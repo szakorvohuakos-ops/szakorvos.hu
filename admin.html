@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Szuperadmin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script>
+  const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#283997;--orange:#ff6b2b;--navy:#1a2e7a;--gray:#f4f6fb;--border:#e8edf8;--text:#374151;--muted:#6b7280;--white:#fff;--sidebar:240px}
+body{font-family:'Nunito Sans',sans-serif;background:var(--gray);color:var(--text);display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--navy);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:100}
+.sidebar-logo{padding:1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.1);font-family:'Nunito',sans-serif;font-size:18px;font-weight:800}
+.sidebar-logo span{color:var(--orange)}
+.sidebar-role{padding:.75rem 1.25rem;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.4);border-bottom:1px solid rgba(255,255,255,0.08)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.75rem 1.25rem;font-size:14px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.08);color:#fff;border-left-color:var(--orange)}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.nav-section{padding:.75rem 1.25rem .25rem;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.3);margin-top:.5rem}
+.sidebar-footer{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.1);font-size:13px;color:rgba(255,255,255,0.5)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;color:var(--navy)}
+.topbar-actions{display:flex;gap:.75rem}
+.btn{padding:8px 18px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--navy)}
+.btn-outline{background:none;border:1.5px solid var(--border);color:var(--brand)}.btn-outline:hover{border-color:var(--brand);background:#eef2ff}
+.btn-danger{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5}.btn-danger:hover{background:#fca5a5}
+.content{padding:2rem;flex:1}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:1.25rem;display:flex;align-items:center;gap:1rem}
+.stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-val{font-family:'Nunito',sans-serif;font-size:26px;font-weight:800;color:var(--navy);line-height:1}
+.stat-label{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* TABLE */
+.table-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;overflow:hidden}
+.table-header{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.table-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--navy)}
+.search-input{border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:13px;font-family:'Nunito Sans',sans-serif;outline:none;width:200px}
+.search-input:focus{border-color:var(--brand)}
+table{width:100%;border-collapse:collapse}
+th{padding:.75rem 1.25rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:#fafbff;border-bottom:1px solid var(--border)}
+td{padding:.875rem 1.25rem;font-size:14px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
+.badge-blue{background:#eef2ff;color:var(--brand)}
+.badge-green{background:#ecfdf5;color:#059669}
+.badge-orange{background:#fff3ed;color:var(--orange)}
+.badge-red{background:#fee2e2;color:#dc2626}
+.actions{display:flex;gap:.4rem}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 1.5rem;background:var(--white)}
+.tab{padding:.75rem 1.25rem;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:999}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:20px;padding:2rem;width:520px;max-height:85vh;overflow-y:auto;animation:fadeUp .25s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--navy);margin-bottom:1.5rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:14px;font-family:'Nunito Sans',sans-serif;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--brand)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.modal-footer{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">Szakorvos<span>.hu</span></div>
+  <div class="sidebar-role">🔴 Szuperadmin</div>
+  <div class="nav-section">Áttekintés</div>
+  <div class="nav-item active" onclick="showTab('overview')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Vezérlőpult
+  </div>
+  <div class="nav-section">Kezelés</div>
+  <div class="nav-item" onclick="showTab('doctors')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Orvosok
+  </div>
+  <div class="nav-item" onclick="showTab('clinics')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Klinikák
+  </div>
+  <div class="nav-item" onclick="showTab('users')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+    Felhasználók
+  </div>
+  <div class="nav-item" onclick="showTab('specialties')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    Szakterületek
+  </div>
+  <div class="nav-section">Analitika</div>
+  <div class="nav-item" onclick="showTab('logs')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Keresési naplók
+  </div>
+  <div class="sidebar-footer">v1.0 · Szakorvos.hu Admin</div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbarTitle">Vezérlőpult</div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" id="addBtn" style="display:none" onclick="openModal()">+ Hozzáadás</button>
+    </div>
+  </div>
+
+  <div class="content" id="mainContent">
+    <!-- Overview -->
+    <div id="tab-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#eef2ff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#283997" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div><div class="stat-val" id="statDoctors">–</div><div class="stat-label">Orvos</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#ecfdf5"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+          <div><div class="stat-val" id="statClinics">–</div><div class="stat-label">Klinika</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fff3ed"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6b2b" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div><div class="stat-val" id="statSpecs">–</div><div class="stat-label">Szakterület</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#f3e8ff"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><div class="stat-val" id="statAppointments">–</div><div class="stat-label">Időpont</div></div>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">Legutóbbi orvosok</div></div>
+        <table>
+          <thead><tr><th>Név</th><th>Szakterület</th><th>Klinika</th><th>Értékelés</th><th>Státusz</th></tr></thead>
+          <tbody id="overviewTable"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Doctors -->
+    <div id="tab-doctors" style="display:none">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Összes orvos</div>
+          <input class="search-input" placeholder="Keresés…" oninput="filterTable('doctorsTable',this.value)">
+        </div>
+        <table>
+          <thead><tr><th>Név</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <tbody id="doctorsTable"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Clinics -->
+    <div id="tab-clinics" style="display:none">
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Összes klinika</div>
+          <input class="search-input" placeholder="Keresés…" oninput="filterTable('clinicsTable',this.value)">
+        </div>
+        <table>
+          <thead><tr><th>Klinika neve</th><th>Cím</th><th>Város</th><th>Telefon</th><th>Orvosok száma</th><th>Műveletek</th></tr></thead>
+          <tbody id="clinicsTable"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Specialties -->
+    <div id="tab-specialties" style="display:none">
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">Szakterületek</div></div>
+        <table>
+          <thead><tr><th>Ikon</th><th>Név</th><th>Slug</th><th>Orvosok</th><th>Műveletek</th></tr></thead>
+          <tbody id="specialtiesTable"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div id="tab-users" style="display:none">
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">Felhasználók & Szerepkörök</div></div>
+        <table>
+          <thead><tr><th>Név / Email</th><th>Szerepkör</th><th>Regisztráció</th><th>Műveletek</th></tr></thead>
+          <tbody id="usersTable"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div id="tab-logs" style="display:none">
+      <div class="table-card">
+        <div class="table-header"><div class="table-title">Keresési naplók</div></div>
+        <table>
+          <thead><tr><th>Keresés</th><th>Város</th><th>Szakterület</th><th>Találatok</th><th>Időpont</th></tr></thead>
+          <tbody id="logsTable"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Még nincsenek keresési naplók</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Doctor Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">Orvos hozzáadása</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Név</label><input class="form-input" id="fName" placeholder="Dr. Kovács János"></div>
+      <div class="form-group"><label class="form-label">Titulus</label><input class="form-input" id="fTitle" placeholder="PhD, Prof."></div>
+    </div>
+    <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input" id="fBio" rows="3" placeholder="Rövid bemutatkozás…"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Tapasztalat (év)</label><input class="form-input" id="fExp" type="number" placeholder="10"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="fEmail" type="email" placeholder="doktor@email.hu"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Mégse</button>
+      <button class="btn btn-primary" onclick="saveDoctor()">Mentés</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentTab = 'overview';
+
+function showTab(tab) {
+  document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('tab-' + tab).style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  currentTab = tab;
+  const titles = {overview:'Vezérlőpult',doctors:'Orvosok',clinics:'Klinikák',users:'Felhasználók',specialties:'Szakterületek',logs:'Keresési naplók'};
+  document.getElementById('topbarTitle').textContent = titles[tab] || tab;
+  document.getElementById('addBtn').style.display = tab === 'doctors' ? 'block' : 'none';
+  loadTab(tab);
+}
+
+async function loadStats() {
+  const [d,c,s,a] = await Promise.all([
+    db.from('doctors').select('id',{count:'exact',head:true}),
+    db.from('clinics').select('id',{count:'exact',head:true}),
+    db.from('specialties').select('id',{count:'exact',head:true}),
+    db.from('appointments').select('id',{count:'exact',head:true}),
+  ]);
+  document.getElementById('statDoctors').textContent = d.count || 0;
+  document.getElementById('statClinics').textContent = c.count || 0;
+  document.getElementById('statSpecs').textContent = s.count || 0;
+  document.getElementById('statAppointments').textContent = a.count || 0;
+}
+
+async function loadTab(tab) {
+  if (tab === 'overview') await loadOverview();
+  else if (tab === 'doctors') await loadDoctors();
+  else if (tab === 'clinics') await loadClinics();
+  else if (tab === 'specialties') await loadSpecialties();
+  else if (tab === 'users') await loadUsers();
+  else if (tab === 'logs') await loadLogs();
+}
+
+async function loadOverview() {
+  const {data} = await db.from('doctors').select('name,is_active,rating,review_count,doctor_specialties(specialties(name)),doctor_clinics(clinics(name))').limit(8);
+  const tbody = document.getElementById('overviewTable');
+  if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem">Nincsenek adatok</td></tr>'; return; }
+  tbody.innerHTML = data.map(d => `<tr>
+    <td style="font-weight:700;color:var(--navy)">${d.name}</td>
+    <td>${d.doctor_specialties?.[0]?.specialties?.name || '–'}</td>
+    <td>${d.doctor_clinics?.[0]?.clinics?.name || '–'}</td>
+    <td>★ ${d.rating || '–'} <span style="color:var(--muted);font-size:12px">(${d.review_count})</span></td>
+    <td><span class="badge ${d.is_active ? 'badge-green':'badge-red'}">${d.is_active ? 'Aktív':'Inaktív'}</span></td>
+  </tr>`).join('');
+}
+
+async function loadDoctors() {
+  const {data} = await db.from('doctors').select('id,name,title,is_active,rating,review_count,experience_years,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))');
+  const tbody = document.getElementById('doctorsTable');
+  if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:1.5rem">Nincsenek orvosok</td></tr>'; return; }
+  tbody.innerHTML = data.map(d => `<tr>
+    <td><span style="font-weight:700;color:var(--navy)">${d.name}</span> <span style="color:var(--muted);font-size:12px">${d.title||''}</span></td>
+    <td>${d.doctor_specialties?.[0]?.specialties?.name || '–'}</td>
+    <td>${d.doctor_clinics?.[0]?.clinics?.name || '–'} <span style="color:var(--muted);font-size:12px">${d.doctor_clinics?.[0]?.clinics?.cities?.name ? '· '+d.doctor_clinics[0].clinics.cities.name : ''}</span></td>
+    <td>${d.experience_years || '–'} év</td>
+    <td>★ ${d.rating || '–'}</td>
+    <td><span class="badge ${d.is_active ? 'badge-green':'badge-red'}">${d.is_active ? 'Aktív':'Inaktív'}</span></td>
+    <td><div class="actions">
+      <button class="btn btn-outline" style="padding:5px 12px;font-size:12px" onclick="toggleDoctor('${d.id}',${d.is_active})">${d.is_active ? 'Deaktivál':'Aktivál'}</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+async function loadClinics() {
+  const {data} = await db.from('clinics').select('id,name,address,phone,cities(name),doctor_clinics(doctor_id)');
+  const tbody = document.getElementById('clinicsTable');
+  if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:1.5rem">Nincsenek klinikák</td></tr>'; return; }
+  tbody.innerHTML = data.map(c => `<tr>
+    <td style="font-weight:700;color:var(--navy)">${c.name}</td>
+    <td style="color:var(--muted)">${c.address || '–'}</td>
+    <td>${c.cities?.name || '–'}</td>
+    <td>${c.phone || '–'}</td>
+    <td><span class="badge badge-blue">${c.doctor_clinics?.length || 0} orvos</span></td>
+    <td><div class="actions"><button class="btn btn-outline" style="padding:5px 12px;font-size:12px">Szerkesztés</button></div></td>
+  </tr>`).join('');
+}
+
+async function loadSpecialties() {
+  const {data} = await db.from('specialties').select('id,name,slug,icon,doctor_count').order('name');
+  const tbody = document.getElementById('specialtiesTable');
+  if (!data) return;
+  tbody.innerHTML = data.map(s => `<tr>
+    <td style="font-size:20px">${s.icon || '–'}</td>
+    <td style="font-weight:700;color:var(--navy)">${s.name}</td>
+    <td style="color:var(--muted);font-size:12px">${s.slug}</td>
+    <td><span class="badge badge-blue">${s.doctor_count || 0}</span></td>
+    <td><button class="btn btn-outline" style="padding:5px 12px;font-size:12px">Szerkesztés</button></td>
+  </tr>`).join('');
+}
+
+async function loadUsers() {
+  const {data} = await db.from('user_profiles').select('id,full_name,email,role,created_at');
+  const tbody = document.getElementById('usersTable');
+  if (!data || data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:1.5rem">Még nincsenek regisztrált felhasználók</td></tr>'; return; }
+  const roleColors = {superadmin:'badge-red',doctor_admin:'badge-blue',clinic_admin:'badge-orange',patient:'badge-green'};
+  tbody.innerHTML = data.map(u => `<tr>
+    <td><div style="font-weight:700">${u.full_name||'–'}</div><div style="font-size:12px;color:var(--muted)">${u.email||''}</div></td>
+    <td><span class="badge ${roleColors[u.role]||'badge-blue'}">${u.role}</span></td>
+    <td style="color:var(--muted);font-size:13px">${new Date(u.created_at).toLocaleDateString('hu-HU')}</td>
+    <td><select onchange="changeRole('${u.id}',this.value)" style="border:1.5px solid var(--border);border-radius:7px;padding:5px 8px;font-size:12px">
+      <option ${u.role==='patient'?'selected':''} value="patient">patient</option>
+      <option ${u.role==='doctor_admin'?'selected':''} value="doctor_admin">doctor_admin</option>
+      <option ${u.role==='clinic_admin'?'selected':''} value="clinic_admin">clinic_admin</option>
+      <option ${u.role==='superadmin'?'selected':''} value="superadmin">superadmin</option>
+    </select></td>
+  </tr>`).join('');
+}
+
+async function loadLogs() {
+  const {data} = await db.from('search_logs').select('query,result_count,created_at,cities(name),specialties(name)').order('created_at',{ascending:false}).limit(50);
+  const tbody = document.getElementById('logsTable');
+  if (!data || data.length === 0) return;
+  tbody.innerHTML = data.map(l => `<tr>
+    <td style="font-weight:600">${l.query||'–'}</td>
+    <td>${l.cities?.name||'–'}</td>
+    <td>${l.specialties?.name||'–'}</td>
+    <td><span class="badge badge-blue">${l.result_count||0}</span></td>
+    <td style="color:var(--muted);font-size:12px">${new Date(l.created_at).toLocaleString('hu-HU')}</td>
+  </tr>`).join('');
+}
+
+async function toggleDoctor(id, isActive) {
+  await db.from('doctors').update({is_active: !isActive}).eq('id', id);
+  loadDoctors();
+}
+
+async function changeRole(id, role) {
+  await db.from('user_profiles').update({role}).eq('id', id);
+}
+
+function filterTable(tableId, query) {
+  const rows = document.getElementById(tableId).querySelectorAll('tr');
+  rows.forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(query.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+async function saveDoctor() {
+  const name = document.getElementById('fName').value.trim();
+  if (!name) return alert('A név megadása kötelező!');
+  const {error} = await db.from('doctors').insert({
+    name,
+    title: document.getElementById('fTitle').value,
+    bio: document.getElementById('fBio').value,
+    experience_years: parseInt(document.getElementById('fExp').value) || null,
+    email: document.getElementById('fEmail').value,
+  });
+  if (error) { alert('Hiba: ' + error.message); return; }
+  closeModal();
+  loadDoctors();
+  loadStats();
+}
+
+// Init
+loadStats();
+loadTab('overview');
+</script>
+</body>
+</html>

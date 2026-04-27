@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orvos Admin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script>
+  const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#283997;--orange:#ff6b2b;--teal:#0d9488;--navy:#1a2e7a;--gray:#f4f6fb;--border:#e8edf8;--text:#374151;--muted:#6b7280;--white:#fff;--sidebar:240px}
+body{font-family:'Nunito Sans',sans-serif;background:var(--gray);color:var(--text);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:linear-gradient(160deg,#1a2e7a,#283997);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0}
+.sidebar-logo{padding:1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.1);font-family:'Nunito',sans-serif;font-size:18px;font-weight:800}
+.sidebar-logo span{color:var(--orange)}
+.sidebar-role{padding:.75rem 1.25rem;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.4);border-bottom:1px solid rgba(255,255,255,0.08)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.75rem 1.25rem;font-size:14px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.1);color:#fff;border-left-color:var(--orange)}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.doctor-profile{padding:1.25rem;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:10px}
+.doc-avatar-sm{width:44px;height:44px;border-radius:12px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+.doc-name-sm{font-size:14px;font-weight:700;color:#fff}
+.doc-spec-sm{font-size:12px;color:rgba(255,255,255,0.5)}
+.main{margin-left:var(--sidebar);flex:1}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;color:var(--navy)}
+.content{padding:2rem}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--navy);margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:14px;font-family:'Nunito Sans',sans-serif;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--brand)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn{padding:9px 20px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--navy)}
+.btn-outline{background:none;border:1.5px solid var(--border);color:var(--brand)}.btn-outline:hover{border-color:var(--brand);background:#eef2ff}
+.btn-success{background:#ecfdf5;color:#059669;border:1.5px solid #bbf7d0}.btn-success:hover{background:#bbf7d0}
+
+/* Calendar */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-header{text-align:center;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;padding:.4rem 0}
+.cal-day{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1.5px solid transparent;transition:all .2s}
+.cal-day.free{background:#ecfdf5;border-color:#bbf7d0;color:#059669}
+.cal-day.busy{background:#fee2e2;border-color:#fca5a5;color:#dc2626}
+.cal-day.empty{background:var(--gray);color:var(--muted);cursor:default}
+
+/* Appointment list */
+.appt-item{display:flex;align-items:center;gap:1rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+.appt-item:last-child{border-bottom:none}
+.appt-time{background:var(--gray);border-radius:8px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--navy);flex-shrink:0;text-align:center;min-width:80px}
+.appt-name{font-weight:700;color:var(--navy);font-size:14px}
+.appt-meta{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
+.badge-blue{background:#eef2ff;color:var(--brand)}
+.badge-green{background:#ecfdf5;color:#059669}
+.badge-orange{background:#fff3ed;color:var(--orange)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-sm{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center}
+.stat-sm-val{font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;color:var(--brand)}
+.stat-sm-label{font-size:12px;color:var(--muted);margin-top:2px}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">Szakorvos<span>.hu</span></div>
+  <div class="sidebar-role">🩺 Orvos Admin</div>
+  <div class="doctor-profile">
+    <div class="doc-avatar-sm" id="sidebarInitials">–</div>
+    <div><div class="doc-name-sm" id="sidebarName">Betöltés…</div><div class="doc-spec-sm" id="sidebarSpec">–</div></div>
+  </div>
+  <div class="nav-item active" onclick="showSection('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Vezérlőpult
+  </div>
+  <div class="nav-item" onclick="showSection('profile',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+    Profilom
+  </div>
+  <div class="nav-item" onclick="showSection('availability',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Rendelési idők
+  </div>
+  <div class="nav-item" onclick="showSection('appointments',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Időpontjaim
+  </div>
+  <div class="nav-item" onclick="showSection('reviews',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Értékelések
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="sectionTitle">Vezérlőpult</div>
+    <button class="btn btn-primary" id="saveBtn" style="display:none" onclick="saveProfile()">Mentés</button>
+  </div>
+
+  <div class="content">
+
+    <!-- Dashboard -->
+    <div id="sec-dashboard">
+      <div class="stats-row">
+        <div class="stat-sm"><div class="stat-sm-val" id="dRating">–</div><div class="stat-sm-label">Átlagos értékelés</div></div>
+        <div class="stat-sm"><div class="stat-sm-val" id="dReviews">–</div><div class="stat-sm-label">Vélemény</div></div>
+        <div class="stat-sm"><div class="stat-sm-val" id="dExp">–</div><div class="stat-sm-label">Év tapasztalat</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Közelgő időpontok</div>
+        <div id="upcomingAppts"><div style="color:var(--muted);font-size:14px">Betöltés…</div></div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div id="sec-profile" style="display:none">
+      <div class="card">
+        <div class="card-title">Személyes adatok</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Teljes név</label><input class="form-input" id="pName" placeholder="Dr. Kovács János"></div>
+          <div class="form-group"><label class="form-label">Titulus</label><input class="form-input" id="pTitle" placeholder="PhD, Prof."></div>
+        </div>
+        <div class="form-group"><label class="form-label">Bemutatkozás</label><textarea class="form-input" id="pBio" rows="4" placeholder="Rövid szakmai bemutatkozás…"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="pEmail" type="email"></div>
+          <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="pPhone" type="tel"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Tapasztalat (év)</label><input class="form-input" id="pExp" type="number"></div>
+          <div class="form-group"><label class="form-label">Nyelvek</label><input class="form-input" id="pLang" placeholder="magyar, angol"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability -->
+    <div id="sec-availability" style="display:none">
+      <div class="card">
+        <div class="card-title">Rendelési napok és idők</div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem;margin-bottom:1.5rem" id="availGrid"></div>
+        <div style="display:flex;gap:.75rem">
+          <div class="form-group" style="flex:1"><label class="form-label">Kezdés</label><input class="form-input" type="time" id="avStart" value="08:00"></div>
+          <div class="form-group" style="flex:1"><label class="form-label">Befejezés</label><input class="form-input" type="time" id="avEnd" value="16:00"></div>
+          <div class="form-group" style="flex:1"><label class="form-label">Időköz (perc)</label><input class="form-input" type="number" id="avSlot" value="30"></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveAvailability()">Mentés</button>
+      </div>
+    </div>
+
+    <!-- Appointments -->
+    <div id="sec-appointments" style="display:none">
+      <div class="card">
+        <div class="card-title">Összes időpontom</div>
+        <div id="allAppts"><div style="color:var(--muted);font-size:14px">Betöltés…</div></div>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div id="sec-reviews" style="display:none">
+      <div class="card">
+        <div class="card-title">Páciens értékelések</div>
+        <div id="reviewsList"><div style="color:var(--muted);font-size:14px">Még nincsenek értékelések</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Demo: az első orvost töltjük be (élesben auth.uid() alapján)
+let doctorData = null;
+const DAYS = ['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
+let selectedDays = new Set([1,2,3,4,5]);
+
+async function init() {
+  const {data} = await db.from('doctors')
+    .select('*,doctor_specialties(specialties(name)),doctor_clinics(clinics(name)),availability(day_of_week,start_time,end_time,slot_minutes)')
+    .eq('is_active', true).limit(1).single();
+  if (!data) return;
+  doctorData = data;
+
+  const initials = data.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2);
+  document.getElementById('sidebarInitials').textContent = initials;
+  document.getElementById('sidebarName').textContent = data.name;
+  document.getElementById('sidebarSpec').textContent = data.doctor_specialties?.[0]?.specialties?.name || '–';
+  document.getElementById('dRating').textContent = '★ ' + (data.rating || '–');
+  document.getElementById('dReviews').textContent = data.review_count || 0;
+  document.getElementById('dExp').textContent = (data.experience_years || '–') + ' év';
+
+  // Fill profile form
+  document.getElementById('pName').value = data.name || '';
+  document.getElementById('pTitle').value = data.title || '';
+  document.getElementById('pBio').value = data.bio || '';
+  document.getElementById('pEmail').value = data.email || '';
+  document.getElementById('pPhone').value = data.phone || '';
+  document.getElementById('pExp').value = data.experience_years || '';
+  document.getElementById('pLang').value = (data.languages || []).join(', ');
+
+  // Availability
+  if (data.availability?.length) {
+    selectedDays = new Set(data.availability.map(a => a.day_of_week));
+    const av = data.availability[0];
+    if (av.start_time) document.getElementById('avStart').value = av.start_time.slice(0,5);
+    if (av.end_time) document.getElementById('avEnd').value = av.end_time.slice(0,5);
+    if (av.slot_minutes) document.getElementById('avSlot').value = av.slot_minutes;
+  }
+  renderAvailGrid();
+  loadUpcoming();
+}
+
+function renderAvailGrid() {
+  const grid = document.getElementById('availGrid');
+  grid.innerHTML = DAYS.map((day, idx) => `
+    <div onclick="toggleDay(${idx})" style="text-align:center;cursor:pointer">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase">${day.slice(0,3)}</div>
+      <div style="aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:all .2s;
+        ${selectedDays.has(idx) ? 'background:#ecfdf5;border:2px solid #22c55e;color:#059669' : 'background:var(--gray);border:2px solid var(--border);color:var(--muted)'}">
+        ${selectedDays.has(idx) ? '✓' : idx}
+      </div>
+    </div>`).join('');
+}
+
+function toggleDay(idx) {
+  if (selectedDays.has(idx)) selectedDays.delete(idx);
+  else selectedDays.add(idx);
+  renderAvailGrid();
+}
+
+async function saveAvailability() {
+  if (!doctorData) return;
+  const clinicId = doctorData.doctor_clinics?.[0]?.clinics?.id;
+  // Delete existing and re-insert
+  await db.from('availability').delete().eq('doctor_id', doctorData.id);
+  const rows = [...selectedDays].map(day => ({
+    doctor_id: doctorData.id,
+    clinic_id: clinicId || null,
+    day_of_week: day,
+    start_time: document.getElementById('avStart').value,
+    end_time: document.getElementById('avEnd').value,
+    slot_minutes: parseInt(document.getElementById('avSlot').value)
+  }));
+  const {error} = await db.from('availability').insert(rows);
+  alert(error ? 'Hiba: ' + error.message : 'Rendelési idők mentve!');
+}
+
+async function saveProfile() {
+  if (!doctorData) return;
+  const {error} = await db.from('doctors').update({
+    name: document.getElementById('pName').value,
+    title: document.getElementById('pTitle').value,
+    bio: document.getElementById('pBio').value,
+    email: document.getElementById('pEmail').value,
+    phone: document.getElementById('pPhone').value,
+    experience_years: parseInt(document.getElementById('pExp').value) || null,
+    languages: document.getElementById('pLang').value.split(',').map(l=>l.trim()),
+  }).eq('id', doctorData.id);
+  alert(error ? 'Hiba: ' + error.message : 'Profil mentve!');
+}
+
+async function loadUpcoming() {
+  const {data} = await db.from('appointments')
+    .select('appointment_at,status,patients(full_name)')
+    .eq('doctor_id', doctorData?.id)
+    .gte('appointment_at', new Date().toISOString())
+    .order('appointment_at').limit(5);
+
+  const el = document.getElementById('upcomingAppts');
+  if (!data || data.length === 0) { el.innerHTML = '<div style="color:var(--muted);font-size:14px;padding:.5rem 0">Nincsenek közelgő időpontok</div>'; return; }
+  el.innerHTML = data.map(a => `<div class="appt-item">
+    <div class="appt-time">${new Date(a.appointment_at).toLocaleDateString('hu-HU',{month:'short',day:'numeric'})}<br>${new Date(a.appointment_at).toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div><div class="appt-name">${a.patients?.full_name || 'Névtelen páciens'}</div></div>
+    <span class="badge badge-${a.status==='confirmed'?'green':a.status==='pending'?'orange':'blue'}" style="margin-left:auto">${a.status}</span>
+  </div>`).join('');
+}
+
+function showSection(id, el) {
+  document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display='none');
+  document.getElementById('sec-'+id).style.display='block';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const titles = {dashboard:'Vezérlőpult',profile:'Profilom',availability:'Rendelési idők',appointments:'Időpontjaim',reviews:'Értékelések'};
+  document.getElementById('sectionTitle').textContent = titles[id] || id;
+  document.getElementById('saveBtn').style.display = id==='profile' ? 'block':'none';
+}
+
+init();
+</script>
+</body>
+</html>

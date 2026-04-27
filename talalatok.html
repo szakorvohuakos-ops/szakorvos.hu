@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Találatok – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script>
+  const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#283997;--orange:#ff6b2b;--teal:#0d9488;--navy:#1a2e7a;
+  --gray:#f8f9ff;--border:#e8edf8;--text:#374151;--muted:#6b7280;
+  --white:#fff;
+}
+body{font-family:'Nunito Sans',sans-serif;background:#f4f6fb;color:var(--text);min-height:100vh}
+a{text-decoration:none;color:inherit}
+
+/* NAV */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 5%;display:flex;align-items:center;height:60px;gap:1rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(40,57,151,0.06)}
+.nav-logo{display:flex;align-items:center;gap:8px;font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:var(--brand)}
+.nav-logo img{width:24px;height:24px;object-fit:contain}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--brand);background:var(--gray);border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;transition:all .2s;margin-left:auto}
+.nav-back:hover{background:#eef2ff;border-color:var(--brand)}
+
+/* SEARCH BAR */
+.search-bar{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 5%;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.search-field{display:flex;align-items:center;gap:8px;background:var(--gray);border:1.5px solid var(--border);border-radius:10px;padding:8px 14px;flex:1;min-width:200px;transition:border-color .2s}
+.search-field:focus-within{border-color:var(--brand)}
+.search-field svg{color:var(--muted);flex-shrink:0}
+.search-field input{border:none;background:transparent;font-size:14px;font-family:'Nunito Sans',sans-serif;color:var(--text);outline:none;width:100%}
+.search-field input::placeholder{color:#b0b7cc}
+.search-btn{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s}
+.search-btn:hover{background:var(--navy)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:280px 1fr;gap:1.5rem;max-width:1200px;margin:0 auto;padding:1.5rem 5%}
+
+/* FILTERS */
+.filters{background:var(--white);border-radius:16px;border:1.5px solid var(--border);padding:1.25rem;height:fit-content;position:sticky;top:80px}
+.filter-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--brand);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.filter-group{margin-bottom:1.25rem}
+.filter-group-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.filter-option{display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:14px;color:var(--text)}
+.filter-option input[type=checkbox]{accent-color:var(--brand);width:15px;height:15px;cursor:pointer}
+.filter-option:hover{color:var(--brand)}
+.filter-select{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--white);outline:none;cursor:pointer}
+.filter-select:focus{border-color:var(--brand)}
+.filter-reset{width:100%;background:none;border:1.5px solid var(--border);border-radius:8px;padding:8px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .2s;margin-top:.5rem}
+.filter-reset:hover{border-color:var(--brand);color:var(--brand)}
+
+/* RESULTS */
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.results-count{font-family:'Nunito',sans-serif;font-size:16px;font-weight:800;color:var(--navy)}
+.results-count span{color:var(--brand)}
+.sort-select{border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--white);outline:none;cursor:pointer}
+.sort-select:focus{border-color:var(--brand)}
+
+/* DOCTOR CARD */
+.doc-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:1rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.25rem;align-items:start;transition:box-shadow .22s,transform .22s,border-color .22s;animation:fadeUp .35s both}
+.doc-card:hover{box-shadow:0 8px 32px rgba(40,57,151,0.1);transform:translateY(-2px);border-color:#c7d2f5}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.doc-avatar{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:#fff;flex-shrink:0}
+.doc-info{}
+.doc-name{font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.doc-specialty{font-size:13px;color:var(--brand);font-weight:600;margin-bottom:.5rem}
+.doc-meta{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem}
+.doc-badge{font-size:11px;background:var(--gray);border:1px solid var(--border);border-radius:100px;padding:3px 10px;color:var(--muted)}
+.doc-badge.green{background:#ecfdf5;border-color:#bbf7d0;color:#059669}
+.doc-rating{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:#f59e0b}
+.doc-rating span{color:var(--muted);font-weight:400}
+.doc-actions{display:flex;flex-direction:column;gap:.6rem;align-items:flex-end;flex-shrink:0}
+.doc-price{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--navy);text-align:right}
+.doc-price small{font-size:11px;color:var(--muted);font-weight:400;display:block}
+.btn-book{background:var(--brand);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;white-space:nowrap}
+.btn-book:hover{background:var(--navy);transform:scale(1.03)}
+.btn-profile{background:none;border:1.5px solid var(--border);border-radius:10px;padding:8px 16px;font-size:13px;color:var(--brand);cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-profile:hover{border-color:var(--brand);background:#eef2ff}
+
+/* AVAILABILITY DOTS */
+.doc-avail{display:flex;gap:4px;margin-top:.5rem}
+.avail-dot{width:8px;height:8px;border-radius:50%;background:#e5e7eb}
+.avail-dot.free{background:#22c55e}
+.avail-dot.busy{background:#f87171}
+.avail-label{font-size:11px;color:var(--muted);margin-left:4px;align-self:center}
+
+/* EMPTY / LOADING */
+.state-box{background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:3rem;text-align:center;color:var(--muted)}
+.state-box svg{color:#c7d2f5;margin-bottom:1rem}
+.state-box p{font-size:15px;margin-bottom.5rem}
+.loading-skel{background:linear-gradient(90deg,#f0f4ff 25%,#e8edf8 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:12px;height:110px;margin-bottom:1rem}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ACTIVE FILTER TAGS */
+.active-filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.filter-tag{display:flex;align-items:center;gap:6px;background:#eef2ff;border:1px solid #c7d2f5;border-radius:100px;padding:4px 12px;font-size:12px;color:var(--brand);font-weight:600}
+.filter-tag button{background:none;border:none;cursor:pointer;color:var(--brand);font-size:14px;line-height:1;padding:0}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .filters{position:static;display:none}
+  .doc-card{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .doc-actions{flex-direction:row;grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="szakorvos_new_80__1_.html" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2C9.58 2 6 5.58 6 10C6 15.5 14 26 14 26C14 26 22 15.5 22 10C22 5.58 18.42 2 14 2Z" fill="#1b35a8"/>
+      <circle cx="14" cy="10" r="5.5" fill="white"/>
+      <rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/>
+      <rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/>
+    </svg>
+    Szakorvos<span style="color:#22c55e">.hu</span>
+  </a>
+  <a href="szakorvos_new_80__1_.html" class="nav-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Vissza
+  </a>
+</nav>
+
+<!-- Search bar -->
+<div class="search-bar">
+  <div class="search-field">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="searchSpec" type="text" placeholder="Szakterület vagy orvos neve…">
+  </div>
+  <div class="search-field">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <input id="searchCity" type="text" placeholder="Város…">
+  </div>
+  <button class="search-btn" onclick="doSearch()">Keresés</button>
+</div>
+
+<div class="layout">
+  <!-- Filters -->
+  <aside class="filters">
+    <div class="filter-title">Szűrők</div>
+
+    <div class="filter-group">
+      <div class="filter-group-label">Értékelés</div>
+      <select class="filter-select" id="filterRating" onchange="applyFilters()">
+        <option value="">Összes</option>
+        <option value="4.5">4.5 csillag felett</option>
+        <option value="4.0">4.0 csillag felett</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-label">Biztosító</div>
+      <div id="insuranceFilters">
+        <div class="filter-option"><input type="checkbox" value="OEP / TAJ kártya" onchange="applyFilters()"> OEP / TAJ kártya</div>
+        <div class="filter-option"><input type="checkbox" value="Magánfizető" onchange="applyFilters()"> Magánfizető</div>
+        <div class="filter-option"><input type="checkbox" value="SIGNAL IDUNA" onchange="applyFilters()"> SIGNAL IDUNA</div>
+        <div class="filter-option"><input type="checkbox" value="Generali" onchange="applyFilters()"> Generali</div>
+        <div class="filter-option"><input type="checkbox" value="Allianz" onchange="applyFilters()"> Allianz</div>
+        <div class="filter-option"><input type="checkbox" value="UNIQA" onchange="applyFilters()"> UNIQA</div>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-label">Tapasztalat</div>
+      <select class="filter-select" id="filterExp" onchange="applyFilters()">
+        <option value="">Összes</option>
+        <option value="5">5+ év</option>
+        <option value="10">10+ év</option>
+        <option value="15">15+ év</option>
+      </select>
+    </div>
+
+    <button class="filter-reset" onclick="resetFilters()">Szűrők törlése</button>
+  </aside>
+
+  <!-- Results -->
+  <main>
+    <div class="active-filters" id="activeTags"></div>
+    <div class="results-header">
+      <div class="results-count" id="resultsCount">Betöltés…</div>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="rating">Legjobb értékelés</option>
+        <option value="experience">Legtöbb tapasztalat</option>
+        <option value="price_asc">Ár: alacsony → magas</option>
+        <option value="price_desc">Ár: magas → alacsony</option>
+      </select>
+    </div>
+    <div id="resultsList">
+      <div class="loading-skel"></div>
+      <div class="loading-skel"></div>
+      <div class="loading-skel"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const COLORS = ['#2f5ddd','#7c3aed','#0d9488','#dc2626','#ec4899','#ea580c','#059669','#8b5cf6','#d97706','#0891b2'];
+const DAYS = ['V','H','K','Sze','Cs','P','Szo'];
+
+// URL paraméterek
+const params = new URLSearchParams(window.location.search);
+let currentSpec = params.get('specialty') || '';
+let currentCity = params.get('city') || '';
+let allDoctors = [];
+
+document.getElementById('searchSpec').value = currentSpec;
+document.getElementById('searchCity').value = currentCity;
+
+async function loadDoctors() {
+  document.getElementById('resultsList').innerHTML = '<div class="loading-skel"></div><div class="loading-skel"></div><div class="loading-skel"></div>';
+
+  let query = db
+    .from('doctors')
+    .select(`
+      id, name, title, bio, rating, review_count, experience_years,
+      doctor_specialties!inner(specialty_id, specialties!inner(name, slug)),
+      doctor_clinics!inner(consultation_fee, clinics!inner(name, address, cities!inner(name))),
+      doctor_insurances(insurance_types(name)),
+      availability(day_of_week)
+    `)
+    .eq('is_active', true);
+
+  if (currentSpec) {
+    query = query.ilike('doctor_specialties.specialties.name', `%${currentSpec}%`);
+  }
+  if (currentCity) {
+    query = query.ilike('doctor_clinics.clinics.cities.name', `%${currentCity}%`);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error(error);
+    document.getElementById('resultsList').innerHTML = `<div class="state-box"><p>Hiba történt az adatok betöltésekor.</p></div>`;
+    return;
+  }
+
+  allDoctors = data || [];
+  applyFilters();
+}
+
+function applyFilters() {
+  let docs = [...allDoctors];
+
+  // Rating filter
+  const minRating = parseFloat(document.getElementById('filterRating').value);
+  if (minRating) docs = docs.filter(d => parseFloat(d.rating) >= minRating);
+
+  // Experience filter
+  const minExp = parseInt(document.getElementById('filterExp').value);
+  if (minExp) docs = docs.filter(d => d.experience_years >= minExp);
+
+  // Insurance filter
+  const checkedInsurance = [...document.querySelectorAll('#insuranceFilters input:checked')].map(i => i.value);
+  if (checkedInsurance.length > 0) {
+    docs = docs.filter(d => {
+      const ins = (d.doctor_insurances || []).map(i => i.insurance_types?.name);
+      return checkedInsurance.some(ci => ins.includes(ci));
+    });
+  }
+
+  // Sort
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'rating') docs.sort((a,b) => b.rating - a.rating);
+  else if (sort === 'experience') docs.sort((a,b) => (b.experience_years||0) - (a.experience_years||0));
+  else if (sort === 'price_asc') docs.sort((a,b) => getFee(a) - getFee(b));
+  else if (sort === 'price_desc') docs.sort((a,b) => getFee(b) - getFee(a));
+
+  renderResults(docs);
+  renderActiveTags();
+}
+
+function getFee(d) {
+  return d.doctor_clinics?.[0]?.consultation_fee || 0;
+}
+
+function renderResults(docs) {
+  const count = document.getElementById('resultsCount');
+  const list = document.getElementById('resultsList');
+
+  count.innerHTML = `<span>${docs.length}</span> orvos találva`;
+
+  if (docs.length === 0) {
+    list.innerHTML = `<div class="state-box">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <p>Nem találtunk orvost a megadott szűrők alapján.</p>
+      <p style="font-size:13px;margin-top:.5rem">Próbáljon más városra vagy szakterületre keresni.</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = docs.map((d, i) => {
+    const spec = d.doctor_specialties?.[0]?.specialties?.name || '';
+    const clinic = d.doctor_clinics?.[0]?.clinics;
+    const city = clinic?.cities?.name || '';
+    const fee = getFee(d);
+    const initials = d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2);
+    const color = COLORS[i % COLORS.length];
+    const avDays = (d.availability || []).map(a => a.day_of_week);
+    const stars = '★'.repeat(Math.round(d.rating||0)) + '☆'.repeat(5-Math.round(d.rating||0));
+
+    return `<div class="doc-card" style="animation-delay:${i*0.06}s">
+      <div class="doc-avatar" style="background:${color}">${initials}</div>
+      <div class="doc-info">
+        <div class="doc-name">${d.name}${d.title ? ' <span style="font-size:13px;font-weight:600;color:var(--muted)">' + d.title + '</span>' : ''}</div>
+        <div class="doc-specialty">${spec}</div>
+        <div class="doc-meta">
+          ${city ? `<span class="doc-badge">📍 ${city}</span>` : ''}
+          ${clinic?.name ? `<span class="doc-badge">🏥 ${clinic.name}</span>` : ''}
+          ${d.experience_years ? `<span class="doc-badge">⏱ ${d.experience_years} év tapasztalat</span>` : ''}
+          <span class="doc-badge green">✓ Online foglalás</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <div class="doc-rating">${stars} <span>(${d.review_count || 0} vélemény)</span></div>
+        </div>
+        <div class="doc-avail">
+          ${DAYS.map((day,idx) => `<div class="avail-dot ${avDays.includes(idx+1)?'free':''}" title="${day}"></div>`).join('')}
+          <span class="avail-label">Szabad napok</span>
+        </div>
+      </div>
+      <div class="doc-actions">
+        <div class="doc-price">${fee ? fee.toLocaleString('hu-HU') + ' Ft' : 'Egyedi'}<small>konzultáció</small></div>
+        <button class="btn-book" onclick="bookDoctor('${d.id}','${d.name}')">Időpontot foglalok</button>
+        <button class="btn-profile">Profil megtekintése</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderActiveTags() {
+  const tags = [];
+  if (currentSpec) tags.push({label: currentSpec, clear: () => { currentSpec=''; document.getElementById('searchSpec').value=''; loadDoctors(); }});
+  if (currentCity) tags.push({label: currentCity, clear: () => { currentCity=''; document.getElementById('searchCity').value=''; loadDoctors(); }});
+  const minRating = document.getElementById('filterRating').value;
+  if (minRating) tags.push({label: minRating + '★ felett', clear: () => { document.getElementById('filterRating').value=''; applyFilters(); }});
+
+  const container = document.getElementById('activeTags');
+  container.innerHTML = tags.map((t,i) => `<div class="filter-tag">${t.label} <button onclick="clearTag(${i})">×</button></div>`).join('');
+  window._tagClears = tags.map(t => t.clear);
+}
+
+function clearTag(i) { window._tagClears[i](); }
+
+function doSearch() {
+  currentSpec = document.getElementById('searchSpec').value.trim();
+  currentCity = document.getElementById('searchCity').value.trim();
+  loadDoctors();
+}
+
+function resetFilters() {
+  document.getElementById('filterRating').value = '';
+  document.getElementById('filterExp').value = '';
+  document.querySelectorAll('#insuranceFilters input').forEach(i => i.checked = false);
+  applyFilters();
+}
+
+function bookDoctor(id, name) {
+  alert('Időpontfoglalás: ' + name + '\n(Ez a funkció hamarosan elérhető lesz!)');
+}
+
+document.getElementById('searchSpec').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+document.getElementById('searchCity').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
+
+loadDoctors();
+</script>
+</body>
+</html>

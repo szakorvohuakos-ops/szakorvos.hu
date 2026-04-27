@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinika Admin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script>
+  const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#0d9488;--navy:#134e48;--orange:#ff6b2b;--gray:#f0fdfa;--border:#ccfbf1;--text:#374151;--muted:#6b7280;--white:#fff;--sidebar:240px}
+body{font-family:'Nunito Sans',sans-serif;background:var(--gray);color:var(--text);display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:linear-gradient(160deg,#134e48,#0d9488);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0}
+.sidebar-logo{padding:1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.1);font-family:'Nunito',sans-serif;font-size:18px;font-weight:800}
+.sidebar-logo span{color:#fbbf24}
+.sidebar-role{padding:.75rem 1.25rem;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,0.4);border-bottom:1px solid rgba(255,255,255,0.08)}
+.clinic-card-side{padding:1.25rem;border-bottom:1px solid rgba(255,255,255,0.1)}
+.clinic-name-side{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.clinic-city-side{font-size:12px;color:rgba(255,255,255,0.5)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.75rem 1.25rem;font-size:14px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover,.nav-item.active{background:rgba(255,255,255,0.1);color:#fff;border-left-color:#fbbf24}
+.nav-item svg{width:18px;height:18px;flex-shrink:0}
+.main{margin-left:var(--sidebar);flex:1}
+.topbar{background:var(--white);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;color:var(--navy)}
+.content{padding:2rem}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-sm{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center}
+.stat-sm-val{font-family:'Nunito',sans-serif;font-size:24px;font-weight:800;color:var(--brand)}
+.stat-sm-label{font-size:12px;color:var(--muted);margin-top:2px}
+.card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem}
+.card-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--navy);margin-bottom:1.25rem}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:14px;font-family:'Nunito Sans',sans-serif;outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--brand)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn{padding:9px 20px;border-radius:9px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:var(--navy)}
+.btn-outline{background:none;border:1.5px solid var(--border);color:var(--brand)}.btn-outline:hover{border-color:var(--brand);background:#f0fdfa}
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
+.badge-green{background:#ecfdf5;color:#059669}
+.badge-teal{background:#f0fdfa;color:var(--brand)}
+.badge-orange{background:#fff3ed;color:var(--orange)}
+.badge-red{background:#fee2e2;color:#dc2626}
+table{width:100%;border-collapse:collapse}
+th{padding:.75rem 1.25rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:#fafffe;border-bottom:1px solid var(--border)}
+td{padding:.875rem 1.25rem;font-size:14px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafffe}
+.appt-item{display:flex;align-items:center;gap:1rem;padding:.875rem 0;border-bottom:1px solid var(--border)}
+.appt-item:last-child{border-bottom:none}
+.appt-time{background:var(--gray);border-radius:8px;padding:6px 12px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--navy);flex-shrink:0;text-align:center;min-width:80px}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">Szakorvos<span>.hu</span></div>
+  <div class="sidebar-role">🏥 Klinika Admin</div>
+  <div class="clinic-card-side">
+    <div class="clinic-name-side" id="sideClinicName">Betöltés…</div>
+    <div class="clinic-city-side" id="sideClinicCity">–</div>
+  </div>
+  <div class="nav-item active" onclick="showSection('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Vezérlőpult
+  </div>
+  <div class="nav-item" onclick="showSection('clinic',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    Klinika adatai
+  </div>
+  <div class="nav-item" onclick="showSection('doctors',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    Orvososk
+  </div>
+  <div class="nav-item" onclick="showSection('appointments',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Időpontok
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="sectionTitle">Vezérlőpult</div>
+    <button class="btn btn-primary" id="saveClinicBtn" style="display:none" onclick="saveClinic()">Mentés</button>
+  </div>
+
+  <div class="content">
+
+    <!-- Dashboard -->
+    <div id="sec-dashboard">
+      <div class="stats-row">
+        <div class="stat-sm"><div class="stat-sm-val" id="statDocs">–</div><div class="stat-sm-label">Orvos</div></div>
+        <div class="stat-sm"><div class="stat-sm-val" id="statToday">–</div><div class="stat-sm-label">Mai időpont</div></div>
+        <div class="stat-sm"><div class="stat-sm-val" id="statPending">–</div><div class="stat-sm-label">Jóváhagyás alatt</div></div>
+        <div class="stat-sm"><div class="stat-sm-val" id="statCompleted">–</div><div class="stat-sm-label">Teljesített</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mai időpontok</div>
+        <div id="todayAppts"><div style="color:var(--muted);font-size:14px">Betöltés…</div></div>
+      </div>
+    </div>
+
+    <!-- Clinic Info -->
+    <div id="sec-clinic" style="display:none">
+      <div class="card">
+        <div class="card-title">Klinika adatai</div>
+        <div class="form-group"><label class="form-label">Klinika neve</label><input class="form-input" id="cName"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Cím</label><input class="form-input" id="cAddress"></div>
+          <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="cPhone"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="cEmail" type="email"></div>
+          <div class="form-group"><label class="form-label">Weboldal</label><input class="form-input" id="cWebsite" type="url" placeholder="https://"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doctors -->
+    <div id="sec-doctors" style="display:none">
+      <div class="card">
+        <div class="card-title">Klinikán dolgozó orvosok</div>
+        <table>
+          <thead><tr><th>Név</th><th>Szakterület</th><th>Konzultációs díj</th><th>Értékelés</th><th>Státusz</th></tr></thead>
+          <tbody id="clinicDoctors"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Appointments -->
+    <div id="sec-appointments" style="display:none">
+      <div class="card">
+        <div class="card-title">Összes időpont</div>
+        <table>
+          <thead><tr><th>Dátum/Idő</th><th>Páciens</th><th>Orvos</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <tbody id="allAppts"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem">Betöltés…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let clinicData = null;
+
+async function init() {
+  // Demo: első klinika betöltése (élesben: auth alapján)
+  const {data} = await db.from('clinics')
+    .select('*,cities(name),doctor_clinics(doctor_id,consultation_fee,doctors(name,title,rating,is_active,doctor_specialties(specialties(name))))')
+    .limit(1).single();
+
+  if (!data) return;
+  clinicData = data;
+  document.getElementById('sideClinicName').textContent = data.name;
+  document.getElementById('sideClinicCity').textContent = data.cities?.name || '–';
+  document.getElementById('statDocs').textContent = data.doctor_clinics?.length || 0;
+
+  document.getElementById('cName').value = data.name || '';
+  document.getElementById('cAddress').value = data.address || '';
+  document.getElementById('cPhone').value = data.phone || '';
+  document.getElementById('cEmail').value = data.email || '';
+  document.getElementById('cWebsite').value = data.website || '';
+
+  loadDashboard();
+}
+
+async function loadDashboard() {
+  if (!clinicData) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate()+1);
+
+  const {data: appts} = await db.from('appointments')
+    .select('appointment_at,status,patients(full_name),doctors(name)')
+    .eq('clinic_id', clinicData.id)
+    .gte('appointment_at', today.toISOString())
+    .lt('appointment_at', tomorrow.toISOString())
+    .order('appointment_at');
+
+  const {count: pending} = await db.from('appointments').select('id',{count:'exact',head:true}).eq('clinic_id',clinicData.id).eq('status','pending');
+  const {count: completed} = await db.from('appointments').select('id',{count:'exact',head:true}).eq('clinic_id',clinicData.id).eq('status','completed');
+
+  document.getElementById('statToday').textContent = appts?.length || 0;
+  document.getElementById('statPending').textContent = pending || 0;
+  document.getElementById('statCompleted').textContent = completed || 0;
+
+  const el = document.getElementById('todayAppts');
+  if (!appts || appts.length === 0) { el.innerHTML = '<div style="color:var(--muted);font-size:14px">Nincsenek mai időpontok</div>'; return; }
+  el.innerHTML = appts.map(a => `<div class="appt-item">
+    <div class="appt-time">${new Date(a.appointment_at).toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'})}</div>
+    <div style="flex:1"><div style="font-weight:700;color:var(--navy)">${a.patients?.full_name||'Névtelen'}</div><div style="font-size:12px;color:var(--muted)">${a.doctors?.name||'–'}</div></div>
+    <span class="badge badge-${a.status==='confirmed'?'green':a.status==='pending'?'orange':'teal'}">${a.status}</span>
+  </div>`).join('');
+}
+
+async function loadClinicDoctors() {
+  if (!clinicData) return;
+  const tbody = document.getElementById('clinicDoctors');
+  const docs = clinicData.doctor_clinics || [];
+  if (!docs.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem">Nincsenek orvosok</td></tr>'; return; }
+  tbody.innerHTML = docs.map(dc => `<tr>
+    <td style="font-weight:700;color:var(--navy)">${dc.doctors?.name||'–'} <span style="color:var(--muted);font-size:12px">${dc.doctors?.title||''}</span></td>
+    <td>${dc.doctors?.doctor_specialties?.[0]?.specialties?.name||'–'}</td>
+    <td style="font-weight:700">${dc.consultation_fee ? dc.consultation_fee.toLocaleString('hu-HU')+' Ft' : 'Egyedi'}</td>
+    <td>★ ${dc.doctors?.rating||'–'}</td>
+    <td><span class="badge badge-${dc.doctors?.is_active?'green':'red'}">${dc.doctors?.is_active?'Aktív':'Inaktív'}</span></td>
+  </tr>`).join('');
+}
+
+async function loadAllAppts() {
+  if (!clinicData) return;
+  const {data} = await db.from('appointments')
+    .select('appointment_at,status,patients(full_name),doctors(name)')
+    .eq('clinic_id', clinicData.id)
+    .order('appointment_at',{ascending:false}).limit(30);
+  const tbody = document.getElementById('allAppts');
+  if (!data || !data.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:1.5rem">Nincsenek időpontok</td></tr>'; return; }
+  tbody.innerHTML = data.map(a => `<tr>
+    <td style="font-weight:700">${new Date(a.appointment_at).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
+    <td>${a.patients?.full_name||'Névtelen'}</td>
+    <td>${a.doctors?.name||'–'}</td>
+    <td><span class="badge badge-${a.status==='confirmed'?'green':a.status==='pending'?'orange':a.status==='completed'?'teal':'red'}">${a.status}</span></td>
+    <td><select onchange="updateApptStatus('${a.id}',this.value)" style="border:1.5px solid var(--border);border-radius:7px;padding:5px 8px;font-size:12px">
+      <option ${a.status==='pending'?'selected':''} value="pending">pending</option>
+      <option ${a.status==='confirmed'?'selected':''} value="confirmed">confirmed</option>
+      <option ${a.status==='completed'?'selected':''} value="completed">completed</option>
+      <option ${a.status==='cancelled'?'selected':''} value="cancelled">cancelled</option>
+    </select></td>
+  </tr>`).join('');
+}
+
+async function updateApptStatus(id, status) {
+  await db.from('appointments').update({status,updated_at:new Date().toISOString()}).eq('id',id);
+}
+
+async function saveClinic() {
+  if (!clinicData) return;
+  const {error} = await db.from('clinics').update({
+    name: document.getElementById('cName').value,
+    address: document.getElementById('cAddress').value,
+    phone: document.getElementById('cPhone').value,
+    email: document.getElementById('cEmail').value,
+    website: document.getElementById('cWebsite').value,
+  }).eq('id', clinicData.id);
+  alert(error ? 'Hiba: ' + error.message : 'Klinika adatai mentve!');
+  document.getElementById('sideClinicName').textContent = document.getElementById('cName').value;
+}
+
+function showSection(id, el) {
+  document.querySelectorAll('[id^="sec-"]').forEach(s => s.style.display='none');
+  document.getElementById('sec-'+id).style.display='block';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  const titles = {dashboard:'Vezérlőpult',clinic:'Klinika adatai',doctors:'Orvosok',appointments:'Időpontok'};
+  document.getElementById('sectionTitle').textContent = titles[id]||id;
+  document.getElementById('saveClinicBtn').style.display = id==='clinic'?'block':'none';
+  if (id==='doctors') loadClinicDoctors();
+  if (id==='appointments') loadAllAppts();
+}
+
+init();
+</script>
+</body>
+</html>
