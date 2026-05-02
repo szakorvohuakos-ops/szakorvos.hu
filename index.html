@@ -771,6 +771,56 @@ nav.one-row .nav-hamburger { display: flex; }
   font-size: 15px; color: #4b5563;
   line-height: 1.7; margin: 0;
 }
+/* ── FREETEXT DROPDOWN ── */
+.freetext-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(40,56,151,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 300;
+  overflow: hidden;
+  max-height: 380px;
+  overflow-y: auto;
+}
+.freetext-dropdown.open { display: block; }
+.freetext-group-label {
+  font-size: 10px; font-weight: 800; color: #9aa5c4;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 10px 14px 4px;
+  background: #f8f9ff; border-bottom: 1px solid #f0f4fb;
+}
+.freetext-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; cursor: pointer;
+  border-bottom: 1px solid #f7f8fc;
+  transition: background 0.15s;
+}
+.freetext-item:last-child { border-bottom: none; }
+.freetext-item:hover, .freetext-item.active { background: #f4f7ff; }
+.freetext-item-icon {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.freetext-item-main { flex: 1; min-width: 0; }
+.freetext-item-name {
+  font-size: 13px; font-weight: 700; color: #0f172a;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.freetext-item-sub {
+  font-size: 11px; color: #9aa5c4; margin-top: 1px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.freetext-item-badge {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 100px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.nav-dropdown { top: calc(100% + 8px) !important; }
 /* ── HERO SEARCH BOX (2 soros) ── */
 .hero-search-box-label {
   font-family: 'Nunito', sans-serif;
@@ -3881,7 +3931,23 @@ footer {
         if (cards) cards.scrollBy({ left: dir * 360, behavior: 'smooth' });
       }
 
-      function doSmartSearch() { window.location = 'szakorvos-talalatok.html'; }
+      function doSmartSearch() {
+        const v = document.getElementById('smartSearchInput')?.value?.trim() || '';
+        window.location = 'talalatok.html' + (v ? '?specialty=' + encodeURIComponent(v) : '');
+      }
+
+      function heroSearch() {
+        const spec = document.getElementById('heroSearchInput')?.value?.trim() || '';
+        const city = document.getElementById('heroSearchCity')?.value?.trim() || '';
+        const params = new URLSearchParams();
+        if (spec) params.set('specialty', spec);
+        if (city) params.set('city', city);
+        window.location.href = 'talalatok.html?' + params.toString();
+      }
+
+      function heroQuickSearch(specialty) {
+        window.location.href = 'talalatok.html?specialty=' + encodeURIComponent(specialty);
+      }
 
       const ssi = document.getElementById('smartSearchInput');
       if (ssi) ssi.addEventListener('keydown', e => { if (e.key === 'Enter') doSmartSearch(); });
@@ -3954,7 +4020,7 @@ footer {
             const enc = encodeURIComponent(val);
             const [docData, clinicData, specData] = await Promise.all([
               sbGet(`doctors?select=id,name,title,doctor_specialties(specialties(name))&name=ilike.*${enc}*&limit=4`),
-              sbGet(`clinics?select=id,name,cities(name)&name=ilike.*${enc}*&limit=3`),
+              sbGet(`clinics?select=id,name,cities!clinics_city_id_fkey(name)&name=ilike.*${enc}*&limit=3`),
               sbGet(`specialties?select=id,name,icon&name=ilike.*${enc}*&limit=4`),
             ]);
             (docData || []).forEach(d => results.push({ type: 'doctor', icon: '👨‍⚕️', name: (d.title ? d.title + ' ' : '') + d.name, sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos', id: d.id }));
@@ -4705,6 +4771,13 @@ html { scroll-behavior: smooth; }
   opacity: 1;
   transform: none;
 }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
 </style>
 
 <script>
@@ -4719,6 +4792,15 @@ const animObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll('[data-anim]').forEach(el => animObserver.observe(el));
+
+function heroInlineSearch() {
+  const spec = (document.getElementById('heroInlineSearch')?.value || '').trim();
+  const city = (document.getElementById('heroSearchCityInline')?.value || '').trim();
+  const params = new URLSearchParams();
+  if (spec) params.set('specialty', spec);
+  if (city) params.set('city', city);
+  window.location.href = 'talalatok.html?' + params.toString();
+}
 
 function useExample(btn) {
   const text = btn.textContent.replace(/^💬\s*/, '').trim();
