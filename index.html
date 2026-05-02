@@ -1,3 +1,7 @@
+Index · HTML
+Copy
+
+Syntax highlighting has been disabled due to code size.
 
 <!DOCTYPE html>
 <html lang="hu">
@@ -108,32 +112,24 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 200;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-bottom: 1px solid rgba(232,237,248,0.6);
   transition: box-shadow 0.3s ease, background 0.3s ease;
 }
 nav:hover {
-  background: rgba(255,255,255,0.88);
+  background: rgba(255,255,255,0.98);
 }
 .nav-row-top {
   display: flex;
   align-items: center;
-  height: 58px;
+  height: 64px;
   padding: 0 4%;
-  gap: 1.25rem;
-  border-bottom: 1px solid rgba(40,56,151,0.06);
+  gap: 0;
   position: relative;
 }
-.nav-row-bottom {
-  display: flex;
-  align-items: center;
-  height: 40px;
-  padding: 0 4%;
-  background: rgba(248,249,255,0.9);
-  position: relative;
-}
+.nav-row-bottom { display: none; }
 .btn-nav-cta {
   font-family: 'Nunito', sans-serif;
   font-size: 12px;
@@ -159,49 +155,60 @@ nav:hover {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  width: 380px;
+  width: 420px;
 }
 .nav-search-inner {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: #f4f6fb;
-  border: 1.5px solid #e2e8f5;
-  border-radius: 10px;
-  padding: 6px 8px 6px 12px;
-  transition: border-color 0.2s, background 0.2s;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 100px;
+  padding: 7px 7px 7px 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .nav-search-inner:focus-within {
-  border-color: var(--brand);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(40,56,151,0.08);
+  border-color: #c5cde8;
+  box-shadow: 0 4px 18px rgba(40,56,151,0.13);
 }
 .nav-search-inner input {
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   font-family: 'Nunito Sans', sans-serif;
-  color: var(--text);
+  color: #374151;
   outline: none;
   width: 100%;
 }
-.nav-search-inner input::placeholder { color: #b0b7cc; }
+.nav-search-inner input::placeholder { color: #b0bcd4; font-weight: 400; }
 .nav-search-go-icon {
   background: var(--brand);
   color: #fff;
   border: none;
-  border-radius: 7px;
-  width: 28px;
-  height: 28px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 3px 10px rgba(40,56,151,0.3);
 }
-.nav-search-go-icon:hover { background: var(--navy); }
+.nav-search-go-icon:hover {
+  background: #1e2d7d;
+  transform: scale(1.06);
+  box-shadow: 0 5px 16px rgba(40,56,151,0.4);
+}
+.nav-dropdown {
+  top: calc(100% + 10px) !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 500;
+}
 .nav-links {
   display: flex;
   align-items: center;
@@ -303,8 +310,12 @@ nav.one-row .nav-hamburger { display: flex; }
   align-items: center;
   gap: 0;
   list-style: none;
-  flex: 1;
-  margin-left: 0.5rem;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .nav-links li { position: relative; }
 .nav-links a {
@@ -352,12 +363,9 @@ nav.one-row .nav-hamburger { display: flex; }
 .nav-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   margin-left: auto;
   flex-shrink: 0;
-  width: 160px;
-  position: relative;
-  z-index: 1;
 }
 .btn-nav-outline {
   font-family: 'Nunito', sans-serif;
@@ -378,10 +386,11 @@ nav.one-row .nav-hamburger { display: flex; }
 /* ── HERO ── */
 .hero {
   background: #f0f4ff !important;
-  min-height: 100vh;
-  padding-top: 100px;
+  min-height: auto;
+  padding-top: 76px;
+  padding-bottom: 1.5rem;
   position: relative;
-    display: flex;
+  display: flex;
   flex-direction: column;
 }
 
@@ -475,10 +484,10 @@ nav.one-row .nav-hamburger { display: flex; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.5rem 2% 0;
+  padding: 0.75rem 2% 0;
   margin: 0 auto;
   width: 100%;
-  gap: 1.25rem;
+  gap: 0.75rem;
   transform: scale(0.95);
   transform-origin: top center;
 }
@@ -493,33 +502,75 @@ nav.one-row .nav-hamburger { display: flex; }
   width: 100%;
   opacity: 0.5;
 }
+
 .hero-two-col {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: start;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
   width: 100%;
-  padding: 0 4%;
-  gap: 1.5rem;
+  padding: 1rem 3% 0 3%;
+  gap: 2rem;
 }
+
 .hero-left {
-  flex: none;
+  flex: 0 0 420px;
   max-width: 420px;
-  transform: scale(0.9);
-  transform-origin: top left;
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding-top: 0;
-  grid-column: 1;
+  padding-top: 0.5rem;
+  transform: scale(1.05);
+  transform-origin: top left;
 }
 .hero-right-search {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
   flex-shrink: 0;
-  grid-column: 2;
-  justify-self: center;
+  position: relative;
+  margin-top: -24px;
+}
+.hero-right-search::before {
+  content: '';
+  position: absolute;
+  top: -40px; left: -60px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.ai-chat-widget { position: relative; z-index: 1; }
+.hero-side-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.hero-side-feat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  width: 90px;
+}
+.hero-side-feat-icon {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-side-feat-label {
+  font-size: 11px; color: #374151;
+  font-weight: 600; line-height: 1.4;
+  font-family: 'Nunito Sans', sans-serif;
 }
 .hero-floating-cards {
   display: flex;
@@ -529,7 +580,6 @@ nav.one-row .nav-hamburger { display: flex; }
   padding-top: 2rem;
   flex-shrink: 0;
 }
-  display: flex;
   flex-direction: column;
   gap: 0;
   align-self: start;
@@ -571,8 +621,312 @@ nav.one-row .nav-hamburger { display: flex; }
   font-weight: 400;
   line-height: 1.4;
 }
-.hero-ai-badge {
-  display: none;
+.hero-badge-new {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #f0fdf4; border: 1.5px solid #bbf7d0;
+  border-radius: 100px; padding: 6px 14px 6px 10px;
+  font-size: 13px; font-weight: 700; color: #166534;
+  font-family: 'Nunito', sans-serif; width: fit-content;
+}
+/* ── HERO TOP STATS (cím felett) ── */
+.hero-top-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-top-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: #fff;
+  border: 1.5px solid #dde4f5;
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 8px rgba(40,56,151,0.07);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.hero-top-stat:hover {
+  border-color: #283897;
+  box-shadow: 0 4px 14px rgba(40,56,151,0.13);
+  transform: translateY(-2px);
+}
+.hero-top-stat-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #283897;
+  line-height: 1;
+}
+.hero-top-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7ecc;
+  white-space: nowrap;
+}
+.hero-top-stat-divider { display: none; }
+.hero-title-new {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.75rem, 2.5vw, 2.6rem);
+  font-weight: 800; color: #0f172a;
+  line-height: 1.25; letter-spacing: -0.02em; margin: 0;
+}
+.hero-title-accent {
+  color: #22c55e;
+  position: relative;
+  display: inline;
+}
+.hero-title-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-radius: 2px;
+}
+.hero-desc-new {
+  font-size: 15px; color: #4b5563;
+  line-height: 1.7; margin: 0;
+}
+/* ── HERO SEARCH BOX (2 soros) ── */
+.hero-search-box {
+  background: #fff;
+  border: 2px solid #c7d2f0;
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow:
+    0 4px 16px rgba(40,56,151,0.08),
+    0 1px 4px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.hero-search-box:hover {
+  border-color: #283897;
+  box-shadow:
+    0 8px 28px rgba(40,56,151,0.15),
+    0 2px 8px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+}
+.hero-search-box:focus-within {
+  border-color: #283897;
+  box-shadow:
+    0 8px 28px rgba(40,56,151,0.15),
+    0 0 0 4px rgba(40,56,151,0.08);
+  transform: translateY(-2px);
+}
+.hero-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.hero-search-field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f7fb;
+  border: 1.5px solid #e8edf8;
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.hero-search-field:focus-within {
+  border-color: #283897;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(40,56,151,0.07);
+}
+.hero-search-field input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 500;
+  color: #0f172a;
+  outline: none;
+  min-width: 0;
+}
+.hero-search-field input::placeholder { color: #b0bcd4; font-weight: 400; }
+/* Város + irányítószám egy boxban */
+.hero-search-location-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4f7fb;
+  border: 1.5px solid #e8edf8;
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.hero-search-location-box:focus-within {
+  border-color: #283897;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(40,56,151,0.07);
+}
+.hero-search-location-box input {
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 500;
+  color: #0f172a;
+  outline: none;
+  min-width: 0;
+  flex: 1;
+}
+.hero-search-location-box input::placeholder { color: #b0bcd4; font-weight: 400; }
+.hero-location-divider {
+  width: 1px;
+  height: 16px;
+  background: #d1daf0;
+  flex-shrink: 0;
+}
+.hero-divider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-divider-line {
+  flex: 1;
+  height: 1.5px;
+  background: #c7d2f0;
+}
+.hero-divider-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #283897;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+  background: #eef2ff;
+  border: 1.5px solid #c7d2f0;
+  border-radius: 100px;
+  padding: 5px 14px;
+  letter-spacing: 0.01em;
+}
+.hero-inline-search-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 100px;
+  padding: 8px 8px 8px 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hero-inline-search-inner:focus-within {
+  border-color: #c5cde8;
+  box-shadow: 0 4px 20px rgba(40,56,151,0.14);
+}
+.hero-inline-search-inner input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 500;
+  color: #374151;
+  outline: none;
+}
+.hero-inline-search-inner input::placeholder { color: #b0bcd4; font-weight: 400; }
+.hero-inline-search-btn {
+  background: var(--brand);
+  border: none;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 3px 10px rgba(40,56,151,0.3);
+}
+.hero-inline-search-btn:hover {
+  background: #1e2d7d;
+  transform: scale(1.06);
+  box-shadow: 0 5px 16px rgba(40,56,151,0.4);
+}
+.hero-how-mini {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 14px 18px;
+}
+.hero-how-mini-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 800; color: #0f172a;
+  margin-bottom: 12px;
+}
+.hero-how-mini-steps {
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-how-mini-step {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; flex: 1;
+}
+.hero-how-mini-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px; font-weight: 800; color: #6b7280;
+}
+.hero-how-mini-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: #f0fdf4; border: 1.5px solid #bbf7d0;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-how-mini-label {
+  font-size: 11px; color: #6b7280; text-align: center; line-height: 1.4;
+}
+.hero-how-mini-label strong { color: #0f172a; }
+.hero-btns-row {
+  display: flex; gap: 0.75rem; flex-wrap: wrap;
+}
+.hero-gdpr {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #6b7280;
+}
+.hero-mini-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  background: #fff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 16px;
+  padding: 12px 4px;
+  box-shadow: 0 2px 12px rgba(40,56,151,0.06);
+}
+.hero-mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  padding: 4px 16px;
+  border-right: 1.5px solid #eef1f8;
+}
+.hero-mini-stat:last-child {
+  border-right: none;
+}
+.hero-mini-stat-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hero-mini-stat-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px; font-weight: 800;
+  color: #0f172a; line-height: 1;
+}
+.hero-mini-stat-num span { font-size: 13px; font-weight: 600; color: #6b7280; }
+.hero-mini-stat-label {
+  font-size: 11px; color: #6b7280;
+  line-height: 1.4; margin-top: 3px;
 }
 .hero-eyebrow-label {
   font-family: 'Nunito', 'Arial Black', Impact, sans-serif;
@@ -862,91 +1216,83 @@ nav.one-row .nav-hamburger { display: flex; }
 /* ── AI CHAT WIDGET ── */
 .ai-chat-widget {
   background: #ffffff;
-  border-radius: 24px;
-  border: 1.5px solid #e8edf8;
+  border-radius: 22px;
+  border: 2px solid #c7d2f0;
   box-shadow:
-    0 4px 6px rgba(0,0,0,0.04),
-    0 12px 32px rgba(40,56,151,0.1),
-    0 32px 80px rgba(40,56,151,0.15),
-    0 64px 120px rgba(0,0,0,0.1);
+    0 4px 12px rgba(40,56,151,0.08),
+    0 16px 48px rgba(40,56,151,0.14),
+    0 32px 80px rgba(0,0,0,0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 462px;
-  width: 546px;
-  min-width: 546px;
+  height: 460px;
+  width: 520px;
+  min-width: 520px;
   flex-shrink: 0;
-  transform: translateY(-16px);
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 .ai-chat-widget:hover, .ai-chat-widget:focus-within {
   box-shadow:
-    0 8px 16px rgba(0,0,0,0.07),
-    0 24px 56px rgba(40,56,151,0.18),
-    0 56px 120px rgba(40,56,151,0.22),
-    0 96px 160px rgba(0,0,0,0.14);
-  transform: translateY(-26px);
+    0 8px 20px rgba(40,56,151,0.12),
+    0 28px 64px rgba(40,56,151,0.18),
+    0 48px 96px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
 }
+
 .ai-chat-header {
-  background: linear-gradient(120deg, #283897 0%, #1e2d7d 100%);
-  padding: 10px 16px;
+  background: #ffffff;
+  padding: 14px 16px 12px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-.ai-chat-header::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.03) 20px, rgba(255,255,255,0.03) 21px);
+  border-bottom: 1px solid #f0fdf4;
 }
 .ai-chat-avatar {
-  width: 40px; height: 40px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.08));
-  border-radius: 12px;
+  width: 48px; height: 48px;
+  background: #dcfce7;
+  border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; position: relative; z-index: 1;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  border: 2px solid #bbf7d0;
 }
-.ai-chat-avatar svg { color: #fff !important; }
+.ai-chat-avatar svg { color: #166534 !important; }
 .ai-chat-name {
-  font-size: 15px; font-weight: 600;
-  color: #fff !important;
-  line-height: 1.2; position: relative; z-index: 1;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 800;
+  color: #0f172a !important;
+  line-height: 1.2;
 }
 .ai-chat-status {
   display: flex; align-items: center; gap: 5px;
-  font-size: 13px; color: rgba(255,255,255,0.85) !important;
-  margin-top: 3px; position: relative; z-index: 1;
+  font-size: 13px; color: #6b7280 !important;
+  margin-top: 2px;
 }
 .ai-chat-dot {
   width: 7px; height: 7px;
-  background: #4ade80; border-radius: 50%;
+  background: #22c55e; border-radius: 50%;
   animation: pulse 2s infinite; flex-shrink: 0;
-  box-shadow: 0 0 6px rgba(74,222,128,0.7);
+  box-shadow: 0 0 6px rgba(34,197,94,0.5);
 }
 .ai-chat-secure {
   margin-left: auto;
   display: flex; align-items: center; gap: 5px;
-  font-size: 13px; color: rgba(255,255,255,0.75) !important;
-  flex-shrink: 0; position: relative; z-index: 1;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 100px; padding: 4px 10px;
+  font-size: 12px; color: #22c55e !important;
+  flex-shrink: 0;
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 100px; padding: 5px 12px;
 }
-.ai-chat-secure svg { width: 12px; height: 12px; }
+.ai-chat-secure svg { width: 12px; height: 12px; stroke: #22c55e; }
 .ai-chat-messages {
   flex: 1; overflow-y: auto;
   padding: 12px 14px 10px;
   display: flex; flex-direction: column; gap: 8px;
-  background: #f0f4ff;
+  background: #f8fffe;
   margin: 10px 12px;
   border-radius: 14px;
-  border: 1.5px solid #e2e8f5;
-  box-shadow: inset 0 2px 8px rgba(40,56,151,0.05);
+  border: 1.5px solid #d1fae5;
+  box-shadow: inset 0 2px 8px rgba(34,197,94,0.05);
 }
 .ai-bubble-examples {
   display: flex;
@@ -966,9 +1312,10 @@ nav.one-row .nav-hamburger { display: flex; }
 .ai-msg { justify-content: flex-start; }
 .user-msg { justify-content: flex-end; }
 .ai-chat-msg-avatar {
-  width: 30px; height: 30px;
-  background: rgba(40,56,151,0.08);
-  border-radius: 8px;
+  width: 32px; height: 32px;
+  background: #dcfce7;
+  border-radius: 50%;
+  border: 1.5px solid #bbf7d0;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
@@ -1062,9 +1409,9 @@ nav.one-row .nav-hamburger { display: flex; }
 }
 .ai-chat-input {
   width: 100%;
-  border: 1.5px solid #283897;
+  border: 1.5px solid #e5e7eb;
   border-radius: 14px;
-  padding: 20px 18px;
+  padding: 18px 16px;
   font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
   color: #374151;
@@ -1074,20 +1421,21 @@ nav.one-row .nav-hamburger { display: flex; }
   box-sizing: border-box;
 }
 .ai-chat-input:focus {
-  border-color: #283897;
+  border-color: #22c55e;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(40,56,151,0.1);
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.1);
 }
 .ai-chat-input::placeholder { color: #6b7280; font-weight: 500; }
 .ai-chat-send {
   width: 48px; height: 48px;
-  background: #283897;
-  border: none; border-radius: 12px;
+  background: #16a34a;
+  border: none; border-radius: 14px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; flex-shrink: 0;
   transition: background 0.2s, transform 0.15s;
+  box-shadow: 0 4px 12px rgba(22,163,74,0.35);
 }
-.ai-chat-send:hover { background: #1e2d7d; transform: scale(1.05); }
+.ai-chat-send:hover { background: #15803d; transform: scale(1.05); }
 .ai-chat-send:active { transform: scale(0.95); }
 /* Process hint - kept for JS compatibility */
 .ai-chat-process-hint { display: none; }
@@ -2042,40 +2390,44 @@ nav.one-row .nav-hamburger { display: flex; }
 /* ══════════════════════════════════════════
    RESPONSIVE — TABLET (max 1024px)
 ══════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   RESPONSIVE — TABLET (max 1024px)
+══════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .hero-two-col {
-    gap: 1.5rem 1rem;
-    padding: 0 3%;
-  }
-  .ai-chat-widget {
-    width: 420px !important;
-    min-width: 420px !important;
-  }
-  .hero-title { font-size: clamp(1.8rem, 3vw, 2.8rem) !important; }
-
-  /* Sections */
+  .hero-two-col { gap: 1.5rem; padding: 0 3%; }
+  .ai-chat-widget { width: 420px !important; min-width: 420px !important; }
   .why-grid { grid-template-columns: repeat(2, 1fr); }
   .specs-grid { grid-template-columns: repeat(4, 1fr); }
   .partner-inner { gap: 2rem; }
+  .nav-links { position: static; transform: none; }
 }
 
 /* ══════════════════════════════════════════
    RESPONSIVE — TABLET PORTRAIT (max 900px)
 ══════════════════════════════════════════ */
 @media (max-width: 900px) {
-  /* Nav */
-  nav.two-row .nav-bottom-row { display: none; }
-  nav.two-row { flex-direction: row; height: 56px; }
-  nav.two-row .nav-top-row { height: auto; }
-  nav .nav-search-wrap { max-width: 220px; }
-  nav .nav-hamburger { display: flex; }
+  /* Nav — hamburger megjelenítés */
+  nav .nav-links { display: none; }
+  nav .nav-actions { display: none; }
+  nav .nav-row-top { justify-content: space-between; }
+  .nav-mobile-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    background: #f0f4ff;
+    border: 1.5px solid #dde4f5;
+    border-radius: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
 
   /* Hero */
-  .hero { min-height: auto; height: auto; padding-top: 56px; }
-  .hero-content { padding: 1.5rem 4% 1rem; }
+  .hero { padding-top: 76px; }
+  .hero-content { padding: 1rem 4% 0.5rem; }
   .hero-two-col {
     flex-direction: column !important;
-    gap: 2rem;
+    gap: 1.5rem;
     padding: 0 4%;
   }
   .hero-left {
@@ -2084,16 +2436,15 @@ nav.one-row .nav-hamburger { display: flex; }
     transform: none !important;
     width: 100%;
   }
-  .hero-right-search {
-    width: 100% !important;
-  }
+  .hero-right-search { width: 100% !important; margin-top: 0 !important; }
   .ai-chat-widget {
     width: 100% !important;
     min-width: 0 !important;
-    height: 400px;
+    height: 420px !important;
     transform: none !important;
   }
-  .hero-ai-cta, .hero-search-outline-btn { width: 100%; }
+  .hero-side-features { display: none; }
+  .hero-top-stats { flex-wrap: wrap; gap: 6px; }
 
   /* Sections */
   .why-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2102,15 +2453,10 @@ nav.one-row .nav-hamburger { display: flex; }
   .how-step-arrow { transform: rotate(90deg); align-self: center; padding: 0; }
   .partner-inner { flex-direction: column; gap: 2rem; }
   .partner-right { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-
-  /* Klassz */
   .klassz-fields { flex-direction: column; }
   .klassz-btn { width: 100%; justify-content: center; }
   .klassz-ai-banner { flex-direction: column; gap: 1rem; align-items: flex-start; }
   .klassz-ai-btn { width: 100%; justify-content: center; }
-  .klassz-pills { gap: 8px; }
-
-  /* Footer */
   .footer-top { flex-direction: column; gap: 2rem; }
   .footer-links { flex-wrap: wrap; gap: 2rem; justify-content: flex-start; }
 }
@@ -2120,82 +2466,121 @@ nav.one-row .nav-hamburger { display: flex; }
 ══════════════════════════════════════════ */
 @media (max-width: 640px) {
   /* Nav */
-  .nav-search-bar { max-width: none; flex: 1; }
-  .nav-btn-outline, .nav-btn-login { display: none; }
+  nav { height: 60px !important; }
+  nav .nav-row-top { height: 60px !important; padding: 0 4%; }
+  .hero { padding-top: 68px; }
 
-  /* Hero */
-  .hero-content { padding: 1rem 4% 0.5rem; }
-  .hero-title { font-size: 2rem !important; line-height: 1.15 !important; }
-  .hero-sub-desc { font-size: 14px !important; max-width: 100% !important; }
+  /* Hero left */
+  .hero-content { padding: 0.75rem 4% 0; }
+  .hero-two-col { padding: 0 4%; gap: 1.25rem; }
+  .hero-title-new { font-size: 1.75rem !important; line-height: 1.2 !important; }
+  .hero-desc-new { font-size: 14px !important; }
+  .hero-top-stats { gap: 6px; }
+  .hero-top-stat { padding: 7px 12px; }
+  .hero-top-stat-num { font-size: 15px; }
+  .hero-divider-text { font-size: 11px; padding: 4px 10px; }
 
-  /* Badge kisebb mobilon */
-  .hero-eyebrow-label {
-    font-size: 10px !important;
-    letter-spacing: 0.08em !important;
-    padding: 6px 10px 6px 8px !important;
-  }
-  .hero-eyebrow-label svg { width: 18px !important; height: 18px !important; }
-
-  /* Gombok ne törjenek */
-  .hero-ai-cta {
-    font-size: 14px !important;
-    padding: 13px 20px !important;
-    white-space: nowrap;
-    width: 100%;
-    justify-content: center;
-  }
-  .hero-search-outline-btn {
-    font-size: 13px !important;
-    padding: 12px 20px !important;
-    white-space: nowrap;
-    width: 100%;
-    justify-content: center;
-  }
+  /* Search box */
+  .hero-search-box { padding: 10px; }
+  .hero-search-field input { font-size: 13px; }
+  .hero-search-location-box input { font-size: 13px; }
+  .hero-search-field-zip { flex: 0 0 100px; }
 
   /* Chat widget */
-  .ai-chat-widget { height: 380px; }
-
-  /* Klassz */
-  .klassz-title { font-size: 20px; }
-  .klassz-pills { gap: 6px; }
-  .klassz-pill { font-size: 12px; padding: 7px 12px; }
-  .klassz-ai-banner { padding: 1rem; }
-  .klassz-ai-sub { font-size: 12px; }
+  .ai-chat-widget { height: 360px !important; }
+  .ai-chat-input { font-size: 14px !important; padding: 14px !important; }
 
   /* Sections */
   .how-section, .stats-section, .specs-section, .why-section,
-  .partner-section, .faq-section-new, .cta-section-new { padding: 3rem 4%; }
+  .partner-section, .faq-section-new, .cta-section-new { padding: 2.5rem 4%; }
   .section-title { font-size: 22px; }
-  .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .specs-grid { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
   .specs-card { padding: 1rem 0.5rem; }
-  .specs-emoji { font-size: 24px; }
+  .specs-emoji { font-size: 22px; }
   .why-grid { grid-template-columns: 1fr; }
   .stats-grid { flex-wrap: wrap; }
   .stats-divider { display: none; }
   .stats-item { flex: 0 0 50%; padding: 1rem; }
   .stats-num { font-size: 28px; }
-  .partner-stat-card { min-width: 140px; }
-  .cta-btns { flex-direction: column; align-items: center; }
-  .cta-btn-primary, .cta-btn-outline { width: 100%; justify-content: center; }
-  .cta-title { font-size: 24px; }
-
-  /* Footer */
+  .partner-stat-card { min-width: 130px; }
+  .cta-btns { flex-direction: column; align-items: stretch; }
+  .cta-btn-primary, .cta-btn-outline { width: 100%; justify-content: center; text-align: center; }
+  .cta-title { font-size: 22px; }
   .footer-links { grid-template-columns: repeat(2, 1fr); }
-  .footer-copy, .footer-badge { font-size: 12px; }
+  .klassz-search-section { padding: 1.5rem 4% 2rem; }
+  .klassz-card { padding: 1.25rem; }
+  .klassz-title { font-size: 20px; }
+  .klassz-pills { gap: 6px; }
+  .klassz-pill { font-size: 12px; padding: 7px 12px; }
+  .klassz-ai-banner { padding: 1rem; }
+  .klassz-fields { flex-direction: column; }
+  .klassz-btn { width: 100%; justify-content: center; }
+  .hero-search-row { flex-wrap: wrap; }
+  .hero-search-location-box { flex: 1; }
 }
 
 /* ══════════════════════════════════════════
    RESPONSIVE — SMALL MOBILE (max 400px)
 ══════════════════════════════════════════ */
 @media (max-width: 400px) {
-  .hero-title { font-size: 1.5rem !important; }
+  .hero-title-new { font-size: 1.5rem !important; }
   .specs-grid { grid-template-columns: repeat(2, 1fr); }
-  .klassz-inner { padding: 0; }
-  .hero-ai-cta, .hero-search-outline-btn { font-size: 12px !important; }
   .stats-item { flex: 0 0 100%; }
+  .hero-top-stats { flex-direction: column; align-items: flex-start; }
+  .ai-chat-widget { height: 320px !important; }
 }
 
-/* ── CHAT START SECTION ── */
+/* ── MOBILE DRAWER ── */
+.nav-mobile-toggle { display: none; }
+.mobile-drawer {
+  position: fixed;
+  top: 64px; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(20px);
+  z-index: 190;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+}
+.mobile-drawer.open { transform: translateX(0); }
+.mobile-drawer-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 5%;
+  gap: 4px;
+}
+.mobile-nav-item {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: #283897;
+  text-decoration: none;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f4fb;
+  display: block;
+  transition: color 0.2s, padding-left 0.2s;
+}
+.mobile-nav-item:hover { color: #ff6b2b; padding-left: 6px; }
+.mobile-nav-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff6b2b;
+  color: #fff !important;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  margin-top: 12px;
+  box-shadow: 0 4px 16px rgba(255,107,43,0.3);
+  transition: background 0.2s;
+}
+.mobile-nav-cta:hover { background: #e55a1c; }
+@media (max-width: 900px) {
+  .nav-mobile-toggle { display: flex !important; }
+}
 .chat-legal-info {
   display: flex; align-items: center; gap: 6px;
   font-size: 12px; color: #6b7280;
@@ -2795,38 +3180,16 @@ footer {
 </head>
 <body>
 
-<nav class="two-row-nav" id="mainNav">
-
-  <!-- Felső sor: logo + kereső + gombok -->
+<nav id="mainNav">
   <div class="nav-row-top">
-    <a href="#" class="nav-logo" style="display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;">
-      <img src="data:image/png;base64,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" alt="logo" style="width:28px;height:28px;object-fit:contain;">
-      <span style="font-family:'Nunito',sans-serif;font-size:24px;font-weight:700 !important;color:#283897;letter-spacing:-0.5px;line-height:1;">Szakorvos<span style="color:#283897;">.hu</span></span>
+    <a href="#" class="nav-logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
+      <img src="data:image/png;base64,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" alt="ikon" style="height:46px;width:auto;object-fit:contain;">
+      <div style="display:flex;flex-direction:column;gap:1px;">
+        <span style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:#283897;letter-spacing:-0.3px;line-height:1.1;">Szakorvos<span style="color:#22c55e;">.hu</span></span>
+        <span style="font-family:'Nunito',sans-serif;font-size:10.5px;font-weight:700;color:#22c55e;letter-spacing:0.13em;text-transform:uppercase;line-height:1;">Országos szakorvoskereső</span>
+      </div>
     </a>
 
-    <div class="nav-search-bar">
-      <div class="nav-search-inner">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="navSearchInput" type="text" placeholder="Orvos, szakterület, város…" onkeydown="if(event.key==='Enter') navGoSearch()">
-        <button class="nav-search-go-icon" onclick="navGoSearch()" title="Keresés">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="nav-actions">
-      <a href="#" class="btn-nav-outline">Bejelentkezés</a>
-    </div>
-
-    <button class="nav-hamburger" id="hamburger" onclick="toggleHamburger()">
-      <div class="nav-hamburger-lines">
-        <span></span><span></span><span></span>
-      </div>
-    </button>
-  </div>
-
-  <!-- Alsó sor: menüpontok -->
-  <div class="nav-row-bottom">
     <ul class="nav-links">
       <li>
         <a href="#">Orvosok
@@ -2840,16 +3203,16 @@ footer {
         </div>
       </li>
       <li>
-        <a href="#">Megoldások
+        <a href="#">Klinikák
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
-          <a href="#">Online foglalás</a>
-          <a href="#">Telemedizin</a>
-          <a href="#">Rendelők térképe</a>
+          <a href="#">Magánklinikák</a>
+          <a href="#">Kórházak</a>
+          <a href="#">Rendelők</a>
+          <a href="#">Diagnosztikai központok</a>
         </div>
       </li>
-      <li><a href="#">Erőforrások</a></li>
       <li><a href="tudastar.html" class="nav-link-highlight">Tudástár A–Z</a></li>
       <li>
         <a href="#">Kapcsolat
@@ -2861,18 +3224,37 @@ footer {
         </div>
       </li>
     </ul>
-    <a href="#" class="btn-nav-cta">Legyen Ön is a partnerünk</a>
-  </div>
 
+    <div class="nav-actions">
+      <a href="#" class="btn-nav-outline">Bejelentkezés</a>
+      <a href="#" class="btn-nav-cta" style="position:static;width:auto;margin-left:8px;">Legyen Ön is a partnerünk</a>
+    </div>
+
+    <!-- Hamburger (csak mobilon látszik) -->
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" style="display:none;">
+      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
 </nav>
 
-<div class="nav-mobile-menu" id="mobileMenu">
-  <a href="#" class="nav-mobile-item">Orvosok</a>
-  <a href="#" class="nav-mobile-item">Megoldások</a>
-  <a href="#" class="nav-mobile-item">Erőforrások</a>
-  <a href="#" class="nav-mobile-item">Kapcsolat</a>
-  <a href="#" class="nav-mobile-item" style="color:var(--orange)">Bejelentkezés</a>
+<!-- Mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="#" class="mobile-nav-item">Orvosok</a>
+    <a href="#" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#283897;font-weight:700;">Tudástár A–Z</a>
+    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
+    <a href="#" class="mobile-nav-item">Bejelentkezés</a>
+    <a href="#" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
+  </div>
 </div>
+
+
 
 <div class="hero">
   <div class="hero-content">
@@ -2881,50 +3263,88 @@ footer {
       <!-- BAL: cím + feature lista + stat sor -->
       <div class="hero-left">
 
-        <div class="hero-eyebrow-label" style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.92);border-radius:10px;padding:7px 12px 7px 8px;box-shadow:0 4px 14px rgba(40,56,151,0.12);border:1px solid rgba(40,56,151,0.12);width:fit-content;">
-          <div style="width:26px;height:26px;background:linear-gradient(135deg,#283897,#1e2d7d);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <!-- Stat pill sor a cím felett -->
+        <div class="hero-top-stats">
+          <div class="hero-top-stat">
+            <span class="hero-top-stat-num">12 000+</span>
+            <span class="hero-top-stat-label">orvos</span>
           </div>
-          <span style="font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:#283897;letter-spacing:1px;white-space:nowrap;">ORSZÁGOS SZAKORVOSKERESŐ</span>
+          <div class="hero-top-stat-divider"></div>
+          <div class="hero-top-stat">
+            <span class="hero-top-stat-num">1 800+</span>
+            <span class="hero-top-stat-label">klinika</span>
+          </div>
+          <div class="hero-top-stat-divider"></div>
+          <div class="hero-top-stat">
+            <span class="hero-top-stat-num">3 400+</span>
+            <span class="hero-top-stat-label">tudástár cikk</span>
+          </div>
         </div>
 
-        <h1 class="hero-title">
-          Nem tudja milyen<br>szakorvosra van<br>szüksége?<br><span class="accent" style="font-weight:800 !important">Megmondjuk.</span>
+        <!-- Badge -->
+        <!-- Cím -->
+        <h1 class="hero-title-new">
+          Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
         </h1>
 
-        <a href="#" class="hero-ai-cta" onclick="document.getElementById('chatInput').focus();return false;">
-          <span class="hero-ai-cta-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </span>
-          AI asszisztens kipróbálása →
-        </a>
+        <!-- Alcím -->
+        <p class="hero-desc-new">
+          Írja le tüneteit, AI asszisztensünk elemzi,<br>
+          és segít megtalálni a legmegfelelőbb szakorvost az Ön számára.
+        </p>
 
-        <a href="talalatok.html" class="hero-search-outline-btn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          Hagyományos kereső →
-        </a>
+        <!-- Elválasztó + szöveg -->
+        <div class="hero-divider-row">
+          <div class="hero-divider-line"></div>
+          <span class="hero-divider-text">vagy használja a klasszikus orvoskeresőt</span>
+          <div class="hero-divider-line"></div>
+        </div>
+
+        <!-- Inline search box -->
+        <div class="hero-search-box">
+          <!-- 1. sor: Mit keres + gomb -->
+          <div class="hero-search-row" style="position:relative;">
+            <div class="hero-search-field">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="heroInlineSearch" placeholder="Orvos, szakterület, vizsgálat…" autocomplete="off"
+                oninput="smartSearch('heroInlineSearch','heroDropdown')"
+                onfocus="smartFocus('heroInlineSearch','heroDropdown')"
+                onkeydown="smartKeydown(event,'heroInlineSearch','heroDropdown')">
+            </div>
+            <div class="freetext-dropdown" id="heroDropdown"></div>
+          </div>
+          <!-- 2. sor: Város + Irányítószám egy boxban + gomb -->
+          <div class="hero-search-row">
+            <div class="hero-search-location-box">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input type="text" id="heroSearchCityInline" placeholder="Város, pl. Budapest…" onkeydown="if(event.key==='Enter') heroInlineSearch()">
+              <div class="hero-location-divider"></div>
+              <input type="text" id="heroSearchZip" placeholder="Irányítószám" onkeydown="if(event.key==='Enter') heroInlineSearch()" style="width:95px;flex-shrink:0;">
+            </div>
+            <button class="hero-inline-search-btn" onclick="heroInlineSearch()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
 
       </div>
 
-      <!-- JOBB: AI chat + floating stat cards -->
+      <!-- JOBB: AI chat + oldalsó feature kártyák -->
       <div class="hero-right-search">
 
         <div class="ai-chat-widget">
 
-          <!-- Header -->
+          <!-- Header - zöld -->
           <div class="ai-chat-header">
             <div class="ai-chat-avatar">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)"/>
-                <path d="M12 3C8 3 5 6 5 9.5c0 2.5 1.5 4.7 3.7 5.8L8 18h8l-.7-2.7C17.5 14.2 19 12 19 9.5 19 6 16 3 12 3z" fill="white" opacity="0.95"/>
-                <circle cx="9.5" cy="10" r="1.2" fill="#283897"/>
-                <circle cx="14.5" cy="10" r="1.2" fill="#283897"/>
-                <path d="M9.5 13.5 Q12 15.5 14.5 13.5" stroke="#283897" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-                <line x1="12" y1="3" x2="12" y2="1" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
-                <circle cx="12" cy="0.8" r="1" fill="white" opacity="0.8"/>
-                <line x1="8" y1="18" x2="8" y2="21" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-                <line x1="16" y1="18" x2="16" y2="21" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-                <line x1="7" y1="21" x2="17" y2="21" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+              <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.2)"/>
+                <rect x="10" y="14" width="20" height="14" rx="5" fill="white" opacity="0.95"/>
+                <circle cx="15" cy="21" r="2" fill="#166534"/>
+                <circle cx="25" cy="21" r="2" fill="#166534"/>
+                <path d="M15 25 Q20 28 25 25" stroke="#166534" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                <line x1="20" y1="14" x2="20" y2="10" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
+                <circle cx="20" cy="9" r="2" fill="white" opacity="0.9"/>
               </svg>
             </div>
             <div>
@@ -2935,7 +3355,7 @@ footer {
               </div>
             </div>
             <div class="ai-chat-secure">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span>Biztonságos és titkos</span>
             </div>
           </div>
@@ -2944,15 +3364,14 @@ footer {
           <div class="ai-chat-messages" id="chatMessages">
             <div class="ai-chat-msg ai-msg" id="chatStartSection">
               <div class="ai-chat-msg-avatar">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="12" cy="12" r="10" fill="#eef2ff"/>
-                  <path d="M12 4C9 4 7 6.5 7 9c0 1.8 1 3.4 2.6 4.2L9 16h6l-.6-2.8C16 12.4 17 10.8 17 9c0-2.5-2-5-5-5z" fill="#283897" opacity="0.85"/>
-                  <circle cx="10" cy="9.5" r="0.9" fill="white"/>
-                  <circle cx="14" cy="9.5" r="0.9" fill="white"/>
-                  <path d="M10 12 Q12 13.5 14 12" stroke="white" stroke-width="1.1" stroke-linecap="round" fill="none"/>
-                  <line x1="9" y1="16" x2="9" y2="18" stroke="#283897" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-                  <line x1="15" y1="16" x2="15" y2="18" stroke="#283897" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
-                  <line x1="8.5" y1="18" x2="15.5" y2="18" stroke="#283897" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="18" fill="#f0fdf4"/>
+                  <rect x="10" y="14" width="20" height="14" rx="5" fill="#22c55e" opacity="0.9"/>
+                  <circle cx="15" cy="21" r="1.8" fill="white"/>
+                  <circle cx="25" cy="21" r="1.8" fill="white"/>
+                  <path d="M15 25 Q20 27.5 25 25" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                  <line x1="20" y1="14" x2="20" y2="10" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="20" cy="9" r="1.8" fill="#22c55e"/>
                 </svg>
               </div>
               <div class="ai-chat-bubble ai-bubble">
@@ -2981,13 +3400,35 @@ footer {
           <!-- Footer -->
           <div class="ai-chat-footer-area">
             <div class="chat-legal-info">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ff6b2b" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               Az AI nem helyettesíti az orvosi diagnózist!
             </div>
             <a href="#" class="chat-legal-more">További információ →</a>
           </div>
 
-      </div><!-- end ai-chat-widget -->
+        </div><!-- end ai-chat-widget -->
+
+        <!-- Jobb oldalsó feature kártyák -->
+        <div class="hero-side-features">
+          <div class="hero-side-feat">
+            <div class="hero-side-feat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div class="hero-side-feat-label">Adatvédelem<br>első helyen</div>
+          </div>
+          <div class="hero-side-feat">
+            <div class="hero-side-feat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+            </div>
+            <div class="hero-side-feat-label">Ellenőrzött<br>szakemberek</div>
+          </div>
+          <div class="hero-side-feat">
+            <div class="hero-side-feat-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div class="hero-side-feat-label">Önre szabott<br>ajánlások</div>
+          </div>
+        </div>
 
     </div><!-- end hero-right-search -->
 
@@ -3148,66 +3589,24 @@ footer {
           'Belgyógyászat':'🩺','Gyermekgyógyászat':'👶','Allergológia':'🌸'
         };
         const icon = icons[specialty] || '🏥';
-        const colors = ['#283897','#7c3aed','#0d9488','#dc2626','#ec4899','#ea580c'];
 
-        try {
-          const { data: doctors } = await db
-            .from('doctors')
-            .select('name, title, rating, review_count, doctor_specialties(specialties(name)), doctor_clinics(clinics(name, cities(name)))')
-            .eq('is_active', true)
-            .limit(50);
-
-          // JS-side filter by specialty
-          const filtered = (doctors || []).filter(d =>
-            (d.doctor_specialties || []).some(ds =>
-              ds.specialties?.name?.toLowerCase().includes(specialty.toLowerCase())
-            )
-          ).slice(0, 3);
-
-          let doctorCards = '';
-          if (filtered.length > 0) {
-            doctorCards = filtered.map((d, i) => {
-              const initials = d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2);
-              const city = d.doctor_clinics?.[0]?.clinics?.cities?.name || '';
-              const clinic = d.doctor_clinics?.[0]?.clinics?.name || '';
-              const stars = Math.round(d.rating || 0);
-              return `<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e2e8f5;border-radius:12px;padding:10px 12px;margin-bottom:6px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
-                <div style="width:38px;height:38px;border-radius:10px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;font-family:'Nunito',sans-serif">${initials}</div>
-                <div style="flex:1;min-width:0">
-                  <div style="font-size:13px;font-weight:700;color:#0f172a;font-family:'Nunito',sans-serif">${d.name}${d.title ? ' <span style="font-weight:400;color:#6b7280;font-size:11px">'+d.title+'</span>' : ''}</div>
-                  <div style="font-size:11px;color:#6b7280;margin-top:1px">${specialty}${city ? ' · 📍 '+city : ''}${clinic ? ' · '+clinic : ''}</div>
-                </div>
-                <div style="text-align:right;flex-shrink:0">
-                  <div style="font-size:12px;color:#f59e0b;font-weight:700">${d.rating ? '★ '+parseFloat(d.rating).toFixed(1) : '–'}</div>
-                  <div style="font-size:10px;color:#22c55e;font-weight:600">● Szabad</div>
-                </div>
-              </div>`;
-            }).join('');
-          } else {
-            doctorCards = `<div style="font-size:12px;color:#9aa5c4;padding:8px 0">Jelenleg nem találtunk ${specialty} orvost az adatbázisban.</div>`;
-          }
-
-          const html = `
-            <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:14px">
-              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                <span style="font-size:20px">${icon}</span>
-                <div>
-                  <div style="font-size:14px;font-weight:800;color:#283897;font-family:'Nunito',sans-serif">${specialty}</div>
-                  <div style="font-size:11px;color:#6b7280">Ajánlott szakterület az Ön tünetei alapján</div>
-                </div>
+        const html = `
+          <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:16px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+              <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#283897,#1e2d7d);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${icon}</div>
+              <div>
+                <div style="font-size:16px;font-weight:800;color:#283897;font-family:'Nunito',sans-serif">${specialty}</div>
+                <div style="font-size:12px;color:#6b7280;margin-top:2px">Az Ön tünetei alapján ajánlott szakterület</div>
               </div>
-              ${doctorCards}
-              <a href="talalatok.html?specialty=${encodeURIComponent(specialty)}"
-                style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#283897,#1e2d7d);border-radius:10px;padding:11px 14px;text-decoration:none;margin-top:8px;box-shadow:0 4px 12px rgba(40,56,151,0.3)">
-                <div style="font-size:13px;font-weight:700;color:#fff;font-family:'Nunito',sans-serif">Összes ${specialty} orvos →</div>
-                <div style="font-size:11px;color:rgba(255,255,255,0.65)">Szűrés, értékelések</div>
-              </a>
-            </div>`;
+            </div>
+            <a href="talalatok.html?specialty=${encodeURIComponent(specialty)}"
+              style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#283897,#1e2d7d);border-radius:12px;padding:12px 16px;text-decoration:none;box-shadow:0 4px 14px rgba(40,56,151,0.3)">
+              <div style="font-size:13px;font-weight:700;color:#fff;font-family:'Nunito',sans-serif">${specialty} szakorvos keresése</div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>`;
 
-          addMsg(html, 'ai');
-        } catch(e) {
-          console.error('Doctor fetch error:', e);
-        }
+        addMsg(html, 'ai');
       }
 
       function sendChip(text) {
@@ -3348,6 +3747,7 @@ footer {
       let freetextTimeout = null;
       let freetextActiveIdx = -1;
       let freetextItems = [];
+      let activeDropdownId = null;
 
       const TYPE_CONFIG = {
         specialty: { label: 'Szakterület', bg: '#fff3ed', color: '#ff6b2b' },
@@ -3368,49 +3768,29 @@ footer {
         { type: 'treatment', icon: '💉', name: 'Védőoltás', sub: 'Megelőző immunizálás' },
       ];
 
-      async function freetextSearch(val) {
-        const clear = document.getElementById('freetextClear');
-        clear.style.display = val ? 'flex' : 'none';
-
+      // ── GENERIC SMART SEARCH (nav + hero + klassz) ──
+      function smartSearch(inputId, dropId) {
+        const val = document.getElementById(inputId).value;
+        activeDropdownId = dropId;
+        // sync clear button if exists
+        const clr = document.getElementById('freetextClear');
+        if (clr && inputId === 'freetextInput') clr.style.display = val ? 'flex' : 'none';
+        const spn = document.getElementById('freetextSpinner');
         clearTimeout(freetextTimeout);
-        if (!val || val.length < 1) {
-          showDefaultSuggestions();
-          return;
-        }
-
-        document.getElementById('freetextSpinner').classList.add('active');
-
+        if (!val || val.length < 1) { renderDropdown(DEFAULT_SUGGESTIONS, dropId); return; }
+        if (spn && inputId === 'freetextInput') spn.classList.add('active');
         freetextTimeout = setTimeout(async () => {
           try {
             const q = val.toLowerCase();
             const results = [];
-
             const [docRes, clinicRes, specRes] = await Promise.all([
               db.from('doctors').select('id,name,title,doctor_specialties(specialties(name))').ilike('name', `%${val}%`).limit(4),
               db.from('clinics').select('id,name,cities(name)').ilike('name', `%${val}%`).limit(3),
               db.from('specialties').select('id,name,icon').ilike('name', `%${val}%`).limit(4),
             ]);
-
-            (docRes.data || []).forEach(d => results.push({
-              type: 'doctor', icon: '👨‍⚕️',
-              name: d.name + (d.title ? ' ' + d.title : ''),
-              sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos',
-              id: d.id,
-            }));
-            (clinicRes.data || []).forEach(c => results.push({
-              type: 'clinic', icon: '🏥',
-              name: c.name,
-              sub: c.cities?.name || 'Klinika',
-              id: c.id,
-            }));
-            (specRes.data || []).forEach(s => results.push({
-              type: 'specialty', icon: s.icon || '🔬',
-              name: s.name,
-              sub: 'Szakterület',
-              id: s.id,
-            }));
-
-            // Static exam/treatment suggestions
+            (docRes.data || []).forEach(d => results.push({ type: 'doctor', icon: '👨‍⚕️', name: d.name + (d.title ? ' ' + d.title : ''), sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos', id: d.id }));
+            (clinicRes.data || []).forEach(c => results.push({ type: 'clinic', icon: '🏥', name: c.name, sub: c.cities?.name || 'Klinika', id: c.id }));
+            (specRes.data || []).forEach(s => results.push({ type: 'specialty', icon: s.icon || '🔬', name: s.name, sub: 'Szakterület', id: s.id }));
             const examSuggestions = [
               { type: 'exam', icon: '🩺', name: 'EKG vizsgálat', sub: 'Vizsgálat' },
               { type: 'exam', icon: '🩻', name: 'Ultrahang vizsgálat', sub: 'Vizsgálat' },
@@ -3418,118 +3798,94 @@ footer {
               { type: 'treatment', icon: '💉', name: 'Védőoltás', sub: 'Kezelés' },
               { type: 'treatment', icon: '🩹', name: 'Fizikoterápia', sub: 'Kezelés' },
             ].filter(e => e.name.toLowerCase().includes(q));
-
             results.push(...examSuggestions);
-
-            renderDropdown(results.slice(0, 8));
-          } catch(e) {
-            console.error(e);
-          } finally {
-            document.getElementById('freetextSpinner').classList.remove('active');
-          }
+            renderDropdown(results.slice(0, 8), dropId);
+          } catch(e) { console.error(e); }
+          finally { if (spn && inputId === 'freetextInput') spn.classList.remove('active'); }
         }, 220);
       }
 
-      function showDefaultSuggestions() {
-        renderDropdown(DEFAULT_SUGGESTIONS);
+      function smartFocus(inputId, dropId) {
+        activeDropdownId = dropId;
+        const val = document.getElementById(inputId).value;
+        renderDropdown(val ? [] : DEFAULT_SUGGESTIONS, dropId);
+        if (val) smartSearch(inputId, dropId);
       }
 
-      function renderDropdown(items) {
-        const drop = document.getElementById('freetextDropdown');
+      function smartKeydown(e, inputId, dropId) {
+        const drop = document.getElementById(dropId);
+        const items = drop.querySelectorAll('.freetext-item');
+        if (e.key === 'ArrowDown') { e.preventDefault(); freetextActiveIdx = Math.min(freetextActiveIdx + 1, items.length - 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); freetextActiveIdx = Math.max(freetextActiveIdx - 1, -1); }
+        else if (e.key === 'Enter') {
+          if (freetextActiveIdx >= 0) selectItem(parseInt(items[freetextActiveIdx].dataset.idx), inputId, dropId);
+          else smartGo(inputId);
+          return;
+        } else if (e.key === 'Escape') { drop.classList.remove('open'); return; }
+        items.forEach((el, i) => el.classList.toggle('active', i === freetextActiveIdx));
+      }
+
+      function smartGo(inputId) {
+        const v = document.getElementById(inputId).value.trim();
+        if (v) window.location.href = `talalatok.html?specialty=${encodeURIComponent(v)}`;
+      }
+
+      function selectItem(idx, inputId, dropId) {
+        const item = freetextItems[idx];
+        if (!item) return;
+        document.getElementById(inputId).value = item.name;
+        document.getElementById(dropId).classList.remove('open');
+        const dest = item.type === 'doctor' ? `talalatok.html?specialty=${encodeURIComponent(item.sub)}` : `talalatok.html?specialty=${encodeURIComponent(item.name)}`;
+        window.location.href = dest;
+      }
+
+      function renderDropdown(items, dropId) {
+        const drop = document.getElementById(dropId);
+        if (!drop) return;
         freetextItems = items;
         freetextActiveIdx = -1;
-
-        if (!items.length) {
-          drop.innerHTML = '<div class="freetext-empty">Nincs találat</div>';
-          drop.classList.add('open');
-          return;
-        }
-
-        // Group by type in correct order
+        if (!items.length) { drop.classList.remove('open'); return; }
         const ORDER = ['specialty', 'exam', 'treatment', 'doctor', 'clinic'];
         const groups = {};
         ORDER.forEach(t => groups[t] = []);
-        items.forEach(item => {
-          if (groups[item.type]) groups[item.type].push(item);
-          else groups[item.type] = [item];
-        });
-
-        let html = '';
-        let idx = 0;
+        items.forEach(item => { if (groups[item.type]) groups[item.type].push(item); else groups[item.type] = [item]; });
+        let html = ''; let idx = 0;
         ORDER.forEach(type => {
           const groupItems = groups[type] || [];
           if (!groupItems.length) return;
           const cfg = TYPE_CONFIG[type] || { label: type, bg: '#f4f7fb', color: '#374151' };
           html += `<div class="freetext-group-label">${cfg.label}</div>`;
           groupItems.forEach(item => {
-            html += `<div class="freetext-item" data-idx="${idx}" onmousedown="selectFreetextItem(${idx})">
+            html += `<div class="freetext-item" data-idx="${idx}" onmousedown="selectItem(${idx},'${document.activeElement.id||'freetextInput'}','${dropId}')">
               <div class="freetext-item-icon" style="background:${cfg.bg}">${item.icon}</div>
-              <div class="freetext-item-main">
-                <div class="freetext-item-name">${item.name}</div>
-                <div class="freetext-item-sub">${item.sub}</div>
-              </div>
+              <div class="freetext-item-main"><div class="freetext-item-name">${item.name}</div><div class="freetext-item-sub">${item.sub}</div></div>
               <span class="freetext-item-badge" style="background:${cfg.bg};color:${cfg.color}">${cfg.label}</span>
             </div>`;
             idx++;
           });
         });
-
         drop.innerHTML = html;
         drop.classList.add('open');
-        document.getElementById('freetextSpinner').classList.remove('active');
       }
 
-      function selectFreetextItem(idx) {
-        const item = freetextItems[idx];
-        if (!item) return;
-        document.getElementById('freetextInput').value = item.name;
-        document.getElementById('freetextClear').style.display = 'flex';
-        document.getElementById('freetextDropdown').classList.remove('open');
-
-        if (item.type === 'doctor') {
-          window.location.href = `talalatok.html?specialty=${encodeURIComponent(item.sub)}`;
-        } else {
-          window.location.href = `talalatok.html?specialty=${encodeURIComponent(item.name)}`;
-        }
-      }
-
-      function freetextFocus() {
-        const val = document.getElementById('freetextInput').value;
-        if (!val) showDefaultSuggestions();
-        else freetextSearch(val);
-      }
-
-      function freetextKeydown(e) {
-        const drop = document.getElementById('freetextDropdown');
-        const items = drop.querySelectorAll('.freetext-item');
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          freetextActiveIdx = Math.min(freetextActiveIdx + 1, items.length - 1);
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          freetextActiveIdx = Math.max(freetextActiveIdx - 1, -1);
-        } else if (e.key === 'Enter') {
-          if (freetextActiveIdx >= 0) selectFreetextItem(parseInt(items[freetextActiveIdx].dataset.idx));
-          else window.location.href = `talalatok.html?specialty=${encodeURIComponent(document.getElementById('freetextInput').value)}`;
-          return;
-        } else if (e.key === 'Escape') {
-          drop.classList.remove('open');
-          return;
-        }
-        items.forEach((el, i) => el.classList.toggle('active', i === freetextActiveIdx));
-      }
-
+      // ── LEGACY wrappers for klassz section ──
+      function freetextSearch(val) { smartSearch('freetextInput', 'freetextDropdown'); }
+      function showDefaultSuggestions() { renderDropdown(DEFAULT_SUGGESTIONS, 'freetextDropdown'); }
+      function freetextFocus() { smartFocus('freetextInput', 'freetextDropdown'); }
+      function freetextKeydown(e) { smartKeydown(e, 'freetextInput', 'freetextDropdown'); }
       function clearFreetext() {
         document.getElementById('freetextInput').value = '';
         document.getElementById('freetextClear').style.display = 'none';
         document.getElementById('freetextDropdown').classList.remove('open');
         document.getElementById('freetextInput').focus();
       }
+      function selectFreetextItem(idx) { selectItem(idx, 'freetextInput', 'freetextDropdown'); }
 
       document.addEventListener('click', e => {
-        if (!e.target.closest('.freetext-search-wrap')) {
-          document.getElementById('freetextDropdown').classList.remove('open');
-        }
+        ['freetextDropdown','navDropdown','heroDropdown'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && !e.target.closest(`#${id}`) && !e.target.closest('input')) el.classList.remove('open');
+        });
       });
 
     </script>
@@ -3562,13 +3918,6 @@ footer {
               </button>
             </div>
             <div class="freetext-dropdown" id="freetextDropdown"></div>
-          </div>
-          <div class="klassz-field-wrap city">
-            <label class="klassz-label">Hol?</label>
-            <div class="klassz-field">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <input id="heroSearchCity" type="text" placeholder="pl. Budapest, Szeged…" onkeydown="if(event.key==='Enter') heroSearch()">
-            </div>
           </div>
           <button class="klassz-btn" onclick="heroSearch()">
             Keresés
@@ -3898,9 +4247,34 @@ footer {
 </style>
 
 <script>
+function toggleMobileMenu() {
+  const drawer = document.getElementById('mobileDrawer');
+  const btn = document.getElementById('mobileToggle');
+  drawer.classList.toggle('open');
+  btn.style.background = drawer.classList.contains('open') ? '#eef2ff' : '#f0f4ff';
+}
+document.addEventListener('click', e => {
+  const drawer = document.getElementById('mobileDrawer');
+  const btn = document.getElementById('mobileToggle');
+  if (drawer && !drawer.contains(e.target) && btn && !btn.contains(e.target)) {
+    drawer.classList.remove('open');
+  }
+});
+
 function navGoSearch() {
   const val = document.getElementById('navSearchInput').value.trim();
   if (val) window.location.href = 'talalatok.html?specialty=' + encodeURIComponent(val);
+}
+
+function heroInlineSearch() {
+  const spec = (document.getElementById('heroInlineSearch') && document.getElementById('heroInlineSearch').value.trim()) || '';
+  const city = (document.getElementById('heroSearchCityInline') && document.getElementById('heroSearchCityInline').value.trim()) || '';
+  const zip  = (document.getElementById('heroSearchZip') && document.getElementById('heroSearchZip').value.trim()) || '';
+  const params = new URLSearchParams();
+  if (spec) params.set('specialty', spec);
+  if (city) params.set('city', city);
+  if (zip)  params.set('zip', zip);
+  window.location.href = 'talalatok.html?' + params.toString();
 }
 
 function heroSearch() {
@@ -3922,172 +4296,6 @@ const _hsc = document.getElementById('heroSearchCity');
 if (_hsc) _hsc.addEventListener('keydown', function(e) { if (e.key === 'Enter') heroSearch(); });
 </script>
 
-
-<!-- ── HOGYAN MŰKÖDIK ── -->
-<section class="how-section">
-  <div class="how-inner">
-    <div class="how-header" data-anim="fade-up">
-      <div class="section-eyebrow">Hogyan működik</div>
-      <h2 class="section-title">Három lépés az ideális orvosig</h2>
-      <p class="section-sub">Egyszerű, gyors és személyre szabott folyamat</p>
-    </div>
-    <div class="how-steps">
-      <div class="how-step" data-anim="fade-up" style="transition-delay:0s">
-        <div class="how-step-num">1</div>
-        <div class="how-step-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        </div>
-        <h3 class="how-step-title">Írja le tünetét</h3>
-        <p class="how-step-desc">Adja meg panaszát vagy a keresett szakterületet az AI keresőben vagy a klasszikus keresőben.</p>
-      </div>
-      <div class="how-step-arrow">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4dcf0" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </div>
-      <div class="how-step" data-anim="fade-up" style="transition-delay:0.15s">
-        <div class="how-step-num">2</div>
-        <div class="how-step-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h3 class="how-step-title">Válasszon orvost</h3>
-        <p class="how-step-desc">Böngéssze az ajánlott szakorvosokat értékelések, helyszín és elérhetőség szerint szűrve.</p>
-      </div>
-      <div class="how-step-arrow">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4dcf0" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </div>
-      <div class="how-step" data-anim="fade-up" style="transition-delay:0.3s">
-        <div class="how-step-num">3</div>
-        <div class="how-step-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <h3 class="how-step-title">Foglaljon időpontot</h3>
-        <p class="how-step-desc">Online foglalja le időpontját közvetlenül a rendszerben — egyszerűen, bármikor.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SZÁMOK ── -->
-<section class="stats-section">
-  <div class="stats-inner">
-    <div class="stats-grid">
-      <div class="stats-item" data-anim="fade-up" style="transition-delay:0s">
-        <div class="stats-num">12 000<span>+</span></div>
-        <div class="stats-label">Regisztrált szakorvos</div>
-      </div>
-      <div class="stats-divider"></div>
-      <div class="stats-item" data-anim="fade-up" style="transition-delay:0.1s">
-        <div class="stats-num">1 800<span>+</span></div>
-        <div class="stats-label">Partner klinika</div>
-      </div>
-      <div class="stats-divider"></div>
-      <div class="stats-item" data-anim="fade-up" style="transition-delay:0.2s">
-        <div class="stats-num">94<span>%</span></div>
-        <div class="stats-label">Elégedett páciens</div>
-      </div>
-      <div class="stats-divider"></div>
-      <div class="stats-item" data-anim="fade-up" style="transition-delay:0.3s">
-        <div class="stats-num">2 perc</div>
-        <div class="stats-label">Átlagos foglalási idő</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── SZAKTERÜLETEK ── -->
-<section class="specs-section">
-  <div class="specs-inner">
-    <div class="specs-header" data-anim="fade-up">
-      <div class="section-eyebrow">Szakterületek</div>
-      <h2 class="section-title">Minden orvosi területen segítünk</h2>
-    </div>
-    <div class="specs-grid" data-anim="fade-up" style="transition-delay:0.15s" id="specsGrid">
-      <button class="specs-card" onclick="heroQuickSearch('Kardiológus')"><span class="specs-emoji">❤️</span><span class="specs-name">Kardiológus</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Neurológus')"><span class="specs-emoji">🧠</span><span class="specs-name">Neurológus</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Bőrgyógyász')"><span class="specs-emoji">🌿</span><span class="specs-name">Bőrgyógyász</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Nőgyógyász')"><span class="specs-emoji">💜</span><span class="specs-name">Nőgyógyász</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Ortopéd')"><span class="specs-emoji">🦴</span><span class="specs-name">Ortopéd</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Szemész')"><span class="specs-emoji">👁️</span><span class="specs-name">Szemész</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Fogorvos')"><span class="specs-emoji">🦷</span><span class="specs-name">Fogorvos</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Gyermekgyógyász')"><span class="specs-emoji">👶</span><span class="specs-name">Gyermekgyógyász</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Urológus')"><span class="specs-emoji">🔬</span><span class="specs-name">Urológus</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Pszichiáter')"><span class="specs-emoji">🧩</span><span class="specs-name">Pszichiáter</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Belgyógyász')"><span class="specs-emoji">🩺</span><span class="specs-name">Belgyógyász</span></button>
-      <button class="specs-card" onclick="heroQuickSearch('Fül-orr-gégész')"><span class="specs-emoji">👂</span><span class="specs-name">Fül-orr-gégész</span></button>
-    </div>
-  </div>
-</section>
-
-<!-- ── MIÉRT MI ── -->
-<section class="why-section">
-  <div class="why-inner">
-    <div class="why-header" data-anim="fade-up">
-      <div class="section-eyebrow">Miért Szakorvos.hu</div>
-      <h2 class="section-title">Az orvoskeresés egyszerűbb mint valaha</h2>
-    </div>
-    <div class="why-grid">
-      <div class="why-card" data-anim="fade-up" style="transition-delay:0s">
-        <div class="why-icon" style="background:#eef2ff">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-        </div>
-        <h3 class="why-title">AI alapú ajánlás</h3>
-        <p class="why-desc">Mesterséges intelligenciánk a tünetei és igényei alapján azonosítja a legjobb szakembert.</p>
-      </div>
-      <div class="why-card" data-anim="fade-up" style="transition-delay:0.1s">
-        <div class="why-icon" style="background:#ecfdf5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.8"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <h3 class="why-title">Valós idejű elérhetőség</h3>
-        <p class="why-desc">Csak elérhető időpontokat mutatunk — nincs felesleges telefonálgatás vagy várakozás.</p>
-      </div>
-      <div class="why-card" data-anim="fade-up" style="transition-delay:0.2s">
-        <div class="why-icon" style="background:#fff3ed">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff6b2b" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3 class="why-title">Biztonságos és titkos</h3>
-        <p class="why-desc">Adatai teljes mértékben védve vannak — GDPR-kompatibilis, titkosított rendszerben.</p>
-      </div>
-      <div class="why-card" data-anim="fade-up" style="transition-delay:0.3s">
-        <div class="why-icon" style="background:#f3e8ff">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <h3 class="why-title">Online foglalás 0–24</h3>
-        <p class="why-desc">Foglaljon időpontot bármikor, bárhonnan — az orvoskeresés nem vár munkaidőre.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── PARTNER ORVOSOKNAK ── -->
-<section class="partner-section">
-  <div class="partner-inner">
-    <div class="partner-left" data-anim="fade-left">
-      <div class="section-eyebrow">Orvosoknak & Klinikáknak</div>
-      <h2 class="section-title" style="color:#fff">Legyen Ön is a partnerünk</h2>
-      <p class="partner-desc">Csatlakozzon több ezer orvoshoz és klinikához, akik már a Szakorvos.hu platformon kezelik pácienseiket és időpontjaikat.</p>
-      <div class="partner-features">
-        <div class="partner-feat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Ingyenes profil létrehozás</div>
-        <div class="partner-feat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Online időpontkezelő rendszer</div>
-        <div class="partner-feat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Páciens visszajelzések kezelése</div>
-        <div class="partner-feat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Statisztikák és analitika</div>
-      </div>
-      <a href="#" class="partner-btn">Regisztrálok partnerként →</a>
-    </div>
-    <div class="partner-right" data-anim="fade-right">
-      <div class="partner-stat-card">
-        <div class="partner-stat-num">12 000<span>+</span></div>
-        <div class="partner-stat-label">Partner orvos</div>
-      </div>
-      <div class="partner-stat-card">
-        <div class="partner-stat-num">1 800<span>+</span></div>
-        <div class="partner-stat-label">Partner klinika</div>
-      </div>
-      <div class="partner-stat-card">
-        <div class="partner-stat-num">350 000<span>+</span></div>
-        <div class="partner-stat-label">Sikeres foglalás</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ── FAQ ── -->
 <section class="faq-section-new">
@@ -4117,23 +4325,6 @@ if (_hsc) _hsc.addEventListener('keydown', function(e) { if (e.key === 'Enter') 
         <summary class="faq-q">Orvosként hogyan csatlakozhatok?<span class="faq-arrow">›</span></summary>
         <div class="faq-a">A „Legyen Ön is a partnerünk" gombra kattintva regisztrálhat. Az alapprofil ingyenesen hozható létre, és azonnal megjelenik a keresési találatokban.</div>
       </details>
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ── -->
-<section class="cta-section-new">
-  <div class="cta-inner">
-    <div class="cta-content" data-anim="fade-scale">
-      <h2 class="cta-title">Találja meg a legjobb szakorvost ma</h2>
-      <p class="cta-sub">Több mint 12 000 szakorvos, valós idejű foglalás, AI alapú ajánlás</p>
-      <div class="cta-btns">
-        <a href="#" class="cta-btn-primary" onclick="document.getElementById('chatInput').focus();return false;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          AI asszisztens kipróbálása
-        </a>
-        <a href="talalatok.html" class="cta-btn-outline">Orvosok böngészése →</a>
-      </div>
     </div>
   </div>
 </section>
@@ -4285,11 +4476,7 @@ html { scroll-behavior: smooth; }
 .why-inner { max-width: 1000px; margin: 0 auto; }
 .why-header { text-align: center; margin-bottom: 2.5rem; }
 .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-.why-card {
-  background: #f4f7fb; border-radius: 20px; padding: 1.75rem;
-  border: 1.5px solid #e8edf8;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
+
 .why-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(40,56,151,0.1); }
 .why-icon {
   width: 52px; height: 52px; border-radius: 14px;
