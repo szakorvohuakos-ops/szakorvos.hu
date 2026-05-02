@@ -8,7 +8,69 @@ Syntax highlighting has been disabled due to code size.
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Szakorvos.hu – Orvoskereső</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- ── SEO ALAPOK ── -->
+<title>Szakorvos.hu – Országos Szakorvoskereső | Foglalj Időpontot Online</title>
+<meta name="description" content="Magyarország legnagyobb szakorvoskeresője. Találd meg a legmegfelelőbb szakorvost AI segítséggel vagy hagyományos kereséssel. 12 000+ orvos, 1 800+ klinika, gyors online időpontfoglalás.">
+<meta name="keywords" content="szakorvos, orvoskereső, időpontfoglalás, kardiológus, bőrgyógyász, nőgyógyász, fogorvos, magánorvos, Budapest, Magyarország">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Szakorvos.hu">
+<link rel="canonical" href="https://www.szakorvos.hu/">
+
+<!-- ── OPEN GRAPH (Facebook, LinkedIn) ── -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.szakorvos.hu/">
+<meta property="og:title" content="Szakorvos.hu – Találd meg a legjobb szakorvost">
+<meta property="og:description" content="AI-alapú és hagyományos orvoskereső. 12 000+ orvos, 1 800+ klinika. Foglalj időpontot percek alatt!">
+<meta property="og:image" content="https://www.szakorvos.hu/og-image.jpg">
+<meta property="og:locale" content="hu_HU">
+<meta property="og:site_name" content="Szakorvos.hu">
+
+<!-- ── TWITTER CARD ── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Szakorvos.hu – Országos Szakorvoskereső">
+<meta name="twitter:description" content="AI-alapú és hagyományos orvoskereső. 12 000+ orvos, 1 800+ klinika.">
+<meta name="twitter:image" content="https://www.szakorvos.hu/og-image.jpg">
+
+<!-- ── SCHEMA.ORG STRUKTURÁLT ADATOK ── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Szakorvos.hu",
+  "url": "https://www.szakorvos.hu",
+  "description": "Magyarország legnagyobb szakorvoskeresője",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.szakorvos.hu/talalatok.html?specialty={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalOrganization",
+  "name": "Szakorvos.hu",
+  "url": "https://www.szakorvos.hu",
+  "logo": "https://www.szakorvos.hu/logo.png",
+  "description": "Szakorvos.hu az ország vezető orvoskeresője, ahol páciensek könnyen megtalálhatják a megfelelő szakembert.",
+  "areaServed": {
+    "@type": "Country",
+    "name": "Magyarország"
+  }
+}
+</script>
+
+<script>
+// Ha visszanavigáció (bfcache) történik, kényszerítjük az újratöltést
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) window.location.reload();
+});
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -530,7 +592,7 @@ nav.one-row .nav-hamburger { display: flex; }
   gap: 16px;
   flex-shrink: 0;
   position: relative;
-  margin-top: -24px;
+  margin-top: 0;
 }
 .hero-right-search::before {
   content: '';
@@ -632,37 +694,58 @@ nav.one-row .nav-hamburger { display: flex; }
 .hero-top-stats {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
+  background: #fff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 14px;
+  padding: 10px 0;
+  box-shadow: 0 2px 10px rgba(40,56,151,0.06);
+  width: fit-content;
 }
 .hero-top-stat {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  background: #fff;
-  border: 1.5px solid #dde4f5;
-  border-radius: 12px;
-  padding: 10px 16px;
-  box-shadow: 0 2px 8px rgba(40,56,151,0.07);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  gap: 10px;
+  padding: 4px 20px;
+  border-right: 1.5px solid #eef1f8;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  position: static;
+  transition: none;
+  cursor: default;
 }
-.hero-top-stat:hover {
-  border-color: #283897;
-  box-shadow: 0 4px 14px rgba(40,56,151,0.13);
-  transform: translateY(-2px);
+.hero-top-stat:last-child { border-right: none; }
+.hero-top-stat::before { display: none; }
+.hero-top-stat:hover { border-color: transparent; box-shadow: none; transform: none; }
+.hero-top-stat:hover { border-right-color: #eef1f8; }
+.hero-top-stat-icon {
+  width: 40px; height: 40px;
+  background: #ecfdf5;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
+.hero-top-stat-icon svg { width: 20px; height: 20px; }
+.hero-top-stat-text { display: flex; flex-direction: column; gap: 1px; }
 .hero-top-stat-num {
   font-family: 'Nunito', sans-serif;
   font-size: 18px;
-  font-weight: 800;
-  color: #283897;
-  line-height: 1;
+  font-weight: 900;
+  color: #ff6b2b;
+  line-height: 1.1;
+  white-space: nowrap;
+  position: static;
 }
 .hero-top-stat-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #6b7ecc;
+  color: #6b7280;
   white-space: nowrap;
+  position: static;
 }
 .hero-top-stat-divider { display: none; }
 .hero-title-new {
@@ -689,6 +772,15 @@ nav.one-row .nav-hamburger { display: flex; }
   line-height: 1.7; margin: 0;
 }
 /* ── HERO SEARCH BOX (2 soros) ── */
+.hero-search-box-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  color: #283897;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 4px 2px;
+}
 .hero-search-box {
   background: #fff;
   border: 2px solid #c7d2f0;
@@ -788,24 +880,34 @@ nav.one-row .nav-hamburger { display: flex; }
 .hero-divider-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 .hero-divider-line {
   flex: 1;
   height: 1.5px;
-  background: #c7d2f0;
+  background: linear-gradient(90deg, transparent, #d1daf0);
+}
+.hero-divider-line:last-child {
+  background: linear-gradient(90deg, #d1daf0, transparent);
 }
 .hero-divider-text {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #283897;
   font-family: 'Nunito', sans-serif;
   white-space: nowrap;
-  background: #eef2ff;
+  background: #fff;
   border: 1.5px solid #c7d2f0;
-  border-radius: 100px;
-  padding: 5px 14px;
-  letter-spacing: 0.01em;
+  border-radius: 10px;
+  padding: 8px 16px;
+  box-shadow: 0 3px 12px rgba(40,56,151,0.10), 0 1px 3px rgba(0,0,0,0.05);
+  animation: dividerPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+@keyframes dividerPop {
+  0%   { opacity: 0; transform: translateY(8px) scale(0.93); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 .hero-inline-search-inner {
   display: flex;
@@ -836,20 +938,26 @@ nav.one-row .nav-hamburger { display: flex; }
 .hero-inline-search-btn {
   background: var(--brand);
   border: none;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
+  border-radius: 12px;
+  height: 42px;
+  padding: 0 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
   cursor: pointer;
   flex-shrink: 0;
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
   box-shadow: 0 3px 10px rgba(40,56,151,0.3);
 }
 .hero-inline-search-btn:hover {
   background: #1e2d7d;
-  transform: scale(1.06);
+  transform: scale(1.04);
   box-shadow: 0 5px 16px rgba(40,56,151,0.4);
 }
 .hero-how-mini {
@@ -1307,6 +1415,41 @@ nav.one-row .nav-hamburger { display: flex; }
   color: #374151;
   font-style: italic;
   font-weight: 500;
+}
+/* ── CHAT EXAMPLE CHIPS ── */
+.ai-chat-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(40,56,151,0.08);
+}
+.ai-chat-example-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #9aa5c4;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 2px;
+}
+.ai-chat-example-chip {
+  background: #f0f4ff;
+  border: 1px solid #dde4f5;
+  border-radius: 8px;
+  padding: 7px 11px;
+  font-size: 12.5px;
+  font-family: 'Nunito Sans', sans-serif;
+  color: #283897;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  line-height: 1.4;
+}
+.ai-chat-example-chip:hover {
+  background: #e4ecff;
+  border-color: #b8c6e8;
+  transform: translateX(3px);
 }
 .ai-chat-msg { display: flex; align-items: flex-end; gap: 8px; }
 .ai-msg { justify-content: flex-start; }
@@ -2435,8 +2578,9 @@ nav.one-row .nav-hamburger { display: flex; }
     max-width: 100% !important;
     transform: none !important;
     width: 100%;
+    order: 2;
   }
-  .hero-right-search { width: 100% !important; margin-top: 0 !important; }
+  .hero-right-search { width: 100% !important; margin-top: 0 !important; order: 1; }
   .ai-chat-widget {
     width: 100% !important;
     min-width: 0 !important;
@@ -2444,7 +2588,7 @@ nav.one-row .nav-hamburger { display: flex; }
     transform: none !important;
   }
   .hero-side-features { display: none; }
-  .hero-top-stats { flex-wrap: wrap; gap: 6px; }
+  .hero-top-stats { flex-wrap: wrap; gap: 8px; }
 
   /* Sections */
   .why-grid { grid-template-columns: repeat(2, 1fr); }
@@ -2476,7 +2620,7 @@ nav.one-row .nav-hamburger { display: flex; }
   .hero-title-new { font-size: 1.75rem !important; line-height: 1.2 !important; }
   .hero-desc-new { font-size: 14px !important; }
   .hero-top-stats { gap: 6px; }
-  .hero-top-stat { padding: 7px 12px; }
+  .hero-top-stat { width: 82px; height: 82px; }
   .hero-top-stat-num { font-size: 15px; }
   .hero-divider-text { font-size: 11px; padding: 4px 10px; }
 
@@ -3266,18 +3410,31 @@ footer {
         <!-- Stat pill sor a cím felett -->
         <div class="hero-top-stats">
           <div class="hero-top-stat">
-            <span class="hero-top-stat-num">12 000+</span>
-            <span class="hero-top-stat-label">orvos</span>
+            <div class="hero-top-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="hero-top-stat-text">
+              <span class="hero-top-stat-num">12 000+</span>
+              <span class="hero-top-stat-label">orvos</span>
+            </div>
           </div>
-          <div class="hero-top-stat-divider"></div>
           <div class="hero-top-stat">
-            <span class="hero-top-stat-num">1 800+</span>
-            <span class="hero-top-stat-label">klinika</span>
+            <div class="hero-top-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="8"/><line x1="12" y1="2" x2="12" y2="6"/></svg>
+            </div>
+            <div class="hero-top-stat-text">
+              <span class="hero-top-stat-num">1 800+</span>
+              <span class="hero-top-stat-label">klinika</span>
+            </div>
           </div>
-          <div class="hero-top-stat-divider"></div>
           <div class="hero-top-stat">
-            <span class="hero-top-stat-num">3 400+</span>
-            <span class="hero-top-stat-label">tudástár cikk</span>
+            <div class="hero-top-stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="hero-top-stat-text">
+              <span class="hero-top-stat-num">3 400+</span>
+              <span class="hero-top-stat-label">tudástár cikk</span>
+            </div>
           </div>
         </div>
 
@@ -3295,34 +3452,32 @@ footer {
 
         <!-- Elválasztó + szöveg -->
         <div class="hero-divider-row">
-          <div class="hero-divider-line"></div>
-          <span class="hero-divider-text">vagy használja a klasszikus orvoskeresőt</span>
-          <div class="hero-divider-line"></div>
+          <div class="hero-divider-line" style="flex:1;"></div>
         </div>
 
         <!-- Inline search box -->
         <div class="hero-search-box">
-          <!-- 1. sor: Mit keres + gomb -->
+          <div class="hero-search-box-label">Keresés szakterület, kezelés vagy orvos neve alapján</div>
+          <!-- 1. sor: Mit keres -->
           <div class="hero-search-row" style="position:relative;">
             <div class="hero-search-field">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input type="text" id="heroInlineSearch" placeholder="Orvos, szakterület, vizsgálat…" autocomplete="off"
+              <input type="text" id="heroInlineSearch" placeholder="pl. Kardiológus, EKG, Dr. Kiss János…" autocomplete="off"
                 oninput="smartSearch('heroInlineSearch','heroDropdown')"
                 onfocus="smartFocus('heroInlineSearch','heroDropdown')"
                 onkeydown="smartKeydown(event,'heroInlineSearch','heroDropdown')">
             </div>
             <div class="freetext-dropdown" id="heroDropdown"></div>
           </div>
-          <!-- 2. sor: Város + Irányítószám egy boxban + gomb -->
+          <!-- 2. sor: Város + gomb -->
           <div class="hero-search-row">
             <div class="hero-search-location-box">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <input type="text" id="heroSearchCityInline" placeholder="Város, pl. Budapest…" onkeydown="if(event.key==='Enter') heroInlineSearch()">
-              <div class="hero-location-divider"></div>
-              <input type="text" id="heroSearchZip" placeholder="Irányítószám" onkeydown="if(event.key==='Enter') heroInlineSearch()" style="width:95px;flex-shrink:0;">
             </div>
             <button class="hero-inline-search-btn" onclick="heroInlineSearch()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Keresés
             </button>
           </div>
         </div>
@@ -3376,6 +3531,14 @@ footer {
               </div>
               <div class="ai-chat-bubble ai-bubble">
                 Kérjük, írjon le bármilyen tünetet vagy panaszt, és megtalálom a megfelelő szakorvost az Ön számára.
+                <div class="ai-chat-examples" id="chatExamples">
+                  <div class="ai-chat-example-label">Például:</div>
+                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Fáj a térdem lépcsőzéskor</button>
+                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Mellkasi szorítást érzek terhelésre</button>
+                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Három napja fáj a fejem és szédülök</button>
+                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Bőrkiütés jelent meg a karomra</button>
+                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Szívdobogásérzésem van éjszaka</button>
+                </div>
               </div>
             </div>
           </div>
@@ -3434,49 +3597,48 @@ footer {
 
     <script>
       const chatMessages = document.getElementById('chatMessages');
-      // ── TYPING ANIMATION ──
+      // ── TYPING ANIMATION — 1 javaslat, folyamatos, gépeléskor leáll ──
       const chatInput = document.getElementById('chatInput');
       if (chatInput) {
-        const phrases = [
-          'Írja le a panaszát… pl. fáj a térdem lépcsőzéskor',
-          'Három napja fáj a fejem és szédülök…',
-          'Mellkasi szorítást érzek terhelésre…',
-          'Bőrkiütés jelent meg a karomra…',
-          'Hátfájásom van, alig tudok hajolni…',
-          'Szívdobogásérzésem van éjszaka…',
-        ];
-        let phraseIdx = 0;
+        const phrase = 'Írja le a panaszát… pl. fáj a térdem lépcsőzéskor';
         let charIdx = 0;
         let isDeleting = false;
         let typingTimer = null;
+        let stopped = false;
 
         function typeEffect() {
-          if (document.activeElement === chatInput) {
-            typingTimer = setTimeout(typeEffect, 2000);
-            return;
-          }
-          const current = phrases[phraseIdx];
+          if (stopped) return;
           if (!isDeleting) {
             charIdx++;
-            chatInput.setAttribute('placeholder', current.slice(0, charIdx));
-            if (charIdx === current.length) {
+            chatInput.setAttribute('placeholder', phrase.slice(0, charIdx));
+            if (charIdx === phrase.length) {
               isDeleting = true;
               typingTimer = setTimeout(typeEffect, 2200);
               return;
             }
           } else {
             charIdx--;
-            chatInput.setAttribute('placeholder', current.slice(0, charIdx));
+            chatInput.setAttribute('placeholder', phrase.slice(0, charIdx));
             if (charIdx === 0) {
               isDeleting = false;
-              phraseIdx = (phraseIdx + 1) % phrases.length;
               typingTimer = setTimeout(typeEffect, 400);
               return;
             }
           }
-          typingTimer = setTimeout(typeEffect, isDeleting ? 35 : 55);
+          typingTimer = setTimeout(typeEffect, isDeleting ? 30 : 60);
         }
-        setTimeout(typeEffect, 1500);
+
+        chatInput.addEventListener('input', function() {
+          if (this.value.length > 0) {
+            stopped = true;
+            clearTimeout(typingTimer);
+            this.setAttribute('placeholder', '');
+            const ex = document.getElementById('chatExamples');
+            if (ex) ex.style.display = 'none';
+          }
+        });
+
+        setTimeout(typeEffect, 1200);
       }
 
       const chatInputEl = document.getElementById('chatInput');
@@ -3769,10 +3931,16 @@ footer {
       ];
 
       // ── GENERIC SMART SEARCH (nav + hero + klassz) ──
+      async function sbGet(path) {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        return res.ok ? res.json() : [];
+      }
+
       function smartSearch(inputId, dropId) {
         const val = document.getElementById(inputId).value;
         activeDropdownId = dropId;
-        // sync clear button if exists
         const clr = document.getElementById('freetextClear');
         if (clr && inputId === 'freetextInput') clr.style.display = val ? 'flex' : 'none';
         const spn = document.getElementById('freetextSpinner');
@@ -3783,14 +3951,15 @@ footer {
           try {
             const q = val.toLowerCase();
             const results = [];
-            const [docRes, clinicRes, specRes] = await Promise.all([
-              db.from('doctors').select('id,name,title,doctor_specialties(specialties(name))').ilike('name', `%${val}%`).limit(4),
-              db.from('clinics').select('id,name,cities(name)').ilike('name', `%${val}%`).limit(3),
-              db.from('specialties').select('id,name,icon').ilike('name', `%${val}%`).limit(4),
+            const enc = encodeURIComponent(val);
+            const [docData, clinicData, specData] = await Promise.all([
+              sbGet(`doctors?select=id,name,title,doctor_specialties(specialties(name))&name=ilike.*${enc}*&limit=4`),
+              sbGet(`clinics?select=id,name,cities(name)&name=ilike.*${enc}*&limit=3`),
+              sbGet(`specialties?select=id,name,icon&name=ilike.*${enc}*&limit=4`),
             ]);
-            (docRes.data || []).forEach(d => results.push({ type: 'doctor', icon: '👨‍⚕️', name: d.name + (d.title ? ' ' + d.title : ''), sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos', id: d.id }));
-            (clinicRes.data || []).forEach(c => results.push({ type: 'clinic', icon: '🏥', name: c.name, sub: c.cities?.name || 'Klinika', id: c.id }));
-            (specRes.data || []).forEach(s => results.push({ type: 'specialty', icon: s.icon || '🔬', name: s.name, sub: 'Szakterület', id: s.id }));
+            (docData || []).forEach(d => results.push({ type: 'doctor', icon: '👨‍⚕️', name: (d.title ? d.title + ' ' : '') + d.name, sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos', id: d.id }));
+            (clinicData || []).forEach(c => results.push({ type: 'clinic', icon: '🏥', name: c.name, sub: c.cities?.name || 'Klinika', id: c.id }));
+            (specData || []).forEach(s => results.push({ type: 'specialty', icon: s.icon || '🔬', name: s.name, sub: 'Szakterület', id: s.id }));
             const examSuggestions = [
               { type: 'exam', icon: '🩺', name: 'EKG vizsgálat', sub: 'Vizsgálat' },
               { type: 'exam', icon: '🩻', name: 'Ultrahang vizsgálat', sub: 'Vizsgálat' },
@@ -3835,8 +4004,11 @@ footer {
         if (!item) return;
         document.getElementById(inputId).value = item.name;
         document.getElementById(dropId).classList.remove('open');
-        const dest = item.type === 'doctor' ? `talalatok.html?specialty=${encodeURIComponent(item.sub)}` : `talalatok.html?specialty=${encodeURIComponent(item.name)}`;
-        window.location.href = dest;
+        if (item.type === 'doctor') {
+          window.location.href = `orvos.html?id=${item.id}`;
+        } else {
+          window.location.href = `talalatok.html?specialty=${encodeURIComponent(item.name)}`;
+        }
       }
 
       function renderDropdown(items, dropId) {
@@ -3892,410 +4064,133 @@ footer {
 
   </div>
 
-  <!-- ── HERO BOTTOM SEARCH ── -->
-  <div class="klassz-search-section">
-    <div class="klassz-inner">
-
-      <div class="klassz-header">
-        <h2 class="klassz-title">Klasszikus kereső</h2>
-        <p class="klassz-sub">Keressen orvosra, szakterületre vagy városra egyszerűen.</p>
-      </div>
-
-      <div class="klassz-card">
-
-        <div class="klassz-fields">
-          <div class="klassz-field-wrap" style="position:relative">
-            <label class="klassz-label">Mit keres?</label>
-            <div class="klassz-field" id="freetextField">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input id="freetextInput" type="text" placeholder="Orvos, klinika, szakterület, vizsgálat, kezelés…" autocomplete="off"
-                oninput="freetextSearch(this.value)"
-                onfocus="freetextFocus()"
-                onkeydown="freetextKeydown(event)">
-              <span class="freetext-spinner" id="freetextSpinner"></span>
-              <button class="freetext-clear" id="freetextClear" onclick="clearFreetext()" style="display:none">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-            <div class="freetext-dropdown" id="freetextDropdown"></div>
-          </div>
-          <button class="klassz-btn" onclick="heroSearch()">
-            Keresés
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          </button>
-        </div>
-        <div class="klassz-hints">
-          <span class="klassz-hint">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Gyors és egyszerű használat
-          </span>
-          <span class="klassz-hint">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Valós idejű találatok
-          </span>
-        </div>
-
-        <div class="klassz-divider"></div>
-
-        <div class="klassz-specs-label">Népszerű szakterületek</div>
-        <div class="klassz-pills">
-          <button class="klassz-pill" onclick="heroQuickSearch('Kardiológus')">❤️ Kardiológus</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Bőrgyógyász')">🌿 Bőrgyógyász</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Nőgyógyász')">💜 Nőgyógyász</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Szemész')">👁️ Szemész</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Fogorvos')">🦷 Fogorvos</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Ortopéd')">🦴 Ortopéd</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Fül-orr-gégész')">👂 Fül-orr-gégész</button>
-          <button class="klassz-pill" onclick="heroQuickSearch('Urológus')">🔬 Urológus</button>
-        </div>
-
-        <div class="klassz-divider"></div>
-
-        <div class="klassz-ai-banner">
-          <div class="klassz-ai-left">
-            <div class="klassz-ai-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            </div>
-            <div>
-              <div class="klassz-ai-title">Nem találja, amit keres?</div>
-              <div class="klassz-ai-sub">Próbálja ki AI asszisztensünket, amely személyre szabott javaslatokat ad.</div>
-            </div>
-          </div>
-          <a href="#" class="klassz-ai-btn" onclick="document.getElementById('chatInput').focus();return false;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            AI asszisztens kipróbálása →
-          </a>
-        </div>
-      </div>
-
+<!-- ── NÉPSZERŰ SZAKTERÜLETEK ── -->
+<section class="popular-specs-section">
+  <div class="popular-specs-inner">
+    <div class="popular-specs-header">
+      <h2 class="popular-specs-title">Népszerű szakterületek</h2>
+      <p class="popular-specs-sub">Kattintson egy szakterületre és találja meg a legjobb szakorvost</p>
+    </div>
+    <div class="popular-specs-grid">
+      <button class="popular-spec-card" onclick="heroQuickSearch('Kardiológus')">
+        <div class="popular-spec-icon" style="background:#fff0f0;">❤️</div>
+        <span class="popular-spec-name">Kardiológus</span>
+        <span class="popular-spec-sub">Szív- és érrendszer</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Neurológus')">
+        <div class="popular-spec-icon" style="background:#f3f0ff;">🧠</div>
+        <span class="popular-spec-name">Neurológus</span>
+        <span class="popular-spec-sub">Idegrendszer</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Bőrgyógyász')">
+        <div class="popular-spec-icon" style="background:#f0fdf4;">🌿</div>
+        <span class="popular-spec-name">Bőrgyógyász</span>
+        <span class="popular-spec-sub">Bőr- és hajproblémák</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Nőgyógyász')">
+        <div class="popular-spec-icon" style="background:#fdf0ff;">💜</div>
+        <span class="popular-spec-name">Nőgyógyász</span>
+        <span class="popular-spec-sub">Nőgyógyászat</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Ortopéd')">
+        <div class="popular-spec-icon" style="background:#fff7ed;">🦴</div>
+        <span class="popular-spec-name">Ortopéd</span>
+        <span class="popular-spec-sub">Csont- és ízületproblémák</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Szemész')">
+        <div class="popular-spec-icon" style="background:#f0fbff;">👁️</div>
+        <span class="popular-spec-name">Szemész</span>
+        <span class="popular-spec-sub">Szembetegségek</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Fogorvos')">
+        <div class="popular-spec-icon" style="background:#f0f9ff;">🦷</div>
+        <span class="popular-spec-name">Fogorvos</span>
+        <span class="popular-spec-sub">Fogászat</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Gyermekgyógyász')">
+        <div class="popular-spec-icon" style="background:#f0fdf4;">👶</div>
+        <span class="popular-spec-name">Gyermekgyógyász</span>
+        <span class="popular-spec-sub">Gyermekek egészsége</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Pszichiáter')">
+        <div class="popular-spec-icon" style="background:#fdf4ff;">🧩</div>
+        <span class="popular-spec-name">Pszichiáter</span>
+        <span class="popular-spec-sub">Mentális egészség</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Belgyógyász')">
+        <div class="popular-spec-icon" style="background:#f0f4ff;">🩺</div>
+        <span class="popular-spec-name">Belgyógyász</span>
+        <span class="popular-spec-sub">Általános belgyógyászat</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Urológus')">
+        <div class="popular-spec-icon" style="background:#f0f9ff;">🔬</div>
+        <span class="popular-spec-name">Urológus</span>
+        <span class="popular-spec-sub">Húgyúti betegségek</span>
+      </button>
+      <button class="popular-spec-card" onclick="heroQuickSearch('Fül-orr-gégész')">
+        <div class="popular-spec-icon" style="background:#fffbf0;">👂</div>
+        <span class="popular-spec-name">Fül-orr-gégész</span>
+        <span class="popular-spec-sub">Fül, orr, torok</span>
+      </button>
     </div>
   </div>
+</section>
 
-  <!-- Smooth transition to klassz section -->
-  <div class="hero-to-klassz">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,0 C360,80 1080,80 1440,0 L1440,80 L0,80 Z" fill="#e8edf8"/>
-    </svg>
+<!-- ── VÉLEMÉNYEK ── -->
+<section class="reviews-section">
+  <div class="reviews-inner">
+    <div class="reviews-header">
+      <h2 class="reviews-title">Bíznak bennünk</h2>
+      <p class="reviews-sub">Több ezer elégedett páciens tapasztalata.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">„Nagyon gyorsan segített megtalálni a megfelelő szakorvost. Az AI pontosan értette a problémámat."</p>
+        <div class="review-footer">
+          <div class="review-avatar" style="background:#dcfce7;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="review-name">Kovács Anna</div>
+            <div class="review-city">Budapest</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">„Végre egy oldal, ahol tényleg könnyű megtalálni a legjobb szakembereket. Csak ajánlani tudom!"</p>
+        <div class="review-footer">
+          <div class="review-avatar" style="background:#dbeafe;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="review-name">Nagy Péter</div>
+            <div class="review-city">Debrecen</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">„Időt és energiát spóroltam vele. Pár perc alatt megkaptam, amit kerestem."</p>
+        <div class="review-footer">
+          <div class="review-avatar" style="background:#fce7f3;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="review-name">Szabó Zsófia</div>
+            <div class="review-city">Szeged</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reviews-dots">
+      <span class="reviews-dot active"></span>
+      <span class="reviews-dot"></span>
+      <span class="reviews-dot"></span>
+    </div>
   </div>
-</div>
-
-<style>
-/* ── KLASSZ SEARCH SECTION ── */
-.klassz-search-section {
-  background: #e8edf8;
-  padding: 2rem 5% 3rem;
-  position: relative;
-}
-.klassz-search-section::after {
-  content: '';
-  position: absolute;
-  bottom: -1px; left: 0; right: 0;
-  height: 50px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 50' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C360,50 1080,50 1440,0 L1440,50 L0,50 Z' fill='%23ffffff'/%3E%3C/svg%3E") no-repeat bottom/100% 100%;
-}
-.hero-to-klassz {
-  width: 100%;
-  line-height: 0;
-  margin-top: -2px;
-}
-.hero-to-klassz svg {
-  display: block;
-  width: 100%;
-  height: 50px;
-}
-.klassz-inner { max-width: 860px; margin: 0 auto; }
-.klassz-header { margin-bottom: 2rem; }
-.klassz-title {
-  font-family: 'Nunito', sans-serif;
-  font-size: 26px; font-weight: 800;
-  color: #0f172a; margin-bottom: 6px;
-}
-.klassz-sub { font-size: 15px; color: #6b7280; line-height: 1.6; }
-
-.klassz-card {
-  background: #fff;
-  border-radius: 22px;
-  border: 2px solid #dde4f5;
-  padding: 2rem;
-  box-shadow: 0 4px 24px rgba(40,56,151,0.08), 0 1px 4px rgba(0,0,0,0.04);
-  transition: box-shadow 0.3s, border-color 0.3s, transform 0.3s;
-}
-.klassz-card:hover {
-  box-shadow: 0 12px 40px rgba(40,56,151,0.13), 0 4px 12px rgba(0,0,0,0.05);
-  border-color: #b8c6e8;
-  transform: translateY(-2px);
-}
-
-/* Fields row */
-.klassz-fields {
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-.klassz-field-wrap { flex: 1; position: relative; }
-.klassz-field-wrap.city { flex: 0 0 210px; }
-.klassz-label {
-  display: block;
-  font-family: 'Nunito', sans-serif;
-  font-size: 12px; font-weight: 800;
-  color: #283897; margin-bottom: 7px;
-  letter-spacing: 0.04em; text-transform: uppercase;
-}
-.klassz-field {
-  display: flex; align-items: center; gap: 10px;
-  border: 2px solid #e2e8f5;
-  border-radius: 12px; padding: 13px 16px;
-  background: #fafbff;
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.2s;
-}
-.klassz-field:hover {
-  background: #fff;
-  border-color: #b8c6e8;
-  box-shadow: 0 2px 10px rgba(40,56,151,0.07);
-}
-.klassz-field:focus-within {
-  background: #fff;
-  border-color: #283897;
-  box-shadow: 0 0 0 3px rgba(40,56,151,0.1);
-}
-.klassz-field input {
-  border: none; background: transparent;
-  font-size: 15px; font-family: 'Nunito Sans', sans-serif;
-  font-weight: 500; color: #0f172a; outline: none; width: 100%;
-}
-.klassz-field input::placeholder { color: #b0bcd8; font-weight: 400; }
-
-.klassz-btn {
-  display: flex; align-items: center; gap: 9px;
-  background: #283897; color: #fff;
-  border: none; border-radius: 12px;
-  padding: 14px 30px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px; font-weight: 800;
-  cursor: pointer; white-space: nowrap; flex-shrink: 0;
-  box-shadow: 0 4px 16px rgba(40,56,151,0.3);
-  transition: all 0.2s;
-  letter-spacing: 0.01em;
-}
-.klassz-btn:hover {
-  background: #1e2d7d;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(40,56,151,0.4);
-}
-.klassz-btn:active { transform: translateY(0); }
-
-/* Hints */
-.klassz-hints { display: flex; gap: 1.5rem; flex-wrap: wrap; }
-.klassz-hint {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 500; color: #6b7280;
-}
-
-/* Divider */
-.klassz-divider { height: 1px; background: #eef1f8; margin: 1.5rem 0; }
-
-/* Specs label */
-.klassz-specs-label {
-  font-family: 'Nunito', sans-serif;
-  font-size: 11px; font-weight: 800;
-  color: #9aa5c4; text-transform: uppercase;
-  letter-spacing: 0.1em; margin-bottom: 1rem;
-}
-
-/* Pills */
-.klassz-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.klassz-pill {
-  display: inline-flex; align-items: center; gap: 7px;
-  background: #f4f7fb;
-  border: 1.5px solid #e2e8f5;
-  border-radius: 100px;
-  padding: 8px 16px;
-  font-size: 13px; font-weight: 600;
-  font-family: 'Nunito Sans', sans-serif;
-  color: #374151; cursor: pointer;
-  transition: all 0.18s;
-}
-.klassz-pill:hover {
-  background: #eef2ff;
-  border-color: #283897;
-  color: #283897;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(40,56,151,0.1);
-}
-
-/* AI Banner */
-.klassz-ai-banner {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 1.5rem;
-  background: linear-gradient(135deg, #f8f9ff, #eef2ff);
-  border: 1.5px solid #dde4f5;
-  border-radius: 16px; padding: 1.25rem 1.5rem;
-}
-.klassz-ai-left { display: flex; align-items: center; gap: 1rem; }
-.klassz-ai-icon {
-  width: 48px; height: 48px; flex-shrink: 0;
-  background: #fff; border-radius: 12px;
-  border: 1.5px solid #dde4f5;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(40,56,151,0.08);
-}
-.klassz-ai-title {
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 3px;
-}
-.klassz-ai-sub { font-size: 13px; color: #6b7280; max-width: 400px; line-height: 1.5; }
-.klassz-ai-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #283897;
-  border: none;
-  border-radius: 10px; padding: 11px 20px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 13px; font-weight: 700;
-  color: #fff !important; text-decoration: none;
-  white-space: nowrap; flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(40,56,151,0.3);
-  transition: all 0.2s;
-}
-.klassz-ai-btn:hover {
-  background: #1e2d7d;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(40,56,151,0.4);
-}
-
-/* ── FREETEXT SEARCH ── */
-.freetext-field {
-  display: flex; align-items: center; gap: 10px;
-  border: 2px solid #e2e8f5;
-  border-radius: 12px; padding: 13px 16px;
-  background: #fafbff;
-  transition: border-color 0.25s, box-shadow 0.25s, background 0.2s;
-}
-.freetext-field:hover {
-  background: #fff;
-  border-color: #b8c6e8;
-  box-shadow: 0 2px 10px rgba(40,56,151,0.07);
-}
-.freetext-field:focus-within {
-  background: #fff;
-  border-color: #283897;
-  box-shadow: 0 0 0 3px rgba(40,56,151,0.1);
-}
-.freetext-field input {
-  border: none; background: transparent;
-  font-size: 15px; font-family: 'Nunito Sans', sans-serif;
-  font-weight: 500; color: #0f172a; outline: none; width: 100%;
-}
-.freetext-field input::placeholder { color: #b0bcd8; font-weight: 400; }
-.freetext-spinner {
-  width: 16px; height: 16px; flex-shrink: 0;
-  border: 2px solid #e2e8f5; border-top-color: #283897;
-  border-radius: 50%; display: none;
-  animation: spin 0.7s linear infinite;
-}
-.freetext-spinner.active { display: block; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.freetext-clear {
-  background: #f4f7fb; border: none; border-radius: 6px;
-  width: 26px; height: 26px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: #6b7280; flex-shrink: 0;
-  transition: background 0.15s;
-}
-.freetext-clear:hover { background: #e2e8f5; }
-.freetext-dropdown {
-  position: absolute; left: 0; right: 0; top: calc(100% + 8px);
-  background: #fff; border: 1.5px solid #e2e8f5;
-  border-radius: 16px; overflow: hidden;
-  box-shadow: 0 8px 40px rgba(40,56,151,0.13), 0 2px 8px rgba(0,0,0,0.05);
-  z-index: 999; display: none;
-  animation: dropIn 0.18s ease;
-}
-@keyframes dropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:none; } }
-.freetext-dropdown.open { display: block; }
-.freetext-group-label {
-  padding: 10px 16px 4px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 10px; font-weight: 800;
-  color: #9aa5c4; text-transform: uppercase; letter-spacing: 0.1em;
-}
-.freetext-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 16px; cursor: pointer;
-  transition: background 0.12s;
-}
-.freetext-item:hover, .freetext-item.active { background: #f4f7fb; }
-.freetext-item-icon {
-  width: 34px; height: 34px; border-radius: 9px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 16px;
-}
-.freetext-item-main { flex: 1; min-width: 0; }
-.freetext-item-name {
-  font-size: 14px; font-weight: 600; color: #0f172a;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.freetext-item-sub { font-size: 12px; color: #9aa5c4; margin-top: 1px; }
-.freetext-item-badge {
-  font-size: 11px; font-weight: 700; padding: 3px 9px;
-  border-radius: 100px; flex-shrink: 0;
-}
-.freetext-empty {
-  padding: 1.5rem; text-align: center;
-  font-size: 14px; color: #b0bcd8;
-}
-</style>
-
-<script>
-function toggleMobileMenu() {
-  const drawer = document.getElementById('mobileDrawer');
-  const btn = document.getElementById('mobileToggle');
-  drawer.classList.toggle('open');
-  btn.style.background = drawer.classList.contains('open') ? '#eef2ff' : '#f0f4ff';
-}
-document.addEventListener('click', e => {
-  const drawer = document.getElementById('mobileDrawer');
-  const btn = document.getElementById('mobileToggle');
-  if (drawer && !drawer.contains(e.target) && btn && !btn.contains(e.target)) {
-    drawer.classList.remove('open');
-  }
-});
-
-function navGoSearch() {
-  const val = document.getElementById('navSearchInput').value.trim();
-  if (val) window.location.href = 'talalatok.html?specialty=' + encodeURIComponent(val);
-}
-
-function heroInlineSearch() {
-  const spec = (document.getElementById('heroInlineSearch') && document.getElementById('heroInlineSearch').value.trim()) || '';
-  const city = (document.getElementById('heroSearchCityInline') && document.getElementById('heroSearchCityInline').value.trim()) || '';
-  const zip  = (document.getElementById('heroSearchZip') && document.getElementById('heroSearchZip').value.trim()) || '';
-  const params = new URLSearchParams();
-  if (spec) params.set('specialty', spec);
-  if (city) params.set('city', city);
-  if (zip)  params.set('zip', zip);
-  window.location.href = 'talalatok.html?' + params.toString();
-}
-
-function heroSearch() {
-  const spec = document.getElementById('freetextInput').value.trim();
-  const city = document.getElementById('heroSearchCity').value.trim();
-  const params = new URLSearchParams();
-  if (spec) params.set('specialty', spec);
-  if (city) params.set('city', city);
-  window.location.href = 'talalatok.html?' + params.toString();
-}
-
-function heroQuickSearch(spec) {
-  window.location.href = 'talalatok.html?specialty=' + encodeURIComponent(spec);
-}
-
-const _hss = document.getElementById('heroSearchSpec');
-if (_hss) _hss.addEventListener('keydown', function(e) { if (e.key === 'Enter') heroSearch(); });
-const _hsc = document.getElementById('heroSearchCity');
-if (_hsc) _hsc.addEventListener('keydown', function(e) { if (e.key === 'Enter') heroSearch(); });
-</script>
-
+</section>
 
 <!-- ── FAQ ── -->
 <section class="faq-section-new">
@@ -4511,6 +4406,149 @@ html { scroll-behavior: smooth; }
 .partner-stat-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
 
 /* ── FAQ ── */
+/* ── NÉPSZERŰ SZAKTERÜLETEK ── */
+.popular-specs-section {
+  background: #fff;
+  padding: 4rem 5%;
+}
+.popular-specs-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.popular-specs-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.popular-specs-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+.popular-specs-sub {
+  font-size: 15px;
+  color: #6b7280;
+}
+.popular-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+.popular-spec-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 16px;
+  padding: 1.25rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.22s;
+  box-shadow: 0 2px 8px rgba(40,56,151,0.05);
+  text-align: center;
+}
+.popular-spec-card:hover {
+  border-color: #283897;
+  background: #f4f7ff;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(40,56,151,0.13);
+}
+.popular-spec-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.popular-spec-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+}
+.popular-spec-card:hover .popular-spec-name { color: #283897; }
+.popular-spec-sub {
+  font-size: 11px;
+  color: #9aa5c4;
+  line-height: 1.3;
+}
+@media (max-width: 900px) {
+  .popular-specs-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 640px) {
+  .popular-specs-section { padding: 2.5rem 4%; }
+  .popular-specs-grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .popular-spec-icon { width: 44px; height: 44px; font-size: 22px; }
+}
+@media (max-width: 400px) {
+  .popular-specs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── VÉLEMÉNYEK ── */
+.reviews-section {
+  background: #f8f9ff;
+  padding: 4rem 5%;
+}
+.reviews-inner { max-width: 1000px; margin: 0 auto; }
+.reviews-header { text-align: center; margin-bottom: 2.5rem; }
+.reviews-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800; color: #0f172a; margin-bottom: 0.4rem;
+}
+.reviews-sub { font-size: 15px; color: #6b7280; }
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.review-card {
+  background: #fff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 2px 12px rgba(40,56,151,0.05);
+  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+}
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(40,56,151,0.1);
+  border-color: #c7d2f0;
+}
+.review-stars { color: #22c55e; font-size: 16px; letter-spacing: 2px; }
+.review-text {
+  font-size: 14px; color: #374151;
+  line-height: 1.75; flex: 1;
+  font-style: italic;
+}
+.review-footer { display: flex; align-items: center; gap: 10px; padding-top: 0.75rem; border-top: 1px solid #f0f4fb; }
+.review-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.review-name { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700; color: #0f172a; }
+.review-city { font-size: 12px; color: #9aa5c4; }
+.reviews-dots { display: flex; justify-content: center; gap: 6px; }
+.reviews-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #d1daf0; transition: background 0.2s, transform 0.2s;
+}
+.reviews-dot.active { background: #283897; transform: scale(1.3); }
+@media (max-width: 768px) {
+  .reviews-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .reviews-grid { grid-template-columns: 1fr; }
+}
+
 .faq-section-new { background: #f4f7fb; padding: 5rem 5%; }
 .faq-inner { max-width: 760px; margin: 0 auto; }
 .faq-header { text-align: center; margin-bottom: 2.5rem; }
@@ -4681,6 +4719,17 @@ const animObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 
 document.querySelectorAll('[data-anim]').forEach(el => animObserver.observe(el));
+
+function useExample(btn) {
+  const text = btn.textContent.replace(/^💬\s*/, '').trim();
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  input.value = text;
+  input.setAttribute('placeholder', '');
+  const ex = document.getElementById('chatExamples');
+  if (ex) ex.style.display = 'none';
+  sendChat();
+}
 </script>
 
 </body>
