@@ -1,0 +1,68 @@
+/**
+ * Buttons — Szakorvos.hu
+ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition-base), box-shadow var(--transition-base), transform var(--transition-fast);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+/* Variants */
+.btn--primary {
+  background: var(--color-brand);
+  color: var(--color-surface);
+  box-shadow: 0 3px 10px rgba(40, 56, 151, 0.25);
+}
+.btn--primary:hover { background: var(--color-brand-dark); box-shadow: 0 4px 14px rgba(40, 56, 151, 0.35); }
+
+.btn--orange {
+  background: var(--color-orange);
+  color: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(255, 107, 43, 0.30);
+}
+.btn--orange:hover { background: var(--color-orange-light); box-shadow: 0 4px 14px rgba(255, 107, 43, 0.40); }
+
+.btn--green {
+  background: var(--color-green-dark);
+  color: var(--color-surface);
+  box-shadow: 0 3px 10px rgba(22, 163, 74, 0.30);
+}
+.btn--green:hover { background: var(--color-green-darker); }
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-brand);
+  border: 1.5px solid var(--color-border);
+}
+.btn--ghost:hover { border-color: var(--color-brand); background: rgba(40, 56, 151, 0.04); }
+
+.btn--outline-nav {
+  background: transparent;
+  color: var(--color-brand);
+  border: 1.5px solid rgba(40, 56, 151, 0.2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  padding: 7px var(--space-4);
+  border-radius: var(--radius-sm);
+}
+.btn--outline-nav:hover { border-color: var(--color-brand); background: rgba(40, 56, 151, 0.04); }
+
+/* Sizes */
+.btn--sm { font-size: var(--text-xs); padding: 5px var(--space-3); border-radius: 7px; }
+.btn--lg { font-size: var(--text-base); padding: var(--space-3) var(--space-6); border-radius: var(--radius-md); }
+.btn--full { width: 100%; }
