@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- SEO meta tagek – JS tölti fel -->
+  <title id="pageTitle">Egészségügyi cikk | Szakorvos.hu</title>
+  <meta name="description" id="pageDesc" content="Tudjon meg többet erről az egészségügyi témáról a Szakorvos.hu tudástárában."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" id="pageCanonical" href="https://szakorvos.hu/tudastar-cikk.html"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article"/>
+  <meta property="og:site_name" content="Szakorvos.hu"/>
+  <meta property="og:title" id="ogTitle" content="Egészségügyi cikk | Szakorvos.hu"/>
+  <meta property="og:description" id="ogDesc" content="Tudástár cikk a Szakorvos.hu oldalon."/>
+  <meta property="og:image" content="https://szakorvos.hu/assets/og-default.jpg"/>
+
+  <!-- Schema.org – JS tölti fel -->
+  <script id="schemaScript" type="application/ld+json">{}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito Sans', sans-serif; background: #f0f4ff; color: #374151; -webkit-font-smoothing: antialiased; padding-top: 64px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid #e8edf8;
+      box-shadow: 0 2px 16px rgba(40,56,151,0.06); height: 64px;
+    }
+    .nav-row {
+      display: flex; align-items: center; height: 64px;
+      padding: 0 4%; max-width: 1400px; margin: 0 auto; gap: 8px;
+      width: 100%;
+    }
+    .nav-logo { display:flex; align-items:center; gap:8px; text-decoration:none; flex-shrink:0; margin-right: 24px; }
+    .nav-logo-text { font-family:'Nunito',sans-serif; font-size:20px; font-weight:900; color:#283897; }
+    .nav-logo-text em { color:#22c55e; font-style:normal; }
+    .nav-logo-sub { font-size:9px; font-weight:700; color:#9aa5c4; letter-spacing:.12em; text-transform:uppercase; }
+    .nav-links { display:flex; align-items:center; gap:2px; list-style:none; flex:1; }
+    .nav-links a { display:flex; align-items:center; gap:4px; padding:8px 12px; font-size:13.5px; font-weight:600; color:#374151; border-radius:8px; text-decoration:none; transition:all .15s; white-space:nowrap; }
+    .nav-links a:hover { background:#f0f4ff; color:#283897; }
+    .nav-link-highlight { color:#ff6b2b !important; font-weight:700 !important; }
+    .nav-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; margin-left: auto; }
+    .btn-outline { padding:7px 16px; font-size:13px; font-weight:600; color:#283897; border:1.5px solid rgba(40,56,151,0.2); border-radius:8px; text-decoration:none; transition:all .15s; white-space:nowrap; }
+    .btn-outline:hover { border-color:#283897; background:rgba(40,56,151,0.04); }
+    .btn-cta { padding:8px 16px; font-size:13px; font-weight:700; color:#fff; background:#ff6b2b; border-radius:8px; text-decoration:none; box-shadow:0 2px 8px rgba(255,107,43,0.3); white-space:nowrap; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      max-width: 1200px; margin: 0 auto;
+      padding: 20px 4% 0;
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: #9aa5c4;
+    }
+    .breadcrumb a { color: #9aa5c4; text-decoration: none; transition: color .15s; }
+    .breadcrumb a:hover { color: #283897; }
+    .breadcrumb span { color: #374151; font-weight: 600; }
+
+    /* ── ARTICLE LAYOUT ── */
+    .article-wrap {
+      max-width: 1200px; margin: 0 auto;
+      padding: 24px 4% 64px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .article-main {}
+
+    .article-header { margin-bottom: 28px; }
+    .article-category {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      color: #ff6b2b; text-transform: uppercase; letter-spacing: .1em;
+      background: #fff5f0; border: 1.5px solid #fed7c3;
+      border-radius: 100px; padding: 4px 12px; margin-bottom: 12px;
+    }
+    .article-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 900; color: #0f172a;
+      line-height: 1.2; margin-bottom: 14px;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 12px; color: #9aa5c4; flex-wrap: wrap;
+    }
+    .article-meta-item { display: flex; align-items: center; gap: 5px; }
+
+    /* Article body */
+    .article-body {
+      background: #fff; border-radius: 16px;
+      border: 1.5px solid #e8edf8;
+      padding: 28px 32px;
+      line-height: 1.75;
+    }
+    .article-body h2 {
+      font-family: 'Nunito', sans-serif; font-size: 1.25rem; font-weight: 800;
+      color: #0f172a; margin: 28px 0 12px; padding-bottom: 8px;
+      border-bottom: 2px solid #f0f4ff;
+    }
+    .article-body h2:first-child { margin-top: 0; }
+    .article-body p { margin-bottom: 14px; font-size: 15px; }
+    .article-body ul, .article-body ol { padding-left: 20px; margin-bottom: 14px; }
+    .article-body li { margin-bottom: 6px; font-size: 15px; }
+    .article-body strong { color: #0f172a; }
+    .article-body .highlight-box {
+      background: #f0fdf4; border: 1.5px solid #bbf7d0;
+      border-radius: 12px; padding: 16px 20px; margin: 20px 0;
+    }
+    .article-body .warning-box {
+      background: #fff7ed; border: 1.5px solid #fed7aa;
+      border-radius: 12px; padding: 16px 20px; margin: 20px 0;
+    }
+    .article-body .warning-box strong { color: #c2410c; }
+
+    /* Disclaimer */
+    .article-disclaimer {
+      background: #f8f9ff; border: 1.5px solid #e8edf8;
+      border-radius: 12px; padding: 14px 18px;
+      margin-top: 24px;
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 12px; color: #6b7280; line-height: 1.6;
+    }
+    .article-disclaimer svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* ── SIDEBAR ── */
+    .article-sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .sidebar-card {
+      background: #fff; border-radius: 16px;
+      border: 1.5px solid #e8edf8; padding: 20px;
+    }
+    .sidebar-card-title {
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+      color: #0f172a; margin-bottom: 14px;
+    }
+
+    /* CTA card */
+    .cta-card {
+      background: linear-gradient(135deg, #283897, #1a2472);
+      border: none; color: #fff;
+    }
+    .cta-card .sidebar-card-title { color: #fff; }
+    .cta-card p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 16px; }
+    .cta-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: #22c55e; color: #fff; border-radius: 10px;
+      padding: 11px 16px; text-decoration: none;
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+      box-shadow: 0 4px 14px rgba(34,197,94,0.35);
+      transition: all .2s;
+    }
+    .cta-btn:hover { background: #16a34a; transform: translateY(-1px); }
+
+    /* Specialty badge */
+    .specialty-badge {
+      display: flex; align-items: center; gap: 10px;
+      background: #f0fdf4; border: 1.5px solid #bbf7d0;
+      border-radius: 10px; padding: 10px 14px;
+      text-decoration: none; transition: all .18s;
+      margin-bottom: 8px;
+    }
+    .specialty-badge:last-child { margin-bottom: 0; }
+    .specialty-badge:hover { border-color: #22c55e; background: #dcfce7; transform: translateX(3px); }
+    .specialty-badge-icon { font-size: 20px; flex-shrink: 0; }
+    .specialty-badge-text { font-size: 13px; font-weight: 700; color: #166534; }
+
+    /* Related articles */
+    .related-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid #f0f4ff;
+      text-decoration: none; transition: all .15s;
+    }
+    .related-item:last-child { border-bottom: none; }
+    .related-item:hover { color: #283897; }
+    .related-item-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+    .related-item-title { font-size: 13px; font-weight: 600; color: #374151; line-height: 1.4; }
+    .related-item:hover .related-item-title { color: #283897; }
+
+    /* Loading / error */
+    .loading-state { text-align: center; padding: 80px 20px; color: #9aa5c4; }
+    .loading-dots { display: inline-flex; gap: 6px; margin-top: 16px; }
+    .loading-dots span { width: 8px; height: 8px; background: #c7d2f5; border-radius: 50%; animation: dp 1.4s infinite; }
+    .loading-dots span:nth-child(2) { animation-delay: .2s; }
+    .loading-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dp { 0%,80%,100%{transform:scale(.6);opacity:.4} 40%{transform:scale(1);opacity:1} }
+
+    @media (max-width: 768px) {
+      .article-wrap { grid-template-columns: 1fr; }
+      .article-sidebar { order: -1; }
+      .nav-links, .nav-actions { display: none; }
+      .article-body { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-row">
+    <a href="index.html" class="nav-logo">
+      <div>
+        <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+        <div class="nav-logo-sub">Országos Szakorvoskereső</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Orvosok</a></li>
+      <li><a href="#">Klinikák</a></li>
+      <li><a href="tudastar.html" class="nav-link-highlight">Tudástár A–Z</a></li>
+      <li><a href="#">Kapcsolat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-outline">Bejelentkezés</a>
+      <a href="#" class="btn-cta">Legyen Ön is a partnerünk</a>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb" aria-label="Navigációs útvonal">
+  <a href="index.html">Főoldal</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  <a href="tudastar.html">Tudástár A–Z</a>
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  <span id="breadcrumbTitle">Betöltés…</span>
+</nav>
+
+<!-- CONTENT -->
+<div class="article-wrap" id="articleWrap">
+  <div class="loading-state">
+    <div style="font-size:16px;font-weight:600;color:#374151">Cikk betöltése</div>
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+
+const SPEC_ICONS = {
+  'Kardiológia':'❤️','Neurológia':'🧠','Gasztroenterológia':'🫁','Bőrgyógyászat':'🌿',
+  'Háziorvos':'⚕️','Ortopédia':'🦴','Szemészet':'👁️','Nőgyógyászat':'💜','Fogászat':'🦷',
+  'Pszichológia':'💭','Reumatológia':'🦴','Endokrinológia':'⚗️','Urológia':'🔬',
+  'Fül-orr-gégészet':'👂','Pszichiátria':'🧩','Belgyógyászat':'🩺',
+  'Gyermekgyógyászat':'👶','Allergológia':'🌸','Onkológia':'🎗️','Sebészet':'🔪'
+};
+
+// Szakterület hozzárendelés kulcsszavak alapján
+function guessSpecialty(title) {
+  const t = title.toLowerCase();
+  // Fogászat – elsőként, mert 'fog' más szavakban is előfordul
+  if (/fog|fogszabályozó|fogíny|fogsor|fogtömés|fogfehér|fogcsikorgatás|fogkő|gyökérkezelés|szájüreg|szájrák|szájsebész/.test(t)) return 'Fogászat';
+  if (/szív|kardio|angina|aritmia|pitvar|aorta|bypass|vérnyomás|szívroham|szívzörej/.test(t)) return 'Kardiológia';
+  if (/agy|neuro|stroke|migrain|fejfáj|epilep|parkinson|sclerosis|alzheimer|demencia/.test(t)) return 'Neurológia';
+  if (/bőr|dermat|ekcéma|pattanás|pikkelysömör|rosacea|melanoma|bőrrák|anyajegy|akne|vitiligo/.test(t)) return 'Bőrgyógyászat';
+  if (/gyomor|bél|hasnyál|máj|kolonosz|gastro|reflux|széklet|epehólyag|vastagbél/.test(t)) return 'Gasztroenterológia';
+  if (/csont|ízület|térd|csípő|gerinc|artritisz|ortopéd|vállfájdalom|boka|rándulás|törés/.test(t)) return 'Ortopédia';
+  if (/szem|látás|glaukoma|katarakt|retina|szaruhártya|szemhéj/.test(t)) return 'Szemészet';
+  if (/méh|petefészek|menstruáció|menopauza|terhes|nőgyógyász|hüvely|szülés|mellrák/.test(t)) return 'Nőgyógyászat';
+  if (/pszicho|depressz|szorongás|bipoláris|skizofrénia|pánik|fóbia|önkárosítás/.test(t)) return 'Pszichológia';
+  if (/cukorbeteg|inzulin|pajzsmirigy|hormon|endokrin|metabol|mellékvese/.test(t)) return 'Endokrinológia';
+  if (/gyermek|baba|csecsemő|pubertás|pelenkakiütés/.test(t)) return 'Gyermekgyógyászat';
+  if (/vizelet|vese|urológ|prosztata|húgyhólyag|húgyúti/.test(t)) return 'Urológia';
+  if (/fül|orr|torok|hallás|gégész|mandula|orrvérzés|fülzúgás/.test(t)) return 'Fül-orr-gégészet';
+  if (/rák|daganat|tumor|onkológ|kemoterápia|lymphoma|leukémia/.test(t)) return 'Onkológia';
+  if (/allergia|allergiás|szénanátha/.test(t)) return 'Allergológia';
+  if (/reuma|arthritis|polymyalgia/.test(t)) return 'Reumatológia';
+  if (/tüdő|légzés|asztma|bronch|köhögés|copd/.test(t)) return 'Belgyógyászat';
+  return 'Belgyógyászat';
+}
+
+// Kapcsolódó szakterületek a főszakterület alapján
+function getRelatedSpecialties(mainSpecialty) {
+  const map = {
+    'Fogászat': [['Fül-orr-gégészet','👂'], ['Belgyógyászat','🩺'], ['Gyermekgyógyászat','👶']],
+    'Kardiológia': [['Belgyógyászat','🩺'], ['Neurológia','🧠'], ['Endokrinológia','⚗️']],
+    'Neurológia': [['Pszichiátria','🧩'], ['Belgyógyászat','🩺'], ['Kardiológia','❤️']],
+    'Bőrgyógyászat': [['Allergológia','🌸'], ['Onkológia','🎗️'], ['Belgyógyászat','🩺']],
+    'Gasztroenterológia': [['Belgyógyászat','🩺'], ['Onkológia','🎗️'], ['Endokrinológia','⚗️']],
+    'Ortopédia': [['Reumatológia','🦴'], ['Belgyógyászat','🩺'], ['Neurológia','🧠']],
+    'Szemészet': [['Neurológia','🧠'], ['Endokrinológia','⚗️'], ['Belgyógyászat','🩺']],
+    'Nőgyógyászat': [['Onkológia','🎗️'], ['Endokrinológia','⚗️'], ['Belgyógyászat','🩺']],
+    'Pszichológia': [['Pszichiátria','🧩'], ['Neurológia','🧠'], ['Belgyógyászat','🩺']],
+    'Endokrinológia': [['Belgyógyászat','🩺'], ['Kardiológia','❤️'], ['Neurológia','🧠']],
+    'Gyermekgyógyászat': [['Háziorvos','⚕️'], ['Allergológia','🌸'], ['Neurológia','🧠']],
+    'Urológia': [['Belgyógyászat','🩺'], ['Onkológia','🎗️'], ['Endokrinológia','⚗️']],
+    'Fül-orr-gégészet': [['Allergológia','🌸'], ['Neurológia','🧠'], ['Fogászat','🦷']],
+    'Onkológia': [['Belgyógyászat','🩺'], ['Bőrgyógyászat','🌿'], ['Gasztroenterológia','🫁']],
+    'Allergológia': [['Bőrgyógyászat','🌿'], ['Fül-orr-gégészet','👂'], ['Belgyógyászat','🩺']],
+    'Reumatológia': [['Ortopédia','🦴'], ['Belgyógyászat','🩺'], ['Neurológia','🧠']],
+    'Belgyógyászat': [['Kardiológia','❤️'], ['Endokrinológia','⚗️'], ['Gasztroenterológia','🫁']],
+    'Háziorvos': [['Belgyógyászat','🩺'], ['Kardiológia','❤️'], ['Gasztroenterológia','🫁']],
+  };
+  return map[mainSpecialty] || [['Belgyógyászat','🩺'], ['Háziorvos','⚕️'], ['Kardiológia','❤️']];
+}
+
+// Cikk tartalom generálás a cím alapján
+function generateContent(title, specialty) {
+  const icon = SPEC_ICONS[specialty] || '🏥';
+  return `
+    <h2>Mi az a ${title}?</h2>
+    <p>A <strong>${title}</strong> témakör részletes orvosi leírása és útmutatója. Ez az oldal általános tájékoztatást nyújt a témáról – a pontos diagnózis és kezelés érdekében mindig forduljon szakorvoshoz.</p>
+
+    <div class="highlight-box">
+      <strong>${icon} Ajánlott szakterület: ${specialty}</strong><br>
+      Ha ezzel a témával kapcsolatban panaszai vannak, ${specialty.toLowerCase()} szakorvos vizsgálatát javasoljuk.
+    </div>
+
+    <h2>Mikor forduljon orvoshoz?</h2>
+    <p>Ha az alábbi tünetek bármelyikét tapasztalja, forduljon haladéktalanul orvoshoz:</p>
+    <ul>
+      <li>Súlyos vagy hirtelen fellépő panaszok</li>
+      <li>Tünetek, amelyek napok alatt nem javulnak</li>
+      <li>Ismétlődő vagy visszatérő problémák</li>
+      <li>Ha otthoni kezeléssel nem enyhülnek a tünetek</li>
+    </ul>
+
+    <h2>Kezelési lehetőségek</h2>
+    <p>A kezelés módja függ a pontos diagnózistól, az állapot súlyosságától és az egyéni körülményektől. A megfelelő kezelési tervet csak vizsgálat alapján tud összeállítani a szakorvos.</p>
+
+    <div class="warning-box">
+      <strong>⚠️ Fontos:</strong> Az itt szereplő információk csak tájékoztató jellegűek, és nem helyettesítik az orvosi vizsgálatot vagy tanácsadást. Kérjük, mindig konzultáljon szakemberrel!
+    </div>
+
+    <h2>Hogyan találjon megfelelő szakorvost?</h2>
+    <p>A Szakorvos.hu segítségével könnyen megtalálhatja a legjobb <strong>${specialty.toLowerCase()}</strong> szakorvost az Ön közelében. Szűrhet helyszín, értékelés és elérhetőség alapján, és azonnal időpontot foglalhat.</p>
+  `;
+}
+
+async function loadArticle() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug') || 'abortusz';
+  const wrap = document.getElementById('articleWrap');
+
+  try {
+    // Cikk betöltése slug alapján
+    let res = await fetch(
+      `${SUPABASE_URL}/rest/v1/knowledge_articles?slug=eq.${encodeURIComponent(slug)}&select=*&limit=1`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    let data = await res.json();
+
+    // Ha nem találja slug alapján, próbálja részleges egyezéssel (fallback)
+    if (!data || !data.length) {
+      res = await fetch(
+        `${SUPABASE_URL}/rest/v1/knowledge_articles?slug=ilike.${encodeURIComponent('*' + slug.split('-').slice(0,3).join('-') + '*')}&select=*&limit=1`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      data = await res.json();
+    }
+
+    if (!data || !data.length) {
+      wrap.innerHTML = `<div class="loading-state" style="grid-column:1/-1"><h2 style="color:#374151;font-family:Nunito,sans-serif">Cikk nem található</h2><p style="margin-top:8px;font-size:14px;color:#9aa5c4">A keresett cikk (${slug}) nem létezik vagy áthelyezték.</p><a href="tudastar.html" style="display:inline-block;margin-top:16px;color:#283897;font-weight:700">← Vissza a tudástárba</a></div>`;
+      return;
+    }
+
+    const article = data[0];
+    const specialty = article.specialty || guessSpecialty(article.title);
+    const icon = SPEC_ICONS[specialty] || '🏥';
+
+    // Kapcsolódó cikkek betöltése (azonos kezdőbetű)
+    const firstChar = article.title[0].toUpperCase();
+    const relRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/knowledge_articles?title=like.${encodeURIComponent(firstChar + '%')}&slug=neq.${encodeURIComponent(slug)}&select=title,slug&limit=6`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const related = await relRes.json();
+
+    // SEO meta frissítése
+    const seoTitle = `${article.title} – Egészségügyi útmutató | Szakorvos.hu`;
+    const seoDesc = `Tudjon meg mindent a(z) ${article.title} témáról. Tünetek, kezelés, ajánlott szakorvos – a Szakorvos.hu egészségügyi tudástárában.`;
+
+    document.getElementById('pageTitle').textContent = seoTitle;
+    document.title = seoTitle;
+    document.getElementById('pageDesc').setAttribute('content', seoDesc);
+    document.getElementById('ogTitle').setAttribute('content', seoTitle);
+    document.getElementById('ogDesc').setAttribute('content', seoDesc);
+    document.getElementById('pageCanonical').setAttribute('href', `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}`);
+    document.getElementById('breadcrumbTitle').textContent = article.title;
+
+    // Schema.org JSON-LD
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": article.title,
+      "description": seoDesc,
+      "url": `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}`,
+      "inLanguage": "hu",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Szakorvos.hu",
+        "url": "https://szakorvos.hu"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://szakorvos.hu" },
+          { "@type": "ListItem", "position": 2, "name": "Tudástár A–Z", "item": "https://szakorvos.hu/tudastar.html" },
+          { "@type": "ListItem", "position": 3, "name": article.title, "item": `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}` }
+        ]
+      }
+    };
+    document.getElementById('schemaScript').textContent = JSON.stringify(schema, null, 2);
+
+    // Oldal tartalom renderelése - ha van DB tartalom, azt használjuk
+    const content = article.content ? article.content : generateContent(article.title, specialty);
+    const relatedHtml = related.length ? `
+      <div class="sidebar-card">
+        <div class="sidebar-card-title">Kapcsolódó cikkek</div>
+        ${related.map(r => `
+          <a href="tudastar-cikk.html?slug=${encodeURIComponent(r.slug)}" class="related-item">
+            <div class="related-item-dot"></div>
+            <div class="related-item-title">${r.title}</div>
+          </a>`).join('')}
+      </div>` : '';
+
+    wrap.innerHTML = `
+      <!-- Főtartalom -->
+      <main class="article-main" itemscope itemtype="https://schema.org/MedicalWebPage">
+        <header class="article-header">
+          <span class="article-category">${specialty}</span>
+          <h1 class="article-title" itemprop="name">${article.title}</h1>
+          <div class="article-meta">
+            <div class="article-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Ellenőrzött orvosi tartalom
+            </div>
+            <div class="article-meta-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Szakorvos.hu Tudástár
+            </div>
+          </div>
+        </header>
+
+        <article class="article-body" itemprop="text">
+          ${content}
+        </article>
+
+        <div class="article-disclaimer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Ez az oldal általános tájékoztatást nyújt, és nem helyettesíti a szakorvosi vizsgálatot vagy diagnózist. Ha panaszai vannak, forduljon egészségügyi szakemberhez.</span>
+        </div>
+      </main>
+
+      <!-- Oldalsáv -->
+      <aside class="article-sidebar">
+        <div class="sidebar-card cta-card">
+          <div class="sidebar-card-title">${icon} ${specialty} szakorvost keres?</div>
+          <p>Találja meg a legjobb ${specialty.toLowerCase()} orvost az Ön közelében – értékelések, időpontok, azonnali foglalás.</p>
+          <a href="talalatok.html?specialty=${encodeURIComponent(specialty)}" class="cta-btn">
+            Szakorvosok keresése
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">Kapcsolódó szakterületek</div>
+          ${getRelatedSpecialties(specialty).map(([spec, ic]) => `
+            <a href="talalatok.html?specialty=${encodeURIComponent(spec)}" class="specialty-badge">
+              <span class="specialty-badge-icon">${ic}</span>
+              <span class="specialty-badge-text">${spec} szakorvos</span>
+            </a>`).join('')}
+        </div>
+
+        ${relatedHtml}
+
+        <div class="sidebar-card">
+          <div class="sidebar-card-title">AI Egészségügyi Elemzés</div>
+          <p style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:12px">Írja le tüneteit, és AI asszisztensünk azonnal megmondja melyik szakorvoshoz érdemes fordulni.</p>
+          <a href="index.html#ai-widget" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f0fdf4;border:1.5px solid #bbf7d0;color:#166534;border-radius:10px;padding:10px 16px;text-decoration:none;font-size:13px;font-weight:700;transition:all .15s">
+            🤖 AI elemzés indítása
+          </a>
+        </div>
+      </aside>
+    `;
+
+  } catch(e) {
+    console.error(e);
+    wrap.innerHTML = `<div class="loading-state" style="grid-column:1/-1"><h2 style="color:#374151;font-family:Nunito,sans-serif">Hiba történt</h2><p style="margin-top:8px;font-size:14px;color:#9aa5c4">Nem sikerült betölteni a cikket.</p><a href="tudastar.html" style="display:inline-block;margin-top:16px;color:#283897;font-weight:700">← Vissza a tudástárba</a></div>`;
+  }
+}
+
+loadArticle();
+</script>
+</body>
+</html>
