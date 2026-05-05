@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinika Admin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#283897;--navy:#1a2472;--orange:#ff6b2b;--olight:#ff8c5a;
+  --teal:#00c4b4;--green:#22c55e;--red:#ef4444;--amber:#f59e0b;
+  --sidebar:260px;
+  --bg:#f0f4ff;--surface:#fff;--border:#e8edf8;
+  --text:#1a1f36;--sub:#6b7280;--muted:#9aa5c4;
+}
+body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--bg);display:flex;min-height:100vh;overflow-x:hidden}
+
+/* ══ SIDEBAR ══ */
+.sidebar{width:var(--sidebar);background:linear-gradient(175deg,#0a1a3a 0%,#0d9488 60%,#00c4b4 100%);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:200;box-shadow:4px 0 28px rgba(0,50,50,.3)}
+.sb-logo{padding:1.4rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px}
+.sb-logo-txt{font-family:'Nunito',sans-serif;font-size:19px;font-weight:800;color:#fff}
+.sb-logo-txt em{color:#7fffd4;font-style:normal}
+.sb-role{padding:.6rem 1.25rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:6px}
+.sb-role::before{content:'';width:7px;height:7px;border-radius:50%;background:#7fffd4;box-shadow:0 0 6px #7fffd4;flex-shrink:0}
+
+/* Clinic card in sidebar */
+.sb-clinic-card{padding:1.1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:11px}
+.sb-clinic-av{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:#fff;flex-shrink:0;background:rgba(255,255,255,.15);box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.sb-clinic-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#fff;line-height:1.25}
+.sb-clinic-city{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.sb-active{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#7fffd4;margin-top:4px}
+.sb-active::before{content:'';width:6px;height:6px;border-radius:50%;background:#7fffd4;box-shadow:0 0 5px #7fffd4}
+
+.sb-section{padding:.75rem 1.25rem .3rem;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.7rem 1.25rem;font-size:13.5px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#7fffd4}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.7}
+.nav-item.active svg,.nav-item:hover svg{opacity:1}
+.nav-notif{margin-left:auto;background:var(--orange);color:#fff;border-radius:100px;padding:1px 7px;font-size:10px;font-weight:700}
+
+.sb-stat-row{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08)}
+.sb-mini-stat{flex:1;padding:.75rem .6rem;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.sb-mini-stat:last-child{border-right:none}
+.sb-mini-val{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#fff;line-height:1}
+.sb-mini-lbl{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+
+.sb-footer{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.sb-footer-link{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.4);cursor:pointer;padding:.4rem 0;transition:color .2s}
+.sb-footer-link:hover{color:#fff}
+.sb-footer-link svg{width:15px;height:15px}
+
+/* ══ MAIN ══ */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(40,56,151,.06)}
+.page-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--text)}
+.topbar-right{display:flex;align-items:center;gap:.75rem}
+.btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;border-radius:9px;padding:8px 16px;cursor:pointer;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 3px 10px rgba(40,56,151,.25)}
+.btn-primary:hover{background:var(--navy)}
+.btn-teal{background:var(--teal);color:#fff;box-shadow:0 3px 10px rgba(0,196,180,.3)}
+.btn-teal:hover{background:#00a896}
+.btn-ghost{background:transparent;color:var(--brand);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--brand);background:#eef2ff}
+.btn-sm{padding:5px 12px;font-size:12px;border-radius:7px}
+
+/* ══ CONTENT ══ */
+.content{padding:1.75rem 2rem;flex:1}
+[data-tab]{display:none}
+[data-tab].active{display:block}
+
+/* ══ STAT CARDS ══ */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+.stat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;padding:1.25rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:box-shadow .2s,transform .2s;animation:fadeUp .4s both;position:relative;overflow:hidden}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.stat-card:hover{box-shadow:0 8px 28px rgba(40,56,151,.1);transform:translateY(-2px)}
+.stat-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-val{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--text);line-height:1}
+.stat-label{font-size:12px;color:var(--sub);margin-top:3px}
+.stat-trend{font-size:11px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:3px}
+.trend-up{color:var(--green)}.trend-dn{color:var(--red)}
+
+/* ══ CARDS ══ */
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.5rem;animation:fadeUp .4s both}
+.card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.card-title{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px}
+.card-body{padding:1.5rem}
+
+/* ══ TABLE ══ */
+table{width:100%;border-collapse:collapse}
+thead th{padding:.75rem 1.25rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:#fafbff;border-bottom:1px solid var(--border)}
+tbody td{padding:.875rem 1.25rem;font-size:13.5px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#fafbff;transition:background .15s}
+.td-name{font-weight:700;color:var(--text)}
+.td-sub{font-size:12px;color:var(--sub);margin-top:1px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
+.badge-green{background:#ecfdf5;color:#059669;border:1px solid #bbf7d0}
+.badge-blue{background:#eef2ff;color:var(--brand);border:1px solid #c7d2f5}
+.badge-teal{background:#f0fdfa;color:#0d9488;border:1px solid #99f6e4}
+.badge-orange{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa}
+.badge-red{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}
+.badge-gray{background:#f4f6fb;color:var(--sub);border:1px solid var(--border)}
+.badge-amber{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.av-chip{display:flex;align-items:center;gap:9px}
+.av-sm{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.empty-row td{text-align:center;color:var(--muted);padding:2.5rem;font-size:14px}
+.skel-row td div{height:14px;background:linear-gradient(90deg,#eef1fa 25%,#e4e9f5 50%,#eef1fa 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:6px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ══ FORM ══ */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{margin-bottom:1rem}
+.form-group:last-child{margin-bottom:0}
+.form-full{grid-column:1/-1}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;font-size:14px;font-family:'Nunito Sans',sans-serif;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;background:#fff}
+.form-input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,196,180,.12)}
+textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
+.form-hint{font-size:11px;color:var(--muted);margin-top:.35rem}
+
+/* ══ DOCTOR CARDS GRID ══ */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;padding:1.25rem}
+.doc-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;transition:box-shadow .2s,transform .2s;position:relative;overflow:hidden}
+.doc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--brand));opacity:0;transition:opacity .25s}
+.doc-card:hover{box-shadow:0 8px 28px rgba(0,196,180,.12);transform:translateY(-2px)}
+.doc-card:hover::before{opacity:1}
+.doc-card-top{display:flex;align-items:center;gap:10px}
+.doc-av-lg{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.doc-card-name{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--text);line-height:1.3}
+.doc-card-spec{font-size:12px;color:var(--sub);margin-top:1px}
+.doc-card-meta{display:flex;flex-wrap:wrap;gap:5px}
+.doc-card-actions{display:flex;gap:.5rem;margin-top:.25rem}
+
+/* ══ APPOINTMENT TIMELINE ══ */
+.appt-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);transition:background .15s}
+.appt-item:last-child{border-bottom:none}
+.appt-item:hover{background:#fafbff}
+.appt-time{background:linear-gradient(135deg,#f0fdfa,#ecfdf5);border:1.5px solid #99f6e4;border-radius:12px;padding:.5rem .75rem;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#0d9488;flex-shrink:0;text-align:center;min-width:72px}
+.appt-time .date{font-size:10px;font-weight:600;color:var(--muted);display:block;margin-bottom:1px}
+
+/* ══ TOGGLE ══ */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid #f0f4fb}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:14px;color:var(--text);font-weight:600}
+.toggle-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#e2e8f0;border-radius:100px;transition:.25s;cursor:pointer}
+.toggle-slider::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.toggle input:checked+.toggle-slider{background:var(--teal)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
+
+/* ══ SEARCH IN CARD ══ */
+.srch-sm{display:flex;align-items:center;gap:7px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;transition:border-color .2s}
+.srch-sm:focus-within{border-color:var(--teal)}
+.srch-sm input{border:none;background:transparent;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--text);outline:none;width:160px}
+.srch-sm input::placeholder{color:var(--muted)}
+
+/* ══ INFO BOX ══ */
+.info-box{background:linear-gradient(135deg,#f0fdfa,#f4f6fb);border:1.5px solid #99f6e4;border-radius:14px;padding:1rem 1.25rem;font-size:13px;color:#0d9488;display:flex;align-items:flex-start;gap:10px;margin-bottom:1.25rem}
+
+/* ══ MINI CHART ══ */
+.mini-chart{display:flex;align-items:flex-end;gap:4px;height:52px}
+.bar{flex:1;border-radius:5px 5px 0 0;background:var(--teal);opacity:.65;transition:opacity .2s;min-width:0;cursor:pointer}
+.bar:hover{opacity:1}
+.chart-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ══ PAGINATION ══ */
+.pag{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.5rem;border-top:1px solid var(--border)}
+.pag-info{font-size:13px;color:var(--sub)}
+.pag-btns{display:flex;gap:4px}
+.pag-btn{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--sub);cursor:pointer;transition:all .2s}
+.pag-btn:hover{border-color:var(--teal);color:var(--teal)}
+.pag-btn.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.pag-btn:disabled{opacity:.3;cursor:default}
+
+/* ══ MODAL ══ */
+.modal-ov{position:fixed;inset:0;background:rgba(10,18,50,.45);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:22px;padding:2rem;width:500px;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(10,20,80,.2);animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:none}}
+.modal-title{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.modal-footer{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border)}
+
+/* ══ TWO COL ══ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+
+/* ══ PHOTO UPLOAD ══ */
+.photo-upload-wrap{display:flex;align-items:center;gap:1.5rem;padding:1.25rem;background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:14px;margin-bottom:1.25rem}
+.photo-preview{width:90px;height:90px;border-radius:18px;object-fit:cover;flex-shrink:0;border:2px solid #99f6e4;background:linear-gradient(135deg,var(--teal),#0d9488);display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:#fff;overflow:hidden}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-upload-area{flex:1}
+.photo-upload-label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:.35rem}
+.photo-upload-hint{font-size:12px;color:var(--muted);margin-bottom:.75rem;line-height:1.5}
+.photo-drop-zone{border:2px dashed #99f6e4;border-radius:11px;padding:1rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:#fff}
+.photo-drop-zone:hover,.photo-drop-zone.drag{border-color:var(--teal);background:#f0fdfa}
+.photo-drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-drop-text{font-size:13px;color:var(--muted);font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
+.photo-drop-text span{color:var(--teal);text-decoration:underline}
+.photo-progress{margin-top:.75rem;display:none}
+.photo-progress-bar{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.photo-progress-fill{height:100%;background:var(--teal);border-radius:99px;width:0%;transition:width .3s}
+.photo-progress-text{font-size:11px;color:var(--muted);margin-top:4px;text-align:center}
+.photo-success{display:none;align-items:center;gap:7px;background:#ecfdf5;border:1.5px solid #bbf7d0;border-radius:9px;padding:.6rem .9rem;margin-top:.75rem;font-size:13px;color:#059669;font-weight:600}
+
+@media(max-width:1200px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="10" r="5.5" fill="rgba(255,255,255,.15)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#7fffd4"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#7fffd4"/></svg>
+    <span class="sb-logo-txt">Szakorvos<em>.hu</em></span>
+  </div>
+  <div class="sb-role">Klinika Admin</div>
+
+  <div class="sb-clinic-card">
+    <div class="sb-clinic-av" id="sbAv">BK</div>
+    <div>
+      <div class="sb-clinic-name" id="sbName">Betöltés…</div>
+      <div class="sb-clinic-city" id="sbCity">–</div>
+      <div class="sb-active">Aktív klinika</div>
+    </div>
+  </div>
+
+  <div class="sb-stat-row">
+    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbDocCnt">–</div><div class="sb-mini-lbl">Orvos</div></div>
+    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbApptCnt">–</div><div class="sb-mini-lbl">Foglalás</div></div>
+    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbRatNum">–</div><div class="sb-mini-lbl">Értékelés</div></div>
+  </div>
+
+  <div class="sb-section">Menü</div>
+  <div class="nav-item active" onclick="switchTab('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Vezérlőpult
+  </div>
+  <div class="nav-item" onclick="switchTab('clinic',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Klinika adatai
+  </div>
+  <div class="nav-item" onclick="switchTab('doctors',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Orvosaink
+    <span class="nav-notif" id="navDocBadge" style="display:none">0</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('appointments',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Foglalások
+    <span class="nav-notif" id="navApptBadge" style="display:none">0</span>
+  </div>
+  <div class="nav-item" onclick="switchTab('schedule',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Rendelési rend
+  </div>
+  <div class="nav-item" onclick="switchTab('settings',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Beállítások
+  </div>
+
+  <div class="sb-footer">
+    <div class="sb-footer-link" onclick="window.location='index.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      Főoldalra vissza
+    </div>
+    <div class="sb-footer-link" style="color:rgba(255,255,255,.2)">v1.0 · Szakorvos.hu</div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">Vezérlőpult</div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" id="btnSaveClinic" style="display:none" onclick="saveClinic()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Mentés
+      </button>
+      <button class="btn btn-teal" onclick="openAddDoctorModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Orvos hozzáadása
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════ DASHBOARD ══════════ -->
+    <div data-tab="dashboard" class="active">
+      <div class="stats-row">
+        <div class="stat-card" style="animation-delay:.05s">
+          <div class="stat-icon" style="background:#f0fdfa"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div><div class="stat-val" id="statDocs">–</div><div class="stat-label">Aktív orvos</div><div class="stat-trend trend-up">↑ naprakész</div></div>
+        </div>
+        <div class="stat-card" style="animation-delay:.1s">
+          <div class="stat-icon" style="background:#eef2ff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><div class="stat-val" id="statAppts">–</div><div class="stat-label">Mai foglalás</div><div class="stat-trend trend-up" id="statApptSub">összesen</div></div>
+        </div>
+        <div class="stat-card" style="animation-delay:.15s">
+          <div class="stat-icon" style="background:#fff7ed"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div><div class="stat-val" id="statRating">–</div><div class="stat-label">Átlag értékelés</div><div class="stat-trend" style="color:var(--sub)" id="statRatSub">–</div></div>
+        </div>
+        <div class="stat-card" style="animation-delay:.2s">
+          <div class="stat-icon" style="background:#fff7ed"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="stat-val" id="statPending">–</div><div class="stat-label">Jóváhagyás alatt</div><div class="stat-trend trend-dn" id="statPendSub">foglalás</div></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <!-- Upcoming appointments -->
+        <div class="card" style="animation-delay:.25s;margin-bottom:0">
+          <div class="card-header">
+            <div class="card-title">📅 Mai időpontok</div>
+            <button class="btn btn-ghost btn-sm" onclick="switchTab('appointments',document.querySelector('[onclick*=appointments]'))">Összes →</button>
+          </div>
+          <div id="todayAppts"><div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:14px">Betöltés…</div></div>
+        </div>
+
+        <!-- Weekly chart -->
+        <div class="card" style="animation-delay:.3s;margin-bottom:0">
+          <div class="card-header"><div class="card-title">📊 Heti foglalások</div></div>
+          <div class="card-body">
+            <div class="mini-chart" id="weekChart"></div>
+            <div class="chart-labels"><span>H</span><span>K</span><span>Sze</span><span>Cs</span><span>P</span><span>Szo</span><span>V</span></div>
+            <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap">
+              <div style="font-size:13px;color:var(--sub)">Összes ezen a héten: <strong style="color:var(--text)" id="weekTotal">–</strong></div>
+              <div style="font-size:13px;color:var(--sub)">Teljesített: <strong style="color:var(--green)" id="weekCompleted">–</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Doctors quick view -->
+      <div class="card" style="animation-delay:.35s">
+        <div class="card-header">
+          <div class="card-title">👨‍⚕️ Rendelő orvosaink</div>
+          <button class="btn btn-ghost btn-sm" onclick="switchTab('doctors',document.querySelector('[onclick*=doctors]'))">Összes →</button>
+        </div>
+        <div class="doc-grid" id="docGridDash"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ CLINIC DATA ══════════ -->
+    <div data-tab="clinic">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            Klinika alapadatai
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- KLINIKA FOTÓ FELTÖLTÉS -->
+          <div class="photo-upload-wrap">
+            <div class="photo-preview" id="photoPreview"><span id="photoInitials">K</span></div>
+            <div class="photo-upload-area">
+              <div class="photo-upload-label">Klinika borítókép / logó</div>
+              <div class="photo-upload-hint">JPG, PNG vagy WebP, max. 5 MB. Ajánlott: 800×400 px szélesvásznú formátum.</div>
+              <div class="photo-drop-zone" id="photoDropZone">
+                <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp" onchange="handlePhotoSelect(this)">
+                <div class="photo-drop-text">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Húzza ide, vagy <span>tallózzon</span>
+                </div>
+              </div>
+              <div class="photo-progress" id="photoProgress">
+                <div class="photo-progress-bar"><div class="photo-progress-fill" id="photoProgressFill"></div></div>
+                <div class="photo-progress-text" id="photoProgressText">Feltöltés…</div>
+              </div>
+              <div class="photo-success" id="photoSuccess">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Fotó sikeresen feltöltve és mentve!
+              </div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Klinika neve</label><input class="form-input" id="cName" placeholder="Budai Egészségközpont"></div>
+            <div class="form-group"><label class="form-label">Város</label><input class="form-input" id="cCity" placeholder="Budapest" disabled style="background:#f8f9ff;color:var(--sub)"><div class="form-hint">Módosításhoz kérje a szuperadmint</div></div>
+            <div class="form-group form-full"><label class="form-label">Cím</label><input class="form-input" id="cAddress" placeholder="1012 Budapest, Attila út 12."></div>
+            <div class="form-group"><label class="form-label">Telefon</label><input class="form-input" id="cPhone" placeholder="+36 1 234 5678"></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="cEmail" type="email" placeholder="info@klinika.hu"></div>
+            <div class="form-group"><label class="form-label">Weboldal</label><input class="form-input" id="cWebsite" placeholder="https://klinika.hu"></div>
+            <div class="form-group"><label class="form-label">Adószám</label><input class="form-input" id="cTax" placeholder="12345678-2-41"></div>
+            <div class="form-group form-full"><label class="form-label">Bemutatkozás / leírás</label><textarea class="form-input" id="cDesc" rows="4" placeholder="A klinika rövid bemutatása, amit a páciensek látnak…"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opening hours -->
+      <div class="card">
+        <div class="card-header"><div class="card-title">🕐 Nyitvatartás</div></div>
+        <div class="card-body">
+          <div id="openHours"></div>
+        </div>
+      </div>
+
+      <!-- Insurance -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏥 Elfogadott biztosítók</div>
+          <span style="font-size:12px;color:var(--muted)">Válassza ki az elfogadott biztosítókat</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;flex-wrap:wrap;gap:.6rem" id="insuranceChips"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ DOCTORS ══════════ -->
+    <div data-tab="doctors">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Rendelő orvosai
+          </div>
+          <div class="tc-controls" style="display:flex;gap:.6rem">
+            <div class="srch-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input placeholder="Keresés névben…" oninput="filterDocs(this.value)">
+            </div>
+            <select class="form-input" style="width:auto;padding:6px 10px;font-size:13px" onchange="filterDocsByStatus(this.value)">
+              <option value="">Minden státusz</option>
+              <option value="true">Aktív</option>
+              <option value="false">Inaktív</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Orvos</th><th>Szakterület</th><th>Értékelés</th><th>Tapasztalat</th><th>Díj</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <tbody id="doctorsTable">
+            <tr class="skel-row"><td colspan="7"><div style="width:100%"></div></td></tr>
+          </tbody>
+        </table>
+        <div class="pag" id="docPag" style="display:none">
+          <div class="pag-info" id="docPagInfo">–</div>
+          <div class="pag-btns" id="docPagBtns"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ APPOINTMENTS ══════════ -->
+    <div data-tab="appointments">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Összes foglalás
+          </div>
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <select class="form-input" style="width:auto;padding:6px 10px;font-size:13px" onchange="loadAppointments(this.value)">
+              <option value="">Minden státusz</option>
+              <option value="pending">Jóváhagyás alatt</option>
+              <option value="confirmed">Megerősített</option>
+              <option value="completed">Teljesített</option>
+              <option value="cancelled">Lemondott</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Dátum / Idő</th><th>Páciens</th><th>Orvos</th><th>Típus</th><th>Státusz</th><th>Művelet</th></tr></thead>
+          <tbody id="apptTable">
+            <tr class="skel-row"><td colspan="6"><div style="width:100%"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ SCHEDULE ══════════ -->
+    <div data-tab="schedule">
+      <div class="info-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        A rendelési rend mutatja, melyik orvos melyik napon rendel. Az egyéni időbeállításokat az orvosok saját admin felületükön módosíthatják.
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📅 Heti rendelési rend</div></div>
+        <table>
+          <thead><tr><th>Nap</th><th>Orvos</th><th>Szakterület</th><th>Kezdés</th><th>Zárás</th><th>Időköz</th></tr></thead>
+          <tbody id="schedTable">
+            <tr class="skel-row"><td colspan="6"><div style="width:100%"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════ SETTINGS ══════════ -->
+    <div data-tab="settings">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🔔 Értesítések</div></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Email értesítés új foglalásnál</div><div class="toggle-sub">Minden új időpontfoglalásról azonnali email</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Napi összefoglaló</div><div class="toggle-sub">Minden reggel email a napi foglalásokkal</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Lemondások értesítője</div><div class="toggle-sub">Azonnali értesítés ha páciens lemond</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Heti statisztika</div><div class="toggle-sub">Hétfőnként heti összefoglaló email</div></div>
+            <label class="toggle"><input type="checkbox"><div class="toggle-slider"></div></label>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">👁️ Klinika láthatósága</div></div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Nyilvános profil</div><div class="toggle-sub">A klinika megjelenik a keresési találatokban</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Online foglalás engedélyezése</div><div class="toggle-sub">Páciensek foglalhatnak online</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Árak megjelenítése</div><div class="toggle-sub">Konzultációs díjak láthatók a profilon</div></div>
+            <label class="toggle"><input type="checkbox" checked><div class="toggle-slider"></div></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ══ ADD DOCTOR MODAL ══ -->
+<div class="modal-ov" id="addDocModal">
+  <div class="modal">
+    <div class="modal-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+      Orvos hozzáadása
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="form-group"><label class="form-label">Teljes név</label><input class="form-input" id="mName" placeholder="Dr. Kovács János"></div>
+      <div class="form-group"><label class="form-label">Titulus</label><input class="form-input" id="mTitle" placeholder="PhD"></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="mEmail" type="email" placeholder="doktor@email.hu"></div>
+      <div class="form-group"><label class="form-label">Tapasztalat (év)</label><input class="form-input" id="mExp" type="number" placeholder="10" min="0"></div>
+      <div class="form-group"><label class="form-label">Konzultációs díj (Ft)</label><input class="form-input" id="mFee" type="number" placeholder="15000"></div>
+      <div class="form-group"><label class="form-label">Szakterület</label>
+        <select class="form-input" id="mSpec"></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Mégse</button>
+      <button class="btn btn-teal" onclick="saveNewDoctor()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Mentés
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ CONSTANTS ═══ */
+const COLORS=['#0d9488','#2f5ddd','#7c3aed','#dc2626','#ec4899','#ea580c','#059669','#8b5cf6','#d97706','#0891b2'];
+const DAYS=['Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat','Vasárnap'];
+const INSURANCES=['OEP / TAJ kártya','Magánfizető','SIGNAL IDUNA','Generali','Allianz','UNIQA','AXA','CIG Pannónia','Groupama'];
+const TAB_TITLES={dashboard:'Vezérlőpult',clinic:'Klinika adatai',doctors:'Orvosaink',appointments:'Foglalások',schedule:'Rendelési rend',settings:'Beállítások'};
+const PG=15;
+let clinicData=null, allDocs=[], allAppts=[];
+let selectedInsurances=new Set(['OEP / TAJ kártya','Magánfizető']);
+
+/* ═══ TAB ═══ */
+function switchTab(tab,el){
+  document.querySelectorAll('[data-tab]').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('pageTitle').textContent=TAB_TITLES[tab]||tab;
+  document.getElementById('btnSaveClinic').style.display=tab==='clinic'?'flex':'none';
+  if(tab==='appointments') loadAppointments('');
+  if(tab==='schedule') loadSchedule();
+}
+
+/* ═══ INIT ═══ */
+async function init(){
+  // Load clinic
+  const{data:clinic}=await db.from('clinics')
+    .select('*,cities(name),doctor_clinics(doctor_id,consultation_fee,doctors(id,name,title,is_active,rating,review_count,experience_years,doctor_specialties(specialties(name)),availability(day_of_week,start_time,end_time,slot_minutes)))')
+    .limit(1).single();
+
+  if(!clinic){ document.getElementById('sbName').textContent='Nincs klinika'; return; }
+  clinicData=clinic;
+  allDocs=(clinic.doctor_clinics||[]).map(dc=>({...dc.doctors,fee:dc.consultation_fee})).filter(Boolean);
+
+  // Sidebar
+  document.getElementById('sbAv').textContent=clinic.name.charAt(0).toUpperCase();
+  document.getElementById('sbName').textContent=clinic.name;
+  document.getElementById('sbCity').textContent=clinic.cities?.name||'–';
+  document.getElementById('sbDocCnt').textContent=allDocs.filter(d=>d.is_active).length;
+  document.getElementById('sbRatNum').textContent=allDocs.length?
+    (allDocs.reduce((s,d)=>s+parseFloat(d.rating||0),0)/allDocs.length).toFixed(1):'–';
+
+  // Stats
+  document.getElementById('statDocs').textContent=allDocs.filter(d=>d.is_active).length;
+  const avgRat=allDocs.length?(allDocs.reduce((s,d)=>s+parseFloat(d.rating||0),0)/allDocs.length).toFixed(1):'–';
+  document.getElementById('statRating').textContent='★ '+avgRat;
+  document.getElementById('statRatSub').textContent=allDocs.length+' orvos átlaga';
+
+  // Load appointments count
+  const{count:apptCount}=await db.from('appointments')
+    .select('id',{count:'exact',head:true})
+    .in('doctor_id',allDocs.map(d=>d.id));
+  const{count:pendCount}=await db.from('appointments')
+    .select('id',{count:'exact',head:true})
+    .in('doctor_id',allDocs.map(d=>d.id))
+    .eq('status','pending');
+  document.getElementById('sbApptCnt').textContent=apptCount||0;
+  document.getElementById('statAppts').textContent=apptCount||0;
+  document.getElementById('statApptSub').textContent='összes foglalás';
+  document.getElementById('statPending').textContent=pendCount||0;
+  if(pendCount>0){
+    document.getElementById('navApptBadge').textContent=pendCount;
+    document.getElementById('navApptBadge').style.display='inline';
+  }
+  document.getElementById('navDocBadge').textContent=allDocs.length;
+  document.getElementById('navDocBadge').style.display='inline';
+
+  // Clinic form
+  document.getElementById('cName').value=clinic.name||'';
+  document.getElementById('cCity').value=clinic.cities?.name||'';
+  document.getElementById('cAddress').value=clinic.address||'';
+  document.getElementById('cPhone').value=clinic.phone||'';
+  document.getElementById('cEmail').value=clinic.email||'';
+  document.getElementById('cWebsite').value=clinic.website||'';
+  document.getElementById('cDesc').value=clinic.description||'';
+
+  // Opening hours
+  renderOpenHours();
+  renderInsuranceChips();
+  loadDashboard();
+  renderDoctors(allDocs,1);
+}
+
+/* ═══ DASHBOARD ═══ */
+async function loadDashboard(){
+  // Today appts
+  const today=new Date();
+  const todayStr=today.toISOString().split('T')[0];
+  const{data:todayData}=await db.from('appointments')
+    .select('appointment_at,status,patients(full_name),doctors(name)')
+    .in('doctor_id',allDocs.map(d=>d.id))
+    .gte('appointment_at',todayStr+'T00:00:00')
+    .lte('appointment_at',todayStr+'T23:59:59')
+    .order('appointment_at').limit(6);
+
+  const el=document.getElementById('todayAppts');
+  if(!todayData||!todayData.length){
+    el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:14px">Nincs mai időpont</div>';
+  } else {
+    el.innerHTML=todayData.map(a=>{
+      const dt=new Date(a.appointment_at);
+      const t=dt.toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'});
+      const sc={confirmed:'badge-green',pending:'badge-orange',completed:'badge-blue',cancelled:'badge-red'};
+      const sl={confirmed:'Megerősített',pending:'Vár',completed:'Kész',cancelled:'Lemondva'};
+      return `<div class="appt-item">
+        <div class="appt-time"><span class="date">Ma</span>${t}</div>
+        <div style="flex:1"><div style="font-weight:700;color:var(--text);font-size:14px">${a.patients?.full_name||'Névtelen'}</div><div style="font-size:12px;color:var(--muted)">${a.doctors?.name||'–'}</div></div>
+        <span class="badge ${sc[a.status]||'badge-gray'}">${sl[a.status]||a.status}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Week chart (mock data)
+  const vals=[12,18,14,22,19,8,0];
+  const max=Math.max(...vals);
+  document.getElementById('weekChart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${max?v/max*100:0}%;${i===new Date().getDay()-1?'opacity:1':''}"></div>`).join('');
+  const total=vals.reduce((s,v)=>s+v,0);
+  document.getElementById('weekTotal').textContent=total;
+  document.getElementById('weekCompleted').textContent=Math.round(total*.7);
+
+  // Doctor grid
+  renderDocGrid(allDocs.slice(0,6));
+}
+
+function renderDocGrid(docs){
+  const el=document.getElementById('docGridDash');
+  if(!docs.length){el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--muted);grid-column:1/-1">Nincsenek orvosok</div>';return;}
+  el.innerHTML=docs.map((d,i)=>{
+    const spec=d.doctor_specialties?.[0]?.specialties?.name||'–';
+    const rat=parseFloat(d.rating||0);
+    const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<div class="doc-card">
+      <div class="doc-card-top">
+        <div class="doc-av-lg" style="background:${COLORS[i%COLORS.length]}">${init}</div>
+        <div><div class="doc-card-name">${d.name}</div><div class="doc-card-spec">${spec}</div></div>
+      </div>
+      <div class="doc-card-meta">
+        <span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span>
+        <span class="badge badge-amber">★ ${rat.toFixed(1)}</span>
+        ${d.fee?`<span class="badge badge-gray">${d.fee.toLocaleString('hu-HU')} Ft</span>`:''}
+      </div>
+      <div class="doc-card-actions">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="toggleDocStatus('${d.id}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══ DOCTORS TABLE ═══ */
+function renderDoctors(docs,page=1){
+  const tb=document.getElementById('doctorsTable');
+  const total=docs.length,pages=Math.ceil(total/PG),st=(page-1)*PG,pg=docs.slice(st,st+PG);
+  if(!pg.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok</td></tr>';hidePag();return;}
+  tb.innerHTML=pg.map((d,i)=>{
+    const spec=d.doctor_specialties?.[0]?.specialties?.name||'–';
+    const rat=parseFloat(d.rating||0);
+    const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    return `<tr>
+      <td><div class="av-chip">
+        <div class="av-sm" style="background:${COLORS[(st+i)%COLORS.length]}">${init}</div>
+        <div><div class="td-name">${d.name}</div>${d.title?`<div class="td-sub">${d.title}</div>`:''}</div>
+      </div></td>
+      <td><span class="badge badge-teal">${spec}</span></td>
+      <td><span style="color:var(--amber);font-weight:700">★ ${rat.toFixed(1)}</span> <span style="color:var(--muted);font-size:12px">(${d.review_count||0})</span></td>
+      <td>${d.experience_years||'–'} év</td>
+      <td>${d.fee?d.fee.toLocaleString('hu-HU')+' Ft':'–'}</td>
+      <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="toggleDocStatus('${d.id}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button></td>
+    </tr>`;
+  }).join('');
+  renderPag(total,page,pages);
+}
+
+function filterDocs(q){
+  const f=allDocs.filter(d=>d.name.toLowerCase().includes(q.toLowerCase()));
+  renderDoctors(f,1);
+}
+function filterDocsByStatus(v){
+  if(!v){renderDoctors(allDocs,1);return;}
+  renderDoctors(allDocs.filter(d=>String(d.is_active)===v),1);
+}
+async function toggleDocStatus(id,isActive){
+  await db.from('doctors').update({is_active:!isActive}).eq('id',id);
+  const d=allDocs.find(x=>x.id===id);if(d)d.is_active=!isActive;
+  renderDoctors(allDocs,1);renderDocGrid(allDocs.slice(0,6));
+  document.getElementById('statDocs').textContent=allDocs.filter(d=>d.is_active).length;
+  document.getElementById('sbDocCnt').textContent=allDocs.filter(d=>d.is_active).length;
+}
+
+/* ═══ PAGINATION ═══ */
+function renderPag(total,cur,pages){
+  const pag=document.getElementById('docPag'),info=document.getElementById('docPagInfo'),btns=document.getElementById('docPagBtns');
+  if(pages<=1){pag.style.display='none';return;}
+  pag.style.display='flex';
+  info.textContent=`${(cur-1)*PG+1}–${Math.min(cur*PG,total)} / ${total}`;
+  let h=`<button class="pag-btn" onclick="renderDoctors(allDocs,${cur-1})" ${cur===1?'disabled':''}>‹</button>`;
+  for(let p=1;p<=pages;p++){
+    if(p===1||p===pages||Math.abs(p-cur)<=1) h+=`<button class="pag-btn ${p===cur?'on':''}" onclick="renderDoctors(allDocs,${p})">${p}</button>`;
+    else if(Math.abs(p-cur)===2) h+=`<span style="color:var(--muted);padding:0 2px;align-self:center">…</span>`;
+  }
+  h+=`<button class="pag-btn" onclick="renderDoctors(allDocs,${cur+1})" ${cur===pages?'disabled':''}>›</button>`;
+  btns.innerHTML=h;
+}
+function hidePag(){document.getElementById('docPag').style.display='none';}
+
+/* ═══ APPOINTMENTS ═══ */
+async function loadAppointments(filter){
+  const tb=document.getElementById('apptTable');
+  tb.innerHTML='<tr class="skel-row"><td colspan="6"><div style="width:100%"></div></td></tr>';
+  if(!allDocs.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek orvosok</td></tr>';return;}
+  let q=db.from('appointments').select('id,appointment_at,status,patients(full_name),doctors(name)')
+    .in('doctor_id',allDocs.map(d=>d.id)).order('appointment_at',{ascending:false}).limit(50);
+  if(filter) q=q.eq('status',filter);
+  const{data}=await q;
+  allAppts=data||[];
+  if(!allAppts.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek foglalások</td></tr>';return;}
+  const sc={confirmed:'badge-green',pending:'badge-orange',completed:'badge-blue',cancelled:'badge-red'};
+  const sl={confirmed:'Megerősített',pending:'Jóváhagyás alatt',completed:'Teljesített',cancelled:'Lemondott'};
+  tb.innerHTML=allAppts.map(a=>{
+    const dt=new Date(a.appointment_at);
+    return `<tr>
+      <td><div class="td-name">${dt.toLocaleDateString('hu-HU',{year:'numeric',month:'short',day:'numeric'})}</div><div class="td-sub">${dt.toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'})}</div></td>
+      <td class="td-name">${a.patients?.full_name||'Névtelen'}</td>
+      <td style="color:var(--sub)">${a.doctors?.name||'–'}</td>
+      <td><span class="badge badge-gray">Személyes</span></td>
+      <td><span class="badge ${sc[a.status]||'badge-gray'}">${sl[a.status]||a.status}</span></td>
+      <td><select class="form-input" style="width:auto;padding:5px 9px;font-size:12px" onchange="updateAppt('${a.id}',this.value)">
+        <option ${a.status==='pending'?'selected':''} value="pending">Jóváhagyás alatt</option>
+        <option ${a.status==='confirmed'?'selected':''} value="confirmed">Megerősített</option>
+        <option ${a.status==='completed'?'selected':''} value="completed">Teljesített</option>
+        <option ${a.status==='cancelled'?'selected':''} value="cancelled">Lemondott</option>
+      </select></td>
+    </tr>`;
+  }).join('');
+}
+async function updateAppt(id,status){await db.from('appointments').update({status}).eq('id',id);}
+
+/* ═══ SCHEDULE ═══ */
+async function loadSchedule(){
+  const tb=document.getElementById('schedTable');
+  const rows=[];
+  allDocs.forEach(d=>{
+    (d.availability||[]).forEach(av=>{
+      rows.push({doctor:d.name,spec:d.doctor_specialties?.[0]?.specialties?.name||'–',day:av.day_of_week,start:av.start_time,end:av.end_time,slot:av.slot_minutes});
+    });
+  });
+  rows.sort((a,b)=>a.day-b.day);
+  if(!rows.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek rendelési adatok</td></tr>';return;}
+  tb.innerHTML=rows.map(r=>`<tr>
+    <td><span class="badge badge-teal">${DAYS[(r.day-1+7)%7]}</span></td>
+    <td class="td-name">${r.doctor}</td>
+    <td><span class="badge badge-blue">${r.spec}</span></td>
+    <td>${r.start?.slice(0,5)||'–'}</td>
+    <td>${r.end?.slice(0,5)||'–'}</td>
+    <td>${r.slot||30} perc</td>
+  </tr>`).join('');
+}
+
+/* ═══ OPENING HOURS ═══ */
+function renderOpenHours(){
+  const el=document.getElementById('openHours');
+  el.innerHTML=DAYS.map((day,i)=>`
+    <div style="display:flex;align-items:center;gap:1rem;padding:.6rem 0;border-bottom:1px solid #f0f4fb;flex-wrap:wrap">
+      <div style="font-size:13px;font-weight:700;color:var(--text);width:90px;flex-shrink:0">${day}</div>
+      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);cursor:pointer">
+        <input type="checkbox" ${i<6?'checked':''} style="accent-color:var(--teal)" onchange="this.closest('div').querySelector('.time-inputs').style.display=this.checked?'flex':'none'">
+        Nyitva
+      </label>
+      <div class="time-inputs" style="display:${i<6?'flex':'none'};align-items:center;gap:8px;flex-wrap:wrap">
+        <input type="time" value="${i<5?'08:00':i===5?'09:00':'09:00'}" class="form-input" style="width:120px;padding:6px 10px">
+        <span style="color:var(--muted)">–</span>
+        <input type="time" value="${i<5?'18:00':i===5?'14:00':'13:00'}" class="form-input" style="width:120px;padding:6px 10px">
+      </div>
+    </div>`).join('');
+}
+
+/* ═══ INSURANCE CHIPS ═══ */
+function renderInsuranceChips(){
+  document.getElementById('insuranceChips').innerHTML=INSURANCES.map(ins=>`
+    <div onclick="toggleIns(this,'${ins}')" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid;${selectedInsurances.has(ins)?'background:#f0fdfa;border-color:#0d9488;color:#0d9488':'background:#f4f6fb;border-color:var(--border);color:var(--sub)'}">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:${selectedInsurances.has(ins)?'block':'none'}"><polyline points="20 6 9 17 4 12"/></svg>
+      ${ins}
+    </div>`).join('');
+}
+function toggleIns(el,ins){
+  if(selectedInsurances.has(ins)) selectedInsurances.delete(ins);
+  else selectedInsurances.add(ins);
+  renderInsuranceChips();
+}
+
+/* ═══ SAVE CLINIC ═══ */
+async function saveClinic(){
+  if(!clinicData) return;
+  const btn=document.getElementById('btnSaveClinic');
+  btn.textContent='Mentés…';btn.disabled=true;
+  const{error}=await db.from('clinics').update({
+    name:document.getElementById('cName').value,
+    address:document.getElementById('cAddress').value,
+    phone:document.getElementById('cPhone').value,
+    email:document.getElementById('cEmail').value,
+    website:document.getElementById('cWebsite').value,
+    description:document.getElementById('cDesc').value,
+  }).eq('id',clinicData.id);
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Mentés';
+  btn.disabled=false;
+  if(error) alert('Hiba: '+error.message);
+  else{
+    document.getElementById('sbName').textContent=document.getElementById('cName').value;
+    document.getElementById('sbAv').textContent=document.getElementById('cName').value.charAt(0);
+  }
+}
+
+/* ═══ ADD DOCTOR MODAL ═══ */
+async function openAddDoctorModal(){
+  // Load specialties
+  const{data}=await db.from('specialties').select('id,name').order('name');
+  const sel=document.getElementById('mSpec');
+  sel.innerHTML=(data||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  document.getElementById('addDocModal').classList.add('open');
+}
+function closeModal(){document.getElementById('addDocModal').classList.remove('open');}
+document.getElementById('addDocModal').addEventListener('click',e=>{if(e.target===document.getElementById('addDocModal'))closeModal();});
+
+async function saveNewDoctor(){
+  const name=document.getElementById('mName').value.trim();
+  if(!name){alert('A név megadása kötelező!');return;}
+  const{data:doctor,error}=await db.from('doctors').insert({
+    name,title:document.getElementById('mTitle').value,
+    email:document.getElementById('mEmail').value,
+    experience_years:parseInt(document.getElementById('mExp').value)||null,
+    is_active:true,
+  }).select().single();
+  if(error){alert('Hiba: '+error.message);return;}
+  // Link to clinic
+  if(doctor&&clinicData){
+    await db.from('doctor_clinics').insert({
+      doctor_id:doctor.id,clinic_id:clinicData.id,
+      consultation_fee:parseInt(document.getElementById('mFee').value)||null,
+    });
+    const specId=document.getElementById('mSpec').value;
+    if(specId) await db.from('doctor_specialties').insert({doctor_id:doctor.id,specialty_id:specId});
+  }
+  closeModal();
+  ['mName','mTitle','mEmail','mExp','mFee'].forEach(id=>document.getElementById(id).value='');
+  init(); // reload
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ═══ PHOTO UPLOAD ═══ */
+async function handlePhotoSelect(input){
+  const file=input.files[0];
+  if(!file) return;
+  if(file.size>5*1024*1024){ alert('A fájl mérete maximum 5 MB lehet!'); return; }
+
+  // Local preview
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const prev=document.getElementById('photoPreview');
+    prev.innerHTML=`<img src="${e.target.result}" alt="Preview">`;
+  };
+  reader.readAsDataURL(file);
+
+  const prog=document.getElementById('photoProgress');
+  const fill=document.getElementById('photoProgressFill');
+  const txt=document.getElementById('photoProgressText');
+  const succ=document.getElementById('photoSuccess');
+  prog.style.display='block'; succ.style.display='none';
+  fill.style.width='20%'; txt.textContent='Feltöltés előkészítése…';
+
+  if(!clinicData){ alert('Előbb töltse be a klinika adatait!'); return; }
+
+  const ext=file.name.split('.').pop().toLowerCase();
+  const fileName=`${clinicData.id}.${ext}`;
+
+  fill.style.width='50%'; txt.textContent='Feltöltés folyamatban…';
+
+  const{error}=await db.storage.from('clinic-photos').upload(fileName, file, {
+    contentType: file.type, upsert: true
+  });
+  if(error){ prog.style.display='none'; alert('Hiba: '+error.message); return; }
+
+  fill.style.width='80%'; txt.textContent='URL mentése…';
+
+  const{data:{publicUrl}}=db.storage.from('clinic-photos').getPublicUrl(fileName);
+
+  await db.from('clinics').update({photo_url: publicUrl}).eq('id', clinicData.id);
+  clinicData.photo_url=publicUrl;
+
+  // Update sidebar avatar
+  const sbAv=document.getElementById('sbAv');
+  if(sbAv){
+    sbAv.style.background='none';
+    sbAv.innerHTML=`<img src="${publicUrl}" style="width:46px;height:46px;border-radius:13px;object-fit:cover;display:block">`;
+  }
+
+  fill.style.width='100%'; txt.textContent='Kész!';
+  setTimeout(()=>{ prog.style.display='none'; succ.style.display='flex'; },400);
+}
+
+// Drag & drop
+const dz=document.getElementById('photoDropZone');
+if(dz){
+  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault(); dz.classList.remove('drag');
+    const f=e.dataTransfer.files[0];
+    if(f){ document.getElementById('photoFile').files=e.dataTransfer.files; handlePhotoSelect({files:e.dataTransfer.files}); }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
