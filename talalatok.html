@@ -356,6 +356,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       <button class="srch-btn" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
     </div>
     <div class="nav-acts">
+      <a href="tudastar.html" style="font-size:13px;font-weight:700;color:#ff6b2b;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">Tudástár A–Z</a>
       <button class="btn-ghost">Bejelentkezés</button>
       <button class="btn-pill">Regisztráció</button>
     </div>
@@ -768,7 +769,7 @@ function updateHero(){
 async function load(){
   document.getElementById('resList').innerHTML='<div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div>';
   document.getElementById('pagDiv').style.display='none';
-  let q=db.from('doctors').select(`id,name,title,bio,rating,review_count,experience_years,email,phone,languages,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
+  let q=db.from('doctors').select(`id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
   if(specQ) q=q.ilike('doctor_specialties.specialties.name',`%${specQ}%`);
   if(cityQ) q=q.ilike('doctor_clinics.clinics.cities.name',`%${cityQ}%`);
   const{data,error}=await q;
@@ -919,9 +920,12 @@ function cardH(d,i){
   const ins=(d.doctor_insurances||[]).map(x=>x.insurance_types?.name).filter(Boolean).slice(0,3);
   const next=avD.includes(1)?'Ma szabad':avD.includes(2)?'Holnap szabad':avD.length?'Héten szabad':'Egyeztessen';
   const bio=d.bio||(d.experience_years?`${d.experience_years} éve aktív ${spec||'szakorvos'}.`:`Szakterülete: ${spec||'általános orvoslás'}.`);
-  return `<div class="dc${isPrem?' prem':''}" style="animation-delay:${(i%PGS)*.07}s" onclick="openPanel('${d.id}')">
+  const avEl=d.photo_url
+    ?`<div style="position:relative;flex-shrink:0"><img src="${d.photo_url}" alt="${d.name}" style="width:90px;height:90px;border-radius:20px;object-fit:cover;display:block;box-shadow:0 6px 20px rgba(0,0,0,.15)">${avD.length?'<div class="av-dot" style="position:absolute;bottom:-2px;right:-2px"></div>':''}</div>`
+    :`<div style="position:relative;flex-shrink:0"><div class="av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}${avD.length?'<div class="av-dot"></div>':''}</div></div>`;
+  return `<div class="dc${isPrem?' prem':''}" style="animation-delay:${(i%PGS)*.07}s;cursor:pointer" onclick="goToProfile('${d.id}')">
     ${isPrem?'<div class="prem-lbl">⭐ Prémium</div>':''}
-    <div style="position:relative"><div class="av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}${avD.length?'<div class="av-dot"></div>':''}</div></div>
+    ${avEl}
     <div>
       <div class="dc-nm">${d.name}${d.title?` <span style="font-size:12.5px;font-weight:500;color:var(--sub)">${d.title}</span>`:''}</div>
       <div class="dc-deg">${d.experience_years?d.experience_years+' év tapasztalat':'Szakorvos'}</div>
@@ -940,12 +944,13 @@ function cardH(d,i){
     <div class="dc-right" onclick="event.stopPropagation()">
       <div style="text-align:right"><div class="dc-price">${f?f.toLocaleString('hu-HU')+' Ft':'Egyedi'}<small>konzultáció</small></div></div>
       <div class="nxt-slot"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${next}</div>
-      <button class="btn-book">Időpontot foglalok</button>
-      <button class="btn-prof" onclick="openPanel('${d.id}')">Profil megtekintése</button>
+      <button class="btn-book" onclick="event.stopPropagation();alert('Foglalás hamarosan!')">Időpontot foglalok</button>
+      <button class="btn-prof" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
     </div>
   </div>`;
 }
 
+function goToProfile(id){ window.location.href=`orvos.html?id=${id}`; }
 function setView(v){curView=v;document.getElementById('btnList').classList.toggle('on',v==='list');document.getElementById('btnGrid').classList.toggle('on',v==='grid');renderList();}
 function goPg(p){curPg=p;renderList();scrollTo({top:0,behavior:'smooth'});}
 function changePg(d){goPg(curPg+d);}
