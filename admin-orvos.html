@@ -192,6 +192,24 @@ tbody tr:hover td{background:#fafbff;transition:background .15s}
 .prog-bar{flex:1;height:6px;background:#f0f4ff;border-radius:99px;overflow:hidden}
 .prog-fill{height:100%;background:var(--amber);border-radius:99px}
 
+/* ══ PHOTO UPLOAD ══ */
+.photo-upload-wrap{display:flex;align-items:center;gap:1.5rem;padding:1.25rem;background:#f8f9ff;border:1.5px solid var(--border);border-radius:14px;margin-bottom:1.25rem}
+.photo-preview{width:90px;height:90px;border-radius:18px;object-fit:cover;flex-shrink:0;border:2px solid var(--border);background:linear-gradient(135deg,var(--brand),var(--teal));display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:#fff;overflow:hidden;position:relative}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-upload-area{flex:1}
+.photo-upload-label{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:.35rem}
+.photo-upload-hint{font-size:12px;color:var(--muted);margin-bottom:.75rem;line-height:1.5}
+.photo-drop-zone{border:2px dashed var(--border);border-radius:11px;padding:1rem;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:#fff}
+.photo-drop-zone:hover,.photo-drop-zone.drag{border-color:var(--brand);background:#eef2ff}
+.photo-drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-drop-text{font-size:13px;color:var(--muted);font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
+.photo-drop-text span{color:var(--brand);text-decoration:underline}
+.photo-progress{margin-top:.75rem;display:none}
+.photo-progress-bar{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.photo-progress-fill{height:100%;background:var(--brand);border-radius:99px;width:0%;transition:width .3s}
+.photo-progress-text{font-size:11px;color:var(--muted);margin-top:4px;text-align:center}
+.photo-success{display:none;align-items:center;gap:7px;background:#ecfdf5;border:1.5px solid #bbf7d0;border-radius:9px;padding:.6rem .9rem;margin-top:.75rem;font-size:13px;color:#059669;font-weight:600}
+
 @media(max-width:1100px){.stats-row{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
 @media(max-width:860px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}}
 </style>
@@ -353,6 +371,29 @@ tbody tr:hover td{background:#fafbff;transition:background .15s}
           </div>
         </div>
         <div class="card-body">
+          <!-- FOTÓ FELTÖLTÉS -->
+          <div class="photo-upload-wrap">
+            <div class="photo-preview" id="photoPreview"><span id="photoInitials">KJ</span></div>
+            <div class="photo-upload-area">
+              <div class="photo-upload-label">Profilfotó</div>
+              <div class="photo-upload-hint">JPG, PNG vagy WebP, max. 5 MB. Ajánlott: 400×400 px négyzet formátum.</div>
+              <div class="photo-drop-zone" id="photoDropZone">
+                <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp" onchange="handlePhotoSelect(this)">
+                <div class="photo-drop-text">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Húzza ide, vagy <span>tallózzon</span>
+                </div>
+              </div>
+              <div class="photo-progress" id="photoProgress">
+                <div class="photo-progress-bar"><div class="photo-progress-fill" id="photoProgressFill"></div></div>
+                <div class="photo-progress-text" id="photoProgressText">Feltöltés…</div>
+              </div>
+              <div class="photo-success" id="photoSuccess">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Fotó sikeresen feltöltve és mentve!
+              </div>
+            </div>
+          </div>
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Teljes név</label>
@@ -629,7 +670,21 @@ async function init(){
 
   // Sidebar
   const init2=data.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  document.getElementById('sbAvatar').textContent=init2;
+  const sbAv=document.getElementById('sbAvatar');
+  if(data.photo_url){
+    sbAv.style.background='none';
+    sbAv.innerHTML=`<img src="${data.photo_url}" style="width:46px;height:46px;border-radius:13px;object-fit:cover;display:block">`;
+  } else {
+    sbAv.textContent=init2;
+  }
+  // Photo preview in form
+  const prev=document.getElementById('photoPreview');
+  const photoInit=document.getElementById('photoInitials');
+  if(data.photo_url){
+    prev.innerHTML=`<img src="${data.photo_url}" alt="${data.name}">`;
+  } else {
+    if(photoInit) photoInit.textContent=init2;
+  }
   document.getElementById('sbName').textContent=data.name;
   const spec=data.doctor_specialties?.[0]?.specialties?.name||'–';
   document.getElementById('sbSpec').textContent=spec;
@@ -890,6 +945,75 @@ async function saveAvailability(){
   btn.disabled=false;
   if(error) alert('Hiba: '+error.message);
   else loadAvailPreview();
+}
+
+/* ═══ PHOTO UPLOAD ═══ */
+async function handlePhotoSelect(input){
+  const file=input.files[0];
+  if(!file) return;
+  if(file.size>5*1024*1024){ alert('A fájl mérete maximum 5 MB lehet!'); return; }
+
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('photoPreview').innerHTML=`<img src="${e.target.result}" alt="Preview">`; };
+  reader.readAsDataURL(file);
+
+  const prog=document.getElementById('photoProgress');
+  const fill=document.getElementById('photoProgressFill');
+  const txt=document.getElementById('photoProgressText');
+  const succ=document.getElementById('photoSuccess');
+  prog.style.display='block'; succ.style.display='none';
+  fill.style.width='20%'; txt.textContent='Feltöltés előkészítése…';
+
+  if(!doctorData){ alert('Nincs betöltött orvos adat!'); prog.style.display='none'; return; }
+
+  const ext=file.name.split('.').pop().toLowerCase();
+  const fileName=`${doctorData.id}.${ext}`;
+
+  console.log('Feltöltés indul:', fileName, 'doctor id:', doctorData.id);
+
+  fill.style.width='40%'; txt.textContent='Feltöltés folyamatban…';
+
+  const{data:uploadData, error:uploadError}=await db.storage
+    .from('doctor-photos')
+    .upload(fileName, file, { contentType: file.type, upsert: true });
+
+  if(uploadError){
+    prog.style.display='none';
+    console.error('Storage hiba:', uploadError);
+    alert('Feltöltési hiba: '+uploadError.message+'\n\nEllenőrizze a Supabase Storage policy-kat.');
+    return;
+  }
+
+  console.log('Feltöltés sikeres:', uploadData);
+  fill.style.width='75%'; txt.textContent='URL mentése az adatbázisba…';
+
+  const{data:{publicUrl}}=db.storage.from('doctor-photos').getPublicUrl(fileName);
+  console.log('Public URL:', publicUrl);
+
+  const{error:updateError}=await db.from('doctors').update({photo_url: publicUrl}).eq('id', doctorData.id);
+  if(updateError){ console.error('DB update hiba:', updateError); alert('Adatbázis hiba: '+updateError.message); return; }
+
+  doctorData.photo_url=publicUrl;
+
+  // Sidebar avatar frissítés
+  const sbAv=document.getElementById('sbAvatar');
+  if(sbAv){ sbAv.style.background='none'; sbAv.innerHTML=`<img src="${publicUrl}" style="width:46px;height:46px;border-radius:13px;object-fit:cover;display:block">`; }
+
+  fill.style.width='100%'; txt.textContent='Kész!';
+  setTimeout(()=>{ prog.style.display='none'; succ.style.display='flex'; },400);
+  console.log('Fotó mentve:', publicUrl, 'orvos:', doctorData.name);
+}
+
+// Drag & drop
+const dz=document.getElementById('photoDropZone');
+if(dz){
+  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+  dz.addEventListener('drop',e=>{
+    e.preventDefault(); dz.classList.remove('drag');
+    const f=e.dataTransfer.files[0];
+    if(f){ document.getElementById('photoFile').files=e.dataTransfer.files; handlePhotoSelect({files:e.dataTransfer.files}); }
+  });
 }
 
 /* ═══ INIT ═══ */
