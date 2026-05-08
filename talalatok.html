@@ -616,10 +616,12 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
         </div>
         <select class="sort-sel" id="sortSel" onchange="applyF()">
           <option value="rating">⭐ Legjobb értékelés</option>
+          <option value="specialty">🏥 Szakterület (A–Z)</option>
           <option value="exp">⏱ Legtöbb tapasztalat</option>
           <option value="price_asc">💰 Ár: alacsony → magas</option>
           <option value="price_desc">💰 Ár: magas → alacsony</option>
           <option value="reviews">💬 Legtöbb vélemény</option>
+          <option value="name">🔤 Névsor (A–Z)</option>
         </select>
       </div>
     </div>
@@ -817,6 +819,13 @@ function applyF(){
   else if(s==='price_asc') docs.sort((a,b)=>fee(a)-fee(b));
   else if(s==='price_desc') docs.sort((a,b)=>fee(b)-fee(a));
   else if(s==='reviews') docs.sort((a,b)=>(b.review_count||0)-(a.review_count||0));
+  else if(s==='name') docs.sort((a,b)=>a.name.localeCompare(b.name,'hu'));
+  else if(s==='specialty') docs.sort((a,b)=>{
+    const sa=a.doctor_specialties?.[0]?.specialties?.name||'';
+    const sb=b.doctor_specialties?.[0]?.specialties?.name||'';
+    if(sa!==sb) return sa.localeCompare(sb,'hu');
+    return (b.rating||0)-(a.rating||0);
+  });
   filtered=docs;curPg=1;renderList();renderTags();updateBadge();
 }
 
@@ -896,9 +905,34 @@ function renderList(){
   const tot=filtered.length,pgs=Math.ceil(tot/PGS),st=(curPg-1)*PGS,pg=filtered.slice(st,st+PGS);
   document.getElementById('rcnt').innerHTML=`<span>${tot}</span> orvos találva`;
   const list=document.getElementById('resList');
+  const sortMode=document.getElementById('sortSel').value;
   list.className=curView==='grid'?'rgrid':'';
   if(!tot){list.innerHTML='<div class="empty-st"><div class="empty-icon">🔍</div><div class="empty-title">Nem találtunk orvost</div><div class="empty-sub">Próbáljon más szűrőkkel keresni.</div></div>';document.getElementById('pagDiv').style.display='none';return;}
-  list.innerHTML=pg.map((d,i)=>cardH(d,st+i)).join('');
+
+  if(sortMode==='specialty' && curView==='list'){
+    // Szakterület szerinti csoportos megjelenítés
+    let html='';
+    let lastSpec='';
+    pg.forEach((d,i)=>{
+      const spec=d.doctor_specialties?.[0]?.specialties?.name||'Egyéb';
+      if(spec!==lastSpec){
+        const cnt=filtered.filter(x=>(x.doctor_specialties?.[0]?.specialties?.name||'Egyéb')===spec).length;
+        html+=`<div style="display:flex;align-items:center;gap:12px;margin:${lastSpec?'1.5rem':'0'} 0 .75rem;padding-bottom:.5rem;border-bottom:2px solid #eef2ff">
+          <div style="background:linear-gradient(135deg,#283897,#3a52e8);border-radius:10px;padding:6px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:#fff">
+            ${spec}
+          </div>
+          <span style="font-size:12px;color:#94a3b8;font-weight:600">${cnt} orvos</span>
+          <div style="flex:1;height:1px;background:#eef2ff"></div>
+        </div>`;
+        lastSpec=spec;
+      }
+      html+=cardH(d,st+i);
+    });
+    list.innerHTML=html;
+  } else {
+    list.innerHTML=pg.map((d,i)=>cardH(d,st+i)).join('');
+  }
+
   // Pagination
   if(pgs>1){
     document.getElementById('pagDiv').style.display='flex';
