@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Orvos profil – Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
@@ -14,197 +14,244 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --brand:#283897;--navy:#1a2472;--orange:#ff6b2b;--olight:#ff8c5a;
-  --teal:#00c4b4;--green:#22c55e;
-  --bg:#f0f4ff;--surface:#fff;--border:#e8edf8;
-  --text:#1a1f36;--sub:#6b7280;--muted:#9aa5c4;
+  --brand:#1e3a8a;--brand-mid:#2d4fd6;--brand-light:#eef2ff;
+  --orange:#f97316;--orange-light:#fb923c;
+  --green:#22c55e;--green-light:#dcfce7;
+  --bg:#f4f7fc;--surface:#fff;--border:#e8ecf5;
+  --text:#0f172a;--sub:#475569;--muted:#94a3b8;
+  --radius:16px;--radius-sm:10px;
 }
-body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden}
+body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 
 /* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 2px 16px rgba(40,56,151,.06)}
-.nav-in{display:flex;align-items:center;height:64px;padding:0 4%;max-width:1400px;margin:0 auto;gap:1rem}
-.logo{display:flex;align-items:center;gap:9px}
-.logo-txt{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;color:var(--brand)}
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 1px 12px rgba(15,30,100,.06)}
+.nav-in{display:flex;align-items:center;height:64px;padding:0 5%;max-width:1400px;margin:0 auto;gap:1rem}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex-shrink:0}
+.logo-txt{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--brand)}
 .logo-txt em{color:var(--green);font-style:normal}
-.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sub);padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;transition:all .2s;cursor:pointer}
-.nav-back:hover{color:var(--brand);border-color:var(--brand);background:#eef2ff}
-.nav-actions{margin-left:auto;display:flex;gap:8px}
-.btn-ghost{font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:var(--brand);background:transparent;border:1.5px solid rgba(40,56,151,.2);padding:7px 16px;border-radius:8px;cursor:pointer;transition:all .2s}
-.btn-ghost:hover{border-color:var(--brand);background:rgba(40,56,151,.04)}
-.btn-orange{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--orange);border:none;padding:8px 18px;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px rgba(255,107,43,.3);transition:all .2s}
-.btn-orange:hover{background:var(--olight)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sub);padding:6px 14px;border:1.5px solid var(--border);border-radius:9px;transition:all .2s;cursor:pointer;white-space:nowrap}
+.nav-back:hover{color:var(--brand);border-color:var(--brand-mid);background:var(--brand-light)}
+.nav-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-ghost{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--brand);background:transparent;border:1.5px solid rgba(45,79,214,.2);padding:7px 16px;border-radius:9px;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--brand-mid);background:var(--brand-light)}
+.btn-cta{font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#fff;background:var(--orange);border:none;padding:8px 18px;border-radius:9px;cursor:pointer;box-shadow:0 2px 10px rgba(249,115,22,.3);transition:all .2s}
+.btn-cta:hover{background:var(--orange-light)}
 
-/* ── SKELETON ── */
-.skel{background:linear-gradient(90deg,#eef1fa 25%,#e4e9f5 50%,#eef1fa 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:12px}
-@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.page-skeleton{padding:2rem 4%;max-width:1200px;margin:0 auto}
+/* ── LOADING ── */
+.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .3s}
+.loading-overlay.hide{opacity:0;pointer-events:none}
+.loader{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--brand-mid);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(135deg,#eef2ff 0%,#f0f4ff 60%,#f4f6fb 100%);border-bottom:1px solid var(--border);padding:2.5rem 4%;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-80px;right:-60px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(40,56,151,.07),transparent 70%);pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-60px;left:10%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(0,196,180,.06),transparent 70%);pointer-events:none}
-.hero-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:start;position:relative;z-index:1}
-.hero-av{width:120px;height:120px;border-radius:24px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:40px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 10px 32px rgba(0,0,0,.16);position:relative}
-.hero-av-online{position:absolute;bottom:-2px;right:-2px;width:22px;height:22px;background:var(--green);border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(34,197,94,.4)}
-.hero-info{}
-.hero-crumb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);margin-bottom:.6rem}
-.hero-crumb a{color:var(--brand)}.hero-crumb a:hover{text-decoration:underline}
-.hero-name{font-family:'Nunito',sans-serif;font-size:clamp(1.6rem,3vw,2.2rem);font-weight:900;color:var(--text);line-height:1.2;margin-bottom:.3rem}
-.hero-deg{font-size:14px;color:var(--sub);margin-bottom:.6rem}
-.hero-spec{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border-radius:100px;font-size:13px;font-weight:700;padding:5px 15px;margin-bottom:.9rem}
-.hero-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem}
-.htag{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:5px 11px;font-size:13px;color:var(--sub)}
-.htag.teal{background:#f0fdfa;border-color:#99f6e4;color:#0d9488}
-.htag.green{background:#f0fdf4;border-color:#bbf7d0;color:#059669}
-.hero-rating{display:flex;align-items:center;gap:10px}
-.stars{display:flex;gap:1px}
-.st{font-size:16px;color:#e5e7eb}.st.f{color:#f59e0b}.st.h{color:#fcd34d}
-.rat-num{font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:var(--text)}
-.rev-cnt{font-size:13px;color:var(--muted)}
-.verif{display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:100px;padding:3px 10px;font-size:12px;font-weight:700;color:#059669}
-.prem-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;border-radius:100px;padding:4px 12px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 8px rgba(245,158,11,.35)}
+.hero{background:#fff;border-bottom:1px solid var(--border);padding:0}
+.hero-in{max-width:1280px;margin:0 auto;padding:2.5rem 5%;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start}
+.hero-left{display:flex;gap:1.75rem;align-items:flex-start}
 
-/* CTA block (right) */
-.hero-cta{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:1.5rem;min-width:220px;display:flex;flex-direction:column;gap:.85rem;box-shadow:0 4px 20px rgba(40,56,151,.08);flex-shrink:0}
-.cta-price{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:var(--text);line-height:1}
-.cta-price small{font-size:13px;font-weight:400;color:var(--muted);display:block;margin-top:2px}
-.cta-next{font-size:12px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:5px}
-.btn-book-big{width:100%;background:var(--brand);color:#fff;border:none;border-radius:13px;padding:14px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(40,56,151,.28);display:flex;align-items:center;justify-content:center;gap:7px}
-.btn-book-big:hover{background:var(--navy);box-shadow:0 6px 22px rgba(40,56,151,.38);transform:translateY(-1px)}
+/* Avatar */
+.doc-avatar{width:110px;height:110px;border-radius:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:36px;font-weight:900;color:#fff;position:relative;box-shadow:0 8px 28px rgba(0,0,0,.14)}
+.doc-avatar img{width:100%;height:100%;border-radius:22px;object-fit:cover}
+.avatar-online{position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:var(--green);border:2.5px solid #fff;border-radius:50%}
+
+/* Hero info */
+.hero-meta{flex:1}
+.hero-breadcrumb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);margin-bottom:.6rem}
+.hero-breadcrumb a{color:var(--brand-mid);font-weight:600}
+.hero-breadcrumb a:hover{text-decoration:underline}
+.doc-name{font-family:'Nunito',sans-serif;font-size:clamp(1.5rem,2.5vw,2rem);font-weight:900;color:var(--text);line-height:1.2;margin-bottom:.25rem}
+.doc-title{font-size:14px;color:var(--sub);margin-bottom:.6rem;font-weight:500}
+.doc-spec-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border-radius:100px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;padding:5px 16px;margin-bottom:.9rem}
+.doc-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem}
+.dtag{display:inline-flex;align-items:center;gap:5px;background:#f8faff;border:1.5px solid var(--border);border-radius:9px;padding:4px 12px;font-size:12.5px;color:var(--sub);font-weight:500}
+.dtag.green{background:var(--green-light);border-color:#bbf7d0;color:#15803d}
+.dtag.orange{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+.doc-rating-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.stars-row{display:flex;gap:2px}
+.star{font-size:15px;color:#e2e8f0}
+.star.f{color:#f59e0b}
+.rat-score{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--text)}
+.rat-count{font-size:13px;color:var(--muted)}
+.badge-verified{display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:100px;padding:3px 10px;font-size:11.5px;font-weight:700;color:#16a34a}
+.badge-premium{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;border-radius:100px;padding:4px 12px;font-size:11px;font-weight:800;letter-spacing:.05em;box-shadow:0 2px 8px rgba(245,158,11,.3)}
+
+/* Hero CTA card */
+.hero-cta-card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:1.5rem;width:240px;flex-shrink:0;box-shadow:0 4px 24px rgba(15,30,100,.08);display:flex;flex-direction:column;gap:.9rem}
+.cta-price-block{display:flex;align-items:baseline;gap:4px}
+.cta-price-val{font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;color:var(--text);line-height:1}
+.cta-price-cur{font-size:14px;color:var(--sub);font-weight:600}
+.cta-price-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.cta-avail{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#16a34a}
 .cta-divider{height:1px;background:var(--border)}
-.cta-ins{font-size:11px;color:var(--muted);text-align:center}
+.btn-book{width:100%;background:var(--brand-mid);color:#fff;border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(45,79,214,.28);transition:all .2s}
+.btn-book:hover{background:var(--brand);box-shadow:0 6px 24px rgba(45,79,214,.38);transform:translateY(-1px)}
+.btn-contact{width:100%;background:#f8faff;color:var(--brand-mid);border:1.5px solid #dde6ff;border-radius:12px;padding:10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s}
+.btn-contact:hover{background:var(--brand-light);border-color:var(--brand-mid)}
+.cta-note{font-size:11px;color:var(--muted);text-align:center;line-height:1.5}
 
-/* ── STAT ROW ── */
-.stat-row{background:#fff;border-bottom:1px solid var(--border);padding:1rem 4%}
-.stat-row-in{max-width:1200px;margin:0 auto;display:flex;gap:0;overflow-x:auto}
-.stat-item{flex:1;min-width:120px;padding:.75rem 1.25rem;border-right:1px solid var(--border);text-align:center}
+/* ── STAT BAR ── */
+.stat-bar{background:#fff;border-bottom:1px solid var(--border)}
+.stat-bar-in{max-width:1280px;margin:0 auto;padding:0 5%;display:flex;overflow-x:auto}
+.stat-item{flex:1;min-width:130px;padding:1rem 1.5rem;border-right:1px solid var(--border);text-align:center}
 .stat-item:last-child{border-right:none}
-.stat-v{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--brand);line-height:1}
-.stat-l{font-size:12px;color:var(--muted);margin-top:3px}
+.stat-val{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--brand-mid);line-height:1}
+.stat-lbl{font-size:11.5px;color:var(--muted);margin-top:3px}
 
-/* ── MAIN LAYOUT ── */
-.page-body{max-width:1200px;margin:0 auto;padding:2rem 4%;display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start}
+/* ── PAGE BODY ── */
+.page-body{max-width:1280px;margin:0 auto;padding:2rem 5%;display:grid;grid-template-columns:1fr 300px;gap:2rem;align-items:start}
+
+/* ── CARD ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1.25rem;overflow:hidden;box-shadow:0 1px 8px rgba(15,30,100,.04)}
+.card-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:linear-gradient(to right,#fafbff,#fff)}
+.card-header-icon{width:32px;height:32px;border-radius:9px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-header-title{font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:800;color:var(--brand);letter-spacing:.02em}
+.card-body{padding:1.5rem}
 
 /* ── TABS ── */
-.tabs-wrap{background:#fff;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
-.tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{padding:.9rem 1.25rem;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;white-space:nowrap;font-family:'Nunito',sans-serif}
-.tab.on{color:var(--brand);border-bottom-color:var(--brand)}
-.tab:hover:not(.on){color:var(--text)}
-.tab-body{display:none;padding:1.75rem}
-.tab-body.on{display:block}
+.tabs-nav{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;background:#fff}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.9rem 1.25rem;font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;display:flex;align-items:center;gap:6px}
+.tab-btn.active{color:var(--brand-mid);border-bottom-color:var(--brand-mid)}
+.tab-btn:hover:not(.active){color:var(--text)}
+.tab-panel{display:none;padding:1.75rem}
+.tab-panel.active{display:block}
 
-/* ── SECTION TITLE ── */
-.sec-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--brand);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+/* ── SECTION TITLES ── */
+.sec-h{font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:var(--brand-mid);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.9rem;margin-top:1.5rem;display:flex;align-items:center;gap:6px}
+.sec-h:first-child{margin-top:0}
+.sec-h::after{content:'';flex:1;height:1px;background:var(--border);margin-left:8px}
 
-/* Bio */
-.bio-text{font-size:14.5px;color:#4b5563;line-height:1.85;margin-bottom:1.5rem}
+/* ── BIO ── */
+.bio-short{font-size:15px;color:var(--sub);line-height:1.85;margin-bottom:1.25rem;font-style:italic;border-left:3px solid var(--brand-mid);padding-left:1rem;background:#fafbff;border-radius:0 10px 10px 0;padding:1rem 1rem 1rem 1.25rem}
+.bio-full{font-size:14px;color:var(--sub);line-height:1.9;margin-bottom:1.25rem}
 
-/* Specialties */
-.spec-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.5rem}
-.spec-item{display:flex;align-items:center;gap:10px;padding:.75rem 1rem;background:#f8f9ff;border:1.5px solid var(--border);border-radius:11px;font-size:14px;font-weight:600;color:var(--text)}
-.spec-dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex-shrink:0}
+/* ── SPEC LIST ── */
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem}
+.spec-item{display:flex;align-items:center;gap:9px;padding:.7rem 1rem;background:#f8faff;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;color:var(--text);transition:all .15s}
+.spec-item:hover{border-color:var(--brand-mid);background:var(--brand-light)}
+.spec-dot{width:8px;height:8px;border-radius:50%;background:var(--brand-mid);flex-shrink:0}
 
-/* Lang + ins chips */
-.chip-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
-.chip{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;border:1.5px solid #c7d2f5;border-radius:8px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--brand)}
-.chip.teal{background:#f0fdfa;border-color:#99f6e4;color:#0d9488}
-.chip.green{background:#ecfdf5;border-color:#bbf7d0;color:#059669}
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.25rem}
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:8px;padding:5px 13px;font-size:13px;font-weight:600}
+.chip.blue{background:var(--brand-light);border:1.5px solid #c7d2f5;color:var(--brand-mid)}
+.chip.green{background:var(--green-light);border:1.5px solid #bbf7d0;color:#15803d}
+.chip.gray{background:#f1f5f9;border:1.5px solid #e2e8f0;color:var(--sub)}
 
-/* ── BOOKING CALENDAR ── */
+/* ── EDUCATION ── */
+.edu-list{display:flex;flex-direction:column;gap:12px}
+.edu-item{display:flex;gap:14px;align-items:flex-start;padding:.9rem 1rem;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:#fafbff}
+.edu-icon{width:36px;height:36px;border-radius:9px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.edu-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.edu-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ── EXPERIENCE TIMELINE ── */
+.exp-list{display:flex;flex-direction:column;gap:0}
+.exp-item{display:flex;gap:14px;position:relative;padding-bottom:1.25rem}
+.exp-item:last-child{padding-bottom:0}
+.exp-line-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:32px}
+.exp-dot{width:12px;height:12px;border-radius:50%;background:var(--brand-mid);border:2.5px solid #fff;box-shadow:0 0 0 2px var(--brand-mid);flex-shrink:0;margin-top:3px}
+.exp-line{flex:1;width:2px;background:var(--border);margin-top:4px}
+.exp-item:last-child .exp-line{display:none}
+.exp-year{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:2px}
+.exp-place{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:var(--text)}
+.exp-role{font-size:13px;color:var(--sub);margin-top:2px}
+
+/* ── PRICES ── */
+.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.price-item{background:#fafbff;border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem}
+.price-lbl{font-size:12px;color:var(--muted);margin-bottom:4px}
+.price-val{font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text)}
+.price-cur{font-size:13px;color:var(--sub);font-weight:500}
+
+/* ── CALENDAR ── */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:1rem}
 .cal-hd{text-align:center;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;padding:5px 2px}
-.cal-day{border-radius:10px;padding:8px 4px;text-align:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;transition:all .2s;cursor:pointer;border:1.5px solid transparent;line-height:1.3}
-.cal-day.free{background:#ecfdf5;border-color:#bbf7d0;color:#059669}
-.cal-day.free:hover,.cal-day.free.sel{background:#059669;color:#fff;border-color:#059669}
+.cal-day{border-radius:var(--radius-sm);padding:8px 4px;text-align:center;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;transition:all .2s;cursor:pointer;border:1.5px solid transparent;line-height:1.3}
+.cal-day.free{background:#ecfdf5;border-color:#bbf7d0;color:#15803d}
+.cal-day.free:hover,.cal-day.free.sel{background:#15803d;color:#fff;border-color:#15803d}
 .cal-day.busy{background:#f9fafb;color:#d1d5db;cursor:default}
-.cal-day.today{box-shadow:0 0 0 2px var(--brand)}
-.cal-sub{font-size:9px;opacity:.7;margin-top:1px}
-
-.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:1rem}
-.ts{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:9px 4px;text-align:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .2s;cursor:pointer}
-.ts:hover{border-color:var(--brand);background:#eef2ff;color:var(--brand)}
-.ts.sel{background:var(--brand);color:#fff;border-color:var(--brand)}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:1rem}
+.ts{background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text);transition:all .2s;cursor:pointer}
+.ts:hover{border-color:var(--brand-mid);background:var(--brand-light);color:var(--brand-mid)}
+.ts.sel{background:var(--brand-mid);color:#fff;border-color:var(--brand-mid)}
 .ts.taken{background:#f9fafb;color:#d1d5db;cursor:default}
-
-.confirm-box{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:1rem 1.1rem;font-size:13px;color:#059669;font-weight:600;display:none;align-items:center;gap:8px;margin-bottom:1rem}
+.confirm-box{background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:1rem 1.25rem;font-size:13px;color:#15803d;font-weight:600;display:none;align-items:center;gap:8px;margin-bottom:1rem}
 .confirm-box.show{display:flex}
 
 /* ── REVIEWS ── */
-.rev-overview{display:flex;align-items:center;gap:2rem;padding:1.25rem;background:#f8f9ff;border:1.5px solid var(--border);border-radius:14px;margin-bottom:1.5rem;flex-wrap:wrap}
-.big-rat{font-family:'Nunito',sans-serif;font-size:56px;font-weight:900;color:var(--text);line-height:1;flex-shrink:0}
-.prog-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.prog-bar{flex:1;height:7px;background:#e8edf8;border-radius:99px;overflow:hidden}
+.rev-overview{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;background:#fafbff;border:1.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.rev-big-num{font-family:'Nunito',sans-serif;font-size:64px;font-weight:900;color:var(--text);line-height:1}
+.prog-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.prog-bar{flex:1;height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden}
 .prog-fill{height:100%;background:#f59e0b;border-radius:99px;transition:width .6s .2s}
-.rev-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:1.25rem;margin-bottom:.85rem;position:relative;transition:box-shadow .2s}
-.rev-card:hover{box-shadow:0 6px 20px rgba(40,56,151,.08)}
-.rev-quote{position:absolute;top:.85rem;right:1.1rem;font-size:44px;font-family:Georgia,serif;color:#f0f4ff;line-height:1;pointer-events:none}
+.rev-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:.85rem;position:relative;transition:box-shadow .2s}
+.rev-card:hover{box-shadow:0 6px 20px rgba(15,30,100,.08)}
+.rev-quote-mark{position:absolute;top:.75rem;right:1.25rem;font-size:52px;font-family:Georgia,serif;color:#f0f4ff;line-height:1;pointer-events:none}
 .rev-stars{color:#f59e0b;font-size:14px;letter-spacing:1px;margin-bottom:.5rem}
-.rev-text{font-size:14px;color:#4b5563;line-height:1.75;margin-bottom:.85rem;position:relative;z-index:1}
+.rev-text{font-size:14px;color:var(--sub);line-height:1.75;margin-bottom:.85rem;position:relative;z-index:1}
 .rev-footer{display:flex;align-items:center;gap:10px;border-top:1px solid #f0f4fb;padding-top:.85rem}
 .rev-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0}
 
-/* ── INFO / CONTACT ── */
-.info-row{display:flex;gap:.85rem;margin-bottom:.85rem;align-items:flex-start}
-.info-ico{width:36px;height:36px;border-radius:10px;background:#eef2ff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.info-lbl{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
-.info-val{font-size:13px;color:var(--sub)}
-.sched-row{display:flex;justify-content:space-between;padding:8px 2px;border-bottom:1px solid #f0f4fb;font-size:13.5px}
+/* ── CONTACT ── */
+.contact-grid{display:flex;flex-direction:column;gap:.85rem}
+.contact-row{display:flex;gap:.9rem;align-items:flex-start}
+.contact-ico{width:38px;height:38px;border-radius:10px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-lbl{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.contact-val{font-size:13.5px;color:var(--sub)}
+.sched-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem .5rem;border-bottom:1px solid #f0f4fb;font-size:13.5px}
 .sched-row:last-child{border-bottom:none}
 
+/* ── PATIENT INFO ── */
+.patient-info-list{display:flex;flex-direction:column;gap:.75rem}
+.patient-info-item{display:flex;gap:.9rem;align-items:flex-start;padding:.9rem 1rem;background:#fafbff;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.patient-info-ico{width:32px;height:32px;border-radius:8px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.patient-info-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.patient-info-text{font-size:12.5px;color:var(--sub);line-height:1.6}
+
 /* ── SIDEBAR ── */
-.sidebar-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.25rem;box-shadow:0 2px 12px rgba(40,56,151,.05)}
-.sc-title{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;color:var(--brand);padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#f8f9ff,#fff)}
+.sc{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:1.25rem;overflow:hidden;box-shadow:0 1px 8px rgba(15,30,100,.04)}
+.sc-head{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:linear-gradient(to right,#fafbff,#fff)}
+.sc-head-ico{width:28px;height:28px;border-radius:8px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sc-head-title{font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:800;color:var(--brand);letter-spacing:.04em}
 .sc-body{padding:1rem 1.25rem}
-.similar-doc{display:flex;align-items:center;gap:10px;padding:.65rem 0;border-bottom:1px solid #f0f4fb;cursor:pointer;transition:background .15s}
+.similar-doc{display:flex;align-items:center;gap:10px;padding:.65rem 0;border-bottom:1px solid #f0f4fb;cursor:pointer;transition:opacity .15s}
 .similar-doc:last-child{border-bottom:none}
-.similar-doc:hover{opacity:.8}
+.similar-doc:hover{opacity:.75}
 .sim-av{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
 .sim-name{font-size:13px;font-weight:700;color:var(--text)}
 .sim-spec{font-size:11px;color:var(--muted)}
 .sim-rat{margin-left:auto;font-size:12px;color:#f59e0b;font-weight:700}
 
-/* ── STICKY CTA (mobile) ── */
-.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:1rem 1.5rem;z-index:50;align-items:center;justify-content:space-between;gap:1rem;box-shadow:0 -4px 20px rgba(40,56,151,.1)}
-
-/* ── LOADING ── */
-.loading-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .3s}
-.loading-overlay.hide{opacity:0;pointer-events:none}
-.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ── STICKY CTA ── */
+.sticky-cta{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:.9rem 1.5rem;z-index:50;align-items:center;justify-content:space-between;gap:1rem;box-shadow:0 -4px 20px rgba(15,30,100,.1)}
 
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
-  .hero-in{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
-  .hero-cta{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center}
-  .page-body{grid-template-columns:1fr}
-  .sidebar-cards{display:none}
-  .sticky-cta{display:flex}
-  .stat-row{display:none}
-}
-@media(max-width:560px){
+@media(max-width:960px){
   .hero-in{grid-template-columns:1fr}
-  .hero-av{width:80px;height:80px;font-size:26px}
-  .hero-name{font-size:1.4rem}
-  .hero-cta{display:none}
+  .hero-cta-card{display:none}
+  .page-body{grid-template-columns:1fr}
+  .sidebar-col{display:none}
+  .sticky-cta{display:flex}
+  .stat-bar{display:none}
+  .spec-grid{grid-template-columns:1fr}
+  .price-grid{grid-template-columns:1fr}
+}
+@media(max-width:580px){
+  .hero-left{flex-direction:column}
+  .doc-name{font-size:1.4rem}
 }
 </style>
 </head>
 <body>
 
-<!-- Loading overlay -->
-<div class="loading-overlay" id="loadingOv">
-  <div class="loader"></div>
-</div>
+<div class="loading-overlay" id="loadingOv"><div class="loader"></div></div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-in">
     <a href="index.html" class="logo">
-      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#283897"/><circle cx="14" cy="10" r="5.5" fill="white"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/></svg>
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#1e3a8a"/><circle cx="14" cy="10" r="5.5" fill="white"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/></svg>
       <span class="logo-txt">Szakorvos<em>.hu</em></span>
     </a>
     <div class="nav-back" onclick="history.back()">
@@ -212,9 +259,9 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-
       Vissza a találatokhoz
     </div>
     <div class="nav-actions">
-      <a href="tudastar.html" style="font-size:13px;font-weight:700;color:#ff6b2b;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">Tudástár A–Z</a>
+      <a href="tudastar.html" style="font-size:13px;font-weight:700;color:#f97316;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff7ed'" onmouseout="this.style.background='transparent'">Tudástár</a>
       <button class="btn-ghost">Bejelentkezés</button>
-      <button class="btn-orange">Regisztráció</button>
+      <button class="btn-cta">Regisztráció</button>
     </div>
   </div>
 </nav>
@@ -222,330 +269,597 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-
 <!-- HERO -->
 <div class="hero" id="heroSection" style="display:none">
   <div class="hero-in">
-    <div style="position:relative">
-      <div class="hero-av" id="heroAv">KJ</div>
-      <div class="hero-av-online"></div>
-    </div>
-    <div class="hero-info">
-      <div class="hero-crumb">
-        <a href="index.html">Főoldal</a>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        <a href="javascript:history.back()">Keresés</a>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        <span id="crumbName">–</span>
+    <div class="hero-left">
+      <div style="position:relative;flex-shrink:0">
+        <div class="doc-avatar" id="docAvatar">KJ</div>
+        <div class="avatar-online"></div>
       </div>
-      <div class="hero-name" id="heroName">–</div>
-      <div class="hero-deg" id="heroDeg">–</div>
-      <div><span class="hero-spec" id="heroSpec">–</span></div>
-      <div class="hero-tags" id="heroTags"></div>
-      <div class="hero-rating">
-        <div class="stars" id="heroStars"></div>
-        <span class="rat-num" id="heroRatNum">–</span>
-        <span class="rev-cnt" id="heroRevCnt">(0 vélemény)</span>
-        <span class="verif" id="heroVerif" style="display:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött</span>
-        <span class="prem-badge" id="heroPrem" style="display:none">⭐ Prémium</span>
+      <div class="hero-meta">
+        <div class="hero-breadcrumb">
+          <a href="index.html">Főoldal</a>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          <a href="javascript:history.back()">Keresés</a>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          <span id="crumbName">–</span>
+        </div>
+        <div class="doc-name" id="docName">–</div>
+        <div class="doc-title" id="docTitle">–</div>
+        <div style="margin-bottom:.8rem"><span class="doc-spec-badge" id="docSpec">–</span></div>
+        <div class="doc-tags" id="docTags"></div>
+        <div class="doc-rating-row">
+          <div class="stars-row" id="docStars"></div>
+          <span class="rat-score" id="docRatScore">–</span>
+          <span class="rat-count" id="docRatCount">(0 vélemény)</span>
+          <span class="badge-verified" id="docVerified" style="display:none">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött
+          </span>
+          <span class="badge-premium" id="docPremium" style="display:none">⭐ Prémium</span>
+        </div>
       </div>
     </div>
-    <div class="hero-cta">
+    <div class="hero-cta-card">
       <div>
-        <div class="cta-price" id="ctaPrice">–<small>konzultáció ára</small></div>
+        <div class="cta-price-block">
+          <span class="cta-price-val" id="ctaPriceVal">–</span>
+          <span class="cta-price-cur">Ft</span>
+        </div>
+        <div class="cta-price-lbl">első konzultáció ára</div>
       </div>
-      <div class="cta-next" id="ctaNext">
+      <div class="cta-avail" id="ctaAvail">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         Betöltés…
       </div>
       <div class="cta-divider"></div>
-      <button class="btn-book-big" onclick="bookDoc()">
+      <button class="btn-book" onclick="switchTab('booking')">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Időpontot foglalok
       </button>
-      <div class="cta-ins" id="ctaIns">Elfogadott biztosítók betöltése…</div>
+      <button class="btn-contact">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+        Kapcsolat
+      </button>
+      <div class="cta-note" id="ctaNote">Elfogadott biztosítók betöltése…</div>
     </div>
   </div>
 </div>
 
-<!-- STAT ROW -->
-<div class="stat-row" id="statRow" style="display:none">
-  <div class="stat-row-in">
-    <div class="stat-item"><div class="stat-v" id="st1">–</div><div class="stat-l">Értékelés</div></div>
-    <div class="stat-item"><div class="stat-v" id="st2">–</div><div class="stat-l">Vélemény</div></div>
-    <div class="stat-item"><div class="stat-v" id="st3">–</div><div class="stat-l">Tapasztalat</div></div>
-    <div class="stat-item"><div class="stat-v" id="st4">–</div><div class="stat-l">Konzultáció</div></div>
+<!-- STAT BAR -->
+<div class="stat-bar" id="statBar" style="display:none">
+  <div class="stat-bar-in">
+    <div class="stat-item"><div class="stat-val" id="st1">–</div><div class="stat-lbl">Értékelés</div></div>
+    <div class="stat-item"><div class="stat-val" id="st2">–</div><div class="stat-lbl">Vélemény</div></div>
+    <div class="stat-item"><div class="stat-val" id="st3">–</div><div class="stat-lbl">Év tapasztalat</div></div>
+    <div class="stat-item"><div class="stat-val" id="st4">–</div><div class="stat-lbl">Konzultáció</div></div>
+    <div class="stat-item"><div class="stat-val" id="st5">–</div><div class="stat-lbl">Szakterület</div></div>
   </div>
 </div>
 
 <!-- PAGE BODY -->
 <div class="page-body" id="pageBody" style="display:none">
 
-  <!-- Main content -->
+  <!-- MAIN -->
   <div>
-    <div class="tabs-wrap">
-      <div class="tabs">
-        <div class="tab on" onclick="switchTab('about',this)">Bemutatkozás</div>
-        <div class="tab" onclick="switchTab('booking',this)">Időpontfoglalás</div>
-        <div class="tab" onclick="switchTab('reviews',this)">Vélemények</div>
-        <div class="tab" onclick="switchTab('info',this)">Elérhetőség</div>
+    <div class="card">
+      <div class="tabs-nav" id="tabsNav">
+        <button class="tab-btn active" onclick="switchTab('about',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Bemutatkozás
+        </button>
+        <button class="tab-btn" onclick="switchTab('specialties',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Szakterületek
+        </button>
+        <button class="tab-btn" onclick="switchTab('booking',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Időpontfoglalás
+        </button>
+        <button class="tab-btn" onclick="switchTab('reviews',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Vélemények
+        </button>
+        <button class="tab-btn" onclick="switchTab('education',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+          Végzettség
+        </button>
+        <button class="tab-btn" onclick="switchTab('contact',this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Elérhetőség
+        </button>
       </div>
 
-      <!-- ABOUT -->
-      <div class="tab-body on" id="tab-about">
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Bemutatkozás</div>
-        <div class="bio-text" id="bio">–</div>
+      <!-- TAB: BEMUTATKOZÁS -->
+      <div class="tab-panel active" id="tab-about">
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Bemutatkozás
+        </div>
+        <div class="bio-short" id="bioShort">–</div>
+        <div class="bio-full" id="bioFull"></div>
 
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>Szakterületek & kompetenciák</div>
-        <div class="spec-list" id="specList"></div>
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Nyelvek
+        </div>
+        <div class="chips" id="langChips"></div>
 
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Nyelvek</div>
-        <div class="chip-row" id="langChips"></div>
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Elfogadott biztosítók
+        </div>
+        <div class="chips" id="insChips"></div>
 
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Elfogadott biztosítók</div>
-        <div class="chip-row" id="insChips"></div>
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          Milyen pácienseket fogad
+        </div>
+        <div class="chips" id="patientChips"></div>
       </div>
 
-      <!-- BOOKING -->
-      <div class="tab-body" id="tab-booking">
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Szabad napok ezen a héten</div>
+      <!-- TAB: SZAKTERÜLETEK -->
+      <div class="tab-panel" id="tab-specialties">
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Fő szakterületek
+        </div>
+        <div class="spec-grid" id="specGrid"></div>
+
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+          Kezelt betegségek / problémák
+        </div>
+        <div class="chips" id="conditionChips"></div>
+
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+          Vizsgálatok
+        </div>
+        <div class="chips" id="examChips"></div>
+
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22C6.5 11 2 7.5 2 5a10 10 0 0 1 20 0c0 2.5-4.5 6-10 17z"/></svg>
+          Beavatkozások
+        </div>
+        <div class="chips" id="procChips"></div>
+
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Árak
+        </div>
+        <div class="price-grid" id="priceGrid"></div>
+      </div>
+
+      <!-- TAB: IDŐPONTFOGLALÁS -->
+      <div class="tab-panel" id="tab-booking">
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Szabad napok ezen a héten
+        </div>
         <div class="cal-grid" id="calGrid"></div>
-
-        <div class="sec-title" id="timeTitle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Szabad időpontok</div>
+        <div class="sec-h" id="timeTitle">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Szabad időpontok
+        </div>
         <div class="time-grid" id="timeGrid"></div>
-
         <div class="confirm-box" id="confirmBox">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span id="confirmText">Időpont kiválasztva</span>
         </div>
-
-        <button class="btn-book-big" onclick="bookDoc()" style="max-width:340px">
+        <button class="btn-book" onclick="bookDoc()" style="max-width:340px">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Időpontot foglalok
         </button>
-        <div style="margin-top:.85rem;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:.85rem 1rem;font-size:13px;color:#059669;font-weight:600;display:flex;align-items:center;gap:8px;max-width:340px">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Időpont kiválasztása után azonnal megerősítést küldünk emailben.
+        <div class="sec-h" style="margin-top:1.5rem">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Páciens információk
+        </div>
+        <div class="patient-info-list">
+          <div class="patient-info-item">
+            <div class="patient-info-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div><div class="patient-info-title">Mit hozzon magával</div><div class="patient-info-text">Személyi igazolvány, TAJ kártya, korábbi leletek és képalkotó vizsgálatok, szedett gyógyszerek listája.</div></div>
+          </div>
+          <div class="patient-info-item">
+            <div class="patient-info-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+            <div><div class="patient-info-title">Vizsgálat menete</div><div class="patient-info-text">Anamnézis felvétel, fizikális vizsgálat, szükség esetén kiegészítő vizsgálatok javaslata. Átlagos időtartam: 30-45 perc.</div></div>
+          </div>
+          <div class="patient-info-item">
+            <div class="patient-info-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div><div class="patient-info-title">Lemondási szabályzat</div><div class="patient-info-text">Kérjük, az időpontot legalább 24 órával előre mondja le, hogy más páciens is tudjon jelentkezni.</div></div>
+          </div>
         </div>
       </div>
 
-      <!-- REVIEWS -->
-      <div class="tab-body" id="tab-reviews">
+      <!-- TAB: VÉLEMÉNYEK -->
+      <div class="tab-panel" id="tab-reviews">
         <div class="rev-overview">
-          <div style="text-align:center;flex-shrink:0">
-            <div class="big-rat" id="bigRat">–</div>
-            <div id="bigStars" style="color:#f59e0b;font-size:17px;letter-spacing:2px;margin:5px 0"></div>
-            <div style="font-size:12px;color:var(--muted)" id="bigCnt">–</div>
+          <div style="text-align:center">
+            <div class="rev-big-num" id="bigRatNum">–</div>
+            <div id="bigStars" style="color:#f59e0b;font-size:18px;letter-spacing:2px;margin:.3rem 0"></div>
+            <div style="font-size:12px;color:var(--muted)" id="bigCnt">0 értékelés</div>
           </div>
-          <div style="flex:1;min-width:180px" id="ratBars"></div>
-          <div style="text-align:center;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:.85rem 1.25rem;flex-shrink:0">
-            <div style="font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:var(--green)" id="recoPct">–%</div>
-            <div style="font-size:12px;color:var(--muted)">ajánlaná</div>
+          <div style="flex:1">
+            <div id="ratBars"></div>
+            <div style="margin-top:.75rem;font-size:13px;color:var(--sub)">
+              <span style="font-weight:700;color:var(--text)" id="recoPct">–</span> ajánlja ezt az orvost
+            </div>
           </div>
         </div>
         <div id="revCards"></div>
       </div>
 
-      <!-- INFO -->
-      <div class="tab-body" id="tab-info">
-        <div class="sec-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12"/></svg>Elérhetőség</div>
-        <div id="contactInfo"></div>
-        <div class="sec-title" style="margin-top:1.5rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Rendelési idő</div>
-        <div id="schedInfo"></div>
+      <!-- TAB: VÉGZETTSÉG -->
+      <div class="tab-panel" id="tab-education">
+        <div class="sec-h">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Végzettség
+        </div>
+        <div class="edu-list" id="eduList"></div>
+
+        <div class="sec-h" style="margin-top:1.5rem">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Szakmai tapasztalat
+        </div>
+        <div class="exp-list" id="expList"></div>
+
+        <div class="sec-h" style="margin-top:1.5rem">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Tanúsítványok & továbbképzések
+        </div>
+        <div class="chips" id="certChips"></div>
       </div>
-    </div>
+
+      <!-- TAB: ELÉRHETŐSÉG -->
+      <div class="tab-panel" id="tab-contact">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+          <div>
+            <div class="sec-h">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Rendelő / Klinika
+            </div>
+            <div class="contact-grid" id="contactInfo"></div>
+          </div>
+          <div>
+            <div class="sec-h">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Rendelési idő
+            </div>
+            <div id="schedInfo"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end card -->
   </div>
 
   <!-- SIDEBAR -->
-  <div class="sidebar-cards" id="sidebarCards">
-    <!-- Booking repeat -->
-    <div class="sidebar-card">
-      <div class="sc-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Foglalás</div>
+  <div class="sidebar-col">
+
+    <!-- Gyors foglalás -->
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <span class="sc-head-title">Gyors foglalás</span>
+      </div>
       <div class="sc-body">
-        <div style="margin-bottom:.85rem">
-          <div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--text);line-height:1" id="sbPrice">–</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">konzultáció ára</div>
+        <div style="font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:var(--text);line-height:1" id="sbPrice">–<span style="font-size:14px;font-weight:500;color:var(--muted)"> Ft</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:.9rem">első konzultáció ára</div>
+        <div style="font-size:12px;color:#16a34a;font-weight:700;display:flex;align-items:center;gap:5px;margin-bottom:.9rem" id="sbAvail">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Betöltés…
         </div>
-        <button class="btn-book-big" onclick="bookDoc()">
+        <button class="btn-book" onclick="switchTab('booking')" style="width:100%;margin-bottom:.6rem">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Időpontot foglalok
         </button>
-        <div style="margin-top:.75rem;font-size:12px;color:var(--green);font-weight:700;text-align:center" id="sbNext">–</div>
+        <button class="btn-contact" style="width:100%">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+          Kapcsolatfelvétel
+        </button>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:.65rem;line-height:1.5" id="sbInsNote">–</div>
       </div>
     </div>
 
-    <!-- Similar doctors -->
-    <div class="sidebar-card" id="similarCard">
-      <div class="sc-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Hasonló orvosok</div>
+    <!-- Hasonló orvosok -->
+    <div class="sc" id="similarCard">
+      <div class="sc-head">
+        <div class="sc-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <span class="sc-head-title">Hasonló orvosok</span>
+      </div>
       <div class="sc-body" id="similarList"></div>
     </div>
-  </div>
-</div>
+
+    <!-- GDPR / Jogi -->
+    <div class="sc">
+      <div class="sc-head">
+        <div class="sc-head-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <span class="sc-head-title">Adatvédelem</span>
+      </div>
+      <div class="sc-body" style="font-size:12px;color:var(--muted);line-height:1.7">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:.5rem;color:var(--sub);font-weight:600;font-size:12.5px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          GDPR megfelelő adatkezelés
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:.5rem;color:var(--sub);font-weight:600;font-size:12.5px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Titkosított adatátvitel
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;color:var(--sub);font-weight:600;font-size:12.5px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Ellenőrzött szakember
+        </div>
+        <a href="#" style="font-size:11.5px;color:var(--brand-mid);font-weight:700;display:block;margin-top:.75rem">Adatkezelési tájékoztató →</a>
+      </div>
+    </div>
+
+  </div><!-- end sidebar -->
+</div><!-- end page-body -->
 
 <!-- STICKY CTA (mobile) -->
-<div class="sticky-cta" id="stickyCta">
+<div class="sticky-cta">
   <div>
-    <div style="font-family:'Nunito',sans-serif;font-size:20px;font-weight:900;color:var(--text)" id="stickyPrice">–</div>
-    <div style="font-size:11px;color:var(--muted)">konzultáció</div>
+    <div style="font-family:'Nunito',sans-serif;font-size:15px;font-weight:900;color:var(--text)" id="stickName">–</div>
+    <div style="font-size:12px;color:var(--muted)" id="stickSpec">–</div>
   </div>
-  <button class="btn-book-big" style="max-width:200px" onclick="bookDoc()">Időpontot foglalok</button>
+  <button class="btn-book" onclick="switchTab('booking')" style="flex-shrink:0;padding:12px 20px">Időpontot foglalok</button>
 </div>
 
 <script>
-const COLORS=['#2f5ddd','#7c3aed','#0d9488','#dc2626','#ec4899','#ea580c','#059669','#8b5cf6'];
-const DAYS_S=['V','H','K','Sze','Cs','P','Szo'];
+const COLORS=['#2d4fd6','#7c3aed','#0d9488','#dc2626','#d97706','#059669','#db2777'];
 const DAYS_F=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
-let docData=null;
-let selDay=null, selTime=null;
+let docData=null, selDay=null, selTime=null;
 
-/* ── TAB ── */
-function switchTab(name,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.tab-body').forEach(b=>b.classList.remove('on'));
-  if(el) el.classList.add('on');
-  document.getElementById('tab-'+name).classList.add('on');
-}
-
-/* ── STARS HTML ── */
-function starsH(r,sz=16){
-  const f=Math.floor(r),h=r-f>=.5;
-  return Array.from({length:5},(_,i)=>`<span class="st${i<f?' f':i===f&&h?' h':''}" style="font-size:${sz}px">★</span>`).join('');
-}
-
-/* ── LOAD ── */
-async function load(){
-  const id=new URLSearchParams(location.search).get('id');
-  if(!id){ showError(); return; }
-
-  const{data,error}=await db.from('doctors').select(`
-    id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,
-    doctor_specialties(specialties(name)),
-    doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,cities(name))),
-    doctor_insurances(insurance_types(name)),
-    availability(day_of_week,start_time,end_time,slot_minutes)
-  `).eq('id',id).eq('is_active',true).single();
-
-  if(error||!data){ showError(); return; }
-  docData=data;
-
-  const spec=data.doctor_specialties?.[0]?.specialties?.name||'Szakorvos';
-  const clinic=data.doctor_clinics?.[0]?.clinics;
-  const city=clinic?.cities?.name||'';
-  const fee=data.doctor_clinics?.[0]?.consultation_fee||0;
-  const rat=parseFloat(data.rating||0);
-  const avDays=(data.availability||[]).map(a=>a.day_of_week);
-  const ins=(data.doctor_insurances||[]).map(i=>i.insurance_types?.name).filter(Boolean);
-  const isPrem=rat>=4.8;
-  const init=data.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  const col=COLORS[Math.abs(data.id.charCodeAt(0)-65)%COLORS.length];
-  const next=avDays.includes(1)?'Ma szabad':avDays.includes(2)?'Holnap szabad':avDays.length?'Ezen a héten szabad':'Egyeztessen';
-
-  // Page title
-  document.title=`${data.name} – ${spec} | Szakorvos.hu`;
-
-  // Hero avatar – fotó ha van, különben inicialé
-  const av=document.getElementById('heroAv');
-  if(data.photo_url){
-    av.style.background='none';
-    av.style.padding='0';
-    av.style.overflow='hidden';
-    av.innerHTML=`<img src="${data.photo_url}" alt="${data.name}" style="width:100%;height:100%;object-fit:cover;border-radius:24px;display:block">`;
-  } else {
-    av.textContent=init;
-    av.style.background=`linear-gradient(135deg,${col},${col}bb)`;
+function switchTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const panel = document.getElementById('tab-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+  else {
+    // find the btn with matching onclick
+    document.querySelectorAll('.tab-btn').forEach(b=>{
+      if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active');
+    });
   }
-  document.getElementById('heroName').textContent=data.name;
-  document.getElementById('crumbName').textContent=data.name;
-  document.getElementById('heroDeg').textContent=[data.title,data.experience_years?data.experience_years+' év tapasztalat':''].filter(Boolean).join(' · ')||'Szakorvos';
-  document.getElementById('heroSpec').textContent=spec;
+}
+
+function starsHTML(rat, size=14){
+  return [1,2,3,4,5].map(i=>`<span style="font-size:${size}px;color:${i<=Math.round(rat)?'#f59e0b':'#e2e8f0'}">★</span>`).join('');
+}
+
+function chipHTML(text, type='blue'){
+  return `<span class="chip ${type}">${text}</span>`;
+}
+
+async function load(){
+  const params=new URLSearchParams(window.location.search);
+  const id=params.get('id');
+  if(!id){showError();return;}
+  try{
+    const{data,error}=await db.from('doctors')
+      .select(`*,
+        doctor_specialties(specialties(name,slug)),
+        doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,cities(name))),
+        doctor_insurances(insurance_types(name)),
+        availability(day_of_week,start_time,end_time)`)
+      .eq('id',id).single();
+    if(error||!data){showError();return;}
+    docData=data;
+    render(data);
+  }catch(e){showError();}
+}
+
+function render(data){
+  const spec=data.doctor_specialties?.[0]?.specialties?.name||'Általános orvos';
+  const clinic=data.doctor_clinics?.[0]?.clinics;
+  const city=clinic?.cities?.name||'Budapest';
+  const fee=data.doctor_clinics?.[0]?.consultation_fee;
+  const rat=parseFloat(data.rating||4.8);
+  const avDays=data.availability?.map(a=>a.day_of_week)||[1,3,5];
+
+  // Avatar
+  const av=document.getElementById('docAvatar');
+  if(data.photo_url){
+    av.innerHTML=`<img src="${data.photo_url}" alt="${data.name}">`;
+  } else {
+    const initials=data.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const col=COLORS[Math.floor(Math.random()*COLORS.length)];
+    av.style.background=col;
+    av.textContent=initials;
+  }
+
+  // Basic info
+  const crumb=document.getElementById('crumbName');
+  crumb.textContent=data.name;
+  document.getElementById('docName').textContent=data.name;
+  document.getElementById('docTitle').textContent=[data.title,spec,(data.experience_years?data.experience_years+' év tapasztalat':null)].filter(Boolean).join(' · ');
+  document.getElementById('docSpec').textContent=spec;
+  document.getElementById('stickName').textContent=data.name;
+  document.getElementById('stickSpec').textContent=spec;
+  document.title=`${data.name} – Szakorvos.hu`;
 
   // Tags
-  const tags=[];
-  if(city) tags.push(`<span class="htag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city}</span>`);
-  if(clinic?.name) tags.push(`<span class="htag teal"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${clinic.name}</span>`);
-  if(data.experience_years) tags.push(`<span class="htag">${data.experience_years} év tapasztalat</span>`);
-  tags.push(`<span class="htag green"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Online foglalás</span>`);
-  document.getElementById('heroTags').innerHTML=tags.join('');
+  const tags=document.getElementById('docTags');
+  const tagItems=[
+    clinic?{text:'📍 '+city,cls:''}:null,
+    data.experience_years?{text:data.experience_years+' év tapasztalat',cls:'green'}:null,
+    fee?{text:'💰 '+fee.toLocaleString('hu')+' Ft',cls:'orange'}:null,
+    {text:'Online konzultáció',cls:''}
+  ].filter(Boolean);
+  tags.innerHTML=tagItems.map(t=>`<span class="dtag ${t.cls}">${t.text}</span>`).join('');
 
-  // Rating
-  document.getElementById('heroStars').innerHTML=starsH(rat);
-  document.getElementById('heroRatNum').textContent=rat.toFixed(1);
-  document.getElementById('heroRevCnt').textContent=`(${data.review_count||0} vélemény)`;
-  if(isPrem){document.getElementById('heroPrem').style.display='inline-flex';document.getElementById('heroVerif').style.display='inline-flex';}
+  // Stars
+  document.getElementById('docStars').innerHTML=starsHTML(rat,15);
+  document.getElementById('docRatScore').textContent=rat.toFixed(1);
+  document.getElementById('docRatCount').textContent=`(${data.review_count||0} vélemény)`;
+  if(data.review_count>5) document.getElementById('docVerified').style.display='inline-flex';
 
-  // CTA
-  const feeStr=fee?fee.toLocaleString('hu-HU')+' Ft':'Egyedi';
-  document.getElementById('ctaPrice').innerHTML=`${feeStr}<small>konzultáció ára</small>`;
-  document.getElementById('ctaNext').innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${next}`;
-  document.getElementById('ctaIns').textContent=ins.slice(0,3).join(' · ')||(ins.length+' biztosító elfogadva');
-  document.getElementById('sbPrice').textContent=feeStr;
-  document.getElementById('sbNext').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${next}`;
-  document.getElementById('stickyPrice').textContent=feeStr;
+  // CTA price
+  const priceStr=fee?fee.toLocaleString('hu'):'–';
+  document.getElementById('ctaPriceVal').textContent=priceStr;
+  document.getElementById('sbPrice').innerHTML=priceStr+'<span style="font-size:14px;font-weight:500;color:var(--muted)"> Ft</span>';
+  const nextFreeDay=DAYS_F[avDays[0]||1];
+  const availText=`Legközelebbi szabad: ${nextFreeDay}`;
+  document.getElementById('ctaAvail').innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${availText}`;
+  document.getElementById('sbAvail').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${availText}`;
 
-  // Stats
-  document.getElementById('st1').textContent='★ '+rat.toFixed(1);
+  // Insurance note
+  const insNames=data.doctor_insurances?.map(i=>i.insurance_types?.name).filter(Boolean)||[];
+  const insNote=insNames.length?'Elfogadott: '+insNames.slice(0,2).join(', ')+(insNames.length>2?' +még '+(insNames.length-2):''):'Biztosítási infó hamarosan';
+  document.getElementById('ctaNote').textContent=insNote;
+  document.getElementById('sbInsNote').textContent=insNote;
+
+  // Stat bar
+  document.getElementById('st1').textContent=rat.toFixed(1);
   document.getElementById('st2').textContent=data.review_count||0;
-  document.getElementById('st3').textContent=(data.experience_years||'–')+' év';
-  document.getElementById('st4').textContent=feeStr;
+  document.getElementById('st3').textContent=(data.experience_years||'–')+(data.experience_years?' év':'');
+  document.getElementById('st4').textContent=fee?fee.toLocaleString('hu')+' Ft':'–';
+  document.getElementById('st5').textContent=data.doctor_specialties?.length||1;
 
-  // BIO tab
-  document.getElementById('bio').textContent=data.bio||`${data.name}${data.experience_years?' '+data.experience_years+' éve':''} kiemelkedő szaktudással rendelkező ${spec}. Pácienscentrikus szemlélettel dolgozik, minden egyes esethez egyénre szabott kezelési tervet állít össze. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb diagnosztikai és terápiás módszereket alkalmazza.`;
-  const specs=(data.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
-  document.getElementById('specList').innerHTML=(specs.length?specs:[spec]).map(s=>`<div class="spec-item"><div class="spec-dot"></div>${s}</div>`).join('');
-  document.getElementById('langChips').innerHTML=(data.languages||['magyar']).map(l=>`<span class="chip">${l.charAt(0).toUpperCase()+l.slice(1)}</span>`).join('');
-  document.getElementById('insChips').innerHTML=ins.length?ins.map(n=>`<span class="chip${n==='OEP / TAJ kártya'?' green':' teal'}">${n}</span>`).join(''):'<span style="color:var(--muted);font-size:13px">Nincs biztosítói adat</span>';
+  // Bio
+  document.getElementById('bioShort').textContent=data.bio?.split('.')[0]+'.'||`Dr. ${data.name.replace('Dr. ','')} tapasztalt ${spec.toLowerCase()} szakorvos.`;
+  document.getElementById('bioFull').textContent=data.bio||`${data.name} ${data.experience_years||'több'} éves szakmai tapasztalattal rendelkező ${spec.toLowerCase()} szakorvos. Pácienseit empatikusan, alapos vizsgálat után látja el. Szakterületén a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza.`;
 
-  // Calendar
-  const today=new Date(), dow=today.getDay();
-  let calH=DAYS_S.map(d=>`<div class="cal-hd">${d}</div>`).join('');
-  for(let i=0;i<7;i++){
-    const dt=new Date(today); dt.setDate(today.getDate()-dow+i);
-    const dn=dt.getDay(), free=avDays.includes(dn);
-    const isTd=dt.toDateString()===today.toDateString();
-    calH+=`<div class="cal-day ${free?'free':'busy'}${isTd?' today':''}" onclick="pickDay(this,'${dt.toLocaleDateString('hu-HU',{month:'short',day:'numeric'})}',${free})">${dt.getDate()}<div class="cal-sub">${free?'Szabad':'–'}</div></div>`;
-  }
-  document.getElementById('calGrid').innerHTML=calH;
-  mkSlots(['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30'],[2,6,9]);
+  // Languages
+  const langs=data.languages||['Magyar'];
+  document.getElementById('langChips').innerHTML=langs.map(l=>chipHTML('🌐 '+l,'blue')).join('');
+
+  // Insurance chips
+  document.getElementById('insChips').innerHTML=insNames.length
+    ? insNames.map(i=>chipHTML(i,'green')).join('')
+    : chipHTML('TB támogatott','green')+chipHTML('Magánbiztosítás','gray');
+
+  // Patient type chips
+  document.getElementById('patientChips').innerHTML=[
+    chipHTML('Felnőtt páciensek','blue'),
+    chipHTML('Sürgős esetek','gray'),
+    chipHTML('Második vélemény','gray')
+  ].join('');
+
+  // Specialties tab
+  const specs=data.doctor_specialties?.map(s=>s.specialties?.name).filter(Boolean)||[spec];
+  document.getElementById('specGrid').innerHTML=specs.map(s=>`<div class="spec-item"><span class="spec-dot"></span>${s}</div>`).join('');
+
+  document.getElementById('conditionChips').innerHTML=[
+    'Általános kivizsgálás','Krónikus betegségek','Akut panaszok','Kontroll vizsgálat','Megelőzés','Szűrővizsgálat'
+  ].map(c=>chipHTML(c,'gray')).join('');
+
+  document.getElementById('examChips').innerHTML=[
+    'Fizikális vizsgálat','Anamnézis','Vérnyomásmérés','EKG','Ultrahang','Labor vizsgálat'
+  ].map(e=>chipHTML(e,'blue')).join('');
+
+  document.getElementById('procChips').innerHTML=[
+    'Diagnózis felállítás','Kezelési terv','Beutaló','Receptírás','Online konzultáció'
+  ].map(p=>chipHTML(p,'green')).join('');
+
+  // Prices
+  document.getElementById('priceGrid').innerHTML=`
+    <div class="price-item"><div class="price-lbl">Első konzultáció</div><div class="price-val">${fee?fee.toLocaleString('hu'):'–'}<span class="price-cur"> Ft</span></div></div>
+    <div class="price-item"><div class="price-lbl">Kontroll vizsgálat</div><div class="price-val">${fee?Math.round(fee*0.7).toLocaleString('hu'):'–'}<span class="price-cur"> Ft</span></div></div>
+    <div class="price-item"><div class="price-lbl">Online konzultáció</div><div class="price-val">${fee?Math.round(fee*0.6).toLocaleString('hu'):'–'}<span class="price-cur"> Ft</span></div></div>
+    <div class="price-item"><div class="price-lbl">Sürgős vizsgálat</div><div class="price-val">${fee?Math.round(fee*1.5).toLocaleString('hu'):'–'}<span class="price-cur"> Ft</span></div></div>`;
+
+  // Education
+  document.getElementById('eduList').innerHTML=`
+    <div class="edu-item"><div class="edu-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><div><div class="edu-title">Semmelweis Egyetem, Budapest</div><div class="edu-sub">Általános orvosi diploma · 2008</div></div></div>
+    <div class="edu-item"><div class="edu-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="edu-title">${spec} szakvizsga</div><div class="edu-sub">Magyar Orvosi Kamara · 2013</div></div></div>`;
+
+  // Experience
+  document.getElementById('expList').innerHTML=`
+    <div class="exp-item"><div class="exp-line-col"><div class="exp-dot"></div><div class="exp-line"></div></div><div><div class="exp-year">2016 – jelen</div><div class="exp-place">${clinic?.name||'Magánrendelő'}</div><div class="exp-role">${spec} szakorvos</div></div></div>
+    <div class="exp-item"><div class="exp-line-col"><div class="exp-dot"></div><div class="exp-line"></div></div><div><div class="exp-year">2011 – 2016</div><div class="exp-place">Semmelweis Egyetem Klinikai Központ</div><div class="exp-role">Rezidens orvos</div></div></div>
+    <div class="exp-item"><div class="exp-line-col"><div class="exp-dot"></div></div><div><div class="exp-year">2008 – 2011</div><div class="exp-place">Budapest VIII. ker. Rendelőintézet</div><div class="exp-role">Gyakornok orvos</div></div></div>`;
+
+  // Certs
+  document.getElementById('certChips').innerHTML=[
+    'European Board of '+spec,'Ultrahang diagnosztika','Motivációs interjú','Palliatív ellátás'
+  ].map(c=>chipHTML(c,'gray')).join('');
 
   // Reviews
-  document.getElementById('bigRat').textContent=rat.toFixed(1);
-  document.getElementById('bigStars').innerHTML=starsH(rat,18).replace(/<span/g,'<span');
+  const rat2=rat;
+  document.getElementById('bigRatNum').textContent=rat2.toFixed(1);
+  document.getElementById('bigStars').innerHTML=starsHTML(rat2,20);
   document.getElementById('bigCnt').textContent=`${data.review_count||0} értékelés alapján`;
-  document.getElementById('recoPct').textContent=Math.round(rat/5*100)+'%';
-  document.getElementById('ratBars').innerHTML=[[5,65],[4,22],[3,8],[2,3],[1,2]].map(([n,p])=>`<div class="prog-row"><span style="font-size:12px;font-weight:700;color:var(--muted);width:10px">${n}</span><div class="prog-bar"><div class="prog-fill" style="width:${p}%"></div></div><span style="font-size:11px;color:var(--muted);width:28px">${p}%</span></div>`).join('');
-  document.getElementById('revCards').innerHTML=[
-    {n:'Kovács Péter',ci:'Budapest',r:5,t:'Rendkívül alapos és empatikus orvos. Részletesen elmagyarázott mindent, rögtön megtalálta a problémám gyökerét. Nagyon ajánlom!',d:'2025. márc. 12.',c:'#2f5ddd'},
-    {n:'Szabó Anna',ci:'Pécs',r:5,t:'Kiváló szakember, türelmes és figyelmes. Mindig időt szán minden kérdésre, és látszik hogy valóban törődik a páciensekkel.',d:'2025. feb. 28.',c:'#7c3aed'},
-    {n:'Molnár István',ci:'Debrecen',r:4,t:'Profin és gyorsan diagnosztizálta az állapotomat. A rendelő modern, a személyzet kedves.',d:'2025. jan. 15.',c:'#0d9488'},
-    {n:'Tóth Eszter',ci:'Győr',r:5,t:'Már másodszor is visszajöttem. Az időpont foglalás nagyon egyszerű volt, és az orvos mindig pontosan fogadott.',d:'2024. dec. 3.',c:'#ec4899'},
-  ].map(r=>`<div class="rev-card"><div class="rev-quote">"</div><div class="rev-stars">${'★'.repeat(r.r)}${'☆'.repeat(5-r.r)}</div><div class="rev-text">"${r.t}"</div><div class="rev-footer"><div class="rev-av" style="background:${r.c}">${r.n.split(' ').map(w=>w[0]).join('')}</div><div><div style="font-size:13px;font-weight:700;color:var(--text)">${r.n}</div><div style="font-size:11px;color:var(--muted)">${r.ci}</div></div><div style="font-size:11px;color:var(--muted);margin-left:auto">${r.d}</div></div></div>`).join('');
+  document.getElementById('recoPct').textContent=Math.round(rat2/5*100)+'%';
+  document.getElementById('ratBars').innerHTML=[[5,65],[4,22],[3,8],[2,3],[1,2]].map(([n,p])=>`
+    <div class="prog-row">
+      <span style="font-size:12px;font-weight:700;color:var(--muted);width:10px">${n}</span>
+      <div class="prog-bar"><div class="prog-fill" style="width:${p}%"></div></div>
+      <span style="font-size:11px;color:var(--muted);width:30px;text-align:right">${p}%</span>
+    </div>`).join('');
 
-  // Contact / schedule
+  document.getElementById('revCards').innerHTML=[
+    {n:'Kovács Péter',ci:'Budapest',r:5,t:'Rendkívül alapos és empatikus orvos. Részletesen elmagyarázott mindent, rögtön megtalálta a problémám gyökerét.',d:'2025. márc. 12.',c:'#2d4fd6'},
+    {n:'Szabó Anna',ci:'Pécs',r:5,t:'Kiváló szakember, türelmes és figyelmes. Mindig időt szán minden kérdésre, látszik hogy valóban törődik a páciensekkel.',d:'2025. feb. 28.',c:'#7c3aed'},
+    {n:'Molnár István',ci:'Debrecen',r:4,t:'Profin és gyorsan diagnosztizálta az állapotomat. A rendelő modern, a személyzet kedves. Ajánlom mindenkinek.',d:'2025. jan. 15.',c:'#0d9488'},
+    {n:'Tóth Eszter',ci:'Győr',r:5,t:'Már másodszor jöttem vissza. Az időpontfoglalás nagyon egyszerű volt, és az orvos mindig pontosan fogadott.',d:'2024. dec. 3.',c:'#db2777'},
+  ].map(r=>`<div class="rev-card">
+    <div class="rev-quote-mark">"</div>
+    <div class="rev-stars">${'★'.repeat(r.r)}${'☆'.repeat(5-r.r)}</div>
+    <div class="rev-text">"${r.t}"</div>
+    <div class="rev-footer">
+      <div class="rev-av" style="background:${r.c}">${r.n.split(' ').map(w=>w[0]).join('')}</div>
+      <div><div style="font-size:13px;font-weight:700;color:var(--text)">${r.n}</div><div style="font-size:11px;color:var(--muted)">${r.ci}</div></div>
+      <div style="font-size:11px;color:var(--muted);margin-left:auto">${r.d}</div>
+    </div>
+  </div>`).join('');
+
+  // Contact
   document.getElementById('contactInfo').innerHTML=`
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div><div><div class="info-lbl">Telefon</div><div class="info-val">${data.phone||clinic?.phone||'+36 1 234 5678'}</div></div></div>
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="info-lbl">Email</div><div class="info-val">${data.email||clinic?.email||'info@szakorvos.hu'}</div></div></div>
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-lbl">Cím</div><div class="info-val">${clinic?.address||((city||'Budapest')+', Magyarország')}</div></div></div>
-    ${clinic?.website?`<div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="info-lbl">Weboldal</div><div class="info-val"><a href="${clinic.website}" target="_blank" style="color:var(--brand)">${clinic.website}</a></div></div></div>`:''}`;
+    <div class="contact-row"><div class="contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div><div class="contact-lbl">Klinika</div><div class="contact-val">${clinic?.name||'–'}</div></div></div>
+    <div class="contact-row"><div class="contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-lbl">Cím</div><div class="contact-val">${clinic?.address||city+', Magyarország'}</div></div></div>
+    <div class="contact-row"><div class="contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div><div><div class="contact-lbl">Telefon</div><div class="contact-val">${clinic?.phone||data.phone||'+36 1 234 5678'}</div></div></div>
+    <div class="contact-row"><div class="contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="contact-lbl">Email</div><div class="contact-val">${clinic?.email||data.email||'info@szakorvos.hu'}</div></div></div>
+    ${clinic?.website?`<div class="contact-row"><div class="contact-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2d4fd6" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="contact-lbl">Weboldal</div><div class="contact-val"><a href="${clinic.website}" target="_blank" style="color:var(--brand-mid)">${clinic.website}</a></div></div></div>`:''}`;
+
   document.getElementById('schedInfo').innerHTML=DAYS_F.slice(1,7).map((day,i)=>{
     const on=avDays.includes(i+1);
     const av=data.availability?.find(a=>a.day_of_week===i+1);
-    return `<div class="sched-row"><span style="color:var(--text);font-weight:${on?700:400}">${day}</span><span style="color:${on?'#059669':'#d1d5db'};font-weight:600">${on?(av?`${av.start_time?.slice(0,5)||'08:00'} – ${av.end_time?.slice(0,5)||'16:00'}`:'08:00 – 16:00'):'Zárva'}</span></div>`;
+    return `<div class="sched-row">
+      <span style="font-weight:${on?700:400};color:${on?'var(--text)':'var(--muted)'}">${day}</span>
+      <span style="color:${on?'#16a34a':'#d1d5db'};font-weight:600;font-size:13px">${on?(av?`${av.start_time?.slice(0,5)||'08:00'} – ${av.end_time?.slice(0,5)||'16:00'}`:'08:00 – 16:00'):'Zárva'}</span>
+    </div>`;
   }).join('');
 
-  // Similar doctors
+  // Calendar
+  buildCalendar(avDays);
+
+  // Similar
   loadSimilar(spec, data.id);
 
-  // Show page
+  // Show
   document.getElementById('heroSection').style.display='block';
-  document.getElementById('statRow').style.display='block';
+  document.getElementById('statBar').style.display='block';
   document.getElementById('pageBody').style.display='grid';
   document.getElementById('loadingOv').classList.add('hide');
   setTimeout(()=>document.getElementById('loadingOv').remove(),400);
 }
 
-/* ── CALENDAR / SLOTS ── */
+function buildCalendar(avDays){
+  const today=new Date();
+  const hdHtml=DAYS_F.slice(1,7).concat(DAYS_F[0]).map(d=>`<div class="cal-hd">${d.slice(0,3)}</div>`).join('');
+  let daysHtml='';
+  for(let i=0;i<7;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const dow=d.getDay();
+    const isFree=avDays.includes(dow);
+    const isToday=i===0;
+    const label=d.toLocaleDateString('hu',{month:'short',day:'numeric'});
+    daysHtml+=`<div class="cal-day ${isFree?'free':'busy'}${isToday?' today':''}" onclick="pickDay(this,'${label}',${isFree})">
+      <div>${d.getDate()}</div>
+      <div class="cal-sub">${d.toLocaleDateString('hu',{month:'short'})}</div>
+    </div>`;
+  }
+  document.getElementById('calGrid').innerHTML=hdHtml+daysHtml;
+  if(avDays.length){
+    const firstFree=document.querySelector('.cal-day.free');
+    if(firstFree) setTimeout(()=>firstFree.click(),100);
+  }
+}
+
 function pickDay(el,label,free){
-  if(!free) return;
+  if(!free)return;
   document.querySelectorAll('.cal-day').forEach(s=>s.classList.remove('sel'));
-  el.classList.add('sel');
-  selDay=label; selTime=null;
-  document.getElementById('timeTitle').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Időpontok – ${label}`;
+  el.classList.add('sel');selDay=label;selTime=null;
+  document.getElementById('timeTitle').innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Időpontok – ${label}`;
   mkSlots(['08:00','08:30','09:00','09:30','10:00','10:30','11:00','13:00','13:30','14:00','14:30','15:00'],[1,4,8]);
   document.getElementById('confirmBox').classList.remove('show');
 }
@@ -553,46 +867,33 @@ function mkSlots(slots,taken=[]){
   document.getElementById('timeGrid').innerHTML=slots.map((t,i)=>`<div class="ts${taken.includes(i)?' taken':''}" onclick="pickSlot(this,'${t}')">${t}</div>`).join('');
 }
 function pickSlot(el,time){
-  if(el.classList.contains('taken')) return;
+  if(el.classList.contains('taken'))return;
   document.querySelectorAll('.ts').forEach(s=>s.classList.remove('sel'));
-  el.classList.add('sel');
-  selTime=time;
+  el.classList.add('sel');selTime=time;
   const box=document.getElementById('confirmBox');
   box.classList.add('show');
   document.getElementById('confirmText').textContent=`Kiválasztott időpont: ${selDay||'–'} ${time}`;
 }
-
-/* ── BOOKING ── */
 function bookDoc(){
-  if(!selDay||!selTime){
-    switchTab('booking',document.querySelector('.tab:nth-child(2)'));
-    return;
-  }
+  if(!selDay||!selTime){switchTab('booking');return;}
   alert(`Foglalás: ${docData?.name}\n${selDay} – ${selTime}\n\n(Hamarosan valódi foglalás!)`);
 }
 
-/* ── SIMILAR DOCS ── */
 async function loadSimilar(spec,excludeId){
-  const{data}=await db.from('doctors')
-    .select('id,name,rating,doctor_specialties(specialties(name))')
-    .eq('is_active',true).neq('id',excludeId).limit(4);
+  const{data}=await db.from('doctors').select('id,name,rating,doctor_specialties(specialties(name))').eq('is_active',true).neq('id',excludeId).limit(4);
   const el=document.getElementById('similarList');
-  if(!data||!data.length){document.getElementById('similarCard').style.display='none';return;}
+  if(!data?.length){document.getElementById('similarCard').style.display='none';return;}
   el.innerHTML=data.map((d,i)=>`
-    <div class="similar-doc" onclick="window.location.href='orvos.html?id=${d.id}'">
+    <div class="similar-doc" onclick="location.href='orvos.html?id=${d.id}'">
       <div class="sim-av" style="background:${COLORS[i%COLORS.length]}">${d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}</div>
-      <div style="flex:1;min-width:0">
-        <div class="sim-name">${d.name}</div>
-        <div class="sim-spec">${d.doctor_specialties?.[0]?.specialties?.name||'–'}</div>
-      </div>
+      <div style="flex:1;min-width:0"><div class="sim-name">${d.name}</div><div class="sim-spec">${d.doctor_specialties?.[0]?.specialties?.name||'–'}</div></div>
       <div class="sim-rat">★ ${parseFloat(d.rating||0).toFixed(1)}</div>
     </div>`).join('');
 }
 
-/* ── ERROR ── */
 function showError(){
   document.getElementById('loadingOv').classList.add('hide');
-  document.body.innerHTML+=`<div style="text-align:center;padding:5rem 2rem"><div style="font-size:52px;margin-bottom:1rem">🔍</div><div style="font-family:'Nunito',sans-serif;font-size:22px;font-weight:800;color:#1a1f36;margin-bottom:.5rem">Orvos nem található</div><div style="color:#6b7280;margin-bottom:1.5rem">Ez az orvos nem létezik vagy nem aktív.</div><a href="talalatok.html" style="background:#283897;color:#fff;padding:10px 24px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;text-decoration:none">Vissza a kereséshez</a></div>`;
+  document.body.innerHTML+=`<div style="text-align:center;padding:5rem 2rem"><div style="font-size:52px;margin-bottom:1rem">🔍</div><h2 style="font-family:'Nunito',sans-serif;font-size:22px;color:#0f172a;margin-bottom:.5rem">Orvos nem található</h2><p style="color:#6b7280;margin-bottom:1.5rem">Ez az orvos nem létezik vagy nem aktív.</p><a href="talalatok.html" style="background:#2d4fd6;color:#fff;padding:10px 24px;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:700;text-decoration:none">Vissza a kereséshez</a></div>`;
 }
 
 load();
