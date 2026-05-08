@@ -4,7 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tudástár Generátor – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db = supabase.createClient(SUPABASE_URL, SB_KEY);
+
+// ══ AUTH GUARD ══
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) {
+    window.location.replace('/login.html?redirect=generator');
+    return;
+  }
+  const { data: profile } = await db.from('user_profiles').select('role').eq('id', session.user.id).single();
+  if (!profile || profile.role !== 'superadmin') {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f4f7fc;text-align:center;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2><p style="color:#6b7280;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p><a href="/login.html" style="background:#1e3a8a;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Bejelentkezés</a></div>';
+    return;
+  }
+  loadStats();
+});
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Nunito Sans',sans-serif;background:#f4f7fc;color:#0f172a;min-height:100vh}
@@ -58,6 +79,9 @@ select{padding:9px 12px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:
   <div class="logo">Szakorvos<em>.hu</em></div>
   <span style="color:#e2e8f0">|</span>
   <span style="font-size:13px;color:#64748b">Tudástár Cikk Generátor</span>
+  <span style="margin-left:auto">
+    <button onclick="logoutGen()" style="background:none;border:1.5px solid #e2e8f0;color:#64748b;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Nunito Sans',sans-serif">Kijelentkezés</button>
+  </span>
 </nav>
 
 <div class="wrap">
@@ -103,17 +127,15 @@ select{padding:9px 12px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:
     </div>
     <div class="log" id="log">
       <div class="l info">Szakorvos.hu Cikk Generátor</div>
-      <div class="l">Adatok betöltése...</div>
+      <div class="l">Hitelesítés és adatok betöltése...</div>
     </div>
   </div>
 </div>
 
 <script>
 const FN_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/generate-articles';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 
 let running = false, session = 0;
-
 const $ = id => document.getElementById(id);
 
 function log(msg, cls='l') {
@@ -125,9 +147,7 @@ function log(msg, cls='l') {
   el.scrollTop = el.scrollHeight;
 }
 
-function clearLog() {
-  $('log').innerHTML = '';
-}
+function clearLog() { $('log').innerHTML = ''; }
 
 function updateStats(total, done) {
   $('sTotal').textContent = total.toLocaleString('hu');
@@ -142,8 +162,10 @@ function updateStats(total, done) {
 
 async function loadStats() {
   try {
+    const { data: { session: s } } = await db.auth.getSession();
+    const token = s?.access_token || SB_KEY;
     const res = await fetch(FN_URL + '/stats', {
-      headers: { 'Authorization': `Bearer ${SB_KEY}` }
+      headers: { 'Authorization': `Bearer ${token}` }
     });
     const data = await res.json();
     if (data.total) {
@@ -165,18 +187,16 @@ async function startGen() {
 
   const batchSize = parseInt($('batch').value);
   let total = parseInt($('sTotal').textContent.replace(/\s/g,'')) || 3012;
-  let done = parseInt($('sDone').textContent.replace(/\s/g,'')) || 141;
+  let done = parseInt($('sDone').textContent.replace(/\s/g,'')) || 0;
+  const { data: { session: s } } = await db.auth.getSession();
+  const token = s?.access_token || SB_KEY;
 
   while (running) {
     try {
       log('Batch küldése (' + batchSize + ' cikk)...');
-
       const res = await fetch(FN_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SB_KEY}`
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ batch_size: batchSize })
       });
 
@@ -188,33 +208,16 @@ async function startGen() {
       }
 
       const data = await res.json();
-
-      if (data.done) {
-        log('🎉 Minden cikk kész!', 'info');
-        running = false;
-        break;
-      }
-
-      if (data.error) {
-        log('Hiba: ' + data.error, 'err');
-        await sleep(3000);
-        continue;
-      }
+      if (data.done) { log('🎉 Minden cikk kész!', 'info'); running = false; break; }
+      if (data.error) { log('Hiba: ' + data.error, 'err'); await sleep(3000); continue; }
 
       for (const r of data.results || []) {
-        if (r.ok) {
-          done++;
-          session++;
-          $('sSession').textContent = session;
-          log('✓ ' + r.title + ' [' + r.specialty + ']', 'ok');
-        } else {
-          log('✗ ' + r.title + ': ' + (r.error || 'ismeretlen hiba'), 'err');
-        }
+        if (r.ok) { done++; session++; $('sSession').textContent = session; log('✓ ' + r.title + ' [' + r.specialty + ']', 'ok'); }
+        else log('✗ ' + r.title + ': ' + (r.error || 'ismeretlen hiba'), 'err');
       }
 
       updateStats(total, done);
       await sleep(1500);
-
     } catch(e) {
       log('Hálózati hiba: ' + e.message, 'err');
       await sleep(5000);
@@ -227,14 +230,13 @@ async function startGen() {
   if (!running) log('Leállítva. Ebben a futásban generált: ' + session + ' cikk', 'warn');
 }
 
-function stopGen() {
-  running = false;
-  $('btnStop').disabled = true;
-}
-
+function stopGen() { running = false; $('btnStop').disabled = true; }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-loadStats();
+async function logoutGen() {
+  await db.auth.signOut();
+  window.location.replace('/login.html');
+}
 </script>
 </body>
 </html>
