@@ -10,6 +10,56 @@
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// ══ AUTH GUARD ══
+// Az oldal tartalma rejtve van amíg az auth ellenőrzés meg nem történik
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await db.auth.getSession();
+
+  if (!session) {
+    // Nincs bejelentkezve → login oldalra
+    window.location.replace('/login.html?redirect=admin');
+    return;
+  }
+
+  // Ellenőrizzük a szerepkört
+  const { data: profile } = await db
+    .from('user_profiles')
+    .select('role')
+    .eq('id', session.user.id)
+    .single();
+
+  if (!profile || profile.role !== 'superadmin') {
+    // Nem superadmin → hozzáférés megtagadva
+    document.body.innerHTML = `
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f0f4ff;gap:16px">
+        <div style="font-size:48px">🚫</div>
+        <h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2>
+        <p style="color:#6b7280;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p>
+        <a href="/login.html" style="background:#283897;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza a bejelentkezéshez</a>
+      </div>`;
+    return;
+  }
+
+  // Superadmin → tartalom megjelenítése
+  document.getElementById('appContent').style.display = '';
+  document.getElementById('authLoading').style.display = 'none';
+
+  // Felhasználó neve a sidebarba
+  const userName = profile.full_name || session.user.email || 'Admin';
+  const el = document.getElementById('sbUserName');
+  if (el) el.textContent = userName;
+
+  // Kijelentkezés
+  window.logoutAdmin = async () => {
+    await db.auth.signOut();
+    window.location.replace('/login.html');
+  };
+
+  // App init
+  loadStats();
+  loadTab('overview');
+});
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -204,6 +254,18 @@ select.td-select:focus{border-color:var(--brand)}
 </head>
 <body>
 
+<!-- ══ AUTH LOADING ══ -->
+<div id="authLoading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0f4ff;font-family:'Nunito Sans',sans-serif">
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+    <svg width="40" height="40" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#283897"/><circle cx="14" cy="10" r="5.5" fill="rgba(40,56,151,.2)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/></svg>
+    <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:18px;color:#283897">Szakorvos<span style="color:#22c55e">.hu</span></div>
+    <div style="color:#6b7280;font-size:14px">Hitelesítés folyamatban…</div>
+  </div>
+</div>
+
+<!-- ══ APP (rejtve amíg auth nem OK) ══ -->
+<div id="appContent" style="display:none">
+
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
   <div class="sb-logo">
@@ -247,10 +309,13 @@ select.td-select:focus{border-color:var(--brand)}
   <div class="sb-footer">
     <div class="sb-user">
       <div class="sb-avatar">SA</div>
-      <div>
-        <div class="sb-user-name">Super Admin</div>
+      <div style="flex:1;min-width:0">
+        <div class="sb-user-name" id="sbUserName">Super Admin</div>
         <div class="sb-user-role">Szuperadmin</div>
       </div>
+      <button onclick="logoutAdmin()" title="Kijelentkezés" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);padding:4px;border-radius:6px;transition:all .2s;flex-shrink:0" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='rgba(255,255,255,.4)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
   </div>
 </aside>
@@ -468,11 +533,21 @@ select.td-select:focus{border-color:var(--brand)}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             Szakterületek
           </div>
+          <div class="tc-controls">
+            <div class="srch-sm">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input placeholder="Keresés…" oninput="filterTable('specsBody',this.value)">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openAddSpecModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Új szakterület
+            </button>
+          </div>
         </div>
         <table>
-          <thead><tr><th>Ikon</th><th>Neve</th><th>Slug</th><th>Orvosok száma</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th style="width:44px;text-align:center">#</th><th style="width:36px">Ikon</th><th>Neve</th><th>Slug</th><th>Orvosok</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="specsBody">
-            <tr class="skel-row"><td colspan="5"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
+            <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -502,7 +577,84 @@ select.td-select:focus{border-color:var(--brand)}
   </div><!-- /content -->
 </div><!-- /main -->
 
-<!-- ══ ADD DOCTOR MODAL ══ -->
+<!-- ══ ADD SPECIALTY MODAL ══ -->
+<div class="modal-overlay" id="specModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-title" id="specModalTitle">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Szakterület szerkesztése
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="flex:0 0 72px">
+        <label class="form-label">Ikon</label>
+        <input class="form-input" id="sIcon" placeholder="🩺" style="font-size:22px;text-align:center">
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Szakterület neve <span style="color:var(--red)">*</span></label>
+        <input class="form-input" id="sName" placeholder="pl. Kardiológia">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Szakterület slug <span style="color:var(--red)">*</span></label>
+        <input class="form-input" id="sSlug" placeholder="kardiologia">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Klinika oldalán: <code style="background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px">/szakterulet/kardiologia</code></div>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Orvos slug</label>
+        <input class="form-input" id="sDoctorSlug" placeholder="kardiologus">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Orvos profilnál: <code style="background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px">/orvos/[nev]/kardiologus</code></div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="flex:0 0 120px">
+        <label class="form-label">Szín (HEX)</label>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="color" id="sColorPicker" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0" oninput="document.getElementById('sColor').value=this.value">
+          <input class="form-input" id="sColor" placeholder="#fee2e2" style="flex:1" oninput="document.getElementById('sColorPicker').value=this.value">
+        </div>
+      </div>
+      <div class="form-group" style="flex:0 0 110px">
+        <label class="form-label">Orvosok száma</label>
+        <input class="form-input" id="sDoctorCount" type="number" placeholder="0" min="0">
+      </div>
+      <div class="form-group" style="flex:0 0 100px">
+        <label class="form-label">Sorrend</label>
+        <input class="form-input" id="sSortOrder" type="number" placeholder="99" min="1">
+      </div>
+      <div class="form-group" style="flex:0 0 100px">
+        <label class="form-label">Státusz</label>
+        <select class="form-input" id="sIsActive">
+          <option value="true">Aktív</option>
+          <option value="false">Inaktív</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Leírás (beteg oldal)</label>
+      <textarea class="form-input" id="sDescription" rows="4" placeholder="Mit foglal magában ez a szakterület? Mi a célja, mikor érdemes felkeresni?"></textarea>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Megjelenik a szakterület oldalán és a tudástárban.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Licensz / Képesítési követelmény</label>
+      <textarea class="form-input" id="sLicenseText" rows="4" placeholder="Milyen szakorvosi képesítés szükséges? Hány éves rezidensprogram?"></textarea>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Csak az adminok és az orvosok látják – az orvos profilhoz és ellenőrzéshez használjuk.</div>
+    </div>
+
+    <input type="hidden" id="sEditId">
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeSpecModal()">Mégse</button>
+      <button class="btn btn-primary" onclick="saveSpecialty()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Mentés
+      </button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="addModal">
   <div class="modal">
     <div class="modal-title">
@@ -529,6 +681,18 @@ select.td-select:focus{border-color:var(--brand)}
 </div>
 
 <script>
+/* ═══ XSS VÉDELEM ═══ */
+function esc(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+
 /* ═══ STATE ═══ */
 const COLORS=['#2f5ddd','#7c3aed','#0d9488','#dc2626','#ec4899','#ea580c','#059669','#8b5cf6','#d97706','#0891b2'];
 let currentTab='overview';
@@ -589,12 +753,12 @@ async function loadOverview(){
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Nincsenek adatok</td></tr>';return;}
   tb.innerHTML=data.map((d,i)=>`<tr>
     <td><div class="av-chip">
-      <div class="av-sm" style="background:${COLORS[i%COLORS.length]}">${initials(d.name)}</div>
-      <span class="td-name">${d.name}</span>
+      <div class="av-sm" style="background:${COLORS[i%COLORS.length]}">${esc(initials(d.name))}</div>
+      <span class="td-name">${esc(d.name)}</span>
     </div></td>
-    <td>${d.doctor_specialties?.[0]?.specialties?.name||'–'}</td>
-    <td>${d.doctor_clinics?.[0]?.clinics?.name||'–'}</td>
-    <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating||'–'}</span> <span style="color:var(--muted);font-size:12px">(${d.review_count||0})</span></td>
+    <td>${esc(d.doctor_specialties?.[0]?.specialties?.name||'–')}</td>
+    <td>${esc(d.doctor_clinics?.[0]?.clinics?.name||'–')}</td>
+    <td><span style="color:#f59e0b;font-weight:700">★ ${esc(d.rating||'–')}</span> <span style="color:var(--muted);font-size:12px">(${esc(d.review_count||0)})</span></td>
     <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
   </tr>`).join('');
   // Mini bar chart
@@ -620,16 +784,16 @@ function renderDoctors(docs,page=1){
   if(!pg.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
   tb.innerHTML=pg.map((d,i)=>`<tr>
     <td><div class="av-chip">
-      <div class="av-sm" style="background:${COLORS[(st+i)%COLORS.length]}">${initials(d.name)}</div>
-      <div><div class="td-name">${d.name}</div>${d.title?`<div class="td-sub">${d.title}</div>`:''}</div>
+      <div class="av-sm" style="background:${COLORS[(st+i)%COLORS.length]}">${esc(initials(d.name))}</div>
+      <div><div class="td-name">${esc(d.name)}</div>${d.title?`<div class="td-sub">${esc(d.title)}</div>`:''}</div>
     </div></td>
-    <td><span class="badge badge-blue">${d.doctor_specialties?.[0]?.specialties?.name||'–'}</span></td>
-    <td>${d.doctor_clinics?.[0]?.clinics?.name||'–'} ${d.doctor_clinics?.[0]?.clinics?.cities?.name?`<span class="td-sub">· ${d.doctor_clinics[0].clinics.cities.name}</span>`:''}</td>
-    <td><span style="font-weight:700">${d.experience_years||'–'}</span> <span style="color:var(--muted);font-size:12px">év</span></td>
-    <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating?parseFloat(d.rating).toFixed(1):'–'}</span> <span style="color:var(--muted);font-size:12px">(${d.review_count||0})</span></td>
+    <td><span class="badge badge-blue">${esc(d.doctor_specialties?.[0]?.specialties?.name||'–')}</span></td>
+    <td>${esc(d.doctor_clinics?.[0]?.clinics?.name||'–')} ${d.doctor_clinics?.[0]?.clinics?.cities?.name?`<span class="td-sub">· ${esc(d.doctor_clinics[0].clinics.cities.name)}</span>`:''}</td>
+    <td><span style="font-weight:700">${esc(d.experience_years||'–')}</span> <span style="color:var(--muted);font-size:12px">év</span></td>
+    <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating?esc(parseFloat(d.rating).toFixed(1)):'–'}</span> <span style="color:var(--muted);font-size:12px">(${esc(d.review_count||0)})</span></td>
     <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
     <td><div class="act-row">
-      <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${d.id}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${esc(d.id)}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
     </div></td>
   </tr>`).join('');
   renderPag('doctor',total,page,pages,(p)=>renderDoctors(docs,p));
@@ -655,10 +819,10 @@ async function loadClinics(){
   if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek klinikák</td></tr>';return;}
   tb.innerHTML=allClinics.map((c,i)=>`<tr>
     <td><div class="av-chip">
-      <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px">${c.name.charAt(0)}</div>
-      <span class="td-name">${c.name}</span>
+      <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px">${esc(c.name.charAt(0))}</div>
+      <span class="td-name">${esc(c.name)}</span>
     </div></td>
-    <td>${c.cities?.name||'–'}</td>
+    <td>${esc(c.cities?.name||'–')}</td>
     <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
     <td style="color:var(--sub)">${c.phone||'–'}</td>
     <td><span class="badge badge-teal">${c.doctor_clinics?.length||0} orvos</span></td>
@@ -679,13 +843,13 @@ async function loadUsers(){
   const roleLabels={superadmin:'Szuperadmin',doctor_admin:'Orvos admin',clinic_admin:'Klinika admin',patient:'Páciens'};
   tb.innerHTML=allUsers.map((u,i)=>`<tr>
     <td><div class="av-chip">
-      <div class="av-sm av-sm-circle" style="background:${COLORS[i%COLORS.length]}">${initials(u.full_name||'?')}</div>
-      <span class="td-name">${u.full_name||'Névtelen'}</span>
+      <div class="av-sm av-sm-circle" style="background:${COLORS[i%COLORS.length]}">${esc(initials(u.full_name||'?'))}</div>
+      <span class="td-name">${esc(u.full_name||'Névtelen')}</span>
     </div></td>
-    <td style="color:var(--sub);font-size:13px">${u.email||'–'}</td>
-    <td><span class="badge ${roleColors[u.role]||'badge-gray'}">${roleLabels[u.role]||u.role}</span></td>
+    <td style="color:var(--sub);font-size:13px">${esc(u.email||'–')}</td>
+    <td><span class="badge ${roleColors[u.role]||'badge-gray'}">${esc(roleLabels[u.role]||u.role)}</span></td>
     <td style="color:var(--sub);font-size:13px">${new Date(u.created_at).toLocaleDateString('hu-HU')}</td>
-    <td><select class="td-select" onchange="changeRole('${u.id}',this.value)">
+    <td><select class="td-select" onchange="changeRole('${esc(u.id)}',this.value)">
       <option ${u.role==='patient'?'selected':''} value="patient">Páciens</option>
       <option ${u.role==='doctor_admin'?'selected':''} value="doctor_admin">Orvos admin</option>
       <option ${u.role==='clinic_admin'?'selected':''} value="clinic_admin">Klinika admin</option>
@@ -697,17 +861,115 @@ async function loadUsers(){
 /* ═══ SPECIALTIES ═══ */
 async function loadSpecialties(){
   const tb=document.getElementById('specsBody');
-  tb.innerHTML='<tr class="skel-row"><td colspan="5"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('specialties').select('id,name,slug,icon,doctor_count').order('name');
-  if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Nincsenek szakterületek</td></tr>';return;}
-  tb.innerHTML=data.map(s=>`<tr>
-    <td style="font-size:22px">${s.icon||'🩺'}</td>
-    <td class="td-name">${s.name}</td>
-    <td><code style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;color:var(--sub)">${s.slug}</code></td>
-    <td><span class="badge badge-blue">${s.doctor_count||0} orvos</span></td>
-    <td><button class="btn btn-ghost btn-sm">Szerkesztés</button></td>
+  tb.innerHTML='<tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
+  const{data}=await db.from('specialties')
+    .select('id,name,slug,icon,color,doctor_count,sort_order,is_active,description,license_text')
+    .order('name',{ascending:true});
+  if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek szakterületek</td></tr>';return;}
+  tb.innerHTML=data.map((s,i)=>`<tr>
+    <td style="text-align:center;color:var(--muted);font-size:12px;font-weight:700">${i+1}</td>
+    <td style="font-size:20px;text-align:center">${esc(s.icon||'🩺')}</td>
+    <td>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:12px;height:12px;border-radius:3px;background:${esc(s.color||'#e2e8f0')};flex-shrink:0;border:1px solid rgba(0,0,0,.1)"></div>
+        <span class="td-name">${esc(s.name)}</span>
+      </div>
+    </td>
+    <td><code style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;color:var(--sub)">${esc(s.slug)}</code></td>
+    <td><span class="badge badge-blue">${esc((s.doctor_count||0).toLocaleString('hu'))} orvos</span></td>
+    <td><span class="badge ${s.is_active!==false?'badge-green':'badge-red'}">${s.is_active!==false?'Aktív':'Inaktív'}</span></td>
+    <td><div class="act-row">
+      <button class="btn btn-ghost btn-sm" onclick="openEditSpec(${JSON.stringify(s).replace(/"/g,'&quot;')})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Szerkesztés
+      </button>
+      <button class="btn btn-danger btn-sm" onclick="deleteSpec('${esc(s.id)}','${esc(s.name.replace(/'/g,"\\'"))}')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Törlés
+      </button>
+    </div></td>
   </tr>`).join('');
 }
+
+function openAddSpecModal(){
+  document.getElementById('sEditId').value='';
+  document.getElementById('specModalTitle').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Új szakterület hozzáadása`;
+  ['sIcon','sName','sSlug','sDoctorSlug','sColor','sDoctorCount','sSortOrder','sDescription','sLicenseText'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sColorPicker').value='#e0f2fe';
+  document.getElementById('sIsActive').value='true';
+  document.getElementById('specModal').classList.add('open');
+}
+
+function openEditSpec(s){
+  document.getElementById('sEditId').value=s.id;
+  document.getElementById('specModalTitle').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Szerkesztés: ${s.name}`;
+  document.getElementById('sIcon').value=s.icon||'';
+  document.getElementById('sName').value=s.name||'';
+  document.getElementById('sSlug').value=s.slug||'';
+  document.getElementById('sDoctorSlug').value=s.doctor_slug||'';
+  document.getElementById('sColor').value=s.color||'';
+  document.getElementById('sColorPicker').value=s.color||'#e0f2fe';
+  document.getElementById('sDoctorCount').value=s.doctor_count||0;
+  document.getElementById('sSortOrder').value=s.sort_order||99;
+  document.getElementById('sIsActive').value=s.is_active!==false?'true':'false';
+  document.getElementById('sDescription').value=s.description||'';
+  document.getElementById('sLicenseText').value=s.license_text||'';
+  document.getElementById('specModal').classList.add('open');
+}
+
+function closeSpecModal(){document.getElementById('specModal').classList.remove('open');}
+
+async function saveSpecialty(){
+  const id=document.getElementById('sEditId').value;
+  const name=document.getElementById('sName').value.trim();
+  const slug=document.getElementById('sSlug').value.trim();
+  if(!name){alert('A szakterület neve kötelező!');return;}
+  if(!slug){alert('A slug megadása kötelező!');return;}
+  const payload={
+    name,slug,
+    doctor_slug:document.getElementById('sDoctorSlug').value.trim()||null,
+    icon:document.getElementById('sIcon').value.trim()||'🩺',
+    color:document.getElementById('sColor').value.trim()||'#e0f2fe',
+    doctor_count:parseInt(document.getElementById('sDoctorCount').value)||0,
+    sort_order:parseInt(document.getElementById('sSortOrder').value)||99,
+    is_active:document.getElementById('sIsActive').value==='true',
+    description:document.getElementById('sDescription').value.trim()||null,
+    license_text:document.getElementById('sLicenseText').value.trim()||null,
+  };
+  let error;
+  if(id){
+    ({error}=await db.from('specialties').update(payload).eq('id',id));
+  } else {
+    ({error}=await db.from('specialties').insert(payload));
+  }
+  if(error){alert('Hiba mentéskor: '+error.message);return;}
+  closeSpecModal();
+  loadSpecialties();
+  loadStats();
+}
+
+async function deleteSpec(id, name){
+  if(!confirm(`Biztosan törlöd ezt: „${name}"?\n\nEz a művelet nem visszavonható.`)) return;
+  const{error}=await db.from('specialties').delete().eq('id',id);
+  if(error){alert('Hiba törléskor: '+error.message);return;}
+  loadSpecialties();
+  loadStats();
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('sName')?.addEventListener('input',function(){
+    if(document.getElementById('sEditId').value) return;
+    const base=this.value.toLowerCase()
+      .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+      .replace(/ó/g,'o').replace(/ö/g,'o').replace(/ő/g,'o')
+      .replace(/ú/g,'u').replace(/ü/g,'u').replace(/ű/g,'u')
+      .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+    document.getElementById('sSlug').value=base;
+    document.getElementById('sDoctorSlug').value=base+'us';
+  });
+  document.getElementById('specModal')?.addEventListener('click',e=>{
+    if(e.target===document.getElementById('specModal'))closeSpecModal();
+  });
+});
 
 /* ═══ LOGS ═══ */
 async function loadLogs(){
@@ -715,10 +977,10 @@ async function loadLogs(){
   const{data}=await db.from('search_logs').select('query,result_count,created_at,cities(name),specialties(name)').order('created_at',{ascending:false}).limit(50);
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="5">Nincsenek keresési naplók</td></tr>';return;}
   tb.innerHTML=data.map(l=>`<tr>
-    <td class="td-name">${l.query||'–'}</td>
-    <td>${l.cities?.name||'–'}</td>
-    <td>${l.specialties?.name||'–'}</td>
-    <td><span class="badge badge-blue">${l.result_count||0}</span></td>
+    <td class="td-name">${esc(l.query||'–')}</td>
+    <td>${esc(l.cities?.name||'–')}</td>
+    <td>${esc(l.specialties?.name||'–')}</td>
+    <td><span class="badge badge-blue">${esc(l.result_count||0)}</span></td>
     <td style="color:var(--sub);font-size:12px">${new Date(l.created_at).toLocaleString('hu-HU',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
   </tr>`).join('');
 }
@@ -780,11 +1042,9 @@ function globalSearch(q){
 function initials(name){return(name||'').replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
 
 /* ═══ ESC ═══ */
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeSpecModal();}});
 
-/* ═══ INIT ═══ */
-loadStats();
-loadTab('overview');
 </script>
+</div><!-- /appContent -->
 </body>
 </html>
