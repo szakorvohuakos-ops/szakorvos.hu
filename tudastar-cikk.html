@@ -369,49 +369,81 @@ async function loadArticle() {
     const specialty = article.specialty || guessSpecialty(article.title);
     const icon = SPEC_ICONS[specialty] || '🏥';
 
-    // Kapcsolódó cikkek betöltése (azonos kezdőbetű)
-    const firstChar = article.title[0].toUpperCase();
-    const relRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/knowledge_articles?title=like.${encodeURIComponent(firstChar + '%')}&slug=neq.${encodeURIComponent(slug)}&select=title,slug&limit=6`,
-      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-    );
-    const related = await relRes.json();
+    // Kapcsolódó cikkek betöltése – azonos szakterület alapján (jobb SEO)
+    let related = [];
+    if (specialty) {
+      const relRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/knowledge_articles?specialty=eq.${encodeURIComponent(specialty)}&slug=neq.${encodeURIComponent(slug)}&content=not.is.null&select=title,slug&limit=6`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      related = await relRes.json();
+    }
+    // Ha nincs elég, kiegészítjük kezdőbetű alapján
+    if (related.length < 3) {
+      const firstChar = article.title[0].toUpperCase();
+      const relRes2 = await fetch(
+        `${SUPABASE_URL}/rest/v1/knowledge_articles?title=like.${encodeURIComponent(firstChar + '%')}&slug=neq.${encodeURIComponent(slug)}&content=not.is.null&select=title,slug&limit=${6 - related.length}`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      const extra = await relRes2.json();
+      const existingSlugs = new Set(related.map(r => r.slug));
+      related = [...related, ...extra.filter(r => !existingSlugs.has(r.slug))].slice(0, 6);
+    }
 
-    // SEO meta frissítése
-    const seoTitle = `${article.title} – Egészségügyi útmutató | Szakorvos.hu`;
-    const seoDesc = `Tudjon meg mindent a(z) ${article.title} témáról. Tünetek, kezelés, ajánlott szakorvos – a Szakorvos.hu egészségügyi tudástárában.`;
+    // SEO meta frissítése – gazdagabb description
+    const seoTitle = `${article.title} – tünetek, kezelés, szakorvos | Szakorvos.hu`;
+    const seoDesc = article.description
+      ? article.description
+      : `Részletes útmutató: ${article.title} – tünetek, okok, kezelési lehetőségek és mikor forduljon ${specialty || 'orvos'}hoz. Szakorvos.hu egészségügyi tudástár.`;
+
+    const cleanSlug = slug;
+    const canonicalUrl = `https://szakorvos.hu/tudastar/${cleanSlug}`;
+    const fallbackUrl  = `https://szakorvos.hu/tudastar-cikk.html?slug=${cleanSlug}`;
 
     document.getElementById('pageTitle').textContent = seoTitle;
     document.title = seoTitle;
     document.getElementById('pageDesc').setAttribute('content', seoDesc);
     document.getElementById('ogTitle').setAttribute('content', seoTitle);
     document.getElementById('ogDesc').setAttribute('content', seoDesc);
-    document.getElementById('pageCanonical').setAttribute('href', `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}`);
+    // Canonical: szép URL ha elérhető, egyébként query-param
+    document.getElementById('pageCanonical').setAttribute('href', canonicalUrl);
     document.getElementById('breadcrumbTitle').textContent = article.title;
 
-    // Schema.org JSON-LD
+    // Schema.org JSON-LD – bővített MedicalWebPage
     const schema = {
       "@context": "https://schema.org",
       "@type": "MedicalWebPage",
       "name": article.title,
+      "headline": article.title,
       "description": seoDesc,
-      "url": `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}`,
+      "url": canonicalUrl,
       "inLanguage": "hu",
+      "dateModified": new Date().toISOString().split('T')[0],
       "publisher": {
         "@type": "Organization",
         "name": "Szakorvos.hu",
-        "url": "https://szakorvos.hu"
+        "url": "https://szakorvos.hu",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://szakorvos.hu/assets/logo.png"
+        }
       },
+      "about": {
+        "@type": "MedicalCondition",
+        "name": article.title
+      },
+      "specialty": specialty ? { "@type": "MedicalSpecialty", "name": specialty } : undefined,
       "breadcrumb": {
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://szakorvos.hu" },
           { "@type": "ListItem", "position": 2, "name": "Tudástár A–Z", "item": "https://szakorvos.hu/tudastar.html" },
-          { "@type": "ListItem", "position": 3, "name": article.title, "item": `https://szakorvos.hu/tudastar-cikk.html?slug=${slug}` }
+          { "@type": "ListItem", "position": 3, "name": article.title, "item": canonicalUrl }
         ]
       }
     };
-    document.getElementById('schemaScript').textContent = JSON.stringify(schema, null, 2);
+    // undefined mezők eltávolítása
+    document.getElementById('schemaScript').textContent = JSON.stringify(schema, (k,v) => v === undefined ? undefined : v, 2);
 
     // Oldal tartalom renderelése - ha van DB tartalom, azt használjuk
     const content = article.content ? article.content : generateContent(article.title, specialty);
@@ -419,7 +451,7 @@ async function loadArticle() {
       <div class="sidebar-card">
         <div class="sidebar-card-title">Kapcsolódó cikkek</div>
         ${related.map(r => `
-          <a href="tudastar-cikk.html?slug=${encodeURIComponent(r.slug)}" class="related-item">
+          <a href="tudastar-cikk.html?slug=${encodeURIComponent(r.slug)}" class="related-item" rel="dofollow">
             <div class="related-item-dot"></div>
             <div class="related-item-title">${r.title}</div>
           </a>`).join('')}
