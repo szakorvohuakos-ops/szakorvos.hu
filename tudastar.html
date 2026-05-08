@@ -96,10 +96,10 @@
       padding: 0 5%;
     }
     .alpha-btn {
-      width: 48px; height: 48px; border-radius: 12px;
+      min-width: 48px; height: 48px; border-radius: 12px;
       border: 1.5px solid #e8edf8; background: #fff;
       font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
-      color: #283897; cursor: pointer;
+      color: #283897; cursor: pointer; padding: 0 10px;
       transition: all .15s; display: flex; align-items: center; justify-content: center;
     }
     .alpha-btn:hover { border-color: #283897; background: #eef2ff; }
@@ -278,6 +278,18 @@
     <!-- Rendered by JS -->
   </div>
 
+  <!-- View mode toggle -->
+  <div style="display:flex;justify-content:center;gap:8px;margin:1rem 0 .5rem">
+    <button id="btnViewAbc" onclick="setViewMode('abc')" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;border:2px solid #283897;background:#283897;color:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+      A–Z szerinti lista
+    </button>
+    <button id="btnViewSpec" onclick="setViewMode('specialty')" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:100px;border:2px solid #283897;background:transparent;color:#283897;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+      Szakterület szerint
+    </button>
+  </div>
+
   <!-- Search -->
   <div class="search-wrap">
     <div class="search-inner">
@@ -306,28 +318,137 @@
 const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-const HU_MAP = { 'Á':'A','É':'E','Í':'I','Ó':'O','Ö':'O','Ő':'O','Ú':'U','Ü':'U','Ű':'U' };
+// Magyar ábécé helyes sorrendben
+const ALPHABET = ['A','Á','B','C','Cs','D','E','É','F','G','Gy','H','I','Í','J','K','L','M','N','Ny','O','Ó','Ö','Ő','P','Q','R','S','Sz','T','Ty','U','Ú','Ü','Ű','V','W','X','Y','Z','Zs'];
+
+// Betűsorrend index a helyes rendezéshez
+const HU_ORDER = {};
+ALPHABET.forEach((l,i) => HU_ORDER[l] = i);
 
 let allArticles = [];
-let activeFilter = 'ALL'; // 'ALL' or a letter
+let activeFilter = 'ALL';
 let searchQuery = '';
+let viewMode = 'abc'; // 'abc' vagy 'specialty'
 
-function normalize(str) {
-  return str.toUpperCase().split('').map(c => HU_MAP[c] || c).join('');
+function setViewMode(mode) {
+  viewMode = mode;
+  const btnAbc = document.getElementById('btnViewAbc');
+  const btnSpec = document.getElementById('btnViewSpec');
+  const alphabetWrap = document.getElementById('alphabetWrap');
+
+  if (mode === 'abc') {
+    btnAbc.style.background = '#283897';
+    btnAbc.style.color = '#fff';
+    btnSpec.style.background = 'transparent';
+    btnSpec.style.color = '#283897';
+    alphabetWrap.style.display = '';
+  } else {
+    btnSpec.style.background = '#283897';
+    btnSpec.style.color = '#fff';
+    btnAbc.style.background = 'transparent';
+    btnAbc.style.color = '#283897';
+    alphabetWrap.style.display = 'none';
+    activeFilter = 'ALL';
+  }
+  renderArticles();
 }
 
+// Normalizálás kereséshez (ékezet nélküli összehasonlítás)
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+    .replace(/ó/g,'o').replace(/ö/g,'o').replace(/ő/g,'o')
+    .replace(/ú/g,'u').replace(/ü/g,'u').replace(/ű/g,'u');
+}
+
+// Melyik ábécé csoportba tartozik a cikk
 function firstLetter(title) {
-  const first = title[0].toUpperCase();
-  return HU_MAP[first] || first;
+  const t = title.trim();
+  const two = t.slice(0,2);
+  const twoLow = two.toLowerCase();
+  // Kétjegyű mássalhangzók (sorrendben, hosszabb előbb!)
+  if (twoLow === 'zs') return 'Zs';
+  if (twoLow === 'sz') return 'Sz';
+  if (twoLow === 'ny') return 'Ny';
+  if (twoLow === 'gy') return 'Gy';
+  if (twoLow === 'cs') return 'Cs';
+  if (twoLow === 'ty') return 'Ty';
+  // Egyjegyű
+  const f = t[0];
+  // Visszaadjuk az eredeti nagybetűs formát
+  const upper = f.toUpperCase();
+  // Magyar ékezetes betűk megtartása
+  if (upper === 'Á') return 'Á';
+  if (upper === 'É') return 'É';
+  if (upper === 'Í') return 'Í';
+  if (upper === 'Ó') return 'Ó';
+  if (upper === 'Ö') return 'Ö';
+  if (upper === 'Ő') return 'Ő';
+  if (upper === 'Ú') return 'Ú';
+  if (upper === 'Ü') return 'Ü';
+  if (upper === 'Ű') return 'Ű';
+  return upper;
+}
+
+// Magyar ábécé szerinti cím-rendezés
+function huCompare(a, b) {
+  const at = a.title.toLowerCase();
+  const bt = b.title.toLowerCase();
+  const HU_CHARS = {
+    'a':0,'á':1,'b':2,'c':3,'cs':4,'d':5,'e':6,'é':7,'f':8,
+    'g':9,'gy':10,'h':11,'i':12,'í':13,'j':14,'k':15,'l':16,
+    'm':17,'n':18,'ny':19,'o':20,'ó':21,'ö':22,'ő':23,'p':24,
+    'q':25,'r':26,'s':27,'sz':28,'t':29,'ty':30,'u':31,'ú':32,
+    'ü':33,'ű':34,'v':35,'w':36,'x':37,'y':38,'z':39,'zs':40
+  };
+  for (let i = 0; i < Math.max(at.length, bt.length); i++) {
+    // Kétjegyű ellenőrzés
+    const a2 = at.slice(i,i+2), b2 = bt.slice(i,i+2);
+    const a2o = HU_CHARS[a2], b2o = HU_CHARS[b2];
+    const a1 = at[i] || '', b1 = bt[i] || '';
+    const a1o = HU_CHARS[a1] ?? a1.charCodeAt(0);
+    const b1o = HU_CHARS[b1] ?? b1.charCodeAt(0);
+
+    // Ha mindkét pozícióban kétjegyű van
+    if (a2o !== undefined && b2o !== undefined) {
+      if (a2o !== b2o) return a2o - b2o;
+      i++; continue;
+    }
+    // Ha csak egyik kétjegyű
+    if (a2o !== undefined) { if (a2o !== b1o) return a2o - b1o; i++; continue; }
+    if (b2o !== undefined) { if (a1o !== b2o) return a1o - b2o; i++; continue; }
+    // Egyjegyű összehasonlítás
+    if (a1 === '') return -1;
+    if (b1 === '') return 1;
+    if (a1o !== b1o) return a1o - b1o;
+  }
+  return 0;
 }
 
 async function loadArticles() {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/knowledge_articles?select=id,title,slug&order=title.asc&limit=5000`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-  );
-  allArticles = await res.json();
+  // Supabase max 1000 rekordot ad vissza egyszerre – lapozással töltjük le az összeset
+  let all = [];
+  let from = 0;
+  const pageSize = 1000;
+
+  while (true) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/knowledge_articles?select=id,title,slug,specialty&order=title.asc&limit=${pageSize}&offset=${from}`,
+      { headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Range': `${from}-${from + pageSize - 1}`
+      }}
+    );
+    const batch = await res.json();
+    if (!batch || !batch.length) break;
+    all = all.concat(batch);
+    if (batch.length < pageSize) break;
+    from += pageSize;
+  }
+
+  // Magyar ábécé szerinti rendezés
+  allArticles = all.sort(huCompare);
   buildAlphabet();
   renderArticles();
 }
@@ -368,6 +489,50 @@ function buildAlphabet() {
 function renderArticles() {
   const section = document.getElementById('articlesSection');
 
+  // Szakterület nézet
+  if (viewMode === 'specialty' && !searchQuery) {
+    const grouped = {};
+    allArticles.forEach(a => {
+      const spec = a.specialty || 'Egyéb';
+      if (!grouped[spec]) grouped[spec] = [];
+      grouped[spec].push(a);
+    });
+
+    const SPEC_COLORS = {
+      'Belgyógyászat':'#1e3a8a','Neurológia':'#7c3aed','Kardiológia':'#dc2626',
+      'Ortopédia':'#0d9488','Gasztroenterológia':'#ea580c','Pszichiátria':'#9333ea',
+      'Endokrinológia':'#0891b2','Nőgyógyászat':'#db2777','Gyermekgyógyászat':'#16a34a',
+      'Fogászat':'#2563eb','Szemészet':'#0284c7','Bőrgyógyászat':'#d97706',
+      'Urológia':'#059669','Fül-orr-gégészet':'#7c3aed','Pulmonológia':'#0369a1',
+      'Allergológia':'#15803d','Reumatológia':'#b45309','Onkológia':'#be123c',
+      'Addiktológia':'#6d28d9','Infektológia':'#065f46','Traumatológia':'#92400e',
+      'Sebészet':'#1d4ed8','Rehabilitáció':'#0f766e'
+    };
+
+    const sortedSpecs = Object.keys(grouped).sort((a,b) => a.localeCompare(b, 'hu'));
+
+    section.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 5% 1.5rem;max-width:1200px;margin:0 auto">
+        ${sortedSpecs.map(spec => `
+          <a href="#spec-${encodeURIComponent(spec)}" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:${SPEC_COLORS[spec]||'#283897'}18;border:1.5px solid ${SPEC_COLORS[spec]||'#283897'}40;color:${SPEC_COLORS[spec]||'#283897'};font-size:12.5px;font-weight:700;text-decoration:none;transition:all .15s" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
+            ${spec} <span style="opacity:.65">(${grouped[spec].length})</span>
+          </a>`).join('')}
+      </div>
+      ${sortedSpecs.map(spec => `
+        <div class="letter-section" id="spec-${encodeURIComponent(spec)}">
+          <div class="letter-section-header">
+            <div class="letter-badge" style="background:${SPEC_COLORS[spec]||'#283897'};min-width:auto;padding:0 16px;font-size:13px">${spec}</div>
+            <div>
+              <div style="font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:#0f172a">${spec}</div>
+              <div class="letter-section-count">${grouped[spec].length} cikk</div>
+            </div>
+          </div>
+          <div class="articles-grid">${grouped[spec].sort(huCompare).map(cardHTML).join('')}</div>
+        </div>
+      `).join('')}`;
+    return;
+  }
+
   let filtered = allArticles;
 
   if (searchQuery) {
@@ -388,8 +553,6 @@ function renderArticles() {
   }
 
   if (searchQuery || activeFilter !== 'ALL') {
-    // Single group
-    const letter = activeFilter !== 'ALL' ? activeFilter : '';
     section.innerHTML = `
       <div class="articles-header">
         <div class="articles-letter-title">${searchQuery ? `"${searchQuery}" találatai` : activeFilter}</div>
@@ -397,7 +560,6 @@ function renderArticles() {
       </div>
       <div class="articles-grid">${filtered.map(cardHTML).join('')}</div>`;
   } else {
-    // Group by letter
     const grouped = {};
     filtered.forEach(a => {
       const l = firstLetter(a.title);
@@ -405,7 +567,16 @@ function renderArticles() {
       grouped[l].push(a);
     });
 
-    section.innerHTML = Object.keys(grouped).sort().map(letter => `
+    const sortedKeys = Object.keys(grouped).sort((a,b) => {
+      const ai = ALPHABET.indexOf(a);
+      const bi = ALPHABET.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+
+    section.innerHTML = sortedKeys.map(letter => `
       <div class="letter-section" id="section-${letter}">
         <div class="letter-section-header">
           <div class="letter-badge">${letter}</div>
@@ -422,7 +593,7 @@ function renderArticles() {
 
 function cardHTML(article) {
   return `
-    <a class="article-card" href="tudastar-cikk.html?slug=${encodeURIComponent(article.slug)}" title="${article.title}">
+    <a class="article-card" href="tudastar-cikk.html?slug=${encodeURIComponent(article.slug)}" title="${article.title}" rel="dofollow">
       <div class="article-card__title">${article.title}</div>
       <div class="article-card__arrow">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
