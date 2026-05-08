@@ -10,6 +10,22 @@
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+// ══ AUTH GUARD ══
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) { window.location.replace('/login.html?redirect=' + encodeURIComponent(window.location.pathname)); return; }
+  const { data: profile } = await db.from('user_profiles').select('role,full_name').eq('id', session.user.id).single();
+  if (!profile || profile.role !== 'superadmin') {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f0f4ff;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2><p style="color:#6b7280;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p><a href="/login.html" style="background:#283897;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza a bejelentkezéshez</a></div>';
+    return;
+  }
+  document.getElementById('appContent').style.display = '';
+  document.getElementById('authLoading').style.display = 'none';
+  const nameEl = document.getElementById('sbUserName');
+  if (nameEl) nameEl.textContent = profile.full_name || session.user.email || 'Admin';
+  window.logoutAdmin = async () => { await db.auth.signOut(); window.location.replace('/login.html'); };
+  initApp();
+});
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -216,6 +232,17 @@ textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
 </style>
 </head>
 <body>
+<!-- ══ AUTH LOADING ══ -->
+<div id="authLoading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0f4ff;font-family:'Nunito Sans',sans-serif">
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+    <svg width="40" height="40" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#283897"/><circle cx="14" cy="10" r="5.5" fill="rgba(40,56,151,.2)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/></svg>
+    <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:18px;color:#283897">Szakorvos<span style="color:#22c55e">.hu</span></div>
+    <div style="color:#6b7280;font-size:14px">Hitelesítés folyamatban…</div>
+  </div>
+</div>
+<!-- ══ APP ══ -->
+<div id="appContent" style="display:none">
+
 
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
@@ -587,396 +614,8 @@ function switchTab(tab,el){
   if(tab==='schedule') loadSchedule();
 }
 
-/* ═══ INIT ═══ */
-async function init(){
-  // Load clinic
-  const{data:clinic}=await db.from('clinics')
-    .select('*,cities(name),doctor_clinics(doctor_id,consultation_fee,doctors(id,name,title,is_active,rating,review_count,experience_years,doctor_specialties(specialties(name)),availability(day_of_week,start_time,end_time,slot_minutes)))')
-    .limit(1).single();
 
-  if(!clinic){ document.getElementById('sbName').textContent='Nincs klinika'; return; }
-  clinicData=clinic;
-  allDocs=(clinic.doctor_clinics||[]).map(dc=>({...dc.doctors,fee:dc.consultation_fee})).filter(Boolean);
-
-  // Sidebar
-  document.getElementById('sbAv').textContent=clinic.name.charAt(0).toUpperCase();
-  document.getElementById('sbName').textContent=clinic.name;
-  document.getElementById('sbCity').textContent=clinic.cities?.name||'–';
-  document.getElementById('sbDocCnt').textContent=allDocs.filter(d=>d.is_active).length;
-  document.getElementById('sbRatNum').textContent=allDocs.length?
-    (allDocs.reduce((s,d)=>s+parseFloat(d.rating||0),0)/allDocs.length).toFixed(1):'–';
-
-  // Stats
-  document.getElementById('statDocs').textContent=allDocs.filter(d=>d.is_active).length;
-  const avgRat=allDocs.length?(allDocs.reduce((s,d)=>s+parseFloat(d.rating||0),0)/allDocs.length).toFixed(1):'–';
-  document.getElementById('statRating').textContent='★ '+avgRat;
-  document.getElementById('statRatSub').textContent=allDocs.length+' orvos átlaga';
-
-  // Load appointments count
-  const{count:apptCount}=await db.from('appointments')
-    .select('id',{count:'exact',head:true})
-    .in('doctor_id',allDocs.map(d=>d.id));
-  const{count:pendCount}=await db.from('appointments')
-    .select('id',{count:'exact',head:true})
-    .in('doctor_id',allDocs.map(d=>d.id))
-    .eq('status','pending');
-  document.getElementById('sbApptCnt').textContent=apptCount||0;
-  document.getElementById('statAppts').textContent=apptCount||0;
-  document.getElementById('statApptSub').textContent='összes foglalás';
-  document.getElementById('statPending').textContent=pendCount||0;
-  if(pendCount>0){
-    document.getElementById('navApptBadge').textContent=pendCount;
-    document.getElementById('navApptBadge').style.display='inline';
-  }
-  document.getElementById('navDocBadge').textContent=allDocs.length;
-  document.getElementById('navDocBadge').style.display='inline';
-
-  // Clinic form
-  document.getElementById('cName').value=clinic.name||'';
-  document.getElementById('cCity').value=clinic.cities?.name||'';
-  document.getElementById('cAddress').value=clinic.address||'';
-  document.getElementById('cPhone').value=clinic.phone||'';
-  document.getElementById('cEmail').value=clinic.email||'';
-  document.getElementById('cWebsite').value=clinic.website||'';
-  document.getElementById('cDesc').value=clinic.description||'';
-
-  // Opening hours
-  renderOpenHours();
-  renderInsuranceChips();
-  loadDashboard();
-  renderDoctors(allDocs,1);
-}
-
-/* ═══ DASHBOARD ═══ */
-async function loadDashboard(){
-  // Today appts
-  const today=new Date();
-  const todayStr=today.toISOString().split('T')[0];
-  const{data:todayData}=await db.from('appointments')
-    .select('appointment_at,status,patients(full_name),doctors(name)')
-    .in('doctor_id',allDocs.map(d=>d.id))
-    .gte('appointment_at',todayStr+'T00:00:00')
-    .lte('appointment_at',todayStr+'T23:59:59')
-    .order('appointment_at').limit(6);
-
-  const el=document.getElementById('todayAppts');
-  if(!todayData||!todayData.length){
-    el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:14px">Nincs mai időpont</div>';
-  } else {
-    el.innerHTML=todayData.map(a=>{
-      const dt=new Date(a.appointment_at);
-      const t=dt.toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'});
-      const sc={confirmed:'badge-green',pending:'badge-orange',completed:'badge-blue',cancelled:'badge-red'};
-      const sl={confirmed:'Megerősített',pending:'Vár',completed:'Kész',cancelled:'Lemondva'};
-      return `<div class="appt-item">
-        <div class="appt-time"><span class="date">Ma</span>${t}</div>
-        <div style="flex:1"><div style="font-weight:700;color:var(--text);font-size:14px">${a.patients?.full_name||'Névtelen'}</div><div style="font-size:12px;color:var(--muted)">${a.doctors?.name||'–'}</div></div>
-        <span class="badge ${sc[a.status]||'badge-gray'}">${sl[a.status]||a.status}</span>
-      </div>`;
-    }).join('');
-  }
-
-  // Week chart (mock data)
-  const vals=[12,18,14,22,19,8,0];
-  const max=Math.max(...vals);
-  document.getElementById('weekChart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${max?v/max*100:0}%;${i===new Date().getDay()-1?'opacity:1':''}"></div>`).join('');
-  const total=vals.reduce((s,v)=>s+v,0);
-  document.getElementById('weekTotal').textContent=total;
-  document.getElementById('weekCompleted').textContent=Math.round(total*.7);
-
-  // Doctor grid
-  renderDocGrid(allDocs.slice(0,6));
-}
-
-function renderDocGrid(docs){
-  const el=document.getElementById('docGridDash');
-  if(!docs.length){el.innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--muted);grid-column:1/-1">Nincsenek orvosok</div>';return;}
-  el.innerHTML=docs.map((d,i)=>{
-    const spec=d.doctor_specialties?.[0]?.specialties?.name||'–';
-    const rat=parseFloat(d.rating||0);
-    const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    return `<div class="doc-card">
-      <div class="doc-card-top">
-        <div class="doc-av-lg" style="background:${COLORS[i%COLORS.length]}">${init}</div>
-        <div><div class="doc-card-name">${d.name}</div><div class="doc-card-spec">${spec}</div></div>
-      </div>
-      <div class="doc-card-meta">
-        <span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span>
-        <span class="badge badge-amber">★ ${rat.toFixed(1)}</span>
-        ${d.fee?`<span class="badge badge-gray">${d.fee.toLocaleString('hu-HU')} Ft</span>`:''}
-      </div>
-      <div class="doc-card-actions">
-        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="toggleDocStatus('${d.id}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ═══ DOCTORS TABLE ═══ */
-function renderDoctors(docs,page=1){
-  const tb=document.getElementById('doctorsTable');
-  const total=docs.length,pages=Math.ceil(total/PG),st=(page-1)*PG,pg=docs.slice(st,st+PG);
-  if(!pg.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok</td></tr>';hidePag();return;}
-  tb.innerHTML=pg.map((d,i)=>{
-    const spec=d.doctor_specialties?.[0]?.specialties?.name||'–';
-    const rat=parseFloat(d.rating||0);
-    const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    return `<tr>
-      <td><div class="av-chip">
-        <div class="av-sm" style="background:${COLORS[(st+i)%COLORS.length]}">${init}</div>
-        <div><div class="td-name">${d.name}</div>${d.title?`<div class="td-sub">${d.title}</div>`:''}</div>
-      </div></td>
-      <td><span class="badge badge-teal">${spec}</span></td>
-      <td><span style="color:var(--amber);font-weight:700">★ ${rat.toFixed(1)}</span> <span style="color:var(--muted);font-size:12px">(${d.review_count||0})</span></td>
-      <td>${d.experience_years||'–'} év</td>
-      <td>${d.fee?d.fee.toLocaleString('hu-HU')+' Ft':'–'}</td>
-      <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
-      <td><button class="btn btn-ghost btn-sm" onclick="toggleDocStatus('${d.id}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button></td>
-    </tr>`;
-  }).join('');
-  renderPag(total,page,pages);
-}
-
-function filterDocs(q){
-  const f=allDocs.filter(d=>d.name.toLowerCase().includes(q.toLowerCase()));
-  renderDoctors(f,1);
-}
-function filterDocsByStatus(v){
-  if(!v){renderDoctors(allDocs,1);return;}
-  renderDoctors(allDocs.filter(d=>String(d.is_active)===v),1);
-}
-async function toggleDocStatus(id,isActive){
-  await db.from('doctors').update({is_active:!isActive}).eq('id',id);
-  const d=allDocs.find(x=>x.id===id);if(d)d.is_active=!isActive;
-  renderDoctors(allDocs,1);renderDocGrid(allDocs.slice(0,6));
-  document.getElementById('statDocs').textContent=allDocs.filter(d=>d.is_active).length;
-  document.getElementById('sbDocCnt').textContent=allDocs.filter(d=>d.is_active).length;
-}
-
-/* ═══ PAGINATION ═══ */
-function renderPag(total,cur,pages){
-  const pag=document.getElementById('docPag'),info=document.getElementById('docPagInfo'),btns=document.getElementById('docPagBtns');
-  if(pages<=1){pag.style.display='none';return;}
-  pag.style.display='flex';
-  info.textContent=`${(cur-1)*PG+1}–${Math.min(cur*PG,total)} / ${total}`;
-  let h=`<button class="pag-btn" onclick="renderDoctors(allDocs,${cur-1})" ${cur===1?'disabled':''}>‹</button>`;
-  for(let p=1;p<=pages;p++){
-    if(p===1||p===pages||Math.abs(p-cur)<=1) h+=`<button class="pag-btn ${p===cur?'on':''}" onclick="renderDoctors(allDocs,${p})">${p}</button>`;
-    else if(Math.abs(p-cur)===2) h+=`<span style="color:var(--muted);padding:0 2px;align-self:center">…</span>`;
-  }
-  h+=`<button class="pag-btn" onclick="renderDoctors(allDocs,${cur+1})" ${cur===pages?'disabled':''}>›</button>`;
-  btns.innerHTML=h;
-}
-function hidePag(){document.getElementById('docPag').style.display='none';}
-
-/* ═══ APPOINTMENTS ═══ */
-async function loadAppointments(filter){
-  const tb=document.getElementById('apptTable');
-  tb.innerHTML='<tr class="skel-row"><td colspan="6"><div style="width:100%"></div></td></tr>';
-  if(!allDocs.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek orvosok</td></tr>';return;}
-  let q=db.from('appointments').select('id,appointment_at,status,patients(full_name),doctors(name)')
-    .in('doctor_id',allDocs.map(d=>d.id)).order('appointment_at',{ascending:false}).limit(50);
-  if(filter) q=q.eq('status',filter);
-  const{data}=await q;
-  allAppts=data||[];
-  if(!allAppts.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek foglalások</td></tr>';return;}
-  const sc={confirmed:'badge-green',pending:'badge-orange',completed:'badge-blue',cancelled:'badge-red'};
-  const sl={confirmed:'Megerősített',pending:'Jóváhagyás alatt',completed:'Teljesített',cancelled:'Lemondott'};
-  tb.innerHTML=allAppts.map(a=>{
-    const dt=new Date(a.appointment_at);
-    return `<tr>
-      <td><div class="td-name">${dt.toLocaleDateString('hu-HU',{year:'numeric',month:'short',day:'numeric'})}</div><div class="td-sub">${dt.toLocaleTimeString('hu-HU',{hour:'2-digit',minute:'2-digit'})}</div></td>
-      <td class="td-name">${a.patients?.full_name||'Névtelen'}</td>
-      <td style="color:var(--sub)">${a.doctors?.name||'–'}</td>
-      <td><span class="badge badge-gray">Személyes</span></td>
-      <td><span class="badge ${sc[a.status]||'badge-gray'}">${sl[a.status]||a.status}</span></td>
-      <td><select class="form-input" style="width:auto;padding:5px 9px;font-size:12px" onchange="updateAppt('${a.id}',this.value)">
-        <option ${a.status==='pending'?'selected':''} value="pending">Jóváhagyás alatt</option>
-        <option ${a.status==='confirmed'?'selected':''} value="confirmed">Megerősített</option>
-        <option ${a.status==='completed'?'selected':''} value="completed">Teljesített</option>
-        <option ${a.status==='cancelled'?'selected':''} value="cancelled">Lemondott</option>
-      </select></td>
-    </tr>`;
-  }).join('');
-}
-async function updateAppt(id,status){await db.from('appointments').update({status}).eq('id',id);}
-
-/* ═══ SCHEDULE ═══ */
-async function loadSchedule(){
-  const tb=document.getElementById('schedTable');
-  const rows=[];
-  allDocs.forEach(d=>{
-    (d.availability||[]).forEach(av=>{
-      rows.push({doctor:d.name,spec:d.doctor_specialties?.[0]?.specialties?.name||'–',day:av.day_of_week,start:av.start_time,end:av.end_time,slot:av.slot_minutes});
-    });
-  });
-  rows.sort((a,b)=>a.day-b.day);
-  if(!rows.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek rendelési adatok</td></tr>';return;}
-  tb.innerHTML=rows.map(r=>`<tr>
-    <td><span class="badge badge-teal">${DAYS[(r.day-1+7)%7]}</span></td>
-    <td class="td-name">${r.doctor}</td>
-    <td><span class="badge badge-blue">${r.spec}</span></td>
-    <td>${r.start?.slice(0,5)||'–'}</td>
-    <td>${r.end?.slice(0,5)||'–'}</td>
-    <td>${r.slot||30} perc</td>
-  </tr>`).join('');
-}
-
-/* ═══ OPENING HOURS ═══ */
-function renderOpenHours(){
-  const el=document.getElementById('openHours');
-  el.innerHTML=DAYS.map((day,i)=>`
-    <div style="display:flex;align-items:center;gap:1rem;padding:.6rem 0;border-bottom:1px solid #f0f4fb;flex-wrap:wrap">
-      <div style="font-size:13px;font-weight:700;color:var(--text);width:90px;flex-shrink:0">${day}</div>
-      <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);cursor:pointer">
-        <input type="checkbox" ${i<6?'checked':''} style="accent-color:var(--teal)" onchange="this.closest('div').querySelector('.time-inputs').style.display=this.checked?'flex':'none'">
-        Nyitva
-      </label>
-      <div class="time-inputs" style="display:${i<6?'flex':'none'};align-items:center;gap:8px;flex-wrap:wrap">
-        <input type="time" value="${i<5?'08:00':i===5?'09:00':'09:00'}" class="form-input" style="width:120px;padding:6px 10px">
-        <span style="color:var(--muted)">–</span>
-        <input type="time" value="${i<5?'18:00':i===5?'14:00':'13:00'}" class="form-input" style="width:120px;padding:6px 10px">
-      </div>
-    </div>`).join('');
-}
-
-/* ═══ INSURANCE CHIPS ═══ */
-function renderInsuranceChips(){
-  document.getElementById('insuranceChips').innerHTML=INSURANCES.map(ins=>`
-    <div onclick="toggleIns(this,'${ins}')" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:1.5px solid;${selectedInsurances.has(ins)?'background:#f0fdfa;border-color:#0d9488;color:#0d9488':'background:#f4f6fb;border-color:var(--border);color:var(--sub)'}">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display:${selectedInsurances.has(ins)?'block':'none'}"><polyline points="20 6 9 17 4 12"/></svg>
-      ${ins}
-    </div>`).join('');
-}
-function toggleIns(el,ins){
-  if(selectedInsurances.has(ins)) selectedInsurances.delete(ins);
-  else selectedInsurances.add(ins);
-  renderInsuranceChips();
-}
-
-/* ═══ SAVE CLINIC ═══ */
-async function saveClinic(){
-  if(!clinicData) return;
-  const btn=document.getElementById('btnSaveClinic');
-  btn.textContent='Mentés…';btn.disabled=true;
-  const{error}=await db.from('clinics').update({
-    name:document.getElementById('cName').value,
-    address:document.getElementById('cAddress').value,
-    phone:document.getElementById('cPhone').value,
-    email:document.getElementById('cEmail').value,
-    website:document.getElementById('cWebsite').value,
-    description:document.getElementById('cDesc').value,
-  }).eq('id',clinicData.id);
-  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Mentés';
-  btn.disabled=false;
-  if(error) alert('Hiba: '+error.message);
-  else{
-    document.getElementById('sbName').textContent=document.getElementById('cName').value;
-    document.getElementById('sbAv').textContent=document.getElementById('cName').value.charAt(0);
-  }
-}
-
-/* ═══ ADD DOCTOR MODAL ═══ */
-async function openAddDoctorModal(){
-  // Load specialties
-  const{data}=await db.from('specialties').select('id,name').order('name');
-  const sel=document.getElementById('mSpec');
-  sel.innerHTML=(data||[]).map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-  document.getElementById('addDocModal').classList.add('open');
-}
-function closeModal(){document.getElementById('addDocModal').classList.remove('open');}
-document.getElementById('addDocModal').addEventListener('click',e=>{if(e.target===document.getElementById('addDocModal'))closeModal();});
-
-async function saveNewDoctor(){
-  const name=document.getElementById('mName').value.trim();
-  if(!name){alert('A név megadása kötelező!');return;}
-  const{data:doctor,error}=await db.from('doctors').insert({
-    name,title:document.getElementById('mTitle').value,
-    email:document.getElementById('mEmail').value,
-    experience_years:parseInt(document.getElementById('mExp').value)||null,
-    is_active:true,
-  }).select().single();
-  if(error){alert('Hiba: '+error.message);return;}
-  // Link to clinic
-  if(doctor&&clinicData){
-    await db.from('doctor_clinics').insert({
-      doctor_id:doctor.id,clinic_id:clinicData.id,
-      consultation_fee:parseInt(document.getElementById('mFee').value)||null,
-    });
-    const specId=document.getElementById('mSpec').value;
-    if(specId) await db.from('doctor_specialties').insert({doctor_id:doctor.id,specialty_id:specId});
-  }
-  closeModal();
-  ['mName','mTitle','mEmail','mExp','mFee'].forEach(id=>document.getElementById(id).value='');
-  init(); // reload
-}
-
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-
-/* ═══ PHOTO UPLOAD ═══ */
-async function handlePhotoSelect(input){
-  const file=input.files[0];
-  if(!file) return;
-  if(file.size>5*1024*1024){ alert('A fájl mérete maximum 5 MB lehet!'); return; }
-
-  // Local preview
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const prev=document.getElementById('photoPreview');
-    prev.innerHTML=`<img src="${e.target.result}" alt="Preview">`;
-  };
-  reader.readAsDataURL(file);
-
-  const prog=document.getElementById('photoProgress');
-  const fill=document.getElementById('photoProgressFill');
-  const txt=document.getElementById('photoProgressText');
-  const succ=document.getElementById('photoSuccess');
-  prog.style.display='block'; succ.style.display='none';
-  fill.style.width='20%'; txt.textContent='Feltöltés előkészítése…';
-
-  if(!clinicData){ alert('Előbb töltse be a klinika adatait!'); return; }
-
-  const ext=file.name.split('.').pop().toLowerCase();
-  const fileName=`${clinicData.id}.${ext}`;
-
-  fill.style.width='50%'; txt.textContent='Feltöltés folyamatban…';
-
-  const{error}=await db.storage.from('clinic-photos').upload(fileName, file, {
-    contentType: file.type, upsert: true
-  });
-  if(error){ prog.style.display='none'; alert('Hiba: '+error.message); return; }
-
-  fill.style.width='80%'; txt.textContent='URL mentése…';
-
-  const{data:{publicUrl}}=db.storage.from('clinic-photos').getPublicUrl(fileName);
-
-  await db.from('clinics').update({photo_url: publicUrl}).eq('id', clinicData.id);
-  clinicData.photo_url=publicUrl;
-
-  // Update sidebar avatar
-  const sbAv=document.getElementById('sbAv');
-  if(sbAv){
-    sbAv.style.background='none';
-    sbAv.innerHTML=`<img src="${publicUrl}" style="width:46px;height:46px;border-radius:13px;object-fit:cover;display:block">`;
-  }
-
-  fill.style.width='100%'; txt.textContent='Kész!';
-  setTimeout(()=>{ prog.style.display='none'; succ.style.display='flex'; },400);
-}
-
-// Drag & drop
-const dz=document.getElementById('photoDropZone');
-if(dz){
-  dz.addEventListener('dragover',e=>{ e.preventDefault(); dz.classList.add('drag'); });
-  dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
-  dz.addEventListener('drop',e=>{
-    e.preventDefault(); dz.classList.remove('drag');
-    const f=e.dataTransfer.files[0];
-    if(f){ document.getElementById('photoFile').files=e.dataTransfer.files; handlePhotoSelect({files:e.dataTransfer.files}); }
-  });
-}
-
-init();
 </script>
+</div><!-- /appContent -->
 </body>
 </html>
