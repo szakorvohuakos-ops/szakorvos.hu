@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tudástár Generátor – Szakorvos.hu</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito Sans',sans-serif;background:#f4f7fc;color:#0f172a;min-height:100vh}
+.nav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 5%;height:60px;display:flex;align-items:center;gap:10px}
+.logo{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#1e3a8a}
+.logo em{color:#22c55e;font-style:normal}
+.wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+h1{font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:#1e3a8a;margin-bottom:.25rem}
+.sub{font-size:14px;color:#64748b;margin-bottom:2rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1rem 1.25rem;text-align:center}
+.stat-val{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:#1e3a8a;line-height:1}
+.stat-lbl{font-size:12px;color:#64748b;margin-top:4px}
+.progress-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.25rem;margin-bottom:1.5rem}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.progress-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#0f172a}
+.progress-pct{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#1e3a8a}
+.bar{height:12px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,#1e3a8a,#2d4fd6);border-radius:99px;transition:width .5s ease;width:0%}
+.controls{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn-start{background:#1e3a8a;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s}
+.btn-start:hover{background:#1e40af}
+.btn-start:disabled{opacity:.5;cursor:not-allowed}
+.btn-stop{background:#fff;border:1.5px solid #e2e8f0;color:#374151;padding:10px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-stop:hover{border-color:#ef4444;color:#ef4444}
+.btn-stop:disabled{opacity:.4;cursor:not-allowed}
+select{padding:9px 12px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:13px;background:#fff;color:#0f172a;font-family:'Nunito Sans',sans-serif}
+.status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#64748b}
+.dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
+.dot.on{background:#22c55e;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.log-wrap{background:#0f172a;border-radius:14px;overflow:hidden}
+.log-header{padding:.75rem 1rem;background:#1e293b;display:flex;align-items:center;justify-content:space-between}
+.log-title{font-size:12px;font-weight:700;color:#94a3b8;letter-spacing:.05em}
+.log-clear{background:none;border:none;cursor:pointer;font-size:11px;color:#475569;font-family:'Nunito Sans',sans-serif}
+.log-clear:hover{color:#94a3b8}
+.log{height:380px;overflow-y:auto;padding:.75rem 1rem;font-size:12px;font-family:monospace;line-height:1.75}
+.log::-webkit-scrollbar{width:4px}
+.log::-webkit-scrollbar-track{background:#1e293b}
+.log::-webkit-scrollbar-thumb{background:#334155;border-radius:99px}
+.l{padding:0;color:#64748b}
+.ok{color:#4ade80}
+.err{color:#f87171}
+.info{color:#60a5fa;font-weight:bold}
+.warn{color:#fbbf24}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Szakorvos<em>.hu</em></div>
+  <span style="color:#e2e8f0">|</span>
+  <span style="font-size:13px;color:#64748b">Tudástár Cikk Generátor</span>
+</nav>
+
+<div class="wrap">
+  <h1>Tudástár Cikk Generátor</h1>
+  <p class="sub">Az Edge Function automatikusan megírja és feltölti az összes hiányzó cikket</p>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="sTotal">–</div><div class="stat-lbl">Összes cikk</div></div>
+    <div class="stat"><div class="stat-val" id="sDone">–</div><div class="stat-lbl">Kész</div></div>
+    <div class="stat"><div class="stat-val" id="sMissing">–</div><div class="stat-lbl">Hiányzó</div></div>
+    <div class="stat"><div class="stat-val" id="sSession">0</div><div class="stat-lbl">Most generált</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-title">Haladás</span>
+      <span class="progress-pct" id="pct">0%</span>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-start" id="btnStart" onclick="startGen()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Generálás indítása
+    </button>
+    <button class="btn-stop" id="btnStop" onclick="stopGen()" disabled>■ Megállít</button>
+    <select id="batch">
+      <option value="3">3 cikk / kör</option>
+      <option value="5" selected>5 cikk / kör</option>
+      <option value="10">10 cikk / kör</option>
+    </select>
+    <div class="status">
+      <div class="dot" id="dot"></div>
+      <span id="statusMsg">Betöltés...</span>
+    </div>
+  </div>
+
+  <div class="log-wrap">
+    <div class="log-header">
+      <span class="log-title">LOG</span>
+      <button class="log-clear" onclick="clearLog()">Törlés</button>
+    </div>
+    <div class="log" id="log">
+      <div class="l info">Szakorvos.hu Cikk Generátor</div>
+      <div class="l">Adatok betöltése...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FN_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/generate-articles';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+
+let running = false, session = 0;
+
+const $ = id => document.getElementById(id);
+
+function log(msg, cls='l') {
+  const el = $('log');
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = '[' + new Date().toLocaleTimeString('hu') + '] ' + msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+function clearLog() {
+  $('log').innerHTML = '';
+}
+
+function updateStats(total, done) {
+  $('sTotal').textContent = total.toLocaleString('hu');
+  $('sDone').textContent = done.toLocaleString('hu');
+  $('sMissing').textContent = (total - done).toLocaleString('hu');
+  $('sSession').textContent = session;
+  const pct = total > 0 ? (done / total * 100).toFixed(1) : 0;
+  $('barFill').style.width = pct + '%';
+  $('pct').textContent = pct + '%';
+  $('statusMsg').textContent = pct + '% kész – ' + done + ' / ' + total;
+}
+
+async function loadStats() {
+  try {
+    const res = await fetch(FN_URL + '/stats', {
+      headers: { 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    const data = await res.json();
+    if (data.total) {
+      updateStats(data.total, data.done);
+      log('Adatok betöltve: ' + data.done + ' / ' + data.total + ' cikk kész', 'ok');
+    }
+  } catch(e) {
+    log('Betöltési hiba: ' + e.message, 'err');
+    $('statusMsg').textContent = 'Hiba a betöltésnél';
+  }
+}
+
+async function startGen() {
+  running = true;
+  $('btnStart').disabled = true;
+  $('btnStop').disabled = false;
+  $('dot').classList.add('on');
+  log('Generálás elindítva!', 'info');
+
+  const batchSize = parseInt($('batch').value);
+  let total = parseInt($('sTotal').textContent.replace(/\s/g,'')) || 3012;
+  let done = parseInt($('sDone').textContent.replace(/\s/g,'')) || 141;
+
+  while (running) {
+    try {
+      log('Batch küldése (' + batchSize + ' cikk)...');
+
+      const res = await fetch(FN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SB_KEY}`
+        },
+        body: JSON.stringify({ batch_size: batchSize })
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        log('Edge Function hiba (' + res.status + '): ' + err.slice(0, 200), 'err');
+        await sleep(5000);
+        continue;
+      }
+
+      const data = await res.json();
+
+      if (data.done) {
+        log('🎉 Minden cikk kész!', 'info');
+        running = false;
+        break;
+      }
+
+      if (data.error) {
+        log('Hiba: ' + data.error, 'err');
+        await sleep(3000);
+        continue;
+      }
+
+      for (const r of data.results || []) {
+        if (r.ok) {
+          done++;
+          session++;
+          $('sSession').textContent = session;
+          log('✓ ' + r.title + ' [' + r.specialty + ']', 'ok');
+        } else {
+          log('✗ ' + r.title + ': ' + (r.error || 'ismeretlen hiba'), 'err');
+        }
+      }
+
+      updateStats(total, done);
+      await sleep(1500);
+
+    } catch(e) {
+      log('Hálózati hiba: ' + e.message, 'err');
+      await sleep(5000);
+    }
+  }
+
+  $('btnStart').disabled = false;
+  $('btnStop').disabled = true;
+  $('dot').classList.remove('on');
+  if (!running) log('Leállítva. Ebben a futásban generált: ' + session + ' cikk', 'warn');
+}
+
+function stopGen() {
+  running = false;
+  $('btnStop').disabled = true;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+loadStats();
+</script>
+</body>
+</html>
