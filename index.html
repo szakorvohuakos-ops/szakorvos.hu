@@ -447,13 +447,11 @@ nav.one-row .nav-hamburger { display: flex; }
 
 /* ── HERO ── */
 .hero {
-  background: #f0f4ff !important;
+  background: #fff !important;
   min-height: auto;
-  padding-top: 76px;
-  padding-bottom: 1.5rem;
+  padding-top: 64px;
+  padding-bottom: 0;
   position: relative;
-  display: flex;
-  flex-direction: column;
 }
 
 .hero::before {
@@ -3476,194 +3474,155 @@ footer {
 
 
 <div class="hero">
-  <div class="hero-content">
-    <div class="hero-two-col">
+  <div class="new-hero-wrap">
 
-      <!-- BAL: stat boxok + cím + alcím -->
-      <div class="hero-left">
+    <!-- CÍM blokk bal felül -->
+    <div class="new-hero-top">
+      <h1 class="new-hero-title">
+        Nem tudja,<br>milyen orvos kell?
+        <span class="new-hero-accent">Írja le a tünetét.<span class="new-hero-plus">+</span></span>
+      </h1>
+      <p class="new-hero-desc">Az AI elemzi, és megmondja, melyik szakorvoshoz<br>érdemes fordulnia.</p>
+    </div>
 
-        <!-- Stat boxok FELÜL -->
-        <div class="hero-top-stats">
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num">12 000+</span>
-              <span class="hero-top-stat-label">orvos</span>
-            </div>
-          </div>
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="8"/><line x1="12" y1="2" x2="12" y2="6"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num">1 800+</span>
-              <span class="hero-top-stat-label">klinika</span>
-            </div>
-          </div>
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num">3 400+</span>
-              <span class="hero-top-stat-label">tudástár cikk</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cím -->
-        <h1 class="hero-title-new">
-          Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
-        </h1>
-
-        <!-- Alcím -->
-        <p class="hero-desc-new">
-          Írja le tüneteit, AI asszisztensünk elemzi,<br>és segít megtalálni a legmegfelelőbb szakorvost az Ön számára.
-        </p>
-
+    <!-- Rating badge jobb felső -->
+    <div class="new-hero-rating">
+      <div class="new-hero-rating-avatars">
+        <div class="new-hero-rating-av" style="background:#93c5fd"></div>
+        <div class="new-hero-rating-av" style="background:#6ee7b7"></div>
+        <div class="new-hero-rating-av" style="background:#fca5a5"></div>
+        <div class="new-hero-rating-av" style="background:#fbbf24"></div>
       </div>
+      <div>
+        <div class="new-hero-rating-score">★ 4,9/5</div>
+        <div class="new-hero-rating-count">18 000+ értékelés</div>
+        <div class="new-hero-rating-sub">Valódi páciensek<br>visszajelzése</div>
+      </div>
+    </div>
 
-      <!-- KÖZÉP: AI chat widget -->
-      <div class="hero-right-search">
+    <!-- NAGY KERESŐSÁV KÁRTYA -->
+    <div class="prem-search">
 
-        <div class="ai-chat-widget">
-
-          <!-- Header -->
-          <div class="ai-chat-header">
-            <div class="ai-chat-avatar">
-              <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.15)"/>
-                <rect x="10" y="14" width="20" height="14" rx="5" fill="white" opacity="0.95"/>
-                <circle cx="15" cy="21" r="2" fill="#166534"/>
-                <circle cx="25" cy="21" r="2" fill="#166534"/>
-                <path d="M15 25 Q20 28 25 25" stroke="#166534" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-                <line x1="20" y1="14" x2="20" y2="10" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-                <circle cx="20" cy="9" r="2" fill="white" opacity="0.9"/>
-              </svg>
-            </div>
-            <div style="flex:1">
-              <div class="ai-chat-name">AI orvosi asszisztens</div>
-              <div class="ai-chat-status">
-                <span class="ai-chat-dot"></span>
-                <span>Online</span>
-              </div>
-            </div>
-            <div class="ai-chat-secure">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Biztonságos és titkos</span>
-            </div>
+      <!-- AI oldal -->
+      <div class="prem-ai">
+        <div class="prem-label">
+          <div class="prem-label-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
           </div>
-
-          <!-- Input – HEADER ALATT -->
-          <div class="ai-chat-input-row">
-            <div class="ai-chat-input-inner">
-              <div class="ai-chat-input-wrap">
-                <input class="ai-chat-input" type="text" id="chatInput"
-                  placeholder=""
-                  onkeydown="if(event.key==='Enter') sendChat()" />
-              </div>
-              <button class="ai-chat-send" onclick="sendChat()" id="chatSendBtn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-              </button>
-            </div>
+          <div>
+            <div class="prem-label-title">AI tünetelemző keresés</div>
+            <div class="prem-label-sub">Írja le, milyen panasza vagy tünete van</div>
           </div>
-
-          <!-- Eredmény / alapállapot terület -->
-          <div class="ai-chat-messages" id="chatMessages">
-            <div id="chatIdleState" style="padding:1rem 1.1rem">
-              <div style="font-size:11px;font-weight:700;color:#9aa5c4;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Például:</div>
-              <div style="font-size:13px;color:#6b7280;line-height:1.8">
-                <span class="ai-tip" onclick="useTip(this)">Fáj a térdem lépcsőzéskor</span><span style="color:#d1d5db"> · </span><span class="ai-tip" onclick="useTip(this)">Mellkasi szorítást érzek</span><span style="color:#d1d5db"> · </span><span class="ai-tip" onclick="useTip(this)">Anyajegyszűrés Győrben</span><span style="color:#d1d5db"> · </span><span class="ai-tip" onclick="useTip(this)">Kardiológus Debrecenben</span><span style="color:#d1d5db"> · </span><span class="ai-tip" onclick="useTip(this)">Három napja fáj a fejem és szédülök</span>
-              </div>
-            </div>
-            <div id="chatLoadingState" style="display:none;padding:1.5rem;text-align:center">
-              <div style="display:inline-flex;flex-direction:column;align-items:center;gap:.75rem">
-                <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#f0fdf4);display:flex;align-items:center;justify-content:center">
-                  <div class="ai-dots"><span></span><span></span><span></span></div>
-                </div>
-                <div style="font-size:13px;color:#6b7280;font-weight:600">Elemzés folyamatban…</div>
-              </div>
-            </div>
-            <div id="chatResult" style="display:none;padding:1rem;animation:fadeUp .4s ease"></div>
-          </div>
-
-          <!-- Footer -->
-          <div class="ai-chat-footer-area">
-            <div class="chat-legal-info">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Az AI nem helyettesíti az orvosi diagnózist!
-            </div>
-            <button class="chat-legal-more" onclick="resetChat()" id="chatResetBtn" style="display:none;background:none;border:none;cursor:pointer;font-size:12px;color:#9aa5c4;font-weight:600">↺ Új keresés</button>
-          </div>
-
-        </div><!-- end ai-chat-widget -->
-
-      </div><!-- end hero-right-search -->
-
-      <!-- JOBB: feature ikonok -->
-      <div class="hero-side-features">
-        <div class="hero-side-feat">
-          <div class="hero-side-feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          </div>
-          <div class="hero-side-feat-label">Adatvédelem<br>első helyen</div>
         </div>
-        <div class="hero-side-feat">
-          <div class="hero-side-feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-          </div>
-          <div class="hero-side-feat-label">Ellenőrzött<br>szakemberek</div>
+        <div class="prem-ai-field">
+          <input class="prem-ai-input" type="text" id="chatInput"
+            placeholder="pl. szédülök és fáj a fejem"
+            onkeydown="if(event.key==='Enter') sendChat()" />
+          <button class="prem-ai-btn" onclick="sendChat()" id="chatSendBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+          </button>
         </div>
-        <div class="hero-side-feat">
-          <div class="hero-side-feat-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div class="prem-chips">
+          <span class="prem-chips-label">Példák:</span>
+          <span class="prem-chip" onclick="useTip(this)">fáj a mellkasom</span>
+          <span class="prem-chip" onclick="useTip(this)">szédülök</span>
+          <span class="prem-chip" onclick="useTip(this)">bőrkiütés</span>
+          <span class="prem-chip" onclick="useTip(this)">fáj a térdem</span>
+        </div>
+        <div id="chatMessages" style="display:none;border-top:1px solid #eef2ff;margin-top:14px;padding-top:14px">
+          <div id="chatIdleState" style="display:none"></div>
+          <div id="chatLoadingState" style="display:none;padding:.75rem 0;text-align:center">
+            <div style="display:inline-flex;align-items:center;gap:.5rem">
+              <div class="ai-dots"><span></span><span></span><span></span></div>
+              <span style="font-size:13px;color:#6b7280;font-weight:600">Elemzés folyamatban…</span>
+            </div>
           </div>
-          <div class="hero-side-feat-label">Önre szabott<br>ajánlások</div>
+          <div id="chatResult" style="display:none;animation:fadeUp .4s ease"></div>
+        </div>
+        <div class="prem-disclaimer">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Az AI nem helyettesíti az orvosi diagnózist
+          <button onclick="resetChat()" id="chatResetBtn" style="display:none;background:none;border:none;cursor:pointer;font-size:11px;color:#94a3b8;font-weight:600;margin-left:8px;text-decoration:underline">Új keresés</button>
         </div>
       </div>
 
+      <!-- Elválasztó -->
+      <div class="prem-sep">
+        <div class="prem-sep-line"></div>
+        <span class="prem-sep-badge">VAGY</span>
+        <div class="prem-sep-line"></div>
+      </div>
 
-    <style>
-      .ai-chip-ex {
-        background:#fff;border:1.5px solid #e8edf8;border-radius:8px;
-        padding:7px 12px;font-size:13px;font-weight:500;color:#374151;
-        cursor:pointer;transition:all .15s;font-family:'Nunito Sans',sans-serif;
-        white-space:nowrap;width:100%;text-align:left;
-      }
-      .ai-chip-ex:hover{border-color:#283897;color:#283897;background:#eef2ff;}
-      .ai-tip {
-        color:#283897;font-weight:600;cursor:pointer;
-        text-decoration:none;border-bottom:1px dashed #c7d2f5;
-        transition:color .15s;
-      }
-      .ai-tip:hover{color:#16a34a;border-bottom-color:#16a34a;}
-      @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-      .result-spec-card{
-        background:linear-gradient(135deg,#eef2ff,#f0f4ff);
-        border:1.5px solid #c7d2f5;border-radius:16px;padding:14px;margin-bottom:10px;
-      }
-      .result-spec-card .spec-name{
-        font-family:'Nunito',sans-serif;font-size:17px;font-weight:900;color:#283897;
-      }
-      .result-ai-text{
-        font-size:13.5px;color:#374151;line-height:1.65;margin-bottom:12px;
-        background:#fff;border-radius:12px;padding:12px 14px;border:1.5px solid #e8edf8;
-      }
-      .result-cta-btn{
-        display:flex;align-items:center;justify-content:space-between;
-        background:linear-gradient(135deg,#283897,#1e2d7d);border-radius:12px;
-        padding:12px 16px;text-decoration:none;
-        box-shadow:0 4px 14px rgba(40,56,151,.28);transition:all .2s;
-      }
-      .result-cta-btn:hover{box-shadow:0 6px 20px rgba(40,56,151,.38);transform:translateY(-1px)}
-    </style>
+      <!-- Hagyományos kereső -->
+      <div class="prem-classic">
+        <div class="prem-label">
+          <div class="prem-label-icon gray">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div>
+            <div class="prem-label-title">Hagyományos keresés</div>
+            <div class="prem-label-sub">Keresés orvos, szakterület vagy helyszín alapján</div>
+          </div>
+        </div>
+        <div class="prem-classic-row">
+          <div class="prem-classic-fields">
+            <div class="prem-field">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <input id="heroClassicSpec" type="text" placeholder="Szakterület vagy orvos neve" class="prem-field-input" onkeydown="if(event.key==='Enter') heroClassicSearch()" />
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="prem-field">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input id="heroClassicCity" type="text" placeholder="Helyszín (pl. Budapest, II. kerület)" class="prem-field-input" onkeydown="if(event.key==='Enter') heroClassicSearch()" />
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <button class="prem-search-btn" onclick="heroClassicSearch()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Keresés
+          </button>
+        </div>
+        <div class="prem-filters">
+          <span class="prem-filter"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Ma elérhető</span>
+          <span class="prem-filter"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Online konzultáció</span>
+          <span class="prem-filter"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Magánrendelés</span>
+          <span class="prem-filter"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>TB támogatott</span>
+        </div>
+      </div>
 
-    <script>
+    </div>
+
+    <!-- STAT BAR -->
+    <div class="new-hero-statbar">
+      <div class="new-hero-stat">
+        <div class="new-hero-stat-icon" style="background:#dbeafe"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div><div class="new-hero-stat-num">12 000+ orvos</div><div class="new-hero-stat-label">ellenőrzött szakemberek az egész országban</div></div>
+      </div>
+      <div class="new-hero-stat">
+        <div class="new-hero-stat-icon" style="background:#d1fae5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div><div class="new-hero-stat-num">1 800+ klinika</div><div class="new-hero-stat-label">megbízható intézmények széles választéka</div></div>
+      </div>
+      <div class="new-hero-stat">
+        <div class="new-hero-stat-icon" style="background:#fef3c7"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="new-hero-stat-num">2 perc alatt</div><div class="new-hero-stat-label">időpontfoglalás gyorsan és egyszerűen</div></div>
+      </div>
+      <div class="new-hero-stat">
+        <div class="new-hero-stat-icon" style="background:#ede9fe"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="new-hero-stat-num">100% biztonság</div><div class="new-hero-stat-label">személyes adatok védelme, GDPR megfelelés</div></div>
+      </div>
+    </div>
+
+    <!-- FEATURE SOR -->
+    <div class="new-hero-feats">
+      <div class="new-hero-feat"><div class="new-hero-feat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div><div class="new-hero-feat-t">Adatbiztonság</div><div class="new-hero-feat-s">Az adatait biztonságban kezeljük</div></div></div>
+      <div class="new-hero-feat"><div class="new-hero-feat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2" stroke-linecap="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div><div class="new-hero-feat-t">Független értékelések</div><div class="new-hero-feat-s">Valódi páciensek visszajelzései</div></div></div>
+      <div class="new-hero-feat"><div class="new-hero-feat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><div class="new-hero-feat-t">Gyors visszaigazolás</div><div class="new-hero-feat-s">Időpontja perceken belül biztosított</div></div></div>
+      <div class="new-hero-feat"><div class="new-hero-feat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div><div class="new-hero-feat-t">Ügyfélszolgálat</div><div class="new-hero-feat-s">Segítünk, ha kérdése van</div></div></div>
+    </div>
+
+  </div>
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       const chatInputEl = document.getElementById('chatInput');
 
@@ -3699,6 +3658,7 @@ footer {
       async function sendChat() {
         const q = chatInputEl.value.trim();
         if (!q) return;
+        document.getElementById('chatMessages').style.display = '';
         document.getElementById('chatIdleState').style.display = 'none';
         document.getElementById('chatLoadingState').style.display = '';
         document.getElementById('chatResult').style.display = 'none';
@@ -3920,8 +3880,7 @@ footer {
     }); // DOMContentLoaded
     </script>
 
-  </div>
-
+</div>
 <!-- ── NÉPSZERŰ SZAKTERÜLETEK ── -->
 <section class="popular-specs-section">
   <div class="popular-specs-inner">
@@ -4692,6 +4651,436 @@ html { scroll-behavior: smooth; }
 }
 
 
+/* ══════════════════════════════════
+   ÚJ HERO – pixel-perfect
+══════════════════════════════════ */
+.hero {
+  background: #fff !important;
+  padding-top: 64px;
+  padding-bottom: 0;
+  position: relative;
+}
+.new-hero-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2.5rem 4% 0;
+  position: relative;
+}
+
+/* CÍM */
+.new-hero-top { margin-bottom: 2rem; max-width: 520px; }
+.new-hero-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 900; color: #0f172a;
+  line-height: 1.2; letter-spacing: -0.02em;
+}
+.new-hero-accent {
+  color: #1e3a8a;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  display: block;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.new-hero-plus { font-size: .45em; vertical-align: super; color: #1e3a8a; }
+.new-hero-desc { font-size: 13px; color: #6b7280; margin-top: 10px; line-height: 1.6; }
+
+/* RATING BADGE – jobb felső */
+.new-hero-rating {
+  position: absolute; top: 2.5rem; right: 4%;
+  background: #fff; border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(40,56,151,0.12);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+  z-index: 10;
+}
+.new-hero-rating-avatars { display: flex; }
+.new-hero-rating-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid #fff; margin-left: -8px;
+}
+.new-hero-rating-avatars .new-hero-rating-av:first-child { margin-left: 0; }
+.new-hero-rating-score { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #f59e0b; }
+.new-hero-rating-count { font-size: 12px; font-weight: 700; color: #0f172a; }
+.new-hero-rating-sub { font-size: 11px; color: #9aa5c4; line-height: 1.4; }
+
+/* ══ PRÉMIUM KERESŐSÁV ══ */
+.prem-search {
+  display: grid;
+  grid-template-columns: 1fr 52px 1fr;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 12px 40px rgba(15,30,100,0.09);
+  border: 1px solid #e8ecf6;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+/* AI & Classic oldalak */
+.prem-ai { padding: 26px 28px; }
+.prem-classic { padding: 26px 28px; }
+
+/* Label fejléc */
+.prem-label {
+  display: flex; align-items: center; gap: 11px; margin-bottom: 16px;
+}
+.prem-label-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: #2d4fd6;
+  display: flex; align-items: center; justify-content: center;
+}
+.prem-label-icon.gray {
+  background: #f1f5f9;
+}
+.prem-label-title {
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+  color: #0f172a; letter-spacing: -0.01em;
+}
+.prem-label-sub { font-size: 12px; color: #94a3b8; margin-top: 1px; }
+
+/* AI input mező */
+.prem-ai-field {
+  display: flex; align-items: center; gap: 8px;
+  background: #f8faff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 13px 13px 13px 18px;
+  transition: all .2s;
+}
+.prem-ai-field:focus-within {
+  border-color: #2d4fd6;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(45,79,214,0.07);
+}
+.prem-ai-input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14.5px; color: #1e293b;
+}
+.prem-ai-input::placeholder { color: #a8b4cc; }
+
+/* Kék csillag gomb */
+.prem-ai-btn {
+  width: 42px; height: 42px; border-radius: 11px; border: none; flex-shrink: 0;
+  background: #2d4fd6;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45,79,214,0.35);
+  transition: all .2s;
+}
+.prem-ai-btn:hover { background: #1e3db8; transform: scale(1.05); }
+.prem-ai-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* Chip-ek */
+.prem-chips {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 14px;
+}
+.prem-chips-label {
+  font-size: 11px; color: #94a3b8; font-weight: 600;
+}
+.prem-chip {
+  padding: 5px 13px;
+  background: #fff; border: 1.5px solid #e2e8f0;
+  border-radius: 100px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 12px; color: #475569;
+  cursor: pointer; transition: all .15s;
+}
+.prem-chip:hover {
+  border-color: #2d4fd6; color: #2d4fd6; background: #f0f4ff;
+}
+
+/* Disclaimer */
+.prem-disclaimer {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: #94a3b8; margin-top: 14px;
+}
+
+/* Elválasztó VAGY */
+.prem-sep {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 0;
+  background: #f8faff;
+  border-left: 1px solid #edf0f7;
+  border-right: 1px solid #edf0f7;
+}
+.prem-sep-line { flex: 1; width: 1px; background: #e2e8f0; }
+.prem-sep-badge {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #fff; border: 1.5px solid #e2e8f0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 9px; font-weight: 800; color: #94a3b8;
+  letter-spacing: .05em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  flex-shrink: 0; margin: 8px 0;
+}
+
+/* Classic mezők + gomb sor */
+.prem-classic-row {
+  display: flex; align-items: stretch; gap: 10px;
+}
+.prem-classic-fields { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.prem-field {
+  display: flex; align-items: center; gap: 10px;
+  background: #f8faff; border: 1.5px solid #e2e8f0;
+  border-radius: 14px; padding: 13px 16px;
+  transition: all .2s; cursor: text;
+}
+.prem-field:focus-within {
+  border-color: #2d4fd6; background: #fff;
+  box-shadow: 0 0 0 4px rgba(45,79,214,0.07);
+}
+.prem-field-input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px; color: #1e293b;
+}
+.prem-field-input::placeholder { color: #a8b4cc; }
+
+/* Narancs keresés gomb */
+.prem-search-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+  padding: 0 20px;
+  background: #f97316; color: #fff; border: none; border-radius: 14px;
+  font-family: 'Nunito', sans-serif; font-size: 13.5px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0; white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+  transition: all .2s; min-width: 100px;
+}
+.prem-search-btn:hover { background: #ea6c0a; transform: translateY(-1px); }
+
+/* Filter chipek */
+.prem-filters {
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px;
+}
+.prem-filter {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px;
+  background: #f8faff; border: 1.5px solid #e2e8f0;
+  border-radius: 9px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 11.5px; color: #475569;
+  cursor: pointer; transition: all .15s;
+}
+.prem-filter:hover { background: #f0f4ff; color: #2d4fd6; border-color: #c7d2f5; }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .prem-search { grid-template-columns: 1fr; overflow: hidden; }
+  .prem-sep { flex-direction: row; padding: 10px 20px; border: none; border-top: 1px solid #edf0f7; border-bottom: 1px solid #edf0f7; background: #fff; }
+  .prem-sep-line { flex: 1; height: 1px; width: auto; }
+  .prem-classic-row { flex-direction: column; }
+  .prem-search-btn { min-width: auto; padding: 13px 20px; }
+}
+
+/* ══ STAT BAR ══ */
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  border: 1px solid #e8edf8;
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  margin-bottom: 1.5rem;
+  overflow: visible;
+  position: relative;
+}
+
+/* ══ STAT BAR ══ */
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  border: 1px solid #e8edf8;
+  display: grid;
+  grid-template-columns: 1fr 56px 1fr;
+  margin-bottom: 1.5rem;
+  overflow: visible;
+  position: relative;
+}
+
+/* AI oldal */
+.new-hero-ai-side { padding: 24px 28px; }
+.new-hero-classic-side { padding: 24px 28px; }
+
+.new-hero-section-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.new-hero-section-icon {
+  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.new-hero-section-icon.blue { background: #eef2ff; }
+.new-hero-section-icon.gray { background: #f4f6fb; }
+.new-hero-section-title {
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; color: #0f172a;
+}
+.new-hero-section-sub { font-size: 12px; color: #9aa5c4; margin-top: 2px; }
+
+/* AI input – nagy, tiszta mező */
+.new-hero-ai-inputrow {
+  display: flex; align-items: center; gap: 10px;
+  background: #f8faff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px 14px 14px 18px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.new-hero-ai-inputrow:focus-within {
+  border-color: #3b5bdb;
+  box-shadow: 0 0 0 3px rgba(59,91,219,0.08);
+  background: #fff;
+}
+.new-hero-ai-input {
+  flex: 1; border: none; background: transparent;
+  font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: #374151; outline: none;
+}
+.new-hero-ai-input::placeholder { color: #a0aec0; }
+
+/* Csillag gomb – kék, kerekített */
+.new-hero-ai-sendbtn {
+  width: 44px; height: 44px; border-radius: 12px; border: none; flex-shrink: 0;
+  background: #3b5bdb;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .2s, transform .15s;
+  box-shadow: 0 4px 12px rgba(59,91,219,0.3);
+}
+.new-hero-ai-sendbtn:hover { background: #2f4fc0; transform: scale(1.05); }
+
+/* Chips */
+.new-hero-chips-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 14px;
+}
+.new-hero-chip-label {
+  font-size: 11px; color: #9aa5c4; font-weight: 600; white-space: nowrap; margin-right: 2px;
+}
+.new-hero-chip {
+  padding: 5px 14px; background: #fff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 100px; font-size: 12px; color: #374151; cursor: pointer;
+  transition: all .15s; font-family: 'Nunito Sans', sans-serif;
+}
+.new-hero-chip:hover { background: #eef2ff; color: #3b5bdb; border-color: #c7d2f5; }
+
+/* Disclaimer */
+.new-hero-disclaimer {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: #aab0c0; margin-top: 14px;
+}
+
+/* VAGY – kerek badge középen */
+.new-hero-vagy {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 8px;
+  border-left: 1px solid #f0f4ff; border-right: 1px solid #f0f4ff;
+  position: relative;
+}
+.new-hero-vagy-line { flex: 1; width: 1px; background: #eef2ff; }
+.new-hero-vagy-badge {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #fff; border: 1.5px solid #e8edf8;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; color: #9aa5c4;
+  letter-spacing: .06em; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Hagyományos – dropdown stílus + gomb egymás mellett */
+.new-hero-classic-inputs {
+  display: flex; align-items: stretch; gap: 10px;
+}
+.new-hero-classic-fields { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.new-hero-dropdown {
+  display: flex; align-items: center; gap: 10px;
+  border: 1.5px solid #e8edf8; border-radius: 12px;
+  padding: 12px 14px; background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+  cursor: text;
+}
+.new-hero-dropdown:focus-within {
+  border-color: #3b5bdb;
+  box-shadow: 0 0 0 3px rgba(59,91,219,0.07);
+}
+.new-hero-dropdown-input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; color: #374151;
+}
+.new-hero-dropdown-input::placeholder { color: #a0aec0; }
+
+/* Narancs Keresés gomb – jobbra, teljes magasság */
+.new-hero-search-btn {
+  background: #f97316; color: #fff; border: none;
+  border-radius: 12px; padding: 0 22px;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(249,115,22,0.35);
+  transition: background .2s, transform .15s;
+  white-space: nowrap; flex-shrink: 0;
+  min-height: 100px;
+}
+.new-hero-search-btn:hover { background: #ea6c0a; transform: translateY(-1px); }
+
+/* Filter chipek */
+.new-hero-filter-row {
+  display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px;
+}
+.new-hero-filter {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 11px; background: #f8faff;
+  border: 1.5px solid #e8edf8;
+  border-radius: 8px; font-size: 11.5px; color: #374151; cursor: pointer;
+  transition: all .15s; font-family: 'Nunito Sans', sans-serif;
+}
+.new-hero-filter:hover { background: #eef2ff; color: #3b5bdb; border-color: #c7d2f5; }
+
+/* STAT BAR */
+.new-hero-statbar {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 1rem;
+}
+.new-hero-stat {
+  display: flex; align-items: center; gap: 12px;
+  background: #fff; border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 2px 12px rgba(40,56,151,0.07);
+  border: 1px solid #f0f4ff;
+}
+.new-hero-stat-icon {
+  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.new-hero-stat-num { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #0f172a; }
+.new-hero-stat-label { font-size: 11px; color: #9aa5c4; margin-top: 2px; line-height: 1.4; }
+
+/* FEATURE SOR */
+.new-hero-feats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; border-top: 1px solid #f0f4ff;
+  padding: 1rem 0;
+}
+.new-hero-feat {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 12px;
+  border-right: 1px solid #f0f4ff;
+}
+.new-hero-feat:last-child { border-right: none; }
+.new-hero-feat-ico {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: #eef2ff; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.new-hero-feat-t { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: #0f172a; }
+.new-hero-feat-s { font-size: 11px; color: #9aa5c4; margin-top: 1px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .new-hero-searchbar { grid-template-columns: 1fr; overflow: hidden; }
+  .new-hero-vagy { flex-direction: row; padding: 10px 20px; border: none; border-top: 1px solid #f0f4ff; border-bottom: 1px solid #f0f4ff; }
+  .new-hero-vagy-line { flex: 1; height: 1px; width: auto; }
+  .new-hero-classic-inputs { flex-direction: column; }
+  .new-hero-search-btn { min-height: auto; padding: 13px 20px; }
+  .new-hero-statbar { grid-template-columns: repeat(2, 1fr); }
+  .new-hero-feats { grid-template-columns: repeat(2, 1fr); }
+  .new-hero-rating { display: none; }
+}
+
 /* ── SCROLL ANIMATIONS ── */
 [data-anim] {
   opacity: 0;
@@ -4734,6 +5123,23 @@ function heroInlineSearch() {
   if (spec) params.set('specialty', spec);
   if (city) params.set('city', city);
   window.location.href = 'talalatok.html?' + params.toString();
+}
+
+function heroClassicSearch() {
+  const spec = (document.getElementById('heroClassicSpec')?.value || '').trim();
+  const city = (document.getElementById('heroClassicCity')?.value || '').trim();
+  const params = new URLSearchParams();
+  if (spec) params.set('specialty', spec);
+  if (city) params.set('city', city);
+  window.location.href = 'talalatok.html?' + params.toString();
+}
+
+function useTip(el) {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  input.value = el.textContent.trim();
+  input.focus();
+  if (typeof sendChat === 'function') sendChat();
 }
 
 function doClassicSearch() {
