@@ -714,6 +714,7 @@ nav.one-row .nav-hamburger { display: flex; }
   padding: 10px 0;
   box-shadow: 0 2px 10px rgba(40,56,151,0.06);
   width: fit-content;
+  margin-top: 1.25rem;
 }
 .hero-top-stat {
   display: flex;
@@ -2712,33 +2713,26 @@ nav.one-row .nav-hamburger { display: flex; }
   /* Stat badge-ek */
   .hero-stat-bar { padding: 0; }
   .hero-top-stats {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .hero-top-stat {
-    width: 100% !important;
-    height: auto !important;
-    padding: 10px 12px;
-    border-radius: 12px;
+    display: flex !important;
     flex-direction: row;
-    gap: 8px;
-    justify-content: flex-start;
-  }
-  .hero-top-stat-num { font-size: 15px; }
-  .hero-top-stat-label { font-size: 11px; }
-  .hero-stat-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .hero-stat-card {
-    background: rgba(255,255,255,0.08);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100% !important;
+    margin-top: 1rem;
     border-radius: 12px;
-    padding: 10px;
-    align-items: flex-start;
   }
-  .hero-divider-text { display: none; }
+  .hero-top-stats::-webkit-scrollbar { display: none; }
+  .hero-top-stat {
+    flex: 1;
+    min-width: 0;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .hero-top-stat-num { font-size: 14px; }
+  .hero-top-stat-label { font-size: 11px; }
+  .hero-top-stat-icon { width: 34px; height: 34px; border-radius: 9px; }
 
   /* ── AI CHAT WIDGET ── */
   .ai-chat-widget {
@@ -2877,10 +2871,15 @@ nav.one-row .nav-hamburger { display: flex; }
   top: 64px; left: 0; right: 0; bottom: 0;
   background: rgba(255,255,255,0.98);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   z-index: 190;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 640px) {
+  .mobile-drawer { top: 58px; }
 }
 .mobile-drawer.open { transform: translateX(0); }
 .mobile-drawer-inner {
@@ -3554,6 +3553,7 @@ footer {
         </div>
       </li>
       <li><a href="tudastar.html" class="nav-link-highlight">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html" class="nav-link-highlight">Vizsgálatok</a></li>
       <li>
         <a href="#">Kapcsolat
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
@@ -3567,11 +3567,11 @@ footer {
 
     <div class="nav-actions">
       <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
-      <a href="#" class="btn-nav-cta" style="position:static;width:auto;margin-left:8px;">Legyen Ön is a partnerünk</a>
+      <a href="register.html" class="btn-nav-cta" style="position:static;width:auto;margin-left:8px;">Legyen Ön is a partnerünk</a>
     </div>
 
     <!-- Hamburger (csak mobilon látszik) -->
-    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" style="display:none;">
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
       <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -3587,10 +3587,11 @@ footer {
     <a href="#" class="mobile-nav-item">Orvosok</a>
     <a href="#" class="mobile-nav-item">Klinikák</a>
     <a href="tudastar.html" class="mobile-nav-item" style="color:#283897;font-weight:700;">Tudástár A–Z</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#283897;font-weight:700;">Vizsgálatok</a>
     <a href="#" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
-    <a href="#" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
+    <a href="register.html" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
   </div>
 </div>
 
@@ -3603,7 +3604,19 @@ footer {
       <!-- BAL: cím + feature lista + stat sor -->
       <div class="hero-left">
 
-        <!-- Stat pill sor a cím felett -->
+        <!-- Badge -->
+        <!-- Cím -->
+        <h1 class="hero-title-new">
+          Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
+        </h1>
+
+        <!-- Alcím -->
+        <p class="hero-desc-new">
+          Írja le tüneteit, AI asszisztensünk elemzi,<br>
+          és segít megtalálni a legmegfelelőbb szakorvost az Ön számára.
+        </p>
+
+        <!-- Stat pill sor a cím alatt -->
         <div class="hero-top-stats">
           <div class="hero-top-stat">
             <div class="hero-top-stat-icon">
@@ -3633,18 +3646,6 @@ footer {
             </div>
           </div>
         </div>
-
-        <!-- Badge -->
-        <!-- Cím -->
-        <h1 class="hero-title-new">
-          Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
-        </h1>
-
-        <!-- Alcím -->
-        <p class="hero-desc-new">
-          Írja le tüneteit, AI asszisztensünk elemzi,<br>
-          és segít megtalálni a legmegfelelőbb szakorvost az Ön számára.
-        </p>
 
         <!-- Elválasztó + szöveg -->
         <div class="hero-divider-row">
@@ -4958,6 +4959,63 @@ function useExample(btn) {
   if (ex) ex.style.display = 'none';
   sendChat();
 }
+</script>
+
+<script>
+// ── HAMBURGER MENU ──
+function toggleMobileMenu() {
+  const drawer = document.getElementById('mobileDrawer');
+  const toggle = document.getElementById('mobileToggle');
+  const icon   = document.getElementById('hamburgerIcon');
+  const isOpen = drawer.classList.contains('open');
+
+  if (isOpen) {
+    drawer.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    // vissza hamburger ikon
+    icon.innerHTML = `
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>`;
+    document.body.style.overflow = '';
+  } else {
+    drawer.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    // X ikon
+    icon.innerHTML = `
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>`;
+    document.body.style.overflow = 'hidden'; // háttér scroll tiltása
+  }
+}
+
+// Kívülre kattintva bezár
+document.addEventListener('click', function(e) {
+  const drawer = document.getElementById('mobileDrawer');
+  const toggle = document.getElementById('mobileToggle');
+  if (!drawer || !toggle) return;
+  if (drawer.classList.contains('open') &&
+      !drawer.contains(e.target) &&
+      !toggle.contains(e.target)) {
+    toggleMobileMenu();
+  }
+});
+
+// Escape gomb
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const drawer = document.getElementById('mobileDrawer');
+    if (drawer && drawer.classList.contains('open')) toggleMobileMenu();
+  }
+});
+
+// Drawer linkre kattintva bezár
+document.querySelectorAll('.mobile-nav-item, .mobile-nav-cta').forEach(function(link) {
+  link.addEventListener('click', function() {
+    const drawer = document.getElementById('mobileDrawer');
+    if (drawer && drawer.classList.contains('open')) toggleMobileMenu();
+  });
+});
 </script>
 
 </body>
