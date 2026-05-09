@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await db.auth.getSession();
   if (!session) { window.location.replace('/login.html?redirect=' + encodeURIComponent(window.location.pathname)); return; }
   const { data: profile } = await db.from('user_profiles').select('role,full_name').eq('id', session.user.id).single();
-  if (!profile || profile.role !== 'superadmin') {
-    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f0f4ff;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2><p style="color:#6b7280;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p><a href="/login.html" style="background:#283897;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza a bejelentkezéshez</a></div>';
+  if (!profile || !['superadmin','doctor_admin'].includes(profile.role)) {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f0f4ff;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2><p style="color:#6b7280;margin:0">Ez az oldal csak orvos admin jogosultsággal érhető el.</p><a href="/login.html" style="background:#283897;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza a bejelentkezéshez</a></div>';
     return;
   }
   document.getElementById('appContent').style.display = '';
