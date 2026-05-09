@@ -122,7 +122,16 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
 .badge-free { background: #ecfdf5; color: #065f46; }
 .badge-selected { background: #283897; color: #fff; }
 
-/* Claimed doctor preview */
+/* Role cards */
+.role-card {
+  border: 2px solid #e8edf8; border-radius: 14px; padding: 14px 12px;
+  cursor: pointer; transition: all .2s; text-align: center; background: #fff;
+}
+.role-card:hover { border-color: #283897; background: #f0f4ff; }
+.role-card.active { border-color: #283897; background: #eef2ff; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
+.role-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+.role-card-label { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 3px; }
+.role-card-sub { font-size: 11px; color: #6b7280; }
 .doctor-preview {
   border: 2px solid #283897; border-radius: 14px; padding: 14px;
   background: #eef2ff; margin-bottom: 1rem;
@@ -197,8 +206,26 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
       <span id="p1ErrorText"></span>
     </div>
 
+    <!-- Szerepkör választó -->
     <div class="form-group">
-      <label class="lbl">Teljes neve</label>
+      <label class="lbl">Ön milyen minőségben regisztrál?</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="role-card active" id="roleCardDoctor" onclick="selectRegRole('doctor_admin')">
+          <div class="role-card-icon" style="background:rgba(40,56,151,0.1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="role-card-label">Orvos</div>
+          <div class="role-card-sub">Saját profil kezelése</div>
+        </div>
+        <div class="role-card" id="roleCardClinic" onclick="selectRegRole('clinic_admin')">
+          <div class="role-card-icon" style="background:rgba(0,196,180,0.1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="role-card-label">Klinika</div>
+          <div class="role-card-sub">Rendelő kezelése</div>
+        </div>
+      </div>
+    </div>
       <div class="input-wrap">
         <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <input type="text" id="fullName" placeholder="Dr. Kovács János" autocomplete="name">
@@ -331,6 +358,21 @@ let currentUser = null;
 let selectedDoctor = null;
 let searchTimer = null;
 let pwStates = {};
+let selectedRole = 'doctor_admin';
+
+function selectRegRole(role) {
+  selectedRole = role;
+  document.getElementById('roleCardDoctor').classList.toggle('active', role === 'doctor_admin');
+  document.getElementById('roleCardClinic').classList.toggle('active', role === 'clinic_admin');
+  // Panel 2 heading frissítése
+  if (role === 'clinic_admin') {
+    document.querySelector('#panel2 .heading h2').textContent = 'Klinika adatlap átvétele';
+    document.querySelector('#panel2 .heading p').textContent = 'Ha klinikájuk már szerepel az adatbázisunkban, keresse meg és vegye át. Ez a lépés kihagyható.';
+  } else {
+    document.querySelector('#panel2 .heading h2').textContent = 'Adatlap átvétele';
+    document.querySelector('#panel2 .heading p').textContent = 'Ha már szerepel az adatbázisunkban, keresse meg a nevét és vegye át adatlapját. Ez a lépés kihagyható.';
+  }
+}
 
 function initials(name) {
   return (name || '').replace('Dr. ','').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
@@ -398,7 +440,7 @@ async function handleRegister() {
     const { data, error } = await db.auth.signUp({
       email,
       password: pw,
-      options: { data: { full_name: name, role: 'doctor_admin' } }
+      options: { data: { full_name: name, role: selectedRole } }
     });
 
     if (error) {
@@ -411,9 +453,9 @@ async function handleRegister() {
 
     currentUser = data.user;
 
-    // user_profiles frissítése névvel
+    // user_profiles frissítése névvel és szerepkörrel
     if (currentUser) {
-      await db.from('user_profiles').update({ full_name: name }).eq('id', currentUser.id);
+      await db.from('user_profiles').update({ full_name: name, role: selectedRole }).eq('id', currentUser.id);
     }
 
     setStep(2);
