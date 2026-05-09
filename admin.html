@@ -412,12 +412,7 @@ select.td-select:focus{border-color:var(--brand)}
         <div class="table-card" style="margin-bottom:0;animation-delay:.35s">
           <div class="tc-header"><div class="tc-title">🕐 Legutóbbi aktivitás</div></div>
           <div class="activity-list" id="activityList">
-            <div class="act-item"><div class="act-dot" style="background:#22c55e"></div><div class="act-text"><strong>Dr. Nagy Katalin</strong> csatlakozott</div><div class="act-time">2 p</div></div>
-            <div class="act-item"><div class="act-dot" style="background:#283897"></div><div class="act-text">Új foglalás: <strong>Kovács Péter</strong></div><div class="act-time">8 p</div></div>
-            <div class="act-item"><div class="act-dot" style="background:#f59e0b"></div><div class="act-text"><strong>Budai Klinika</strong> adatai frissítve</div><div class="act-time">23 p</div></div>
-            <div class="act-item"><div class="act-dot" style="background:#0d9488"></div><div class="act-text">Új vélemény: <strong>4.9 ★</strong></div><div class="act-time">1 ó</div></div>
-            <div class="act-item"><div class="act-dot" style="background:#ef4444"></div><div class="act-text"><strong>Dr. Tóth Béla</strong> deaktiválva</div><div class="act-time">2 ó</div></div>
-            <div class="act-item"><div class="act-dot" style="background:#8b5cf6"></div><div class="act-text">Új szakterület: <strong>Allergológia</strong></div><div class="act-time">3 ó</div></div>
+            <div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:13px">Még nincs aktivitás</div>
           </div>
         </div>
       </div>
@@ -499,6 +494,36 @@ select.td-select:focus{border-color:var(--brand)}
 
     <!-- ══════════════ USERS ══════════════ -->
     <div data-tab="users">
+      <!-- Meghívó panel -->
+      <div class="table-card" style="margin-bottom:1rem">
+        <div class="tc-header">
+          <div class="tc-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Felhasználó meghívása
+          </div>
+        </div>
+        <div style="padding:1rem 1.25rem;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div style="flex:1;min-width:220px">
+            <label style="font-size:12px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px">Email cím</label>
+            <input id="inviteEmail" type="email" class="form-input" placeholder="pl. doktor@korhaz.hu" style="width:100%">
+          </div>
+          <div style="min-width:160px">
+            <label style="font-size:12px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px">Szerepkör</label>
+            <select id="inviteRole" class="form-input" style="width:100%">
+              <option value="doctor_admin">Orvos admin</option>
+              <option value="clinic_admin">Klinika admin</option>
+              <option value="superadmin">Szuperadmin</option>
+              <option value="patient">Páciens</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="inviteUser()" id="inviteBtn" style="height:40px;white-space:nowrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Meghívó küldése
+          </button>
+        </div>
+        <div id="inviteMsg" style="display:none;padding:.5rem 1.25rem 1rem;font-size:13px;font-weight:600"></div>
+      </div>
+
       <div class="info-box" style="margin-bottom:1rem">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         A szerepkörök megváltoztatása azonnal érvényes. A szuperadmin hozzáféréssel rendelkezők minden adatot láthatnak és szerkeszthetnek.
@@ -990,8 +1015,67 @@ async function toggleDoctor(id,isActive){
   await db.from('doctors').update({is_active:!isActive}).eq('id',id);
   loadDoctors();loadStats();
 }
+
 async function changeRole(id,role){
-  await db.from('user_profiles').update({role}).eq('id',id);
+  const{error}=await db.from('user_profiles').update({role}).eq('id',id);
+  if(error){alert('Hiba: '+error.message);}
+}
+
+async function inviteUser(){
+  const email=document.getElementById('inviteEmail').value.trim();
+  const role=document.getElementById('inviteRole').value;
+  const btn=document.getElementById('inviteBtn');
+  const msg=document.getElementById('inviteMsg');
+
+  if(!email){
+    msg.style.display='block';
+    msg.style.color='var(--red)';
+    msg.textContent='⚠ Kérlek add meg az email címet!';
+    document.getElementById('inviteEmail').focus();
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    msg.style.display='block';
+    msg.style.color='var(--red)';
+    msg.textContent='⚠ Érvénytelen email cím formátum.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Küldés...';
+  msg.style.display='none';
+
+  try {
+    // Meghívó küldése Supabase Admin API-n keresztül (service role kell, de anon key-jel is próbáljuk)
+    const{data,error}=await db.auth.admin?.inviteUserByEmail
+      ? await db.auth.admin.inviteUserByEmail(email,{data:{role}})
+      : {error:{message:'Admin API nem elérhető anon key-jel — Edge Function szükséges'}};
+
+    if(error){
+      // Fallback: edge function-ön keresztül
+      const{data:{session}}=await db.auth.getSession();
+      const res=await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/invite-user',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+session?.access_token},
+        body:JSON.stringify({email,role})
+      });
+      const result=await res.json();
+      if(!res.ok) throw new Error(result.error||'Ismeretlen hiba');
+    }
+
+    msg.style.display='block';
+    msg.style.color='var(--green)';
+    msg.textContent='✓ Meghívó sikeresen elküldve: '+email;
+    document.getElementById('inviteEmail').value='';
+    loadUsers();
+  } catch(e){
+    msg.style.display='block';
+    msg.style.color='var(--red)';
+    msg.textContent='⚠ Hiba: '+e.message;
+  } finally {
+    btn.disabled=false;
+    btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Meghívó küldése';
+  }
 }
 
 /* ═══ MODAL ═══ */
