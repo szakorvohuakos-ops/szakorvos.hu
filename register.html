@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regisztráció – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: #f0f4ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 48px rgba(40,56,151,0.12);
+  width: 100%;
+  max-width: 460px;
+  padding: 2.5rem 2rem;
+}
+
+/* Logo */
+.logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem; text-decoration: none; }
+.logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,#283897,#4042e2); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(40,56,151,0.3); }
+.logo-text { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #283897; }
+.logo-text em { color: #ff6b2b; font-style: normal; }
+
+/* Steps */
+.steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.step-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+  border: 2px solid #e8edf8; color: #9aa5c4; background: #fff;
+  transition: all .3s;
+}
+.step.active .step-circle { background: #283897; border-color: #283897; color: #fff; }
+.step.done .step-circle { background: #22c55e; border-color: #22c55e; color: #fff; }
+.step-label { font-size: 11px; font-weight: 700; color: #9aa5c4; white-space: nowrap; transition: color .3s; }
+.step.active .step-label { color: #283897; }
+.step.done .step-label { color: #22c55e; }
+.step-line { width: 48px; height: 2px; background: #e8edf8; margin-bottom: 18px; transition: background .3s; }
+.step-line.done { background: #22c55e; }
+
+/* Heading */
+.heading { margin-bottom: 1.5rem; }
+.heading h2 { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #0f172a; margin-bottom: 5px; }
+.heading p { font-size: 13.5px; color: #6b7280; line-height: 1.6; }
+
+/* Form */
+.form-group { margin-bottom: 1rem; }
+label.lbl { display: block; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.input-wrap { position: relative; }
+.input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9aa5c4; pointer-events: none; }
+input[type=text], input[type=email], input[type=password] {
+  width: 100%; border: 1.5px solid #e8edf8; border-radius: 12px;
+  padding: 12px 14px 12px 44px; font-size: 15px;
+  font-family: 'Nunito Sans', sans-serif; color: #0f172a;
+  outline: none; background: #fff; transition: border-color .2s, box-shadow .2s;
+}
+input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
+.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9aa5c4; padding: 4px; transition: color .2s; }
+.pw-toggle:hover { color: #283897; }
+.pw-hint { font-size: 11px; color: #9aa5c4; margin-top: 5px; }
+
+/* Buttons */
+.btn-primary {
+  width: 100%; background: linear-gradient(135deg,#283897,#4042e2);
+  color: #fff; border: none; border-radius: 12px; padding: 14px;
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 18px rgba(40,56,151,0.3); transition: all .2s;
+}
+.btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+.btn-secondary {
+  width: 100%; background: #f0f4ff; color: #283897;
+  border: 1.5px solid #e8edf8; border-radius: 12px; padding: 13px;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .2s; margin-top: 10px;
+}
+.btn-secondary:hover { border-color: #283897; background: #eef2ff; }
+
+/* Messages */
+.msg { border-radius: 11px; padding: .85rem 1rem; font-size: 13.5px; font-weight: 600; display: none; align-items: center; gap: 9px; margin-bottom: 1rem; animation: msgIn .2s ease; }
+@keyframes msgIn { from { opacity:0; transform:translateY(-4px) } to { opacity:1; transform:none } }
+.msg.show { display: flex; }
+.msg-error { background: #fee2e2; border: 1.5px solid #fca5a5; color: #b91c1c; }
+.msg-success { background: #ecfdf5; border: 1.5px solid #bbf7d0; color: #065f46; }
+.msg-info { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; }
+
+/* Doctor search results */
+.search-results { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+.doctor-card {
+  display: flex; align-items: center; gap: 12px;
+  border: 1.5px solid #e8edf8; border-radius: 12px; padding: 12px 14px;
+  cursor: pointer; transition: all .2s; background: #fff;
+}
+.doctor-card:hover { border-color: #283897; background: #f0f4ff; }
+.doctor-card.selected { border-color: #283897; background: #eef2ff; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
+.doctor-card.claimed { opacity: .5; cursor: not-allowed; }
+.doc-avatar {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #fff;
+  flex-shrink: 0;
+}
+.doc-info { flex: 1; min-width: 0; }
+.doc-name { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #0f172a; }
+.doc-sub { font-size: 12px; color: #6b7280; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px; flex-shrink: 0; }
+.badge-claimed { background: #fee2e2; color: #b91c1c; }
+.badge-free { background: #ecfdf5; color: #065f46; }
+.badge-selected { background: #283897; color: #fff; }
+
+/* Claimed doctor preview */
+.doctor-preview {
+  border: 2px solid #283897; border-radius: 14px; padding: 14px;
+  background: #eef2ff; margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 12px;
+}
+.preview-check { width: 32px; height: 32px; border-radius: 50%; background: #283897; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Spinner */
+.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-dark { width: 18px; height: 18px; border: 2.5px solid rgba(40,56,151,.2); border-top-color: #283897; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg) } }
+
+/* Bottom links */
+.bottom-links { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 1.5rem; font-size: 13px; color: #6b7280; }
+.bottom-links a { color: #283897; font-weight: 700; text-decoration: none; }
+.bottom-links a:hover { color: #ff6b2b; }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Success state */
+.success-state { text-align: center; padding: 1rem 0; }
+.success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#22c55e,#16a34a); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 8px 24px rgba(34,197,94,0.3); }
+.success-state h2 { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 8px; }
+.success-state p { font-size: 14px; color: #6b7280; line-height: 1.7; margin-bottom: 1.5rem; }
+
+/* Divider */
+.divider { display: flex; align-items: center; gap: 12px; margin: 1rem 0; color: #9aa5c4; font-size: 12px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e8edf8; }
+
+@media (max-width: 480px) { .card { padding: 2rem 1.5rem; } .step-line { width: 28px; } }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <a href="index.html" class="logo">
+    <div class="logo-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    </div>
+    <span class="logo-text">Szakorvos<em>.hu</em></span>
+  </a>
+
+  <!-- Steps -->
+  <div class="steps" id="stepsBar">
+    <div class="step active" id="step1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Fiók</div>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step" id="step2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Adatlap</div>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step" id="step3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Kész</div>
+    </div>
+  </div>
+
+  <!-- PANEL 1: Fiók létrehozása -->
+  <div class="panel active" id="panel1">
+    <div class="heading">
+      <h2>Hozzon létre fiókot</h2>
+      <p>Adja meg adatait a regisztrációhoz. Orvosként a következő lépésben átveheti meglévő adatlapját.</p>
+    </div>
+
+    <div class="msg msg-error" id="p1Error">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <span id="p1ErrorText"></span>
+    </div>
+
+    <div class="form-group">
+      <label class="lbl">Teljes neve</label>
+      <div class="input-wrap">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="fullName" placeholder="Dr. Kovács János" autocomplete="name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="lbl">Email cím</label>
+      <div class="input-wrap">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" id="regEmail" placeholder="doktor@email.hu" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="lbl">Jelszó</label>
+      <div class="input-wrap">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="regPassword" placeholder="Legalább 8 karakter" autocomplete="new-password">
+        <button type="button" class="pw-toggle" onclick="togglePw('regPassword','eyeReg')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeReg"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="pw-hint">Legalább 8 karakter, tartalmazzon számot és betűt</div>
+    </div>
+
+    <div class="form-group">
+      <label class="lbl">Jelszó megerősítése</label>
+      <div class="input-wrap">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="regPassword2" placeholder="Ismételje meg a jelszót" autocomplete="new-password">
+      </div>
+    </div>
+
+    <div style="margin-bottom:1.25rem">
+      <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#6b7280;cursor:pointer">
+        <input type="checkbox" id="acceptTerms" style="accent-color:#283897;margin-top:2px;flex-shrink:0">
+        Elfogadom az <a href="#" style="color:#283897;font-weight:600;margin:0 3px">Általános Szerződési Feltételeket</a> és az <a href="#" style="color:#283897;font-weight:600;margin:0 3px">Adatvédelmi irányelveket</a>
+      </label>
+    </div>
+
+    <button class="btn-primary" onclick="handleRegister()" id="btnRegister">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+      <span id="btnRegisterText">Fiók létrehozása</span>
+    </button>
+  </div>
+
+  <!-- PANEL 2: Adatlap átvétele -->
+  <div class="panel" id="panel2">
+    <div class="heading">
+      <h2>Adatlap átvétele</h2>
+      <p>Ha már szerepel az adatbázisunkban, keresse meg a nevét és vegye át adatlapját. Ez a lépés kihagyható.</p>
+    </div>
+
+    <div class="msg msg-info" id="p2Info" style="display:flex">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Az adatlap átvétele után Ön kezelheti és szerkesztheti profilját.</span>
+    </div>
+    <div class="msg msg-error" id="p2Error">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      <span id="p2ErrorText"></span>
+    </div>
+
+    <!-- Keresés -->
+    <div class="form-group">
+      <label class="lbl">Keresse meg nevét</label>
+      <div class="input-wrap">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="doctorSearch" placeholder="Pl. Dr. Kovács" oninput="searchDoctors(this.value)" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="search-results" id="searchResults" style="display:none"></div>
+
+    <!-- Kiválasztott orvos preview -->
+    <div class="doctor-preview" id="selectedPreview" style="display:none">
+      <div class="preview-check">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#0f172a" id="previewName"></div>
+        <div style="font-size:12px;color:#283897;margin-top:2px" id="previewSub"></div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="claimProfile()" id="btnClaim" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/></svg>
+      <span id="btnClaimText">Adatlap átvétele</span>
+    </button>
+
+    <div class="divider">vagy</div>
+
+    <button class="btn-secondary" onclick="skipClaim()">
+      Kihagyom – nincs adatlapom
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+
+  <!-- PANEL 3: Siker -->
+  <div class="panel" id="panel3">
+    <div class="success-state">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Regisztráció sikeres!</h2>
+      <p id="successMsg">Fiókja létrejött. Ellenőrizze email fiókját a megerősítő linkért, majd lépjen be.</p>
+      <button class="btn-primary" onclick="window.location.href='login.html'" style="max-width:280px;margin:0 auto">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        Bejelentkezés
+      </button>
+    </div>
+  </div>
+
+  <div class="bottom-links" id="bottomLinks">
+    Már van fiókja? <a href="login.html">Bejelentkezés</a>
+    &nbsp;·&nbsp;
+    <a href="index.html">Főoldal</a>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const COLORS = ['#283897','#4042e2','#ff6b2b','#0d9488','#9333ea','#dc2626','#0369a1','#b45309'];
+
+let currentUser = null;
+let selectedDoctor = null;
+let searchTimer = null;
+let pwStates = {};
+
+function initials(name) {
+  return (name || '').replace('Dr. ','').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+}
+
+function togglePw(inputId, iconId) {
+  const inp = document.getElementById(inputId);
+  const ico = document.getElementById(iconId);
+  pwStates[inputId] = !pwStates[inputId];
+  inp.type = pwStates[inputId] ? 'text' : 'password';
+  ico.innerHTML = pwStates[inputId]
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+function setStep(n) {
+  [1,2,3].forEach(i => {
+    const s = document.getElementById('step'+i);
+    s.classList.remove('active','done');
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
+  });
+  [1,2].forEach(i => {
+    const l = document.getElementById('line'+i);
+    l.classList.toggle('done', i < n);
+  });
+  [1,2,3].forEach(i => {
+    document.getElementById('panel'+i).classList.toggle('active', i === n);
+  });
+  if (n === 3) document.getElementById('bottomLinks').style.display = 'none';
+}
+
+function showP1Error(msg) {
+  document.getElementById('p1ErrorText').textContent = msg;
+  document.getElementById('p1Error').classList.add('show');
+}
+function hideP1Error() { document.getElementById('p1Error').classList.remove('show'); }
+function showP2Error(msg) {
+  document.getElementById('p2ErrorText').textContent = msg;
+  document.getElementById('p2Error').classList.add('show');
+}
+
+// ── 1. lépés: Regisztráció ──────────────────────────────────────
+async function handleRegister() {
+  hideP1Error();
+  const name  = document.getElementById('fullName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pw    = document.getElementById('regPassword').value;
+  const pw2   = document.getElementById('regPassword2').value;
+  const terms = document.getElementById('acceptTerms').checked;
+
+  if (!name)  { showP1Error('Kérjük adja meg a teljes nevét.'); return; }
+  if (!email) { showP1Error('Kérjük adja meg az email címét.'); return; }
+  if (pw.length < 8) { showP1Error('A jelszó legalább 8 karakter kell legyen.'); return; }
+  if (pw !== pw2) { showP1Error('A két jelszó nem egyezik.'); return; }
+  if (!terms) { showP1Error('Kérjük fogadja el az általános feltételeket.'); return; }
+
+  const btn = document.getElementById('btnRegister');
+  const txt = document.getElementById('btnRegisterText');
+  btn.disabled = true;
+  txt.textContent = 'Regisztráció…';
+  btn.querySelector('svg').outerHTML = '<div class="spinner" style="display:inline-block"></div>';
+
+  try {
+    const { data, error } = await db.auth.signUp({
+      email,
+      password: pw,
+      options: { data: { full_name: name, role: 'doctor_admin' } }
+    });
+
+    if (error) {
+      btn.disabled = false;
+      txt.textContent = 'Fiók létrehozása';
+      if (error.message.includes('already registered')) showP1Error('Ez az email cím már regisztrálva van.');
+      else showP1Error(error.message);
+      return;
+    }
+
+    currentUser = data.user;
+
+    // user_profiles frissítése névvel
+    if (currentUser) {
+      await db.from('user_profiles').update({ full_name: name }).eq('id', currentUser.id);
+    }
+
+    setStep(2);
+
+  } catch(e) {
+    btn.disabled = false;
+    showP1Error('Hiba történt: ' + e.message);
+  }
+}
+
+// ── 2. lépés: Orvos keresés ──────────────────────────────────────
+async function searchDoctors(q) {
+  clearTimeout(searchTimer);
+  const results = document.getElementById('searchResults');
+  selectedDoctor = null;
+  document.getElementById('selectedPreview').style.display = 'none';
+  document.getElementById('btnClaim').style.display = 'none';
+
+  if (q.trim().length < 2) {
+    results.style.display = 'none';
+    return;
+  }
+
+  results.style.display = 'flex';
+  results.innerHTML = '<div style="padding:12px;display:flex;align-items:center;gap:8px;color:#9aa5c4;font-size:13px"><div class="spinner-dark"></div> Keresés…</div>';
+
+  searchTimer = setTimeout(async () => {
+    const { data, error } = await db
+      .from('doctors')
+      .select('id, name, title, admin_user_id, doctor_specialties(specialties(name)), doctor_clinics(clinics(name))')
+      .ilike('name', `%${q.trim()}%`)
+      .limit(8);
+
+    if (error || !data || !data.length) {
+      results.innerHTML = '<div style="padding:12px;color:#9aa5c4;font-size:13px;text-align:center">Nem található orvos ezzel a névvel</div>';
+      return;
+    }
+
+    results.innerHTML = data.map((d, i) => {
+      const spec  = d.doctor_specialties?.[0]?.specialties?.name || '';
+      const klinika = d.doctor_clinics?.[0]?.clinics?.name || '';
+      const sub   = [spec, klinika].filter(Boolean).join(' · ') || 'Nincs további adat';
+      const claimed = !!d.admin_user_id;
+      return `<div class="doctor-card ${claimed ? 'claimed' : ''}" onclick="${claimed ? '' : `selectDoctor('${d.id}','${d.name.replace(/'/g,"\\'")}','${sub.replace(/'/g,"\\'")}',${i})`}" data-id="${d.id}">
+        <div class="doc-avatar" style="background:${COLORS[i % COLORS.length]}">${initials(d.name)}</div>
+        <div class="doc-info">
+          <div class="doc-name">${d.name}</div>
+          <div class="doc-sub">${sub}</div>
+        </div>
+        <span class="doc-badge ${claimed ? 'badge-claimed' : 'badge-free'}">${claimed ? 'Foglalt' : 'Szabad'}</span>
+      </div>`;
+    }).join('');
+  }, 300);
+}
+
+function selectDoctor(id, name, sub, colorIdx) {
+  selectedDoctor = { id, name, sub };
+
+  // Kártyák kijelölése
+  document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
+  const card = document.querySelector(`[data-id="${id}"]`);
+  if (card) {
+    card.classList.add('selected');
+    card.querySelector('.doc-badge').className = 'doc-badge badge-selected';
+    card.querySelector('.doc-badge').textContent = 'Kiválasztva';
+  }
+
+  // Preview
+  document.getElementById('previewName').textContent = name;
+  document.getElementById('previewSub').textContent = sub;
+  document.getElementById('selectedPreview').style.display = 'flex';
+  document.getElementById('btnClaim').style.display = 'flex';
+  document.getElementById('p2Error').classList.remove('show');
+}
+
+async function claimProfile() {
+  if (!selectedDoctor || !currentUser) return;
+
+  const btn = document.getElementById('btnClaim');
+  const txt = document.getElementById('btnClaimText');
+  btn.disabled = true;
+  txt.textContent = 'Átvétel folyamatban…';
+
+  const { error } = await db
+    .from('doctors')
+    .update({ admin_user_id: currentUser.id, email: currentUser.email })
+    .eq('id', selectedDoctor.id)
+    .is('admin_user_id', null); // csak ha még szabad
+
+  if (error) {
+    btn.disabled = false;
+    txt.textContent = 'Adatlap átvétele';
+    showP2Error('Hiba az átvételkor: ' + error.message);
+    return;
+  }
+
+  document.getElementById('successMsg').textContent =
+    `Fiókja létrejött és az adatlapja (${selectedDoctor.name}) sikeresen átvéve! Ellenőrizze emailjét a megerősítő linkért.`;
+  setStep(3);
+}
+
+function skipClaim() {
+  document.getElementById('successMsg').textContent =
+    'Fiókja sikeresen létrejött! Ellenőrizze emailjét a megerősítő linkért, majd lépjen be.';
+  setStep(3);
+}
+
+// Ha már be van jelentkezve → átirányítás
+(async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) window.location.href = 'login.html';
+})();
+</script>
+</body>
+</html>
