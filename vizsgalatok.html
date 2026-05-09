@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Vizsgálatok és Kezelések A–Z | Szakorvos.hu</title>
+  <meta name="description" content="Vizsgálatok és kezelések szakterület szerint. Találd meg a számodra szükséges vizsgálatot és foglalj időpontot online."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito Sans', sans-serif; background: #f0f4ff; color: #374151; -webkit-font-smoothing: antialiased; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid #e8edf8;
+      box-shadow: 0 2px 16px rgba(40,56,151,0.06);
+      height: 64px;
+    }
+    .nav-row {
+      display: flex; align-items: center; height: 64px;
+      padding: 0 4%; max-width: 1400px; margin: 0 auto; gap: 8px; width: 100%;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; margin-right: 24px; }
+    .nav-logo-text { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #283897; }
+    .nav-logo-text em { color: #ff6b2b; font-style: normal; }
+    .nav-logo-sub { font-size: 9px; font-weight: 700; color: #9aa5c4; letter-spacing: .12em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; }
+    .nav-links a {
+      display: flex; align-items: center; gap: 4px;
+      padding: 8px 12px; font-size: 13.5px; font-weight: 600;
+      color: #374151; border-radius: 8px; text-decoration: none;
+      transition: background .15s, color .15s; white-space: nowrap;
+    }
+    .nav-links a:hover { background: #f0f4ff; color: #283897; }
+    .nav-link-highlight { color: #ff6b2b !important; font-weight: 700 !important; }
+    .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
+    .btn-nav-outline {
+      padding: 7px 16px; font-size: 13px; font-weight: 600;
+      color: #283897; border: 1.5px solid rgba(40,56,151,0.2);
+      border-radius: 8px; text-decoration: none; transition: all .15s;
+    }
+    .btn-nav-outline:hover { border-color: #283897; background: rgba(40,56,151,0.04); }
+    .btn-nav-cta {
+      padding: 8px 16px; font-size: 13px; font-weight: 700;
+      color: #fff; background: #ff6b2b; border-radius: 8px;
+      text-decoration: none; transition: all .15s;
+      box-shadow: 0 2px 8px rgba(255,107,43,0.3);
+    }
+    .btn-nav-cta:hover { background: #ff8c5a; }
+
+    /* ── HAMBURGER ── */
+    .nav-mobile-toggle {
+      display: none; align-items: center; justify-content: center;
+      width: 40px; height: 40px; background: #f0f4ff;
+      border: 1.5px solid #dde4f5; border-radius: 10px;
+      cursor: pointer; flex-shrink: 0; margin-left: auto;
+    }
+    @media (max-width: 900px) {
+      .nav-links, .nav-actions { display: none; }
+      .nav-mobile-toggle { display: flex; }
+    }
+
+    /* Mobile drawer */
+    .mobile-drawer {
+      position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.98); backdrop-filter: blur(20px);
+      z-index: 190; transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-drawer.open { transform: translateX(0); }
+    .mobile-drawer-inner { display: flex; flex-direction: column; padding: 1.5rem 5%; gap: 4px; }
+    .mobile-nav-item {
+      font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 600;
+      color: #283897; text-decoration: none; padding: 14px 0;
+      border-bottom: 1px solid #f0f4fb; display: block; transition: color .2s, padding-left .2s;
+    }
+    .mobile-nav-item:hover { color: #ff6b2b; padding-left: 6px; }
+    .mobile-nav-cta {
+      display: flex; align-items: center; justify-content: center;
+      background: #ff6b2b; color: #fff !important; font-family: 'Nunito', sans-serif;
+      font-size: 15px; font-weight: 700; text-decoration: none;
+      padding: 14px 24px; border-radius: 12px; margin-top: 12px;
+      box-shadow: 0 4px 16px rgba(255,107,43,0.3); transition: background .2s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 96px; padding-bottom: 48px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(64,66,226,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700;
+      color: #ff6b2b; text-transform: uppercase; letter-spacing: .12em;
+      margin-bottom: 16px;
+      background: rgba(255,107,43,0.08); border: 1px solid rgba(255,107,43,0.2);
+      border-radius: 100px; padding: 5px 14px;
+    }
+    .hero-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900; color: #283897;
+      line-height: 1.15; margin-bottom: 20px;
+    }
+    .hero-title span { color: #ff6b2b; }
+    .hero-desc {
+      font-size: 16px; color: #6b7280; line-height: 1.7;
+      max-width: 620px; margin: 0 auto 28px;
+    }
+    .hero-badges {
+      display: flex; align-items: center; justify-content: center;
+      gap: 28px; flex-wrap: wrap; margin-bottom: 40px;
+    }
+    .hero-badge {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: #374151;
+    }
+    .hero-badge svg { color: #ff6b2b; flex-shrink: 0; }
+
+    /* ── SPECIALTY FILTER PILLS ── */
+    .filter-wrap {
+      max-width: 1100px; margin: 0 auto 16px; padding: 0 4%;
+    }
+    .filter-scroll {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    }
+    .filter-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 7px 16px; border-radius: 100px;
+      border: 1.5px solid #e8edf8; background: #fff;
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+      color: #374151; cursor: pointer; transition: all .15s;
+      white-space: nowrap;
+    }
+    .filter-pill:hover { border-color: #283897; color: #283897; background: #eef2ff; }
+    .filter-pill.active { background: #283897; color: #fff; border-color: #283897; box-shadow: 0 4px 12px rgba(40,56,151,0.25); }
+    .filter-pill .count { opacity: .65; font-size: 11px; }
+
+    /* ── VIEW TOGGLE ── */
+    .view-toggle {
+      display: flex; justify-content: center; gap: 8px; margin: 0 0 1rem;
+    }
+    .view-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 100px;
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all .2s;
+    }
+    .view-btn.active { background: #283897; color: #fff; border: 2px solid #283897; }
+    .view-btn.inactive { background: transparent; color: #283897; border: 2px solid #283897; }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      max-width: 600px; margin: 0 auto 48px; padding: 0 5%;
+    }
+    .search-inner {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1.5px solid #e8edf8;
+      border-radius: 100px; padding: 12px 20px;
+      box-shadow: 0 4px 20px rgba(40,56,151,0.08);
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .search-inner:focus-within {
+      border-color: #283897;
+      box-shadow: 0 4px 20px rgba(40,56,151,0.15);
+    }
+    .search-inner svg { flex-shrink: 0; color: #9aa5c4; }
+    .search-inner input {
+      flex: 1; border: none; outline: none; background: transparent;
+      font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: #374151;
+    }
+    .search-inner input::placeholder { color: #b0bcd4; }
+
+    /* ── MAIN SECTION ── */
+    .main-section {
+      max-width: 1200px; margin: 0 auto; padding: 0 4% 64px;
+    }
+
+    /* Specialty group */
+    .spec-section { margin-bottom: 56px; }
+    .spec-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+      padding-bottom: 14px; border-bottom: 2px solid #e8edf8;
+    }
+    .spec-badge {
+      width: 46px; height: 46px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .spec-name {
+      font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #0f172a;
+    }
+    .spec-count { font-size: 13px; color: #9aa5c4; font-weight: 600; margin-top: 2px; }
+
+    .treatments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 10px;
+    }
+    .treatment-card {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; border: 1.5px solid #e8edf8; border-radius: 12px;
+      padding: 13px 16px; text-decoration: none; color: #374151;
+      transition: all .18s; cursor: pointer;
+    }
+    .treatment-card:hover {
+      border-color: #283897; background: #eef2ff;
+      transform: translateY(-1px); box-shadow: 0 4px 16px rgba(40,56,151,0.1);
+    }
+    .treatment-card__title {
+      font-size: 14px; font-weight: 600; color: #0f172a;
+      line-height: 1.4; flex: 1; margin-right: 10px;
+    }
+    .spec-suffix {
+      font-size: 12px; font-weight: 500; color: #9aa5c4;
+      font-style: italic; margin-left: 2px;
+    }
+    .badge-soon {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; color: #f59e0b;
+      background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 100px; padding: 2px 8px; margin-left: 8px;
+      vertical-align: middle; white-space: nowrap;
+    }
+    .treatment-card__arrow {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: #f0f4ff; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background .15s;
+    }
+    .treatment-card:hover .treatment-card__arrow { background: #283897; }
+    .treatment-card:hover .treatment-card__arrow svg { stroke: #fff; }
+
+    /* Special tags */
+    .tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      padding: 2px 7px; border-radius: 100px; margin-left: 6px;
+      vertical-align: middle; letter-spacing: .03em;
+    }
+    .tag-phone { background: rgba(40,56,151,0.1); color: #283897; }
+    .tag-video { background: rgba(64,66,226,0.1); color: #4042e2; }
+    .tag-online { background: rgba(255,107,43,0.1); color: #ff6b2b; }
+
+    /* Empty / loading */
+    .loading {
+      text-align: center; padding: 48px;
+      color: #9aa5c4; font-size: 15px; font-weight: 600;
+    }
+    .loading-dots { display: inline-flex; gap: 6px; margin-left: 8px; }
+    .loading-dots span {
+      width: 6px; height: 6px; background: #9aa5c4; border-radius: 50%;
+      animation: dotPulse 1.4s infinite;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: .2s; }
+    .loading-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.6); opacity: .4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    .empty-state {
+      text-align: center; padding: 64px 24px; color: #9aa5c4;
+    }
+    .empty-state h3 { font-family: 'Nunito', sans-serif; font-size: 18px; color: #6b7280; margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; }
+
+    /* Sticky spec nav */
+    .spec-nav {
+      position: sticky; top: 64px; z-index: 100;
+      background: rgba(240,244,255,0.95); backdrop-filter: blur(12px);
+      padding: 10px 0; margin-bottom: 8px;
+    }
+    .spec-nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 4%;
+      overflow-x: auto; display: flex; gap: 6px;
+      scrollbar-width: none;
+    }
+    .spec-nav-inner::-webkit-scrollbar { display: none; }
+    .spec-nav-pill {
+      flex-shrink: 0; padding: 5px 14px; border-radius: 100px;
+      background: #fff; border: 1.5px solid #e8edf8;
+      font-size: 12.5px; font-weight: 700; color: #374151;
+      text-decoration: none; transition: all .15s; white-space: nowrap;
+    }
+    .spec-nav-pill:hover { border-color: #283897; color: #283897; }
+
+    @media (max-width: 640px) {
+      .hero { padding-top: 80px; padding-bottom: 32px; }
+      .hero-title { font-size: 1.7rem; }
+      .hero-desc { font-size: 14px; }
+      .hero-badges { gap: 16px; }
+      .hero-badge { font-size: 13px; }
+      .treatments-grid { grid-template-columns: 1fr; }
+      .filter-scroll { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 4px; scrollbar-width: none; }
+      .filter-scroll::-webkit-scrollbar { display: none; }
+      .spec-name { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-row">
+    <a href="index.html" class="nav-logo">
+      <div>
+        <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+        <div class="nav-logo-sub">Országos Szakorvoskereső</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Orvosok</a></li>
+      <li><a href="#">Klinikák</a></li>
+      <li><a href="tudastar.html">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html" class="nav-link-highlight">Vizsgálatok</a></li>
+      <li><a href="#">Kapcsolat</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
+      <a href="#" class="btn-nav-cta">Legyen Ön is a partnerünk</a>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMenu()" aria-label="Menü">
+      <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="#" class="mobile-nav-item">Orvosok</a>
+    <a href="#" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item">Tudástár A–Z</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#ff6b2b;">Vizsgálatok</a>
+    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
+    <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
+    <a href="#" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    Vizsgálatok &amp; Kezelések
+  </div>
+  <h1 class="hero-title">Minden vizsgálat, <span>egy helyen</span></h1>
+  <p class="hero-desc">
+    53 szakterület összes vizsgálatát és kezelési lehetőségét megtalálod itt. Keresd meg, amire szükséged van, és foglalj időpontot azonnal.
+  </p>
+  <div class="hero-badges">
+    <div class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      53 szakterület
+    </div>
+    <div class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      700+ vizsgálat és kezelés
+    </div>
+    <div class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Online és telefonos konzultáció
+    </div>
+  </div>
+
+  <!-- View toggle -->
+  <div class="view-toggle">
+    <button class="view-btn active" id="btnSpec" onclick="setView('specialty')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+      Szakterület szerint
+    </button>
+    <button class="view-btn inactive" id="btnList" onclick="setView('list')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+      Összes lista
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <div class="search-inner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Keress vizsgálatot vagy kezelést... pl. ultrahang, allergiatesztelés" autocomplete="off"/>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY SPECIALTY NAV (only in specialty view) -->
+<div class="spec-nav" id="specNav">
+  <div class="spec-nav-inner" id="specNavInner"></div>
+</div>
+
+<!-- SPECIALTY FILTER (only in list view) -->
+<div class="filter-wrap" id="filterWrap" style="display:none;">
+  <div class="filter-scroll" id="filterScroll"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-section" id="mainSection">
+  <div class="loading">
+    Adatok betöltése
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// ADAT — 53 szakterület, összes vizsgálattal
+// ══════════════════════════════════════════
+const SPECIALTIES = [
+  { name: 'Addiktológia', icon: '🧠', color: '#6d28d9', treatments: ['Szakorvosi vizsgálat','Szakorvosi ellenőrző vizsgálat','Szakorvosi konzultáció (leletmegbeszélés)','Állapotfelmérés, terápia tervezés','Alkoholbetegség kezelése','Dohányzásról való leszoktatás','Játékszenvedély kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Allergológia és klinikai immunológia', icon: '🌿', color: '#15803d', treatments: ['Szakorvosi vizsgálat','Szakorvosi ellenőrző vizsgálat','Szakorvosi konzultáció (leletmegbeszélés)','Allergia teszt','Allergia teszt fogászati anyagokra','Pollen allergia teszt','Fémallergia teszt','Tejallergia teszt','Ételallergia teszt','Asztmás panaszok kezelése','Gyermek allergiák kezelése','Ekcéma, bőrkiütés és csalángöb kezelése','Lisztérzékenység antitest vizsgálat'] },
+  { name: 'Andrológia', icon: '⚕️', color: '#1d4ed8', treatments: ['Szakorvosi vizsgálat','Szakorvosi ellenőrző vizsgálat','Szakorvosi konzultáció (leletmegbeszélés)','Merevedési zavarok','Magömlés problémák','Férfi klimax','Járulékos nemi mirigyek gyulladása','Humán Papilloma Virus (HPV)','Chlamydia','Szexuális úton terjedő betegségek','Here, mellékhere gyulladás','Herevízsérv','Here visszértágulat','Herebiopszia','Hímvessző görbület','Fitymaszűkület','Prosztata rákszűrés','Hererákszűrés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Angiológia', icon: '🩸', color: '#dc2626', treatments: ['Angiológiai szakorvosi vizsgálat','Angiológiai szakorvosi vizsgálat ultrahanggal','Angiológiai leletmegbeszélés','Teljes átfogó angiológiai állapotfelmérés','BOSO - érszűkület rizikó felmérés','Ellenőrző vizsgálat','Nyaki verőerek ultrahang vizsgálata','TOS vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Audiológia', icon: '👂', color: '#7c3aed', treatments: ['Audiológiai szakorvosi vizsgálat','Beszédértés vizsgálata','Csecsemőkori hallásvizsgálat','Fülzúgás kezelés','Hallásvizsgálat'] },
+  { name: 'Belgyógyászat', icon: '🫀', color: '#1e3a8a', treatments: ['Belgyógyászati szakorvosi vizsgálat','Belgyógyászati szakorvosi konzultáció','Belgyógyászati szakorvosi kontroll vizsgálat','Belgyógyászati leletmegbeszélés','Belgyógyászati szakorvosi vizsgálat hasi és kismedencei ultrahanggal','Belgyógyászati és kardiológiai szakorvosi vizsgálat','24 órás ambuláns vérnyomásmérés','Holter szakorvosi kiértékeléssel','Laborvizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Bőrgyógyászat', icon: '🧴', color: '#d97706', treatments: ['Bőrgyógyászati szakorvosi vizsgálat','Bőrgyógyászati kontrollvizsgálat','Bőrgyógyászati leletmegbeszélés','Aknés bőr kezelése','Bőrhibák lézeres kezelése','Anyajegy eltávolítása','Anyajegy eltávolítása + szövettan','Anyajegyszűrés','Atheroma megnyitás','Bőrdaganatok kezelése','Bőrelváltozás eltávolítása fagyasztással','Bőrgyógyászati Allergológia - Epicután teszt','Bőrnövedék eltávolítás','Cryo terápiás kezelés','Ekcéma kezelése','Fibróma eltávolítás','Futószemölcs eltávolítása','Hidegkamrás terápia','Körömgomba kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Fül-orr-gégészet', icon: '👶', color: '#7c3aed', treatments: ['Gyermek fül-orr-gégészeti szakorvosi vizsgálat','Hallásvizsgálat teljes körű fül orr gégészeti vizsgálat','Egyensúly vizsgálat','Műszeres hallásvizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-kardiológia', icon: '❤️', color: '#dc2626', treatments: ['Gyermek kardiológiai szakorvosi vizsgálat','Gyermek kardiológiai leletmegbeszélés','Gyermek kardiológia ritmuszavar vizsgálati','Gyermek kardiológia sport vizsgálat','Magzati szívultrahang vizsgálat','Terheléses EKG vizsgálat','24 órás EKG otthoni monitorozás','24 órás EKG és vérnyomás monitorozás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Csecsemő- és gyermekgyógyászat', icon: '🍼', color: '#16a34a', treatments: ['Csecsemő- és gyermekgyógyászati szakorvosi vizsgálat','Csecsemő- és gyermekgyógyászati kontroll vizsgálat','Fitymaszűkület kezelés','Gyermekkori mozgásszervi állapotfelmérés','Injekció beadás','Laborvizsgálat','Oltás','Röntgen','Szív ultrahang','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-gasztroenterológia', icon: '🍎', color: '#ea580c', treatments: ['Gyermek gasztroenterológiai szakorvosi vizsgálat','Gyermek gasztroenterológiai kontroll','Gyomor és vastagbéltükrözés altatásban','Gyomortükrözés altatásban','Konzultáció, általános vizsgálat','Vastagbéltükrözés altatásban','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-neurológia', icon: '🧩', color: '#7c3aed', treatments: ['Gyermek neurológiai szakorvosi vizsgálat','Alvásmegvonást követő spontán alvásvizsgálat','Epilepszia kivizsgálása, kezelése','Fejlődés-neurológiai vizsgálat','Ismeretlen eredetű fejfájás','Komplex állapot felmérés','Rutin EEG vizsgálat','Spontán eszméletvesztés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermekimmunológia', icon: '🌱', color: '#15803d', treatments: ['Allergia vizsgálat fogászati anyagokra','Allergia vizsgálat fogászati fémekre','Allergia vizsgálat ételintoleranciára','Asztmás panaszok kezelése','Candida albicans kezelése','Ekcéma, bőrkiütés és csalángöb kezelése','Tej allergia kezelése','Élelmiszer allergia kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Diabetológia', icon: '💉', color: '#0284c7', treatments: ['Diabetológiai szakorvosi vizsgálat','Diabetológiai kontroll vizsgálat','Diabetológiai leletmegbeszélés','Diabetológiai szakorvosi vizsgálat várandósoknak','Folyamatos vércukor monitorozás','Inzulin és gyógyszerek adagolásának beállítása','Komplex lábvizsgálat (érszűkület és neuropátia szűrés)','Vércukormérő betanítás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Endokrinológia és anyagcsere-betegségek', icon: '⚗️', color: '#0891b2', treatments: ['Endokrinológia szakorvosi vizsgálat','Endokrinológiai szakorvosi kontroll vizsgálat','Endokrinológiai szakorvosi konzultáció','Aspiration cytologya','Alap endokrinológiai labor','Endokrinológiai labor vizsgálatok','Kismedencei ultrahang','Komplex pajzsmirigy vizsgálat','Komplex, fej-nyak sebészeti ultrahang','Pajzsmirigy göb aspirációs citológiai vizsgálata','Pajzsmirigy göbök, struma kezelése','Pajzsmirigy ultrahang vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Érsebészet', icon: '🩺', color: '#dc2626', treatments: ['Érsebészeti szakorvosi vizsgálat','Érsebészeti szakorvosi vizsgálat vaszkuláris ultrahanggal','Érsebészeti lelet értékelés','Érsebészeti kontroll konzultáció','Érsebészeti kontroll vizsgálat','Érsebészeti vizsgálat, doppler méréssel','Érsebészeti vizsgálat, doppler méréssel, sclerotherápia','Fekély, krónikus seb, gangrena ellátása, kezelése','Gyulladásos elváltozás vizsgálata és feltárása, thrombectomia','Tágult visszerek injekciós kezelése','Visszérbetegség érsebészeti vizsgálata','Visszérvizsgálat ultrahang vizsgálattal','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Fizikális medicina és rehabilitációs orvoslás', icon: '🏃', color: '#0f766e', treatments: ['Fizikoterápia konzultáció, általános vizsgálat','Bemer pulzáló mágnes terápia','Bemer terápia','Cryoterápia','Elektroterápia','Lézer terápia','Lökéshullám terápia','Mágnesterápia','SIS (Super Inductiv System) terápia','Senso-Pro Trainer','Szelektív ingeráram','TENS','Trigger kezelések','Ultrahang-terápia'] },
+  { name: 'Foglalkozás-orvostan', icon: '🏭', color: '#374151', treatments: ['Egészségügyi kiskönyv érvényesítése','Fegyverviselési alkalmassági vizsgálat','Foglalkozás egészségügyi szakorvosi vizsgálat','Foglalkozás-egészségügyi vizsgálat','Hajóvezetői alkalmassági vizsgálat','Járművezetői alkalmassági vizsgálat','Konzultáció, általános vizsgálat','Menedzserszűrés','Munkaköri alkalmassági vizsgálat','Szakmai alkalmassági vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gasztroenterológia', icon: '🫀', color: '#ea580c', treatments: ['Gasztroenterológiai szakorvosi vizsgálat','Gasztroenterológiai kontroll vizsgálat','Gasztroenterológiai hasi és kismedencei ultrahang','Fruktóz kilégzési teszt','Gyomor és vastagbéltükrözés altatásban','Gyomortükrözés','Gyomortükrözés + vastagbéltükrözés','Hasi ultrahang','Hasnyálmirigy funkciós teszt','Helicobacter szűrés','Laktóz kilégzési teszt','Polypectomia','Vastagbélrák szűrés','Vastagbéltükrözés','Ételallergiák és intoleranciák szűrés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Haematológia', icon: '🩸', color: '#be123c', treatments: ['Haematológiai szakorvosi vizsgálat','Haematológiai kontrollvizsgálat','Vérképzőszervi és daganatos betegségek tanácsadás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Idegsebészet', icon: '🧠', color: '#6d28d9', treatments: ['Idegsebészeti szakorvosi vizsgálat','Idegsebészeti szakorvosi konzultáció','Műtéti konzultáció','Számítógépes mozgáselemzés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Igazságügyi orvostan', icon: '⚖️', color: '#374151', treatments: ['Orvosszakértői konzultáció','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Infektológia', icon: '🦠', color: '#065f46', treatments: ['Infektológiai szakorvosi vizsgálat','Infektológiai kontroll vizsgálat','Lyme-kór kezelése','Oltás beadása','Oltástanácsadás','Post COVID Infektológia','STD diagnosztizálása és kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Kardiológia', icon: '❤️', color: '#dc2626', treatments: ['Kardiológiai szakorvosi kontroll','Kardiológiai szakorvosi vizsgálat','EKG kiértékeléssel','Szívultrahang','Terheléses EKG','24 órás ABPM kiértékeléssel','24 órás Holter kiértékeléssel','ABPM vizsgálat','HOLTER EKG vizsgálat','Alsóvégtagi Doppler vizsgálat','Nyaki ultrahangvizsgálat','Post COVID Kardiológia Általános Vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Kézsebészet', icon: '✋', color: '#0d9488', treatments: ['Kézsebészeti szakorvosi vizsgálat','Kézsebészeti kontrollvizsgálat','Csukló- és könyöktáji idegek panaszainak vizsgálata','Pattanó ujjak kezelése','Sérült kéz rehabilitációja','Teniszkönyök injekciós kezelése','Ínhüvelygyulladás kezelése','Ízületi kopás PRP (sajátvér) kezelése','Ízületi porckopás hialuronsavas kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Nefrológia', icon: '🫘', color: '#0284c7', treatments: ['Nephrológiai szakorvosi szakvizsgálat','Nephrológiai szakorvosi kontrollvizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Neurológia', icon: '🧠', color: '#7c3aed', treatments: ['Neurológiai szakorvosi vizsgálat','Neurológiai szakorvosi vizsgálat + carotis doppler vizsgálat','Neurológiai szakorvosi kontroll','24 órás EEG vizsgálat','EEG vizsgálat','EMG vizsgálat','ENG vizsgálat (1 terület)','ENG vizsgálat (2 vagy több terület)','Fejfájás ambulancia','Infúziós kezelés','Stroke szűrés és tanácsadás carotis doppler echo','Szédülés ambulancia szakorvosi vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Szülészet-nőgyógyászat', icon: '🌸', color: '#db2777', treatments: ['Nőgyógyászati szakorvosi vizsgálat','Nőgyógyászati szakorvosi kontroll','Nőgyógyászati ambuláns beavatkozás','Nőgyógyászati fertőző betegségek kezelése','Nőgyógyászati vizsgálat ultrahanggal','Nőgyógyászati éves szűrővizsgálat','4D ultrahang','Down-szindróma szűrés','Candida gomba kimutatás, kezelés','Endometriózis szűrés','Fogamzásgátlás tanácsadás','Fogamzásgátló spirál (IUD) felhelyezése','HPV-szűrés','Hormonvizsgálat','Hüvelyi ultrahangvizsgálat','Inkontinencia vizsgálat','Inszemináció','Mammográfia','Manuális emlővizsgálat','Meddőség kivizsgálás','Menopauza-gondozás','Méhtükrözés (hysteroscopia)','Petesejtleszívás és in vitro megtermékenyítés (IVF)','Terhesgondozás','Terhesség megállapítás','Terhességi ultrahang vizsgálat','Tinédzser nőgyógyászat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Klinikai onkológia', icon: '🎗️', color: '#be123c', treatments: ['Anyajegyszűrés','Onkológiai szakorvosi vizsgálat','Onkológiai kontroll vizsgálat','Onkológiai konzultáció','Dermato-onkológia (bőrdaganatok)','Vastagbélrák szűrés','Vérképzőszervi és daganatos betegségekkel kapcsolatos tanácsadás','Öröklődő prosztatarák szűrés','Öröklődő veserák szűrés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Ortopédia és traumatológia', icon: '🦴', color: '#0d9488', treatments: ['Ortopédiai szakorvosi vizsgálat','Ortopédiai leletmegbeszélés','Ortopédiai kontroll vizsgálat','Arthroscopos térdműtét','Arthroscopos vállműtét','Csecsemő ortopédiai szűrővizsgálat','Csontritkulás kezelése','Csípőízületi protetika','Diabéteszes láb kezelése','Injekció beadása','Komplex mozgásszervi szűrővizsgálat','Lábsebészet','Lökéshullám terápia','Nyáktömlőbe adott injekció','Rehabilitációs terv készítése','Röntgenfelvétel irányonként','Számítógépes talpvizsgálat','Talpbetét készítés','Térdvizsgálat','Térdízületi protetika','Ultrahangos vállvizsgálat','Vállsebészet','Ízületi punkció','Traumatológiai szakorvosi vizsgálat','Boka és lábpanaszok kivizsgálása, kezelése','Csípőízületi panaszok kivizsgálása, kezelése','Gipsz felhelyezése, segédeszköz illesztése','Leletértékelés','Lágyrész, izom injekció','RTG konzultáció','Sportsérülések ellátása','Térdsérülések, térdpanaszok kivizsgálása, kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Plasztikai és égéssebészet', icon: '💫', color: '#db2777', treatments: ['Plasztikai sebészeti szakorvosi konzultáció','Plasztikai sebészeti kontrollvizsgálat','Ajakfeltöltés','Anyajegy, bőrdaganat kimetszés','Arcplasztika','Body-Tite bőrfeszesítés','Co2 frakcionált mélyhámlasztás','Esztétikai konzultáció','FTC szálazás','Frakcionált lézeres kezelés','Fülplasztika','Hajbeültetés','Hasplasztika','Hegek korrekciója','Hyaluronsavas kezelés','Injekciós izzadásgátlás kezelés','Injekciós ránctalanító kezelés','Mellnagyobbítás, implantátum behelyezése','Növedék eltávolítása','Orrplasztika','Szemhéjplasztika','Szempilla beültetés','Tartós szőrtelenítés','Vékonyszálas arcfeszesítés','Zsírleszívás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Pszichiátria', icon: '🧩', color: '#9333ea', treatments: ['Pszichiátriai szakorvosi vizsgálat','Pszichiátriai szakorvosi kontrollvizsgálat','Neuropszichológiai vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Pszichoterápia', icon: '💬', color: '#7c3aed', treatments: ['Pszichológia konzultáció','Pszichológiai tanácsadás','Alkohol- és/vagy nikotinfüggőség kezelés','Alváskzavarok kezelése','Autogén tréning','Business coaching','Család- és párterápia','EMDR terápia','Egyéni pszichológiai tanácsadás','Egyéni terápia','Evési zavarok kezelése','Komplex egészségpszichológiai konzultáció','Krízis tanácsadás','Life coaching','Meseterápia','Művészetterápia','Neuropszichológia','Onkopszichológia','Pszichodiagnosztika','Pszichoterápia','Párterápia','Relaxáció','Sport pszichológia','Szorongás és depresszió kezelése','Szakpszichoterápia','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Reumatológia', icon: '🦴', color: '#b45309', treatments: ['Reumatológiai szakorvosi vizsgálat','Reumatológiai kontroll vizsgálat','Reumatológiai szakorvosi konzultáció','Reumatológiai szakorvosi vizsgálat blokád injekció beadással','Becsípődés kezelése','Blokád injekció sorozatkezelés','Gyógyszeres kezelés','Hidegterápiás kezelés','Infúziós kezelés','Injekció beadás','Intraarticularis injekció vagy ízületi punctio','Izületi gyulladás kezelése','Kinesiotape kezelés','Kollagén injekció beadása','Lökéshullám terápia','McKenzie torna derékpanaszokra','Nyaki vagy deréktáji gerinc fájdalom kezelés','Steroid injekció beadása','Ínhüvelygyulladás kezelése','Ízület feltöltés hialuronsav injekcióval','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Sebészet', icon: '🔪', color: '#1d4ed8', treatments: ['Sebészeti szakorvosi vizsgálat','Sebészeti kontrollvizsgálat','Sebészeti konzultáció','Ambuláns műtétek helyi érzéstelenítésben','Anyajegy sebészi eltávolítása','Aranyér kezelés','Benőtt köröm eltávolítása','Benőtt köröm lézeres kezelése','Bőrsebészeti beavatkozás','Bőrvarrat, sutura','Egyszerű sebkezelés','Emlősebészeti szakorvosi vizsgálat','Gátrekonstrukció műtét előtti konzultáció','Injekciós visszérkezelés (scleroterápia)','Komplikált sebkezelés','Krónikus sebek ellátása','Lipoma, atheroma sebészi eltávolítása','Lézeres visszérműtét','Lökéshullám terápia','Nyirokcsomó biopszia','Sclerotisáló kezelés','Sebészi kimetszés','Szemölcs eltávolítása','Szövettani vizsgálat','Tályog feltárás','Varratszedés, sebkezelés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Szemészet', icon: '👁️', color: '#0284c7', treatments: ['Szemészeti szakorvosi vizsgálat','Szemészeti kontrollvizsgálat','Szemészeti leletmegbeszélés','Biometria/lencsetervezés szürkehályog műtét előtt','Glaucoma kontroll vizsgálat','Jégárpa megnyitása, kezelése','Keratoconus/keratoglobus vizsgálat','Kontaktlencse betanítás','Látásvizsgálat','Lézeres látásjavítás Excimer lézerrel','Lézeres látásjavítás két lézerrel','Munkaalkalmassági vizsgálat','Szemfenék (Fundus) vizsgálat','Szemnyomás mérés (IOP)','Szemtorna betanítás','Szemészeti szűrés','Szürkehályog vizsgálat','Teljeskörű szemészeti vizsgálat','Zöldhályog kivizsgálás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Tüdőgyógyászat (Pulmonológia)', icon: '🫁', color: '#0369a1', treatments: ['Tüdőgyógyászati szakorvosi vizsgálat','Tüdőgyógyászati szakorvosi konzultáció','Tüdőgyógyászati szakorvosi kontroll','Tüdőgyógyászati immunológiai vizsgálat','Allergia vizsgálat PRICK teszttel','Alvászavar előzetes konzultáció','Asztma kezelése','Bronchoscopia','Dohányzás leszoktatás','Infúzió beadása','Komplex légzésfunkció vizsgálat','Kontroll vizsgálat (COPD gondozás)','Konzultáció eszközös vizsgálat nélkül','Köhögés kezelése','Légzésfunkció vizsgálat','Légúti allergia, allergiás nátha, allergiás asztma kivizsgálás','Post COVID Tüdőgyógyászat','Spirometria (légzésfunkció vizsgálat)','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Urológia', icon: '🫘', color: '#059669', treatments: ['Urológiai szakorvosi vizsgálat','Urológiai szakorvosi kontroll','Urológiai ambuláns beavatkozás','Urológiai ultrahang vizsgálat','Urológiai kisműtétek','Circumcisio (előbőr eltávolítás, körülmetélés)','Condyloma eltávolítás','Frenulotomia (fitymafék bemetszés)','Férfi meddőség kivizsgálás','HPV szűrés','Here ultrahang','Inkontinencia vizsgálat','Katéter behelyezés','Korai magömlés kezelése','Lézeres inkontinencia kezelés','Ondó vizsgálat','Prosztata probléma','Prosztata szűrés','Szexuális zavarok kezelése','Szexuális úton terjedő betegségek (STD)','Vesekő kezelése','Visszatérő hólyaghurut','Vizeletvizsgálat gyorsteszttel','Öröklődő prosztatarák szűrés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Alvásmedicina', icon: '😴', color: '#6366f1', treatments: ['Alvásmedicinai szakorvosi vizsgálat','Alvásmedicinai kontrollvizsgálat','Alvásmedicinai konzultáció','Alvási apnoe kivizsgálása','Alvásvizsgálat (poliszomnográfia)','Alvásvizsgálat otthoni eszközzel','CPAP terápia beállítása','CPAP kontroll','Horkolás kivizsgálása és kezelése','Inszomnia kezelése','Narkolepszia kivizsgálása','Nyugtalan láb szindróma kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Aneszteziológia és intenzív terápia', icon: '💉', color: '#374151', treatments: ['Aneszteziológiai konzultáció','Altatás előtti vizsgálat','Műtét előtti kivizsgálás','Fájdalomcsillapítás konzultáció','Krónikus fájdalom kezelése','Regionális érzéstelenítés','Gerincvelői érzéstelenítés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Arc-, állcsont- és szájsebészet', icon: '🦷', color: '#0891b2', treatments: ['Arc-állcsont sebészeti szakorvosi vizsgálat','Arc-állcsont sebészeti kontrollvizsgálat','Állcsonttörés kezelése','Arckoponya törések ellátása','Bölcsességfog sebészeti eltávolítása','Ciszta eltávolítás','Foggyökér csúcsresekció','Implantátum beültetés','Nyálmirigy műtét','Orthognath sebészet konzultáció','Temporomandibularis ízületi kezelés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Dento-alveoláris sebészet', icon: '🦷', color: '#0284c7', treatments: ['Dento-alveoláris sebészeti vizsgálat','Fog sebészeti eltávolítása','Bölcsességfog eltávolítás','Beékelődött fog sebészeti feltárása','Gyökércsúcs-reszekció','Fogágy műtét','Ciszta eltávolítás','Implantátum konzultáció','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Endodoncia', icon: '🦷', color: '#1d4ed8', treatments: ['Endodonciai szakorvosi vizsgálat','Gyökérkezelés (1 gyökércsatorna)','Gyökérkezelés (2 gyökércsatorna)','Gyökérkezelés (3 gyökércsatorna)','Gyökérkezelés (4+ gyökércsatorna)','Gyökérkezelés újrakezelése','Gyökércsatorna-tömés','Pulpitis kezelése','Fogfájás sürgősségi ellátása','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Esztétikai fogászat', icon: '😁', color: '#db2777', treatments: ['Esztétikai fogászati konzultáció','Fogfehérítés','Fogfehérítés otthoni kerettel','Kompozit héj (veneer) készítés','Porcelán héj (veneer) készítés','Fogkő eltávolítás','Fog rés (diastéma) zárás','Esztétikai tömés','Fogszínmeghatározás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Fogszabályozás', icon: '😬', color: '#7c3aed', treatments: ['Fogszabályozási szakorvosi vizsgálat','Fogszabályozási kontrollvizsgálat','Fogszabályozási konzultáció','Rögzített fogszabályozó készülék','Kivehető fogszabályozó készülék','Láthatatlan fogszabályozó (Invisalign)','Retainer készítés','Röntgenfelvétel (panoráma)','Cephalometriai röntgenfelvétel','Fogazati lenyomat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Foniátria', icon: '🗣️', color: '#0891b2', treatments: ['Foniátriai szakorvosi vizsgálat','Foniátriai kontrollvizsgálat','Hangszalag vizsgálat','Stroboszkópos vizsgálat','Hangterápia','Logopédiai terápia','Rekedtség kivizsgálása','Nyelési zavar vizsgálata','Dadogás kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Geriátria', icon: '👴', color: '#92400e', treatments: ['Geriátriai szakorvosi vizsgálat','Geriátriai kontrollvizsgálat','Geriátriai konzultáció','Komplex geriátriai állapotfelmérés','Demencia kivizsgálása','Elesés-kockázat felmérés','Gyógyszerelés felülvizsgálata','Tápláltsági állapot felmérés','Idős beteg gondozási terve','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek- és ifjúságpszichiátria', icon: '🧒', color: '#9333ea', treatments: ['Gyermek pszichiátriai szakorvosi vizsgálat','Gyermek pszichiátriai kontrollvizsgálat','ADHD kivizsgálása és kezelése','Autizmus spektrum vizsgálat','Szorongásos zavarok kezelése','Depresszió kezelése gyermekeknél','Evési zavar kezelése','Magatartászavar kezelése','Alvászavar kezelése','Iskolai teljesítményzavar kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-haematológia és onkológia', icon: '🩸', color: '#be123c', treatments: ['Gyermek haematológiai vizsgálat','Gyermek onkológiai konzultáció','Vérképzési rendellenesség kivizsgálása','Anaemia kivizsgálása','Véralvadási zavar kezelése','Daganatos betegség kivizsgálása','Leukémia szűrés','Nyirokcsomó vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-infektológia', icon: '🦠', color: '#065f46', treatments: ['Gyermek infektológiai szakorvosi vizsgálat','Gyermek infektológiai kontrollvizsgálat','Gyermekkori fertőző betegségek kezelése','Oltástanácsadás gyermekeknek','Visszatérő fertőzések kivizsgálása','Antibiotikum rezisztencia kezelése','Lyme-kór kezelése gyermekeknél','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-nőgyógyászat', icon: '👧', color: '#db2777', treatments: ['Gyermek nőgyógyászati szakorvosi vizsgálat','Gyermek nőgyógyászati kontrollvizsgálat','Tinédzser nőgyógyászati vizsgálat','Hüvelyi váladék vizsgálat','Menstruációs zavarok kezelése','Fogamzásgátlás tanácsadás serdülőknek','HPV oltás','Nőgyógyászati ultrahang','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermek-tüdőgyógyászat', icon: '🫁', color: '#0369a1', treatments: ['Gyermek tüdőgyógyászati szakorvosi vizsgálat','Gyermek tüdőgyógyászati kontrollvizsgálat','Asztma kivizsgálása és kezelése gyermekeknél','Légzésfunkció vizsgálat gyermekeknél','Visszatérő köhögés kivizsgálása','Bronchitis kezelése','Allergiás nátha kezelése','Spirometria gyermekeknél','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermekfogászat', icon: '🦷', color: '#16a34a', treatments: ['Gyermekfogászati szakorvosi vizsgálat','Gyermekfogászati kontrollvizsgálat','Tejfog tömés','Maradandó fog tömés','Tejfog húzás','Fogkő eltávolítás','Barázdazárás (fissúra lakk)','Fluoridálás','Fogszabályozás előkészítés','Fogcsikorgatás kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermekradiológia', icon: '🩻', color: '#374151', treatments: ['Gyermekradiológiai vizsgálat','Gyermek röntgenvizsgálat','Gyermek ultrahang vizsgálat','Gyermek csípő ultrahang','Csontkor meghatározás','Gyermek mellkas röntgen','Gyermek koponya röntgen','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermekreumatológia', icon: '🦴', color: '#b45309', treatments: ['Gyermekreumatológiai szakorvosi vizsgálat','Gyermekreumatológiai kontrollvizsgálat','Juvenilis idiopathiás arthritis kezelése','Ízületi gyulladás kezelése gyermekeknél','Lupus kivizsgálása gyermekeknél','Mozgásszervi fájdalom kivizsgálása','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Gyermeksebészet', icon: '🩺', color: '#1d4ed8', treatments: ['Gyermeksebészeti szakorvosi vizsgálat','Gyermeksebészeti kontrollvizsgálat','Gyermeksebészeti konzultáció','Lágyéksérvek kezelése','Fimózis kezelése','Kriptorchizmus kezelése','Köldöksérv kezelése','Hydrocelé kezelése','Appendicitis kezelése','Bőrelváltozások eltávolítása','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Háziorvostan', icon: '🏠', color: '#059669', treatments: ['Háziorvosi vizsgálat','Háziorvosi kontrollvizsgálat','Általános egészségügyi szűrés','Vérnyomásmérés','Vércukormérés','EKG kiértékelés','Laborvizsgálat értékelés','Oltás beadása','Beutaló kiállítása','Táppénzes igazolás','Krónikus betegség gondozás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Hipertónia', icon: '🫀', color: '#dc2626', treatments: ['Hipertónia szakorvosi vizsgálat','Hipertónia kontrollvizsgálat','Vérnyomásmérés és értékelés','24 órás ambuláns vérnyomásmérés','Másodlagos hipertónia kivizsgálása','Fehérköpeny hipertónia vizsgálat','Gyógyszerbeállítás','Életmód tanácsadás','Vesefunkció szűrés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Honvéd-, katasztrófa- és rendvédelem-orvostan', icon: '🪖', color: '#374151', treatments: ['Honvédorvostani vizsgálat','Rendvédelmi alkalmassági vizsgálat','Fizikai alkalmassági vizsgálat','Pszichológiai alkalmassági szűrés','Foglalkozási egészségügyi vizsgálat','Repülő-egészségügyi alkalmassági vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Implantológia', icon: '🦷', color: '#0891b2', treatments: ['Implantológiai konzultáció','Implantológiai kontrollvizsgálat','Fogimplantátum beültetés','Csontpótlás (sinus lift)','Csontpótlás (csontgraft)','Implantátum felépítmény','Koronapótlás implantátra','Implantátum eltávolítás','Panoráma röntgenfelvétel','3D CBCT felvétel','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Klinikai farmakológia', icon: '💊', color: '#6d28d9', treatments: ['Klinikai farmakológiai konzultáció','Gyógyszer-kölcsönhatás vizsgálat','Gyógyszerelés felülvizsgálata','Mellékhatások kivizsgálása','Gyógyszer-allergia vizsgálat','Terápiás gyógyszerszint monitorozás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Klinikai neurofiziológia', icon: '⚡', color: '#7c3aed', treatments: ['Klinikai neurofiziológiai szakorvosi vizsgálat','EEG vizsgálat','EMG vizsgálat','ENG vizsgálat','Kiváltott potenciál vizsgálat','24 órás EEG monitorozás','Poliszomnográfia','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Konzerváló fogászat és fogpótlástan', icon: '🦷', color: '#2563eb', treatments: ['Konzerváló fogászati vizsgálat','Fogpótlástani konzultáció','Kompozit tömés','Kerámia tömés (inlay, onlay)','Koronapótlás','Fogpótlás (kivehető)','Fogpótlás (rögzített, híd)','Teljes fogsor készítés','Ideiglenes korona','Foggyökér kezelés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Laboratóriumi medicina', icon: '🔬', color: '#0891b2', treatments: ['Labordiagnosztikai konzultáció','Vérkép vizsgálat','Vérsejtsüllyedés','Vércsoport meghatározás','Koagulációs vizsgálatok','Pajzsmirigy hormon vizsgálat','Tumor marker vizsgálat','Hepatitisz szűrés','HIV szűrés','Vizeletvizsgálat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Lipidológia', icon: '🫀', color: '#dc2626', treatments: ['Lipidológiai szakorvosi vizsgálat','Lipidológiai kontrollvizsgálat','Koleszterinszint vizsgálat','Teljes lipidprofil meghatározás','Cardiovascularis rizikóbecslés','Atherogén dyslipidaemia kezelése','Örökletes hiperkoleszterinémia kezelése','LDL aferezis konzultáció','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Meddőségi specialista', icon: '👶', color: '#db2777', treatments: ['Meddőségi szakorvosi vizsgálat','Meddőségi konzultáció','Férfi meddőség kivizsgálása','Női meddőség kivizsgálása','Hormonális kivizsgálás','Ondóvizsgálat','Petesejtleszívás és IVF','Inszemináció (IUI)','Embrióbeültetés','Meddőségi genetikai vizsgálat','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Megelőző orvostan és népegészségtan', icon: '🛡️', color: '#15803d', treatments: ['Megelőző orvostani konzultáció','Átfogó egészségügyi szűrővizsgálat','Cardiovascularis rizikószűrés','Daganatszűrés','Életmód tanácsadás','Dohányzásról való leszoktatás','Táplálkozási tanácsadás','Oltástanácsadás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Mellkassebészet', icon: '🫁', color: '#1d4ed8', treatments: ['Mellkassebészeti szakorvosi vizsgálat','Mellkassebészeti kontrollvizsgálat','Mellkassebészeti konzultáció','Tüdőrák sebészeti kezelése','Mellhártya betegségek sebészeti kezelése','Mediastinum műtétek','Thymectomia','Mellkascsap eltávolítás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Mozgásszervi rehabilitáció', icon: '🏃', color: '#0f766e', treatments: ['Mozgásszervi rehabilitációs vizsgálat','Mozgásszervi rehabilitációs kontroll','Rehabilitációs terv készítése','Gyógytorna','Fizikoterápia','Hidroterápia','Ergo terápia','Manuálterápia','Kinesio taping','Lökéshullám terápia','Ultrahang terápia','TENS kezelés','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Neonatológia', icon: '👶', color: '#16a34a', treatments: ['Neonatológiai szakorvosi vizsgálat','Újszülött vizsgálat','Újszülött szűrővizsgálat','Koraszülött gondozás','Újszülöttkori sárgaság kezelése','Szoptatási tanácsadás','Újszülöttkori légzési problémák','Neonatológiai kontroll','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Nukleáris medicina', icon: '☢️', color: '#374151', treatments: ['Nukleáris medicinai konzultáció','Szcintigráfia (csont)','Szcintigráfia (pajzsmirigy)','Szcintigráfia (vese)','Szcintigráfia (szív)','PET-CT vizsgálat','Radiojód kezelés konzultáció','SPECT vizsgálat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Obezitológia', icon: '⚖️', color: '#0891b2', treatments: ['Obezitológiai szakorvosi vizsgálat','Obezitológiai kontrollvizsgálat','Testsúlycsökkentési program','Testösszetétel-mérés','Táplálkozási tanácsadás','Metabolikus szindróma kezelése','Mozgásterápia tanácsadás','Gyógyszeres kezelés','Bariátriai műtét előtti konzultáció','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Orvosi genetika', icon: '🧬', color: '#7c3aed', treatments: ['Orvosi genetikai konzultáció','Genetikai tanácsadás','Prenatális genetikai vizsgálat','Kromoszóma vizsgálat (kariotipizálás)','DNS vizsgálat','Örökletes betegségek szűrése','Hordozó státusz meghatározás','Preimplantációs genetikai vizsgálat','Farmakogenomikai vizsgálat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Orvosi mikrobiológia', icon: '🦠', color: '#065f46', treatments: ['Mikrobiológiai konzultáció','Bakteriológiai tenyésztés','Vírusszerológiai vizsgálat','Gomba tenyésztés','Antibiotikum érzékenység vizsgálat','MRSA szűrés','STI szűrés','Parazitológiai vizsgálat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Oxiológia', icon: '🚑', color: '#dc2626', treatments: ['Oxiológiai konzultáció','Sürgősségi ellátás tanácsadás','Elsősegély oktatás','Oxiológiai szűrővizsgálat','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Palliatív medicina', icon: '🕊️', color: '#6b7280', treatments: ['Palliatív medicinai konzultáció','Palliatív gondozási terv','Fájdalomcsillapítás','Tünetkezelés','Pszichoszociális támogatás','Hozzátartozók tanácsadása','Otthoni palliatív ellátás tanácsadás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Parodontológia', icon: '🦷', color: '#15803d', treatments: ['Parodontológiai szakorvosi vizsgálat','Parodontológiai kontrollvizsgálat','Fogíny-vizsgálat','Fogkő eltávolítás (professzionális)','Gyökérgyalulás','Parodontológiai műtét','Fogágy-kezelés','Fogíny ültetés','Fogíny esztétikai korrekció','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Patológia', icon: '🔬', color: '#374151', treatments: ['Patológiai konzultáció','Szövettani vizsgálat','Citológiai vizsgálat','Immunhisztokémiai vizsgálat','Molekuláris patológiai vizsgálat','Fagyasztásos metszet készítés','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Pneumológia', icon: '🫁', color: '#0369a1', treatments: ['Pneumológiai szakorvosi vizsgálat','Pneumológiai kontrollvizsgálat','Pneumológiai konzultáció','Légzésfunkció vizsgálat','Mellkas röntgen kiértékelés','Bronchoscopia','COPD kivizsgálása és kezelése','Tüdőrák szűrés','Tüdőgyulladás kezelése','Allergiás asztma kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Radiológia', icon: '🩻', color: '#374151', treatments: ['Radiológiai konzultáció','Röntgenvizsgálat','Ultrahang vizsgálat','CT vizsgálat','MRI vizsgálat','Mammográfia','Csontdenzitometria (DEXA)','Intervenciós radiológiai beavatkozás','Angiográfia','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Sportorvostan', icon: '⚽', color: '#15803d', treatments: ['Sportorvostani szakorvosi vizsgálat','Sportorvostani kontrollvizsgálat','Sportalkalmassági vizsgálat','Versenysport alkalmassági vizsgálat','Sportsérülések kezelése','Terheléses EKG','Laktatmérés terhelési teszten','Regenerációs tanácsadás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Sugárterápia', icon: '☢️', color: '#be123c', treatments: ['Sugárterápiás konzultáció','Sugárterápiás kontrollvizsgálat','Sugárterápia tervezés','Lineáris gyorsítós besugárzás','Sztereotaxiás sugárterápia','Brachyterápia','Sugárterápia mellékhatásainak kezelése','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Sürgősségi orvostan', icon: '🚨', color: '#dc2626', treatments: ['Sürgősségi orvostani konzultáció','Sürgősségi ellátás utógondozása','Sürgősségi vizsgálat','Sokk kezelése','Mérgezés kezelése','Trauma ellátás','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Szívsebészet', icon: '❤️', color: '#dc2626', treatments: ['Szívsebészeti szakorvosi vizsgálat','Szívsebészeti kontrollvizsgálat','Szívsebészeti konzultáció','Koszorúér-bypass műtét','Billentyű-csere konzultáció','Billentyű-plasztika konzultáció','Aortaaneurizma műtéti konzultáció','Pacemaker beültetés konzultáció','Szívtranszplantáció konzultáció','Receptírás','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Transzfuziológia', icon: '🩸', color: '#be123c', treatments: ['Transzfuziológiai konzultáció','Vérátömlesztés előtti vizsgálat','Vércsoportszerológiai vizsgálat','Kompatibilitási vizsgálat','Autológ vérgyűjtés','Terápiás plazmacsere','Leukocitaferezis','Thrombocytaferezis','Telefonos konzultáció','Videós konzultáció'] },
+  { name: 'Transzplantológia', icon: '🫀', color: '#7c3aed', treatments: ['Transzplantológiai konzultáció','Transzplantációs előkészítő vizsgálat','Veseátültetés konzultáció','Májtranszplantáció konzultáció','Szívtranszplantáció konzultáció','Tüdőtranszplantáció konzultáció','Transzplantált beteg gondozása','Immunszuppresszív kezelés beállítása','Receptírás','Telefonos konzultáció','Videós konzultáció'] }
+];
+
+// Szakterületek amelyek még nincsenek az orvos-adatbázisban
+const NO_DB_SPECS = new Set();
+
+// ══════════════════════════════════════════
+// LOGIKA
+// ══════════════════════════════════════════
+let currentView = 'specialty'; // 'specialty' | 'list'
+let activeSpecialty = 'ALL';
+let searchQuery = '';
+
+function normalize(str) {
+  return str.toLowerCase()
+    .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+    .replace(/ó/g,'o').replace(/ö/g,'o').replace(/ő/g,'o')
+    .replace(/ú/g,'u').replace(/ü/g,'u').replace(/ű/g,'u');
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('btnSpec').className = 'view-btn ' + (v === 'specialty' ? 'active' : 'inactive');
+  document.getElementById('btnList').className  = 'view-btn ' + (v === 'list' ? 'active' : 'inactive');
+  document.getElementById('specNav').style.display   = v === 'specialty' && !searchQuery ? '' : 'none';
+  document.getElementById('filterWrap').style.display = v === 'list' ? '' : 'none';
+  render();
+}
+
+function buildSpecNav() {
+  const inner = document.getElementById('specNavInner');
+  inner.innerHTML = SPECIALTIES.map(s =>
+    `<a class="spec-nav-pill" href="#spec-${s.name.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ0-9]/g,'_')}">${s.icon} ${s.name}</a>`
+  ).join('');
+}
+
+function buildFilterPills() {
+  const scroll = document.getElementById('filterScroll');
+  const allBtn = `<button class="filter-pill ${activeSpecialty==='ALL'?'active':''}" onclick="filterBy('ALL')">Összes</button>`;
+  const pills = SPECIALTIES.map(s =>
+    `<button class="filter-pill ${activeSpecialty===s.name?'active':''}" onclick="filterBy('${s.name.replace(/'/g,"\\'")}')">
+      ${s.icon} ${s.name} <span class="count">(${s.treatments.length})</span>
+    </button>`
+  ).join('');
+  scroll.innerHTML = allBtn + pills;
+}
+
+function filterBy(name) {
+  activeSpecialty = name;
+  buildFilterPills();
+  render();
+}
+
+// Generikus nevek, amelyekhez hozzáadjuk a szakterületet zárójelben
+const GENERIC_NAMES = new Set([
+  'szakorvosi vizsgálat',
+  'szakorvosi ellenőrző vizsgálat',
+  'szakorvosi konzultáció (leletmegbeszélés)',
+  'szakorvosi kontroll vizsgálat',
+  'szakorvosi kontrollvizsgálat',
+  'szakorvosi konzultáció',
+  'kontroll vizsgálat',
+  'kontrollvizsgálat',
+  'leletmegbeszélés',
+  'konzultáció, általános vizsgálat',
+  'konzultáció',
+  'receptírás',
+  'telefonos konzultáció',
+  'videós konzultáció',
+  'laborvizsgálat',
+  'injekció beadás',
+  'injekció beadása',
+]);
+
+function displayName(name, spec) {
+  const key = name.toLowerCase().trim();
+  // Pontos egyezés
+  if (GENERIC_NAMES.has(key)) {
+    return `${name} <span class="spec-suffix">(${spec})</span>`;
+  }
+  // Tartalmazza-e valamelyik generikus nevet (pl. "Belgyógyászati szakorvosi vizsgálat" — nem generikus)
+  // csak akkor adjuk hozzá ha a szaktarület neve NEM szerepel már a névben
+  const specNorm = spec.toLowerCase().split(/[,\/\s]+/)[0]; // pl. "belgyógyász"
+  const nameNorm = name.toLowerCase();
+  // Ha a név nem tartalmazza a szakterület gyökét, és generikus mintájú
+  const isGenericPattern =
+    nameNorm === 'receptírás' ||
+    nameNorm === 'telefonos konzultáció' ||
+    nameNorm === 'videós konzultáció' ||
+    nameNorm === 'laborvizsgálat' ||
+    nameNorm === 'konzultáció, általános vizsgálat' ||
+    nameNorm === 'konzultáció';
+  if (isGenericPattern) {
+    return `${name} <span class="spec-suffix">(${spec})</span>`;
+  }
+  return name;
+}
+
+function treatmentCard(name, spec) {
+  const isPhone = name.toLowerCase().includes('telefonos');
+  const isVideo = name.toLowerCase().includes('videós');
+  let tag = '';
+  if (isPhone) tag = '<span class="tag tag-phone">Telefonos</span>';
+  else if (isVideo) tag = '<span class="tag tag-video">Videó</span>';
+
+  const shown = displayName(name, spec);
+
+  return `<a class="treatment-card" href="talalatok.html?specialty=${encodeURIComponent(spec)}&service=${encodeURIComponent(name)}">
+    <div class="treatment-card__title">${shown}${tag}</div>
+    <div class="treatment-card__arrow">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+  </a>`;
+}
+
+function render() {
+  const section = document.getElementById('mainSection');
+
+  // Keresés
+  if (searchQuery) {
+    const q = normalize(searchQuery);
+    const results = [];
+    SPECIALTIES.forEach(s => {
+      s.treatments.forEach(t => {
+        if (normalize(t).includes(q) || normalize(s.name).includes(q)) {
+          results.push({ treatment: t, spec: s });
+        }
+      });
+    });
+
+    if (!results.length) {
+      section.innerHTML = `<div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <h3>Nincs találat</h3>
+        <p>Próbáld más kulcsszóval.</p>
+      </div>`;
+      return;
+    }
+
+    // Group by spec
+    const grouped = {};
+    results.forEach(r => {
+      if (!grouped[r.spec.name]) grouped[r.spec.name] = { spec: r.spec, items: [] };
+      grouped[r.spec.name].items.push(r.treatment);
+    });
+
+    section.innerHTML = Object.values(grouped).map(g => `
+      <div class="spec-section">
+        <div class="spec-header">
+          <div class="spec-badge" style="background:${g.spec.color}22;">${g.spec.icon}</div>
+          <div>
+            <div class="spec-name">${g.spec.name}</div>
+            <div class="spec-count">${g.items.length} találat</div>
+          </div>
+        </div>
+        <div class="treatments-grid">${g.items.map(t => treatmentCard(t, g.spec.name)).join('')}</div>
+      </div>
+    `).join('');
+    return;
+  }
+
+  // Szakterület nézet
+  if (currentView === 'specialty') {
+    section.innerHTML = SPECIALTIES.map(s => `
+      <div class="spec-section" id="spec-${s.name.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ0-9]/g,'_')}">
+        <div class="spec-header">
+          <div class="spec-badge" style="background:${s.color}22; border: 1.5px solid ${s.color}33;">${s.icon}</div>
+          <div>
+            <div class="spec-name">${s.name}</div>
+            <div class="spec-count">${s.treatments.length} vizsgálat / kezelés</div>
+          </div>
+          ${!NO_DB_SPECS.has(s.name) 
+            ? `<a href="talalatok.html?specialty=${encodeURIComponent(s.name)}" style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:100px;background:${s.color};color:#fff;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;">Orvosok keresése →</a>`
+            : `<span class="badge-soon" style="margin-left:auto;">⏳ Hamarosan</span>`
+          }
+        </div>
+        <div class="treatments-grid">${s.treatments.map(t => treatmentCard(t, s.name)).join('')}</div>
+      </div>
+    `).join('');
+    return;
+  }
+
+  // Lista nézet (szakterület szűrővel)
+  const specs = activeSpecialty === 'ALL' ? SPECIALTIES : SPECIALTIES.filter(s => s.name === activeSpecialty);
+  section.innerHTML = specs.map(s => `
+    <div class="spec-section" id="spec-list-${s.name.replace(/[^a-zA-ZáéíóöőúüűÁÉÍÓÖŐÚÜŰ0-9]/g,'_')}">
+      <div class="spec-header">
+        <div class="spec-badge" style="background:${s.color}22; border: 1.5px solid ${s.color}33;">${s.icon}</div>
+        <div>
+          <div class="spec-name">${s.name}</div>
+          <div class="spec-count">${s.treatments.length} vizsgálat / kezelés</div>
+        </div>
+      </div>
+      <div class="treatments-grid">${s.treatments.map(t => treatmentCard(t, s.name)).join('')}</div>
+    </div>
+  `).join('');
+}
+
+// Search
+let searchTimer;
+document.getElementById('searchInput').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQuery = e.target.value.trim();
+    document.getElementById('specNav').style.display   = searchQuery ? 'none' : (currentView==='specialty' ? '' : 'none');
+    document.getElementById('filterWrap').style.display = searchQuery ? 'none' : (currentView==='list' ? '' : 'none');
+    render();
+  }, 200);
+});
+
+// Hamburger
+function toggleMenu() {
+  const d = document.getElementById('mobileDrawer');
+  const icon = document.getElementById('menuIcon');
+  const open = d.classList.toggle('open');
+  document.body.style.overflow = open ? 'hidden' : '';
+  icon.innerHTML = open
+    ? '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'
+    : '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';
+}
+document.addEventListener('click', e => {
+  const d = document.getElementById('mobileDrawer');
+  const t = document.getElementById('mobileToggle');
+  if (d && d.classList.contains('open') && !d.contains(e.target) && !t.contains(e.target)) toggleMenu();
+});
+
+// Init
+buildSpecNav();
+buildFilterPills();
+render();
+</script>
+</body>
+</html>
