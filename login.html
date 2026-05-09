@@ -402,6 +402,19 @@ const ROLE_REDIRECTS={
 let currentRole='doctor_admin';
 let pwVisible=false;
 
+// Ha admin oldalról jöttünk, automatikusan superadmin szerepkört választjuk
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get('redirect');
+  if (redirect === 'admin') {
+    currentRole = 'superadmin';
+    document.addEventListener('DOMContentLoaded', () => {
+      const superBtn = document.querySelector('[data-role="superadmin"]');
+      if (superBtn) superBtn.click();
+    });
+  }
+})();
+
 /* ═══ ROLE SELECT ═══ */
 function selectRole(btn){
   document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
