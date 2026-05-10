@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adatvédelmi Szabályzat – Szakorvos.hu</title>
+<meta name="description" content="A Szakorvos.hu adatvédelmi szabályzata. Tájékoztató a személyes adatok kezeléséről, a felhasználók jogairól és a sütikről.">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:    #283897;
+  --blue2:   #4042e2;
+  --orange:  #ff6b2b;
+  --bg:      #f0f4ff;
+  --white:   #ffffff;
+  --text:    #0f172a;
+  --sub:     #6b7280;
+  --border:  #e8edf8;
+  --muted:   #9aa5c4;
+}
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(40,56,151,0.06);
+  height: 64px;
+}
+.nav-inner {
+  display: flex; align-items: center; height: 64px;
+  padding: 0 5%; max-width: 1200px; margin: 0 auto; gap: 8px;
+}
+.nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+.nav-logo-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg,#283897,#4042e2);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-text { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 900; color: var(--blue); }
+.nav-logo-text em { color: var(--orange); font-style: normal; }
+.nav-back {
+  margin-left: auto; display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--sub);
+  text-decoration: none; transition: color .2s;
+}
+.nav-back:hover { color: var(--blue); }
+
+/* ── HERO ── */
+.hero {
+  padding-top: 96px; padding-bottom: 40px;
+  background: linear-gradient(160deg, #eef2ff 0%, #f0f4ff 60%, #fff 100%);
+  border-bottom: 1px solid var(--border);
+}
+.hero-inner {
+  max-width: 860px; margin: 0 auto; padding: 0 5%;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(40,56,151,0.08); border: 1px solid rgba(40,56,151,0.15);
+  color: var(--blue); font-size: 11px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 100px; padding: 5px 14px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 900; color: var(--blue); line-height: 1.15;
+  margin-bottom: 14px;
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 20px;
+  flex-wrap: wrap; font-size: 13px; color: var(--sub);
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ── LAYOUT ── */
+.layout {
+  max-width: 1100px; margin: 0 auto; padding: 3rem 5% 5rem;
+  display: grid; grid-template-columns: 240px 1fr; gap: 3rem; align-items: start;
+}
+
+/* ── SIDEBAR TOC ── */
+.toc {
+  position: sticky; top: 80px;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+}
+.toc-header {
+  padding: 14px 18px; background: linear-gradient(135deg,#283897,#4042e2);
+  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
+  color: #fff; letter-spacing: .08em; text-transform: uppercase;
+}
+.toc-list { list-style: none; padding: 8px 0; }
+.toc-list li a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 18px; font-size: 13px; font-weight: 600;
+  color: var(--sub); text-decoration: none; transition: all .15s;
+  border-left: 3px solid transparent;
+}
+.toc-list li a:hover { color: var(--blue); background: #f0f4ff; border-left-color: var(--blue); }
+.toc-list li a.active { color: var(--blue); background: #eef2ff; border-left-color: var(--blue); }
+.toc-num { font-size: 11px; color: var(--muted); flex-shrink: 0; width: 16px; }
+
+/* ── CONTENT ── */
+.content { min-width: 0; }
+
+.section {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 16px; margin-bottom: 1.25rem; overflow: hidden;
+  scroll-margin-top: 80px;
+}
+.section-header {
+  padding: 20px 28px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.section-icon {
+  width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.section-title {
+  font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 900; color: var(--text);
+}
+.section-num { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 2px; }
+.section-body { padding: 24px 28px; }
+
+/* Typography */
+.section-body p { font-size: 14.5px; line-height: 1.8; color: #374151; margin-bottom: 1rem; }
+.section-body p:last-child { margin-bottom: 0; }
+.section-body h3 {
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--blue); margin: 1.25rem 0 .5rem;
+}
+.section-body ul, .section-body ol {
+  padding-left: 1.25rem; margin-bottom: 1rem;
+}
+.section-body li { font-size: 14px; line-height: 1.8; color: #374151; margin-bottom: 3px; }
+.section-body strong { color: var(--text); font-weight: 700; }
+
+/* Info box */
+.info-box {
+  background: #eff6ff; border: 1.5px solid #bfdbfe;
+  border-radius: 11px; padding: 14px 16px; margin: 1rem 0;
+  font-size: 13.5px; color: #1d4ed8; line-height: 1.7;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.info-box svg { flex-shrink: 0; margin-top: 2px; }
+
+.warn-box {
+  background: #fffbeb; border: 1.5px solid #fde68a;
+  border-radius: 11px; padding: 14px 16px; margin: 1rem 0;
+  font-size: 13.5px; color: #92400e; line-height: 1.7;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13.5px; }
+.data-table th {
+  background: #f8faff; padding: 10px 14px; text-align: left;
+  font-weight: 700; color: var(--blue); border-bottom: 2px solid var(--border);
+  font-family: 'Nunito', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+}
+.data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: #374151; line-height: 1.6; vertical-align: top; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #fafbff; }
+
+/* Meta row */
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 12px; margin: 1rem 0;
+}
+.meta-tag {
+  display: flex; align-items: center; gap: 6px;
+  background: #f0f4ff; border: 1px solid var(--border);
+  border-radius: 100px; padding: 5px 12px;
+  font-size: 12.5px; font-weight: 600; color: var(--blue);
+}
+.meta-tag.orange { background: rgba(255,107,43,0.08); border-color: rgba(255,107,43,0.2); color: #c2410c; }
+.meta-tag.green { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; }
+
+/* Rights grid */
+.rights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
+.right-card {
+  border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px;
+  transition: border-color .2s;
+}
+.right-card:hover { border-color: #283897; }
+.right-card-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.right-card-desc { font-size: 12.5px; color: var(--sub); line-height: 1.6; }
+
+/* Footer note */
+.footer-note {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 24px 28px; margin-bottom: 1.25rem;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.footer-note-icon { font-size: 24px; flex-shrink: 0; }
+.footer-note p { font-size: 13.5px; color: var(--sub); line-height: 1.7; }
+.footer-note strong { color: var(--text); }
+
+/* Contact card */
+.contact-card {
+  background: linear-gradient(135deg,#283897,#4042e2);
+  border-radius: 16px; padding: 24px 28px; color: #fff; margin-bottom: 1.25rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.contact-card h3 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+.contact-card p { font-size: 13.5px; opacity: .85; }
+.contact-card a {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3);
+  color: #fff; text-decoration: none; font-size: 13px; font-weight: 700;
+  padding: 9px 18px; border-radius: 100px; transition: all .2s; white-space: nowrap;
+}
+.contact-card a:hover { background: rgba(255,255,255,0.25); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .toc { display: none; }
+}
+@media (max-width: 600px) {
+  .rights-grid { grid-template-columns: 1fr; }
+  .section-body { padding: 18px; }
+  .section-header { padding: 16px 18px; }
+  .hero h1 { font-size: 1.6rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <span class="nav-logo-text">Szakorvos<em>.hu</em></span>
+    </a>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      Vissza a főoldalra
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      GDPR-kompatibilis
+    </div>
+    <h1>Adatvédelmi Szabályzat</h1>
+    <div class="hero-meta">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Hatályos: 2026. május 1.
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Utolsó módosítás: 2026. május 10.
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        10 fejezet
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <nav class="toc">
+      <div class="toc-header">Tartalomjegyzék</div>
+      <ul class="toc-list">
+        <li><a href="#s1"><span class="toc-num">1.</span> Adatkezelő adatai</a></li>
+        <li><a href="#s2"><span class="toc-num">2.</span> A szabályzat célja</a></li>
+        <li><a href="#s3"><span class="toc-num">3.</span> Kezelt adatok</a></li>
+        <li><a href="#s4"><span class="toc-num">4.</span> Adatfeldolgozók</a></li>
+        <li><a href="#s5"><span class="toc-num">5.</span> Sütik</a></li>
+        <li><a href="#s6"><span class="toc-num">6.</span> Az Ön jogai</a></li>
+        <li><a href="#s7"><span class="toc-num">7.</span> Adatbiztonság</a></li>
+        <li><a href="#s8"><span class="toc-num">8.</span> Gyermekek védelme</a></li>
+        <li><a href="#s9"><span class="toc-num">9.</span> Módosítások</a></li>
+        <li><a href="#s10"><span class="toc-num">10.</span> Kapcsolat</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- 1. Adatkezelő -->
+    <section class="section" id="s1">
+      <div class="section-header">
+        <div class="section-icon" style="background:#eef2ff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <div class="section-num">1. fejezet</div>
+          <div class="section-title">Adatkezelő adatai</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>Adatkezelő neve</strong></td><td>[cégnév / egyéni vállalkozó neve]</td></tr>
+            <tr><td><strong>Székhely</strong></td><td>[cím]</td></tr>
+            <tr><td><strong>Adószám</strong></td><td>[adószám]</td></tr>
+            <tr><td><strong>Cégjegyzékszám</strong></td><td>[adat]</td></tr>
+            <tr><td><strong>Email</strong></td><td><a href="mailto:info@szakorvos.hu" style="color:#283897">info@szakorvos.hu</a></td></tr>
+            <tr><td><strong>Weboldal</strong></td><td><a href="https://szakorvos.hu" style="color:#283897">szakorvos.hu</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. Cél -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ecfdf5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="section-num">2. fejezet</div>
+          <div class="section-title">A szabályzat célja</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Ez a szabályzat tájékoztatja a Szakorvos.hu platform látogatóit és felhasználóit arról, hogy milyen személyes adatokat gyűjtünk, azokat miért és hogyan kezeljük, meddig tároljuk, és milyen jogok illetik meg Önt az adataival kapcsolatban.</p>
+        <p>Az adatkezelés az Európai Unió <strong>2016/679 számú általános adatvédelmi rendeletének (GDPR)</strong> és a magyar információs önrendelkezési jogról és az információszabadságról szóló <strong>2011. évi CXII. törvénynek (Infotv.)</strong> megfelelően történik.</p>
+      </div>
+    </section>
+
+    <!-- 3. Kezelt adatok -->
+    <section class="section" id="s3">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fff7ed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div>
+          <div class="section-num">3. fejezet</div>
+          <div class="section-title">Kezelt adatok köre és az adatkezelés célja</div>
+        </div>
+      </div>
+      <div class="section-body">
+
+        <h3>3.1 Látogatói adatok (regisztráció nélkül)</h3>
+        <p>Amikor Ön meglátogatja az oldalt, automatikusan naplózzuk az alábbi adatokat:</p>
+        <ul>
+          <li>IP-cím (anonimizált formában)</li>
+          <li>Látogatás időpontja, megtekintett oldalak</li>
+          <li>Keresési lekérdezések (pl. szakterület, város)</li>
+          <li>Böngésző típusa és operációs rendszer</li>
+        </ul>
+        <div class="meta-row">
+          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: jogos érdek (GDPR 6. cikk f)</span>
+          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: 12 hónap</span>
+        </div>
+
+        <h3>3.2 Regisztrált páciensek adatai</h3>
+        <ul>
+          <li>Email cím, teljes név (opcionális)</li>
+          <li>Jelszó (titkosított, nem olvasható)</li>
+          <li>Regisztráció időpontja, foglalási előzmények</li>
+        </ul>
+        <div class="meta-row">
+          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: szerződés teljesítése (GDPR 6. cikk b)</span>
+          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: fiók törléséig, max. 3 év</span>
+        </div>
+
+        <h3>3.3 Regisztrált orvosok adatai</h3>
+        <ul>
+          <li>Email cím, jelszó (titkosítva), teljes név, titulus</li>
+          <li>Szakterület(ek), szakmai bemutatkozás</li>
+          <li>Rendelési cím, klinika neve, telefonszám</li>
+          <li>Profilfotó, konzultációs díj, rendelési idők</li>
+          <li>Nyelvismeret, tapasztalati évek száma</li>
+        </ul>
+        <div class="meta-row">
+          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: szerződés + hozzájárulás (GDPR 6. cikk a, b)</span>
+          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: profil törléséig + 30 nap</span>
+        </div>
+
+        <h3>3.4 Klinikák adatai</h3>
+        <ul>
+          <li>Kapcsolattartó neve és email címe</li>
+          <li>Klinika neve, címe, telefonszáma, nyitvatartási idő</li>
+          <li>Elfogadott biztosítók listája</li>
+        </ul>
+
+        <h3>3.5 AI kereső használata</h3>
+        <p>Ha Ön leírja tüneteit az AI keresőben, az alábbiak történnek:</p>
+        <ul>
+          <li>A beírt szöveg az OpenAI API-hoz kerül feldolgozásra</li>
+          <li>Az eredményt (javasolt szakterület) statisztikai célból naplózzuk, de <strong>személyhez nem kötjük</strong></li>
+          <li>A naplóban csak a keresési lekérdezés szövege és az időpont szerepel</li>
+        </ul>
+        <div class="info-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Az AI kereső használata során a felhasználó egészségügyi adatnak minősülő információkat is megadhat. Ezeket kizárólag a keresési funkció működtetéséhez használjuk fel, és <strong>nem kapcsoljuk össze felhasználói profillal vagy más azonosító adattal</strong>.
+        </div>
+        <div class="info-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Az OpenAI API-ba küldött adatok az OpenAI aktuális vállalati API adatkezelési feltételei szerint kerülnek feldolgozásra. Az API-n keresztül küldött adatokat az OpenAI <strong>nem használja fel a modellek általános tanítására</strong> az aktuális vállalati API beállítások alapján.
+        </div>
+        <div class="warn-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Az AI kereső által adott eredmények <strong>kizárólag tájékoztató jellegűek</strong>, nem minősülnek orvosi diagnózisnak, egészségügyi tanácsadásnak vagy kezelési javaslatnak. Kérjük, ne adjon meg az AI keresőben személyes azonosításra alkalmas adatokat (pl. teljes nevet, TAJ-számot).
+        </div>
+        <div class="meta-row">
+          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: önkéntes hozzájárulás + jogos érdek (GDPR 6. cikk a, f)</span>
+          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: 12 hónap</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Adatfeldolgozók -->
+    <section class="section" id="s4">
+      <div class="section-header">
+        <div class="section-icon" style="background:#f0fdf4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <div>
+          <div class="section-num">4. fejezet</div>
+          <div class="section-title">Adatfeldolgozók és harmadik felek</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Az adatok kezeléséhez az alábbi megbízható partnercégek szolgáltatásait vesszük igénybe:</p>
+        <table class="data-table">
+          <thead><tr><th>Szolgáltató</th><th>Szerepe</th><th>Székhely</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Supabase Inc.</strong></td><td>Adatbázis és autentikáció</td><td>USA (EU szerveren tárolt)</td></tr>
+            <tr><td><strong>OpenAI LLC</strong></td><td>AI szövegelemzés</td><td>USA</td></tr>
+            <tr><td><strong>Silicium.eu</strong></td><td>Email küldés (SMTP)</td><td>Magyarország</td></tr>
+          </tbody>
+        </table>
+        <p>Minden külső szolgáltatóval adatfeldolgozói szerződést kötünk. Az USA-ban székhellyel rendelkező cégek esetén az EU–USA adatvédelmi keretrendszer (Data Privacy Framework) vagy standard szerződéses klauzulák alapján történik az adattovábbítás.</p>
+      </div>
+    </section>
+
+    <!-- 5. Sütik -->
+    <section class="section" id="s5">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fefce8">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a16207" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="10" r="1" fill="#a16207"/><circle cx="15" cy="9" r="1" fill="#a16207"/><circle cx="10" cy="15" r="1" fill="#a16207"/></svg>
+        </div>
+        <div>
+          <div class="section-num">5. fejezet</div>
+          <div class="section-title">Sütik (cookie-k)</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <table class="data-table">
+          <thead><tr><th>Süti neve</th><th>Típusa</th><th>Célja</th><th>Lejárat</th></tr></thead>
+          <tbody>
+            <tr><td><code>sb-*</code> (Supabase)</td><td>Szükséges</td><td>Bejelentkezési munkamenet fenntartása</td><td>Munkamenet / 7 nap</td></tr>
+            <tr><td>Névtelen analitika</td><td>Statisztikai</td><td>Látogatói statisztikák</td><td>12 hónap</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Harmadik féltől származó reklám- vagy követési sütit <strong>nem</strong> használunk. Amennyiben a jövőben nem szükséges sütik (pl. analitikai vagy marketing sütik) kerülnek alkalmazásra, a weboldal előzetes hozzájárulást kér azok használatához.
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Jogok -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <div class="section-icon" style="background:#eef2ff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="section-num">6. fejezet</div>
+          <div class="section-title">Az Ön jogai</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="rights-grid">
+          <div class="right-card">
+            <div class="right-card-title">👁 Hozzáférési jog</div>
+            <div class="right-card-desc">Bármikor kérheti, hogy tájékoztassuk az Önről tárolt adatainkról.</div>
+          </div>
+          <div class="right-card">
+            <div class="right-card-title">✏️ Helyesbítési jog</div>
+            <div class="right-card-desc">Kérheti a pontatlan adatok javítását, a hiányos adatok kiegészítését.</div>
+          </div>
+          <div class="right-card">
+            <div class="right-card-title">🗑 Törlési jog</div>
+            <div class="right-card-desc">Kérheti adatai törlését, ha az adatkezelés jogalapja megszűnt.</div>
+          </div>
+          <div class="right-card">
+            <div class="right-card-title">📦 Adathordozhatóság</div>
+            <div class="right-card-desc">Kérheti adatait géppel olvasható formátumban (JSON/CSV).</div>
+          </div>
+          <div class="right-card">
+            <div class="right-card-title">🚫 Tiltakozás joga</div>
+            <div class="right-card-desc">Tiltakozhat a jogos érdeken alapuló adatkezelés ellen.</div>
+          </div>
+          <div class="right-card">
+            <div class="right-card-title">⏸ Korlátozás joga</div>
+            <div class="right-card-desc">Kérheti az adatkezelés korlátozását vitás esetekben.</div>
+          </div>
+        </div>
+        <p>Jogai gyakorlásához írjon az <a href="mailto:info@szakorvos.hu" style="color:#283897;font-weight:600">info@szakorvos.hu</a> email-címre. Kérelmére <strong>30 napon belül</strong> válaszolunk.</p>
+        <div class="info-box" style="margin-top:1rem">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Ha úgy érzi, jogait megsértettük, panaszt tehet a <strong>Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH)</strong>: <a href="https://naih.hu" target="_blank" style="color:#1d4ed8">naih.hu</a> · 1055 Budapest, Falk Miksa utca 9-11.
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Biztonság -->
+    <section class="section" id="s7">
+      <div class="section-header">
+        <div class="section-icon" style="background:#ecfdf5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <div class="section-num">7. fejezet</div>
+          <div class="section-title">Adatbiztonság</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <ul>
+          <li>Minden adat <strong>HTTPS kapcsolaton</strong> keresztül kerül átvitelre</li>
+          <li>A jelszavak <strong>bcrypt algoritmussal</strong> titkosítva tárolódnak</li>
+          <li>Az adatbázis-hozzáférés <strong>Row Level Security (RLS)</strong> szabályokkal korlátozott</li>
+          <li>Az admin felület kizárólag autentikált, jogosult felhasználók számára érhető el</li>
+          <li>Az API kulcsok és érzékeny adatok kizárólag szerver oldali környezetben kerülnek felhasználásra</li>
+          <li>A rendszeres biztonsági frissítések és hozzáférés-kezelési eljárások alkalmazásával törekszünk az adatok bizalmasságának és sértetlenségének megőrzésére</li>
+        </ul>
+
+        <h3>7.1 Adatvédelmi incidensek kezelése</h3>
+        <p>Adatvédelmi incidens esetén a hatályos jogszabályoknak megfelelően járunk el, és szükség esetén értesítjük az érintetteket, valamint a Nemzeti Adatvédelmi és Információszabadság Hatóságot (NAIH).</p>
+      </div>
+    </section>
+
+    <!-- 8. Gyermekek -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fdf4ff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="section-num">8. fejezet</div>
+          <div class="section-title">Gyermekek adatainak védelme</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>A Szakorvos.hu szolgáltatásai <strong>18 éven aluli személyek számára nem elérhetők</strong>. Ha tudomásunkra jut, hogy kiskorútól gyűjtöttünk adatot, azt haladéktalanul töröljük.</p>
+        <p>A szolgáltatás használatával a felhasználó kijelenti, hogy betöltötte a 18. életévét.</p>
+      </div>
+    </section>
+
+    <!-- 9. Módosítások -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <div class="section-icon" style="background:#fff7ed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-5.96"/></svg>
+        </div>
+        <div>
+          <div class="section-num">9. fejezet</div>
+          <div class="section-title">Módosítások</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Fenntartjuk a jogot e szabályzat módosítására. Lényeges változás esetén emailben értesítjük a regisztrált felhasználókat, és az oldal tetején 30 napig jelezzük a módosítást. A folyamatos használat a módosított szabályzat elfogadását jelenti.</p>
+      </div>
+    </section>
+
+    <!-- 10. Kapcsolat -->
+    <section class="section" id="s10">
+      <div class="section-header">
+        <div class="section-icon" style="background:#eef2ff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="section-num">10. fejezet</div>
+          <div class="section-title">Kapcsolat</div>
+        </div>
+      </div>
+      <div class="section-body">
+        <p>Adatvédelmi kérdéseivel forduljon hozzánk bizalommal:</p>
+      </div>
+    </section>
+
+    <!-- Kapcsolat kártya -->
+    <div class="contact-card">
+      <div>
+        <h3>Adatvédelmi kérdése van?</h3>
+        <p>Írjon nekünk és 30 napon belül válaszolunk.</p>
+      </div>
+      <a href="mailto:info@szakorvos.hu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        info@szakorvos.hu
+      </a>
+    </div>
+
+    <!-- Jogi note -->
+    <div class="footer-note">
+      <div class="footer-note-icon">⚠️</div>
+      <p>Jelen adatvédelmi tájékoztató <strong>kizárólag tájékoztató jellegű</strong>, és nem helyettesíti a személyre szabott jogi tanácsadást. Éles üzembe helyezés előtt javasolt ügyvéd vagy adatvédelmi szakértő bevonása.</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Aktív fejezet kiemelése görgetéskor
+const sections = document.querySelectorAll('.section[id]');
+const tocLinks = document.querySelectorAll('.toc-list a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-80px 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// Smooth scroll
+document.querySelectorAll('.toc-list a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
