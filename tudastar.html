@@ -426,31 +426,46 @@ function huCompare(a, b) {
 }
 
 async function loadArticles() {
+  const section = document.getElementById('articlesSection');
   // Supabase max 1000 rekordot ad vissza egyszerre – lapozással töltjük le az összeset
   let all = [];
   let from = 0;
   const pageSize = 1000;
 
-  while (true) {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/knowledge_articles?select=id,title,slug,specialty&order=title.asc&limit=${pageSize}&offset=${from}`,
-      { headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Range': `${from}-${from + pageSize - 1}`
-      }}
-    );
-    const batch = await res.json();
-    if (!batch || !batch.length) break;
-    all = all.concat(batch);
-    if (batch.length < pageSize) break;
-    from += pageSize;
-  }
+  try {
+    while (true) {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/knowledge_articles?select=id,title,slug,specialty&order=title.asc&limit=${pageSize}&offset=${from}`,
+        { headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Range': `${from}-${from + pageSize - 1}`
+        }}
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status} – ${res.statusText}`);
+      const batch = await res.json();
+      if (!batch || !batch.length) break;
+      all = all.concat(batch);
+      if (batch.length < pageSize) break;
+      from += pageSize;
+    }
 
-  // Magyar ábécé szerinti rendezés
-  allArticles = all.sort(huCompare);
-  buildAlphabet();
-  renderArticles();
+    // Magyar ábécé szerinti rendezés
+    allArticles = all.sort(huCompare);
+    buildAlphabet();
+    renderArticles();
+  } catch(e) {
+    console.error('[loadArticles]', e);
+    if (section) {
+      section.innerHTML = `
+        <div class="empty-state" style="margin-top:2rem">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <h3>Nem sikerült betölteni a cikkeket</h3>
+          <p>${e.message || 'Hálózati hiba'}</p>
+          <button onclick="loadArticles()" style="margin-top:1rem;padding:10px 20px;border:none;border-radius:10px;background:#283897;color:#fff;font-weight:700;cursor:pointer">Újrapróbálás</button>
+        </div>`;
+    }
+  }
 }
 
 function buildAlphabet() {
