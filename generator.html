@@ -28,65 +28,181 @@ document.addEventListener('DOMContentLoaded', async () => {
 </script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito Sans',sans-serif;background:#f4f7fc;color:#0f172a;min-height:100vh}
-.nav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 5%;height:60px;display:flex;align-items:center;gap:10px}
-.logo{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;color:#1e3a8a}
-.logo em{color:#22c55e;font-style:normal}
+
+/* ── Szín paletta ──
+   Elsődleges sötétkék : #283897
+   Élénk elektromos kék: #4042e2
+   Narancssárga akcentus: #ff6b2b
+*/
+
+body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef0ff 0%,#fff4ef 100%);color:#0f172a;min-height:100vh}
+
+/* NAV */
+.nav{
+  background:linear-gradient(90deg,#283897 0%,#4042e2 60%,#ff6b2b 100%);
+  padding:0 5%;height:64px;display:flex;align-items:center;gap:12px;
+  box-shadow:0 4px 24px rgba(40,56,151,0.25);
+}
+.logo{font-family:'Nunito',sans-serif;font-size:19px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.logo em{color:#ffd6bc;font-style:normal}
+.nav-sep{color:rgba(255,255,255,0.35);font-size:20px}
+.nav-subtitle{font-size:13px;color:rgba(255,255,255,0.75);font-weight:600}
+.btn-logout{
+  background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.35);
+  color:#fff;padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:all .2s;
+  backdrop-filter:blur(4px);
+}
+.btn-logout:hover{background:rgba(255,255,255,0.28);border-color:rgba(255,255,255,0.6)}
+
+/* WRAP */
 .wrap{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
-h1{font-family:'Nunito',sans-serif;font-size:24px;font-weight:900;color:#1e3a8a;margin-bottom:.25rem}
-.sub{font-size:14px;color:#64748b;margin-bottom:2rem}
+
+/* HERO / HEADER */
+.page-header{
+  background:linear-gradient(135deg,#283897 0%,#4042e2 50%,#5a3fd8 100%);
+  border-radius:20px;padding:2rem 2.25rem;margin-bottom:1.5rem;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 32px rgba(64,66,226,0.3);
+}
+.page-header::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,107,43,0.18);pointer-events:none;
+}
+.page-header::after{
+  content:'';position:absolute;bottom:-60px;left:30%;
+  width:160px;height:160px;border-radius:50%;
+  background:rgba(255,255,255,0.06);pointer-events:none;
+}
+.page-header h1{
+  font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;
+  color:#fff;margin-bottom:.3rem;position:relative;z-index:1;
+}
+.page-header .sub{
+  font-size:14px;color:rgba(255,255,255,0.72);margin-bottom:0;
+  position:relative;z-index:1;
+}
+
+/* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
-.stat{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1rem 1.25rem;text-align:center}
-.stat-val{font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:#1e3a8a;line-height:1}
-.stat-lbl{font-size:12px;color:#64748b;margin-top:4px}
-.progress-wrap{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.25rem;margin-bottom:1.5rem}
-.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.stat{
+  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  padding:1.1rem 1.25rem;text-align:center;
+  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+  transition:transform .2s,box-shadow .2s;
+}
+.stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(64,66,226,0.15)}
+.stat-val{
+  font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;
+  background:linear-gradient(135deg,#283897,#4042e2);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1;
+}
+.stat-lbl{font-size:12px;color:#64748b;margin-top:5px;font-weight:600}
+
+/* PROGRESS */
+.progress-wrap{
+  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  padding:1.25rem;margin-bottom:1.5rem;
+  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem}
 .progress-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#0f172a}
-.progress-pct{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#1e3a8a}
-.bar{height:12px;background:#e2e8f0;border-radius:99px;overflow:hidden}
-.bar-fill{height:100%;background:linear-gradient(90deg,#1e3a8a,#2d4fd6);border-radius:99px;transition:width .5s ease;width:0%}
-.controls{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:1.25rem;margin-bottom:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.btn-start{background:#1e3a8a;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all .2s}
-.btn-start:hover{background:#1e40af}
-.btn-start:disabled{opacity:.5;cursor:not-allowed}
-.btn-stop{background:#fff;border:1.5px solid #e2e8f0;color:#374151;padding:10px 20px;border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.progress-pct{
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
+  color:#ff6b2b;
+}
+.bar{height:14px;background:#eef0ff;border-radius:99px;overflow:hidden}
+.bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,#283897,#4042e2,#ff6b2b);
+  border-radius:99px;transition:width .5s ease;width:0%;
+  box-shadow:0 2px 8px rgba(64,66,226,0.35);
+}
+
+/* CONTROLS */
+.controls{
+  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  padding:1.25rem;margin-bottom:1.25rem;display:flex;gap:10px;
+  align-items:center;flex-wrap:wrap;
+  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+}
+.btn-start{
+  background:linear-gradient(135deg,#ff6b2b,#ff8c52);
+  color:#fff;border:none;padding:11px 24px;border-radius:10px;
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  cursor:pointer;display:flex;align-items:center;gap:7px;
+  transition:all .2s;box-shadow:0 4px 14px rgba(255,107,43,0.35);
+}
+.btn-start:hover{
+  background:linear-gradient(135deg,#e85a1e,#ff6b2b);
+  transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,43,0.45);
+}
+.btn-start:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-stop{
+  background:#fff;border:1.5px solid #e2e8f0;color:#374151;
+  padding:10px 20px;border-radius:10px;font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
+}
 .btn-stop:hover{border-color:#ef4444;color:#ef4444}
 .btn-stop:disabled{opacity:.4;cursor:not-allowed}
-select{padding:9px 12px;border-radius:10px;border:1.5px solid #e2e8f0;font-size:13px;background:#fff;color:#0f172a;font-family:'Nunito Sans',sans-serif}
-.status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#64748b}
-.dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
-.dot.on{background:#22c55e;animation:pulse 1s infinite}
+select{
+  padding:9px 12px;border-radius:10px;
+  border:1.5px solid #e8edf8;font-size:13px;
+  background:#fff;color:#0f172a;font-family:'Nunito Sans',sans-serif;
+  font-weight:600;
+}
+.status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#64748b;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
+.dot.on{background:#22c55e;animation:pulse 1s infinite;box-shadow:0 0 0 3px rgba(34,197,94,0.2)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.log-wrap{background:#0f172a;border-radius:14px;overflow:hidden}
-.log-header{padding:.75rem 1rem;background:#1e293b;display:flex;align-items:center;justify-content:space-between}
-.log-title{font-size:12px;font-weight:700;color:#94a3b8;letter-spacing:.05em}
-.log-clear{background:none;border:none;cursor:pointer;font-size:11px;color:#475569;font-family:'Nunito Sans',sans-serif}
-.log-clear:hover{color:#94a3b8}
+
+/* LOG */
+.log-wrap{
+  background:#1a1b2e;border-radius:16px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(40,56,151,0.2);
+  border:1px solid #2d2f4a;
+}
+.log-header{
+  padding:.75rem 1rem;
+  background:linear-gradient(90deg,#283897,#4042e2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.log-title{font-size:12px;font-weight:800;color:#fff;letter-spacing:.1em;text-transform:uppercase}
+.log-clear{
+  background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;font-size:11px;color:#fff;font-family:'Nunito Sans',sans-serif;
+  padding:3px 10px;border-radius:6px;font-weight:700;transition:all .2s;
+}
+.log-clear:hover{background:rgba(255,255,255,0.28)}
 .log{height:380px;overflow-y:auto;padding:.75rem 1rem;font-size:12px;font-family:monospace;line-height:1.75}
 .log::-webkit-scrollbar{width:4px}
-.log::-webkit-scrollbar-track{background:#1e293b}
-.log::-webkit-scrollbar-thumb{background:#334155;border-radius:99px}
-.l{padding:0;color:#64748b}
+.log::-webkit-scrollbar-track{background:#12131f}
+.log::-webkit-scrollbar-thumb{background:#4042e2;border-radius:99px}
+.l{padding:0;color:#5a6080}
 .ok{color:#4ade80}
 .err{color:#f87171}
-.info{color:#60a5fa;font-weight:bold}
+.info{color:#a5b4fc;font-weight:bold}
 .warn{color:#fbbf24}
 </style>
 </head>
 <body>
 
-<nav>
+<nav class="nav">
   <div class="logo">Szakorvos<em>.hu</em></div>
-  <span style="color:#e2e8f0">|</span>
-  <span style="font-size:13px;color:#64748b">Tudástár Cikk Generátor</span>
+  <span class="nav-sep">|</span>
+  <span class="nav-subtitle">Tudástár Cikk Generátor</span>
   <span style="margin-left:auto">
-    <button onclick="logoutGen()" style="background:none;border:1.5px solid #e2e8f0;color:#64748b;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'Nunito Sans',sans-serif">Kijelentkezés</button>
+    <button onclick="logoutGen()" class="btn-logout">Kijelentkezés</button>
   </span>
 </nav>
 
 <div class="wrap">
-  <h1>Tudástár Cikk Generátor</h1>
-  <p class="sub">Az Edge Function automatikusan megírja és feltölti az összes hiányzó cikket</p>
+  <div class="page-header">
+    <h1>⚡ Tudástár Cikk Generátor</h1>
+    <p class="sub">Az Edge Function automatikusan megírja és feltölti az összes hiányzó cikket</p>
+  </div>
 
   <div class="stats">
     <div class="stat"><div class="stat-val" id="sTotal">–</div><div class="stat-lbl">Összes cikk</div></div>
