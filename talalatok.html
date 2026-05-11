@@ -19,7 +19,7 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   --bg:#f0f4ff;--surface:#fff;--border:#e8edf8;
   --text:#1a1f36;--sub:#6b7280;--muted:#9aa5c4;
 }
-body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:#f0f4ff;overflow-x:hidden}
+body{font-family:'Nunito Sans',sans-serif;color:var(--text);background:#fafbff;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c7d2f5;border-radius:9px}
@@ -44,18 +44,18 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .btn-pill:hover{background:var(--olight)}
 
 /* ───── HERO BAR ───── */
-.hbar{background:linear-gradient(135deg,#eef2ff,#f0f4ff 60%,#f4f6fb);border-bottom:1px solid var(--border);padding:1.4rem 3.5%;position:relative;overflow:hidden}
-.hbar::after{content:'';position:absolute;top:-70px;right:-50px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(40,56,151,.06),transparent 70%);pointer-events:none}
+.hbar{background:#fff;border-bottom:1px solid var(--border);padding:1.5rem 3.5%;position:relative}
+.hbar::after{display:none}
 .hbar-in{max-width:1600px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.crumb{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--sub);margin-bottom:5px}
+.crumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--sub);margin-bottom:6px;font-weight:500}
 .crumb a{color:var(--brand)}.crumb a:hover{text-decoration:underline}
-.htitle{font-family:'Nunito',sans-serif;font-size:clamp(1.2rem,2vw,1.55rem);font-weight:800;color:var(--text);line-height:1.3}
+.htitle{font-family:'Nunito',sans-serif;font-size:clamp(1.3rem,2vw,1.6rem);font-weight:800;color:var(--text);line-height:1.3;letter-spacing:-0.01em}
 .htitle b{color:var(--brand);font-weight:900}
-.hpills{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
-.hpill{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--sub)}
+.hpills{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.hpill{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--sub)}
 .hpill.g{border-color:#bbf7d0;color:#059669;background:#f0fdf4}
 .hpill.b{border-color:#c7d2f5;color:var(--brand);background:#eef2ff}
-.cnt-pill{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border-radius:12px;padding:8px 16px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;box-shadow:0 4px 14px rgba(40,56,151,.25)}
+.cnt-pill{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border-radius:10px;padding:9px 18px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;box-shadow:0 2px 8px rgba(40,56,151,.15)}
 
 /* ───── PAGE LAYOUT ───── */
 .pw{max-width:1600px;margin:0 auto;padding:1.5rem 3.5%;display:grid;grid-template-columns:310px 1fr;gap:1.5rem;align-items:start}
@@ -63,11 +63,11 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ══════════════════════════════════════════
    FILTER SIDEBAR – PREMIUM DETAILED
 ══════════════════════════════════════════ */
-.fsb{background:#fff;border:1.5px solid var(--border);border-radius:22px;overflow:hidden;position:sticky;top:80px;box-shadow:0 4px 28px rgba(40,56,151,.08);max-height:calc(100vh - 100px);overflow-y:auto}
+.fsb{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;position:sticky;top:80px;box-shadow:0 2px 16px rgba(40,56,151,.04);max-height:calc(100vh - 100px);overflow-y:auto}
 .fsb::-webkit-scrollbar{width:4px}
 
 /* Header */
-.fsb-hd{padding:1rem 1.4rem;background:linear-gradient(135deg,#f8f9ff,#fff);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+.fsb-hd{padding:1.1rem 1.4rem;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
 .fsb-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:8px}
 .fsb-badge{background:var(--brand);color:#fff;border-radius:100px;padding:1px 8px;font-size:11px;font-weight:700;display:none}
 .fsb-badge.on{display:inline}
@@ -152,64 +152,64 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
    RESULTS
 ───────────────────────────────────── */
 .rtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem}
-.rcnt{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text)}
+.rcnt{font-family:'Nunito',sans-serif;font-size:14.5px;font-weight:800;color:var(--text);letter-spacing:-0.01em}
 .rcnt span{color:var(--brand)}
 .rctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.sort-sel{border:1.5px solid var(--border);border-radius:9px;padding:7px 12px;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s}
+.sort-sel{border:1px solid var(--border);border-radius:9px;padding:8px 14px;font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s;font-weight:600}
 .sort-sel:focus{border-color:var(--brand)}
-.vtog{display:flex;background:#eef2ff;border:1.5px solid #c7d2f5;border-radius:10px;padding:3px;gap:3px}
-.vbtn{padding:5px 11px;border-radius:7px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;color:#8894c8;background:transparent;border:none;display:flex;align-items:center;gap:4px;transition:all .2s}
-.vbtn.on{background:#fff;color:var(--brand);box-shadow:0 2px 8px rgba(40,56,151,.1)}
+.vtog{display:flex;background:#fff;border:1px solid var(--border);border-radius:10px;padding:3px;gap:3px}
+.vbtn{padding:6px 12px;border-radius:7px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;color:var(--sub);background:transparent;border:none;display:flex;align-items:center;gap:4px;transition:all .2s}
+.vbtn.on{background:var(--brand);color:#fff}
 
 /* ─────────────────────────────────────
    DOCTOR CARD
 ───────────────────────────────────── */
-.dc{background:#fff;border:1.5px solid var(--border);border-radius:22px;padding:1.6rem;margin-bottom:.9rem;display:grid;grid-template-columns:90px 1fr auto;gap:1.4rem;align-items:start;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .25s,transform .25s,border-color .25s;animation:cdin .4s both}
-@keyframes cdin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--brand),var(--teal));border-radius:22px 0 0 22px;opacity:0;transition:opacity .25s}
-.dc:hover{box-shadow:0 12px 40px rgba(40,56,151,.12),0 2px 6px rgba(40,56,151,.06);transform:translateY(-3px);border-color:#c7d2f5}
+.dc{background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.5rem 1.6rem;margin-bottom:.85rem;display:grid;grid-template-columns:80px 1fr auto;gap:1.4rem;align-items:start;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .25s,transform .25s,border-color .25s;animation:cdin .4s both}
+@keyframes cdin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--brand);border-radius:18px 0 0 18px;opacity:0;transition:opacity .25s}
+.dc:hover{box-shadow:0 8px 32px rgba(40,56,151,.08),0 1px 4px rgba(40,56,151,.04);transform:translateY(-2px);border-color:#d4ddf5}
 .dc:hover::before{opacity:1}
-.dc.prem{border-color:#fde68a;background:linear-gradient(135deg,#fffbeb,#fff 55%)}
-.dc.prem:hover{border-color:#f59e0b;box-shadow:0 12px 40px rgba(245,158,11,.15)}
-.prem-lbl{position:absolute;top:1.15rem;right:1.15rem;background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:100px;box-shadow:0 2px 8px rgba(245,158,11,.4)}
+.dc.prem{border-color:#fde68a;background:linear-gradient(180deg,#fffdf7,#fff 50%)}
+.dc.prem:hover{border-color:#f59e0b;box-shadow:0 8px 32px rgba(245,158,11,.1)}
+.prem-lbl{position:absolute;top:1.15rem;right:1.15rem;background:#f59e0b;color:#fff;font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:100px}
 
 /* Avatar */
-.av{width:90px;height:90px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:28px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.16);position:relative}
-.av-dot{position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;background:var(--green);border:2.5px solid #fff;border-radius:50%}
+.av{width:80px;height:80px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.1);position:relative}
+.av-dot{position:absolute;bottom:-2px;right:-2px;width:14px;height:14px;background:var(--green);border:2.5px solid #fff;border-radius:50%}
 
 /* Card info */
-.dc-nm{font-family:'Nunito',sans-serif;font-size:19px;font-weight:900;color:var(--text);line-height:1.2}
-.dc-deg{font-size:12.5px;color:var(--sub);margin-top:1px;margin-bottom:.55rem}
-.spec-pill{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;border:1.5px solid #c7d2f5;color:var(--brand);border-radius:100px;font-size:12px;font-weight:700;padding:3px 11px;margin-bottom:.7rem}
+.dc-nm{font-family:'Nunito',sans-serif;font-size:18px;font-weight:800;color:var(--text);line-height:1.25;letter-spacing:-0.01em}
+.dc-deg{font-size:12.5px;color:var(--sub);margin-top:2px;margin-bottom:.6rem;font-weight:500}
+.spec-pill{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;border:1px solid #d4ddf5;color:var(--brand);border-radius:100px;font-size:11.5px;font-weight:700;padding:3px 11px;margin-bottom:.7rem}
 .dc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.75rem}
-.dtag{display:inline-flex;align-items:center;gap:4px;background:#f8f9ff;border:1px solid var(--border);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--sub)}
-.dtag.tl{background:#f0fdfa;border-color:#99f6e4;color:#0d9488}
+.dtag{display:inline-flex;align-items:center;gap:4px;background:#fafbff;border:1px solid var(--border);border-radius:7px;padding:3px 9px;font-size:11.5px;color:var(--sub);font-weight:500}
+.dtag.tl{background:#f0fdfa;border-color:#a5f3eb;color:#0d9488}
 .dtag.gr{background:#f0fdf4;border-color:#bbf7d0;color:#059669}
 .dc-rat{display:flex;align-items:center;gap:8px;margin-bottom:.7rem}
 .stars{display:flex;gap:1px}
 .st{font-size:14px;color:#e5e7eb}.st.f{color:#f59e0b}.st.h{color:#fcd34d}
-.rat-n{font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;color:var(--text)}
+.rat-n{font-family:'Nunito',sans-serif;font-size:14.5px;font-weight:800;color:var(--text)}
 .rev-n{font-size:12px;color:var(--sub)}
 .verif{display:inline-flex;align-items:center;gap:4px;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:100px;padding:2px 8px;font-size:11px;font-weight:700;color:#059669}
-.dc-bio{font-size:13px;color:#4b5563;line-height:1.75;margin-bottom:.75rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dc-bio{font-size:13px;color:#6b7280;line-height:1.65;margin-bottom:.75rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .av-row{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
-.av-lbl{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.av-lbl{font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .adays{display:flex;gap:3px}
-.aday{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;background:#f0f4ff;color:#c7d2f5}
+.aday{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;background:#f4f6fb;color:#c7d2f5}
 .aday.on{background:#ecfdf5;color:#059669}
 .ins-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:.4rem}
-.itag{font-size:10px;font-weight:700;background:#f8f9ff;border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--sub)}
+.itag{font-size:10px;font-weight:700;background:#fafbff;border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--sub)}
 .itag.oep{background:#ecfdf5;border-color:#bbf7d0;color:#059669}
 
 /* Right col */
-.dc-right{display:flex;flex-direction:column;align-items:flex-end;gap:.65rem;flex-shrink:0;min-width:160px}
-.dc-price{font-family:'Nunito',sans-serif;font-size:23px;font-weight:900;color:var(--text);line-height:1;text-align:right}
-.dc-price small{font-size:12px;color:var(--sub);font-weight:400;display:block;margin-top:2px}
+.dc-right{display:flex;flex-direction:column;align-items:flex-end;gap:.65rem;flex-shrink:0;min-width:150px}
+.dc-price{font-family:'Nunito',sans-serif;font-size:22px;font-weight:900;color:var(--text);line-height:1;text-align:right;letter-spacing:-0.01em}
+.dc-price small{font-size:11.5px;color:var(--sub);font-weight:500;display:block;margin-top:3px}
 .nxt-slot{font-size:12px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:4px}
-.btn-book{width:100%;background:var(--brand);color:#fff;border:none;border-radius:12px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;transition:all .2s;box-shadow:0 4px 14px rgba(40,56,151,.25);white-space:nowrap}
-.btn-book:hover{background:var(--navy);transform:scale(1.03);box-shadow:0 6px 20px rgba(40,56,151,.35)}
-.btn-prof{width:100%;background:#fff;color:var(--brand);border:1.5px solid var(--border);border-radius:12px;padding:9px 14px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;transition:all .2s;white-space:nowrap}
-.btn-prof:hover{border-color:var(--brand);background:#eef2ff}
+.btn-book{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:800;transition:all .2s;box-shadow:0 2px 8px rgba(40,56,151,.18);white-space:nowrap}
+.btn-book:hover{background:var(--navy);box-shadow:0 4px 14px rgba(40,56,151,.28)}
+.btn-prof{width:100%;background:#fff;color:var(--brand);border:1px solid var(--border);border-radius:10px;padding:9px 16px;font-family:'Nunito',sans-serif;font-size:12.5px;font-weight:700;transition:all .2s;white-space:nowrap}
+.btn-prof:hover{border-color:var(--brand);background:#fafbff}
 
 /* Grid view */
 .rgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
@@ -218,9 +218,9 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .rgrid .dc-right .btn-book,.rgrid .dc-right .btn-prof{width:auto}
 
 /* Skeleton */
-.skel{background:linear-gradient(90deg,#eef1fa 25%,#e4e9f5 50%,#eef1fa 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:22px;height:188px;margin-bottom:.9rem}
+.skel{background:linear-gradient(90deg,#f4f6fb 25%,#eaeef8 50%,#f4f6fb 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:18px;height:178px;margin-bottom:.85rem}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.empty-st{background:#fff;border:1.5px solid var(--border);border-radius:22px;padding:4rem 2rem;text-align:center}
+.empty-st{background:#fff;border:1px solid var(--border);border-radius:18px;padding:4rem 2rem;text-align:center}
 .empty-icon{font-size:52px;margin-bottom:1rem}
 .empty-title{font-family:'Nunito',sans-serif;font-size:20px;font-weight:800;margin-bottom:.5rem}
 .empty-sub{font-size:14px;color:var(--sub);line-height:1.7}
@@ -370,8 +370,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       <div class="crumb"><a href="index.html">Főoldal</a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg><span id="crumb2">Keresés</span></div>
       <div class="htitle" id="htitle">Orvosok keresése…</div>
       <div class="hpills">
-        <span class="hpill g"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Online foglalás</span>
-        <span class="hpill b"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Azonnali visszajelzés</span>
         <span class="hpill"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Ellenőrzött profilok</span>
       </div>
     </div>
@@ -398,31 +396,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
     <div class="fsb-tags" id="fTags"></div>
 
     <!-- 1. Értékelés -->
-    <div class="fss open" id="fs1">
-      <button class="fss-tog" onclick="toggleSec('fs1')">
-        <span class="fss-lbl">⭐ Értékelés</span><span class="fss-arr">▼</span>
-      </button>
-      <div class="fss-body">
-        <div class="star-opts">
-          <label class="sopt on" data-v=""><input type="radio" name="rat" value="">
-            <span class="sopt-stars">★★★★★</span><span class="sopt-lbl">Összes értékelés</span><span class="sopt-cnt">–</span>
-          </label>
-          <label class="sopt" data-v="4.8"><input type="radio" name="rat" value="4.8">
-            <span class="sopt-stars">★★★★★</span><span class="sopt-lbl">4.8+ Kiváló</span><span class="sopt-cnt" id="c48">–</span>
-          </label>
-          <label class="sopt" data-v="4.5"><input type="radio" name="rat" value="4.5">
-            <span class="sopt-stars">★★★★½</span><span class="sopt-lbl">4.5+ Nagyon jó</span><span class="sopt-cnt" id="c45">–</span>
-          </label>
-          <label class="sopt" data-v="4.0"><input type="radio" name="rat" value="4.0">
-            <span class="sopt-stars">★★★★☆</span><span class="sopt-lbl">4.0+ Jó</span><span class="sopt-cnt" id="c40">–</span>
-          </label>
-          <label class="sopt" data-v="3.0"><input type="radio" name="rat" value="3.0">
-            <span class="sopt-stars">★★★☆☆</span><span class="sopt-lbl">3.0+ Elfogadható</span><span class="sopt-cnt" id="c30">–</span>
-          </label>
-        </div>
-      </div>
-    </div>
-
     <!-- 2. Tapasztalat -->
     <div class="fss open" id="fs2">
       <button class="fss-tog" onclick="toggleSec('fs2')">
@@ -581,10 +554,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       </button>
       <div class="fss-body">
         <div class="tog-row">
-          <div class="tog-lbl">⭐ Csak prémium orvosok<div class="tog-sub">4.8+ értékelés</div></div>
-          <label class="toggle"><input type="checkbox" id="tPrem" onchange="applyF()"><div class="toggle-slider"></div></label>
-        </div>
-        <div class="tog-row">
           <div class="tog-lbl">✅ Ellenőrzött profil<div class="tog-sub">Igazolt adatok</div></div>
           <label class="toggle"><input type="checkbox" id="tVerif" onchange="applyF()"><div class="toggle-slider"></div></label>
         </div>
@@ -595,10 +564,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
         <div class="tog-row">
           <div class="tog-lbl">📸 Fotóval rendelkezik</div>
           <label class="toggle"><input type="checkbox" id="tPhoto" onchange="applyF()"><div class="toggle-slider"></div></label>
-        </div>
-        <div class="tog-row">
-          <div class="tog-lbl">⚡ Azonnali foglalás<div class="tog-sub">Megerősítés nélkül</div></div>
-          <label class="toggle"><input type="checkbox" id="tInst" onchange="applyF()"><div class="toggle-slider"></div></label>
         </div>
       </div>
     </div>
@@ -615,12 +580,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
           <button class="vbtn" id="btnGrid" onclick="setView('grid')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Rács</button>
         </div>
         <select class="sort-sel" id="sortSel" onchange="applyF()">
-          <option value="rating">⭐ Legjobb értékelés</option>
           <option value="specialty">🏥 Szakterület (A–Z)</option>
           <option value="exp">⏱ Legtöbb tapasztalat</option>
           <option value="price_asc">💰 Ár: alacsony → magas</option>
           <option value="price_desc">💰 Ár: magas → alacsony</option>
-          <option value="reviews">💬 Legtöbb vélemény</option>
           <option value="name">🔤 Névsor (A–Z)</option>
         </select>
       </div>
@@ -643,7 +606,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
   <div class="pp-top">
     <button class="pp-close" onclick="closePanel()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <div class="pp-top-name" id="ppTopName">–</div>
-    <button class="pp-book-btn" onclick="alert('Időpontfoglalás hamarosan!')">Időpontot foglalok</button>
   </div>
 
   <div class="pp-hero">
@@ -660,8 +622,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       </div>
     </div>
     <div class="pp-stats">
-      <div class="pp-stat"><div class="pp-stat-v" id="ppStat1">–</div><div class="pp-stat-l">Értékelés</div></div>
-      <div class="pp-stat"><div class="pp-stat-v" id="ppStat2">–</div><div class="pp-stat-l">Vélemény</div></div>
       <div class="pp-stat"><div class="pp-stat-v" id="ppStat3">–</div><div class="pp-stat-l">Tapasztalat</div></div>
       <div class="pp-stat"><div class="pp-stat-v" id="ppStat4">–</div><div class="pp-stat-l">Konzultáció</div></div>
     </div>
@@ -669,8 +629,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 
   <div class="pp-tabs">
     <div class="pp-tab on" onclick="ppTab('about',this)">Bemutatkozás</div>
-    <div class="pp-tab" onclick="ppTab('booking',this)">Időpontfoglalás</div>
-    <div class="pp-tab" onclick="ppTab('reviews',this)">Vélemények</div>
     <div class="pp-tab" onclick="ppTab('info',this)">Elérhetőség</div>
   </div>
 
@@ -696,35 +654,6 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       </div>
     </div>
 
-    <!-- BOOKING -->
-    <div class="pp-section" id="pp-booking">
-      <div class="pp-card">
-        <div class="pp-card-t"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Szabad napok ezen a héten</div>
-        <div class="cal-grid" id="ppCal"></div>
-      </div>
-      <div class="pp-card">
-        <div class="pp-card-t" id="ppTimeT"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Szabad időpontok</div>
-        <div class="time-grid" id="ppTimes"></div>
-      </div>
-      <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:.9rem 1rem;font-size:13px;color:#059669;font-weight:600;display:flex;gap:8px;align-items:center">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        Az időpont kiválasztása után azonnal kap megerősítést emailben és SMS-ben.
-      </div>
-    </div>
-
-    <!-- REVIEWS -->
-    <div class="pp-section" id="pp-reviews">
-      <div class="rating-overview">
-        <div style="text-align:center;flex-shrink:0">
-          <div class="big-rat" id="ppBigR">–</div>
-          <div id="ppBigStars" style="color:#f59e0b;font-size:16px;letter-spacing:2px;margin:4px 0"></div>
-          <div style="font-size:12px;color:var(--muted)" id="ppBigCnt">–</div>
-        </div>
-        <div style="flex:1" id="ppBars"></div>
-      </div>
-      <div id="ppRevs"></div>
-    </div>
-
     <!-- INFO -->
     <div class="pp-section" id="pp-info">
       <div class="pp-card">
@@ -741,10 +670,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 
   <div class="pp-cta">
     <div><div class="pp-cta-price" id="ppCtaP">–</div><div class="pp-cta-sub">konzultáció ára</div></div>
-    <button class="pp-cta-main" onclick="alert('Időpontfoglalás hamarosan!')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Időpontot foglalok
-    </button>
+    <a class="pp-cta-main" id="ppOpenLink" href="#" style="text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 18l6-6-6-6"/></svg>
+      Részletes profil
+    </a>
   </div>
 </div><!-- /pp -->
 
@@ -777,10 +706,17 @@ async function load(){
   const{data,error}=await q;
   if(error){document.getElementById('resList').innerHTML=`<div class="empty-st"><div class="empty-icon">⚠️</div><div class="empty-title">Hiba</div><div class="empty-sub">${error.message}</div></div>`;return;}
   allDocs=data||[];
+  // Keresés naplózása
+  if(specQ || cityQ) {
+    db.from('search_logs').insert({
+      query: [specQ, cityQ].filter(Boolean).join(' – '),
+      result_count: allDocs.length,
+      specialty_id: null,
+      city_id: null,
+    }).then(()=>{}).catch(()=>{});
+  }
   // Count badge
   document.getElementById('heroCnt').innerHTML=`<div class="cnt-pill"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>${allDocs.length} orvos</div>`;
-  // Star counts
-  [[48,4.8],[45,4.5],[40,4.0],[30,3.0]].forEach(([id,v])=>{const el=document.getElementById('c'+id);if(el)el.textContent=allDocs.filter(d=>parseFloat(d.rating||0)>=v).length;});
   curPg=1;applyF();
 }
 
@@ -789,9 +725,6 @@ function fee(d){return d.doctor_clinics?.[0]?.consultation_fee||0}
 
 function applyF(){
   let docs=[...allDocs];
-  // Rating
-  const rv=document.querySelector('.sopt.on input')?.value;
-  if(rv) docs=docs.filter(d=>parseFloat(d.rating||0)>=parseFloat(rv));
   // Exp
   const ev=parseInt(document.getElementById('expMin').value);
   if(ev>0) docs=docs.filter(d=>(d.experience_years||0)>=ev);
@@ -810,28 +743,23 @@ function applyF(){
   // Languages
   const langs=[...document.querySelectorAll('[data-lang].on')].map(c=>c.dataset.lang);
   if(langs.length) docs=docs.filter(d=>{const dl=(d.languages||[]).map(l=>l.toLowerCase());return langs.some(l=>dl.includes(l));});
-  // Extra toggles
-  if(document.getElementById('tPrem')?.checked) docs=docs.filter(d=>parseFloat(d.rating||0)>=4.8);
   // Sort
   const s=document.getElementById('sortSel').value;
-  if(s==='rating') docs.sort((a,b)=>(b.rating||0)-(a.rating||0));
-  else if(s==='exp') docs.sort((a,b)=>(b.experience_years||0)-(a.experience_years||0));
+  if(s==='exp') docs.sort((a,b)=>(b.experience_years||0)-(a.experience_years||0));
   else if(s==='price_asc') docs.sort((a,b)=>fee(a)-fee(b));
   else if(s==='price_desc') docs.sort((a,b)=>fee(b)-fee(a));
-  else if(s==='reviews') docs.sort((a,b)=>(b.review_count||0)-(a.review_count||0));
   else if(s==='name') docs.sort((a,b)=>a.name.localeCompare(b.name,'hu'));
   else if(s==='specialty') docs.sort((a,b)=>{
     const sa=a.doctor_specialties?.[0]?.specialties?.name||'';
     const sb=b.doctor_specialties?.[0]?.specialties?.name||'';
     if(sa!==sb) return sa.localeCompare(sb,'hu');
-    return (b.rating||0)-(a.rating||0);
+    return a.name.localeCompare(b.name,'hu');
   });
   filtered=docs;curPg=1;renderList();renderTags();updateBadge();
 }
 
 function updateBadge(){
   let n=0;
-  if(document.querySelector('.sopt.on input')?.value) n++;
   if(parseInt(document.getElementById('expMin').value)>0) n++;
   if(parseInt(document.getElementById('priceMax').value)<80000) n++;
   n+=document.querySelectorAll('#fs5 input:checked').length;
@@ -957,8 +885,7 @@ function cardH(d,i){
   const avEl=d.photo_url
     ?`<div style="position:relative;flex-shrink:0"><img src="${d.photo_url}" alt="${d.name}" style="width:90px;height:90px;border-radius:20px;object-fit:cover;display:block;box-shadow:0 6px 20px rgba(0,0,0,.15)">${avD.length?'<div class="av-dot" style="position:absolute;bottom:-2px;right:-2px"></div>':''}</div>`
     :`<div style="position:relative;flex-shrink:0"><div class="av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}${avD.length?'<div class="av-dot"></div>':''}</div></div>`;
-  return `<div class="dc${isPrem?' prem':''}" style="animation-delay:${(i%PGS)*.07}s;cursor:pointer" onclick="goToProfile('${d.id}')">
-    ${isPrem?'<div class="prem-lbl">⭐ Prémium</div>':''}
+  return `<div class="dc" style="animation-delay:${(i%PGS)*.07}s;cursor:pointer" onclick="goToProfile('${d.id}')">
     ${avEl}
     <div>
       <div class="dc-nm">${d.name}${d.title?` <span style="font-size:12.5px;font-weight:500;color:var(--sub)">${d.title}</span>`:''}</div>
@@ -968,17 +895,12 @@ function cardH(d,i){
         ${city?`<span class="dtag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city}</span>`:''}
         ${clinic?.name?`<span class="dtag tl"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${clinic.name}</span>`:''}
         ${d.experience_years?`<span class="dtag"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${d.experience_years} év</span>`:''}
-        <span class="dtag gr"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Online foglalás</span>
       </div>
-      <div class="dc-rat">${starsH(rat)}<span class="rat-n">${rat.toFixed(1)}</span><span class="rev-n">(${d.review_count||0} vélemény)</span>${isPrem?'<span class="verif"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött</span>':''}</div>
       <div class="dc-bio">${bio}</div>
-      <div class="av-row"><span class="av-lbl">Rendelési napok:</span><div class="adays">${DS.map((l,idx)=>`<div class="aday${avD.includes(idx+1)?' on':''}" title="${DF[idx]}">${l}</div>`).join('')}</div></div>
       ${ins.length?`<div class="ins-row">${ins.map(n=>`<span class="itag${n==='OEP / TAJ kártya'?' oep':''}">${n}</span>`).join('')}</div>`:''}
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <div style="text-align:right"><div class="dc-price">${f?f.toLocaleString('hu-HU')+' Ft':'Egyedi'}<small>konzultáció</small></div></div>
-      <div class="nxt-slot"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${next}</div>
-      <button class="btn-book" onclick="event.stopPropagation();alert('Foglalás hamarosan!')">Időpontot foglalok</button>
       <button class="btn-prof" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
     </div>
   </div>`;
@@ -1010,11 +932,10 @@ function openPanel(id){
   document.getElementById('ppSpec').textContent=spec;
   document.getElementById('ppCity').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city||'–'}`;
   document.getElementById('ppClinic').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${clinic?.name||'–'}`;
-  document.getElementById('ppStat1').textContent='★ '+rat.toFixed(1);
-  document.getElementById('ppStat2').textContent=(d.review_count||0)+' db';
   document.getElementById('ppStat3').textContent=(d.experience_years||'–')+' év';
   document.getElementById('ppStat4').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
   document.getElementById('ppCtaP').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
+  document.getElementById('ppOpenLink').href=`orvos.html?id=${d.id}`;
 
   // — About —
   document.getElementById('ppBio').textContent=d.bio||`${d.name}${d.experience_years?' '+d.experience_years+' éve':''} kiemelkedő szaktudással rendelkező ${spec}. Pácienscentrikus szemlélettel dolgozik, minden egyes esethez egyénre szabott kezelési tervet állít össze. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb diagnosztikai és terápiás módszereket alkalmazza. Különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`;
@@ -1023,29 +944,6 @@ function openPanel(id){
   document.getElementById('ppLangs').innerHTML=(d.languages||['magyar']).map(l=>`<div class="chip on" style="pointer-events:none">${l.charAt(0).toUpperCase()+l.slice(1)}</div>`).join('');
   const ins=(d.doctor_insurances||[]).map(i=>i.insurance_types?.name).filter(Boolean);
   document.getElementById('ppIns').innerHTML=ins.length?ins.map(n=>`<span class="itag${n==='OEP / TAJ kártya'?' oep':''}">${n}</span>`).join(''):'<span style="color:var(--muted);font-size:13px">Nincs biztosítói adat</span>';
-
-  // — Booking calendar —
-  const today=new Date(),dow=today.getDay();
-  let calH=DS.map(d=>`<div class="cal-hd">${d}</div>`).join('');
-  for(let i=0;i<7;i++){
-    const dt=new Date(today);dt.setDate(today.getDate()-dow+i);
-    const dn=dt.getDay(),free=avD.includes(dn),isTd=dt.toDateString()===today.toDateString();
-    calH+=`<div class="cal-day ${free?'free':'busy'}" onclick="pickDay(this,'${dt.toLocaleDateString('hu-HU',{month:'short',day:'numeric'})}',${free})">${dt.getDate()}<div class="cal-day-sub">${free?'Szabad':'–'}</div></div>`;
-  }
-  document.getElementById('ppCal').innerHTML=calH;
-  document.getElementById('ppTimeT').innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Szabad időpontok`;
-  mkSlots(['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30'],[2,5,9]);
-
-  // — Reviews —
-  document.getElementById('ppBigR').textContent=rat.toFixed(1);
-  document.getElementById('ppBigStars').innerHTML=starsH(rat,16).replace(/<div.*?>/,'').replace(/<\/div>/,'');
-  document.getElementById('ppBigCnt').textContent=(d.review_count||0)+' értékelés';
-  document.getElementById('ppBars').innerHTML=[[5,65],[4,20],[3,10],[2,3],[1,2]].map(([n,p])=>`<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--muted);width:12px;text-align:right">${n}</span><div style="flex:1;height:6px;background:#f0f4ff;border-radius:99px;overflow:hidden"><div style="width:${p}%;height:100%;background:#f59e0b;border-radius:99px"></div></div><span style="font-size:11px;color:var(--muted);width:28px">${p}%</span></div>`).join('');
-  document.getElementById('ppRevs').innerHTML=[
-    {n:'Kovács Péter',ci:'Budapest',r:5,t:'Rendkívül alapos és empatikus orvos. Részletesen elmagyarázott mindent, rögtön megtalálta a problémám gyökerét. Nagyon ajánlom!',dat:'2025. márc. 12.',c:'#2f5ddd'},
-    {n:'Szabó Anna',ci:'Pécs',r:5,t:'Kiváló szakember, türelmes és figyelmes. Mindig időt szán minden kérdésre, és látszik, hogy valóban törődik a páciensekkel. Másodszor is visszajöttem.',dat:'2025. feb. 28.',c:'#7c3aed'},
-    {n:'Molnár István',ci:'Debrecen',r:4,t:'Profin és gyorsan diagnosztizálta az állapotomat. A rendelő modern, a személyzet kedves. Az előjegyzés is nagyon egyszerű volt.',dat:'2025. jan. 15.',c:'#0d9488'},
-  ].map(r=>`<div class="rev-card"><div class="rev-quote">"</div><div class="rev-stars">${'★'.repeat(r.r)}${'☆'.repeat(5-r.r)}</div><div class="rev-text">"${r.t}"</div><div class="rev-ft"><div class="rev-av" style="background:${r.c}">${r.n.split(' ').map(w=>w[0]).join('')}</div><div><div style="font-size:13px;font-weight:700;color:var(--text)">${r.n}</div><div style="font-size:11px;color:var(--muted)">${r.ci}</div></div><div style="font-size:11px;color:var(--muted);margin-left:auto">${r.dat}</div></div></div>`).join('');
 
   // — Info —
   document.getElementById('ppContact').innerHTML=`
