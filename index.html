@@ -157,9 +157,8 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 
 /* ════════ HERO ════════ */
 .hero{background:#fff;padding:3.5rem 5.5% 5.5rem;position:relative;overflow:hidden}
-.hero-bg-image{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transition:opacity .6s ease;z-index:1;pointer-events:none}
-.hero-bg-image.loaded{opacity:1}
-.hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.78) 100%);z-index:2;pointer-events:none}
+.hero-bg-image{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;z-index:1;pointer-events:none}
+.hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.4) 100%);z-index:2;pointer-events:none}
 .hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none;z-index:0}
 .hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none;z-index:0}
 .hero-content{max-width:1400px;margin:0 auto;position:relative;z-index:3}
@@ -1724,18 +1723,17 @@ document.querySelectorAll('.mobile-nav-item, .mobile-nav-cta').forEach(function(
         .eq('key', 'hero_bg_url')
         .maybeSingle();
       const url = data?.value;
+      console.log('[heroBg] URL:', url);
       if (url) {
         const el = document.getElementById('heroBgImage');
         if (el) {
-          const img = new Image();
-          img.onload = () => {
-            el.style.backgroundImage = `url('${url}')`;
-            el.classList.add('loaded');
-          };
-          img.src = url;
+          el.style.backgroundImage = `url('${url}')`;
+          console.log('[heroBg] Applied');
+        } else {
+          console.warn('[heroBg] Element #heroBgImage not found');
         }
       }
-    } catch (e) { console.warn('[heroBg]', e); }
+    } catch (e) { console.error('[heroBg]', e); }
   })();
 
   // ── Stat formátum: kis számoknál pontos, nagyobbnál kerekítve "+" jellel ──
