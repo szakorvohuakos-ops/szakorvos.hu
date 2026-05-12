@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Regisztráció – Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Nunito Sans', sans-serif;
-  background: #f0f4ff;
+  font-family: 'Inter', sans-serif;
+  background: #F4F6F8;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -20,7 +20,7 @@ body {
 .card {
   background: #fff;
   border-radius: 24px;
-  box-shadow: 0 8px 48px rgba(40,56,151,0.12);
+  box-shadow: 0 8px 48px rgba(17,50,147,0.12);
   width: 100%;
   max-width: 460px;
   padding: 2.5rem 2rem;
@@ -28,9 +28,9 @@ body {
 
 /* Logo */
 .logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem; text-decoration: none; }
-.logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,#283897,#4042e2); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(40,56,151,0.3); }
-.logo-text { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #283897; }
-.logo-text em { color: #ff6b2b; font-style: normal; }
+.logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,#113293,#264ACA); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(17,50,147,0.3); }
+.logo-text { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; }
+.logo-text em { color: #FF8A00; font-style: normal; }
 
 /* Steps */
 .steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; }
@@ -38,116 +38,116 @@ body {
 .step-circle {
   width: 32px; height: 32px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
-  border: 2px solid #e8edf8; color: #9aa5c4; background: #fff;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight:700;
+  border: 2px solid #DCE3EA; color: #94a3b8; background: #fff;
   transition: all .3s;
 }
-.step.active .step-circle { background: #283897; border-color: #283897; color: #fff; }
-.step.done .step-circle { background: #22c55e; border-color: #22c55e; color: #fff; }
-.step-label { font-size: 11px; font-weight: 700; color: #9aa5c4; white-space: nowrap; transition: color .3s; }
-.step.active .step-label { color: #283897; }
-.step.done .step-label { color: #22c55e; }
-.step-line { width: 48px; height: 2px; background: #e8edf8; margin-bottom: 18px; transition: background .3s; }
-.step-line.done { background: #22c55e; }
+.step.active .step-circle { background: #113293; border-color: #113293; color: #fff; }
+.step.done .step-circle { background: #2C9650; border-color: #2C9650; color: #fff; }
+.step-label { font-size: 11px; font-weight: 700; color: #94a3b8; white-space: nowrap; transition: color .3s; }
+.step.active .step-label { color: #113293; }
+.step.done .step-label { color: #2C9650; }
+.step-line { width: 48px; height: 2px; background: #DCE3EA; margin-bottom: 18px; transition: background .3s; }
+.step-line.done { background: #2C9650; }
 
 /* Heading */
 .heading { margin-bottom: 1.5rem; }
-.heading h2 { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #0f172a; margin-bottom: 5px; }
-.heading p { font-size: 13.5px; color: #6b7280; line-height: 1.6; }
+.heading h2 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight:700; color: #113293; margin-bottom: 5px; }
+.heading p { font-size: 13.5px; color: #475569; line-height: 1.6; }
 
 /* Form */
 .form-group { margin-bottom: 1rem; }
-label.lbl { display: block; font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+label.lbl { display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 .input-wrap { position: relative; }
-.input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9aa5c4; pointer-events: none; }
+.input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
 input[type=text], input[type=email], input[type=password] {
-  width: 100%; border: 1.5px solid #e8edf8; border-radius: 12px;
+  width: 100%; border: 1.5px solid #DCE3EA; border-radius: 12px;
   padding: 12px 14px 12px 44px; font-size: 15px;
-  font-family: 'Nunito Sans', sans-serif; color: #0f172a;
+  font-family: 'Inter', sans-serif; color: #113293;
   outline: none; background: #fff; transition: border-color .2s, box-shadow .2s;
 }
-input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
-.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9aa5c4; padding: 4px; transition: color .2s; }
-.pw-toggle:hover { color: #283897; }
-.pw-hint { font-size: 11px; color: #9aa5c4; margin-top: 5px; }
+input:focus { border-color: #113293; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
+.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; padding: 4px; transition: color .2s; }
+.pw-toggle:hover { color: #113293; }
+.pw-hint { font-size: 11px; color: #94a3b8; margin-top: 5px; }
 
 /* Buttons */
 .btn-primary {
-  width: 100%; background: linear-gradient(135deg,#283897,#4042e2);
+  width: 100%; background: linear-gradient(135deg,#113293,#264ACA);
   color: #fff; border: none; border-radius: 12px; padding: 14px;
-  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight:700;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 18px rgba(40,56,151,0.3); transition: all .2s;
+  box-shadow: 0 4px 18px rgba(17,50,147,0.3); transition: all .2s;
 }
 .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
 .btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
 .btn-secondary {
-  width: 100%; background: #f0f4ff; color: #283897;
-  border: 1.5px solid #e8edf8; border-radius: 12px; padding: 13px;
-  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+  width: 100%; background: #F4F6F8; color: #113293;
+  border: 1.5px solid #DCE3EA; border-radius: 12px; padding: 13px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
   transition: all .2s; margin-top: 10px;
 }
-.btn-secondary:hover { border-color: #283897; background: #eef2ff; }
+.btn-secondary:hover { border-color: #113293; background: #eef2ff; }
 
 /* Messages */
 .msg { border-radius: 11px; padding: .85rem 1rem; font-size: 13.5px; font-weight: 600; display: none; align-items: center; gap: 9px; margin-bottom: 1rem; animation: msgIn .2s ease; }
 @keyframes msgIn { from { opacity:0; transform:translateY(-4px) } to { opacity:1; transform:none } }
 .msg.show { display: flex; }
 .msg-error { background: #fee2e2; border: 1.5px solid #fca5a5; color: #b91c1c; }
-.msg-success { background: #ecfdf5; border: 1.5px solid #bbf7d0; color: #065f46; }
+.msg-success { background: #ecfdf5; border: 1.5px solid #c8e8d2; color: #065f46; }
 .msg-info { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; }
 
 /* Doctor search results */
 .search-results { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
 .doctor-card {
   display: flex; align-items: center; gap: 12px;
-  border: 1.5px solid #e8edf8; border-radius: 12px; padding: 12px 14px;
+  border: 1.5px solid #DCE3EA; border-radius: 12px; padding: 12px 14px;
   cursor: pointer; transition: all .2s; background: #fff;
 }
-.doctor-card:hover { border-color: #283897; background: #f0f4ff; }
-.doctor-card.selected { border-color: #283897; background: #eef2ff; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
+.doctor-card:hover { border-color: #113293; background: #F4F6F8; }
+.doctor-card.selected { border-color: #113293; background: #eef2ff; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
 .doctor-card.claimed { opacity: .5; cursor: not-allowed; }
 .doc-avatar {
   width: 42px; height: 42px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #fff;
   flex-shrink: 0;
 }
 .doc-info { flex: 1; min-width: 0; }
-.doc-name { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #0f172a; }
-.doc-sub { font-size: 12px; color: #6b7280; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-name { font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #113293; }
+.doc-sub { font-size: 12px; color: #475569; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .doc-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px; flex-shrink: 0; }
 .badge-claimed { background: #fee2e2; color: #b91c1c; }
 .badge-free { background: #ecfdf5; color: #065f46; }
-.badge-selected { background: #283897; color: #fff; }
+.badge-selected { background: #113293; color: #fff; }
 
 /* Role cards */
 .role-card {
-  border: 2px solid #e8edf8; border-radius: 14px; padding: 14px 12px;
+  border: 2px solid #DCE3EA; border-radius: 14px; padding: 14px 12px;
   cursor: pointer; transition: all .2s; text-align: center; background: #fff;
 }
-.role-card:hover { border-color: #283897; background: #f0f4ff; }
-.role-card.active { border-color: #283897; background: #eef2ff; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); }
+.role-card:hover { border-color: #113293; background: #F4F6F8; }
+.role-card.active { border-color: #113293; background: #eef2ff; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
 .role-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
-.role-card-label { font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 3px; }
-.role-card-sub { font-size: 11px; color: #6b7280; }
+.role-card-label { font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #113293; margin-bottom: 3px; }
+.role-card-sub { font-size: 11px; color: #475569; }
 .doctor-preview {
-  border: 2px solid #283897; border-radius: 14px; padding: 14px;
+  border: 2px solid #113293; border-radius: 14px; padding: 14px;
   background: #eef2ff; margin-bottom: 1rem;
   display: flex; align-items: center; gap: 12px;
 }
-.preview-check { width: 32px; height: 32px; border-radius: 50%; background: #283897; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.preview-check { width: 32px; height: 32px; border-radius: 50%; background: #113293; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
 /* Spinner */
 .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
-.spinner-dark { width: 18px; height: 18px; border: 2.5px solid rgba(40,56,151,.2); border-top-color: #283897; border-radius: 50%; animation: spin .7s linear infinite; }
+.spinner-dark { width: 18px; height: 18px; border: 2.5px solid rgba(17,50,147,.2); border-top-color: #113293; border-radius: 50%; animation: spin .7s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg) } }
 
 /* Bottom links */
-.bottom-links { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 1.5rem; font-size: 13px; color: #6b7280; }
-.bottom-links a { color: #283897; font-weight: 700; text-decoration: none; }
-.bottom-links a:hover { color: #ff6b2b; }
+.bottom-links { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 1.5rem; font-size: 13px; color: #475569; }
+.bottom-links a { color: #113293; font-weight: 700; text-decoration: none; }
+.bottom-links a:hover { color: #FF8A00; }
 
 /* Panels */
 .panel { display: none; }
@@ -155,13 +155,13 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
 
 /* Success state */
 .success-state { text-align: center; padding: 1rem 0; }
-.success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#22c55e,#16a34a); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 8px 24px rgba(34,197,94,0.3); }
-.success-state h2 { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #0f172a; margin-bottom: 8px; }
-.success-state p { font-size: 14px; color: #6b7280; line-height: 1.7; margin-bottom: 1.5rem; }
+.success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#2C9650,#1f6e3a); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 8px 24px rgba(44,150,80,0.3); }
+.success-state h2 { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; margin-bottom: 8px; }
+.success-state p { font-size: 14px; color: #475569; line-height: 1.7; margin-bottom: 1.5rem; }
 
 /* Divider */
-.divider { display: flex; align-items: center; gap: 12px; margin: 1rem 0; color: #9aa5c4; font-size: 12px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e8edf8; }
+.divider { display: flex; align-items: center; gap: 12px; margin: 1rem 0; color: #94a3b8; font-size: 12px; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #DCE3EA; }
 
 @media (max-width: 480px) { .card { padding: 2rem 1.5rem; } .step-line { width: 28px; } }
 </style>
@@ -208,11 +208,11 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
 
     <!-- Info: orvos/klinika regisztráció kérelem alapján -->
     <div class="form-group">
-      <div style="background:#f0f4ff;border:1px solid #c7d2f5;border-radius:10px;padding:.85rem 1rem;font-size:13px;color:#1e2d7d;line-height:1.55;display:flex;gap:10px;align-items:flex-start">
+      <div style="background:#F4F6F8;border:1px solid #DCE3EA;border-radius:10px;padding:.85rem 1rem;font-size:13px;color:#1e2d7d;line-height:1.55;display:flex;gap:10px;align-items:flex-start">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <div>
           <strong>Orvos vagy klinika?</strong><br>
-          A fiókja létrehozása után vegye fel velünk a kapcsolatot az <a href="mailto:info@szakorvos.hu" style="color:#283897;font-weight:700">info@szakorvos.hu</a> címen, és kollégánk aktiválja az adminisztrátori jogokat.
+          A fiókja létrehozása után vegye fel velünk a kapcsolatot az <a href="mailto:info@szakorvos.hu" style="color:#113293;font-weight:700">info@szakorvos.hu</a> címen, és kollégánk aktiválja az adminisztrátori jogokat.
         </div>
       </div>
     </div>
@@ -254,9 +254,9 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
     </div>
 
     <div style="margin-bottom:1.25rem">
-      <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#6b7280;cursor:pointer">
-        <input type="checkbox" id="acceptTerms" style="accent-color:#283897;margin-top:2px;flex-shrink:0">
-        Elfogadom az <a href="#" style="color:#283897;font-weight:600;margin:0 3px">Általános Szerződési Feltételeket</a> és az <a href="adatvedelem.html" style="color:#283897;font-weight:600;margin:0 3px">Adatvédelmi irányelveket</a>
+      <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#475569;cursor:pointer">
+        <input type="checkbox" id="acceptTerms" style="accent-color:#113293;margin-top:2px;flex-shrink:0">
+        Elfogadom az <a href="#" style="color:#113293;font-weight:600;margin:0 3px">Általános Szerződési Feltételeket</a> és az <a href="adatvedelem.html" style="color:#113293;font-weight:600;margin:0 3px">Adatvédelmi irányelveket</a>
       </label>
     </div>
 
@@ -299,8 +299,8 @@ input:focus { border-color: #283897; box-shadow: 0 0 0 3px rgba(40,56,151,0.1); 
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <div>
-        <div style="font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;color:#0f172a" id="previewName"></div>
-        <div style="font-size:12px;color:#283897;margin-top:2px" id="previewSub"></div>
+        <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#113293" id="previewName"></div>
+        <div style="font-size:12px;color:#113293;margin-top:2px" id="previewSub"></div>
       </div>
     </div>
 
@@ -345,7 +345,7 @@ const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const COLORS = ['#283897','#4042e2','#ff6b2b','#0d9488','#9333ea','#dc2626','#0369a1','#b45309'];
+const COLORS = ['#113293','#264ACA','#FF8A00','#0d9488','#9333ea','#dc2626','#0369a1','#b45309'];
 
 let currentUser = null;
 let selectedDoctor = null;
@@ -436,7 +436,7 @@ async function handleRegister() {
     if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
       btn.disabled = false;
       txt.textContent = 'Fiók létrehozása';
-      showP1Error('Ez az email cím már regisztrálva van. Kérjük <a href="login.html" style="color:#283897;font-weight:700">lépjen be</a> vagy használjon másik email címet.');
+      showP1Error('Ez az email cím már regisztrálva van. Kérjük <a href="login.html" style="color:#113293;font-weight:700">lépjen be</a> vagy használjon másik email címet.');
       return;
     }
 
@@ -471,7 +471,7 @@ async function searchDoctors(q) {
   }
 
   results.style.display = 'flex';
-  results.innerHTML = '<div style="padding:12px;display:flex;align-items:center;gap:8px;color:#9aa5c4;font-size:13px"><div class="spinner-dark"></div> Keresés…</div>';
+  results.innerHTML = '<div style="padding:12px;display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:13px"><div class="spinner-dark"></div> Keresés…</div>';
 
   searchTimer = setTimeout(async () => {
     const { data, error } = await db
@@ -481,40 +481,60 @@ async function searchDoctors(q) {
       .limit(8);
 
     if (error || !data || !data.length) {
-      results.innerHTML = '<div style="padding:12px;color:#9aa5c4;font-size:13px;text-align:center">Nem található orvos ezzel a névvel</div>';
+      results.innerHTML = '<div style="padding:12px;color:#94a3b8;font-size:13px;text-align:center">Nem található orvos ezzel a névvel</div>';
       return;
     }
+
+    // XSS-safe HTML escape (a render path csak ezt használhatja)
+    const esc = s => String(s).replace(/[&<>"']/g, ch => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[ch]));
 
     results.innerHTML = data.map((d, i) => {
       const spec  = d.doctor_specialties?.[0]?.specialties?.name || '';
       const klinika = d.doctor_clinics?.[0]?.clinics?.name || '';
       const sub   = [spec, klinika].filter(Boolean).join(' · ') || 'Nincs további adat';
       const claimed = !!d.admin_user_id;
-      return `<div class="doctor-card ${claimed ? 'claimed' : ''}" onclick="${claimed ? '' : `selectDoctor('${d.id}','${d.name.replace(/'/g,"\\'")}','${sub.replace(/'/g,"\\'")}',${i})`}" data-id="${d.id}">
-        <div class="doc-avatar" style="background:${COLORS[i % COLORS.length]}">${initials(d.name)}</div>
+      // Data-attribútumok + event delegation: így nincs HTML-injection rés a névben/sub-ban,
+      // és nem kell egyszerű string-replace-szel escape-elni az inline JS-t.
+      return `<div class="doctor-card ${claimed ? 'claimed' : ''}" ${claimed ? '' : 'data-selectable="1"'} data-id="${esc(d.id)}" data-name="${esc(d.name)}" data-sub="${esc(sub)}">
+        <div class="doc-avatar" style="background:${COLORS[i % COLORS.length]}">${esc(initials(d.name))}</div>
         <div class="doc-info">
-          <div class="doc-name">${d.name}</div>
-          <div class="doc-sub">${sub}</div>
+          <div class="doc-name">${esc(d.name)}</div>
+          <div class="doc-sub">${esc(sub)}</div>
         </div>
         <span class="doc-badge ${claimed ? 'badge-claimed' : 'badge-free'}">${claimed ? 'Foglalt' : 'Szabad'}</span>
       </div>`;
     }).join('');
+
+    // Event delegation a kártyákra (egyszer hozzáadva, a re-render után is működik mert a results-on van)
+    if (!results.dataset.bound) {
+      results.addEventListener('click', e => {
+        const card = e.target.closest('.doctor-card[data-selectable]');
+        if (!card) return;
+        selectDoctor(card.dataset.id, card.dataset.name, card.dataset.sub);
+      });
+      results.dataset.bound = '1';
+    }
   }, 300);
 }
 
-function selectDoctor(id, name, sub, colorIdx) {
+function selectDoctor(id, name, sub) {
   selectedDoctor = { id, name, sub };
 
   // Kártyák kijelölése
   document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
-  const card = document.querySelector(`[data-id="${id}"]`);
+  const card = document.querySelector(`.doctor-card[data-id="${CSS.escape(id)}"]`);
   if (card) {
     card.classList.add('selected');
-    card.querySelector('.doc-badge').className = 'doc-badge badge-selected';
-    card.querySelector('.doc-badge').textContent = 'Kiválasztva';
+    const b = card.querySelector('.doc-badge');
+    if (b) {
+      b.className = 'doc-badge badge-selected';
+      b.textContent = 'Kiválasztva';
+    }
   }
 
-  // Preview
+  // Preview (textContent → biztosan nincs HTML injection)
   document.getElementById('previewName').textContent = name;
   document.getElementById('previewSub').textContent = sub;
   document.getElementById('selectedPreview').style.display = 'flex';
@@ -530,16 +550,31 @@ async function claimProfile() {
   btn.disabled = true;
   txt.textContent = 'Átvétel folyamatban…';
 
-  const { error } = await db
+  // FONTOS: race condition védelem
+  // .select()-tel visszakapjuk a frissített sorokat. Ha 0 sor jött vissza,
+  // valaki más megelőzött minket — figyelmeztetjük a felhasználót.
+  const { data: updated, error } = await db
     .from('doctors')
     .update({ admin_user_id: currentUser.id, email: currentUser.email })
     .eq('id', selectedDoctor.id)
-    .is('admin_user_id', null); // csak ha még szabad
+    .is('admin_user_id', null) // csak ha még szabad
+    .select('id, admin_user_id');
 
   if (error) {
     btn.disabled = false;
     txt.textContent = 'Adatlap átvétele';
     showP2Error('Hiba az átvételkor: ' + error.message);
+    return;
+  }
+
+  // Race condition: ha 0 sort érintett az update, valaki más már átvette
+  if (!updated || updated.length === 0) {
+    btn.disabled = false;
+    txt.textContent = 'Adatlap átvétele';
+    showP2Error('Sajnáljuk, ezt az adatlapot időközben másvalaki igényelte. Kérjük válasszon másikat, vagy kattintson a "Most kihagyom" gombra.');
+    // Frissítjük a listát is, hogy a foglalt státusz látszódjon
+    const q = document.getElementById('searchInput')?.value || selectedDoctor.name;
+    if (q) searchDoctors(q);
     return;
   }
 
