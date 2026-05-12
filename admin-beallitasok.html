@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oldalbeállítások – Szakorvos.hu Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+// ══ AUTH GUARD ══
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) {
+    window.location.replace('/login.html?redirect=admin-beallitasok');
+    return;
+  }
+  document.body.style.visibility = 'visible';
+  loadCurrentBg();
+});
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#113293;
+  --brand-2:#264ACA;
+  --brand-light:#eef2ff;
+  --green:#2C9650;
+  --orange:#FF8A00;
+  --orange-2:#FFA726;
+  --bg:#F4F6F8;
+  --border:#DCE3EA;
+  --text:#113293;
+  --sub:#475569;
+  --muted:#94a3b8;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;visibility:hidden;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 2px 20px rgba(17,50,147,.05)}
+.nav-row{display:flex;align-items:center;height:68px;padding:0 3.5%;gap:1.25rem;max-width:1400px;margin:0 auto}
+.nav-logo{font-family:'Inter',sans-serif;font-size:21px;font-weight:600;color:var(--brand);letter-spacing:-0.02em}
+.nav-logo em{color:var(--green);font-style:normal}
+.nav-back{margin-left:auto;font-size:13.5px;font-weight:600;color:var(--brand);background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s}
+.nav-back:hover{border-color:var(--brand);background:var(--brand-light)}
+
+/* CONTENT */
+.container{max-width:880px;margin:0 auto;padding:2.5rem 3.5%}
+.page-header{margin-bottom:2rem}
+.page-eyebrow{display:inline-block;font-size:11.5px;font-weight:600;color:var(--brand);text-transform:uppercase;letter-spacing:.08em;background:var(--brand-light);padding:5px 14px;border-radius:100px;margin-bottom:.85rem}
+.page-title{font-family:'Inter',sans-serif;font-size:clamp(1.6rem,2.6vw,2.1rem);font-weight:600;color:var(--text);letter-spacing:-0.025em;line-height:1.2;margin-bottom:.4rem}
+.page-sub{font-size:15px;color:var(--sub);font-weight:500;line-height:1.55}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.75rem;box-shadow:0 4px 24px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.03);margin-bottom:1.25rem}
+.card-title{font-family:'Inter',sans-serif;font-size:17px;font-weight:600;color:var(--text);letter-spacing:-0.015em;margin-bottom:.4rem}
+.card-sub{font-size:13.5px;color:var(--sub);font-weight:500;line-height:1.55;margin-bottom:1.25rem}
+
+/* PREVIEW */
+.preview-wrap{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--bg);aspect-ratio:16/7;display:flex;align-items:center;justify-content:center}
+.preview-img{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.preview-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.78) 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;text-align:center;padding:1rem}
+.preview-title{font-size:1.5rem;font-weight:600;color:var(--text);letter-spacing:-0.025em;line-height:1.15}
+.preview-title em{color:var(--green);font-style:normal}
+.preview-empty{color:var(--muted);font-size:14px;font-weight:500;text-align:center;padding:2rem}
+
+/* FORM */
+.upload-area{margin-top:1.25rem;border:2px dashed var(--border);border-radius:14px;padding:2rem;text-align:center;transition:all .2s;background:var(--bg);cursor:pointer}
+.upload-area:hover{border-color:var(--brand-2);background:var(--brand-light)}
+.upload-area.dragover{border-color:var(--brand-2);background:var(--brand-light);transform:scale(1.01)}
+.upload-icon{width:48px;height:48px;border-radius:12px;background:var(--brand-light);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.upload-icon svg{color:var(--brand-2)}
+.upload-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.005em}
+.upload-sub{font-size:12.5px;color:var(--sub);font-weight:500}
+.upload-area input[type=file]{display:none}
+
+.btn-row{display:flex;gap:10px;margin-top:1.25rem;flex-wrap:wrap}
+.btn{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:11px 22px;border-radius:11px;cursor:pointer;transition:all .15s;letter-spacing:-0.005em;display:inline-flex;align-items:center;gap:7px;border:none}
+.btn-primary{background:var(--grad-orange);color:#fff;box-shadow:0 4px 14px rgba(255,138,0,.3)}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--brand);border:1px solid rgba(17,50,147,.22)}
+.btn-outline:hover{border-color:var(--brand);background:var(--brand-light)}
+.btn-danger{background:transparent;color:#dc2626;border:1px solid rgba(220,38,38,.25)}
+.btn-danger:hover{border-color:#dc2626;background:#fef2f2}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(40px);background:var(--text);color:#fff;padding:12px 22px;border-radius:11px;font-size:13.5px;font-weight:600;box-shadow:0 8px 24px rgba(17,50,147,.25);opacity:0;transition:all .25s;z-index:1000;letter-spacing:-0.005em;display:flex;align-items:center;gap:8px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:var(--green)}
+.toast.error{background:#dc2626}
+
+/* PROGRESS */
+.progress{margin-top:1rem;height:8px;background:var(--border);border-radius:100px;overflow:hidden;display:none}
+.progress.active{display:block}
+.progress-bar{height:100%;background:var(--grad-blue);border-radius:100px;width:0%;transition:width .2s}
+
+@media(max-width:640px){
+  .nav-row{padding:0 4%}
+  .container{padding:1.5rem 4%}
+  .card{padding:1.25rem}
+  .btn-row{flex-direction:column}
+  .btn{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-row">
+    <a href="admin.html" class="nav-logo">Szakorvos<em>.hu</em></a>
+    <a href="admin.html" class="nav-back">← Vissza az admin oldalra</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <div class="page-eyebrow">Beállítások</div>
+    <h1 class="page-title">Oldalbeállítások</h1>
+    <p class="page-sub">Itt módosíthatod a kezdőlap hero szekciójának háttérképét, és más vizuális elemeket.</p>
+  </div>
+
+  <!-- HERO HÁTTÉRKÉP -->
+  <div class="card">
+    <h2 class="card-title">Kezdőlap hero háttérkép</h2>
+    <p class="card-sub">A főoldal felső szekciójának háttere. Ajánlott méret: 1600×700 px vagy nagyobb. Maximum 10 MB.</p>
+
+    <div class="preview-wrap">
+      <div class="preview-img" id="previewImg"></div>
+      <div class="preview-overlay" id="previewOverlay">
+        <div class="preview-title">Nem tudja, milyen szakorvosra van szüksége?<br><em>Megmondjuk.</em></div>
+      </div>
+      <div class="preview-empty" id="previewEmpty" style="display:none">Nincs feltöltött háttérkép<br><small>A főoldal alapértelmezett fehér háttérrel jelenik meg</small></div>
+    </div>
+
+    <label class="upload-area" id="uploadArea">
+      <div class="upload-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div class="upload-title">Kattints a feltöltéshez vagy húzd ide a képet</div>
+      <div class="upload-sub">JPG, PNG, WebP – max 10 MB</div>
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif">
+    </label>
+
+    <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnSave" disabled>Mentés</button>
+      <button class="btn btn-outline" id="btnReload">Aktuális kép újratöltése</button>
+      <button class="btn btn-danger" id="btnRemove">Háttérkép eltávolítása</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let selectedFile = null;
+let currentBgUrl = '';
+
+function toast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── Aktuális háttérkép betöltése ──
+async function loadCurrentBg() {
+  try {
+    const { data, error } = await db
+      .from('site_settings')
+      .select('value')
+      .eq('key', 'hero_bg_url')
+      .maybeSingle();
+    if (error) throw error;
+    currentBgUrl = data?.value || '';
+    updatePreview(currentBgUrl);
+  } catch (e) {
+    console.warn('[loadCurrentBg]', e);
+    toast('Nem sikerült betölteni a jelenlegi háttérképet', 'error');
+  }
+}
+
+function updatePreview(url) {
+  const img = document.getElementById('previewImg');
+  const overlay = document.getElementById('previewOverlay');
+  const empty = document.getElementById('previewEmpty');
+  if (url) {
+    img.style.backgroundImage = `url('${url}')`;
+    img.style.display = 'block';
+    overlay.style.display = 'flex';
+    empty.style.display = 'none';
+  } else {
+    img.style.backgroundImage = '';
+    img.style.display = 'none';
+    overlay.style.display = 'none';
+    empty.style.display = 'block';
+  }
+}
+
+// ── Fájl választás (input + drag-drop) ──
+const fileInput = document.getElementById('fileInput');
+const uploadArea = document.getElementById('uploadArea');
+
+fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+['dragenter','dragover'].forEach(evt => {
+  uploadArea.addEventListener(evt, (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+});
+['dragleave','drop'].forEach(evt => {
+  uploadArea.addEventListener(evt, (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+  });
+});
+uploadArea.addEventListener('drop', (e) => {
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    toast('Csak képfájlt lehet feltölteni', 'error');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    toast('A fájl túl nagy (max 10 MB)', 'error');
+    return;
+  }
+  selectedFile = file;
+  // Helyi előnézet
+  const reader = new FileReader();
+  reader.onload = (e) => updatePreview(e.target.result);
+  reader.readAsDataURL(file);
+
+  document.getElementById('btnSave').disabled = false;
+  document.querySelector('.upload-title').textContent = file.name + ' (' + (file.size/1024/1024).toFixed(2) + ' MB)';
+}
+
+// ── Mentés ──
+document.getElementById('btnSave').addEventListener('click', async () => {
+  if (!selectedFile) return;
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true;
+  btn.textContent = 'Feltöltés…';
+
+  const progress = document.getElementById('progress');
+  const progressBar = document.getElementById('progressBar');
+  progress.classList.add('active');
+  progressBar.style.width = '20%';
+
+  try {
+    const ext = selectedFile.name.split('.').pop().toLowerCase();
+    const fileName = `hero-bg-${Date.now()}.${ext}`;
+    const filePath = fileName;
+
+    progressBar.style.width = '40%';
+
+    // ── 1. Feltöltés a storage-ba ──
+    const { data: uploadData, error: uploadError } = await db.storage
+      .from('site-assets')
+      .upload(filePath, selectedFile, { cacheControl: '3600', upsert: false });
+
+    if (uploadError) throw uploadError;
+    progressBar.style.width = '70%';
+
+    // ── 2. Publikus URL lekérése ──
+    const { data: urlData } = db.storage.from('site-assets').getPublicUrl(filePath);
+    const publicUrl = urlData.publicUrl;
+    progressBar.style.width = '85%';
+
+    // ── 3. Site settings frissítése ──
+    const { error: updateError } = await db
+      .from('site_settings')
+      .upsert({ key: 'hero_bg_url', value: publicUrl, updated_at: new Date().toISOString() });
+
+    if (updateError) throw updateError;
+    progressBar.style.width = '100%';
+
+    // ── 4. Régi kép törlése (ha volt) ──
+    if (currentBgUrl) {
+      try {
+        const oldPath = currentBgUrl.split('/site-assets/')[1];
+        if (oldPath && oldPath !== filePath) {
+          await db.storage.from('site-assets').remove([oldPath]);
+        }
+      } catch (e) { console.warn('Old image cleanup:', e); }
+    }
+
+    currentBgUrl = publicUrl;
+    selectedFile = null;
+    document.querySelector('.upload-title').textContent = 'Kattints a feltöltéshez vagy húzd ide a képet';
+    fileInput.value = '';
+    btn.textContent = 'Mentés';
+
+    toast('Háttérkép sikeresen frissítve ✓', 'success');
+    setTimeout(() => progress.classList.remove('active'), 800);
+  } catch (e) {
+    console.error('[upload]', e);
+    toast('Hiba: ' + (e.message || 'Ismeretlen hiba'), 'error');
+    btn.textContent = 'Mentés';
+    btn.disabled = false;
+    progress.classList.remove('active');
+    progressBar.style.width = '0%';
+  }
+});
+
+// ── Eltávolítás ──
+document.getElementById('btnRemove').addEventListener('click', async () => {
+  if (!confirm('Biztosan eltávolítod a háttérképet? Az alapértelmezett fehér háttér jelenik majd meg.')) return;
+
+  try {
+    if (currentBgUrl) {
+      const oldPath = currentBgUrl.split('/site-assets/')[1];
+      if (oldPath) {
+        await db.storage.from('site-assets').remove([oldPath]).catch(e => console.warn(e));
+      }
+    }
+    await db.from('site_settings')
+      .upsert({ key: 'hero_bg_url', value: '', updated_at: new Date().toISOString() });
+    currentBgUrl = '';
+    updatePreview('');
+    toast('Háttérkép eltávolítva ✓', 'success');
+  } catch (e) {
+    console.error(e);
+    toast('Hiba az eltávolítás során', 'error');
+  }
+});
+
+document.getElementById('btnReload').addEventListener('click', loadCurrentBg);
+</script>
+
+</body>
+</html>
