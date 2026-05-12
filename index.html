@@ -156,9 +156,8 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .mobile-nav-cta{display:block;background:var(--grad-orange);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3)}
 
 /* ════════ HERO ════════ */
-.hero{padding:3.5rem 5.5% 5.5rem;position:relative;overflow:hidden;background-color:#fff;background-image:url('https://asgnkjmwzhbczpvetprh.supabase.co/storage/v1/object/public/site-assets/hero-bg-1778612182109.png');background-size:cover;background-position:center;background-repeat:no-repeat}
-.hero-bg-image{display:none}
-.hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.4) 100%);z-index:1;pointer-events:none}
+.hero{padding:3.5rem 5.5% 5.5rem;position:relative;overflow:hidden;background-color:#fff;background-image:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,.4) 100%),url('https://asgnkjmwzhbczpvetprh.supabase.co/storage/v1/object/public/site-assets/hero-bg-1778612182109.png');background-size:cover;background-position:center;background-repeat:no-repeat}
+.hero-bg-image,.hero-bg-overlay{display:none}
 .hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none;z-index:0}
 .hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none;z-index:0}
 .hero-content{max-width:1400px;margin:0 auto;position:relative;z-index:2}
@@ -573,8 +572,6 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 
 
 <div class="hero">
-  <div class="hero-bg-image" id="heroBgImage" style="background-image:url('https://asgnkjmwzhbczpvetprh.supabase.co/storage/v1/object/public/site-assets/hero-bg-1778612182109.png')"></div>
-  <div class="hero-bg-overlay"></div>
   <div class="hero-content">
     <div class="hero-two-col">
 
