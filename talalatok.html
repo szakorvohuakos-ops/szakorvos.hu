@@ -410,7 +410,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 <nav>
   <div class="ni">
     <a href="index.html" class="logo">
-      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#283897"/><circle cx="14" cy="10" r="5.5" fill="white"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#22c55e"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#22c55e"/></svg>
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><circle cx="14" cy="10" r="5.5" fill="white"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
       <span class="logo-txt">Szakorvos<em>.hu</em></span>
     </a>
     <div class="nav-srch" style="margin:0 1.25rem">
@@ -422,7 +422,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       <button class="srch-btn" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
     </div>
     <div class="nav-acts">
-      <a href="tudastar.html" style="font-size:13px;font-weight:600;color:#ff6b2b;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">Tudástár A–Z</a>
+      <a href="tudastar.html" style="font-size:13px;font-weight:600;color:#FF8A00;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">Tudástár A–Z</a>
       <button class="btn-ghost">Bejelentkezés</button>
       <button class="btn-pill">Regisztráció</button>
     </div>
@@ -937,7 +937,7 @@ function renderList(){
       if(spec!==lastSpec){
         const cnt=filtered.filter(x=>(x.doctor_specialties?.[0]?.specialties?.name||'Egyéb')===spec).length;
         html+=`<div style="display:flex;align-items:center;gap:12px;margin:${lastSpec?'1.5rem':'0'} 0 .75rem;padding-bottom:.5rem">
-          <div style="background:linear-gradient(135deg,#283897,#3a52e8);border-radius:10px;padding:6px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#fff">
+          <div style="background:linear-gradient(135deg,#113293,#264ACA);border-radius:10px;padding:6px 14px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#fff">
             ${spec}
           </div>
           <span style="font-size:12px;color:#94a3b8;font-weight:600">${cnt} orvos</span>
@@ -1093,10 +1093,10 @@ function openPanel(id){
 
   // — Info —
   document.getElementById('ppContact').innerHTML=`
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div><div><div class="info-lbl">Telefon</div><div class="info-val">${d.phone||clinic?.phone||'+36 1 234 5678'}</div></div></div>
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="info-lbl">Email</div><div class="info-val">${d.email||clinic?.email||'info@szakorvos.hu'}</div></div></div>
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-lbl">Cím</div><div class="info-val">${clinic?.address||((city||'Budapest')+', Magyarország')}</div></div></div>
-    ${clinic?.website?`<div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="info-lbl">Weboldal</div><div class="info-val"><a href="${clinic.website}" target="_blank" style="color:var(--brand)">${clinic.website}</a></div></div></div>`:''}`;
+    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div><div><div class="info-lbl">Telefon</div><div class="info-val">${d.phone||clinic?.phone||'+36 1 234 5678'}</div></div></div>
+    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="info-lbl">Email</div><div class="info-val">${d.email||clinic?.email||'info@szakorvos.hu'}</div></div></div>
+    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-lbl">Cím</div><div class="info-val">${clinic?.address||((city||'Budapest')+', Magyarország')}</div></div></div>
+    ${clinic?.website?`<div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="info-lbl">Weboldal</div><div class="info-val"><a href="${clinic.website}" target="_blank" style="color:var(--brand)">${clinic.website}</a></div></div></div>`:''}`;
   document.getElementById('ppSched').innerHTML=DF.slice(1,7).map((day,i)=>{
     const on=avD.includes(i+1),av=d.availability?.find(a=>a.day_of_week===i+1);
     return `<div class="sched-row"><span style="color:var(--text);font-weight:${on?700:400}">${day}</span><span style="color:${on?'#059669':'#d1d5db'};font-weight:600">${on?(av?`${av.start_time?.slice(0,5)||'08:00'} – ${av.end_time?.slice(0,5)||'16:00'}`:'08:00 – 16:00'):'Zárva'}</span></div>`;
