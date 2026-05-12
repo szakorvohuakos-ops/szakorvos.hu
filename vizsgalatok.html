@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Vizsgálatok és Kezelések A–Z | Szakorvos.hu</title>
   <meta name="description" content="Vizsgálatok és kezelések szakterület szerint. Találd meg a számodra szükséges vizsgálatot és foglalj időpontot online."/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Nunito Sans', sans-serif; background: #f0f4ff; color: #374151; -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', sans-serif; background: #F4F6F8; color: #475569; -webkit-font-smoothing: antialiased; }
 
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
       background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
-      border-bottom: 1px solid #e8edf8;
-      box-shadow: 0 2px 16px rgba(40,56,151,0.06);
+      border-bottom: 1px solid #DCE3EA;
+      box-shadow: 0 2px 16px rgba(17,50,147,0.06);
       height: 64px;
     }
     .nav-row {
@@ -25,37 +26,37 @@
       padding: 0 4%; max-width: 1400px; margin: 0 auto; gap: 8px; width: 100%;
     }
     .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; margin-right: 24px; }
-    .nav-logo-text { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900; color: #283897; }
-    .nav-logo-text em { color: #ff6b2b; font-style: normal; }
-    .nav-logo-sub { font-size: 9px; font-weight: 700; color: #9aa5c4; letter-spacing: .12em; text-transform: uppercase; }
+    .nav-logo-text { font-family: 'Inter', sans-serif; font-size: 20px; font-weight:700; color: #113293; }
+    .nav-logo-text em { color: #FF8A00; font-style: normal; }
+    .nav-logo-sub { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: .12em; text-transform: uppercase; }
     .nav-links { display: flex; align-items: center; gap: 2px; list-style: none; flex: 1; }
     .nav-links a {
       display: flex; align-items: center; gap: 4px;
       padding: 8px 12px; font-size: 13.5px; font-weight: 600;
-      color: #374151; border-radius: 8px; text-decoration: none;
+      color: #475569; border-radius: 8px; text-decoration: none;
       transition: background .15s, color .15s; white-space: nowrap;
     }
-    .nav-links a:hover { background: #f0f4ff; color: #283897; }
-    .nav-link-highlight { color: #ff6b2b !important; font-weight: 700 !important; }
+    .nav-links a:hover { background: #F4F6F8; color: #113293; }
+    .nav-link-highlight { color: #FF8A00 !important; font-weight: 700 !important; }
     .nav-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
     .btn-nav-outline {
       padding: 7px 16px; font-size: 13px; font-weight: 600;
-      color: #283897; border: 1.5px solid rgba(40,56,151,0.2);
+      color: #113293; border: 1.5px solid rgba(17,50,147,0.2);
       border-radius: 8px; text-decoration: none; transition: all .15s;
     }
-    .btn-nav-outline:hover { border-color: #283897; background: rgba(40,56,151,0.04); }
+    .btn-nav-outline:hover { border-color: #113293; background: rgba(17,50,147,0.04); }
     .btn-nav-cta {
       padding: 8px 16px; font-size: 13px; font-weight: 700;
-      color: #fff; background: #ff6b2b; border-radius: 8px;
+      color: #fff; background: #FF8A00; border-radius: 8px;
       text-decoration: none; transition: all .15s;
-      box-shadow: 0 2px 8px rgba(255,107,43,0.3);
+      box-shadow: 0 2px 8px rgba(255,138,0,0.3);
     }
     .btn-nav-cta:hover { background: #ff8c5a; }
 
     /* ── HAMBURGER ── */
     .nav-mobile-toggle {
       display: none; align-items: center; justify-content: center;
-      width: 40px; height: 40px; background: #f0f4ff;
+      width: 40px; height: 40px; background: #F4F6F8;
       border: 1.5px solid #dde4f5; border-radius: 10px;
       cursor: pointer; flex-shrink: 0; margin-left: auto;
     }
@@ -75,17 +76,17 @@
     .mobile-drawer.open { transform: translateX(0); }
     .mobile-drawer-inner { display: flex; flex-direction: column; padding: 1.5rem 5%; gap: 4px; }
     .mobile-nav-item {
-      font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 600;
-      color: #283897; text-decoration: none; padding: 14px 0;
+      font-family: 'Inter', sans-serif; font-size: 17px; font-weight: 600;
+      color: #113293; text-decoration: none; padding: 14px 0;
       border-bottom: 1px solid #f0f4fb; display: block; transition: color .2s, padding-left .2s;
     }
-    .mobile-nav-item:hover { color: #ff6b2b; padding-left: 6px; }
+    .mobile-nav-item:hover { color: #FF8A00; padding-left: 6px; }
     .mobile-nav-cta {
       display: flex; align-items: center; justify-content: center;
-      background: #ff6b2b; color: #fff !important; font-family: 'Nunito', sans-serif;
+      background: #FF8A00; color: #fff !important; font-family: 'Inter', sans-serif;
       font-size: 15px; font-weight: 700; text-decoration: none;
       padding: 14px 24px; border-radius: 12px; margin-top: 12px;
-      box-shadow: 0 4px 16px rgba(255,107,43,0.3); transition: background .2s;
+      box-shadow: 0 4px 16px rgba(255,138,0,0.3); transition: background .2s;
     }
 
     /* ── HERO ── */
@@ -95,26 +96,26 @@
     }
     .hero::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(64,66,226,0.06) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 60% at 50% 30%, rgba(38,74,202,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
     .hero-label {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 12px; font-weight: 700;
-      color: #ff6b2b; text-transform: uppercase; letter-spacing: .12em;
+      color: #FF8A00; text-transform: uppercase; letter-spacing: .12em;
       margin-bottom: 16px;
-      background: rgba(255,107,43,0.08); border: 1px solid rgba(255,107,43,0.2);
+      background: rgba(255,138,0,0.08); border: 1px solid rgba(255,138,0,0.2);
       border-radius: 100px; padding: 5px 14px;
     }
     .hero-title {
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 900; color: #283897;
+      font-weight:700; color: #113293;
       line-height: 1.15; margin-bottom: 20px;
     }
-    .hero-title span { color: #ff6b2b; }
+    .hero-title span { color: #FF8A00; }
     .hero-desc {
-      font-size: 16px; color: #6b7280; line-height: 1.7;
+      font-size: 16px; color: #475569; line-height: 1.7;
       max-width: 620px; margin: 0 auto 28px;
     }
     .hero-badges {
@@ -123,9 +124,9 @@
     }
     .hero-badge {
       display: flex; align-items: center; gap: 8px;
-      font-size: 14px; font-weight: 600; color: #374151;
+      font-size: 14px; font-weight: 600; color: #475569;
     }
-    .hero-badge svg { color: #ff6b2b; flex-shrink: 0; }
+    .hero-badge svg { color: #FF8A00; flex-shrink: 0; }
 
     /* ── SPECIALTY FILTER PILLS ── */
     .filter-wrap {
@@ -137,13 +138,13 @@
     .filter-pill {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 7px 16px; border-radius: 100px;
-      border: 1.5px solid #e8edf8; background: #fff;
-      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
-      color: #374151; cursor: pointer; transition: all .15s;
+      border: 1.5px solid #DCE3EA; background: #fff;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+      color: #475569; cursor: pointer; transition: all .15s;
       white-space: nowrap;
     }
-    .filter-pill:hover { border-color: #283897; color: #283897; background: #eef2ff; }
-    .filter-pill.active { background: #283897; color: #fff; border-color: #283897; box-shadow: 0 4px 12px rgba(40,56,151,0.25); }
+    .filter-pill:hover { border-color: #113293; color: #113293; background: #eef2ff; }
+    .filter-pill.active { background: #113293; color: #fff; border-color: #113293; box-shadow: 0 4px 12px rgba(17,50,147,0.25); }
     .filter-pill .count { opacity: .65; font-size: 11px; }
 
     /* ── VIEW TOGGLE ── */
@@ -153,11 +154,11 @@
     .view-btn {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 18px; border-radius: 100px;
-      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
       cursor: pointer; transition: all .2s;
     }
-    .view-btn.active { background: #283897; color: #fff; border: 2px solid #283897; }
-    .view-btn.inactive { background: transparent; color: #283897; border: 2px solid #283897; }
+    .view-btn.active { background: #113293; color: #fff; border: 2px solid #113293; }
+    .view-btn.inactive { background: transparent; color: #113293; border: 2px solid #113293; }
 
     /* ── SEARCH ── */
     .search-wrap {
@@ -165,19 +166,19 @@
     }
     .search-inner {
       display: flex; align-items: center; gap: 12px;
-      background: #fff; border: 1.5px solid #e8edf8;
+      background: #fff; border: 1.5px solid #DCE3EA;
       border-radius: 100px; padding: 12px 20px;
-      box-shadow: 0 4px 20px rgba(40,56,151,0.08);
+      box-shadow: 0 4px 20px rgba(17,50,147,0.08);
       transition: border-color .2s, box-shadow .2s;
     }
     .search-inner:focus-within {
-      border-color: #283897;
-      box-shadow: 0 4px 20px rgba(40,56,151,0.15);
+      border-color: #113293;
+      box-shadow: 0 4px 20px rgba(17,50,147,0.15);
     }
-    .search-inner svg { flex-shrink: 0; color: #9aa5c4; }
+    .search-inner svg { flex-shrink: 0; color: #94a3b8; }
     .search-inner input {
       flex: 1; border: none; outline: none; background: transparent;
-      font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: #374151;
+      font-family: 'Inter', sans-serif; font-size: 15px; color: #475569;
     }
     .search-inner input::placeholder { color: #b0bcd4; }
 
@@ -190,7 +191,7 @@
     .spec-section { margin-bottom: 56px; }
     .spec-header {
       display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
-      padding-bottom: 14px; border-bottom: 2px solid #e8edf8;
+      padding-bottom: 14px; border-bottom: 2px solid #DCE3EA;
     }
     .spec-badge {
       width: 46px; height: 46px; border-radius: 13px;
@@ -198,9 +199,9 @@
       font-size: 20px; flex-shrink: 0;
     }
     .spec-name {
-      font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: #0f172a;
+      font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293;
     }
-    .spec-count { font-size: 13px; color: #9aa5c4; font-weight: 600; margin-top: 2px; }
+    .spec-count { font-size: 13px; color: #94a3b8; font-weight: 600; margin-top: 2px; }
 
     .treatments-grid {
       display: grid;
@@ -209,20 +210,20 @@
     }
     .treatment-card {
       display: flex; align-items: center; justify-content: space-between;
-      background: #fff; border: 1.5px solid #e8edf8; border-radius: 12px;
-      padding: 13px 16px; text-decoration: none; color: #374151;
+      background: #fff; border: 1.5px solid #DCE3EA; border-radius: 12px;
+      padding: 13px 16px; text-decoration: none; color: #475569;
       transition: all .18s; cursor: pointer;
     }
     .treatment-card:hover {
-      border-color: #283897; background: #eef2ff;
-      transform: translateY(-1px); box-shadow: 0 4px 16px rgba(40,56,151,0.1);
+      border-color: #113293; background: #eef2ff;
+      transform: translateY(-1px); box-shadow: 0 4px 16px rgba(17,50,147,0.1);
     }
     .treatment-card__title {
-      font-size: 14px; font-weight: 600; color: #0f172a;
+      font-size: 14px; font-weight: 600; color: #113293;
       line-height: 1.4; flex: 1; margin-right: 10px;
     }
     .spec-suffix {
-      font-size: 12px; font-weight: 500; color: #9aa5c4;
+      font-size: 12px; font-weight: 500; color: #94a3b8;
       font-style: italic; margin-left: 2px;
     }
     .badge-soon {
@@ -234,10 +235,10 @@
     }
     .treatment-card__arrow {
       width: 28px; height: 28px; border-radius: 8px;
-      background: #f0f4ff; display: flex; align-items: center; justify-content: center;
+      background: #F4F6F8; display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; transition: background .15s;
     }
-    .treatment-card:hover .treatment-card__arrow { background: #283897; }
+    .treatment-card:hover .treatment-card__arrow { background: #113293; }
     .treatment-card:hover .treatment-card__arrow svg { stroke: #fff; }
 
     /* Special tags */
@@ -246,18 +247,18 @@
       padding: 2px 7px; border-radius: 100px; margin-left: 6px;
       vertical-align: middle; letter-spacing: .03em;
     }
-    .tag-phone { background: rgba(40,56,151,0.1); color: #283897; }
-    .tag-video { background: rgba(64,66,226,0.1); color: #4042e2; }
-    .tag-online { background: rgba(255,107,43,0.1); color: #ff6b2b; }
+    .tag-phone { background: rgba(17,50,147,0.1); color: #113293; }
+    .tag-video { background: rgba(38,74,202,0.1); color: #264ACA; }
+    .tag-online { background: rgba(255,138,0,0.1); color: #FF8A00; }
 
     /* Empty / loading */
     .loading {
       text-align: center; padding: 48px;
-      color: #9aa5c4; font-size: 15px; font-weight: 600;
+      color: #94a3b8; font-size: 15px; font-weight: 600;
     }
     .loading-dots { display: inline-flex; gap: 6px; margin-left: 8px; }
     .loading-dots span {
-      width: 6px; height: 6px; background: #9aa5c4; border-radius: 50%;
+      width: 6px; height: 6px; background: #94a3b8; border-radius: 50%;
       animation: dotPulse 1.4s infinite;
     }
     .loading-dots span:nth-child(2) { animation-delay: .2s; }
@@ -267,9 +268,9 @@
       40% { transform: scale(1); opacity: 1; }
     }
     .empty-state {
-      text-align: center; padding: 64px 24px; color: #9aa5c4;
+      text-align: center; padding: 64px 24px; color: #94a3b8;
     }
-    .empty-state h3 { font-family: 'Nunito', sans-serif; font-size: 18px; color: #6b7280; margin-bottom: 8px; }
+    .empty-state h3 { font-family: 'Inter', sans-serif; font-size: 18px; color: #475569; margin-bottom: 8px; }
     .empty-state p { font-size: 14px; }
 
     /* Sticky spec nav */
@@ -286,11 +287,11 @@
     .spec-nav-inner::-webkit-scrollbar { display: none; }
     .spec-nav-pill {
       flex-shrink: 0; padding: 5px 14px; border-radius: 100px;
-      background: #fff; border: 1.5px solid #e8edf8;
-      font-size: 12.5px; font-weight: 700; color: #374151;
+      background: #fff; border: 1.5px solid #DCE3EA;
+      font-size: 12.5px; font-weight: 700; color: #475569;
       text-decoration: none; transition: all .15s; white-space: nowrap;
     }
-    .spec-nav-pill:hover { border-color: #283897; color: #283897; }
+    .spec-nav-pill:hover { border-color: #113293; color: #113293; }
 
     @media (max-width: 640px) {
       .hero { padding-top: 80px; padding-bottom: 32px; }
@@ -328,7 +329,7 @@
       <a href="#" class="btn-nav-cta">Legyen Ön is a partnerünk</a>
     </div>
     <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMenu()" aria-label="Menü">
-      <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.2" stroke-linecap="round">
+      <svg id="menuIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
     </button>
@@ -340,7 +341,7 @@
     <a href="#" class="mobile-nav-item">Orvosok</a>
     <a href="#" class="mobile-nav-item">Klinikák</a>
     <a href="tudastar.html" class="mobile-nav-item">Tudástár A–Z</a>
-    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#ff6b2b;">Vizsgálatok</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#FF8A00;">Vizsgálatok</a>
     <a href="#" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
@@ -420,28 +421,21 @@
 // ══════════════════════════════════════════
 const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
-
-async function sbFetch(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-  });
-  if (!res.ok) throw new Error(`Supabase hiba: ${res.status}`);
-  return res.json();
-}
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Szín és ikon a szakterület neve alapján
 const SPEC_META = {
   'Addiktológia':                             { icon: '🧠', color: '#6d28d9' },
-  'Allergológia és klinikai immunológia':     { icon: '🌿', color: '#15803d' },
+  'Allergológia és klinikai immunológia':     { icon: '🌿', color: '#1f6e3a' },
   'Alvásmedicina':                            { icon: '😴', color: '#6366f1' },
   'Andrológia':                               { icon: '⚕️', color: '#1d4ed8' },
-  'Aneszteziológia és intenzív terápia':      { icon: '💉', color: '#374151' },
+  'Aneszteziológia és intenzív terápia':      { icon: '💉', color: '#475569' },
   'Angiológia':                               { icon: '🩸', color: '#dc2626' },
   'Arc-, állcsont- és szájsebészet':          { icon: '🦷', color: '#0891b2' },
   'Audiológia':                               { icon: '👂', color: '#7c3aed' },
-  'Belgyógyászat':                            { icon: '🫀', color: '#1e3a8a' },
+  'Belgyógyászat':                            { icon: '🫀', color: '#113293' },
   'Bőrgyógyászat':                            { icon: '🧴', color: '#d97706' },
-  'Csecsemő- és gyermekgyógyászat':           { icon: '🍼', color: '#16a34a' },
+  'Csecsemő- és gyermekgyógyászat':           { icon: '🍼', color: '#1f6e3a' },
   'Dento-alveoláris sebészet':                { icon: '🦷', color: '#0284c7' },
   'Diabetológia':                             { icon: '💉', color: '#0284c7' },
   'Endodoncia':                               { icon: '🦷', color: '#1d4ed8' },
@@ -449,7 +443,7 @@ const SPEC_META = {
   'Érsebészet':                               { icon: '🩺', color: '#dc2626' },
   'Esztétikai fogászat':                      { icon: '😁', color: '#db2777' },
   'Fizikális medicina és rehabilitációs orvoslás': { icon: '🏃', color: '#0f766e' },
-  'Foglalkozás-orvostan':                     { icon: '🏭', color: '#374151' },
+  'Foglalkozás-orvostan':                     { icon: '🏭', color: '#475569' },
   'Fogszabályozás':                           { icon: '😬', color: '#7c3aed' },
   'Foniátria':                                { icon: '🗣️', color: '#0891b2' },
   'Fül-orr-gégészet':                         { icon: '👃', color: '#7c3aed' },
@@ -463,17 +457,17 @@ const SPEC_META = {
   'Gyermek-neurológia':                       { icon: '🧩', color: '#7c3aed' },
   'Gyermek-nőgyógyászat':                     { icon: '👧', color: '#db2777' },
   'Gyermek-tüdőgyógyászat':                  { icon: '🫁', color: '#0369a1' },
-  'Gyermekfogászat':                          { icon: '🦷', color: '#16a34a' },
-  'Gyermekimmunológia':                       { icon: '🌱', color: '#15803d' },
-  'Gyermekradiológia':                        { icon: '🩻', color: '#374151' },
+  'Gyermekfogászat':                          { icon: '🦷', color: '#1f6e3a' },
+  'Gyermekimmunológia':                       { icon: '🌱', color: '#1f6e3a' },
+  'Gyermekradiológia':                        { icon: '🩻', color: '#475569' },
   'Gyermekreumatológia':                      { icon: '🦴', color: '#b45309' },
   'Gyermeksebészet':                          { icon: '🩺', color: '#1d4ed8' },
   'Haematológia':                             { icon: '🩸', color: '#be123c' },
   'Háziorvostan':                             { icon: '🏠', color: '#059669' },
   'Hipertónia':                               { icon: '🫀', color: '#dc2626' },
-  'Honvéd-, katasztrófa- és rendvédelem-orvostan': { icon: '🪖', color: '#374151' },
+  'Honvéd-, katasztrófa- és rendvédelem-orvostan': { icon: '🪖', color: '#475569' },
   'Idegsebészet':                             { icon: '🧠', color: '#6d28d9' },
-  'Igazságügyi orvostan':                     { icon: '⚖️', color: '#374151' },
+  'Igazságügyi orvostan':                     { icon: '⚖️', color: '#475569' },
   'Implantológia':                            { icon: '🦷', color: '#0891b2' },
   'Infektológia':                             { icon: '🦠', color: '#065f46' },
   'Kardiológia':                              { icon: '❤️', color: '#dc2626' },
@@ -485,29 +479,29 @@ const SPEC_META = {
   'Laboratóriumi medicina':                   { icon: '🔬', color: '#0891b2' },
   'Lipidológia':                              { icon: '🫀', color: '#dc2626' },
   'Meddőségi specialista':                    { icon: '👶', color: '#db2777' },
-  'Megelőző orvostan és népegészségtan':      { icon: '🛡️', color: '#15803d' },
+  'Megelőző orvostan és népegészségtan':      { icon: '🛡️', color: '#1f6e3a' },
   'Mellkassebészet':                          { icon: '🫁', color: '#1d4ed8' },
   'Mozgásszervi rehabilitáció':               { icon: '🏃', color: '#0f766e' },
   'Nefrológia':                               { icon: '🫘', color: '#0284c7' },
-  'Neonatológia':                             { icon: '👶', color: '#16a34a' },
+  'Neonatológia':                             { icon: '👶', color: '#1f6e3a' },
   'Neurológia':                               { icon: '🧠', color: '#7c3aed' },
-  'Nukleáris medicina':                       { icon: '☢️', color: '#374151' },
+  'Nukleáris medicina':                       { icon: '☢️', color: '#475569' },
   'Obezitológia':                             { icon: '⚖️', color: '#0891b2' },
   'Ortopédia és traumatológia':               { icon: '🦴', color: '#0d9488' },
   'Orvosi genetika':                          { icon: '🧬', color: '#7c3aed' },
   'Orvosi mikrobiológia':                     { icon: '🦠', color: '#065f46' },
   'Oxiológia':                                { icon: '🚑', color: '#dc2626' },
-  'Palliatív medicina':                       { icon: '🕊️', color: '#6b7280' },
-  'Parodontológia':                           { icon: '🦷', color: '#15803d' },
-  'Patológia':                                { icon: '🔬', color: '#374151' },
+  'Palliatív medicina':                       { icon: '🕊️', color: '#475569' },
+  'Parodontológia':                           { icon: '🦷', color: '#1f6e3a' },
+  'Patológia':                                { icon: '🔬', color: '#475569' },
   'Plasztikai és égéssebészet':               { icon: '💫', color: '#db2777' },
   'Pneumológia':                              { icon: '🫁', color: '#0369a1' },
   'Pszichiátria':                             { icon: '🧩', color: '#9333ea' },
   'Pszichoterápia':                           { icon: '💬', color: '#7c3aed' },
-  'Radiológia':                               { icon: '🩻', color: '#374151' },
+  'Radiológia':                               { icon: '🩻', color: '#475569' },
   'Reumatológia':                             { icon: '🦴', color: '#b45309' },
   'Sebészet':                                 { icon: '🔪', color: '#1d4ed8' },
-  'Sportorvostan':                            { icon: '⚽', color: '#15803d' },
+  'Sportorvostan':                            { icon: '⚽', color: '#1f6e3a' },
   'Sugárterápia':                             { icon: '☢️', color: '#be123c' },
   'Sürgősségi orvostan':                      { icon: '🚨', color: '#dc2626' },
   'Szemészet':                                { icon: '👁️', color: '#0284c7' },
@@ -520,7 +514,7 @@ const SPEC_META = {
 };
 
 function getMeta(name) {
-  return SPEC_META[name] || { icon: '🏥', color: '#283897' };
+  return SPEC_META[name] || { icon: '🏥', color: '#113293' };
 }
 
 // ══════════════════════════════════════════
@@ -544,14 +538,26 @@ async function loadData() {
 
   try {
     // 1. Szakterületek a DB-ből
-    const specs = await sbFetch('specialties?select=id,name&order=name.asc');
+    const { data: specs, error: specsErr } = await db
+      .from('specialties')
+      .select('id, name')
+      .order('name', { ascending: true });
+    if (specsErr) throw specsErr;
 
-    // 2. Vizsgálatok/kezelések a treatments táblából
+    // 2. Vizsgálatok/kezelések a treatments táblából — Supabase max 1000 sor / kérés,
+    // ezért lapozással töltjük be az egészet.
     let treatments = [];
     let from = 0;
     const pageSize = 1000;
     while (true) {
-      const batch = await sbFetch(`treatments?select=title,specialty&order=specialty.asc,title.asc&limit=${pageSize}&offset=${from}`);
+      const to = from + pageSize - 1;
+      const { data: batch, error: tErr } = await db
+        .from('treatments')
+        .select('title, specialty')
+        .order('specialty', { ascending: true })
+        .order('title', { ascending: true })
+        .range(from, to);
+      if (tErr) throw tErr;
       if (!batch || !batch.length) break;
       treatments = treatments.concat(batch);
       if (batch.length < pageSize) break;
@@ -566,7 +572,7 @@ async function loadData() {
     });
 
     // 4. SPECIALTIES tömb összeállítása
-    SPECIALTIES = specs.map(s => ({
+    SPECIALTIES = (specs || []).map(s => ({
       name: s.name,
       icon: getMeta(s.name).icon,
       color: getMeta(s.name).color,
@@ -579,7 +585,7 @@ async function loadData() {
 
   } catch(e) {
     section.innerHTML = `<div class="empty-state">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <h3>Betöltési hiba</h3>
       <p>${e.message}</p>
     </div>`;
@@ -683,7 +689,7 @@ function treatmentCard(name, spec) {
   return `<a class="treatment-card" href="talalatok.html?specialty=${encodeURIComponent(spec)}&service=${encodeURIComponent(name)}">
     <div class="treatment-card__title">${shown}${tag}</div>
     <div class="treatment-card__arrow">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </div>
   </a>`;
 }
@@ -705,7 +711,7 @@ function render() {
 
     if (!results.length) {
       section.innerHTML = `<div class="empty-state">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <h3>Nincs találat</h3>
         <p>Próbáld más kulcsszóval.</p>
       </div>`;
