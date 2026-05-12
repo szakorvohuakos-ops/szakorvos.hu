@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tudástár Generátor – Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   const { data: profile } = await db.from('user_profiles').select('role').eq('id', session.user.id).single();
   if (!profile || profile.role !== 'superadmin') {
-    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#f4f7fc;text-align:center;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#1a1f36;margin:0">Hozzáférés megtagadva</h2><p style="color:#6b7280;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p><a href="/login.html" style="background:#1e3a8a;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Bejelentkezés</a></div>';
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#F4F6F8;text-align:center;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#113293;margin:0">Hozzáférés megtagadva</h2><p style="color:#475569;margin:0">Ez az oldal csak szuperadmin jogosultsággal érhető el.</p><a href="/login.html" style="background:#113293;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Bejelentkezés</a></div>';
     return;
   }
   loadStats();
@@ -30,27 +30,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 *{box-sizing:border-box;margin:0;padding:0}
 
 /* ── Szín paletta ──
-   Elsődleges sötétkék : #283897
-   Élénk elektromos kék: #4042e2
-   Narancssárga akcentus: #ff6b2b
+   Elsődleges sötétkék : #113293
+   Élénk elektromos kék: #264ACA
+   Narancssárga akcentus: #FF8A00
 */
 
-body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef0ff 0%,#fff4ef 100%);color:#0f172a;min-height:100vh}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#F4F6F8 0%,#F4F6F8 100%);color:#113293;min-height:100vh}
 
 /* NAV */
 .nav{
-  background:linear-gradient(90deg,#283897 0%,#4042e2 60%,#ff6b2b 100%);
+  background:linear-gradient(90deg,#113293 0%,#264ACA 60%,#FF8A00 100%);
   padding:0 5%;height:64px;display:flex;align-items:center;gap:12px;
-  box-shadow:0 4px 24px rgba(40,56,151,0.25);
+  box-shadow:0 4px 24px rgba(17,50,147,0.25);
 }
-.logo{font-family:'Nunito',sans-serif;font-size:19px;font-weight:900;color:#fff;letter-spacing:-.3px}
-.logo em{color:#ffd6bc;font-style:normal}
+.logo{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.logo em{color:#FFE9D6;font-style:normal}
 .nav-sep{color:rgba(255,255,255,0.35);font-size:20px}
 .nav-subtitle{font-size:13px;color:rgba(255,255,255,0.75);font-weight:600}
 .btn-logout{
   background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.35);
   color:#fff;padding:6px 16px;border-radius:8px;font-size:12px;font-weight:700;
-  cursor:pointer;font-family:'Nunito Sans',sans-serif;transition:all .2s;
+  cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;
   backdrop-filter:blur(4px);
 }
 .btn-logout:hover{background:rgba(255,255,255,0.28);border-color:rgba(255,255,255,0.6)}
@@ -60,15 +60,15 @@ body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef
 
 /* HERO / HEADER */
 .page-header{
-  background:linear-gradient(135deg,#283897 0%,#4042e2 50%,#5a3fd8 100%);
+  background:linear-gradient(135deg,#113293 0%,#264ACA 100%);
   border-radius:20px;padding:2rem 2.25rem;margin-bottom:1.5rem;
   position:relative;overflow:hidden;
-  box-shadow:0 8px 32px rgba(64,66,226,0.3);
+  box-shadow:0 8px 32px rgba(38,74,202,0.3);
 }
 .page-header::before{
   content:'';position:absolute;top:-40px;right:-40px;
   width:200px;height:200px;border-radius:50%;
-  background:rgba(255,107,43,0.18);pointer-events:none;
+  background:rgba(255,138,0,0.18);pointer-events:none;
 }
 .page-header::after{
   content:'';position:absolute;bottom:-60px;left:30%;
@@ -76,7 +76,7 @@ body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef
   background:rgba(255,255,255,0.06);pointer-events:none;
 }
 .page-header h1{
-  font-family:'Nunito',sans-serif;font-size:26px;font-weight:900;
+  font-family:'Inter',sans-serif;font-size:26px;font-weight:700;
   color:#fff;margin-bottom:.3rem;position:relative;z-index:1;
 }
 .page-header .sub{
@@ -87,15 +87,15 @@ body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
 .stat{
-  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  background:#fff;border:1.5px solid #DCE3EA;border-radius:16px;
   padding:1.1rem 1.25rem;text-align:center;
-  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+  box-shadow:0 2px 12px rgba(17,50,147,0.07);
   transition:transform .2s,box-shadow .2s;
 }
-.stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(64,66,226,0.15)}
+.stat:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(38,74,202,0.15)}
 .stat-val{
-  font-family:'Nunito',sans-serif;font-size:30px;font-weight:900;
-  background:linear-gradient(135deg,#283897,#4042e2);
+  font-family:'Inter',sans-serif;font-size:30px;font-weight:700;
+  background:linear-gradient(135deg,#113293,#264ACA);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;line-height:1;
 }
@@ -103,83 +103,83 @@ body{font-family:'Nunito Sans',sans-serif;background:linear-gradient(135deg,#eef
 
 /* PROGRESS */
 .progress-wrap{
-  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  background:#fff;border:1.5px solid #DCE3EA;border-radius:16px;
   padding:1.25rem;margin-bottom:1.5rem;
-  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+  box-shadow:0 2px 12px rgba(17,50,147,0.07);
 }
 .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem}
-.progress-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;color:#0f172a}
+.progress-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#113293}
 .progress-pct{
-  font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
-  color:#ff6b2b;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  color:#FF8A00;
 }
-.bar{height:14px;background:#eef0ff;border-radius:99px;overflow:hidden}
+.bar{height:14px;background:#F4F6F8;border-radius:99px;overflow:hidden}
 .bar-fill{
   height:100%;
-  background:linear-gradient(90deg,#283897,#4042e2,#ff6b2b);
+  background:linear-gradient(90deg,#113293,#264ACA,#FF8A00);
   border-radius:99px;transition:width .5s ease;width:0%;
-  box-shadow:0 2px 8px rgba(64,66,226,0.35);
+  box-shadow:0 2px 8px rgba(38,74,202,0.35);
 }
 
 /* CONTROLS */
 .controls{
-  background:#fff;border:1.5px solid #e8edf8;border-radius:16px;
+  background:#fff;border:1.5px solid #DCE3EA;border-radius:16px;
   padding:1.25rem;margin-bottom:1.25rem;display:flex;gap:10px;
   align-items:center;flex-wrap:wrap;
-  box-shadow:0 2px 12px rgba(40,56,151,0.07);
+  box-shadow:0 2px 12px rgba(17,50,147,0.07);
 }
 .btn-start{
-  background:linear-gradient(135deg,#ff6b2b,#ff8c52);
+  background:linear-gradient(135deg,#FF8A00,#FFA726);
   color:#fff;border:none;padding:11px 24px;border-radius:10px;
-  font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
   cursor:pointer;display:flex;align-items:center;gap:7px;
-  transition:all .2s;box-shadow:0 4px 14px rgba(255,107,43,0.35);
+  transition:all .2s;box-shadow:0 4px 14px rgba(255,138,0,0.35);
 }
 .btn-start:hover{
-  background:linear-gradient(135deg,#e85a1e,#ff6b2b);
-  transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,43,0.45);
+  background:linear-gradient(135deg,#e57a00,#FF8A00);
+  transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,138,0,0.45);
 }
 .btn-start:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-stop{
-  background:#fff;border:1.5px solid #e2e8f0;color:#374151;
-  padding:10px 20px;border-radius:10px;font-family:'Nunito',sans-serif;
+  background:#fff;border:1.5px solid #DCE3EA;color:#475569;
+  padding:10px 20px;border-radius:10px;font-family:'Inter',sans-serif;
   font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
 }
 .btn-stop:hover{border-color:#ef4444;color:#ef4444}
 .btn-stop:disabled{opacity:.4;cursor:not-allowed}
 select{
   padding:9px 12px;border-radius:10px;
-  border:1.5px solid #e8edf8;font-size:13px;
-  background:#fff;color:#0f172a;font-family:'Nunito Sans',sans-serif;
+  border:1.5px solid #DCE3EA;font-size:13px;
+  background:#fff;color:#113293;font-family:'Inter',sans-serif;
   font-weight:600;
 }
 .status{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;color:#64748b;font-weight:600}
-.dot{width:9px;height:9px;border-radius:50%;background:#cbd5e1;flex-shrink:0}
-.dot.on{background:#22c55e;animation:pulse 1s infinite;box-shadow:0 0 0 3px rgba(34,197,94,0.2)}
+.dot{width:9px;height:9px;border-radius:50%;background:#94a3b8;flex-shrink:0}
+.dot.on{background:#2C9650;animation:pulse 1s infinite;box-shadow:0 0 0 3px rgba(44,150,80,0.2)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* LOG */
 .log-wrap{
   background:#1a1b2e;border-radius:16px;overflow:hidden;
-  box-shadow:0 8px 32px rgba(40,56,151,0.2);
+  box-shadow:0 8px 32px rgba(17,50,147,0.2);
   border:1px solid #2d2f4a;
 }
 .log-header{
   padding:.75rem 1rem;
-  background:linear-gradient(90deg,#283897,#4042e2);
+  background:linear-gradient(90deg,#113293,#264ACA);
   display:flex;align-items:center;justify-content:space-between;
 }
-.log-title{font-size:12px;font-weight:800;color:#fff;letter-spacing:.1em;text-transform:uppercase}
+.log-title{font-size:12px;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase}
 .log-clear{
   background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
-  cursor:pointer;font-size:11px;color:#fff;font-family:'Nunito Sans',sans-serif;
+  cursor:pointer;font-size:11px;color:#fff;font-family:'Inter',sans-serif;
   padding:3px 10px;border-radius:6px;font-weight:700;transition:all .2s;
 }
 .log-clear:hover{background:rgba(255,255,255,0.28)}
 .log{height:380px;overflow-y:auto;padding:.75rem 1rem;font-size:12px;font-family:monospace;line-height:1.75}
 .log::-webkit-scrollbar{width:4px}
 .log::-webkit-scrollbar-track{background:#12131f}
-.log::-webkit-scrollbar-thumb{background:#4042e2;border-radius:99px}
+.log::-webkit-scrollbar-thumb{background:#264ACA;border-radius:99px}
 .l{padding:0;color:#5a6080}
 .ok{color:#4ade80}
 .err{color:#f87171}
