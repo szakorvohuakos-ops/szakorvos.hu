@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Egészségügyi Tudástár A–Z | Szakorvos.hu</title>
   <meta name="description" content="Tünetek és betegségek A-tól Z-ig. Keresd meg tüneted vagy betegséged nevét és tudd meg melyik szakorvoshoz érdemes fordulnod."/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -228,6 +229,7 @@
 <script>
 const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Magyar ábécé helyes sorrendben
 const ALPHABET = ['A','Á','B','C','Cs','D','E','É','F','G','Gy','H','I','Í','J','K','L','M','N','Ny','O','Ó','Ö','Ő','P','Q','R','S','Sz','T','Ty','U','Ú','Ü','Ű','V','W','X','Y','Z','Zs'];
@@ -341,16 +343,13 @@ async function loadArticles() {
 
   try {
     while (true) {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/knowledge_articles?select=id,title,slug,specialty&order=title.asc&limit=${pageSize}&offset=${from}`,
-        { headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${SUPABASE_KEY}`,
-            'Range': `${from}-${from + pageSize - 1}`
-        }}
-      );
-      if (!res.ok) throw new Error(`HTTP ${res.status} – ${res.statusText}`);
-      const batch = await res.json();
+      const to = from + pageSize - 1;
+      const { data: batch, error } = await db
+        .from('knowledge_articles')
+        .select('id, title, slug, specialty')
+        .order('title', { ascending: true })
+        .range(from, to);
+      if (error) throw error;
       if (!batch || !batch.length) break;
       all = all.concat(batch);
       if (batch.length < pageSize) break;
