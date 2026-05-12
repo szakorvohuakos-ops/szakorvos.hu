@@ -5,24 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Adatvédelmi Szabályzat – Szakorvos.hu</title>
 <meta name="description" content="A Szakorvos.hu adatvédelmi szabályzata. Tájékoztató a személyes adatok kezeléséről, a felhasználók jogairól és a sütikről.">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --blue:    #283897;
-  --blue2:   #4042e2;
-  --orange:  #ff6b2b;
-  --bg:      #f0f4ff;
+  --blue:    #113293;
+  --blue2:   #264ACA;
+  --orange:  #FF8A00;
+  --bg:      #F4F6F8;
   --white:   #ffffff;
-  --text:    #0f172a;
-  --sub:     #6b7280;
-  --border:  #e8edf8;
-  --muted:   #9aa5c4;
+  --text:    #113293;
+  --sub:     #475569;
+  --border:  #DCE3EA;
+  --muted:   #94a3b8;
 }
 
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -34,7 +34,7 @@ nav {
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 16px rgba(40,56,151,0.06);
+  box-shadow: 0 2px 16px rgba(17,50,147,0.06);
   height: 64px;
 }
 .nav-inner {
@@ -44,10 +44,10 @@ nav {
 .nav-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
 .nav-logo-icon {
   width: 36px; height: 36px; border-radius: 10px;
-  background: linear-gradient(135deg,#283897,#4042e2);
+  background: linear-gradient(135deg,#113293,#264ACA);
   display: flex; align-items: center; justify-content: center;
 }
-.nav-logo-text { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 900; color: var(--blue); }
+.nav-logo-text { font-family: 'Inter', sans-serif; font-size: 18px; font-weight:700; color: var(--blue); }
 .nav-logo-text em { color: var(--orange); font-style: normal; }
 .nav-back {
   margin-left: auto; display: flex; align-items: center; gap: 6px;
@@ -59,7 +59,7 @@ nav {
 /* ── HERO ── */
 .hero {
   padding-top: 96px; padding-bottom: 40px;
-  background: linear-gradient(160deg, #eef2ff 0%, #f0f4ff 60%, #fff 100%);
+  background: linear-gradient(160deg, #eef2ff 0%, #F4F6F8 60%, #fff 100%);
   border-bottom: 1px solid var(--border);
 }
 .hero-inner {
@@ -67,15 +67,15 @@ nav {
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(40,56,151,0.08); border: 1px solid rgba(40,56,151,0.15);
+  background: rgba(17,50,147,0.08); border: 1px solid rgba(17,50,147,0.15);
   color: var(--blue); font-size: 11px; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
   border-radius: 100px; padding: 5px 14px; margin-bottom: 16px;
 }
 .hero h1 {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-  font-weight: 900; color: var(--blue); line-height: 1.15;
+  font-weight:700; color: var(--blue); line-height: 1.15;
   margin-bottom: 14px;
 }
 .hero-meta {
@@ -97,8 +97,8 @@ nav {
   border-radius: 16px; overflow: hidden;
 }
 .toc-header {
-  padding: 14px 18px; background: linear-gradient(135deg,#283897,#4042e2);
-  font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 800;
+  padding: 14px 18px; background: linear-gradient(135deg,#113293,#264ACA);
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight:700;
   color: #fff; letter-spacing: .08em; text-transform: uppercase;
 }
 .toc-list { list-style: none; padding: 8px 0; }
@@ -108,7 +108,7 @@ nav {
   color: var(--sub); text-decoration: none; transition: all .15s;
   border-left: 3px solid transparent;
 }
-.toc-list li a:hover { color: var(--blue); background: #f0f4ff; border-left-color: var(--blue); }
+.toc-list li a:hover { color: var(--blue); background: #F4F6F8; border-left-color: var(--blue); }
 .toc-list li a.active { color: var(--blue); background: #eef2ff; border-left-color: var(--blue); }
 .toc-num { font-size: 11px; color: var(--muted); flex-shrink: 0; width: 16px; }
 
@@ -129,22 +129,22 @@ nav {
   display: flex; align-items: center; justify-content: center;
 }
 .section-title {
-  font-family: 'Nunito', sans-serif; font-size: 17px; font-weight: 900; color: var(--text);
+  font-family: 'Inter', sans-serif; font-size: 17px; font-weight:700; color: var(--text);
 }
 .section-num { font-size: 12px; color: var(--muted); font-weight: 700; margin-top: 2px; }
 .section-body { padding: 24px 28px; }
 
 /* Typography */
-.section-body p { font-size: 14.5px; line-height: 1.8; color: #374151; margin-bottom: 1rem; }
+.section-body p { font-size: 14.5px; line-height: 1.8; color: #475569; margin-bottom: 1rem; }
 .section-body p:last-child { margin-bottom: 0; }
 .section-body h3 {
-  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700;
   color: var(--blue); margin: 1.25rem 0 .5rem;
 }
 .section-body ul, .section-body ol {
   padding-left: 1.25rem; margin-bottom: 1rem;
 }
-.section-body li { font-size: 14px; line-height: 1.8; color: #374151; margin-bottom: 3px; }
+.section-body li { font-size: 14px; line-height: 1.8; color: #475569; margin-bottom: 3px; }
 .section-body strong { color: var(--text); font-weight: 700; }
 
 /* Info box */
@@ -168,9 +168,9 @@ nav {
 .data-table th {
   background: #f8faff; padding: 10px 14px; text-align: left;
   font-weight: 700; color: var(--blue); border-bottom: 2px solid var(--border);
-  font-family: 'Nunito', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
+  font-family: 'Inter', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: .05em;
 }
-.data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: #374151; line-height: 1.6; vertical-align: top; }
+.data-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: #475569; line-height: 1.6; vertical-align: top; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: #fafbff; }
 
@@ -180,12 +180,12 @@ nav {
 }
 .meta-tag {
   display: flex; align-items: center; gap: 6px;
-  background: #f0f4ff; border: 1px solid var(--border);
+  background: #F4F6F8; border: 1px solid var(--border);
   border-radius: 100px; padding: 5px 12px;
   font-size: 12.5px; font-weight: 600; color: var(--blue);
 }
-.meta-tag.orange { background: rgba(255,107,43,0.08); border-color: rgba(255,107,43,0.2); color: #c2410c; }
-.meta-tag.green { background: #ecfdf5; border-color: #bbf7d0; color: #065f46; }
+.meta-tag.orange { background: rgba(255,138,0,0.08); border-color: rgba(255,138,0,0.2); color: #c2410c; }
+.meta-tag.green { background: #ecfdf5; border-color: #c8e8d2; color: #065f46; }
 
 /* Rights grid */
 .rights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1rem 0; }
@@ -193,8 +193,8 @@ nav {
   border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px;
   transition: border-color .2s;
 }
-.right-card:hover { border-color: #283897; }
-.right-card-title { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+.right-card:hover { border-color: #113293; }
+.right-card-title { font-family: 'Inter', sans-serif; font-size: 13px; font-weight:700; color: var(--text); margin-bottom: 5px; }
 .right-card-desc { font-size: 12.5px; color: var(--sub); line-height: 1.6; }
 
 /* Footer note */
@@ -209,11 +209,11 @@ nav {
 
 /* Contact card */
 .contact-card {
-  background: linear-gradient(135deg,#283897,#4042e2);
+  background: linear-gradient(135deg,#113293,#264ACA);
   border-radius: 16px; padding: 24px 28px; color: #fff; margin-bottom: 1.25rem;
   display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
 }
-.contact-card h3 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+.contact-card h3 { font-family: 'Inter', sans-serif; font-size: 16px; font-weight:700; margin-bottom: 4px; }
 .contact-card p { font-size: 13.5px; opacity: .85; }
 .contact-card a {
   display: inline-flex; align-items: center; gap: 7px;
@@ -308,7 +308,7 @@ nav {
     <section class="section" id="s1">
       <div class="section-header">
         <div class="section-icon" style="background:#eef2ff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </div>
         <div>
           <div class="section-num">1. fejezet</div>
@@ -322,8 +322,8 @@ nav {
             <tr><td><strong>Székhely</strong></td><td>[cím]</td></tr>
             <tr><td><strong>Adószám</strong></td><td>[adószám]</td></tr>
             <tr><td><strong>Cégjegyzékszám</strong></td><td>[adat]</td></tr>
-            <tr><td><strong>Email</strong></td><td><a href="mailto:info@szakorvos.hu" style="color:#283897">info@szakorvos.hu</a></td></tr>
-            <tr><td><strong>Weboldal</strong></td><td><a href="https://szakorvos.hu" style="color:#283897">szakorvos.hu</a></td></tr>
+            <tr><td><strong>Email</strong></td><td><a href="mailto:info@szakorvos.hu" style="color:#113293">info@szakorvos.hu</a></td></tr>
+            <tr><td><strong>Weboldal</strong></td><td><a href="https://szakorvos.hu" style="color:#113293">szakorvos.hu</a></td></tr>
           </tbody>
         </table>
       </div>
@@ -349,7 +349,7 @@ nav {
     <!-- 3. Kezelt adatok -->
     <section class="section" id="s3">
       <div class="section-header">
-        <div class="section-icon" style="background:#fff7ed">
+        <div class="section-icon" style="background:#FFF1E8">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <div>
@@ -433,8 +433,8 @@ nav {
     <!-- 4. Adatfeldolgozók -->
     <section class="section" id="s4">
       <div class="section-header">
-        <div class="section-icon" style="background:#f0fdf4">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <div class="section-icon" style="background:#f0f8f3">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1f6e3a" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         </div>
         <div>
           <div class="section-num">4. fejezet</div>
@@ -485,7 +485,7 @@ nav {
     <section class="section" id="s6">
       <div class="section-header">
         <div class="section-icon" style="background:#eef2ff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <div>
           <div class="section-num">6. fejezet</div>
@@ -519,7 +519,7 @@ nav {
             <div class="right-card-desc">Kérheti az adatkezelés korlátozását vitás esetekben.</div>
           </div>
         </div>
-        <p>Jogai gyakorlásához írjon az <a href="mailto:info@szakorvos.hu" style="color:#283897;font-weight:600">info@szakorvos.hu</a> email-címre. Kérelmére <strong>30 napon belül</strong> válaszolunk.</p>
+        <p>Jogai gyakorlásához írjon az <a href="mailto:info@szakorvos.hu" style="color:#113293;font-weight:600">info@szakorvos.hu</a> email-címre. Kérelmére <strong>30 napon belül</strong> válaszolunk.</p>
         <div class="info-box" style="margin-top:1rem">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Ha úgy érzi, jogait megsértettük, panaszt tehet a <strong>Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH)</strong>: <a href="https://naih.hu" target="_blank" style="color:#1d4ed8">naih.hu</a> · 1055 Budapest, Falk Miksa utca 9-11.
@@ -573,7 +573,7 @@ nav {
     <!-- 9. Módosítások -->
     <section class="section" id="s9">
       <div class="section-header">
-        <div class="section-icon" style="background:#fff7ed">
+        <div class="section-icon" style="background:#FFF1E8">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c2410c" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.08-5.96"/></svg>
         </div>
         <div>
@@ -590,7 +590,7 @@ nav {
     <section class="section" id="s10">
       <div class="section-header">
         <div class="section-icon" style="background:#eef2ff">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#283897" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </div>
         <div>
           <div class="section-num">10. fejezet</div>
