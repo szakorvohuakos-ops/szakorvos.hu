@@ -65,6 +65,15 @@
 window.addEventListener('pageshow', function(e) {
   if (e.persisted) window.location.reload();
 });
+
+// Domain redirect: ha valaki a vercel.app domainen keresztül érkezik,
+// átirányítjuk a szakorvos.hu domainre (SEO + brand védelem)
+(function() {
+  var host = window.location.hostname;
+  if (host.endsWith('.vercel.app')) {
+    window.location.replace('https://www.szakorvos.hu' + window.location.pathname + window.location.search + window.location.hash);
+  }
+})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -148,14 +157,18 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 
 /* ════════ HERO ════════ */
 .hero{background:#fff;padding:3.5rem 5.5% 5.5rem;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none}
+.hero-bg-image{position:absolute;inset:0;background-position:center;background-size:cover;background-repeat:no-repeat;opacity:0;transition:opacity .6s ease;z-index:0;pointer-events:none}
+.hero-bg-image.loaded{opacity:1}
+.hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.78) 100%);z-index:0;pointer-events:none}
+.hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none;z-index:0}
+.hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none;z-index:0}
 .hero-content{max-width:1400px;margin:0 auto;position:relative;z-index:1}
 .hero-two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:2rem;align-items:start}
 .hero-left{min-width:0}
 
 .hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.5rem,2.6vw,2.3rem);font-weight:600;color:var(--text);line-height:1.2;letter-spacing:-0.025em;margin-bottom:1.25rem}
 .hero-title-accent{color:var(--green);font-weight:600}
+.hero-eyebrow{display:inline-block;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.12em;margin-top:-1.5rem;margin-bottom:1.25rem;background:var(--grad-orange);padding:7px 16px;border-radius:100px;box-shadow:0 4px 14px rgba(255,138,0,.3)}
 .hero-desc-new{font-size:16px;color:var(--sub);line-height:1.65;margin-bottom:1.75rem;max-width:560px;font-weight:500}
 
 /* Stat sor (most a kereső alatt, középre) */
@@ -375,8 +388,8 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .faq-a{padding:0 1.4rem 1.1rem;font-size:14px;color:var(--sub);line-height:1.7;font-weight:500}
 
 /* ════════ FOOTER ════════ */
-.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 3.5% 1.5rem}
-.footer-inner{max-width:1400px;margin:0 auto}
+.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
 .footer-brand{min-width:0}
 .footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
@@ -409,6 +422,37 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .cookie-switch input:checked+.cookie-slider::before{transform:translateX(18px)}
 .always-on .cookie-slider{background:var(--green);cursor:not-allowed}
 .always-on .cookie-slider::before{transform:translateX(18px)}
+
+/* ════════ COOKIE BANNER (FELUGRÓ) ════════ */
+#cookieBanner{position:fixed;bottom:24px;left:24px;right:24px;z-index:9999;animation:cookie-slide-up .4s cubic-bezier(.4,0,.2,1)}
+@keyframes cookie-slide-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+#cookieBox{max-width:1200px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 60px rgba(17,50,147,.18),0 8px 24px rgba(17,50,147,.1);padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+#cookieLeft{display:flex;align-items:flex-start;gap:14px;flex:1;min-width:280px}
+#cookieIconWrap{width:42px;height:42px;border-radius:12px;background:var(--grad-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+#cookieText{flex:1;min-width:0}
+#cookieTitle{font-family:'Inter',sans-serif;font-size:15.5px;font-weight:600;color:var(--text);margin-bottom:4px;letter-spacing:-0.01em}
+#cookieDesc{font-size:13px;color:var(--sub);line-height:1.55;font-weight:500;margin:0}
+#cookieDesc a{color:var(--brand-2);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+#cookieDesc a:hover{color:var(--brand)}
+#cookieBtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#btnDetails{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--sub);background:transparent;border:none;padding:9px 12px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;letter-spacing:-0.005em}
+#btnDetails:hover{background:var(--bg);color:var(--text)}
+#detailsIcon{transition:transform .2s}
+#detailsIcon.open{transform:rotate(180deg)}
+#btnReject{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--brand);background:transparent;border:1px solid var(--border);padding:10px 18px;border-radius:11px;cursor:pointer;transition:all .15s;letter-spacing:-0.005em}
+#btnReject:hover{border-color:var(--brand);background:var(--brand-light)}
+#btnAccept{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#fff;background:var(--grad-orange);border:none;padding:10px 22px;border-radius:11px;cursor:pointer;transition:all .15s;letter-spacing:-0.005em;box-shadow:0 4px 14px rgba(255,138,0,.3)}
+#btnAccept:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+
+#cookieDetails{display:none;max-width:1200px;margin:.85rem auto 0;background:#fff;border:1px solid var(--border);border-radius:14px;padding:1rem;box-shadow:0 8px 24px rgba(17,50,147,.1)}
+#cookieDetails.open{display:block}
+.always-on{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--green);background:#dcfce7;padding:5px 11px;border-radius:100px;flex-shrink:0;margin-left:1rem;letter-spacing:-0.005em}
+
+@media(max-width:640px){
+  #cookieBanner{bottom:12px;left:12px;right:12px}
+  #cookieBox{padding:1rem;flex-direction:column;align-items:stretch;gap:1rem}
+  #cookieBtns{justify-content:flex-end}
+}
 
 /* ════════ MISC ════════ */
 [data-anim]{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
@@ -530,11 +574,16 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 
 
 <div class="hero">
+  <div class="hero-bg-image" id="heroBgImage"></div>
+  <div class="hero-bg-overlay"></div>
   <div class="hero-content">
     <div class="hero-two-col">
 
       <!-- BAL: cím + kereső + stat sor -->
       <div class="hero-left">
+
+        <!-- Eyebrow felirat -->
+        <div class="hero-eyebrow">Országos szakorvoskereső</div>
 
         <!-- Cím -->
         <h1 class="hero-title-new">
@@ -1665,6 +1714,29 @@ document.querySelectorAll('.mobile-nav-item, .mobile-nav-cta').forEach(function(
 <script>
 (function(){
   if (typeof db === 'undefined' || !db) return;
+
+  // ── Hero háttérkép betöltése a site_settings táblából ──
+  (async function loadHeroBg() {
+    try {
+      const { data } = await db
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'hero_bg_url')
+        .maybeSingle();
+      const url = data?.value;
+      if (url) {
+        const el = document.getElementById('heroBgImage');
+        if (el) {
+          const img = new Image();
+          img.onload = () => {
+            el.style.backgroundImage = `url('${url}')`;
+            el.classList.add('loaded');
+          };
+          img.src = url;
+        }
+      }
+    } catch (e) { console.warn('[heroBg]', e); }
+  })();
 
   // ── Stat formátum: kis számoknál pontos, nagyobbnál kerekítve "+" jellel ──
   function fmtStat(n) {
