@@ -3,25 +3,43 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#113293"/>
 
   <!-- SEO meta tagek – JS tölti fel -->
   <title id="pageTitle">Egészségügyi cikk | Szakorvos.hu</title>
   <meta name="description" id="pageDesc" content="Tudjon meg többet erről az egészségügyi témáról a Szakorvos.hu tudástárában."/>
   <meta name="robots" content="index, follow"/>
-  <link rel="canonical" id="pageCanonical" href="https://szakorvos.hu/tudastar-cikk.html"/>
+  <link rel="canonical" id="pageCanonical" href="https://www.szakorvos.hu/tudastar"/>
 
   <!-- Open Graph -->
   <meta property="og:type" content="article"/>
   <meta property="og:site_name" content="Szakorvos.hu"/>
   <meta property="og:title" id="ogTitle" content="Egészségügyi cikk | Szakorvos.hu"/>
   <meta property="og:description" id="ogDesc" content="Tudástár cikk a Szakorvos.hu oldalon."/>
-  <meta property="og:image" content="https://szakorvos.hu/assets/og-default.jpg"/>
+  <meta property="og:image" id="ogImage" content="https://www.szakorvos.hu/og?type=logo"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Szakorvos.hu Tudástár cikk"/>
+  <meta property="og:url" id="ogUrl" content="https://www.szakorvos.hu/tudastar"/>
+  <meta property="og:locale" content="hu_HU"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" id="twTitle" content="Egészségügyi cikk | Szakorvos.hu"/>
+  <meta name="twitter:description" id="twDesc" content="Tudástár cikk."/>
+  <meta name="twitter:image" id="twImage" content="https://www.szakorvos.hu/og?type=logo"/>
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="hu" id="hrefHu" href="https://www.szakorvos.hu/tudastar"/>
+  <link rel="alternate" hreflang="x-default" id="hrefDefault" href="https://www.szakorvos.hu/tudastar"/>
 
   <!-- Schema.org – JS tölti fel -->
   <script id="schemaScript" type="application/ld+json">{}</script>
+  <script id="breadcrumbScript" type="application/ld+json">{}</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -416,19 +434,32 @@ async function loadArticle() {
     const seoTitle = `${article.title} – tünetek, kezelés, szakorvos | Szakorvos.hu`;
     const seoDesc = article.description
       ? article.description
-      : `Részletes útmutató: ${article.title} – tünetek, okok, kezelési lehetőségek és mikor forduljon ${specialty || 'orvos'}hoz. Szakorvos.hu egészségügyi tudástár.`;
+      : (article.content
+          ? article.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
+          : `Részletes útmutató: ${article.title} – tünetek, okok, kezelési lehetőségek és mikor forduljon ${specialty || 'orvos'}hoz. Szakorvos.hu egészségügyi tudástár.`);
 
     const cleanSlug = slug;
-    const canonicalUrl = `https://szakorvos.hu/tudastar/${cleanSlug}`;
-    const fallbackUrl  = `https://szakorvos.hu/tudastar-cikk.html?slug=${cleanSlug}`;
+    const canonicalUrl = `https://www.szakorvos.hu/tudastar/${cleanSlug}`;
+    const ogImageUrl   = `https://www.szakorvos.hu/og?type=article&slug=${encodeURIComponent(cleanSlug)}`;
+
+    const setAttr = (id, attr, val) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute(attr, val);
+    };
 
     document.getElementById('pageTitle').textContent = seoTitle;
     document.title = seoTitle;
-    document.getElementById('pageDesc').setAttribute('content', seoDesc);
-    document.getElementById('ogTitle').setAttribute('content', seoTitle);
-    document.getElementById('ogDesc').setAttribute('content', seoDesc);
-    // Canonical: szép URL ha elérhető, egyébként query-param
-    document.getElementById('pageCanonical').setAttribute('href', canonicalUrl);
+    setAttr('pageDesc',     'content', seoDesc);
+    setAttr('pageCanonical','href',    canonicalUrl);
+    setAttr('ogTitle',      'content', seoTitle);
+    setAttr('ogDesc',       'content', seoDesc);
+    setAttr('ogImage',      'content', ogImageUrl);
+    setAttr('ogUrl',        'content', canonicalUrl);
+    setAttr('twTitle',      'content', article.title);
+    setAttr('twDesc',       'content', seoDesc);
+    setAttr('twImage',      'content', ogImageUrl);
+    setAttr('hrefHu',       'href',    canonicalUrl);
+    setAttr('hrefDefault',  'href',    canonicalUrl);
     document.getElementById('breadcrumbTitle').textContent = article.title;
 
     // Schema.org JSON-LD – bővített MedicalWebPage
@@ -439,15 +470,17 @@ async function loadArticle() {
       "headline": article.title,
       "description": seoDesc,
       "url": canonicalUrl,
+      "image": ogImageUrl,
       "inLanguage": "hu",
-      "dateModified": new Date().toISOString().split('T')[0],
+      "datePublished": article.created_at || new Date().toISOString(),
+      "dateModified": article.updated_at || article.created_at || new Date().toISOString(),
       "publisher": {
         "@type": "Organization",
         "name": "Szakorvos.hu",
-        "url": "https://szakorvos.hu",
+        "url": "https://www.szakorvos.hu",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://szakorvos.hu/assets/logo.png"
+          "url": "https://www.szakorvos.hu/og?type=logo"
         }
       },
       "about": {
@@ -455,17 +488,20 @@ async function loadArticle() {
         "name": article.title
       },
       "specialty": specialty ? { "@type": "MedicalSpecialty", "name": specialty } : undefined,
-      "breadcrumb": {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://szakorvos.hu" },
-          { "@type": "ListItem", "position": 2, "name": "Tudástár A–Z", "item": "https://szakorvos.hu/tudastar.html" },
-          { "@type": "ListItem", "position": 3, "name": article.title, "item": canonicalUrl }
-        ]
-      }
+    };
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://www.szakorvos.hu" },
+        { "@type": "ListItem", "position": 2, "name": "Tudástár A–Z", "item": "https://www.szakorvos.hu/tudastar" },
+        ...(specialty ? [{ "@type": "ListItem", "position": 3, "name": specialty, "item": `https://www.szakorvos.hu/talalatok?specialty=${encodeURIComponent(specialty)}` }] : []),
+        { "@type": "ListItem", "position": specialty ? 4 : 3, "name": article.title, "item": canonicalUrl }
+      ]
     };
     // undefined mezők eltávolítása
-    document.getElementById('schemaScript').textContent = JSON.stringify(schema, (k,v) => v === undefined ? undefined : v, 2);
+    document.getElementById('schemaScript').textContent = JSON.stringify(schema, (k,v) => v === undefined ? undefined : v);
+    document.getElementById('breadcrumbScript').textContent = JSON.stringify(breadcrumbSchema);
 
     // Oldal tartalom renderelése - ha van DB tartalom, azt használjuk
     const content = article.content ? article.content : generateContent(article.title, specialty);
@@ -473,9 +509,9 @@ async function loadArticle() {
       <div class="sidebar-card">
         <div class="sidebar-card-title">Kapcsolódó cikkek</div>
         ${related.map(r => `
-          <a href="tudastar-cikk.html?slug=${encodeURIComponent(r.slug)}" class="related-item" rel="dofollow">
+          <a href="/tudastar/${encodeURIComponent(r.slug)}" class="related-item" rel="dofollow">
             <div class="related-item-dot"></div>
-            <div class="related-item-title">${r.title}</div>
+            <div class="related-item-title">${escapeHtml(r.title)}</div>
           </a>`).join('')}
       </div>` : '';
 
