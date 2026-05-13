@@ -1,13 +1,43 @@
+# ──────────────────────────────────────────────────────────────────────────
+# robots.txt — Szakorvos.hu
+# ──────────────────────────────────────────────────────────────────────────
+
+# Általános — minden crawler engedélyezve, kivéve az admin oldalak
 User-agent: *
 Allow: /
-
-# Sitemap
-Sitemap: https://www.szakorvos.hu/sitemap.xml
-
-# Admin oldalak ne indexelődjenek
 Disallow: /admin.html
 Disallow: /admin-orvos.html
 Disallow: /admin-klinika.html
 Disallow: /admin-tudastar.html
 Disallow: /admin-beallitasok.html
 Disallow: /generator.html
+
+# ──────────────────────────────────────────────────────────────────────────
+# AI / LLM crawler-ek — explicit engedély (tartalmaink LLM-eknek is jók)
+# Ha ezt nem szeretnéd, állítsd "Disallow: /"-ra a kívánt botoknál.
+# ──────────────────────────────────────────────────────────────────────────
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# ──────────────────────────────────────────────────────────────────────────
+# Sitemap
+# ──────────────────────────────────────────────────────────────────────────
+Sitemap: https://www.szakorvos.hu/sitemap.xml
