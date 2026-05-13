@@ -853,9 +853,9 @@ async function load(){
   // hiányzik a specialties táblából, vagy más mező hiányzik), automatikusan
   // egy minimális query-re fallback-elünk, ami biztosan működik.
 
-  const fullSelect = `id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
-  const minimalSelect = `id,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,specialties(name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
   const runQuery = async (selectClause) => {
     let q = db.from('doctors').select(selectClause).eq('is_active', true);
@@ -1183,10 +1183,23 @@ function cardH(d,i){
 }
 
 function goToProfile(id){
-  // Slug preferálása ID helyett — visszafelé kompatibilis is
+  // SEO-barát URL: /:specialty/:slug (pl. /belgyogyasz/dr-kis-agnes)
+  // Fallback: ha nincs primary specialty vagy slug, akkor /orvos/:id régi formátum
   const d = (allDocs || []).find(x => x.id === id);
-  const slugOrId = d?.slug || id;
-  window.location.href = `/orvos/${slugOrId}`;
+  const url = buildDoctorUrl(d, id);
+  window.location.href = url;
+}
+
+// Univerzális orvos URL építő
+function buildDoctorUrl(d, fallbackId){
+  if(!d) return `/orvos/${fallbackId || ''}`;
+  const primarySpec = (d.doctor_specialties || []).find(s => s.is_primary) || d.doctor_specialties?.[0];
+  const specSlug = primarySpec?.specialties?.doctor_slug;
+  if(d.slug && specSlug){
+    return `/${specSlug}/${d.slug}`;
+  }
+  // Fallback régi formátumra
+  return `/orvos/${d.slug || d.id || fallbackId}`;
 }
 function setView(v){curView=v;document.getElementById('btnList').classList.toggle('on',v==='list');document.getElementById('btnGrid').classList.toggle('on',v==='grid');renderList();}
 function goPg(p){curPg=p;renderList();scrollTo({top:0,behavior:'smooth'});}
@@ -1284,7 +1297,7 @@ function openPanel(id){
   document.getElementById('ppStat3').textContent=(d.experience_years||'–')+' év';
   document.getElementById('ppStat4').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
   document.getElementById('ppCtaP').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
-  document.getElementById('ppOpenLink').href=`/orvos/${d.slug || d.id}`;
+  document.getElementById('ppOpenLink').href=buildDoctorUrl(d);
 
   // — About —
   document.getElementById('ppBio').textContent=d.bio||`${d.name}${d.experience_years?' '+d.experience_years+' éve':''} kiemelkedő szaktudással rendelkező ${spec}. Pácienscentrikus szemlélettel dolgozik, minden egyes esethez egyénre szabott kezelési tervet állít össze. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb diagnosztikai és terápiás módszereket alkalmazza. Különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`;
