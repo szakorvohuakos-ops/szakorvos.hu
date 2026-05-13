@@ -846,17 +846,40 @@ function updateHero(){
 async function load(){
   document.getElementById('resList').innerHTML='<div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div>';
   document.getElementById('pagDiv').style.display='none';
-  // FONTOS: a `slug` oszlop csak akkor jelenik meg, ha az SQL migráció lefutott
-  // (lásd supabase/migrations/001_seo_slugs.sql). Amíg nem futott, a select
-  // hibázna. Helyette: minden render-hely a `d.slug || d.id` fallback-et használja.
-  let q=db.from('doctors').select(`id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
-  if(specQ) q=q.ilike('doctor_specialties.specialties.name',`%${specQ}%`);
-  if(cityQ) q=q.ilike('doctor_clinics.clinics.cities.name',`%${cityQ}%`);
-  const{data,error}=await q;
-  if(error){document.getElementById('resList').innerHTML=`<div class="empty-st"><div class="empty-icon">⚠️</div><div class="empty-title">Hiba</div><div class="empty-sub">${error.message}</div></div>`;return;}
-  allDocs=data||[];
-  // Keresés naplózása
-  if(specQ || cityQ) {
+
+  // ROBUSZTUS QUERY:
+  // Először megpróbáljuk a teljes query-t. Ha hibázik (mert pl. a slug oszlop
+  // hiányzik a specialties táblából, vagy más mező hiányzik), automatikusan
+  // egy minimális query-re fallback-elünk, ami biztosan működik.
+
+  const fullSelect = `id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+
+  const minimalSelect = `id,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,specialties(name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+
+  const runQuery = async (selectClause) => {
+    let q = db.from('doctors').select(selectClause).eq('is_active', true);
+    if(specQ) q = q.ilike('doctor_specialties.specialties.name', `%${specQ}%`);
+    if(cityQ) q = q.ilike('doctor_clinics.clinics.cities.name', `%${cityQ}%`);
+    return await q;
+  };
+
+  let { data, error } = await runQuery(fullSelect);
+
+  // Ha a teljes query hibázik, fallback minimális query-re
+  if(error){
+    console.warn('[load] full query failed, trying minimal fallback:', error.message);
+    ({ data, error } = await runQuery(minimalSelect));
+  }
+
+  if(error){
+    console.error('[load] minimal query also failed:', error);
+    document.getElementById('resList').innerHTML = `<div class="empty-st"><div class="empty-icon">⚠️</div><div class="empty-title">Adatbázis hiba</div><div class="empty-sub">${escapeHtml(error.message)}</div></div>`;
+    return;
+  }
+
+  allDocs = data || [];
+  // Keresés naplózása (fail-silent)
+  if(specQ || cityQ){
     db.from('search_logs').insert({
       query: [specQ, cityQ].filter(Boolean).join(' – '),
       result_count: allDocs.length,
@@ -864,9 +887,10 @@ async function load(){
       city_id: null,
     }).then(()=>{}).catch(()=>{});
   }
-  // Count badge - green inline count
+  // Count badge
   document.getElementById('heroCnt').textContent = `${allDocs.length} találat`;
-  curPg=1;applyF();
+  curPg = 1;
+  applyF();
 }
 
 /* ═════ FILTER ═════ */
