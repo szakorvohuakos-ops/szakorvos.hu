@@ -19,6 +19,16 @@
       "source": "/vizsgalatok.html",
       "destination": "/vizsgalatok",
       "permanent": true
+    },
+    {
+      "source": "/klinikak.html",
+      "destination": "/klinikak",
+      "permanent": true
+    },
+    {
+      "source": "/klinika.html",
+      "destination": "/klinikak",
+      "permanent": true
     }
   ],
 
@@ -50,6 +60,14 @@
     {
       "source": "/vizsgalatok",
       "destination": "/vizsgalatok.html"
+    },
+    {
+      "source": "/klinikak",
+      "destination": "/klinikak.html"
+    },
+    {
+      "source": "/klinikak/:slug",
+      "destination": "/klinika.html?slug=:slug"
     },
     {
       "source": "/orvos/:slug",
