@@ -791,30 +791,52 @@ async function load(){
     return;
   }
   try{
-    const buildQuery = () => db.from('doctors')
-      .select(`*,
-        doctor_specialties(specialties(name,slug)),
+    // Részletes query — minden lehetséges mező. Ha valamelyik nem létezik
+    // a DB-ben, automatikusan minimális query-re fallback-elünk.
+    const fullSelect = `*,
+        doctor_specialties(specialties(name)),
         doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,cities(name))),
         doctor_insurances(insurance_types(name)),
-        availability(day_of_week,start_time,end_time)`);
+        availability(day_of_week,start_time,end_time)`;
+    const minimalSelect = `*,
+        doctor_specialties(specialties(name)),
+        doctor_clinics(consultation_fee,clinics(name,address,phone,email,cities(name))),
+        availability(day_of_week,start_time,end_time)`;
+
+    const buildQuery = (selectClause) => db.from('doctors').select(selectClause);
 
     const isUuid = id || (slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug));
-    let data, error;
-    if(isUuid){
-      ({data,error} = await buildQuery().eq('id', id || slug).single());
-    } else {
-      ({data,error} = await buildQuery().eq('slug', slug).single());
-      if(error){
-        console.warn('[load] slug query failed, trying ID fallback:', error.message);
-        ({data,error} = await buildQuery().eq('id', slug).single());
+
+    // Lekérdezés helper: tries selectClause-szal a megadott eq-vel
+    const tryQuery = async (selectClause) => {
+      if(isUuid){
+        return await buildQuery(selectClause).eq('id', id || slug).single();
+      } else {
+        // Slug alapú próba elsőként
+        const r1 = await buildQuery(selectClause).eq('slug', slug).single();
+        if(!r1.error) return r1;
+        // Ha slug hibázik, ID-ként is megpróbáljuk
+        console.warn('[load] slug query failed, trying ID:', r1.error.message);
+        return await buildQuery(selectClause).eq('id', slug).single();
       }
+    };
+
+    let { data, error } = await tryQuery(fullSelect);
+
+    // Ha a részletes query hibázik (pl. hiányzó oszlop), fallback minimális query-re
+    if(error){
+      console.warn('[load] full query failed, falling back to minimal:', error.message);
+      ({ data, error } = await tryQuery(minimalSelect));
     }
+
     if(error || !data){ showError(); return; }
 
+    // Kiegészítő táblák lekérdezése — fail-silent ha nem léteznek
+    const safeQuery = (q) => q.then(r => r).catch(e => { console.warn(e); return { data: [] }; });
     const[svcRes,sympRes,faqRes] = await Promise.all([
-      db.from('doctor_services').select('*').eq('doctor_id',data.id).eq('is_active',true).order('sort_order'),
-      db.from('doctor_symptoms').select('*').eq('doctor_id',data.id).order('sort_order'),
-      db.from('doctor_faq').select('*').eq('doctor_id',data.id).order('sort_order')
+      safeQuery(db.from('doctor_services').select('*').eq('doctor_id',data.id).eq('is_active',true).order('sort_order')),
+      safeQuery(db.from('doctor_symptoms').select('*').eq('doctor_id',data.id).order('sort_order')),
+      safeQuery(db.from('doctor_faq').select('*').eq('doctor_id',data.id).order('sort_order'))
     ]);
     data._services = svcRes.data || [];
     data._symptoms = sympRes.data || [];
