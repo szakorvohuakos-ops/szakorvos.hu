@@ -783,9 +783,21 @@ function showError(title, desc){
 
 /* ── Load ─────────────────────────────────────────────────────────── */
 async function load(){
+  console.log('[Szakorvos.hu] orvos.html — verzió 2026-05-13 (slug + path fallback)');
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  const slug = params.get('slug');
+  let id = params.get('id');
+  let slug = params.get('slug');
+
+  // Ha sem query paraméter nincs, akkor PATH-BÓL próbáljuk kiolvasni
+  // (ez a Vercel clean URL eset: /orvos/abc123)
+  if(!id && !slug){
+    const pathMatch = window.location.pathname.match(/^\/orvos\/([^\/\?#]+)/i);
+    if(pathMatch && pathMatch[1]){
+      slug = decodeURIComponent(pathMatch[1]);
+      console.log('[load] slug extracted from URL path:', slug);
+    }
+  }
+
   if(!id && !slug){
     showError('Hiányzó orvos azonosító','Az URL-ben nincs orvos ID vagy slug megadva.');
     return;
