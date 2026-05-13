@@ -328,53 +328,65 @@ async function loadClinics(){
   try {
     console.log('[klinikak] Lekérdezés indul...');
     
-    // 1. lépés: klinikák alap adatai
-    const { data: clinics, error: cErr } = await db
+    // 1. lépés: klinikák alap adatai (városokkal)
+    console.log('[klinikak] 1. lépés: klinikák lekérdezése');
+    const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, cities(name)')
+      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, city_id, cities(name)')
       .order('name');
+    console.log('[klinikak] Clinics válasz:', clinicsRes);
+    if(clinicsRes.error){ showError(); return; }
+    const clinics = clinicsRes.data || [];
 
-    if(cErr){ console.error('[klinikak] Clinics error:', cErr); showError(); return; }
-    console.log('[klinikak] Klinikák betöltve:', clinics?.length);
+    // 2. lépés: doctor_clinics kapcsolatok (csak az ID-k)
+    console.log('[klinikak] 2. lépés: doctor_clinics kapcsolatok');
+    const dcRes = await db.from('doctor_clinics').select('clinic_id, doctor_id');
+    console.log('[klinikak] doctor_clinics válasz:', dcRes);
+    if(dcRes.error){ showError(); return; }
+    const links = dcRes.data || [];
 
-    // 2. lépés: orvos-klinika kapcsolatok az orvosok adataival és szakterületeivel
-    const { data: links, error: lErr } = await db
-      .from('doctor_clinics')
-      .select(`
-        clinic_id,
-        doctors!inner(
-          id, name, slug, rating, review_count, is_active,
-          doctor_specialties(
-            is_primary,
-            specialties(name, doctor_slug)
-          )
-        )
-      `)
-      .eq('doctors.is_active', true);
+    // 3. lépés: csak az AKTÍV orvosok adatai (egy lekérés)
+    console.log('[klinikak] 3. lépés: orvosok');
+    const docRes = await db.from('doctors')
+      .select('id, name, slug, rating, review_count, is_active')
+      .eq('is_active', true);
+    console.log('[klinikak] doctors válasz:', docRes);
+    if(docRes.error){ showError(); return; }
+    const docsById = new Map((docRes.data || []).map(d => [d.id, d]));
 
-    if(lErr){ console.error('[klinikak] Links error:', lErr); showError(); return; }
-    console.log('[klinikak] Kapcsolatok betöltve:', links?.length);
+    // 4. lépés: doctor_specialties + specialties (az aktív orvosokra)
+    console.log('[klinikak] 4. lépés: doctor_specialties');
+    const dsRes = await db.from('doctor_specialties')
+      .select('doctor_id, is_primary, specialties(name, doctor_slug)');
+    console.log('[klinikak] doctor_specialties válasz:', dsRes);
+    if(dsRes.error){ showError(); return; }
+    
+    // doctor_id → szakterületek lista
+    const specsByDoc = new Map();
+    for(const ds of (dsRes.data || [])){
+      if(!ds.specialties?.name) continue;
+      if(!specsByDoc.has(ds.doctor_id)) specsByDoc.set(ds.doctor_id, []);
+      specsByDoc.get(ds.doctor_id).push(ds.specialties);
+    }
 
-    // 3. lépés: klinikánként csoportosítás
+    // 5. lépés: klinikánként csoportosítás
     const byClinic = new Map();
-    for(const link of (links || [])){
-      const d = link.doctors;
-      if(!d || !d.is_active) continue;
+    for(const link of links){
+      const d = docsById.get(link.doctor_id);
+      if(!d) continue; // nem aktív orvos vagy nem létezik
       if(!byClinic.has(link.clinic_id)) byClinic.set(link.clinic_id, []);
       byClinic.get(link.clinic_id).push(d);
     }
 
-    // 4. lépés: klinikák feldolgozása
-    allClinics = (clinics || []).map(c => {
+    // 6. lépés: klinikák feldolgozása
+    allClinics = clinics.map(c => {
       const docs = byClinic.get(c.id) || [];
       
-      // Egyedi szakterületek
+      // Egyedi szakterületek az itt dolgozó orvosokon keresztül
       const specMap = new Map();
       docs.forEach(d => {
-        (d.doctor_specialties || []).forEach(ds => {
-          if(ds.specialties?.name){
-            specMap.set(ds.specialties.name, ds.specialties);
-          }
+        (specsByDoc.get(d.id) || []).forEach(s => {
+          specMap.set(s.name, s);
         });
       });
       
@@ -392,24 +404,26 @@ async function loadClinics(){
       };
     });
 
-    console.log('[klinikak] Feldolgozás kész. Klinikák:', allClinics.length);
+    console.log('[klinikak] Kész! Klinikák:', allClinics.length);
     populateFilters();
     updateHeroStats();
     applyFilters();
   } catch(e){
-    console.error(e);
-    showError();
+    console.error('[klinikak] KIVÉTEL:', e);
+    console.error('[klinikak] Stack:', e.stack);
+    showError('Hiba: ' + (e.message || 'Ismeretlen'));
   }
 }
 
-function showError(){
+function showError(msg){
+  const message = msg || 'Nem sikerült betölteni a klinikákat. Próbálja újra később.';
   document.getElementById('grid').innerHTML = `
     <div class="empty" style="grid-column:1/-1">
       <div class="empty-icon">
         <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       </div>
       <h3>Hiba történt</h3>
-      <p>Nem sikerült betölteni a klinikákat. Próbálja újra később.</p>
+      <p>${message}</p>
     </div>`;
 }
 
@@ -564,7 +578,7 @@ function render(){
 
 function openClinic(slug, id){
   // SEO-barát URL ha van slug, különben fallback ID-ra
-  window.location.href = slug ? \`klinikak/\${slug}\` : \`klinika.html?id=\${id}\`;
+  window.location.href = slug ? `klinikak/${slug}` : `klinika.html?id=${id}`;
 }
 
 // Indulás
