@@ -1,132 +1,227 @@
 # Szakorvos.hu — Változások összefoglalója
 
-Ebben az iterációban négy fő területen történtek módosítások: dizájn egységesítés, biztonsági javítások, dinamikus sitemap, és kódminőség.
+Ez a csomag **három kört** tartalmaz:
+1. Dizájn-egységesítés + biztonsági javítások + dinamikus sitemap (1. kör)
+2. Teljes SEO optimalizáció (2. kör)
+3. **SEO audit + finomhangolás** (jelen kör — 8 hiba kijavítva)
 
 ---
 
-## 1. Dizájn egységesítés ✅
+## 🔍 3. KÖR — SEO AUDIT JAVÍTÁSAI
 
-A teljes oldal egységes paletta és tipográfia alá került:
+Az előző körben elvégzett munka után végigmentem auditálással. Találtam 8 problémát, mindet kijavítottam.
 
-| Mit | Régi | Új |
-|-----|------|-----|
-| **Font** | Nunito Sans / Nunito (admin oldalakon, login, register, generator, tudastar-cikk, vizsgalatok, adatvedelem) | **Inter** mindenhol |
-| **Brand kék** | `#283897`, `#3b56e0`, `#0B2A6B` (variálódott) | **`#113293`** egységesen |
-| **Brand-2** | `#4042e2` | **`#264ACA`** |
-| **Narancs** | `#ff6b2b` | **`#FF8A00`** |
-| **Zöld** | `#22c55e` | **`#2C9650`** |
-| **font-weight** | 800, 900 (Nunito heavy stílus) | **700** (Inter max) |
+### Kritikus (production-breaking)
 
-Érintett fájlok (11):
-`login.html`, `register.html`, `admin.html`, `admin-orvos.html`, `admin-klinika.html`, `admin-tudastar.html`*, `generator.html`, `tudastar-cikk.html`, `vizsgalatok.html`, `adatvedelem.html`, `orvos.html`.
+**1. `index.html` `Cache-Control: no-cache` meta törlése**
+Korábban benne volt egy `<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">` és társai. Ez minden requestnél friss letöltést kényszerített a kliensben, ami **rontotta a Core Web Vitals-t** (LCP, FCP). A Vercel-szintű cache header már jó (`max-age=300, s-maxage=3600`), ezt a meta-t törölni kellett.
 
-\* Az `admin-tudastar.html` dark theme — a `--brand` itt világosabb (`#264ACA`) maradt a kontraszt miatt, de a paletta egységesítve.
+**2. `index.html` — duplikált `WebSite` és `MedicalOrganization` schema törlése**
+Két `WebSite` schema volt a fájlban (egyik a régi inline, másik amit a SEO inject hozzátett), valamint egy régi, kevésbé részletes `MedicalOrganization`. A Google figyelmeztet duplikáció miatt. A régiek törölve, a SEO inject által hozzáadott (részletesebb, MedicalOrganization + Sitelinks Search Box-szal) marad.
 
-### Érintetlen (eleve egységesek voltak)
-`index.html`, `talalatok.html`, `tudastar.html`, `admin-beallitasok.html`.
+**3. Vercel redirect bug fix: a régi `/orvos.html?id=X` redirect elveszítette az ID-t**
+Súlyos bug volt: a `vercel.json`-ben a `/orvos.html` redirect destination-je `/talalatok` volt, ami **nem őrizte meg az ID-t** — minden meglévő `/orvos.html?id=abc-123` link a találati listára került, nem az új profil URL-re! Javítva: `(?<docid>.*)` named regex capture + `/orvos/:docid` destination. A `tudastar-cikk.html?slug=X` redirect szintén javítva.
 
----
+### Fontos (SEO-rontó)
 
-## 2. Biztonsági javítások ✅
+**4. `register.html` és `talalatok.html` — H1 felvétele**
+Mindkét fontos publikus oldal `<h1>` nélkül volt. Most:
+- `register.html`: "Hozzon létre fiókot a Szakorvos.hu-n"
+- `talalatok.html`: "Orvos keresési **találatok**" (a meglévő `.htitle` div upgrade-elve H1-re)
 
-### 2a. AI chat — frontend kliens-szintű védelem (`index.html`)
-- **Authorization + apikey header** hozzáadva (a Supabase beépített rate limit ezzel működik)
-- **Klienskorlát:** max 24 üzenet a `chatHistory`-ban, max 12 000 karakter payload
-- **429 Too Many Requests** speciális kezelése (felhasználóbarát üzenet)
+**5. Admin oldalak — `<meta name="robots" content="noindex,nofollow,noarchive">`**
+A `robots.txt` Disallow erős védelem volt, de **defense-in-depth** szempontból minden admin oldalra felkerült a `noindex` meta is. (`admin.html`, `admin-orvos.html`, `admin-klinika.html`, `admin-tudastar.html`, `admin-beallitasok.html`, `generator.html`)
 
-### 2b. AI chat — szerver-oldali rate limit template
-Új fájl: `supabase/functions/ai-chat/_rate-limit.ts`
+**6. Statikus `sitemap.xml` fallback frissítése**
+A statikus fájl még a régi `.html` URL-eket tartalmazta. Most a clean URL-ekre van állítva — ha az Edge Function valamiért nem felel, a fallback is helyes.
 
-Drop-in IP-alapú rate limiter middleware Postgres backinggal.
-- 60 mp ablakon belül max 20 hívás / IP (konfigurálható)
-- Failover: ha az adatbázis hibázik, **engedélyez** (DoS-védelem feláldozása helyett)
-- A header logika `CF-Connecting-IP`, `X-Forwarded-For`, `X-Real-IP` sorrendben próbálkozik
-- A fájl tartalmazza az SQL séma létrehozó parancsokat is, kommentként
+**7. `robots.txt` — AI/LLM crawler explicit engedélyek**
+Explicit `Allow: /` szabály a GPTBot, ChatGPT-User, ClaudeBot, PerplexityBot, anthropic-ai, Google-Extended, CCBot számára. (Ha a jövőben le akarod tiltani, csak átírod `Disallow: /`-ra.)
 
-**Telepítés:** olvasd el a fájl tetején lévő használati blokkot.
+**8. SPA oldalak `og:image:width`/`og:image:height`/`og:image:alt`**
+A korábbi SEO inject kihagyta a statikus oldalakon ezeket — bár az `orvos.html` és `tudastar-cikk.html`-en is hiányoztak. Most már mindkettőn ott vannak.
 
-### 2c. Race condition fix (`register.html`)
-A `claimProfile` függvény eddig nem ellenőrizte, hogy a `.update()` ténylegesen frissített-e sort. Ha két felhasználó egyszerre claim-elte ugyanazt az orvost, az utolsó nyert volna, de mindkettő "sikeres" üzenetet kapott.
+### Plusz: lista oldalak schema-i
 
-**Javítva:**
-- `.select()` a `.update()` után — visszakapjuk a frissített sorokat
-- Ha 0 sor jött vissza, a felhasználó megfelelő hibaüzenetet kap és a lista is frissül
-- Az `selectDoctor` átírva `data-attribute + event delegation`-re (XSS-biztosabb a korábbi `onclick="selectDoctor('${d.name.replace(/'/g,...)}')"`-nál)
+Az audit során kiderült hogy a `talalatok.html`, `tudastar.html`, `vizsgalatok.html` oldalakon nem volt strukturált adat (csak az index-en és a dinamikusakon). Felkerült mindegyikre:
+- `CollectionPage` schema (oldaltípus jelölés)
+- `BreadcrumbList` schema (útvonal a SERP-en)
+
+### Cache header-ek finomítása
+
+A `vercel.json` cache fejlécei kibővítve:
+- **HTML**: 5 min browser, 1 óra CDN, 24 óra stale-while-revalidate
+- **CSS/JS/fontok/képek**: 30 napos immutable cache (jó LCP)
 
 ---
 
-## 3. Dinamikus sitemap.xml ✅
+## 🚀 2. KÖR — SEO OPTIMALIZÁCIÓ
 
-Új Edge Function: `supabase/functions/sitemap/index.ts`
+### 1. Tiszta, SEO-barát URL-ek (Vercel rewrites)
 
-Tartalom:
-- **Statikus oldalak** (index, talalatok, tudastar, vizsgalatok, login, register, adatvedelem)
-- **Minden aktív orvos** (`/orvos.html?id={uuid}`)
-- **Minden publikált tudástár cikk** (`/tudastar-cikk.html?slug={slug}`)
+A `?id=uuid` és `.html?slug=...` formátumú URL-ek lecserélve clean URL-ekre:
 
-Jellemzők:
-- Lapozás 1000-es batchekkel (50 lap = 50 000 sor max) — ha 3000+ cikked van, mind bekerül
-- `lastmod` header az `updated_at`-ből
-- 6 órás CDN cache (`Cache-Control: public, max-age=21600`)
-- `X-Total-Doctors` / `X-Total-Articles` response headerek (monitoring)
+| Régi | Új |
+|------|-----|
+| `/orvos.html?id=abc-123` | `/orvos/dr-kiss-janos-kardiologus-budapest` |
+| `/tudastar-cikk.html?slug=fogfajas` | `/tudastar/fogfajas` |
+| `/talalatok.html?specialty=Kardiológia&city=Budapest` | `/talalatok/budapest/kardiologia` |
+| `/talalatok.html` | `/talalatok` |
+| `/tudastar.html` | `/tudastar` |
+| `/vizsgalatok.html` | `/vizsgalatok` |
 
-**Telepítés:**
-```bash
-supabase functions deploy sitemap --no-verify-jwt
+A `vercel.json` tartalmazza az összes rewrite és redirect szabályt. A régi `?id=`/`?slug=` URL-ek **permanens 301 redirect-et** kapnak az új clean URL-re — így a meglévő linkek és Google index nem veszik kárba.
+
+### 2. Bot-prerender Edge Function
+
+Ez a legfontosabb darab — a JS-ben renderelődő oldalak (orvos profil, tudástár cikk, találati lista) eddig csak `"Cikk betöltése..."` placeholdert mutattak a keresőmotoroknak. Most:
+
+**`supabase/functions/seo-render/index.ts`** — User-Agent alapján:
+- **Botoknak** (Googlebot, Bingbot, Facebook, Twitter, Slack, LinkedIn, stb. — 24 különböző bot felismerve) **statikus, tartalom-gazdag HTML-t** szolgál ki, **inline schema.org JSON-LD**-vel.
+- **Böngészőknek** redirect-eli a normál SPA fájlra (vagy a Vercel rewrite eleve csak a botokra forwarderol).
+
+A botok látnak:
+- Teljes content HTML-ben (nem JS-ben)
+- Schema.org JSON-LD (Physician / MedicalWebPage / MedicalClinic / FAQPage / BreadcrumbList / ItemList)
+- OG / Twitter Card meta-k
+- Canonical URL
+- Hreflang (`hu`, `x-default`)
+- Belső linkek (kapcsolódó cikkek, vissza navigáció)
+
+### 3. SQL migráció — slug oszlop + race condition védelem
+
+**`supabase/migrations/001_seo_slugs.sql`** (idempotens, újrafuttatható):
+
+- `hu_slugify()` Postgres függvény — magyar ékezetes karakterek → ASCII slug
+- `doctors.slug` oszlop + auto-generálás trigger (név + szakterület + város alapján)
+- `clinics.slug` oszlop + auto-generálás trigger
+- **Backfill** — minden meglévő rekordra legenerálja a slug-ot
+- **Unique partial index** mindkét slug oszlopra
+- **`doctors.admin_user_id` UNIQUE partial index** (race condition védelem DB szinten)
+- `rate_limits` tábla az ai-chat rate limiter-hez
+
+**Futtatás:** Supabase Dashboard → SQL Editor → bemásolod → RUN.
+
+### 4. Dinamikus OG kép generátor
+
+**`supabase/functions/og-image/index.ts`** — minden orvos, cikk, találat oldalhoz egyedi 1200×630 SVG OG kép:
+
+- `/og?type=doctor&slug=...` — orvos név + szakterület + emoji + brand színek
+- `/og?type=article&slug=...` — cikk címe + szakterület badge
+- `/og?type=search&q=...` — keresési kifejezés
+- `/og?type=logo` — szervezeti default (Organization schema-hoz)
+
+### 5. Sitemap kibővítés
+
+**`supabase/functions/sitemap/index.ts`** — frissítve:
+- **`<image:image>` tag-ek** minden orvos- és cikk-URL mellé
+- **Long-tail SEO oldalak:** top 12 város × szakterület keresési oldalak
+- Új clean URL formátum
+
+### 6. Schema.org bővítés
+
+| Oldal | Schema típus |
+|-------|--------------|
+| `index.html` | `MedicalOrganization`, `WebSite` (Sitelinks Search Box) |
+| `orvos.html` (SPA + prerender) | `Physician`, `MedicalClinic` (worksFor), `BreadcrumbList`, `FAQPage` (ha van FAQ) |
+| `tudastar-cikk.html` (SPA + prerender) | `MedicalWebPage`, `MedicalCondition`, `MedicalSpecialty`, `BreadcrumbList` |
+| `talalatok.html` (lista + prerender) | `CollectionPage`, `BreadcrumbList`, `ItemList` (Physician-ekkel) |
+| `tudastar.html`, `vizsgalatok.html` | `CollectionPage`, `BreadcrumbList` |
+
+### 7. Egyedi 404 oldal
+
+**`404.html`** — SEO-barát hibaoldal: `noindex,follow`, 3 db navigációs kártya.
+
+### 8. Egyéb
+
+- Security headers a `vercel.json`-ben
+- Cache header-ek 30 napos immutable a statikus assetekre
+- Preconnect Supabase, fonts.googleapis, fonts.gstatic
+
+---
+
+## 📋 TELEPÍTÉSI CHECKLIST
+
+A változások telepítése három lépésben:
+
+### 1. Adatbázis migráció (kötelező, ELŐSZÖR ezt)
+
+```sql
+-- Supabase Dashboard → SQL Editor → New query → bemásolod → RUN
+-- supabase/migrations/001_seo_slugs.sql
 ```
 
-**Vercel routing** (vagy Cloudflare/stb.): `vercel.json.example` mutatja a rewrite szabályt.
-A `/sitemap.xml` ekkor az Edge Function output-ját adja, és nem szükséges hozzá külön kód.
+Sanity check utána:
+```sql
+select count(*), count(slug) from doctors;     -- a kettőnek egyezni kell
+select count(*), count(slug) from clinics;
+select id, name, slug from doctors limit 10;   -- legyenek értelmes slug-ok
+```
 
-**A statikus `sitemap.xml` megmarad** — ha nem deployolod az Edge Function-t, a régi statikus marad. (Csak az `admin-beallitasok.html`-t adtam hozzá a `robots.txt`-hez Disallow-ként, ami lemaradt.)
-
----
-
-## 4. Kódminőség ✅
-
-### Egységes SDK használat
-Korábban a `tudastar.html`, `tudastar-cikk.html`, `vizsgalatok.html` közvetlen `fetch()`-csel hívta a Supabase REST API-t. Ezek átírva a **Supabase JS SDK**-ra (`db.from(...)`):
-
-| Fájl | Régi | Új |
-|------|------|-----|
-| `tudastar.html` | `fetch + Range header` lapozás | `db.from('knowledge_articles').range(from, to)` |
-| `tudastar-cikk.html` | 4 db `fetch` hívás | 2 db `db.from(...)` hívás (kapcsolódó cikkek 2 query → 1 query `.or()`-ral) |
-| `vizsgalatok.html` | Custom `sbFetch` wrapper | Standard `db.from(...).range(...)` |
-| `index.html` | Custom `sbGet` wrapper (3 párhuzamos fetch) | `Promise.all([db.from(...), db.from(...), db.from(...)])` |
-
-### Egyéb javítások
-- `robots.txt` — `admin-beallitasok.html` hozzáadva a Disallow listához (eddig hiányzott)
-- `tudastar-cikk.html` — a hibakezelő szövegekben maradt `font-family:Nunito` is `Inter`-re cserélve
-
----
-
-## Mit NEM csináltunk (szándékosan, a választásod alapján)
-
-- ❌ **Közös `/js/supabase-init.js`** — maradt inline minden HTML-ben (a te kérésedre)
-- ❌ **Adatbázis migrációk** — nem írtunk `UNIQUE constraint`-et az `admin_user_id` mezőre, ahogy kérted (a frontend race condition fix így is sokat segít, de a teljes védelem a DB szinten kívánatos lenne)
-
----
-
-## Telepítési checklist
-
-A frontend változások azonnal hatályosak — csak töltsd fel a fájlokat a hostingra.
-
-A backend változások telepítéshez:
+### 2. Edge Functions deploy
 
 ```bash
-# 1. Sitemap Edge Function
-supabase functions deploy sitemap --no-verify-jwt
+# Új függvények
+supabase functions deploy seo-render --no-verify-jwt
+supabase functions deploy og-image   --no-verify-jwt
 
-# 2. (Opcionális) AI chat rate limiter integráció:
-#    – másold be a _rate-limit.ts-t a meglévő ai-chat function mappába
-#    – importáld és használd a checkRateLimit() függvényt
-#    – futtasd a fájl alján lévő SQL-t a Supabase SQL Editor-ben
-
-# 3. Vercel rewrite — a vercel.json-be:
-#    "rewrites": [
-#      { "source": "/sitemap.xml",
-#        "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/sitemap" }
-#    ]
+# Frissített függvény
+supabase functions deploy sitemap    --no-verify-jwt
 ```
+
+> Megjegyzés: a `--no-verify-jwt` azért kell, mert ezeket a függvényeket nyilvánosan kell elérni (Google, social crawler-ek hívják).
+
+### 3. Frontend deploy
+
+```bash
+vercel --prod
+# vagy git push, ha Vercel a Git-tel van összekötve
+```
+
+### 4. Verifikáció
+
+1. **Sitemap:** `https://www.szakorvos.hu/sitemap.xml` — XML response, orvosokkal és cikkekkel.
+2. **OG kép:** `https://www.szakorvos.hu/og?type=logo` — SVG kép.
+3. **Bot prerender teszt:**
+   ```bash
+   curl -A "Mozilla/5.0 (compatible; Googlebot/2.1)" https://www.szakorvos.hu/orvos/dr-kiss-janos | head -100
+   ```
+   Statikus, tartalom-gazdag HTML-t kell kapnod — nem JS-t.
+4. **Redirect teszt:**
+   ```bash
+   curl -I https://www.szakorvos.hu/orvos.html?id=abc-123
+   # → 301 → Location: /orvos/abc-123  ← itt az ID megőrződik!
+   ```
+5. **Google Rich Results Test:** https://search.google.com/test/rich-results
+6. **Mobile-Friendly Test:** https://search.google.com/test/mobile-friendly
+7. **Search Console:** új sitemap URL beadása.
+
+---
+
+## 🎯 NICE-TO-HAVE (KÖVETKEZŐ LÉPÉSEK)
+
+A "kiváló" cél elérve. Ha még egy szintet ugranál:
+
+1. **Astro / Next.js átírás** — natív SSR, jobb Core Web Vitals (külön projekt)
+2. **Content marketing** — több tudástár cikk, helyi backlinkek
+3. **AggregateRating schema** értékelésekhez — csillagok a SERP-en
+4. **Twitter handle `twitter:site`** ha van Twitter accountod
+5. **Google Search Console verification meta** ha még nincs verified domain
+6. **PWA manifest** — telepíthető a mobilra
+7. **Real User Monitoring (RUM)** — Vercel Speed Insights / Plausible Analytics
+8. **AI-chat rate limiter integrálása** (jelenleg template, lásd `supabase/functions/ai-chat/_rate-limit.ts`)
+
+---
+
+## 🛠️ 1. KÖR — ELŐZŐ ITERÁCIÓ (változatlan)
+
+Csak emlékeztetőül:
+- Dizájn egységesítés 11 fájlon (`Inter` font + `#113293` brand)
+- Race condition fix a `register.html`-ben
+- AI chat klienskorlát és Authorization header
+- AI chat rate limiter template
+- fetch() → Supabase JS SDK migráció
+
+---
 
 Sok sikert! 🚀
