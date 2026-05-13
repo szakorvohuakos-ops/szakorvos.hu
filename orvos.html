@@ -783,18 +783,37 @@ function showError(title, desc){
 
 /* ── Load ─────────────────────────────────────────────────────────── */
 async function load(){
-  console.log('[Szakorvos.hu] orvos.html — verzió 2026-05-13 (slug + path fallback)');
+  console.log('[Szakorvos.hu] orvos.html — verzió 2026-05-13 (SEO URL: /:specialty/dr-:slug)');
   const params = new URLSearchParams(window.location.search);
   let id = params.get('id');
   let slug = params.get('slug');
+  let spec = params.get('spec'); // doctor_slug a specialties táblából (pl. "belgyogyasz")
 
-  // Ha sem query paraméter nincs, akkor PATH-BÓL próbáljuk kiolvasni
-  // (ez a Vercel clean URL eset: /orvos/abc123)
+  // Ha nincs query paraméter, PATH-BÓL próbáljuk kiolvasni
+  // Esetek:
+  //   /:specialty/dr-:slug   → új SEO formátum (pl. /belgyogyasz/dr-kis-agnes)
+  //   /orvos/:slug-or-id     → régi formátum (visszafelé kompatibilitás)
+  //   /dr-:slug              → régebbi formátum (visszafelé kompatibilitás)
   if(!id && !slug){
-    const pathMatch = window.location.pathname.match(/^\/orvos\/([^\/\?#]+)/i);
-    if(pathMatch && pathMatch[1]){
-      slug = decodeURIComponent(pathMatch[1]);
-      console.log('[load] slug extracted from URL path:', slug);
+    const path = window.location.pathname;
+
+    // 1. próba: /:specialty/dr-:slug (új SEO URL)
+    let m = path.match(/^\/([a-z0-9-]+)\/(dr-[^\/\?#]+)/i);
+    if(m){
+      spec = decodeURIComponent(m[1]);
+      slug = decodeURIComponent(m[2]);
+      console.log('[load] SEO URL parsed → spec:', spec, '| slug:', slug);
+    } else {
+      // 2. próba: /orvos/xxx prefix-szel
+      m = path.match(/^\/orvos\/([^\/\?#]+)/i);
+      if(!m){
+        // 3. próba: /dr-xxx (prefix nélküli régi formátum)
+        m = path.match(/^\/(dr-[^\/\?#]+)/i);
+      }
+      if(m && m[1]){
+        slug = decodeURIComponent(m[1]);
+        console.log('[load] legacy URL parsed → slug:', slug);
+      }
     }
   }
 
@@ -806,12 +825,12 @@ async function load(){
     // Részletes query — minden lehetséges mező. Ha valamelyik nem létezik
     // a DB-ben, automatikusan minimális query-re fallback-elünk.
     const fullSelect = `*,
-        doctor_specialties(specialties(name)),
+        doctor_specialties(is_primary,specialties(name,doctor_slug)),
         doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,cities(name))),
         doctor_insurances(insurance_types(name)),
         availability(day_of_week,start_time,end_time)`;
     const minimalSelect = `*,
-        doctor_specialties(specialties(name)),
+        doctor_specialties(is_primary,specialties(name,doctor_slug)),
         doctor_clinics(consultation_fee,clinics(name,address,phone,email,cities(name))),
         availability(day_of_week,start_time,end_time)`;
 
@@ -819,7 +838,7 @@ async function load(){
 
     const isUuid = id || (slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug));
 
-    // Lekérdezés helper: tries selectClause-szal a megadott eq-vel
+    // Lekérdezés helper
     const tryQuery = async (selectClause) => {
       if(isUuid){
         return await buildQuery(selectClause).eq('id', id || slug).single();
@@ -827,7 +846,7 @@ async function load(){
         // Slug alapú próba elsőként
         const r1 = await buildQuery(selectClause).eq('slug', slug).single();
         if(!r1.error) return r1;
-        // Ha slug hibázik, ID-ként is megpróbáljuk
+        // Ha slug hibázik, ID-ként is megpróbáljuk (régebbi URL-ek miatt)
         console.warn('[load] slug query failed, trying ID:', r1.error.message);
         return await buildQuery(selectClause).eq('id', slug).single();
       }
@@ -842,6 +861,30 @@ async function load(){
     }
 
     if(error || !data){ showError(); return; }
+
+    // ── SEO URL CANONICAL CHECK ─────────────────────────────────────
+    // Megkeressük az orvos elsődleges szakterületét és összevetjük az URL-lel.
+    // Ha az URL nem a kanonikus formában van, 301 redirect-tel javítjuk.
+    const primarySpec = (data.doctor_specialties || []).find(ds => ds.is_primary);
+    const correctSpec = primarySpec?.specialties?.doctor_slug;
+
+    if(correctSpec && data.slug){
+      const canonicalPath = `/${correctSpec}/${data.slug}`;
+      const currentPath = window.location.pathname;
+
+      // Ha NEM a kanonikus URL-en vagyunk, átirányítunk (303 - history replace)
+      // Kivétel: ha id= query paraméterrel jöttek (pl. admin nézet), maradunk
+      if(currentPath !== canonicalPath && !params.get('id')){
+        console.log('[load] redirecting to canonical URL:', canonicalPath);
+        window.history.replaceState(null, '', canonicalPath + window.location.search + window.location.hash);
+      }
+      // Ha a spec param meg van adva, de NEM az elsődlegesnek felel meg,
+      // akkor csak figyelmeztetünk a console-ban (de még mindig betöltjük az oldalt)
+      if(spec && spec !== correctSpec){
+        console.warn('[load] URL specialty mismatch — expected:', correctSpec, '| got:', spec);
+      }
+    }
+    // ────────────────────────────────────────────────────────────────
 
     // Kiegészítő táblák lekérdezése — fail-silent ha nem léteznek
     const safeQuery = (q) => q.then(r => r).catch(e => { console.warn(e); return { data: [] }; });
@@ -1396,11 +1439,18 @@ function doNavSearch(){
 /* ── SEO meta update ──────────────────────────────────────────────── */
 function updateSeoMeta(d){
   const fullName = `${d.title ? d.title + ' ' : ''}${d.name || ''}`.trim();
-  const spec = d.doctor_specialties?.[0]?.specialties?.name || '';
+  // Elsődleges szakterület keresése (a többi szakterületet a profilon belül listázzuk)
+  const primarySpec = (d.doctor_specialties || []).find(ds => ds.is_primary) || d.doctor_specialties?.[0];
+  const spec = primarySpec?.specialties?.name || '';
+  const specSlug = primarySpec?.specialties?.doctor_slug || '';
   const clinic = d.doctor_clinics?.[0]?.clinics;
   const city = clinic?.cities?.name || '';
   const slugOrId = d.slug || d.id;
-  const canonical = `https://www.szakorvos.hu/orvos/${encodeURIComponent(slugOrId)}`;
+
+  // ÚJ SEO URL: /belgyogyasz/dr-kis-agnes (csak ha mindkettő megvan, különben fallback)
+  const canonical = (specSlug && d.slug)
+    ? `https://www.szakorvos.hu/${specSlug}/${d.slug}`
+    : `https://www.szakorvos.hu/orvos/${encodeURIComponent(slugOrId)}`;
   const ogImage = `https://www.szakorvos.hu/og?type=doctor&slug=${encodeURIComponent(slugOrId)}`;
 
   const descParts = [fullName, spec, city ? `(${city})` : '', '– foglaljon online időpontot, olvasson véleményeket a Szakorvos.hu-n.'].filter(Boolean);
