@@ -1,42 +1,31 @@
 // supabase/functions/sitemap/index.ts
 // ────────────────────────────────────────────────────────────────────────────
-// Dinamikus sitemap.xml a Szakorvos.hu-hoz.
+// Szakorvos.hu — Dinamikus sitemap.xml
 //
-// Tartalmazza:
-//   • statikus oldalak (index, talalatok, tudastar, vizsgalatok, login,
-//     register, adatvedelem)
-//   • az összes aktív orvos: /orvos.html?id={uuid}
-//   • az összes közzétett tudástár cikk: /tudastar-cikk.html?slug={slug}
+// Tartalom:
+//   • Statikus oldalak
+//   • Az összes aktív orvos:    /orvos/{slug}   + dinamikus OG kép (image:image)
+//   • Az összes közzétett cikk: /tudastar/{slug} + OG kép
+//   • Top szakterület+város találatok:  /talalatok/{city}/{specialty}
 //
-// Telepítés:
-//   1.  supabase functions deploy sitemap --no-verify-jwt
-//   2.  Vercel/Cloudflare-en route-old:
-//         /sitemap.xml   →   .../functions/v1/sitemap
-//       (vagy frissítsd a robots.txt-t a függvény URL-jére).
+// Lapozás 1000-es batchekkel, lastmod az updated_at-ből.
 //
-// Megj.: nem hitelesített, mert a robotok nem küldenek JWT-t.
-//        Csak publikus mezőket válogat ki.
-//
-// Cache: a Cache-Control header 6 órás cache-elést kér a CDN-től /
-// böngészőtől. Igény szerint módosítható.
+// Deploy:  supabase functions deploy sitemap --no-verify-jwt
 // ────────────────────────────────────────────────────────────────────────────
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SITE_BASE = "https://www.szakorvos.hu";
-
-// Lapozás: ha nagyon sok cikked / orvosod van (3000+), a Supabase REST API
-// alapból max 1000 sort ad vissza. Lapozással mindet behúzzuk.
 const PAGE_SIZE = 1000;
 
 const STATIC_URLS: { loc: string; changefreq: string; priority: string }[] = [
-  { loc: "/",                    changefreq: "daily",   priority: "1.0" },
-  { loc: "/talalatok.html",      changefreq: "daily",   priority: "0.9" },
-  { loc: "/tudastar.html",       changefreq: "weekly",  priority: "0.8" },
-  { loc: "/vizsgalatok.html",    changefreq: "weekly",  priority: "0.8" },
-  { loc: "/login.html",          changefreq: "monthly", priority: "0.4" },
-  { loc: "/register.html",       changefreq: "monthly", priority: "0.4" },
-  { loc: "/adatvedelem.html",    changefreq: "yearly",  priority: "0.3" },
+  { loc: "/",                 changefreq: "daily",   priority: "1.0" },
+  { loc: "/talalatok",        changefreq: "daily",   priority: "0.9" },
+  { loc: "/tudastar",         changefreq: "weekly",  priority: "0.8" },
+  { loc: "/vizsgalatok",      changefreq: "weekly",  priority: "0.8" },
+  { loc: "/login.html",       changefreq: "monthly", priority: "0.4" },
+  { loc: "/register.html",    changefreq: "monthly", priority: "0.5" },
+  { loc: "/adatvedelem.html", changefreq: "yearly",  priority: "0.3" },
 ];
 
 function escapeXml(s: string): string {
@@ -48,29 +37,41 @@ function escapeXml(s: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function buildUrlEntry(loc: string, changefreq: string, priority: string, lastmod?: string): string {
-  const parts = [
-    `  <url>`,
-    `    <loc>${escapeXml(loc)}</loc>`,
-    lastmod ? `    <lastmod>${escapeXml(lastmod)}</lastmod>` : "",
-    `    <changefreq>${changefreq}</changefreq>`,
-    `    <priority>${priority}</priority>`,
-    `  </url>`,
-  ].filter(Boolean);
-  return parts.join("\n");
+function urlEntry(opts: {
+  loc: string;
+  lastmod?: string;
+  changefreq?: string;
+  priority?: string;
+  image?: { loc: string; title?: string };
+}): string {
+  const lines = [
+    "  <url>",
+    `    <loc>${escapeXml(opts.loc)}</loc>`,
+    opts.lastmod    ? `    <lastmod>${escapeXml(opts.lastmod)}</lastmod>`        : "",
+    opts.changefreq ? `    <changefreq>${opts.changefreq}</changefreq>`         : "",
+    opts.priority   ? `    <priority>${opts.priority}</priority>`               : "",
+  ];
+  if (opts.image) {
+    lines.push(
+      "    <image:image>",
+      `      <image:loc>${escapeXml(opts.image.loc)}</image:loc>`,
+      opts.image.title ? `      <image:title>${escapeXml(opts.image.title)}</image:title>` : "",
+      "    </image:image>",
+    );
+  }
+  lines.push("  </url>");
+  return lines.filter(Boolean).join("\n");
 }
 
 async function fetchAllPages<T>(
-  query: (from: number, to: number) => Promise<{ data: T[] | null; error: unknown }>,
+  fn: (from: number, to: number) => Promise<{ data: T[] | null; error: unknown }>,
 ): Promise<T[]> {
   const all: T[] = [];
   let from = 0;
-  // védőszelep: max 50 lap = 50 000 sor (bőven elég)
   for (let i = 0; i < 50; i++) {
-    const to = from + PAGE_SIZE - 1;
-    const { data, error } = await query(from, to);
+    const { data, error } = await fn(from, from + PAGE_SIZE - 1);
     if (error) {
-      console.error("[sitemap] query error:", error);
+      console.error("[sitemap] query error", error);
       break;
     }
     if (!data || data.length === 0) break;
@@ -81,103 +82,139 @@ async function fetchAllPages<T>(
   return all;
 }
 
+function citySlug(s: string): string {
+  return s.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 Deno.serve(async (req) => {
-  // CORS — a Google bot nem küldi, de a teszteléshez kell lehet
   if (req.method === "OPTIONS") {
     return new Response(null, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin":  "*",
         "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "*",
       },
     });
   }
 
-  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-  // SERVICE_ROLE kulcs, hogy az RLS-t megkerülje és minden publikus
-  // sort visszaadjon. Csak read-only műveletet végzünk.
-  const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const url = Deno.env.get("SUPABASE_URL")!;
+  const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  if (!url || !key) return new Response("Server misconfiguration", { status: 500 });
 
-  if (!SUPABASE_URL || !SERVICE_KEY) {
-    return new Response("Server misconfiguration", { status: 500 });
-  }
-
-  const db = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: { persistSession: false },
-  });
+  const db = createClient(url, key, { auth: { persistSession: false } });
 
   // ── Orvosok ──────────────────────────────────────────────────────────────
-  const doctors = await fetchAllPages<{ id: string; updated_at: string | null }>(
+  const doctors = await fetchAllPages<{ id: string; slug: string | null; name: string; updated_at: string | null }>(
     (from, to) =>
       db.from("doctors")
-        .select("id, updated_at")
+        .select("id, slug, name, updated_at")
         .eq("is_active", true)
         .order("updated_at", { ascending: false })
         .range(from, to),
   );
 
   // ── Tudástár cikkek ──────────────────────────────────────────────────────
-  // Csak azokat tesszük be, amelyiknek van content-je (= publikált).
-  const articles = await fetchAllPages<{ slug: string; updated_at: string | null }>(
+  const articles = await fetchAllPages<{ slug: string; title: string; updated_at: string | null }>(
     (from, to) =>
       db.from("knowledge_articles")
-        .select("slug, updated_at")
+        .select("slug, title, updated_at")
         .not("content", "is", null)
         .not("slug", "is", null)
         .order("updated_at", { ascending: false })
         .range(from, to),
   );
 
-  // ── XML összerakása ──────────────────────────────────────────────────────
+  // ── Szakterület + város kombinációk (top találati oldalak SEO-ra) ─────────
+  // Fallback megoldás: top 12 város × összes szakterület.
+  // (Optimalizációként Postgres view-val cserélhető a tényleges aktív
+  // orvossal rendelkező kombinációkra.)
+  const TOP_CITIES = [
+    "Budapest", "Debrecen", "Szeged", "Miskolc", "Pécs", "Győr",
+    "Nyíregyháza", "Kecskemét", "Székesfehérvár", "Szombathely",
+    "Szolnok", "Tatabánya"
+  ];
+  const { data: specs } = await db.from("specialties").select("name").limit(200);
+  const specialtyCityPairs: { city: string; specialty: string }[] = [];
+  for (const city of TOP_CITIES) {
+    for (const s of specs || []) {
+      specialtyCityPairs.push({ city, specialty: s.name });
+    }
+  }
+
+  // ── XML build ────────────────────────────────────────────────────────────
   const today = new Date().toISOString().split("T")[0];
+  const out: string[] = [];
+  out.push('<?xml version="1.0" encoding="UTF-8"?>');
+  out.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"');
+  out.push('        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">');
 
-  const xmlParts: string[] = [];
-  xmlParts.push('<?xml version="1.0" encoding="UTF-8"?>');
-  xmlParts.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
-
-  // Statikus oldalak
+  // Statikus
   for (const s of STATIC_URLS) {
-    xmlParts.push(buildUrlEntry(SITE_BASE + s.loc, s.changefreq, s.priority, today));
+    out.push(urlEntry({
+      loc: SITE_BASE + s.loc,
+      lastmod: today,
+      changefreq: s.changefreq,
+      priority: s.priority,
+    }));
   }
 
-  // Orvos profilok
+  // Orvosok
   for (const d of doctors) {
-    const lastmod = d.updated_at ? d.updated_at.split("T")[0] : today;
-    xmlParts.push(
-      buildUrlEntry(
-        `${SITE_BASE}/orvos.html?id=${encodeURIComponent(d.id)}`,
-        "weekly",
-        "0.7",
-        lastmod,
-      ),
-    );
+    const slugOrId = d.slug || d.id;
+    const lastmod  = d.updated_at ? d.updated_at.split("T")[0] : today;
+    out.push(urlEntry({
+      loc:      `${SITE_BASE}/orvos/${slugOrId}`,
+      lastmod,
+      changefreq: "weekly",
+      priority:   "0.7",
+      image: {
+        loc:   `${SITE_BASE}/og?type=doctor&slug=${encodeURIComponent(slugOrId)}`,
+        title: d.name,
+      },
+    }));
   }
 
-  // Tudástár cikkek
+  // Cikkek
   for (const a of articles) {
     const lastmod = a.updated_at ? a.updated_at.split("T")[0] : today;
-    xmlParts.push(
-      buildUrlEntry(
-        `${SITE_BASE}/tudastar-cikk.html?slug=${encodeURIComponent(a.slug)}`,
-        "monthly",
-        "0.6",
-        lastmod,
-      ),
-    );
+    out.push(urlEntry({
+      loc:      `${SITE_BASE}/tudastar/${a.slug}`,
+      lastmod,
+      changefreq: "monthly",
+      priority:   "0.6",
+      image: {
+        loc:   `${SITE_BASE}/og?type=article&slug=${encodeURIComponent(a.slug)}`,
+        title: a.title,
+      },
+    }));
   }
 
-  xmlParts.push("</urlset>");
-  const xml = xmlParts.join("\n");
+  // Top szakterület+város találati oldalak (long-tail SEO)
+  // Max 300, hogy a sitemap kezelhető méretű maradjon.
+  for (const pair of specialtyCityPairs.slice(0, 300)) {
+    out.push(urlEntry({
+      loc:        `${SITE_BASE}/talalatok/${citySlug(pair.city)}/${citySlug(pair.specialty)}`,
+      lastmod:    today,
+      changefreq: "weekly",
+      priority:   "0.6",
+    }));
+  }
+
+  out.push("</urlset>");
+  const xml = out.join("\n");
 
   return new Response(xml, {
     status: 200,
     headers: {
-      "Content-Type": "application/xml; charset=utf-8",
-      // 6 órás CDN cache: gyors válasz a botoknak, de napi frissesség
+      "Content-Type":  "application/xml; charset=utf-8",
       "Cache-Control": "public, max-age=21600, s-maxage=21600",
       "Access-Control-Allow-Origin": "*",
-      "X-Total-Doctors": String(doctors.length),
+      "X-Total-Doctors":  String(doctors.length),
       "X-Total-Articles": String(articles.length),
+      "X-Total-Search":   String(Math.min(specialtyCityPairs.length, 300)),
     },
   });
 });
