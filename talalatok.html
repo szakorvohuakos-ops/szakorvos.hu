@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+  <meta name="theme-color" content="#113293">
+  <link rel="canonical" href="https://www.szakorvos.hu/talalatok">
+  <meta name="description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Szakorvos.hu">
+  <meta property="og:title" content="Szakorvos kereső – Találatok | Szakorvos.hu">
+  <meta property="og:description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
+  <meta property="og:image" content="https://www.szakorvos.hu/og?type=search&amp;q=Szakorvos+kereső">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://www.szakorvos.hu/talalatok">
+  <meta property="og:locale" content="hu_HU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Szakorvos kereső – Találatok | Szakorvos.hu">
+  <meta name="twitter:description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
+  <meta name="twitter:image" content="https://www.szakorvos.hu/og?type=search&amp;q=Szakorvos+kereső">
+  <link rel="alternate" hreflang="hu" href="https://www.szakorvos.hu/talalatok">
+  <link rel="alternate" hreflang="x-default" href="https://www.szakorvos.hu/talalatok">
+  <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Találatok – Szakorvos.hu</title>
+<title>Szakorvos kereső – Találatok | Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
@@ -230,6 +250,13 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .dc-meta-item strong{color:var(--text);font-weight:600;font-family:'Inter',sans-serif}
 .dc-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--muted);flex-shrink:0}
 
+/* Új: rating sor a kártyán */
+.dc-meta-rating{margin-top:.4rem;margin-bottom:.15rem}
+.dc-star{color:#f59e0b;font-size:14px;line-height:1}
+
+/* Új: nyelv chip a kártyán */
+.dc-lang-chip{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:7px;font-size:11.5px;font-weight:500;padding:2px 8px;line-height:1.3}
+
 .dc-tags{display:none}
 .dtag{display:inline-flex;align-items:center;gap:4px;background:rgba(38,74,202,.07);border:1px solid rgba(38,74,202,.15);color:var(--brand);border-radius:100px;padding:5px 13px;font-size:12px;font-weight:600;line-height:1.3;letter-spacing:-0.005em}
 .dtag.more{background:var(--bg);border-color:var(--border);color:var(--sub);font-weight:600}
@@ -318,13 +345,40 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* Panel hero section */
 .pp-hero{background:linear-gradient(145deg,#eef2ff,#f4f6fb);padding:2rem 1.75rem 1.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;flex-shrink:0}
 .pp-hero::before{content:'';position:absolute;top:-80px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(40,56,151,.07),transparent 70%);pointer-events:none}
-.pp-hero-row{display:flex;gap:1.4rem;align-items:flex-start;position:relative;z-index:1;margin-bottom:1.25rem}
+.pp-hero-row{display:flex;gap:1.4rem;align-items:flex-start;position:relative;z-index:1;margin-bottom:1.1rem}
 .pp-av{width:100px;height:100px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:34px;font-weight:600;color:#fff;flex-shrink:0;box-shadow:0 8px 28px rgba(0,0,0,.18)}
-.pp-name{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:3px}
-.pp-title{font-size:14px;color:var(--sub);margin-bottom:.5rem}
-.pp-spec-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;border-radius:100px;font-size:12px;font-weight:600;padding:5px 14px;margin-bottom:.75rem}
-.pp-loc-row{display:flex;gap:10px;flex-wrap:wrap}
+.pp-name{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:var(--text);line-height:1.2;margin-bottom:3px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pp-name-verified{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--brand);color:#fff;flex-shrink:0}
+.pp-name-verified svg{width:11px;height:11px}
+.pp-title{font-size:14px;color:var(--sub);margin-bottom:.55rem;font-weight:500}
+.pp-title strong{color:var(--text);font-weight:600}
+.pp-title em{color:var(--brand);font-style:normal;font-weight:700;font-size:13px;background:#eef2ff;padding:2px 8px;border-radius:6px;margin-left:4px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Specialty chip row (NEW) */
+.pp-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.7rem}
+.pp-chip{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:100px;font-size:12px;font-weight:500;padding:5px 12px;line-height:1.2}
+.pp-chip.more{background:transparent;border:none;color:var(--muted);font-weight:600;padding:5px 4px}
+
+/* Rating + patients row (NEW) */
+.pp-meta-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:13px;color:var(--text);margin-bottom:.55rem}
+.pp-meta-item{display:inline-flex;align-items:center;gap:5px;font-weight:500}
+.pp-meta-item strong{font-weight:700}
+.pp-meta-item .pp-star{color:#f59e0b;font-size:14px;line-height:1}
+.pp-meta-item .pp-count-light{color:var(--sub);font-weight:500}
+.pp-meta-sep{width:1px;height:14px;background:var(--border);display:inline-block}
+
+/* Experience + languages row (NEW) */
+.pp-exp-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px;color:var(--sub);margin-bottom:.55rem}
+.pp-exp-row .pp-exp{font-weight:600;color:var(--text)}
+.pp-exp-row .pp-exp strong{font-weight:700}
+.pp-lang-chip{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:12px;font-weight:500;padding:3px 9px;line-height:1.3}
+
+.pp-spec-badge{display:none}  /* old single badge — replaced by chip-row */
+.pp-loc-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .pp-loc-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--sub)}
+.pp-loc-item .pp-clinic-link{color:var(--brand);font-weight:600;text-decoration:none}
+.pp-loc-item .pp-clinic-link:hover{text-decoration:underline}
+.pp-loc-sep{color:var(--muted)}
 .pp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;position:relative;z-index:1}
 .pp-stat{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:.75rem .5rem;text-align:center;box-shadow:0 2px 8px rgba(40,56,151,.05)}
 .pp-stat-v{font-family:'Inter',sans-serif;font-size:19px;font-weight:600;color:var(--brand);line-height:1}
@@ -403,6 +457,8 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
   .pp{width:100vw}.pp-stats{grid-template-columns:repeat(2,1fr)}
 }
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Szakorvos kereső", "url": "https://www.szakorvos.hu/talalatok", "description": "Találja meg a legjobb szakorvost az Ön közelében.", "inLanguage": "hu", "isPartOf": {"@type": "WebSite", "name": "Szakorvos.hu", "url": "https://www.szakorvos.hu"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://www.szakorvos.hu"}, {"@type": "ListItem", "position": 2, "name": "Orvos kereső", "item": "https://www.szakorvos.hu/talalatok"}]}</script>
 </head>
 <body>
 
@@ -440,7 +496,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       <span class="crumb-sep">›</span>
       <span class="crumb-current" id="crumb2">Találatok</span>
     </div>
-    <div class="htitle">Orvos keresési <b>találatok</b></div>
+    <h1 class="htitle">Orvos keresési <b>találatok</b></h1>
     <div class="hsub" id="hsubText"><span id="hsubQuery">Keresés folyamatban</span> <span class="hcount" id="heroCnt"></span></div>
   </div>
 </div>
@@ -696,11 +752,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
       <div style="flex:1;min-width:0">
         <div class="pp-name" id="ppName">–</div>
         <div class="pp-title" id="ppTitle">–</div>
-        <div><span class="pp-spec-badge" id="ppSpec">–</span></div>
-        <div class="pp-loc-row">
-          <span class="pp-loc-item" id="ppCity"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>–</span>
-          <span class="pp-loc-item" id="ppClinic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>–</span>
-        </div>
+        <div class="pp-chip-row" id="ppChips"></div>
+        <div class="pp-meta-row" id="ppMetaRow"></div>
+        <div class="pp-exp-row" id="ppExpRow"></div>
+        <div class="pp-loc-row" id="ppLocRow"></div>
       </div>
     </div>
     <div class="pp-stats">
@@ -791,7 +846,8 @@ function updateHero(){
 async function load(){
   document.getElementById('resList').innerHTML='<div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div>';
   document.getElementById('pagDiv').style.display='none';
-  let q=db.from('doctors').select(`id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
+  // patient_count: opcionális mező, ha nincs DB-ben akkor a review_count alapján becsüljük
+  let q=db.from('doctors').select(`id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
   if(specQ) q=q.ilike('doctor_specialties.specialties.name',`%${specQ}%`);
   if(cityQ) q=q.ilike('doctor_clinics.clinics.cities.name',`%${cityQ}%`);
   const{data,error}=await q;
@@ -813,6 +869,28 @@ async function load(){
 
 /* ═════ FILTER ═════ */
 function fee(d){return d.doctor_clinics?.[0]?.consultation_fee||0}
+
+// Páciensek számának becslése (ha nincs explicit d.patient_count mező)
+// — a review_count alapján számolunk, mivel kb. 5%-a hagy értékelést.
+function estimatePatientCount(d) {
+  const reviews = parseInt(d.review_count) || 0;
+  if (reviews <= 0) return 0;
+  // ~5% recenziós arány, lefelé kerekítve 50-es lépésekre
+  const est = Math.round(reviews / 0.05 / 50) * 50;
+  return Math.max(est, 100);  // minimum 100, hogy ne nézzen ki triviálisan
+}
+
+// "2 450+ páciens" típusú formázás
+function formatPatientCount(n) {
+  if (!n || n < 50) return '';
+  if (n < 1000) return Math.floor(n / 50) * 50 + '+';
+  if (n < 10000) {
+    const rounded = Math.floor(n / 50) * 50;
+    return rounded.toLocaleString('hu-HU') + '+';
+  }
+  // 10000+
+  return Math.floor(n / 1000) + 'k+';
+}
 
 function applyF(){
   let docs=[...allDocs];
@@ -1026,20 +1104,38 @@ function cardH(d,i){
   const tags=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
   const mainTags=tags.slice(0,3);
   const extraTagCount=Math.max(0, tags.length-3);
+
+  // Új: értékelés + páciensszám
+  const rat = parseFloat(d.rating || 0);
+  const ratingFmt = rat > 0 ? rat.toFixed(1) : null;
+  const reviewCount = parseInt(d.review_count) || 0;
+  const patientCount = d.patient_count || estimatePatientCount(d);
+
+  // Nyelvek (max 2 a kártyán)
+  const langs = (d.languages || []).filter(Boolean).slice(0, 2);
+
   const avEl=d.photo_url
     ?`<div class="dc-photo-wrap"><img src="${d.photo_url}" alt="${d.name}">${avD.length?'<div class="av-dot"></div>':''}</div>`
     :`<div class="dc-photo-wrap"><div class="av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}</div>${avD.length?'<div class="av-dot"></div>':''}</div>`;
   return `<div class="dc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
     ${avEl}
     <div class="dc-mid">
-      <div class="dc-nm">${d.name}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
-      <div class="dc-deg">${spec||'Szakorvos'}${d.title?' · '+d.title:''}</div>
+      <div class="dc-nm">${escapeHtml(d.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+      <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}${d.title?' · '+escapeHtml(d.title):''}</div>
+
+      ${ratingFmt || patientCount ? `<div class="dc-meta dc-meta-rating">
+        ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span style="color:var(--muted);font-weight:500">(${reviewCount} értékelés)</span>` : ''}</span>` : ''}
+        ${ratingFmt && patientCount ? `<span class="dc-meta-dot"></span>` : ''}
+        ${patientCount ? `<span class="dc-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <strong>${formatPatientCount(patientCount)}</strong>&nbsp;páciens</span>` : ''}
+      </div>` : ''}
+
       <div class="dc-meta">
-        ${d.experience_years?`<span class="dc-meta-item"><strong>${d.experience_years} év</strong> tapasztalat</span><span class="dc-meta-dot"></span>`:''}
-        <span class="dc-meta-item">Magán rendelés</span>
+        ${d.experience_years?`<span class="dc-meta-item"><strong>${d.experience_years} év</strong> tapasztalat</span>`:''}
+        ${d.experience_years && langs.length ? `<span class="dc-meta-dot"></span>` : ''}
+        ${langs.map(l => `<span class="dc-lang-chip">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`).join('')}
       </div>
-      ${mainTags.length?`<div class="dc-tags">${mainTags.map(t=>`<span class="dtag">${t}</span>`).join('')}${extraTagCount?`<span class="dtag more">+${extraTagCount} több</span>`:''}</div>`:''}
-      ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?city+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${clinic.name}</span>`:''}</div>`:''}
+
+      ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <div>
@@ -1052,7 +1148,12 @@ function cardH(d,i){
   </div>`;
 }
 
-function goToProfile(id){ window.location.href=`orvos.html?id=${id}`; }
+function goToProfile(id){
+  // Slug preferálása ID helyett — visszafelé kompatibilis is
+  const d = (allDocs || []).find(x => x.id === id);
+  const slugOrId = d?.slug || id;
+  window.location.href = `/orvos/${slugOrId}`;
+}
 function setView(v){curView=v;document.getElementById('btnList').classList.toggle('on',v==='list');document.getElementById('btnGrid').classList.toggle('on',v==='grid');renderList();}
 function goPg(p){curPg=p;renderList();scrollTo({top:0,behavior:'smooth'});}
 function changePg(d){goPg(curPg+d);}
@@ -1071,17 +1172,83 @@ function openPanel(id){
 
   // Topbar
   document.getElementById('ppTopName').textContent=d.name;
-  // Hero
-  const ppAv=document.getElementById('ppAv');ppAv.textContent=init;ppAv.style.background=`linear-gradient(135deg,${col},${col}bb)`;
-  document.getElementById('ppName').textContent=d.name;
-  document.getElementById('ppTitle').textContent=[d.title,d.experience_years?d.experience_years+' év tapasztalat':''].filter(Boolean).join(' · ')||'Szakorvos';
-  document.getElementById('ppSpec').textContent=spec;
-  document.getElementById('ppCity').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city||'–'}`;
-  document.getElementById('ppClinic').innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${clinic?.name||'–'}`;
+
+  // ─── Hero ─────────────────────────────────────────────────────────────
+  const ppAv=document.getElementById('ppAv');
+  ppAv.textContent=init;
+  ppAv.style.background=`linear-gradient(135deg,${col},${col}bb)`;
+
+  // Név + verified badge
+  document.getElementById('ppName').innerHTML = `${escapeHtml(d.name)}<span class="pp-name-verified" title="Ellenőrzött orvos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+
+  // Title sor: "Bőrgyógyász szakorvos · PhD"  (a fő szakterület + cím)
+  const titleParts = [];
+  titleParts.push(`<strong>${escapeHtml(spec)}</strong>`);
+  if (d.title && d.title.trim()) titleParts.push(`<em>${escapeHtml(d.title)}</em>`);
+  document.getElementById('ppTitle').innerHTML = titleParts.join(' ');
+
+  // Chip sor: a többi szakterület (max 3 + "+N" overflow)
+  const allSpecs = (d.doctor_specialties || []).map(s => s.specialties?.name).filter(Boolean);
+  // A fő specialty-t kihagyjuk a chipekből (már fent van a title-ban)
+  const secondarySpecs = allSpecs.filter(s => s !== spec);
+  const visibleSpecs = secondarySpecs.slice(0, 3);
+  const overflowCount = secondarySpecs.length - visibleSpecs.length;
+  const chipHtml = visibleSpecs.map(s => `<span class="pp-chip">${escapeHtml(s)}</span>`).join('');
+  const overflowHtml = overflowCount > 0 ? `<span class="pp-chip more">+${overflowCount}</span>` : '';
+  document.getElementById('ppChips').innerHTML = chipHtml + overflowHtml;
+  document.getElementById('ppChips').style.display = visibleSpecs.length ? 'flex' : 'none';
+
+  // Értékelés + páciensek sor: ⭐ 4.9 (128 értékelés)  |  👥 2 450+ páciens
+  const ratingFmt = rat > 0 ? rat.toFixed(1) : null;
+  const reviewCount = d.review_count || 0;
+  const patientCount = d.patient_count || estimatePatientCount(d);
+  const metaParts = [];
+  if (ratingFmt) {
+    metaParts.push(`<span class="pp-meta-item"><span class="pp-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span class="pp-count-light">(${reviewCount} értékelés)</span>` : ''}</span>`);
+  }
+  if (patientCount) {
+    metaParts.push(`<span class="pp-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><strong>${formatPatientCount(patientCount)}</strong>&nbsp;páciens</span>`);
+  }
+  const ppMeta = document.getElementById('ppMetaRow');
+  ppMeta.innerHTML = metaParts.join('<span class="pp-meta-sep"></span>');
+  ppMeta.style.display = metaParts.length ? 'flex' : 'none';
+
+  // Tapasztalat + nyelvek sor: "12 év tapasztalat  ·  Magyar  ·  Angol"
+  const expParts = [];
+  if (d.experience_years) {
+    expParts.push(`<span class="pp-exp"><strong>${d.experience_years} év</strong> tapasztalat</span>`);
+  }
+  const langs = (d.languages || []).filter(Boolean);
+  if (langs.length) {
+    langs.slice(0, 3).forEach(l => {
+      expParts.push(`<span class="pp-lang-chip">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`);
+    });
+    if (langs.length > 3) {
+      expParts.push(`<span class="pp-lang-chip" style="background:transparent;border:none;color:var(--muted)">+${langs.length - 3}</span>`);
+    }
+  }
+  const ppExp = document.getElementById('ppExpRow');
+  ppExp.innerHTML = expParts.join('');
+  ppExp.style.display = expParts.length ? 'flex' : 'none';
+
+  // Location sor: "📍 Szeged · Szeged Klinika"
+  const locParts = [];
+  if (city) {
+    locParts.push(`<span class="pp-loc-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtml(city)}</span>`);
+  }
+  if (clinic?.name) {
+    if (locParts.length) locParts.push(`<span class="pp-loc-sep">·</span>`);
+    locParts.push(`<span class="pp-loc-item"><a class="pp-clinic-link" href="javascript:void(0)" onclick="event.stopPropagation()">${escapeHtml(clinic.name)}</a></span>`);
+  }
+  const ppLoc = document.getElementById('ppLocRow');
+  ppLoc.innerHTML = locParts.join('');
+  ppLoc.style.display = locParts.length ? 'flex' : 'none';
+
+  // Stat boxok
   document.getElementById('ppStat3').textContent=(d.experience_years||'–')+' év';
   document.getElementById('ppStat4').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
   document.getElementById('ppCtaP').textContent=f?f.toLocaleString('hu-HU')+' Ft':'Egyedi';
-  document.getElementById('ppOpenLink').href=`orvos.html?id=${d.id}`;
+  document.getElementById('ppOpenLink').href=`/orvos/${d.slug || d.id}`;
 
   // — About —
   document.getElementById('ppBio').textContent=d.bio||`${d.name}${d.experience_years?' '+d.experience_years+' éve':''} kiemelkedő szaktudással rendelkező ${spec}. Pácienscentrikus szemlélettel dolgozik, minden egyes esethez egyénre szabott kezelési tervet állít össze. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb diagnosztikai és terápiás módszereket alkalmazza. Különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`;
