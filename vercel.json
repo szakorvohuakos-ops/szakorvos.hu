@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/orvos.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/talalatok.html",
       "destination": "/talalatok",
       "permanent": true
@@ -27,10 +32,6 @@
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/og-image"
     },
     {
-      "source": "/orvos/:slug",
-      "destination": "/orvos.html?slug=:slug"
-    },
-    {
       "source": "/tudastar/:slug",
       "destination": "/tudastar-cikk.html?slug=:slug"
     },
@@ -49,6 +50,14 @@
     {
       "source": "/vizsgalatok",
       "destination": "/vizsgalatok.html"
+    },
+    {
+      "source": "/orvos/:slug",
+      "destination": "/orvos.html?slug=:slug"
+    },
+    {
+      "source": "/:specialty/:slug(dr-.*)",
+      "destination": "/orvos.html?spec=:specialty&slug=:slug"
     }
   ],
 
