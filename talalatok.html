@@ -846,8 +846,10 @@ function updateHero(){
 async function load(){
   document.getElementById('resList').innerHTML='<div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div>';
   document.getElementById('pagDiv').style.display='none';
-  // patient_count: opcionális mező, ha nincs DB-ben akkor a review_count alapján becsüljük
-  let q=db.from('doctors').select(`id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
+  // FONTOS: a `slug` oszlop csak akkor jelenik meg, ha az SQL migráció lefutott
+  // (lásd supabase/migrations/001_seo_slugs.sql). Amíg nem futott, a select
+  // hibázna. Helyette: minden render-hely a `d.slug || d.id` fallback-et használja.
+  let q=db.from('doctors').select(`id,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,specialties!inner(name,slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`).eq('is_active',true);
   if(specQ) q=q.ilike('doctor_specialties.specialties.name',`%${specQ}%`);
   if(cityQ) q=q.ilike('doctor_clinics.clinics.cities.name',`%${cityQ}%`);
   const{data,error}=await q;
@@ -911,7 +913,12 @@ function applyF(){
   if(cities.length) docs=docs.filter(d=>cities.includes(d.doctor_clinics?.[0]?.clinics?.cities?.name));
   // Languages
   const langs=[...document.querySelectorAll('[data-lang].on')].map(c=>c.dataset.lang);
-  if(langs.length) docs=docs.filter(d=>{const dl=(d.languages||[]).map(l=>l.toLowerCase());return langs.some(l=>dl.includes(l));});
+  if(langs.length) docs=docs.filter(d=>{
+    const raw = Array.isArray(d.languages) ? d.languages
+              : (typeof d.languages === 'string' ? d.languages.split(/[,;]/) : []);
+    const dl = raw.map(l => (l || '').toString().trim().toLowerCase()).filter(Boolean);
+    return langs.some(l => dl.includes(l));
+  });
   // Sort
   const s=document.getElementById('sortSel').value;
   if(s==='exp') docs.sort((a,b)=>(b.experience_years||0)-(a.experience_years||0));
@@ -1111,8 +1118,10 @@ function cardH(d,i){
   const reviewCount = parseInt(d.review_count) || 0;
   const patientCount = d.patient_count || estimatePatientCount(d);
 
-  // Nyelvek (max 2 a kártyán)
-  const langs = (d.languages || []).filter(Boolean).slice(0, 2);
+  // Nyelvek (max 2 a kártyán) — defenzív: tömb? string? null?
+  const langsRaw = Array.isArray(d.languages) ? d.languages
+                 : (typeof d.languages === 'string' ? d.languages.split(/[,;]/) : []);
+  const langs = langsRaw.map(s => (s || '').toString().trim()).filter(Boolean).slice(0, 2);
 
   const avEl=d.photo_url
     ?`<div class="dc-photo-wrap"><img src="${d.photo_url}" alt="${d.name}">${avD.length?'<div class="av-dot"></div>':''}</div>`
@@ -1218,7 +1227,9 @@ function openPanel(id){
   if (d.experience_years) {
     expParts.push(`<span class="pp-exp"><strong>${d.experience_years} év</strong> tapasztalat</span>`);
   }
-  const langs = (d.languages || []).filter(Boolean);
+  const langsRaw = Array.isArray(d.languages) ? d.languages
+                 : (typeof d.languages === 'string' ? d.languages.split(/[,;]/) : []);
+  const langs = langsRaw.map(s => (s || '').toString().trim()).filter(Boolean);
   if (langs.length) {
     langs.slice(0, 3).forEach(l => {
       expParts.push(`<span class="pp-lang-chip">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`);
@@ -1254,7 +1265,7 @@ function openPanel(id){
   document.getElementById('ppBio').textContent=d.bio||`${d.name}${d.experience_years?' '+d.experience_years+' éve':''} kiemelkedő szaktudással rendelkező ${spec}. Pácienscentrikus szemlélettel dolgozik, minden egyes esethez egyénre szabott kezelési tervet állít össze. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb diagnosztikai és terápiás módszereket alkalmazza. Különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`;
   const specs=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
   document.getElementById('ppSpecs').innerHTML=(specs.length?specs:[spec]).map(s=>`<div class="sli"><div class="sli-dot"></div>${s}</div>`).join('');
-  document.getElementById('ppLangs').innerHTML=(d.languages||['magyar']).map(l=>`<div class="chip on" style="pointer-events:none">${l.charAt(0).toUpperCase()+l.slice(1)}</div>`).join('');
+  document.getElementById('ppLangs').innerHTML=(langs.length ? langs : ['Magyar']).map(l=>`<div class="chip on" style="pointer-events:none">${l.charAt(0).toUpperCase()+l.slice(1)}</div>`).join('');
   const ins=(d.doctor_insurances||[]).map(i=>i.insurance_types?.name).filter(Boolean);
   document.getElementById('ppIns').innerHTML=ins.length?ins.map(n=>`<span class="itag${n==='OEP / TAJ kártya'?' oep':''}">${n}</span>`).join(''):'<span style="color:var(--muted);font-size:13px">Nincs biztosítói adat</span>';
 
