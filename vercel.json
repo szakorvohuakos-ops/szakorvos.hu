@@ -1,11 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
 
-  "_doc": "Bot detection regex — manuálisan duplikálva minden rewrite-nál (Vercel nem támogat újrahasználható patterneket).",
-
   "redirects": [
     {
-      "_comment": "── Régi /orvos.html?id=X → új /orvos/X (301, ID megőrizve) ──",
       "source": "/orvos.html",
       "has": [
         { "type": "query", "key": "id", "value": "(?<docid>.*)" }
@@ -14,7 +11,6 @@
       "permanent": true
     },
     {
-      "_comment": "── Régi /tudastar-cikk.html?slug=X → új /tudastar/X (301, slug megőrizve) ──",
       "source": "/tudastar-cikk.html",
       "has": [
         { "type": "query", "key": "slug", "value": "(?<articleslug>.*)" }
@@ -23,19 +19,16 @@
       "permanent": true
     },
     {
-      "_comment": "── Régi /talalatok.html → /talalatok (301) ──",
       "source": "/talalatok.html",
       "destination": "/talalatok",
       "permanent": true
     },
     {
-      "_comment": "── Régi /tudastar.html → /tudastar (301) ──",
       "source": "/tudastar.html",
       "destination": "/tudastar",
       "permanent": true
     },
     {
-      "_comment": "── Régi /vizsgalatok.html → /vizsgalatok (301) ──",
       "source": "/vizsgalatok.html",
       "destination": "/vizsgalatok",
       "permanent": true
@@ -44,13 +37,10 @@
 
   "rewrites": [
     {
-      "_comment": "──────── DINAMIKUS SITEMAP ────────",
       "source": "/sitemap.xml",
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/sitemap"
     },
-
     {
-      "_comment": "──────── OG IMAGE GENERATOR ────────",
       "source": "/og",
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/og-image"
     },
@@ -58,21 +48,16 @@
       "source": "/og/:path*",
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/og-image"
     },
-
     {
-      "_comment": "──────── ORVOS PROFIL — bot prerender ────────",
       "source": "/orvos/:slug",
       "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=doctor&slug=:slug"
     },
     {
-      "_comment": "Normál böngészőknek a SPA verzió — :slug query paraméterként",
       "source": "/orvos/:slug",
       "destination": "/orvos.html?slug=:slug"
     },
-
     {
-      "_comment": "──────── TUDÁSTÁR CIKK ────────",
       "source": "/tudastar/:slug",
       "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=article&slug=:slug"
@@ -85,9 +70,7 @@
       "source": "/tudastar",
       "destination": "/tudastar.html"
     },
-
     {
-      "_comment": "──────── TALÁLATI LISTA ────────",
       "source": "/talalatok/:city/:specialty",
       "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=search&city=:city&specialty=:specialty"
@@ -109,9 +92,7 @@
       "source": "/talalatok",
       "destination": "/talalatok.html"
     },
-
     {
-      "_comment": "──────── VIZSGÁLATOK ────────",
       "source": "/vizsgalatok",
       "destination": "/vizsgalatok.html"
     },
@@ -126,15 +107,15 @@
       "source": "/(.*)",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options",        "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy",        "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy",     "value": "camera=(), microphone=(), geolocation=(self)" }
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(self)" }
       ]
     },
     {
       "source": "/(.*\\.html)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" }
+        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=60, stale-while-revalidate=300" }
       ]
     },
     {
@@ -146,7 +127,7 @@
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Content-Type",  "value": "application/xml; charset=utf-8" },
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
         { "key": "Cache-Control", "value": "public, max-age=21600, s-maxage=21600" }
       ]
     }
