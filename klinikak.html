@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Klinikák és magánrendelők | Szakorvos.hu</title>
+<meta name="description" content="Keressen klinikát, magánrendelőt vagy szakrendelőt Magyarországon. Cím, telefon, orvosok, szakterületek - egy helyen.">
+<link rel="canonical" href="https://www.szakorvos.hu/klinikak.html">
+<meta name="theme-color" content="#113293">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klinikák és magánrendelők | Szakorvos.hu">
+<meta property="og:description" content="Keressen klinikát, magánrendelőt vagy szakrendelőt Magyarországon.">
+<meta property="og:url" content="https://www.szakorvos.hu/klinikak.html">
+<meta property="og:locale" content="hu_HU">
+<link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#113293; --brand-2:#264ACA; --brand-light:#eef2ff;
+  --green:#2C9650; --orange:#FF8A00;
+  --bg:#F4F6F8; --card:#FFFFFF;
+  --text:#113293; --muted:#6b7a9a;
+  --border:#DCE3EA; --border-soft:#e8eef5;
+  --shadow-sm:0 2px 8px rgba(17,50,147,.05);
+  --shadow:0 4px 14px rgba(17,50,147,.07);
+  --shadow-lg:0 12px 32px rgba(17,50,147,.1);
+}
+html,body{height:auto}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+img{max-width:100%;display:block}
+
+/* ═══ HERO ═══ */
+.hero{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;padding:3.5rem 4% 3rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.hero-in{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.hero-label{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+.hero h1{font-size:clamp(2rem,4vw,2.75rem);font-weight:700;letter-spacing:-0.025em;line-height:1.15;margin-bottom:.6rem}
+.hero h1 em{font-style:normal;color:#FFC56A}
+.hero p{font-size:1.05rem;opacity:.85;max-width:600px;margin-bottom:2rem}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap;margin-top:.5rem}
+.hero-stat{display:flex;align-items:baseline;gap:6px}
+.hero-stat strong{font-size:1.5rem;font-weight:700;color:#FFC56A}
+.hero-stat span{font-size:.9rem;opacity:.85}
+
+/* ═══ FILTERS BAR ═══ */
+.filters-wrap{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:300;box-shadow:var(--shadow-sm)}
+.filters{max-width:1200px;margin:0 auto;padding:1rem 4%;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.filt{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 12px;min-width:160px;flex:1;transition:border-color .15s,box-shadow .15s}
+.filt:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(17,50,147,.08)}
+.filt svg{flex-shrink:0;color:var(--muted)}
+.filt input,.filt select{border:none;background:transparent;outline:none;font:inherit;color:var(--text);width:100%;font-size:14px}
+.filt select{cursor:pointer;appearance:none;background:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="%236b7a9a" stroke-width="1.8"%3E%3Cpath d="M2 4l4 4 4-4"/%3E%3C/svg%3E') no-repeat right .25rem center}
+.filt-btn{background:var(--brand);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px;transition:background .15s;white-space:nowrap}
+.filt-btn:hover{background:var(--brand-2)}
+.filt-reset{background:transparent;color:var(--muted);border:none;font-size:13px;padding:8px 12px;text-decoration:underline;font-weight:500}
+.filt-reset:hover{color:var(--brand)}
+
+/* ═══ RESULTS HEADER ═══ */
+.results-head{max-width:1200px;margin:1.5rem auto 1rem;padding:0 4%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.results-count{font-size:.95rem;color:var(--muted)}
+.results-count strong{color:var(--text);font-size:1.15rem;font-weight:700}
+.sort-select{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 32px 8px 12px;font:inherit;font-size:14px;color:var(--text);font-weight:500;cursor:pointer;appearance:none;background:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="%23113293" stroke-width="1.8"%3E%3Cpath d="M2 4l4 4 4-4"/%3E%3C/svg%3E') no-repeat right 10px center #fff}
+
+/* ═══ GRID ═══ */
+.grid{max-width:1200px;margin:0 auto 3rem;padding:0 4%;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.25rem}
+.card{background:var(--card);border:1px solid var(--border-soft);border-radius:18px;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;cursor:pointer;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(17,50,147,.18)}
+.card-img{aspect-ratio:16/9;background:linear-gradient(135deg,#eef2ff 0%,#dde6ff 100%);position:relative;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover}
+.card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#9eaad0}
+.card-img-placeholder svg{width:56px;height:56px;opacity:.4}
+.card-badge{position:absolute;top:12px;left:12px;background:rgba(17,50,147,.95);color:#fff;padding:5px 11px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.02em;backdrop-filter:blur(8px)}
+.card-rating{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.96);padding:5px 10px;border-radius:999px;display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--text);backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card-rating svg{color:#FFB400}
+.card-body{padding:1.1rem 1.2rem 1.2rem;flex:1;display:flex;flex-direction:column}
+.card-name{font-size:1.1rem;font-weight:700;letter-spacing:-0.015em;line-height:1.3;margin-bottom:.35rem;color:var(--text)}
+.card-city{display:flex;align-items:center;gap:5px;font-size:13.5px;color:var(--muted);margin-bottom:.85rem}
+.card-city svg{flex-shrink:0;color:var(--brand);opacity:.55}
+.card-stats{display:flex;gap:1rem;padding:.65rem 0;border-top:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);margin-bottom:.9rem}
+.card-stat{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);font-weight:500}
+.card-stat strong{color:var(--text);font-weight:700;font-size:13px}
+.card-specs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem;min-height:32px}
+.card-spec{background:var(--brand-light);color:var(--brand);font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;letter-spacing:.01em}
+.card-spec-more{background:transparent;color:var(--muted);font-size:11.5px;padding:4px 0;font-weight:500}
+.card-cta{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.card-addr{font-size:12.5px;color:var(--muted);max-width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-btn{background:var(--brand);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:600;font-size:12.5px;display:flex;align-items:center;gap:4px;transition:background .15s}
+.card-btn:hover{background:var(--brand-2)}
+
+/* ═══ EMPTY / LOADING ═══ */
+.empty{max-width:600px;margin:3rem auto;padding:0 4%;text-align:center}
+.empty-icon{width:80px;height:80px;background:var(--brand-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;color:var(--brand)}
+.empty h3{font-size:1.25rem;font-weight:700;margin-bottom:.5rem}
+.empty p{color:var(--muted);margin-bottom:1.25rem}
+.empty button{background:var(--brand);color:#fff;border:none;padding:11px 22px;border-radius:10px;font-weight:600}
+.loading{text-align:center;padding:3rem 0;color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--brand-light);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .75rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:640px){
+  .hero{padding:2.5rem 4% 2rem}
+  .filters-wrap{position:static}
+  .filt{min-width:0;flex:1 1 calc(50% - .5rem)}
+  .filt-btn{flex:1 1 100%;justify-content:center}
+  .grid{grid-template-columns:1fr}
+  .hero-stats{gap:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     EGYSÉGES MENÜ — minden oldalon ugyanez
+══════════════════════════════════════════ -->
+<style>
+nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05);font-family:'Inter',sans-serif}
+nav#mainNav *{box-sizing:border-box}
+nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
+nav#mainNav .nav-links li{position:relative}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a:hover{background:#eef2ff}
+nav#mainNav .nav-links li>a svg{opacity:.6}
+nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
+nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
+nav#mainNav .dropdown a:hover{background:#eef2ff}
+nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
+.mobile-drawer{position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-100%);transition:transform .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif}
+.mobile-drawer.open{transform:translateY(0)}
+.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
+.mobile-nav-item:hover{background:#eef2ff}
+.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
+@media(max-width:900px){
+  nav#mainNav .nav-links{display:none}
+  nav#mainNav .nav-actions{display:none}
+  nav#mainNav .nav-mobile-toggle{display:flex}
+}
+</style>
+
+<nav id="mainNav">
+  <div class="nav-row-top">
+    <a href="index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="white"/>
+          <circle cx="14" cy="10" r="5.5" fill="#113293"/>
+          <rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/>
+          <rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+    </a>
+
+    <ul class="nav-links">
+      <li>
+        <a href="talalatok.html">Orvosok
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html">Szakorvos</a>
+          <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
+          <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
+        </div>
+      </li>
+      <li>
+        <a href="klinikak.html">Klinikák
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="#">Magánklinikák</a>
+          <a href="#">Kórházak</a>
+          <a href="#">Rendelők</a>
+          <a href="#">Diagnosztikai központok</a>
+        </div>
+      </li>
+      <li><a href="tudastar.html">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html">Vizsgálatok</a></li>
+      <li>
+        <a href="#">Kapcsolat
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="#">Ügyfélszolgálat</a>
+          <a href="register.html">Orvosoknak</a>
+        </div>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
+      <a href="register.html" class="btn-nav-cta">Legyen Ön is a partnerünk</a>
+    </div>
+
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
+      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="talalatok.html" class="mobile-nav-item">Orvosok</a>
+    <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Tudástár A–Z</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
+    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
+    <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
+    <a href="register.html" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
+  </div>
+</div>
+
+<script>
+function toggleMobileMenu(){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle'),i=document.getElementById('hamburgerIcon');
+  if(!d||!t||!i)return;
+  const o=d.classList.contains('open');
+  if(o){d.classList.remove('open');t.setAttribute('aria-expanded','false');i.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';document.body.style.overflow='';}
+  else{d.classList.add('open');t.setAttribute('aria-expanded','true');i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';document.body.style.overflow='hidden';}
+}
+document.addEventListener('click',function(e){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle');
+  if(!d||!t)return;
+  if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
+</script>
+<!-- ══════ MENÜ VÉGE ══════ -->
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-in">
+    <span class="hero-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+      Klinikák és magánrendelők
+    </span>
+    <h1>Találja meg a legjobb <em>klinikát</em> az Ön közelében</h1>
+    <p>Magyarország országos klinika-, rendelő- és szakrendelőtárában szakorvosok, magánellátás és diagnosztikai központok egy helyen.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong id="statClinics">—</strong><span>klinika</span></div>
+      <div class="hero-stat"><strong id="statCities">—</strong><span>város</span></div>
+      <div class="hero-stat"><strong id="statSpecs">—</strong><span>szakterület</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FILTERS ─── -->
+<div class="filters-wrap">
+  <div class="filters">
+    <div class="filt">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="fName" placeholder="Klinika neve, címe…" autocomplete="off">
+    </div>
+    <div class="filt">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <select id="fCity"><option value="">Minden város</option></select>
+    </div>
+    <div class="filt">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-2 2-3.5 2-5.5C21 4.91 17.5 2 14 2c-2.5 0-4.5 1.5-5.5 3.5"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
+      <select id="fSpec"><option value="">Minden szakterület</option></select>
+    </div>
+    <button class="filt-btn" onclick="applyFilters()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Keresés
+    </button>
+    <button class="filt-reset" onclick="resetFilters()">Szűrők törlése</button>
+  </div>
+</div>
+
+<!-- ─── RESULTS HEADER ─── -->
+<div class="results-head">
+  <div class="results-count"><strong id="resCount">—</strong> klinika találat</div>
+  <select class="sort-select" id="sortBy" onchange="applyFilters()">
+    <option value="doctors">Legtöbb orvos</option>
+    <option value="rating">Legjobb értékelés</option>
+    <option value="reviews">Legtöbb vélemény</option>
+    <option value="name">Név szerint A-Z</option>
+  </select>
+</div>
+
+<!-- ─── GRID ─── -->
+<div class="grid" id="grid">
+  <div class="loading" style="grid-column:1/-1">
+    <div class="spinner"></div>
+    Klinikák betöltése…
+  </div>
+</div>
+
+<!-- ─── SCRIPT ─── -->
+<script>
+let allClinics = [];
+let filtered = [];
+
+// ─ Helpers ─
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+// ─ Adat betöltés ─
+async function loadClinics(){
+  try {
+    const { data, error } = await db
+      .from('clinics')
+      .select(`
+        id, slug, name, address, phone, email, website, photo_url, clinic_photos,
+        cities(name),
+        doctor_clinics(
+          doctor_id,
+          doctors!inner(id, name, slug, rating, review_count, is_active,
+            doctor_specialties(
+              is_primary,
+              specialties(name, doctor_slug)
+            )
+          )
+        )
+      `)
+      .order('name');
+
+    if(error){ console.error('Load error:', error); showError(); return; }
+
+    // Klinikák feldolgozása - statisztikák számolása
+    allClinics = (data || []).map(c => {
+      const docs = (c.doctor_clinics || [])
+        .map(dc => dc.doctors)
+        .filter(d => d && d.is_active);
+      
+      // Egyedi szakterületek összegyűjtése
+      const specMap = new Map();
+      docs.forEach(d => {
+        (d.doctor_specialties || []).forEach(ds => {
+          if(ds.specialties?.name){
+            specMap.set(ds.specialties.name, ds.specialties);
+          }
+        });
+      });
+      
+      const ratings = docs.filter(d => d.rating).map(d => d.rating);
+      const avgRating = ratings.length ? (ratings.reduce((a,b)=>a+b,0) / ratings.length) : 0;
+      const totalReviews = docs.reduce((s,d) => s + (d.review_count || 0), 0);
+      
+      return {
+        ...c,
+        _docCount: docs.length,
+        _specs: Array.from(specMap.values()),
+        _avgRating: avgRating,
+        _totalReviews: totalReviews,
+        _cityName: c.cities?.name || ''
+      };
+    });
+
+    populateFilters();
+    updateHeroStats();
+    applyFilters();
+  } catch(e){
+    console.error(e);
+    showError();
+  }
+}
+
+function showError(){
+  document.getElementById('grid').innerHTML = `
+    <div class="empty" style="grid-column:1/-1">
+      <div class="empty-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h3>Hiba történt</h3>
+      <p>Nem sikerült betölteni a klinikákat. Próbálja újra később.</p>
+    </div>`;
+}
+
+// ─ Hero statisztikák ─
+function updateHeroStats(){
+  document.getElementById('statClinics').textContent = allClinics.length;
+  const cities = new Set(allClinics.map(c => c._cityName).filter(Boolean));
+  document.getElementById('statCities').textContent = cities.size;
+  const specs = new Set();
+  allClinics.forEach(c => c._specs.forEach(s => specs.add(s.name)));
+  document.getElementById('statSpecs').textContent = specs.size;
+}
+
+// ─ Szűrő opciók ─
+function populateFilters(){
+  // Városok
+  const cities = Array.from(new Set(allClinics.map(c => c._cityName).filter(Boolean))).sort();
+  const fCity = document.getElementById('fCity');
+  fCity.innerHTML = '<option value="">Minden város</option>' +
+    cities.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  
+  // Szakterületek
+  const specSet = new Set();
+  allClinics.forEach(c => c._specs.forEach(s => specSet.add(s.name)));
+  const specs = Array.from(specSet).sort();
+  const fSpec = document.getElementById('fSpec');
+  fSpec.innerHTML = '<option value="">Minden szakterület</option>' +
+    specs.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+
+  // URL paraméterekből előre kitöltés
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('city')) fCity.value = params.get('city');
+  if(params.get('specialty')) fSpec.value = params.get('specialty');
+  if(params.get('q')) document.getElementById('fName').value = params.get('q');
+}
+
+// ─ Szűrés és rendezés ─
+function applyFilters(){
+  const q = document.getElementById('fName').value.trim().toLowerCase();
+  const city = document.getElementById('fCity').value;
+  const spec = document.getElementById('fSpec').value;
+  const sort = document.getElementById('sortBy').value;
+
+  filtered = allClinics.filter(c => {
+    if(q && !((c.name||'').toLowerCase().includes(q) || (c.address||'').toLowerCase().includes(q))) return false;
+    if(city && c._cityName !== city) return false;
+    if(spec && !c._specs.some(s => s.name === spec)) return false;
+    return true;
+  });
+
+  // Rendezés
+  filtered.sort((a,b) => {
+    switch(sort){
+      case 'rating':  return b._avgRating - a._avgRating;
+      case 'reviews': return b._totalReviews - a._totalReviews;
+      case 'name':    return (a.name||'').localeCompare(b.name||'', 'hu');
+      case 'doctors':
+      default:        return b._docCount - a._docCount;
+    }
+  });
+
+  render();
+}
+
+function resetFilters(){
+  document.getElementById('fName').value = '';
+  document.getElementById('fCity').value = '';
+  document.getElementById('fSpec').value = '';
+  document.getElementById('sortBy').value = 'doctors';
+  applyFilters();
+}
+
+// Enter a name input-ban
+document.getElementById('fName').addEventListener('keydown', e => {
+  if(e.key === 'Enter') applyFilters();
+});
+
+// ─ Render ─
+function render(){
+  const grid = document.getElementById('grid');
+  document.getElementById('resCount').textContent = filtered.length;
+
+  if(!filtered.length){
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <div class="empty-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>Nincs találat</h3>
+        <p>Próbáljon meg más szűrőkkel keresni.</p>
+        <button onclick="resetFilters()">Szűrők törlése</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(c => {
+    const photo = c.photo_url || (c.clinic_photos && c.clinic_photos[0]);
+    const imgHtml = photo
+      ? `<img src="${escapeHtml(photo)}" alt="${escapeHtml(c.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.card-img-placeholder').style.display='flex';">
+         <div class="card-img-placeholder" style="display:none;position:absolute;inset:0;">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
+         </div>`
+      : `<div class="card-img-placeholder">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
+         </div>`;
+
+    const rating = c._avgRating > 0 
+      ? `<div class="card-rating">
+           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+           ${c._avgRating.toFixed(1)}
+         </div>`
+      : '';
+
+    const specsHtml = c._specs.slice(0, 3).map(s =>
+      `<span class="card-spec">${escapeHtml(s.name)}</span>`
+    ).join('') + (c._specs.length > 3 ? `<span class="card-spec-more">+${c._specs.length - 3}</span>` : '');
+
+    return `
+      <div class="card" onclick="openClinic('${c.slug || ''}', '${c.id}')">
+        <div class="card-img">
+          ${imgHtml}
+          ${c._cityName ? `<span class="card-badge">${escapeHtml(c._cityName)}</span>` : ''}
+          ${rating}
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">${escapeHtml(c.name)}</h3>
+          <div class="card-city">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${escapeHtml(c.address || c._cityName || 'Cím nem elérhető')}
+          </div>
+          <div class="card-stats">
+            <div class="card-stat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <strong>${c._docCount}</strong> orvos
+            </div>
+            ${c._totalReviews > 0 ? `<div class="card-stat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <strong>${c._totalReviews}</strong> vélemény
+            </div>` : ''}
+          </div>
+          <div class="card-specs">${specsHtml || '<span class="card-spec-more">Nincs adat</span>'}</div>
+          <div class="card-cta">
+            <span class="card-addr">${c.phone ? '📞 '+escapeHtml(c.phone) : ''}</span>
+            <button class="card-btn">Részletek
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openClinic(slug, id){
+  // SEO-barát URL ha van slug, különben fallback ID-ra
+  window.location.href = slug ? \`klinikak/\${slug}\` : \`klinika.html?id=\${id}\`;
+}
+
+// Indulás
+document.addEventListener('DOMContentLoaded', loadClinics);
+</script>
+
+</body>
+</html>
