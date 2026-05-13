@@ -326,32 +326,49 @@ function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;',
 // ─ Adat betöltés ─
 async function loadClinics(){
   try {
-    const { data, error } = await db
+    console.log('[klinikak] Lekérdezés indul...');
+    
+    // 1. lépés: klinikák alap adatai
+    const { data: clinics, error: cErr } = await db
       .from('clinics')
+      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, cities(name)')
+      .order('name');
+
+    if(cErr){ console.error('[klinikak] Clinics error:', cErr); showError(); return; }
+    console.log('[klinikak] Klinikák betöltve:', clinics?.length);
+
+    // 2. lépés: orvos-klinika kapcsolatok az orvosok adataival és szakterületeivel
+    const { data: links, error: lErr } = await db
+      .from('doctor_clinics')
       .select(`
-        id, slug, name, address, phone, email, website, photo_url, clinic_photos,
-        cities(name),
-        doctor_clinics(
-          doctor_id,
-          doctors!inner(id, name, slug, rating, review_count, is_active,
-            doctor_specialties(
-              is_primary,
-              specialties(name, doctor_slug)
-            )
+        clinic_id,
+        doctors!inner(
+          id, name, slug, rating, review_count, is_active,
+          doctor_specialties(
+            is_primary,
+            specialties(name, doctor_slug)
           )
         )
       `)
-      .order('name');
+      .eq('doctors.is_active', true);
 
-    if(error){ console.error('Load error:', error); showError(); return; }
+    if(lErr){ console.error('[klinikak] Links error:', lErr); showError(); return; }
+    console.log('[klinikak] Kapcsolatok betöltve:', links?.length);
 
-    // Klinikák feldolgozása - statisztikák számolása
-    allClinics = (data || []).map(c => {
-      const docs = (c.doctor_clinics || [])
-        .map(dc => dc.doctors)
-        .filter(d => d && d.is_active);
+    // 3. lépés: klinikánként csoportosítás
+    const byClinic = new Map();
+    for(const link of (links || [])){
+      const d = link.doctors;
+      if(!d || !d.is_active) continue;
+      if(!byClinic.has(link.clinic_id)) byClinic.set(link.clinic_id, []);
+      byClinic.get(link.clinic_id).push(d);
+    }
+
+    // 4. lépés: klinikák feldolgozása
+    allClinics = (clinics || []).map(c => {
+      const docs = byClinic.get(c.id) || [];
       
-      // Egyedi szakterületek összegyűjtése
+      // Egyedi szakterületek
       const specMap = new Map();
       docs.forEach(d => {
         (d.doctor_specialties || []).forEach(ds => {
@@ -375,6 +392,7 @@ async function loadClinics(){
       };
     });
 
+    console.log('[klinikak] Feldolgozás kész. Klinikák:', allClinics.length);
     populateFilters();
     updateHeroStats();
     applyFilters();
