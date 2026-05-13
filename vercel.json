@@ -1,5 +1,4 @@
-
-
+{
   "redirects": [
     {
       "source": "/orvos.html",
@@ -7,14 +6,6 @@
         { "type": "query", "key": "id", "value": "(?<docid>.*)" }
       ],
       "destination": "/orvos/:docid",
-      "permanent": true
-    },
-    {
-      "source": "/tudastar-cikk.html",
-      "has": [
-        { "type": "query", "key": "slug", "value": "(?<articleslug>.*)" }
-      ],
-      "destination": "/tudastar/:articleslug",
       "permanent": true
     },
     {
@@ -44,22 +35,8 @@
       "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/og-image"
     },
     {
-      "source": "/og/:path*",
-      "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/og-image"
-    },
-    {
-      "source": "/orvos/:slug",
-      "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
-      "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=doctor&slug=:slug"
-    },
-    {
       "source": "/orvos/:slug",
       "destination": "/orvos.html?slug=:slug"
-    },
-    {
-      "source": "/tudastar/:slug",
-      "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
-      "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=article&slug=:slug"
     },
     {
       "source": "/tudastar/:slug",
@@ -70,34 +47,16 @@
       "destination": "/tudastar.html"
     },
     {
-      "source": "/talalatok/:city/:specialty",
-      "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
-      "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=search&city=:city&specialty=:specialty"
-    },
-    {
-      "source": "/talalatok/:city/:specialty",
-      "destination": "/talalatok.html?city=:city&specialty=:specialty"
-    },
-    {
-      "source": "/talalatok/:specialty",
-      "has": [{ "type": "header", "key": "user-agent", "value": "(?i).*(bot|crawler|spider|slurp|preview|facebookexternalhit|twitterbot|linkedinbot|slackbot|telegrambot|whatsapp|discordbot|applebot|pinterest|skypeuripreview|vkshare|redditbot|gptbot|claudebot|perplexitybot|chatgpt-user).*" }],
-      "destination": "https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/seo-render?type=search&specialty=:specialty"
+      "source": "/talalatok",
+      "destination": "/talalatok.html"
     },
     {
       "source": "/talalatok/:specialty",
       "destination": "/talalatok.html?specialty=:specialty"
     },
     {
-      "source": "/talalatok",
-      "destination": "/talalatok.html"
-    },
-    {
       "source": "/vizsgalatok",
       "destination": "/vizsgalatok.html"
-    },
-    {
-      "source": "/vizsgalatok/:specialty",
-      "destination": "/vizsgalatok.html?specialty=:specialty"
     }
   ],
 
@@ -107,31 +66,8 @@
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(self)" }
-      ]
-    },
-    {
-      "source": "/(.*\\.html)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=60, stale-while-revalidate=300" }
-      ]
-    },
-    {
-      "source": "/(.*\\.(css|js|woff2?|ttf|otf|eot|svg|png|jpg|jpeg|webp|avif|ico|gif))",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000, immutable" }
-      ]
-    },
-    {
-      "source": "/sitemap.xml",
-      "headers": [
-        { "key": "Content-Type", "value": "application/xml; charset=utf-8" },
-        { "key": "Cache-Control", "value": "public, max-age=21600, s-maxage=21600" }
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
       ]
     }
-  ],
-
-  "cleanUrls": false,
-  "trailingSlash": false
+  ]
 }
