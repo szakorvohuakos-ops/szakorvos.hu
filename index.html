@@ -821,7 +821,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
-          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html?specialty=Háziorvos">Háziorvos</a>
           <a href="talalatok.html">Szakorvos</a>
           <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
           <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
@@ -2628,26 +2628,55 @@ function useExample(btn) {
     const grid = document.getElementById('popularSpecsGrid');
     if (!grid) return;
     try {
-      const { data, error } = await db
+      // 1) Szakterületek
+      const { data: specs, error } = await db
         .from('specialties')
-        .select('name, slug, icon, color, description, doctor_count')
-        .eq('is_active', true)
-        .order('doctor_count', { ascending: false, nullsFirst: false })
-        .limit(12);
+        .select('id, name, slug, icon, color, description')
+        .eq('is_active', true);
       if (error) throw error;
-      if (!data || !data.length) return; // keep static fallback
+      if (!specs || !specs.length) return;
 
-      grid.innerHTML = data.map(s => {
+      // 2) Aktív orvosok ID-i
+      const { data: activeDocs } = await db
+        .from('doctors')
+        .select('id')
+        .eq('is_active', true);
+      const activeIds = (activeDocs || []).map(d => d.id);
+
+      // 3) Valós doctor count per specialty
+      const counts = {};
+      if(activeIds.length){
+        const { data: links } = await db
+          .from('doctor_specialties')
+          .select('specialty_id,doctor_id')
+          .in('doctor_id', activeIds);
+        (links || []).forEach(l => {
+          counts[l.specialty_id] = (counts[l.specialty_id] || 0) + 1;
+        });
+      }
+
+      // 4) Sorrend doctor count szerint csökkenően, top 12
+      const sorted = specs
+        .map(s => ({ ...s, _cnt: counts[s.id] || 0 }))
+        .sort((a, b) => b._cnt - a._cnt)
+        .slice(0, 12);
+
+      grid.innerHTML = sorted.map(s => {
         const icon = s.icon || '🩺';
         const bg   = s.color || '#eef2ff';
-        const cnt  = s.doctor_count || 0;
+        const cnt  = s._cnt;
         const sub  = cnt > 0 ? `${cnt} szakorvos` : 'Szakorvos keresése';
-        const safeName = String(s.name).replace(/'/g, "\\'");
-        return `<button class="popular-spec-card" onclick="heroQuickSearch('${safeName}')">
-          <div class="popular-spec-icon" style="background:${bg};">${icon}</div>
-          <span class="popular-spec-name">${s.name}</span>
-          <span class="popular-spec-sub">${sub}</span>
-        </button>`;
+        const safeName = String(s.name).replace(/"/g, '&quot;');
+        return `<div class="popular-spec-card" data-spec="${safeName}" role="button" tabindex="0" onclick="togglePopularSpec(this, event)" onkeydown="onPopularKeydown(event,this)">
+          <div class="popular-spec-header">
+            <div class="popular-spec-icon" style="background:${bg};">${icon}</div>
+            <div class="popular-spec-meta">
+              <span class="popular-spec-name">${s.name}</span>
+              <span class="popular-spec-sub">${sub}</span>
+            </div>
+          </div>
+          <div class="popular-spec-cities"></div>
+        </div>`;
       }).join('');
     } catch(e) { console.warn('[popular specs]', e); }
   }
