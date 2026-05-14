@@ -319,11 +319,21 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .empty-sub{font-size:14px;color:var(--sub);line-height:1.7}
 
 /* Pagination */
-.pag{display:flex;align-items:center;justify-content:center;gap:6px;padding:1.75rem 0 .75rem}
-.pgb{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border);background:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--sub);transition:all .2s}
+.pag{display:flex;align-items:center;justify-content:center;gap:6px;padding:1.75rem 0 .75rem;flex-wrap:wrap}
+.pag #pgNums{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center}
+.pgb{width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--border);background:#fff;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--sub);transition:all .2s;cursor:pointer;flex-shrink:0}
 .pgb:hover{border-color:var(--brand);color:var(--brand)}
 .pgb.on{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 3px 10px rgba(40,56,151,.3)}
 .pgb:disabled{opacity:.3;cursor:default}
+.pg-ellipsis{display:inline-flex;align-items:center;color:#c7d2f5;padding:0 3px;font-size:14px;letter-spacing:2px}
+.load-more-wrap{display:flex;justify-content:center;padding:1.5rem 0 0}
+.load-more-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--brand);border:1.5px solid var(--border);padding:13px 26px;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(17,50,147,.04)}
+.load-more-btn:hover{border-color:var(--brand);background:var(--brand-light, #eef2ff);transform:translateY(-1px);box-shadow:0 6px 16px rgba(17,50,147,.1)}
+.load-more-btn:disabled{opacity:.5;cursor:default;transform:none}
+.load-more-btn svg{transition:transform .2s}
+.load-more-btn:hover svg{transform:translateY(2px)}
+.load-more-info{color:var(--sub);font-size:13px;text-align:center;margin-bottom:.5rem}
+.load-more-info strong{color:var(--brand);font-weight:700}
 
 /* ══════════════════════════════════════════
    PROFILE PANEL (slide-in)
@@ -462,28 +472,160 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="ni">
-    <a href="index.html" class="logo">
-      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><circle cx="14" cy="10" r="5.5" fill="white"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
-      <span class="logo-txt">Szakorvos<em>.hu</em></span>
+<!-- ══════════════════════════════════════════
+     EGYSÉGES MENÜ — minden oldalon ugyanez
+══════════════════════════════════════════ -->
+<style>
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
+nav#mainNav *{box-sizing:border-box}
+nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
+nav#mainNav .nav-links li{position:relative}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a:hover{background:#eef2ff}
+nav#mainNav .nav-links li>a svg{opacity:.6}
+nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
+nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
+nav#mainNav .dropdown a:hover{background:#eef2ff}
+nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
+.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
+.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
+.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
+.mobile-nav-item:hover{background:#eef2ff}
+.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
+@media(max-width:900px){
+  nav#mainNav .nav-links{display:none}
+  nav#mainNav .nav-actions{display:none}
+  nav#mainNav .nav-mobile-toggle{display:flex}
+}
+</style>
+
+<nav id="mainNav">
+  <div class="nav-row-top">
+    <a href="index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="white"/>
+          <circle cx="14" cy="10" r="5.5" fill="#113293"/>
+          <rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/>
+          <rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
     </a>
-    <div class="nav-srch" style="margin:0 1.25rem">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#b0bcd4" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="navSpec" class="ni-inp" placeholder="Szakterület, orvos neve…" style="max-width:200px">
-      <div class="nav-div"></div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b0bcd4" stroke-width="2" style="flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <input id="navCity" class="ni-inp" placeholder="Város…" style="max-width:115px">
-      <button class="srch-btn" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+
+    <ul class="nav-links">
+      <li>
+        <a href="talalatok.html">Orvosok
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html">Szakorvos</a>
+          <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
+          <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
+        </div>
+      </li>
+      <li>
+        <a href="klinikak.html">Klinikák
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="#">Magánklinikák</a>
+          <a href="#">Kórházak</a>
+          <a href="#">Rendelők</a>
+          <a href="#">Diagnosztikai központok</a>
+        </div>
+      </li>
+      <li><a href="tudastar.html">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html">Vizsgálatok</a></li>
+      <li>
+        <a href="#">Kapcsolat
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        </a>
+        <div class="dropdown">
+          <a href="#">Ügyfélszolgálat</a>
+          <a href="register.html">Orvosoknak</a>
+        </div>
+      </li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
+      <a href="register.html" class="btn-nav-cta">Legyen Ön is a partnerünk</a>
     </div>
-    <div class="nav-acts">
-      <a href="tudastar.html" style="font-size:13px;font-weight:600;color:#FF8A00;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s" onmouseover="this.style.background='#fff5f0'" onmouseout="this.style.background='transparent'">Tudástár A–Z</a>
-      <button class="btn-ghost">Bejelentkezés</button>
-      <button class="btn-pill">Regisztráció</button>
-    </div>
+
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
+      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
   </div>
 </nav>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="talalatok.html" class="mobile-nav-item">Orvosok</a>
+    <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Tudástár A–Z</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
+    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
+    <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
+    <a href="register.html" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
+  </div>
+</div>
+
+<script>
+function toggleMobileMenu(){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle'),i=document.getElementById('hamburgerIcon');
+  if(!d||!t||!i)return;
+  const o=d.classList.contains('open');
+  if(o){d.classList.remove('open');t.setAttribute('aria-expanded','false');i.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';document.body.style.overflow='';}
+  else{d.classList.add('open');t.setAttribute('aria-expanded','true');i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';document.body.style.overflow='hidden';}
+}
+document.addEventListener('click',function(e){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle');
+  if(!d||!t)return;
+  if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
+</script>
+
+<script>
+// Görgetés-érzékeny menü
+(function(){
+  var nav = document.getElementById('mainNav');
+  if(!nav) return;
+  function update(){
+    if(window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
+</script>
+<!-- ══════ MENÜ VÉGE ══════ -->
+
+
+<!-- NAV -->
+
 
 <!-- HERO -->
 <div class="hbar">
@@ -512,6 +654,29 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
     <input type="text" id="navCity" placeholder="Helyszín">
   </div>
   <button class="topbar-btn" onclick="doSearch()">Új keresés</button>
+</div>
+
+<!-- ── ORVOS / KLINIKA TOGGLE ── -->
+<style>
+.view-toggle{max-width:1400px;margin:0 auto;padding:0 3.5% 1.25rem;display:flex;justify-content:center}
+.view-toggle-inner{display:inline-flex;background:#fff;border:1px solid var(--border);border-radius:14px;padding:5px;gap:3px;box-shadow:0 2px 8px rgba(17,50,147,.05)}
+.view-toggle-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;border:none;background:transparent;color:var(--muted, #6b7a9a);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;text-decoration:none;white-space:nowrap}
+.view-toggle-btn:hover{color:var(--brand)}
+.view-toggle-btn.active{background:var(--brand, #113293);color:#fff;box-shadow:0 2px 8px rgba(17,50,147,.18)}
+.view-toggle-btn svg{flex-shrink:0}
+@media(max-width:520px){.view-toggle-btn{padding:9px 16px;font-size:13px}}
+</style>
+<div class="view-toggle">
+  <div class="view-toggle-inner" role="tablist" aria-label="Találat típus">
+    <button class="view-toggle-btn active" role="tab" aria-selected="true" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Orvosok
+    </button>
+    <a href="klinikak.html" class="view-toggle-btn" role="tab" aria-selected="false">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
+      Klinikák
+    </a>
+  </div>
 </div>
 
 
@@ -729,10 +894,20 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 
     <div id="resList"><div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div></div>
 
+    <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+      <div>
+        <div class="load-more-info" id="loadMoreInfo"></div>
+        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+          További találatok betöltése
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+
     <div class="pag" id="pagDiv" style="display:none">
-      <button class="pgb" id="pgPrev" onclick="changePg(-1)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="pgb" id="pgPrev" onclick="changePg(-1)" aria-label="Előző oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div id="pgNums"></div>
-      <button class="pgb" id="pgNext" onclick="changePg(1)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="pgb" id="pgNext" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
   </main>
 </div>
@@ -1031,12 +1206,22 @@ function starsH(r,sz=14){
 }
 
 function renderList(){
-  const tot=filtered.length,pgs=Math.ceil(tot/PGS),st=(curPg-1)*PGS,pg=filtered.slice(st,st+PGS);
+  const tot=filtered.length,pgs=Math.ceil(tot/PGS);
+  // Load-more módban: az 1. oldaltól a curPg oldalig minden mutatva van
+  // Sima pagination módban: csak az aktuális oldal
+  const st=0;
+  const end=Math.min(curPg*PGS, tot);
+  const pg=filtered.slice(st, end);
   document.getElementById('rcnt').innerHTML=`<span>${tot}</span> orvos találva`;
   const list=document.getElementById('resList');
   const sortMode=document.getElementById('sortSel').value;
   list.className=curView==='grid'?'rgrid':'';
-  if(!tot){list.innerHTML='<div class="empty-st"><div class="empty-icon">🔍</div><div class="empty-title">Nem találtunk orvost</div><div class="empty-sub">Próbáljon más szűrőkkel keresni.</div></div>';document.getElementById('pagDiv').style.display='none';return;}
+  if(!tot){
+    list.innerHTML='<div class="empty-st"><div class="empty-icon">🔍</div><div class="empty-title">Nem találtunk orvost</div><div class="empty-sub">Próbáljon más szűrőkkel keresni.</div></div>';
+    document.getElementById('pagDiv').style.display='none';
+    document.getElementById('loadMoreWrap').style.display='none';
+    return;
+  }
 
   if(sortMode==='specialty' && curView==='list'){
     // Szakterület szerinti csoportos megjelenítés
@@ -1061,15 +1246,29 @@ function renderList(){
     list.innerHTML=pg.map((d,i)=>cardH(d,st+i)).join('');
   }
 
-  // Pagination
+  // ─ Load More gomb ─ (csak ha van még hátra)
+  const loadMoreWrap=document.getElementById('loadMoreWrap');
+  const loadMoreInfo=document.getElementById('loadMoreInfo');
+  if(end < tot){
+    loadMoreWrap.style.display='flex';
+    const remaining = tot - end;
+    loadMoreInfo.innerHTML = `<strong>${end}</strong> / ${tot} orvos megjelenítve · még ${remaining} hátra`;
+  } else {
+    loadMoreWrap.style.display='none';
+  }
+
+  // ─ Pagination ─ (csak ha több mint 1 oldal van)
   if(pgs>1){
     document.getElementById('pagDiv').style.display='flex';
     document.getElementById('pgPrev').disabled=curPg===1;
     document.getElementById('pgNext').disabled=curPg===pgs;
     let h='';
     for(let p=1;p<=pgs;p++){
-      if(p===1||p===pgs||Math.abs(p-curPg)<=1) h+=`<button class="pgb${p===curPg?' on':''}" onclick="goPg(${p})">${p}</button>`;
-      else if(Math.abs(p-curPg)===2) h+=`<span style="color:#c7d2f5;padding:0 3px;align-self:center">…</span>`;
+      if(p===1||p===pgs||Math.abs(p-curPg)<=1) {
+        h+=`<button class="pgb${p===curPg?' on':''}" onclick="goPg(${p})">${p}</button>`;
+      } else if(Math.abs(p-curPg)===2) {
+        h+=`<span class="pg-ellipsis">…</span>`;
+      }
     }
     document.getElementById('pgNums').innerHTML=h;
   } else {document.getElementById('pagDiv').style.display='none';}
@@ -1202,8 +1401,29 @@ function buildDoctorUrl(d, fallbackId){
   return `/orvos/${d.slug || d.id || fallbackId}`;
 }
 function setView(v){curView=v;document.getElementById('btnList').classList.toggle('on',v==='list');document.getElementById('btnGrid').classList.toggle('on',v==='grid');renderList();}
-function goPg(p){curPg=p;renderList();scrollTo({top:0,behavior:'smooth'});}
-function changePg(d){goPg(curPg+d);}
+function goPg(p){
+  curPg=p;
+  renderList();
+  // Egyetlen page kattintásakor: tekerjünk a lista tetejére, hogy a felhasználó értse hogy lapozott
+  const list = document.getElementById('resList');
+  if(list){
+    const y = list.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({top:y, behavior:'smooth'});
+  }
+}
+function changePg(d){
+  const pgs=Math.ceil(filtered.length/PGS);
+  const newPg=Math.max(1, Math.min(pgs, curPg+d));
+  goPg(newPg);
+}
+function loadMore(){
+  // Több oldalnyi adat hozzáadása görgetés nélkül
+  const pgs=Math.ceil(filtered.length/PGS);
+  if(curPg < pgs){
+    curPg++;
+    renderList();
+  }
+}
 function doSearch(){specQ=document.getElementById('navSpec').value.trim();cityQ=document.getElementById('navCity').value.trim();updateHero();load();}
 document.getElementById('navSpec').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 document.getElementById('navCity').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
@@ -1357,5 +1577,6 @@ document.getElementById('priceFill').style.cssText='left:0;width:100%';
 
 load();
 </script>
+
 </body>
 </html>
