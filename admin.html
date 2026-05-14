@@ -645,9 +645,10 @@ select.td-select:focus{border-color:var(--brand)}
           <input class="form-input" id="sColor" placeholder="#fee2e2" style="flex:1" oninput="document.getElementById('sColorPicker').value=this.value">
         </div>
       </div>
-      <div class="form-group" style="flex:0 0 110px">
+      <div class="form-group" style="flex:0 0 140px">
         <label class="form-label">Orvosok száma</label>
-        <input class="form-input" id="sDoctorCount" type="number" placeholder="0" min="0">
+        <input class="form-input" id="sDoctorCount" type="number" placeholder="0" min="0" readonly style="background:var(--bg);cursor:not-allowed;color:var(--sub)">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Automatikusan számolva</div>
       </div>
       <div class="form-group" style="flex:0 0 100px">
         <label class="form-label">Sorrend</label>
@@ -895,6 +896,22 @@ async function loadSpecialties(){
     .select('id,name,slug,doctor_slug,icon,color,doctor_count,sort_order,is_active,description,license_text')
     .order('name',{ascending:true});
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek szakterületek</td></tr>';return;}
+
+  // Valós orvos-darabszám lekérdezése: aktív orvosok doctor_specialties join-nal
+  const counts = {};
+  try {
+    const { data: links } = await db
+      .from('doctor_specialties')
+      .select('specialty_id,doctors!inner(is_active)')
+      .eq('doctors.is_active', true);
+    (links || []).forEach(l => {
+      counts[l.specialty_id] = (counts[l.specialty_id] || 0) + 1;
+    });
+  } catch(e) { console.warn('[doctor count]', e); }
+
+  // Beírjuk a valós számokat
+  data.forEach(s => { s._realCount = counts[s.id] || 0; });
+
   tb.innerHTML=data.map((s,i)=>`<tr>
     <td style="text-align:center;color:var(--muted);font-size:12px;font-weight:700">${i+1}</td>
     <td style="font-size:20px;text-align:center">${esc(s.icon||'🩺')}</td>
@@ -905,7 +922,7 @@ async function loadSpecialties(){
       </div>
     </td>
     <td><code style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;color:var(--sub)">${esc(s.slug)}</code></td>
-    <td><span class="badge badge-blue">${esc((s.doctor_count||0).toLocaleString('hu'))} orvos</span></td>
+    <td><span class="badge badge-blue">${s._realCount.toLocaleString('hu')} orvos</span></td>
     <td><span class="badge ${s.is_active!==false?'badge-green':'badge-red'}">${s.is_active!==false?'Aktív':'Inaktív'}</span></td>
     <td><div class="act-row">
       <button class="btn btn-ghost btn-sm" onclick="openEditSpec(${JSON.stringify(s).replace(/"/g,'&quot;')})">
@@ -938,7 +955,7 @@ function openEditSpec(s){
   document.getElementById('sDoctorSlug').value=s.doctor_slug||'';
   document.getElementById('sColor').value=s.color||'';
   document.getElementById('sColorPicker').value=s.color||'#e0f2fe';
-  document.getElementById('sDoctorCount').value=s.doctor_count||0;
+  document.getElementById('sDoctorCount').value=(s._realCount!=null ? s._realCount : (s.doctor_count||0));
   document.getElementById('sSortOrder').value=s.sort_order||99;
   document.getElementById('sIsActive').value=s.is_active!==false?'true':'false';
   document.getElementById('sDescription').value=s.description||'';
@@ -954,12 +971,26 @@ async function saveSpecialty(){
   const slug=document.getElementById('sSlug').value.trim();
   if(!name){alert('A szakterület neve kötelező!');return;}
   if(!slug){alert('A slug megadása kötelező!');return;}
+
+  // Valós orvos-darabszám lekérdezése
+  let realCount = 0;
+  if(id){
+    try {
+      const { data: links } = await db
+        .from('doctor_specialties')
+        .select('doctor_id,doctors!inner(is_active)')
+        .eq('specialty_id', id)
+        .eq('doctors.is_active', true);
+      realCount = (links || []).length;
+    } catch(e) { console.warn('[count]', e); }
+  }
+
   const payload={
     name,slug,
     doctor_slug:document.getElementById('sDoctorSlug').value.trim()||null,
     icon:document.getElementById('sIcon').value.trim()||'🩺',
     color:document.getElementById('sColor').value.trim()||'#e0f2fe',
-    doctor_count:parseInt(document.getElementById('sDoctorCount').value)||0,
+    doctor_count:realCount,
     sort_order:parseInt(document.getElementById('sSortOrder').value)||99,
     is_active:document.getElementById('sIsActive').value==='true',
     description:document.getElementById('sDescription').value.trim()||null,
