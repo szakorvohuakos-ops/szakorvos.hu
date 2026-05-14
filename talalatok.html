@@ -1111,7 +1111,7 @@ function toPluralHu(spec){
 
 /* ═════ LOAD ═════ */
 async function load(){
-  console.log('[Szakorvos.hu] talalatok.html — verzió 2026-05-13 (slug fix + kétlépcsős fallback)');
+  console.log('[Szakorvos.hu] talalatok.html — verzió 2026-05-14 (doctor_name)');
   document.getElementById('resList').innerHTML='<div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div>';
   document.getElementById('pagDiv').style.display='none';
 
@@ -1367,64 +1367,16 @@ function renderList(){
 }
 
 function specToTitle(s, doctorName){
-  // 1. Ha admin írta doctor_name, azt használjuk pontosan
+  // CSAK az admin által beírt doctor_name jelenik meg
   if(doctorName && doctorName.trim()) return doctorName.trim();
-  // 2. Fallback: hard-coded map
-  if(!s) return 'Szakorvos';
-  const map={
-    'Bőrgyógyászat':'Bőrgyógyász szakorvos',
-    'Belgyógyászat':'Belgyógyász szakorvos',
-    'Nőgyógyászat':'Nőgyógyász szakorvos',
-    'Szülészet-nőgyógyászat':'Szülész-nőgyógyász szakorvos',
-    'Gyermekgyógyászat':'Gyermekgyógyász szakorvos',
-    'Sebészet':'Sebész szakorvos',
-    'Idegsebészet':'Idegsebész szakorvos',
-    'Plasztikai sebészet':'Plasztikai sebész szakorvos',
-    'Érsebészet':'Érsebész szakorvos',
-    'Szívsebészet':'Szívsebész szakorvos',
-    'Mellkassebészet':'Mellkassebész szakorvos',
-    'Szájsebészet':'Szájsebész szakorvos',
-    'Fogászat':'Fogorvos',
-    'Fogszabályozás':'Fogszabályozó szakorvos',
-    'Szemészet':'Szemész szakorvos',
-    'Fül-orr-gégészet':'Fül-orr-gégész szakorvos',
-    'Ortopédia':'Ortopéd szakorvos',
-    'Traumatológia':'Traumatológus szakorvos',
-    'Reumatológia':'Reumatológus szakorvos',
-    'Kardiológia':'Kardiológus szakorvos',
-    'Neurológia':'Neurológus szakorvos',
-    'Pszichiátria':'Pszichiáter szakorvos',
-    'Pszichológia':'Pszichológus',
-    'Urológia':'Urológus szakorvos',
-    'Onkológia':'Onkológus szakorvos',
-    'Endokrinológia':'Endokrinológus szakorvos',
-    'Gasztroenterológia':'Gasztroenterológus szakorvos',
-    'Hematológia':'Hematológus szakorvos',
-    'Nefrológia':'Nefrológus szakorvos',
-    'Pulmonológia':'Pulmonológus szakorvos',
-    'Radiológia':'Radiológus szakorvos',
-    'Aneszteziológia':'Aneszteziológus szakorvos',
-    'Allergológia':'Allergológus szakorvos',
-    'Immunológia':'Immunológus szakorvos',
-    'Infektológia':'Infektológus szakorvos',
-    'Háziorvos':'Háziorvos',
-    'Háziorvoslás':'Háziorvos',
-    'Üzemorvoslás':'Üzemorvos',
-    'Sportorvoslás':'Sportorvos'
-  };
-  if(map[s]) return map[s];
-  // Automatikus szabályalapú konverzió
-  if(/gyógyászat$/i.test(s)) return s.replace(/gyógyászat$/i,'gyógyász')+' szakorvos';
-  if(/lógia$/i.test(s)) return s.replace(/lógia$/i,'lógus')+' szakorvos';
-  if(/iátria$/i.test(s)) return s.replace(/iátria$/i,'iáter')+' szakorvos';
-  if(/észet$/i.test(s)) return s.replace(/észet$/i,'ész')+' szakorvos';
-  if(/pédia$/i.test(s)) return s.replace(/pédia$/i,'péd')+' szakorvos';
-  return s+' szakorvos';
+  // Ha nincs, csak a szakterület nevét adjuk vissza (suffix nélkül)
+  return s || 'Szakorvos';
 }
 
 function cardH(d,i){
   const specRaw=d.doctor_specialties?.[0]?.specialties?.name||'';
   const specDocName=d.doctor_specialties?.[0]?.specialties?.doctor_name||'';
+  if(i===0) console.log('[cardH debug] specRaw:', specRaw, '| doctor_name:', specDocName);
   const spec=specToTitle(specRaw, specDocName),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
