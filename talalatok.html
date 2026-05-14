@@ -1194,7 +1194,7 @@ async function load(){
   // hiányzik a specialties táblából, vagy más mező hiányzik), automatikusan
   // egy minimális query-re fallback-elünk, ami biztosan működik.
 
-  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
   const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
