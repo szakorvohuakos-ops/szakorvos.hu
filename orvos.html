@@ -454,7 +454,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
-          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html?specialty=Háziorvos">Háziorvos</a>
           <a href="talalatok.html">Szakorvos</a>
           <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
           <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
@@ -888,7 +888,77 @@ function formatPatientCount(n){
   if(n < 10000) return (Math.floor(n / 50) * 50).toLocaleString('hu-HU') + '+';
   return Math.floor(n / 1000) + 'k+';
 }
-function specToTitle(s){
+function slugToHu(slug){
+  if(!slug) return '';
+  // Pontos slug → ékezetes magyar label térkép (a leggyakoribb orvosi slug-ok)
+  const exact = {
+    'borgyogyasz':'Bőrgyógyász',
+    'haziorvos':'Háziorvos',
+    'kardiologus':'Kardiológus',
+    'neurologus':'Neurológus',
+    'pszichiater':'Pszichiáter',
+    'pszichologus':'Pszichológus',
+    'fogorvos':'Fogorvos',
+    'fogszakorvos':'Fogszakorvos',
+    'fogasz':'Fogász',
+    'szemesz':'Szemész',
+    'fulorrgegesz':'Fül-orr-gégész',
+    'fulorrgegész':'Fül-orr-gégész',
+    'ful-orr-gegesz':'Fül-orr-gégész',
+    'urologus':'Urológus',
+    'nogyogyasz':'Nőgyógyász',
+    'belgyogyasz':'Belgyógyász',
+    'gyermekgyogyasz':'Gyermekgyógyász',
+    'ortoped':'Ortopéd',
+    'ortopedus':'Ortopéd',
+    'radiologus':'Radiológus',
+    'sebesz':'Sebész',
+    'onkologus':'Onkológus',
+    'allergologus':'Allergológus',
+    'reumatologus':'Reumatológus',
+    'endokrinologus':'Endokrinológus',
+    'gasztroenterologus':'Gasztroenterológus',
+    'hematologus':'Hematológus',
+    'pulmonologus':'Pulmonológus',
+    'nefrologus':'Nefrológus',
+    'angiologus':'Angiológus',
+    'aneszteziologus':'Aneszteziológus',
+    'andrologus':'Andrológus',
+    'foniater':'Foniáter',
+    'genetikus':'Genetikus',
+    'patologus':'Patológus',
+    'szuleszetnogyogyasz':'Szülész-nőgyógyász',
+    'plasztikai-sebesz':'Plasztikai sebész',
+    'idegsebesz':'Idegsebész',
+    'szivsebesz':'Szívsebész',
+    'erseebesz':'Érsebész',
+    'gyermeksebesz':'Gyermeksebész',
+    'altalanos-orvos':'Általános orvos'
+  };
+  if(exact[slug.toLowerCase()]) return exact[slug.toLowerCase()];
+  // Fallback: végződés-alapú dekódolás
+  let s = slug.toLowerCase();
+  // Általános magánhangzó visszaalakítások (csak az -ász/-ész/-ógus/-iáter végződésekre)
+  s = s.replace(/logus$/,'lógus')
+       .replace(/iater$/,'iáter')
+       .replace(/sz$/,'sz')
+       .replace(/gyogyasz$/,'gyógyász')
+       .replace(/sebesz$/,'sebész')
+       .replace(/peed$/,'péd')
+       .replace(/oped$/,'opéd');
+  // Első betű nagy
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function specToTitle(s, doctorSlug, doctorName){
+  // 1. Ha van doctor_name (admin által írt pontos label), azt használjuk
+  if(doctorName && doctorName.trim()) return doctorName.trim();
+  // 2. Ha van doctor_slug, használjuk azt ékezetesítve
+  if(doctorSlug){
+    const label = slugToHu(doctorSlug);
+    if(label) return label + ' szakorvos';
+  }
+  // 3. Fallback: szakterület név regex-szel
   if(!s) return 'Szakorvos';
   if(/lógia$/i.test(s)) return s.replace(/lógia$/i,'lógus') + ' szakorvos';
   if(/iátria$/i.test(s)) return s.replace(/iátria$/i,'iáter') + ' szakorvos';
@@ -952,12 +1022,12 @@ async function load(){
     // Részletes query — minden lehetséges mező. Ha valamelyik nem létezik
     // a DB-ben, automatikusan minimális query-re fallback-elünk.
     const fullSelect = `*,
-        doctor_specialties(is_primary,specialties(name,doctor_slug)),
+        doctor_specialties(is_primary,specialties(name,doctor_slug,doctor_name)),
         doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,cities(name))),
         doctor_insurances(insurance_types(name)),
         availability(day_of_week,start_time,end_time)`;
     const minimalSelect = `*,
-        doctor_specialties(is_primary,specialties(name,doctor_slug)),
+        doctor_specialties(is_primary,specialties(name,doctor_slug,doctor_name)),
         doctor_clinics(consultation_fee,clinics(name,address,phone,email,cities(name))),
         availability(day_of_week,start_time,end_time)`;
 
@@ -1038,7 +1108,9 @@ async function load(){
 function render(d){
   const fullName = d.name;
   const specRaw = d.doctor_specialties?.[0]?.specialties?.name || '';
-  const specTitled = specToTitle(specRaw);
+  const docSlug = d.doctor_specialties?.[0]?.specialties?.doctor_slug || '';
+  const docName = d.doctor_specialties?.[0]?.specialties?.doctor_name || '';
+  const specTitled = specToTitle(specRaw, docSlug, docName);
   const allSpecs = (d.doctor_specialties || []).map(s => s.specialties?.name).filter(Boolean);
   const clinic = d.doctor_clinics?.[0]?.clinics;
   const city = clinic?.cities?.name || '';
@@ -1504,7 +1576,7 @@ async function loadSimilar(d){
   try{
     const spec = d.doctor_specialties?.[0]?.specialty_id;
     let q = db.from('doctors')
-      .select(`id,name,title,rating,review_count,photo_url,doctor_specialties!inner(specialty_id,specialties(name)),doctor_clinics(consultation_fee,clinics(cities(name)))`)
+      .select(`id,name,title,rating,review_count,photo_url,doctor_specialties!inner(specialty_id,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(cities(name)))`)
       .eq('is_active', true)
       .neq('id', d.id);
     if(spec) q = q.eq('doctor_specialties.specialty_id', spec);
@@ -1520,6 +1592,8 @@ async function loadSimilar(d){
 }
 function simCard(s){
   const spec = s.doctor_specialties?.[0]?.specialties?.name || 'Szakorvos';
+  const specSlug = s.doctor_specialties?.[0]?.specialties?.doctor_slug || '';
+  const specName = s.doctor_specialties?.[0]?.specialties?.doctor_name || '';
   const city = s.doctor_clinics?.[0]?.clinics?.cities?.name || '–';
   const fee  = s.doctor_clinics?.[0]?.consultation_fee || 0;
   const rat  = parseFloat(s.rating) || 0;
@@ -1531,7 +1605,7 @@ function simCard(s){
       ${s.photo_url ? `<img src="${escapeHtml(s.photo_url)}" alt="${escapeHtml(s.name)}">` : `<div class="sim-av">${escapeHtml(init)}</div>`}
     </div>
     <div class="sim-name">${escapeHtml(s.name)}</div>
-    <div class="sim-spec">${escapeHtml(specToTitle(spec))}</div>
+    <div class="sim-spec">${escapeHtml(specToTitle(spec, specSlug, specName))}</div>
     ${rat ? `<div class="sim-rating"><span class="star">★</span> <strong>${rat.toFixed(1)}</strong> <span>(${reviews})</span></div>` : ''}
     <div class="sim-loc">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
