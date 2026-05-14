@@ -1015,6 +1015,98 @@ function updateHero(){
   const cityLabel = cityQ ? ` – ${escapeHtml(cityQ)}` : '';
   document.getElementById('hsubQuery').innerHTML = queryLabel + cityLabel + ' keresésre';
   document.getElementById('crumb2').textContent = specQ || 'Találatok';
+
+  // ═══ SEO h1 + title + meta description ═══
+  const h1El = document.querySelector('.htitle');
+  if(h1El){
+    if(specQ && cityQ){
+      // Kardiológusok Győrben
+      h1El.innerHTML = `${escapeHtml(specQ)} <b>${escapeHtml(cityQ + 'ben')}</b>`;
+      // Magyar locativusos végződés egyszerű heurisztikával
+      h1El.innerHTML = `${escapeHtml(toPluralHu(specQ))} <b>${escapeHtml(toLocativeHu(cityQ))}</b>`;
+    } else if(specQ){
+      h1El.innerHTML = `${escapeHtml(toPluralHu(specQ))} <b>Magyarországon</b>`;
+    } else if(cityQ){
+      h1El.innerHTML = `Szakorvosok <b>${escapeHtml(toLocativeHu(cityQ))}</b>`;
+    } else {
+      h1El.innerHTML = 'Orvos keresési <b>találatok</b>';
+    }
+  }
+
+  // Dokumentum címe (browser tab + SEO)
+  if(specQ && cityQ){
+    document.title = `${toPluralHu(specQ)} ${toLocativeHu(cityQ)} | Szakorvos.hu`;
+  } else if(specQ){
+    document.title = `${toPluralHu(specQ)} – találatok | Szakorvos.hu`;
+  } else if(cityQ){
+    document.title = `Szakorvosok ${toLocativeHu(cityQ)} | Szakorvos.hu`;
+  } else {
+    document.title = 'Szakorvos kereső – Találatok | Szakorvos.hu';
+  }
+
+  // Meta description
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if(metaDesc){
+    if(specQ && cityQ){
+      metaDesc.setAttribute('content', `Találja meg a legjobb ${toPluralHu(specQ).toLowerCase()} ${toLocativeHu(cityQ)}. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
+    } else if(specQ){
+      metaDesc.setAttribute('content', `${toPluralHu(specQ)} egész Magyarországon. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
+    } else if(cityQ){
+      metaDesc.setAttribute('content', `Szakorvosok ${toLocativeHu(cityQ)}. Találja meg a legjobb orvosokat, értékelések és online időpontfoglalás.`);
+    }
+  }
+}
+
+/* ═ Magyar nyelvi heurisztikák a SEO h1-hez ═ */
+function toLocativeHu(city){
+  // Egyszerű ban/ben suffix az alsó-magán-/felső-magán hangrend alapján
+  if(!city) return '';
+  const c = city.trim();
+  // Speciális esetek (kivételek)
+  const special = {
+    'Győr':'Győrben','Pécs':'Pécsen','Szeged':'Szegeden','Debrecen':'Debrecenben',
+    'Miskolc':'Miskolcon','Sopron':'Sopronban','Eger':'Egerben','Veszprém':'Veszprémben',
+    'Budapest':'Budapesten','Kecskemét':'Kecskeméten','Székesfehérvár':'Székesfehérváron',
+    'Szombathely':'Szombathelyen','Nyíregyháza':'Nyíregyházán','Kaposvár':'Kaposváron',
+    'Tatabánya':'Tatabányán','Békéscsaba':'Békéscsabán','Érd':'Érden','Szolnok':'Szolnokon',
+    'Zalaegerszeg':'Zalaegerszegen','Dunaújváros':'Dunaújvárosban','Hódmezővásárhely':'Hódmezővásárhelyen',
+    'Salgótarján':'Salgótarjánban','Eszerg':'Esztergomban','Esztergom':'Esztergomban'
+  };
+  if(special[c]) return special[c];
+  // Egyszerű fallback: mély hangrend → -ban, magas → -ben
+  const lower = c.toLowerCase();
+  const hasBackVowel = /[aáoóuú]/.test(lower);
+  const hasFrontVowel = /[eéiíöőüű]/.test(lower);
+  const backCount = (lower.match(/[aáoóuú]/g)||[]).length;
+  const frontCount = (lower.match(/[eéiíöőüű]/g)||[]).length;
+  // Utolsó magánhangzó dönt
+  const lastVowelMatch = lower.match(/[aáeéiíoóöőuúüű](?=[^aáeéiíoóöőuúüű]*$)/);
+  const useBack = lastVowelMatch ? /[aáoóuú]/.test(lastVowelMatch[0]) : (backCount >= frontCount);
+  return c + (useBack ? '-ban' : '-ben');
+}
+
+function toPluralHu(spec){
+  // Szakterület többes szám: végződés alapján egyszerű heurisztika
+  if(!spec) return '';
+  const s = spec.trim();
+  if(/(ok|ek|ök|ak)$/.test(s.toLowerCase())) return s; // már többes szám
+  // Egyszerű utótag: ász/ész → -ok / -ek
+  const map = [
+    [/ász$/, 'ászok'],[/ész$/, 'észek'],
+    [/órus$/, 'órusok'],[/órus$/, 'órusok'],
+    [/orvos$/, 'orvosok'],
+    [/ógus$/, 'ógusok'],[/égész$/, 'égészek'],
+    [/áter$/, 'áterek'],[/áter$/, 'áterek'],
+    [/úr$/, 'úrok']
+  ];
+  for(const [re,suf] of map){
+    if(re.test(s.toLowerCase())) return s.replace(re,suf);
+  }
+  // Fallback: utolsó magánhangzó alapján
+  const lower = s.toLowerCase();
+  const lastVowel = lower.match(/[aáeéiíoóöőuúüű](?=[^aáeéiíoóöőuúüű]*$)/);
+  const useBack = lastVowel ? /[aáoóuú]/.test(lastVowel[0]) : true;
+  return s + (useBack ? 'ok' : 'ek');
 }
 
 /* ═════ LOAD ═════ */
