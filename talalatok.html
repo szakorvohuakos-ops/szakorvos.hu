@@ -1010,22 +1010,35 @@ document.getElementById('navCity').value=cityQ;
 updateHero();
 
 /* ═════ HERO ═════ */
-function updateHero(){
+async function updateHero(){
   const queryLabel = specQ ? `„${escapeHtml(specQ)}"` : 'Összes szakterület';
   const cityLabel = cityQ ? ` – ${escapeHtml(cityQ)}` : '';
   document.getElementById('hsubQuery').innerHTML = queryLabel + cityLabel + ' keresésre';
   document.getElementById('crumb2').textContent = specQ || 'Találatok';
 
+  // ═══ Doctor name lekérdezése a szakterület alapján ═══
+  let doctorName = '';
+  if(specQ){
+    try {
+      const { data } = await db
+        .from('specialties')
+        .select('doctor_name')
+        .eq('name', specQ)
+        .maybeSingle();
+      if(data && data.doctor_name) doctorName = data.doctor_name;
+    } catch(e) { console.warn('[updateHero] doctor_name lekérés:', e); }
+  }
+  // Pluralizált doctor_name (pl. "Kardiológus" → "Kardiológusok")
+  const docLabel = doctorName ? toPluralHu(doctorName) : (specQ ? toPluralHu(specQ) : '');
+
   // ═══ SEO h1 + title + meta description ═══
   const h1El = document.querySelector('.htitle');
   if(h1El){
-    if(specQ && cityQ){
+    if(docLabel && cityQ){
       // Kardiológusok Győrben
-      h1El.innerHTML = `${escapeHtml(specQ)} <b>${escapeHtml(cityQ + 'ben')}</b>`;
-      // Magyar locativusos végződés egyszerű heurisztikával
-      h1El.innerHTML = `${escapeHtml(toPluralHu(specQ))} <b>${escapeHtml(toLocativeHu(cityQ))}</b>`;
-    } else if(specQ){
-      h1El.innerHTML = `${escapeHtml(toPluralHu(specQ))} <b>Magyarországon</b>`;
+      h1El.innerHTML = `${escapeHtml(docLabel)} <b>${escapeHtml(toLocativeHu(cityQ))}</b>`;
+    } else if(docLabel){
+      h1El.innerHTML = `${escapeHtml(docLabel)} <b>Magyarországon</b>`;
     } else if(cityQ){
       h1El.innerHTML = `Szakorvosok <b>${escapeHtml(toLocativeHu(cityQ))}</b>`;
     } else {
@@ -1034,10 +1047,10 @@ function updateHero(){
   }
 
   // Dokumentum címe (browser tab + SEO)
-  if(specQ && cityQ){
-    document.title = `${toPluralHu(specQ)} ${toLocativeHu(cityQ)} | Szakorvos.hu`;
-  } else if(specQ){
-    document.title = `${toPluralHu(specQ)} – találatok | Szakorvos.hu`;
+  if(docLabel && cityQ){
+    document.title = `${docLabel} ${toLocativeHu(cityQ)} | Szakorvos.hu`;
+  } else if(docLabel){
+    document.title = `${docLabel} – találatok | Szakorvos.hu`;
   } else if(cityQ){
     document.title = `Szakorvosok ${toLocativeHu(cityQ)} | Szakorvos.hu`;
   } else {
@@ -1047,10 +1060,10 @@ function updateHero(){
   // Meta description
   const metaDesc = document.querySelector('meta[name="description"]');
   if(metaDesc){
-    if(specQ && cityQ){
-      metaDesc.setAttribute('content', `Találja meg a legjobb ${toPluralHu(specQ).toLowerCase()} ${toLocativeHu(cityQ)}. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
-    } else if(specQ){
-      metaDesc.setAttribute('content', `${toPluralHu(specQ)} egész Magyarországon. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
+    if(docLabel && cityQ){
+      metaDesc.setAttribute('content', `Találja meg a legjobb ${docLabel.toLowerCase()} ${toLocativeHu(cityQ)}. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
+    } else if(docLabel){
+      metaDesc.setAttribute('content', `${docLabel} egész Magyarországon. Értékelések, elérhetőség, online időpontfoglalás a Szakorvos.hu-n.`);
     } else if(cityQ){
       metaDesc.setAttribute('content', `Szakorvosok ${toLocativeHu(cityQ)}. Találja meg a legjobb orvosokat, értékelések és online időpontfoglalás.`);
     }
@@ -1366,18 +1379,56 @@ function renderList(){
   } else {document.getElementById('pagDiv').style.display='none';}
 }
 
-function specToTitle(s, doctorName){
-  // CSAK az admin által beírt doctor_name jelenik meg
+// slug → ékezetes magyar megnevezés (pl. "gasztroenterologus" → "Gasztroenterológus")
+function slugToHu(slug){
+  if(!slug) return '';
+  const map={
+    'gasztroenterologus':'Gasztroenterológus','kardiologus':'Kardiológus',
+    'neurologus':'Neurológus','urologus':'Urológus','onkologus':'Onkológus',
+    'endokrinologus':'Endokrinológus','hematologus':'Hematológus',
+    'nefrologus':'Nefrológus','pulmonologus':'Pulmonológus','radiologus':'Radiológus',
+    'aneszteziologus':'Aneszteziológus','allergologus':'Allergológus',
+    'immunologus':'Immunológus','infektologus':'Infektológus',
+    'traumatologus':'Traumatológus','reumatologus':'Reumatológus',
+    'pszichiater':'Pszichiáter','pszichologus':'Pszichológus',
+    'borgyogyasz':'Bőrgyógyász','belgyogyasz':'Belgyógyász',
+    'nogyogyasz':'Nőgyógyász','szulesz-nogyogyasz':'Szülész-nőgyógyász',
+    'gyermekgyogyasz':'Gyermekgyógyász','sebesz':'Sebész',
+    'idegsebesz':'Idegsebész','plasztikai-sebesz':'Plasztikai sebész',
+    'ersebesz':'Érsebész','szivsebesz':'Szívsebész',
+    'mellkassebesz':'Mellkassebész','szajsebesz':'Szájsebész',
+    'fogorvos':'Fogorvos','fogszabalyozo':'Fogszabályozó',
+    'szemesz':'Szemész','ful-orr-gegesz':'Fül-orr-gégész',
+    'ortopod':'Ortopéd','haziorvos':'Háziorvos',
+    'uzemorvos':'Üzemorvos','sportorvos':'Sportorvos'
+  };
+  return map[slug.toLowerCase()] || '';
+}
+
+function specToTitle(s, doctorName, doctorSlug){
+  // 1. Admin által beírt doctor_name elsőbbséget élvez
   if(doctorName && doctorName.trim()) return doctorName.trim();
-  // Ha nincs, csak a szakterület nevét adjuk vissza (suffix nélkül)
-  return s || 'Szakorvos';
+  // 2. doctor_slug-ból ékezetes magyar
+  if(doctorSlug){
+    const label = slugToHu(doctorSlug);
+    if(label) return label;
+  }
+  // 3. Regex-szel a szakterület névből (pl. "Gasztroenterológia" → "Gasztroenterológus")
+  if(!s) return 'Szakorvos';
+  if(/lógia$/i.test(s)) return s.replace(/lógia$/i,'lógus');
+  if(/iátria$/i.test(s)) return s.replace(/iátria$/i,'iáter');
+  if(/észet$/i.test(s)) return s.replace(/észet$/i,'ész');
+  if(/gyógyászat$/i.test(s)) return s.replace(/gyógyászat$/i,'gyógyász');
+  if(/pédia$/i.test(s)) return s.replace(/pédia$/i,'péd');
+  if(/orvoslás$/i.test(s)) return s.replace(/orvoslás$/i,'orvos');
+  return s;
 }
 
 function cardH(d,i){
   const specRaw=d.doctor_specialties?.[0]?.specialties?.name||'';
   const specDocName=d.doctor_specialties?.[0]?.specialties?.doctor_name||'';
-  if(i===0) console.log('[cardH debug] specRaw:', specRaw, '| doctor_name:', specDocName);
-  const spec=specToTitle(specRaw, specDocName),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
+  const specDocSlug=d.doctor_specialties?.[0]?.specialties?.doctor_slug||'';
+  const spec=specToTitle(specRaw, specDocName, specDocSlug),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
   const tags=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
