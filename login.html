@@ -1,123 +1,400 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta name="theme-color" content="#113293">
-  <link rel="canonical" href="https://www.szakorvos.hu/login.html">
-  <meta name="description" content="Lépjen be Szakorvos.hu fiókjába. Időpontok, kedvencek és személyre szabott ajánlások.">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Szakorvos.hu">
-  <meta property="og:title" content="Bejelentkezés | Szakorvos.hu">
-  <meta property="og:description" content="Lépjen be Szakorvos.hu fiókjába. Időpontok, kedvencek és személyre szabott ajánlások.">
-  <meta property="og:image" content="https://www.szakorvos.hu/og?type=logo">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://www.szakorvos.hu/login.html">
-  <meta property="og:locale" content="hu_HU">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Bejelentkezés | Szakorvos.hu">
-  <meta name="twitter:description" content="Lépjen be Szakorvos.hu fiókjába. Időpontok, kedvencek és személyre szabott ajánlások.">
-  <meta name="twitter:image" content="https://www.szakorvos.hu/og?type=logo">
-  <link rel="alternate" hreflang="hu" href="https://www.szakorvos.hu/login.html">
-  <link rel="alternate" hreflang="x-default" href="https://www.szakorvos.hu/login.html">
-  <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bejelentkezés | Szakorvos.hu</title>
+<title>Bejelentkezés – Szakorvos.hu</title>
+<meta name="description" content="Lépjen be Szakorvos.hu fiókjába és kezelje időpontfoglalásait, kedvenc orvosait és értékeléseit.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://www.szakorvos.hu/login">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', sans-serif;
-  background: #F4F6F8;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+:root{
+  --brand:#113293;
+  --brand-2:#264ACA;
+  --navy:#0c2370;
+  --brand-light:#eef2ff;
+  --green:#2C9650;
+  --green-2:#35B26B;
+  --orange:#FF8A00;
+  --orange-2:#FFA726;
+  --orange-soft:#FFF1E8;
+  --bg:#F4F6F8;
+  --surface:#fff;
+  --border:#DCE3EA;
+  --border-soft:#e8eef5;
+  --text:#113293;
+  --sub:#475569;
+  --muted:#94a3b8;
+  --red:#dc2626;
+  --red-soft:#fee2e2;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-green:linear-gradient(135deg,#2C9650 0%,#35B26B 100%);
+  --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
 }
-.card {
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 8px 48px rgba(17,50,147,0.12);
-  width: 100%;
-  max-width: 420px;
-  padding: 2.5rem 2rem;
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  margin:0;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  display:flex;
+  flex-direction:column;
 }
-.logo {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px; margin-bottom: 2rem; text-decoration: none;
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+
+/* ═══════════ AUTH SECTION ═══════════ */
+.auth-section{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:3rem 1.5rem 4rem;
+  position:relative;
+  overflow:hidden;
 }
-.logo-icon {
-  width: 44px; height: 44px;
-  background: linear-gradient(135deg,#113293,#264ACA);
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 14px rgba(17,50,147,0.3);
+/* Háttér mintázat */
+.auth-section::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(38,74,202,.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(44,150,80,.06) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(255,138,0,.04) 0%, transparent 60%);
+  pointer-events:none;
+  z-index:0;
 }
-.logo-text { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; }
-.logo-text em { color: #FF8A00; font-style: normal; }
-.heading { text-align: center; margin-bottom: 2rem; }
-.heading h1 { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; margin-bottom: 6px; }
-.heading p { font-size: 14px; color: #475569; line-height: 1.6; }
-.form-group { margin-bottom: 1rem; }
-label { display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-.input-wrap { position: relative; }
-.input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
-input[type=email], input[type=password], input[type=text] {
-  width: 100%; border: 1.5px solid #DCE3EA; border-radius: 12px;
-  padding: 12px 14px 12px 44px; font-size: 15px;
-  font-family: 'Inter', sans-serif; color: #113293;
-  outline: none; background: #fff; transition: border-color .2s, box-shadow .2s;
+
+.auth-card{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:980px;
+  background:#fff;
+  border-radius:24px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,1) inset,
+    0 4px 16px rgba(17,50,147,.06),
+    0 24px 60px rgba(17,50,147,.12);
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  min-height:580px;
 }
-input:focus { border-color: #113293; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
-.pw-toggle {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer; color: #94a3b8; padding: 4px; transition: color .2s;
+
+/* ─── BAL: brand panel ─── */
+.auth-brand{
+  background:linear-gradient(135deg,#0c2370 0%,#113293 50%,#264ACA 100%);
+  color:#fff;
+  padding:3rem 2.5rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  overflow:hidden;
 }
-.pw-toggle:hover { color: #113293; }
-.form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-.remember { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #475569; cursor: pointer; user-select: none; }
-.remember input { accent-color: #113293; width: 15px; height: 15px; cursor: pointer; }
-.forgot { font-size: 13px; font-weight: 600; color: #113293; text-decoration: none; transition: color .2s; }
-.forgot:hover { color: #FF8A00; }
-.btn-submit {
-  width: 100%; background: linear-gradient(135deg,#113293,#264ACA);
-  color: #fff; border: none; border-radius: 12px; padding: 14px;
-  font-family: 'Inter', sans-serif; font-size: 15px; font-weight:700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 18px rgba(17,50,147,0.3); transition: all .2s;
+.auth-brand::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 80% 0%, rgba(255,255,255,.15) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(44,150,80,.18) 0%, transparent 55%);
+  pointer-events:none;
 }
-.btn-submit:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(17,50,147,0.35); }
-.btn-submit:active { transform: none; }
-.btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-.msg {
-  border-radius: 11px; padding: .85rem 1rem; font-size: 13.5px; font-weight: 600;
-  display: none; align-items: center; gap: 9px; margin-bottom: 1rem;
-  animation: msgIn .2s ease;
+.auth-brand-top,
+.auth-brand-mid,
+.auth-brand-bot{position:relative;z-index:1}
+
+.auth-brand-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:.5rem;
 }
-@keyframes msgIn { from { opacity:0; transform:translateY(-4px) } to { opacity:1; transform:none } }
-.msg.show { display: flex; }
-.msg-error { background: #fee2e2; border: 1.5px solid #fca5a5; color: #b91c1c; }
-.msg-success { background: #ecfdf5; border: 1.5px solid #c8e8d2; color: #065f46; }
-.divider { display: flex; align-items: center; gap: 12px; margin: 1.25rem 0; color: #94a3b8; font-size: 12px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #DCE3EA; }
-.btn-google {
-  width: 100%; background: #fff; color: #113293; border: 1.5px solid #DCE3EA;
-  border-radius: 12px; padding: 12px; font-family: 'Inter', sans-serif;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 9px; transition: all .2s;
+.auth-brand-logo-icon{
+  width:48px;height:48px;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:13px;
+  display:flex;align-items:center;justify-content:center;
 }
-.btn-google:hover { border-color: #113293; background: #f8faff; }
-.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg) } }
-.back-link {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  margin-top: 1.5rem; font-size: 13px; color: #94a3b8; text-decoration: none; transition: color .2s;
+.auth-brand-logo-text{
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:-0.02em;
 }
-.back-link:hover { color: #113293; }
-@media (max-width: 480px) { .card { padding: 2rem 1.5rem; } }
+.auth-brand-logo-text em{
+  color:#7BD896;
+  font-style:normal;
+}
+
+.auth-brand-headline{
+  font-size:clamp(1.6rem,2.6vw,2.1rem);
+  font-weight:700;
+  letter-spacing:-0.03em;
+  line-height:1.15;
+  margin:0 0 1rem;
+}
+.auth-brand-headline em{
+  font-style:normal;
+  background:linear-gradient(135deg,#FFA726 0%,#FF8A00 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.auth-brand-sub{
+  font-size:15px;
+  color:rgba(255,255,255,.82);
+  line-height:1.55;
+  margin:0;
+}
+
+.auth-features{
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+  margin-top:2.5rem;
+}
+.auth-feature{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14px;
+  color:rgba(255,255,255,.92);
+}
+.auth-feature-icon{
+  flex-shrink:0;
+  width:30px;height:30px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.auth-feature-icon svg{stroke:#7BD896}
+.auth-feature-text strong{color:#fff;font-weight:600;display:block;margin-bottom:2px}
+
+.auth-brand-bot{
+  font-size:12.5px;
+  color:rgba(255,255,255,.6);
+  margin-top:auto;
+}
+.auth-brand-bot a{color:rgba(255,255,255,.85);text-decoration:underline;text-underline-offset:2px}
+.auth-brand-bot a:hover{color:#fff}
+
+/* ─── JOBB: form panel ─── */
+.auth-form-wrap{
+  padding:3rem 3rem 2.5rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.auth-h1{
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-0.025em;
+  color:var(--text);
+  margin:0 0 .35rem;
+}
+.auth-lead{
+  font-size:14.5px;
+  color:var(--sub);
+  margin:0 0 2rem;
+}
+
+/* ─── Üzenetek ─── */
+.msg{
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:13.5px;
+  font-weight:500;
+  margin-bottom:1.25rem;
+  line-height:1.4;
+}
+.msg.show{display:flex}
+.msg-error{background:var(--red-soft);color:#991b1b;border:1px solid #fca5a5}
+.msg-success{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.msg svg{flex-shrink:0}
+
+/* ─── Form ─── */
+.form-group{margin-bottom:1.15rem}
+.form-label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  color:var(--sub);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  margin-bottom:.45rem;
+}
+.input-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.input-wrap svg.input-icon{
+  position:absolute;
+  left:14px;
+  width:18px;height:18px;
+  color:var(--muted);
+  pointer-events:none;
+}
+.input-wrap input{
+  width:100%;
+  padding:13px 14px 13px 44px;
+  font-family:inherit;
+  font-size:14.5px;
+  color:var(--text);
+  background:#fafbfd;
+  border:1.5px solid var(--border);
+  border-radius:11px;
+  transition:border-color .15s,background .15s,box-shadow .15s;
+  outline:none;
+}
+.input-wrap input:focus{
+  border-color:var(--brand-2);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(38,74,202,.1);
+}
+.input-wrap input::placeholder{color:var(--muted)}
+
+.pw-toggle{
+  position:absolute;
+  right:10px;
+  padding:6px;
+  border-radius:8px;
+  color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;
+}
+.pw-toggle:hover{background:var(--brand-light);color:var(--brand)}
+
+.form-row-extras{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:1.5rem;
+  flex-wrap:wrap;gap:.5rem;
+}
+.remember{
+  display:flex;align-items:center;gap:8px;
+  font-size:13.5px;
+  color:var(--sub);
+  cursor:pointer;
+  user-select:none;
+}
+.remember input{
+  width:16px;height:16px;
+  accent-color:var(--brand);
+  cursor:pointer;
+}
+.forgot-link{
+  font-size:13.5px;
+  font-weight:600;
+  color:var(--brand-2);
+  transition:color .15s;
+}
+.forgot-link:hover{color:var(--brand);text-decoration:underline}
+
+.btn-submit{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 20px;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:600;
+  color:#fff;
+  background:var(--grad-blue);
+  border:none;
+  border-radius:12px;
+  box-shadow:0 4px 14px rgba(17,50,147,.25);
+  transition:transform .15s,box-shadow .15s,opacity .15s;
+  letter-spacing:-0.005em;
+}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(17,50,147,.32)}
+.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none}
+
+.spinner{
+  width:16px;height:16px;
+  border:2.5px solid rgba(255,255,255,.3);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── Divider ─── */
+.divider{
+  display:flex;align-items:center;gap:14px;
+  margin:1.75rem 0;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.divider::before,.divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+
+/* ─── Google btn ─── */
+.btn-google{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:12px 20px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  transition:border-color .15s,background .15s,transform .15s;
+}
+.btn-google:hover{border-color:var(--brand-2);background:#fafbff;transform:translateY(-1px)}
+
+/* ─── Footer link ─── */
+.auth-footer{
+  text-align:center;
+  margin-top:1.75rem;
+  font-size:13.5px;
+  color:var(--sub);
+}
+.auth-footer a{
+  color:var(--brand-2);
+  font-weight:600;
+}
+.auth-footer a:hover{color:var(--brand);text-decoration:underline}
+
+/* ─── Mobile ─── */
+@media(max-width:860px){
+  .auth-card{grid-template-columns:1fr;max-width:480px}
+  .auth-brand{padding:2rem 1.75rem;min-height:auto}
+  .auth-brand-headline{font-size:1.4rem}
+  .auth-features{margin-top:1.5rem}
+  .auth-form-wrap{padding:2rem 1.75rem}
+  .auth-section{padding:1.5rem 1rem 2.5rem}
+}
+@media(max-width:480px){
+  .auth-h1{font-size:24px}
+}
 </style>
 </head>
 <body>
@@ -128,14 +405,26 @@ input:focus { border-color: #113293; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); 
 <style>
 nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
 nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
+
+/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
+body.is-index nav#mainNav{background:rgba(255,255,255,.35) !important;backdrop-filter:blur(10px) saturate(140%) !important;-webkit-backdrop-filter:blur(10px) saturate(140%) !important;border-bottom:1px solid rgba(220,227,234,.2) !important;box-shadow:none !important}
+body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
+/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
+body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
+body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
+body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
+
 nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:84px;padding:14px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
 nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
 nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
-nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
+nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
+nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
 nav#mainNav .nav-links li{position:relative}
 nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
 nav#mainNav .nav-links li>a:hover{background:#eef2ff}
@@ -145,8 +434,8 @@ nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform
 nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
 nav#mainNav .dropdown a:hover{background:#eef2ff}
 nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
 nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
@@ -225,12 +514,11 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
   <div class="mobile-drawer-inner">
     <a href="talalatok.html" class="mobile-nav-item">Orvosok</a>
     <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
-    <a href="tudastar.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Tudástár A–Z</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
     <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
     <a href="#" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
-    <a href="register.html" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
   </div>
 </div>
 
@@ -265,79 +553,111 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
 
+<section class="auth-section">
+  <div class="auth-card">
 
-<div class="card">
+    <!-- ─── BAL: brand panel ─── -->
+    <div class="auth-brand">
+      <div class="auth-brand-top">
+        <div class="auth-brand-logo">
+          <div class="auth-brand-logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12h4l3-9 4 18 3-9h4"/>
+            </svg>
+          </div>
+          <div class="auth-brand-logo-text">Szakorvos<em>.hu</em></div>
+        </div>
+        <h2 class="auth-brand-headline">Üdvözöljük <em>újra</em>!</h2>
+        <p class="auth-brand-sub">Lépjen be fiókjába és kezelje időpontfoglalásait, kedvenc orvosait és értékeléseit.</p>
+      </div>
 
-  <a href="index.html" class="logo">
-    <div class="logo-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-    </div>
-    <span class="logo-text">Szakorvos<em>.hu</em></span>
-  </a>
+      <div class="auth-brand-mid">
+        <div class="auth-features">
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="auth-feature-text"><strong>Egyszerű időpontfoglalás</strong>Pár kattintással szakorvosnál</div>
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="auth-feature-text"><strong>Kedvenc orvosok</strong>Mentse el a megbízható szakorvosokat</div>
+          </div>
+          <div class="auth-feature">
+            <div class="auth-feature-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="auth-feature-text"><strong>Értékelések</strong>Ossza meg tapasztalatait másokkal</div>
+          </div>
+        </div>
+      </div>
 
-  <div class="heading">
-    <h1>Üdvözöljük!</h1>
-    <p>Lépjen be fiókjába az email cím és jelszó megadásával</p>
-  </div>
-
-  <div class="msg msg-error" id="msgError">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-    <span id="msgErrorText">Hibás email cím vagy jelszó.</span>
-  </div>
-  <div class="msg msg-success" id="msgSuccess">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-    <span id="msgSuccessText">Sikeres bejelentkezés! Átirányítás…</span>
-  </div>
-
-  <form onsubmit="handleLogin(event)" novalidate>
-    <div class="form-group">
-      <label>Email cím</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input type="email" id="email" placeholder="pelda@email.hu" autocomplete="email" required>
+      <div class="auth-brand-bot">
+        Belépéssel elfogadja az <a href="adatvedelem.html">Adatvédelmi tájékoztatót</a> és az ÁSZF-et.
       </div>
     </div>
-    <div class="form-group">
-      <label>Jelszó</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
-        <button type="button" class="pw-toggle" onclick="togglePw()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIcon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+
+    <!-- ─── JOBB: form panel ─── -->
+    <div class="auth-form-wrap">
+      <h1 class="auth-h1">Bejelentkezés</h1>
+      <p class="auth-lead">Adja meg email címét és jelszavát a folytatáshoz</p>
+
+      <div class="msg msg-error" id="msgError">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="msgErrorText">Hibás email cím vagy jelszó.</span>
+      </div>
+      <div class="msg msg-success" id="msgSuccess">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="msgSuccessText">Sikeres bejelentkezés! Átirányítás…</span>
+      </div>
+
+      <form onsubmit="handleLogin(event)" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email cím</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="email" placeholder="pelda@email.hu" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Jelszó</label>
+          <div class="input-wrap">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+            <button type="button" class="pw-toggle" onclick="togglePw()" aria-label="Jelszó mutatása/elrejtése">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeIcon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row-extras">
+          <label class="remember"><input type="checkbox" id="rememberMe"> Emlékezzen rám</label>
+          <a href="#" class="forgot-link" onclick="forgotPassword(event)">Elfelejtett jelszó?</a>
+        </div>
+
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="loginIcon" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span id="loginBtnText">Bejelentkezés</span>
         </button>
-      </div>
+      </form>
+
+      <div class="divider">vagy</div>
+
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Belépés Google-fiókkal
+      </button>
+
+      <p class="auth-footer">
+        Még nincs fiókja? <a href="register.html">Regisztráljon ingyen</a>
+      </p>
     </div>
-    <div class="form-row">
-      <label class="remember"><input type="checkbox" id="rememberMe"> Emlékezzen rám</label>
-      <a href="#" class="forgot" onclick="forgotPassword(event)">Elfelejtett jelszó?</a>
-    </div>
-    <button type="submit" class="btn-submit" id="loginBtn">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="loginIcon"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      <span id="loginBtnText">Bejelentkezés</span>
-    </button>
-  </form>
 
-  <div class="divider">vagy</div>
-
-  <button class="btn-google" onclick="loginWithGoogle()">
-    <svg width="18" height="18" viewBox="0 0 24 24">
-      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-    </svg>
-    Folytatás Google-lel
-  </button>
-
-  <a href="index.html" class="back-link">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-    Vissza a főoldalra
-  </a>
-  <div style="text-align:center;margin-top:.75rem;font-size:12px;color:#94a3b8">
-    <a href="adatvedelem.html" style="color:#94a3b8;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#113293'" onmouseout="this.style.color='#94a3b8'">Adatvédelmi szabályzat</a>
   </div>
-
-</div>
+</section>
 
 <script>
 const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -414,7 +734,7 @@ function setLoading(on) {
     txt.textContent = 'Bejelentkezés…';
   } else {
     btn.disabled = false;
-    document.getElementById('loginIcon').outerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="loginIcon"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>';
+    document.getElementById('loginIcon').outerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="loginIcon" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>';
     txt.textContent = 'Bejelentkezés';
   }
 }
@@ -433,10 +753,6 @@ function hideMessages() {
   document.getElementById('msgError').classList.remove('show');
   document.getElementById('msgSuccess').classList.remove('show');
 }
-
-document.getElementById('password').addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleLogin(e);
-});
 
 // Ha már be van jelentkezve
 (async () => {
