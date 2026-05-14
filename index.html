@@ -1392,6 +1392,160 @@ section{
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   ★ MOBILE POLISH — egységes mobile élmény, max-width 768px ★
+═══════════════════════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  /* ── Globális spacing & tipográfia ── */
+  body{font-size:15px}
+  section{scroll-margin-top:64px !important}
+
+  /* ── NAV — mobile drawer már létezik, csak finomítás ── */
+  nav#mainNav .nav-row-top{min-height:64px !important;padding:10px 4% !important;gap:.75rem !important}
+  nav#mainNav .nav-logo-img{height:36px !important;width:36px !important}
+  nav#mainNav .nav-logo-text{font-size:18px !important}
+  .mobile-drawer{top:64px !important}
+
+  /* ── HERO — mobil layout ── */
+  .hero{
+    padding:1.5rem 4% 2rem !important;
+    max-height:none !important;
+    min-height:auto !important;
+  }
+  .hero::before,.hero::after{
+    width:280px !important;height:280px !important;
+    filter:blur(40px) !important;
+  }
+  .hero-two-col{
+    grid-template-columns:1fr !important;
+    gap:1.5rem !important;
+  }
+  .hero-title-new{
+    font-size:clamp(1.6rem,7vw,2rem) !important;
+    max-width:100% !important;
+    line-height:1.12 !important;
+  }
+  .hero-eyebrow{font-size:11px !important;padding:6px 12px !important}
+  .hero-search-box{
+    width:100% !important;
+    transform:none !important;
+    animation:none !important;
+    padding:1rem !important;
+    border-radius:18px !important;
+  }
+  .hero-ai-cta{
+    width:100% !important;
+    margin-left:0 !important;
+    padding:1.1rem 1.1rem !important;
+    border-radius:16px !important;
+  }
+  .hero-ai-cta-title{font-size:1.1rem !important}
+  .hero-ai-cta-sub{font-size:13px !important}
+  .hero-ai-cta-action{padding:11px 14px !important;font-size:13.5px !important}
+  .hero-stat-box{padding:.85rem !important}
+
+  /* ── NÉPSZERŰ SZAKTERÜLETEK — mobile grid ── */
+  .popular-specs-section{padding:2.5rem 4% 3rem !important}
+  .popular-specs-title{font-size:1.5rem !important}
+  .popular-specs-sub{font-size:14px !important}
+  .popular-specs-grid{
+    grid-template-columns:repeat(2,1fr) !important;
+    gap:.65rem !important;
+  }
+  .popular-spec-card{padding:.85rem .65rem !important;border-radius:12px !important}
+  .popular-spec-name{font-size:13px !important;line-height:1.2 !important}
+  .popular-spec-sub{font-size:10.5px !important}
+  .popular-spec-cities{margin-top:.55rem !important;padding-top:.5rem !important}
+  .popular-spec-cities-label{font-size:9px !important;margin-bottom:.3rem !important}
+  .popular-spec-cities-grid{gap:3px !important}
+  .popular-spec-city-chip{font-size:10px !important;padding:2.5px 6px !important;border-radius:5px !important}
+
+  /* ── AI MODAL — mobile fullscreen-szerű ── */
+  .ai-chat-widget{
+    width:calc(100vw - 1rem) !important;
+    max-height:calc(100vh - 1.5rem) !important;
+    border-radius:16px !important;
+  }
+  .ai-chat-widget .ai-chat-messages{
+    max-height:calc(100vh - 280px) !important;
+    min-height:180px !important;
+  }
+  .ai-chat-header{padding:.85rem 1rem !important}
+  .ai-chat-avatar{width:36px !important;height:36px !important}
+  .ai-chat-name{font-size:14px !important}
+  .ai-chat-status{font-size:11.5px !important}
+  .ai-chat-secure{display:none !important}
+  .ai-chat-input-row{padding:.7rem .9rem !important}
+  .ai-chat-mic,.ai-chat-send{width:36px !important;height:36px !important}
+  .ai-chat-example-chip{font-size:11.5px !important;padding:6px 10px !important}
+
+  /* ── REVIEWS & FAQ ── */
+  .reviews-section,
+  .testimonials-section,
+  .faq-section-new{padding:2.5rem 4% !important}
+  .review-card,.testimonial-card{
+    padding:1.25rem !important;
+    border-radius:16px !important;
+  }
+  .review-text,.testimonial-text{font-size:14.5px !important;line-height:1.6 !important}
+
+  /* ── Tudástár ── */
+  .kb-card,.knowledge-card,.article-card,.kb-article{
+    padding:1rem !important;
+    border-radius:14px !important;
+  }
+
+  /* ── CTA Band ── */
+  .cta-band,.cta-section{
+    padding:1.75rem 1.25rem !important;
+    border-radius:18px !important;
+    margin:0 4% !important;
+  }
+  .cta-band h2,.cta-section h2{font-size:1.3rem !important;line-height:1.25 !important}
+
+  /* ── Footer ── */
+  .footer-top,.footer{padding-left:4% !important;padding-right:4% !important}
+  .footer-links{grid-template-columns:1fr 1fr !important;gap:1.5rem !important}
+  .footer-bottom{flex-direction:column !important;text-align:center !important;gap:.75rem !important}
+
+  /* ── Section h2 univerzális ── */
+  section h2,.section-title{font-size:1.5rem !important;line-height:1.2 !important}
+
+  /* ── Touch target minimum (Apple HIG: 44px) ── */
+  button,a.btn,.nav-mobile-toggle,.mobile-nav-item,
+  .popular-spec-city-chip,.ai-chat-example-chip,
+  .ai-chat-option-chip{min-height:36px}
+
+  /* ── Tap highlight remove (cleaner mobile feel) ── */
+  *{-webkit-tap-highlight-color:rgba(38,74,202,.12)}
+
+  /* ── Disable some heavy effects on mobile for perf ── */
+  .hero-stat-box,.popular-spec-card,.review-card,.testimonial-card{
+    will-change:auto !important;
+  }
+  .hero::before,.hero::after,
+  .popular-spec-card::after{
+    animation:none !important;
+  }
+}
+
+/* ── Még szűkebb: 420px alatti (iPhone SE, kis Android) ── */
+@media(max-width:420px){
+  .hero-title-new{font-size:1.55rem !important}
+  .popular-specs-grid{grid-template-columns:repeat(2,1fr) !important;gap:.5rem !important}
+  .popular-spec-card{padding:.7rem .55rem !important}
+  .hero-stat-box{padding:.7rem .8rem !important}
+  .hero-top-stat-num{font-size:14px !important}
+  .hero-top-stat-label{font-size:10.5px !important}
+  nav#mainNav .nav-logo-text{font-size:16px !important}
+}
+
+/* ── Tablet 769-1024 ── */
+@media(min-width:769px) and (max-width:1024px){
+  .popular-specs-grid{grid-template-columns:repeat(4,1fr) !important}
+  .hero-two-col{gap:1.5rem !important}
+}
+
 /* ★ PRÉMIUM POLISH OVERLAY VÉGE ★ */
 
 </style>
@@ -3314,7 +3468,11 @@ function useExample(btn) {
       if (url) {
         const hero = document.querySelector('.hero');
         if (hero) {
-          hero.style.backgroundImage = `url('${url}')`;
+          // !important kell, mert a polish overlay-ben a .hero háttér !important-tal van
+          hero.style.setProperty('background-image', `url('${url}')`, 'important');
+          hero.style.setProperty('background-size', 'cover', 'important');
+          hero.style.setProperty('background-position', 'center', 'important');
+          hero.style.setProperty('background-repeat', 'no-repeat', 'important');
           console.log('[heroBg] Applied:', url);
         }
       }
