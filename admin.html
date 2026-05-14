@@ -892,7 +892,7 @@ async function loadSpecialties(){
   const tb=document.getElementById('specsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
   const{data}=await db.from('specialties')
-    .select('id,name,slug,icon,color,doctor_count,sort_order,is_active,description,license_text')
+    .select('id,name,slug,doctor_slug,icon,color,doctor_count,sort_order,is_active,description,license_text')
     .order('name',{ascending:true});
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek szakterületek</td></tr>';return;}
   tb.innerHTML=data.map((s,i)=>`<tr>
