@@ -93,7 +93,8 @@ img{display:block;max-width:100%}
 input,textarea{font-family:'Inter',sans-serif;font-weight:500}
 
 /* ════════ NAV ════════ */
-nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05)}
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
 .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
 .nav-logo img{height:42px;width:auto;object-fit:contain}
@@ -120,16 +121,10 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 .nav-mobile-toggle:hover{background:#f4f6fb}
 
-/* Mobile drawer */
-.mobile-drawer{position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-100%);transition:transform .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto}
-.mobile-drawer.open{transform:translateY(0)}
-.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
-.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:var(--text);border-radius:10px;transition:background .15s}
-.mobile-nav-item:hover{background:var(--brand-light)}
-.mobile-nav-cta{display:block;background:var(--grad-orange);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3)}
+/* Mobile drawer és nav-cta stílusok a beégetett menüblokkban definiálva (lejjebb) */
 
 /* ════════ HERO ════════ */
-.hero{padding:3.5rem 5.5% 5.5rem;position:relative;overflow:hidden;background-color:#fff;background-size:100% 100%;background-position:center;background-repeat:no-repeat;max-height:720px}
+.hero{padding:2rem 5.5% 3rem;position:relative;overflow:hidden;background-color:#fff;background-size:100% 100%;background-position:center;background-repeat:no-repeat;max-height:720px}
 .hero-bg-image,.hero-bg-overlay{display:none}
 .hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none;z-index:0}
 .hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none;z-index:0}
@@ -137,9 +132,40 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .hero-two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:2rem;align-items:start}
 .hero-left{min-width:0}
 
-.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.5rem,2.6vw,2.3rem);font-weight:600;color:var(--text);line-height:1.2;letter-spacing:-0.025em;margin-bottom:1.25rem}
-.hero-title-accent{color:var(--green);font-weight:600}
-.hero-eyebrow{display:inline-block;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.12em;margin-top:-1.5rem;margin-bottom:1.25rem;background:var(--grad-orange);padding:7px 16px;border-radius:100px;box-shadow:0 4px 14px rgba(255,138,0,.3)}
+.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.5rem,2.1vw,1.95rem);font-weight:700;color:var(--text);line-height:1.18;letter-spacing:-0.028em;margin-bottom:0;flex:1;min-width:0;font-feature-settings:'ss01' 1,'cv11' 1}
+.hero-title-accent{color:var(--green);font-weight:700;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+.hero-eyebrow{display:inline-block;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.14em;margin-top:0;margin-bottom:.9rem;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);padding:6px 14px;border-radius:100px;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 2px 6px rgba(255,138,0,.18),0 6px 16px rgba(255,138,0,.28);position:relative;overflow:hidden}
+.hero-eyebrow::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);animation:eyebrowShine 5s ease-in-out infinite;animation-delay:1.5s}
+@keyframes eyebrowShine{
+  0%,100%{left:-100%}
+  35%{left:200%}
+}
+
+/* ── Hero cím + 4 stat box rács ── */
+.hero-headline-row{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.hero-stats-grid{display:flex;gap:.55rem;flex-shrink:0;margin-left:auto}
+.hero-stat-box{aspect-ratio:1/1;width:78px;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(252,253,255,.9) 100%);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);border:1px solid rgba(220,227,234,.55);border-radius:13px;padding:.55rem .5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;cursor:pointer;text-align:center;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .35s ease}
+.hero-stat-box::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 50%);opacity:0;transition:opacity .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.hero-stat-box:hover{transform:translateY(-3px) scale(1.025);border-color:rgba(199,210,245,.85);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 8px rgba(17,50,147,.06),0 12px 28px rgba(17,50,147,.1)}
+.hero-stat-box:hover::before{opacity:1}
+.hero-stat-box:active{transform:translateY(-1px) scale(1.01);transition:transform .12s cubic-bezier(.4,0,.2,1)}
+.hero-stat-num{font-family:'Inter',sans-serif;font-size:1.15rem;font-weight:700;color:var(--text);letter-spacing:-0.028em;line-height:1.05;position:relative;z-index:1;font-feature-settings:'tnum' 1,'ss01' 1}
+.hero-stat-label{font-size:10.5px;color:var(--sub);font-weight:600;letter-spacing:.01em;line-height:1.2;position:relative;z-index:1;transition:color .25s ease}
+.hero-stat-box:hover .hero-stat-label{color:var(--brand)}
+@media(max-width:900px){
+  .hero-stat-box{width:70px}
+  .hero-stat-num{font-size:1.05rem}
+}
+@media(max-width:760px){
+  .hero-headline-row{flex-direction:column;align-items:stretch;gap:1rem}
+  .hero-stats-grid{justify-content:flex-start;margin-left:0}
+}
+@media(max-width:480px){
+  .hero-stats-grid{gap:.4rem}
+  .hero-stat-box{width:calc((100% - 1.2rem)/4);min-width:0}
+  .hero-stat-num{font-size:.95rem}
+  .hero-stat-label{font-size:9.5px}
+}
 .hero-desc-new{font-size:16px;color:var(--sub);line-height:1.65;margin-bottom:1.75rem;max-width:560px;font-weight:500}
 
 /* Stat sor (most a kereső alatt, középre) */
@@ -156,31 +182,62 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .hero-divider-line{height:1px;background:var(--border)}
 
 /* ════ SEARCH BOX - DOMINÁNS, KIEMELT ════ */
-.hero-search-box{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:1.4rem;box-shadow:0 12px 40px rgba(17,50,147,.1),0 4px 14px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.4,0,.2,1),box-shadow .3s,border-color .3s;animation:search-float 4s ease-in-out infinite}
-.hero-search-box:hover{border-color:#7d96f0;box-shadow:0 20px 56px rgba(17,50,147,.16),0 8px 22px rgba(17,50,147,.08);transform:translateY(-3px) scale(1.008);animation-play-state:paused}
-.hero-search-box:focus-within{border-color:var(--brand-2);box-shadow:0 24px 60px rgba(46,74,202,.18),0 8px 22px rgba(46,74,202,.1),0 0 0 4px rgba(46,74,202,.08);transform:translateY(-4px);animation-play-state:paused}
+.hero-search-box{background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(253,254,255,.96) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1.5px solid rgba(220,227,234,.85);border-radius:20px;padding:1.4rem;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06),0 20px 48px rgba(17,50,147,.08);width:110%;max-width:none;position:relative;z-index:2;transition:transform .5s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .35s ease,width .35s cubic-bezier(.4,0,.2,1);animation:search-float 5s ease-in-out infinite}
+.hero-search-box:hover{border-color:rgba(125,150,240,.7);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 10px rgba(17,50,147,.06),0 14px 32px rgba(17,50,147,.12),0 28px 64px rgba(17,50,147,.14);transform:translateY(-3px) scale(1.006);animation-play-state:paused}
+.hero-search-box:focus-within{border-color:var(--brand-2);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 0 0 4px rgba(46,74,202,.08),0 4px 10px rgba(46,74,202,.08),0 16px 36px rgba(46,74,202,.14),0 32px 70px rgba(46,74,202,.16);transform:translateY(-4px);animation-play-state:paused}
 @keyframes search-float{
-  0%,100%{box-shadow:0 12px 40px rgba(17,50,147,.1),0 4px 14px rgba(17,50,147,.05)}
-  50%{box-shadow:0 16px 48px rgba(17,50,147,.13),0 6px 18px rgba(17,50,147,.07);transform:translateY(-2px)}
+  0%,100%{box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06),0 20px 48px rgba(17,50,147,.08)}
+  50%{box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 12px 30px rgba(17,50,147,.08),0 26px 60px rgba(17,50,147,.1);transform:translateY(-2px)}
 }
 .hero-search-box-label{font-size:13px;font-weight:600;color:var(--brand);letter-spacing:-0.005em;margin-bottom:.95rem;padding-left:6px}
+
+/* ─── HERO SEARCH TABS ─── */
+.search-tabs{display:flex;gap:0;margin:-1.4rem -1.4rem 1.1rem;padding:0 .9rem;border-bottom:1px solid var(--border-soft);background:linear-gradient(to bottom,#fafbff 0%,#fff 100%);border-radius:20px 20px 0 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.search-tabs::-webkit-scrollbar{display:none}
+.search-tab{display:flex;align-items:center;gap:8px;padding:14px 18px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#7d8aab;cursor:pointer;position:relative;transition:color .25s cubic-bezier(.4,0,.2,1),transform .25s cubic-bezier(.4,0,.2,1);white-space:nowrap;letter-spacing:-0.005em}
+.search-tab svg{flex-shrink:0;opacity:.65;transition:opacity .25s cubic-bezier(.4,0,.2,1),transform .25s cubic-bezier(.4,0,.2,1)}
+.search-tab:hover{color:var(--brand)}
+.search-tab:hover svg{opacity:.95;transform:scale(1.05)}
+.search-tab.active{color:var(--brand)}
+.search-tab.active svg{opacity:1}
+.search-tab.active::after{content:'';position:absolute;left:14px;right:14px;bottom:-1px;height:3px;background:linear-gradient(90deg,#113293 0%,#264ACA 100%);border-radius:3px 3px 0 0;animation:tabSlideIn .35s cubic-bezier(.34,1.4,.64,1)}
+@keyframes tabSlideIn{
+  from{transform:scaleX(.3);opacity:0}
+  to{transform:scaleX(1);opacity:1}
+}
+.search-tab[data-mode="clinic"].active{color:#2C9650}
+.search-tab[data-mode="clinic"].active::after{background:linear-gradient(90deg,#2C9650 0%,#3fb568 100%)}
+.search-tab[data-mode="knowledge"].active{color:#FF8A00}
+.search-tab[data-mode="knowledge"].active::after{background:linear-gradient(90deg,#2C9650 0%,#FF8A00 100%)}
+@media(max-width:640px){
+  .search-tab{padding:12px 14px;font-size:13px}
+  .search-tab svg{width:16px;height:16px}
+}
 .hero-search-row{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
 .hero-search-row-single{position:relative}
-.hero-search-field{flex:3;min-width:220px;display:flex;align-items:center;gap:12px;background:var(--bg);border:2px solid transparent;border-radius:13px;padding:15px 18px;transition:all .2s}
-.hero-search-field:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(46,63,196,.12)}
-.hero-search-field svg{flex-shrink:0;color:var(--muted);width:19px;height:19px}
+.hero-search-field{flex:3;min-width:220px;display:flex;align-items:center;gap:12px;background:var(--bg);border:2px solid transparent;border-radius:13px;padding:15px 18px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
+.hero-search-field:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(46,63,196,.12),0 4px 14px rgba(46,63,196,.08)}
+.hero-search-field svg{flex-shrink:0;color:var(--muted);width:19px;height:19px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1)}
+.hero-search-field:focus-within svg{color:var(--brand-2);transform:scale(1.08)}
 .hero-search-field input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:15.5px;color:var(--text);outline:none;min-width:0;font-weight:500}
-.hero-search-field input::placeholder{color:#a0aabd}
+.hero-search-field input::placeholder{color:#a0aabd;transition:color .25s ease}
+.hero-search-field:focus-within input::placeholder{color:#bcc4d4}
 
-.hero-search-location-box{flex:1;display:flex;align-items:center;gap:11px;background:var(--bg);border:2px solid transparent;border-radius:13px;padding:15px 18px;min-width:130px;max-width:200px;transition:all .2s}
-.hero-search-location-box:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(46,63,196,.12)}
-.hero-search-location-box svg{flex-shrink:0;color:var(--muted);width:17px;height:17px}
+.hero-search-location-box{flex:1;display:flex;align-items:center;gap:11px;background:var(--bg);border:2px solid transparent;border-radius:13px;padding:15px 18px;min-width:130px;max-width:200px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
+.hero-search-location-box:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(46,63,196,.12),0 4px 14px rgba(46,63,196,.08)}
+.hero-search-location-box svg{flex-shrink:0;color:var(--muted);width:17px;height:17px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1)}
+.hero-search-location-box:focus-within svg{color:var(--brand-2);transform:scale(1.08)}
 .hero-search-location-box input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14.5px;color:var(--text);outline:none;min-width:0;font-weight:500}
 .hero-search-location-box input::placeholder{color:#a0aabd}
 
-.hero-inline-search-btn{background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:13px;padding:15px 28px;font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 6px 18px rgba(46,74,202,.3);transition:all .2s;white-space:nowrap;letter-spacing:-0.005em}
-.hero-inline-search-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(46,74,202,.42)}
-.hero-inline-search-btn svg{width:17px;height:17px}
+.hero-inline-search-btn{background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:13px;padding:15px 28px;font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 1px 3px rgba(46,74,202,.15),0 6px 18px rgba(46,74,202,.3);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
+.hero-inline-search-btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.hero-inline-search-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.18),0 14px 32px rgba(46,74,202,.4)}
+.hero-inline-search-btn:hover::before{left:130%}
+.hero-inline-search-btn:active{transform:translateY(0) scale(1);transition:transform .1s ease}
+.hero-inline-search-btn svg{width:17px;height:17px;position:relative;z-index:1}
+.hero-inline-search-btn svg + *,
+.hero-inline-search-btn{z-index:auto}
 
 /* Kereshető típusok tippek (kereső boxon BELÜL, a search row alatt) */
 .hero-search-tips{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--border-soft);font-size:12.5px;color:var(--sub);line-height:1.4}
@@ -211,17 +268,71 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .hero-right-search{display:flex;flex-direction:column;gap:1rem;min-width:0;width:100%;position:relative}
 
 /* ════ AI CHAT WIDGET ════ */
-.ai-chat-widget{background:#fff;border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(17,50,147,.08),0 2px 8px rgba(17,50,147,.04);display:flex;flex-direction:column;width:100%;transition:width .35s cubic-bezier(.4,0,.2,1),max-height .35s cubic-bezier(.4,0,.2,1),box-shadow .3s,border-color .3s;cursor:pointer}
+/* ─── PARTNER GOMB — finom fehér üveg, narancs accent ─── */
+.hero-partner-btn{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(252,253,255,.9) 100%);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);color:var(--text);border:1px solid rgba(220,227,234,.55);border-radius:14px;padding:14px 18px;text-decoration:none;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 8px 20px rgba(17,50,147,.06);transition:transform .42s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .35s ease;position:relative;overflow:hidden;width:65%;margin-left:auto;cursor:pointer}
+.hero-partner-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 50%);opacity:0;transition:opacity .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.hero-partner-btn:hover{transform:translateY(-2px);border-color:rgba(255,138,0,.45);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 8px rgba(255,138,0,.08),0 16px 32px rgba(17,50,147,.1)}
+.hero-partner-btn:hover::before{opacity:1}
+.hero-partner-btn-icon{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 2px 6px rgba(255,138,0,.28)}
+.hero-partner-btn-text{flex:1;min-width:0;line-height:1.2;position:relative;z-index:1}
+.hero-partner-btn-label{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--sub);margin-bottom:2px}
+.hero-partner-btn-title{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.015em;color:var(--text)}
+.hero-partner-btn-arrow{width:30px;height:30px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--brand);transition:transform .35s cubic-bezier(.34,1.4,.64,1),background .25s ease,color .25s ease;position:relative;z-index:1}
+.hero-partner-btn:hover .hero-partner-btn-arrow{transform:translateX(3px);background:var(--brand);color:#fff}
+
+/* ─── AI CTA KÁRTYA — fehér üveg, zöld accent ─── */
+.hero-ai-cta{display:flex;flex-direction:column;gap:.95rem;width:65%;margin-left:auto;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(252,253,255,.92) 100%);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);color:var(--text);border:1px solid rgba(220,227,234,.6);border-radius:18px;padding:1.4rem 1.5rem;text-align:left;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04),0 12px 28px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.04);transition:transform .5s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .35s ease;position:relative;overflow:hidden;font-family:inherit}
+.hero-ai-cta::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.6) 0%,transparent 45%);opacity:.6;pointer-events:none}
+.hero-ai-cta-glow{position:absolute;top:-50%;right:-30%;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(44,150,80,.08) 0%,transparent 65%);pointer-events:none;animation:aiCtaGlow 8s ease-in-out infinite}
+@keyframes aiCtaGlow{
+  0%,100%{transform:translate(0,0) scale(1);opacity:.85}
+  50%{transform:translate(-10px,14px) scale(1.06);opacity:1}
+}
+.hero-ai-cta:hover{transform:translateY(-3px);border-color:rgba(44,150,80,.35);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 8px rgba(44,150,80,.08),0 20px 40px rgba(17,50,147,.1),0 36px 72px rgba(44,150,80,.08)}
+.hero-ai-cta:active{transform:translateY(-1px);transition:transform .15s ease}
+.hero-ai-cta-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.hero-ai-cta-avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 2px 6px rgba(44,150,80,.25)}
+.hero-ai-cta-status{display:inline-flex;align-items:center;gap:5px;background:rgba(44,150,80,.1);color:var(--green-dark);padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:600;letter-spacing:.02em;margin-left:auto;border:1px solid rgba(44,150,80,.18)}
+.hero-ai-cta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(44,150,80,.55);animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(44,150,80,.45)}
+  50%{box-shadow:0 0 0 6px rgba(44,150,80,0)}
+}
+.hero-ai-cta-title{font-family:'Inter',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:-0.028em;line-height:1.15;color:var(--text);position:relative;z-index:1}
+.hero-ai-cta-sub{font-size:13.5px;font-weight:500;line-height:1.5;color:var(--sub);position:relative;z-index:1}
+.hero-ai-cta-action{display:flex;align-items:center;justify-content:space-between;gap:8px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);color:#fff;padding:12px 16px;border-radius:12px;font-weight:600;font-size:14px;letter-spacing:-0.005em;position:relative;z-index:1;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(44,150,80,.18),0 8px 18px rgba(44,150,80,.22);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s ease;overflow:hidden}
+.hero-ai-cta-action::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.hero-ai-cta:hover .hero-ai-cta-action{box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 4px 10px rgba(44,150,80,.22),0 14px 28px rgba(44,150,80,.32)}
+.hero-ai-cta:hover .hero-ai-cta-action::after{left:130%}
+.hero-ai-cta-action svg{transition:transform .35s cubic-bezier(.34,1.4,.64,1)}
+.hero-ai-cta:hover .hero-ai-cta-action svg{transform:translateX(3px)}
+.hero-ai-cta-legal{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--sub);letter-spacing:.005em;position:relative;z-index:1}
+.hero-ai-cta-legal svg{flex-shrink:0;color:var(--green);opacity:.85}
+
+@media(max-width:1100px){
+  .hero-partner-btn,.hero-ai-cta{width:100%;margin-left:0}
+}
+
+/* ─── AI CHAT MODAL (alapból rejtett, kattintásra fullscreen) ─── */
+.ai-chat-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:8000;opacity:0;visibility:hidden;transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s linear .3s}
+.ai-chat-overlay.open{opacity:1;visibility:visible;transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s}
+.ai-chat-widget{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(640px,calc(100vw - 2rem));max-height:calc(100vh - 4rem);background:#fff;border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 12px 40px rgba(17,50,147,.18),0 32px 80px rgba(17,50,147,.22);display:flex;flex-direction:column;z-index:8001;opacity:0;visibility:hidden;transition:opacity .35s cubic-bezier(.34,1.4,.64,1),transform .4s cubic-bezier(.34,1.4,.64,1),visibility 0s linear .35s;pointer-events:none}
+.ai-chat-widget.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1);pointer-events:auto;transition:opacity .35s cubic-bezier(.34,1.4,.64,1),transform .4s cubic-bezier(.34,1.4,.64,1),visibility 0s}
+.ai-chat-widget .ai-chat-messages{min-height:280px;max-height:50vh}
+.ai-chat-widget .ai-chat-close{display:flex}
+@media(max-width:640px){
+  .ai-chat-widget{width:calc(100vw - 1rem);max-height:calc(100vh - 1.5rem);border-radius:18px}
+}
 
 /* COLLAPSED state - alapértelmezett, kompakt de teljes funkciókkal */
-.ai-chat-widget.ai-collapsed{max-height:380px}
+.ai-chat-widget.ai-collapsed{max-height:391px}
 .ai-chat-widget.ai-collapsed .ai-chat-header{padding:.75rem .9rem;gap:9px}
 .ai-chat-widget.ai-collapsed .ai-chat-avatar{width:32px;height:32px}
 .ai-chat-widget.ai-collapsed .ai-chat-avatar svg{width:19px;height:19px}
 .ai-chat-widget.ai-collapsed .ai-chat-name{font-size:12.5px}
 .ai-chat-widget.ai-collapsed .ai-chat-status{font-size:10.5px;margin-top:1px}
 .ai-chat-widget.ai-collapsed .ai-chat-secure{display:none}
-.ai-chat-widget.ai-collapsed .ai-chat-messages{padding:.75rem;min-height:130px;max-height:180px;font-size:12.5px;gap:.6rem}
+.ai-chat-widget.ai-collapsed .ai-chat-messages{padding:.75rem;min-height:157px;max-height:218px;font-size:12.5px;gap:.6rem}
 .ai-chat-widget.ai-collapsed .ai-chat-msg-avatar{width:24px;height:24px}
 .ai-chat-widget.ai-collapsed .ai-chat-msg-avatar svg{width:15px;height:15px}
 .ai-chat-widget.ai-collapsed .ai-chat-bubble{font-size:12px;padding:.55rem .75rem;line-height:1.45}
@@ -238,18 +349,7 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 
 /* EXPANDED (kinyitott) state - balra terjed overlay-szerűen, lefedi a hagyományos keresőt
    Magasság MARAD ugyanaz mint collapsed-ben - csak SZÉLESSÉG nő */
-.ai-chat-widget:not(.ai-collapsed){
-  position:absolute;
-  top:0;
-  right:0;
-  width:min(560px, calc(100vw - 11%));
-  max-height:380px;
-  cursor:default;
-  z-index:50;
-  box-shadow:0 24px 60px rgba(17,50,147,.18),0 8px 22px rgba(17,50,147,.1);
-  border-color:var(--brand-2);
-}
-.ai-chat-widget:not(.ai-collapsed) .ai-chat-messages{min-height:140px;max-height:180px}
+/* Régi .ai-collapsed és :not(.ai-collapsed) szabályok már nem érvényesek - a modal logika felülírja */
 
 .ai-chat-header{background:var(--grad-blue);padding:1.1rem 1.4rem;display:flex;align-items:center;gap:12px;color:#fff;position:relative;overflow:hidden}
 .ai-chat-header::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 65%);pointer-events:none}
@@ -266,7 +366,7 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 .ai-chat-widget:not(.ai-collapsed) .ai-chat-close{display:flex}
 .ai-chat-widget.ai-collapsed .ai-chat-close{display:none}
 
-.ai-chat-messages{flex:1;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;background:#fafbfd;min-height:220px}
+.ai-chat-messages{flex:1;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;background:#fafbfd;min-height:266px}
 .ai-chat-msg{display:flex;gap:10px;animation:msgIn .25s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .ai-chat-msg-avatar{width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -432,6 +532,8 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
 /* ════════ RESPONSIVE ════════ */
 @media(max-width:1100px){
   .hero-two-col{grid-template-columns:1fr;gap:2.5rem}
+  .hero-search-box{width:100%}
+  .ai-chat-widget{width:100%;margin-left:0}
   .popular-specs-grid{grid-template-columns:repeat(4,1fr)}
   .footer-top{grid-template-columns:1fr;gap:2.5rem}
   .footer-links{grid-template-columns:repeat(4,1fr)}
@@ -463,34 +565,105 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
   .footer-links{grid-template-columns:1fr 1fr}
   .footer-bottom{flex-direction:column;text-align:center}
 }
+
+/* ── PRÉMIUM HERO REVEAL ── */
+@keyframes heroRise{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero-eyebrow{animation:heroRise .6s cubic-bezier(.34,1.4,.64,1) both;animation-delay:.05s}
+.hero-title-new{animation:heroRise .7s cubic-bezier(.34,1.4,.64,1) both;animation-delay:.15s}
+.hero-stats-grid .hero-stat-box{animation:heroRise .6s cubic-bezier(.34,1.4,.64,1) both}
+.hero-stats-grid .hero-stat-box:nth-child(1){animation-delay:.25s}
+.hero-stats-grid .hero-stat-box:nth-child(2){animation-delay:.32s}
+.hero-stats-grid .hero-stat-box:nth-child(3){animation-delay:.39s}
+.hero-stats-grid .hero-stat-box:nth-child(4){animation-delay:.46s}
+.hero-search-box{animation:heroRise .8s cubic-bezier(.34,1.4,.64,1) both,search-float 5s ease-in-out infinite;animation-delay:.3s,.9s}
+
+@media (prefers-reduced-motion: reduce){
+  .hero-eyebrow,.hero-title-new,.hero-stat-box,.hero-search-box{animation:none !important}
+  .hero-eyebrow::after,.hero-inline-search-btn::before{animation:none !important;display:none}
+}
 </style>
 </head>
-<body>
+<body class="is-index">
+
+<!-- ══════════════════════════════════════════
+     EGYSÉGES MENÜ — minden oldalon ugyanez
+══════════════════════════════════════════ -->
+<style>
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
+
+/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
+body.is-index nav#mainNav{background:transparent !important;border-bottom-color:transparent !important;box-shadow:none !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
+/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
+body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
+body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
+body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
+
+nav#mainNav *{box-sizing:border-box}
+nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
+nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
+nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
+nav#mainNav .nav-links li{position:relative}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a:hover{background:#eef2ff}
+nav#mainNav .nav-links li>a svg{opacity:.6}
+nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
+nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
+nav#mainNav .dropdown a:hover{background:#eef2ff}
+nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
+.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
+.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
+.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
+.mobile-nav-item:hover{background:#eef2ff}
+.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
+@media(max-width:900px){
+  nav#mainNav .nav-links{display:none}
+  nav#mainNav .nav-actions{display:none}
+  nav#mainNav .nav-mobile-toggle{display:flex}
+}
+</style>
 
 <nav id="mainNav">
   <div class="nav-row-top">
-    <a href="#" class="nav-logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
-      <img src="data:image/png;base64,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" alt="ikon" style="height:46px;width:auto;object-fit:contain;">
-      <div style="display:flex;flex-direction:column;gap:1px;">
-        <span style="font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1;">Szakorvos<span style="color:#2C9650;">.hu</span></span>
-      </div>
+    <a href="index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+      <img src="data:image/jpeg;base64,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" alt="" class="nav-logo-img">
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
     </a>
 
     <ul class="nav-links">
       <li>
-        <a href="#">Orvosok
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        <a href="talalatok.html">Orvosok
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
-          <a href="#">Háziorvos</a>
-          <a href="#">Szakorvos</a>
-          <a href="#">Fogász</a>
-          <a href="#">Pszichológus</a>
+          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html">Szakorvos</a>
+          <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
+          <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
         </div>
       </li>
       <li>
-        <a href="#">Klinikák
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+        <a href="klinikak.html">Klinikák
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
           <a href="#">Magánklinikák</a>
@@ -499,25 +672,23 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
           <a href="#">Diagnosztikai központok</a>
         </div>
       </li>
-      <li><a href="tudastar.html" class="nav-link-highlight">Tudástár A–Z</a></li>
-      <li><a href="vizsgalatok.html" class="nav-link-highlight">Vizsgálatok</a></li>
+      <li><a href="tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html">Vizsgálatok</a></li>
       <li>
         <a href="#">Kapcsolat
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
           <a href="#">Ügyfélszolgálat</a>
-          <a href="#">Orvosoknak</a>
+          <a href="register.html">Orvosoknak</a>
         </div>
       </li>
     </ul>
 
     <div class="nav-actions">
       <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
-      <a href="register.html" class="btn-nav-cta" style="position:static;width:auto;margin-left:8px;">Legyen Ön is a partnerünk</a>
     </div>
 
-    <!-- Hamburger (csak mobilon látszik) -->
     <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
       <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -528,19 +699,48 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
   </div>
 </nav>
 
-<!-- Mobile drawer -->
 <div class="mobile-drawer" id="mobileDrawer">
   <div class="mobile-drawer-inner">
-    <a href="#" class="mobile-nav-item">Orvosok</a>
-    <a href="#" class="mobile-nav-item">Klinikák</a>
-    <a href="tudastar.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Tudástár A–Z</a>
+    <a href="talalatok.html" class="mobile-nav-item">Orvosok</a>
+    <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
     <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
     <a href="#" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
-    <a href="register.html" class="mobile-nav-cta">Legyen Ön is a partnerünk</a>
   </div>
 </div>
+
+<script>
+function toggleMobileMenu(){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle'),i=document.getElementById('hamburgerIcon');
+  if(!d||!t||!i)return;
+  const o=d.classList.contains('open');
+  if(o){d.classList.remove('open');t.setAttribute('aria-expanded','false');i.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';document.body.style.overflow='';}
+  else{d.classList.add('open');t.setAttribute('aria-expanded','true');i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';document.body.style.overflow='hidden';}
+}
+document.addEventListener('click',function(e){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle');
+  if(!d||!t)return;
+  if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
+</script>
+
+<script>
+// Görgetés-érzékeny menü
+(function(){
+  var nav = document.getElementById('mainNav');
+  if(!nav) return;
+  function update(){
+    if(window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
+</script>
+<!-- ══════ MENÜ VÉGE ══════ -->
 
 
 
@@ -554,14 +754,52 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
         <!-- Eyebrow felirat -->
         <div class="hero-eyebrow">Országos szakorvoskereső</div>
 
-        <!-- Cím -->
-        <h1 class="hero-title-new">
-          Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
-        </h1>
+        <!-- Cím + Stat boxok rács -->
+        <div class="hero-headline-row">
+          <h1 class="hero-title-new">
+            Nem tudja, milyen<br>szakorvosra van szüksége?<br><span class="hero-title-accent">Megmondjuk.</span>
+          </h1>
+
+          <div class="hero-stats-grid">
+            <a href="talalatok.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statDoctors">38</div>
+              <div class="hero-stat-label">Szakorvos</div>
+            </a>
+            <a href="klinikak.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statClinics">20</div>
+              <div class="hero-stat-label">Klinika</div>
+            </a>
+            <a href="tudastar.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statArticles">2 661</div>
+              <div class="hero-stat-label">Tudástár cikk</div>
+            </a>
+            <a href="vizsgalatok.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statExams">24</div>
+              <div class="hero-stat-label">Vizsgálat</div>
+            </a>
+          </div>
+        </div>
 
         <!-- Inline search box -->
         <div class="hero-search-box hero-search-box-premium">
-          <div class="hero-search-box-label">Keresés szakterület, vizsgálat, kezelés, orvos vagy klinika neve alapján</div>
+
+          <!-- TABOK: Szakorvos / Klinika / Tudástár -->
+          <div class="search-tabs" role="tablist" aria-label="Keresés típus">
+            <button class="search-tab active" data-mode="doctor" role="tab" aria-selected="true" onclick="setSearchMode('doctor')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+              Szakorvos keresés
+            </button>
+            <button class="search-tab" data-mode="clinic" role="tab" aria-selected="false" onclick="setSearchMode('clinic')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
+              Klinika keresés
+            </button>
+            <button class="search-tab" data-mode="knowledge" role="tab" aria-selected="false" onclick="setSearchMode('knowledge')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Tudástár keresés
+            </button>
+          </div>
+
+          <div class="hero-search-box-label" id="heroSearchLabel">Keresés szakterület, vizsgálat, kezelés, orvos vagy klinika neve alapján</div>
           <div class="hero-search-row hero-search-row-single" style="position:relative;">
             <div class="hero-search-field">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -571,7 +809,7 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
                 onblur="smartBlur('heroInlineSearch','heroDropdown')"
                 onkeydown="smartKeydown(event,'heroInlineSearch','heroDropdown')">
             </div>
-            <div class="hero-search-location-box">
+            <div class="hero-search-location-box" id="heroSearchCityBox">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <input type="text" id="heroSearchCityInline" placeholder="Város, pl. Budapest…" onkeydown="if(event.key==='Enter') heroInlineSearch()">
             </div>
@@ -593,43 +831,62 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
           </div>
         </div>
 
-        <!-- Stat pill sor (a kereső alatt) -->
-        <div class="hero-top-stats">
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num" id="statDoctors">12 000+</span>
-              <span class="hero-top-stat-label">orvos</span>
-            </div>
-          </div>
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="1.8" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><rect x="9" y="13" width="6" height="8"/><line x1="12" y1="2" x2="12" y2="6"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num" id="statClinics">1 800+</span>
-              <span class="hero-top-stat-label">klinika</span>
-            </div>
-          </div>
-          <div class="hero-top-stat">
-            <div class="hero-top-stat-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="1.8" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            </div>
-            <div class="hero-top-stat-text">
-              <span class="hero-top-stat-num" id="statArticles">3 400+</span>
-              <span class="hero-top-stat-label">tudástár cikk</span>
-            </div>
-          </div>
-        </div>
+        <!-- Stat pill sor (a kereső alatt) - eltávolítva -->
 
       </div>
 
-      <!-- JOBB: AI chat + oldalsó feature kártyák -->
+      <!-- JOBB: AI CTA + partner gomb -->
       <div class="hero-right-search">
 
-        <div class="ai-chat-widget ai-collapsed" id="aiChatWidget" onclick="toggleAiChat(event)">
+        <!-- 1. Partner gomb (felül) -->
+        <a href="register.html" class="hero-partner-btn">
+          <div class="hero-partner-btn-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="hero-partner-btn-text">
+            <div class="hero-partner-btn-label">Orvosoknak / Klinikáknak</div>
+            <div class="hero-partner-btn-title">Legyen Ön is a partnerünk</div>
+          </div>
+          <div class="hero-partner-btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+        </a>
+
+        <!-- 2. AI orvosi asszisztens CTA kártya (kattintásra felugrik a chat) -->
+        <button type="button" class="hero-ai-cta" id="aiCtaCard" onclick="openAiChatModal()">
+          <div class="hero-ai-cta-glow"></div>
+          <div class="hero-ai-cta-top">
+            <div class="hero-ai-cta-avatar">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="8" width="18" height="12" rx="3"/>
+                <path d="M12 8V4"/>
+                <circle cx="12" cy="3" r="1.2" fill="currentColor"/>
+                <circle cx="8.5" cy="14" r="1.3" fill="currentColor" stroke="none"/>
+                <circle cx="15.5" cy="14" r="1.3" fill="currentColor" stroke="none"/>
+                <path d="M9 17.5c1 .6 2 .9 3 .9s2-.3 3-.9"/>
+              </svg>
+            </div>
+            <div class="hero-ai-cta-status">
+              <span class="hero-ai-cta-dot"></span>
+              Online · AI
+            </div>
+          </div>
+          <div class="hero-ai-cta-title">AI orvosi asszisztens</div>
+          <div class="hero-ai-cta-sub">Írja le a tüneteit, és megtalálom Önnek a megfelelő szakorvost</div>
+          <div class="hero-ai-cta-action">
+            <span>Beszélgetés indítása</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </div>
+          <div class="hero-ai-cta-legal">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Biztonságos és titkos · AI nem helyettesíti az orvosi diagnózist
+          </div>
+        </button>
+
+        <!-- ─── AI CHAT MODAL (rejtett alapból, kattintásra nyílik) ─── -->
+        <div class="ai-chat-overlay" id="aiChatOverlay" onclick="closeAiChatModal(event)"></div>
+
+        <div class="ai-chat-widget" id="aiChatWidget">
 
           <!-- Header - zöld -->
           <div class="ai-chat-header">
@@ -655,7 +912,7 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <span>Biztonságos és titkos</span>
             </div>
-            <button class="ai-chat-close" id="aiChatClose" onclick="closeAiChat(event)" aria-label="Bezárás">
+            <button class="ai-chat-close" id="aiChatClose" onclick="closeAiChatModal(event)" aria-label="Bezárás">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
@@ -715,28 +972,6 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
           </div>
 
         </div><!-- end ai-chat-widget -->
-
-        <!-- Jobb oldalsó feature kártyák -->
-        <div class="hero-side-features">
-          <div class="hero-side-feat">
-            <div class="hero-side-feat-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-            </div>
-            <div class="hero-side-feat-label">Adatvédelem<br>első helyen</div>
-          </div>
-          <div class="hero-side-feat">
-            <div class="hero-side-feat-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-            </div>
-            <div class="hero-side-feat-label">Ellenőrzött<br>szakemberek</div>
-          </div>
-          <div class="hero-side-feat">
-            <div class="hero-side-feat-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            </div>
-            <div class="hero-side-feat-label">Önre szabott<br>ajánlások</div>
-          </div>
-        </div>
 
     </div><!-- end hero-right-search -->
 
@@ -1069,13 +1304,7 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
       const ssi = document.getElementById('smartSearchInput');
       if (ssi) ssi.addEventListener('keydown', e => { if (e.key === 'Enter') doSmartSearch(); });
 
-      window.addEventListener('scroll', () => {
-        if (window.scrollY > 10) {
-          mainNav.style.boxShadow = '0 2px 20px rgba(40,56,151,0.1)';
-        } else {
-          mainNav.style.boxShadow = 'none';
-        }
-      });
+      // (A régi scroll handler eltávolítva - az új .scrolled osztály-alapú megoldás kezeli a beégetett menü scriptje)
 
       // ── HAMBURGER ──
       function toggleHamburger() {
@@ -1288,24 +1517,40 @@ nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);b
       function selectFreetextItem(idx) { selectItem(idx, 'freetextInput', 'freetextDropdown'); }
 
 
-      // AI chat collapse/expand
-      window.toggleAiChat = function(e) {
+      // ─── AI CHAT MODAL ───
+      window.openAiChatModal = function(e) {
         const w = document.getElementById('aiChatWidget');
-        if (!w) return;
-        if (w.classList.contains('ai-collapsed')) {
-          w.classList.remove('ai-collapsed');
-          // focus input if exists
-          const inp = w.querySelector('.ai-chat-input, input[type="text"], textarea');
-          if (inp) setTimeout(() => inp.focus(), 100);
-          e.stopPropagation();
-        }
+        const o = document.getElementById('aiChatOverlay');
+        if (!w || !o) return;
+        w.classList.add('open');
+        o.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // Focus input
+        const inp = w.querySelector('.ai-chat-input');
+        if (inp) setTimeout(() => inp.focus(), 200);
+        if (e) e.stopPropagation();
       };
 
-      window.closeAiChat = function(e) {
+      window.closeAiChatModal = function(e) {
         const w = document.getElementById('aiChatWidget');
-        if (w) w.classList.add('ai-collapsed');
+        const o = document.getElementById('aiChatOverlay');
+        if (w) w.classList.remove('open');
+        if (o) o.classList.remove('open');
+        document.body.style.overflow = '';
         if (e) { e.stopPropagation(); e.preventDefault(); }
       };
+
+      // Régi nevek backward-compat (ha más kód hivatkozik rá)
+      window.toggleAiChat = window.openAiChatModal;
+      window.closeAiChat = window.closeAiChatModal;
+
+      // Escape gombra zár
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          const w = document.getElementById('aiChatWidget');
+          if (w && w.classList.contains('open')) window.closeAiChatModal();
+        }
+      });
 
       document.addEventListener('click', e => {
         ['freetextDropdown','navDropdown','heroDropdown'].forEach(id => {
@@ -1545,13 +1790,54 @@ const animObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('[data-anim]').forEach(el => animObserver.observe(el));
 
+// Hero kereső mód: 'doctor' | 'clinic' | 'knowledge'
+let heroSearchMode = 'doctor';
+
+function setSearchMode(mode){
+  heroSearchMode = mode;
+  // Tab aktív állapot
+  document.querySelectorAll('.search-tab').forEach(t => {
+    const isActive = t.dataset.mode === mode;
+    t.classList.toggle('active', isActive);
+    t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  // Placeholder + label + város mező láthatóság
+  const input = document.getElementById('heroInlineSearch');
+  const label = document.getElementById('heroSearchLabel');
+  const cityBox = document.getElementById('heroSearchCityBox');
+  if(mode === 'doctor'){
+    if(input) input.placeholder = 'pl. Kardiológus, EKG, Dr. Kiss János…';
+    if(label) label.textContent = 'Keresés szakterület, vizsgálat, kezelés vagy orvos neve alapján';
+    if(cityBox) cityBox.style.display = '';
+  } else if(mode === 'clinic'){
+    if(input) input.placeholder = 'pl. Telki Magánkórház, MedCenter Budapest…';
+    if(label) label.textContent = 'Keresés klinika neve, címe vagy szakterülete alapján';
+    if(cityBox) cityBox.style.display = '';
+  } else if(mode === 'knowledge'){
+    if(input) input.placeholder = 'pl. magas vérnyomás, mellkasi fájdalom, cukorbetegség…';
+    if(label) label.textContent = 'Keresés a tudástár cikkek között - tünetek, betegségek, kezelések';
+    if(cityBox) cityBox.style.display = 'none';
+  }
+}
+
 function heroInlineSearch() {
-  const spec = (document.getElementById('heroInlineSearch')?.value || '').trim();
+  const query = (document.getElementById('heroInlineSearch')?.value || '').trim();
   const city = (document.getElementById('heroSearchCityInline')?.value || '').trim();
   const params = new URLSearchParams();
-  if (spec) params.set('specialty', spec);
-  if (city) params.set('city', city);
-  window.location.href = 'talalatok?' + params.toString();
+  
+  if(heroSearchMode === 'clinic'){
+    if(query) params.set('q', query);
+    if(city) params.set('city', city);
+    window.location.href = 'klinikak?' + params.toString();
+  } else if(heroSearchMode === 'knowledge'){
+    if(query) params.set('q', query);
+    window.location.href = 'tudastar?' + params.toString();
+  } else {
+    // doctor (default)
+    if(query) params.set('specialty', query);
+    if(city) params.set('city', city);
+    window.location.href = 'talalatok?' + params.toString();
+  }
 }
 
 function useExample(btn) {
@@ -1564,63 +1850,6 @@ function useExample(btn) {
   if (ex) ex.style.display = 'none';
   sendChat();
 }
-</script>
-
-<script>
-// ── HAMBURGER MENU ──
-function toggleMobileMenu() {
-  const drawer = document.getElementById('mobileDrawer');
-  const toggle = document.getElementById('mobileToggle');
-  const icon   = document.getElementById('hamburgerIcon');
-  const isOpen = drawer.classList.contains('open');
-
-  if (isOpen) {
-    drawer.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-    // vissza hamburger ikon
-    icon.innerHTML = `
-      <line x1="3" y1="6" x2="21" y2="6"/>
-      <line x1="3" y1="12" x2="21" y2="12"/>
-      <line x1="3" y1="18" x2="21" y2="18"/>`;
-    document.body.style.overflow = '';
-  } else {
-    drawer.classList.add('open');
-    toggle.setAttribute('aria-expanded', 'true');
-    // X ikon
-    icon.innerHTML = `
-      <line x1="18" y1="6" x2="6" y2="18"/>
-      <line x1="6" y1="6" x2="18" y2="18"/>`;
-    document.body.style.overflow = 'hidden'; // háttér scroll tiltása
-  }
-}
-
-// Kívülre kattintva bezár
-document.addEventListener('click', function(e) {
-  const drawer = document.getElementById('mobileDrawer');
-  const toggle = document.getElementById('mobileToggle');
-  if (!drawer || !toggle) return;
-  if (drawer.classList.contains('open') &&
-      !drawer.contains(e.target) &&
-      !toggle.contains(e.target)) {
-    toggleMobileMenu();
-  }
-});
-
-// Escape gomb
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    const drawer = document.getElementById('mobileDrawer');
-    if (drawer && drawer.classList.contains('open')) toggleMobileMenu();
-  }
-});
-
-// Drawer linkre kattintva bezár
-document.querySelectorAll('.mobile-nav-item, .mobile-nav-cta').forEach(function(link) {
-  link.addEventListener('click', function() {
-    const drawer = document.getElementById('mobileDrawer');
-    if (drawer && drawer.classList.contains('open')) toggleMobileMenu();
-  });
-});
 </script>
 
 <!-- ══════════════════════════════════════════
@@ -1749,15 +1978,17 @@ document.querySelectorAll('.mobile-nav-item, .mobile-nav-cta').forEach(function(
   // ── Hero stat-ok ──
   async function loadHeroStats(){
     try {
-      const [doctors, clinics, articles] = await Promise.all([
+      const [doctors, clinics, articles, treatments] = await Promise.all([
         db.from('doctors').select('id', { count:'exact', head:true }).eq('is_active', true),
         db.from('clinics').select('id', { count:'exact', head:true }),
         db.from('knowledge_articles').select('id', { count:'exact', head:true }),
+        db.from('treatments').select('id', { count:'exact', head:true }),
       ]);
       const setIf = (id, val) => { const el = document.getElementById(id); if (el && val != null) el.textContent = fmtStat(val); };
       setIf('statDoctors',  doctors.count);
       setIf('statClinics',  clinics.count);
       setIf('statArticles', articles.count);
+      setIf('statExams',    treatments.count);
     } catch(e) { console.warn('[stats]', e); }
   }
 
