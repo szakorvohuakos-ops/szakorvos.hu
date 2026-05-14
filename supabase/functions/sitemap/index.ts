@@ -21,6 +21,7 @@ const PAGE_SIZE = 1000;
 const STATIC_URLS: { loc: string; changefreq: string; priority: string }[] = [
   { loc: "/",                 changefreq: "daily",   priority: "1.0" },
   { loc: "/talalatok",        changefreq: "daily",   priority: "0.9" },
+  { loc: "/klinikak",         changefreq: "weekly",  priority: "0.85" },
   { loc: "/tudastar",         changefreq: "weekly",  priority: "0.8" },
   { loc: "/vizsgalatok",      changefreq: "weekly",  priority: "0.8" },
   { loc: "/login.html",       changefreq: "monthly", priority: "0.4" },
@@ -107,10 +108,16 @@ Deno.serve(async (req) => {
   const db = createClient(url, key, { auth: { persistSession: false } });
 
   // ── Orvosok ──────────────────────────────────────────────────────────────
-  const doctors = await fetchAllPages<{ id: string; slug: string | null; name: string; updated_at: string | null }>(
+  const doctors = await fetchAllPages<{
+    id: string;
+    slug: string | null;
+    name: string;
+    updated_at: string | null;
+    doctor_specialties: { is_primary: boolean; specialties: { doctor_slug: string | null } | null }[] | null;
+  }>(
     (from, to) =>
       db.from("doctors")
-        .select("id, slug, name, updated_at")
+        .select("id, slug, name, updated_at, doctor_specialties(is_primary, specialties(doctor_slug))")
         .eq("is_active", true)
         .order("updated_at", { ascending: false })
         .range(from, to),
@@ -124,6 +131,15 @@ Deno.serve(async (req) => {
         .not("content", "is", null)
         .not("slug", "is", null)
         .order("updated_at", { ascending: false })
+        .range(from, to),
+  );
+
+  // ── Klinikák ─────────────────────────────────────────────────────────────
+  const clinics = await fetchAllPages<{ id: string; slug: string | null; name: string; created_at: string | null }>(
+    (from, to) =>
+      db.from("clinics")
+        .select("id, slug, name, created_at")
+        .order("created_at", { ascending: false })
         .range(from, to),
   );
 
@@ -165,8 +181,14 @@ Deno.serve(async (req) => {
   for (const d of doctors) {
     const slugOrId = d.slug || d.id;
     const lastmod  = d.updated_at ? d.updated_at.split("T")[0] : today;
+    // SEO URL: /:specialty/:slug ha mindkettő megvan, különben fallback /orvos/:slug
+    const primarySpec = (d.doctor_specialties || []).find(s => s.is_primary) || d.doctor_specialties?.[0];
+    const specSlug = primarySpec?.specialties?.doctor_slug;
+    const docUrl = (specSlug && d.slug)
+      ? `${SITE_BASE}/${specSlug}/${d.slug}`
+      : `${SITE_BASE}/orvos/${slugOrId}`;
     out.push(urlEntry({
-      loc:      `${SITE_BASE}/orvos/${slugOrId}`,
+      loc:      docUrl,
       lastmod,
       changefreq: "weekly",
       priority:   "0.7",
@@ -189,6 +211,18 @@ Deno.serve(async (req) => {
         loc:   `${SITE_BASE}/og?type=article&slug=${encodeURIComponent(a.slug)}`,
         title: a.title,
       },
+    }));
+  }
+
+  // Klinikák
+  for (const c of clinics) {
+    const slugOrId = c.slug || c.id;
+    const lastmod  = c.created_at ? c.created_at.split("T")[0] : today;
+    out.push(urlEntry({
+      loc:        `${SITE_BASE}/klinikak/${slugOrId}`,
+      lastmod,
+      changefreq: "monthly",
+      priority:   "0.65",
     }));
   }
 
