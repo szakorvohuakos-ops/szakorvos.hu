@@ -514,6 +514,16 @@ async function loadArticles() {
     // Magyar ábécé szerinti rendezés
     allArticles = all.sort(huCompare);
     buildAlphabet();
+
+    // URL paraméterből előre kitöltés
+    const urlParams = new URLSearchParams(window.location.search);
+    const qParam = urlParams.get('q');
+    if (qParam) {
+      searchQuery = qParam.trim();
+      const input = document.getElementById('searchInput');
+      if (input) input.value = qParam;
+    }
+
     renderArticles();
   } catch(e) {
     console.error('[loadArticles]', e);
