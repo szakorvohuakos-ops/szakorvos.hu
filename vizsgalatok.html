@@ -717,6 +717,18 @@ async function loadData() {
 
     buildSpecNav();
     buildFilterPills();
+
+    // URL paraméterből előre kitöltés
+    const urlParams = new URLSearchParams(window.location.search);
+    const qParam = urlParams.get('q');
+    if (qParam) {
+      searchQuery = qParam.trim();
+      const si = document.getElementById('searchInput');
+      if (si) si.value = qParam;
+      document.getElementById('specNav').style.display = 'none';
+      document.getElementById('filterWrap').style.display = 'none';
+    }
+
     render();
 
   } catch(e) {
