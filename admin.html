@@ -897,16 +897,27 @@ async function loadSpecialties(){
     .order('name',{ascending:true});
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek szakterületek</td></tr>';return;}
 
-  // Valós orvos-darabszám lekérdezése: aktív orvosok doctor_specialties join-nal
+  // Valós orvos-darabszám lekérdezése: aktív orvosok → szakterületek
   const counts = {};
   try {
-    const { data: links } = await db
-      .from('doctor_specialties')
-      .select('specialty_id,doctors!inner(is_active)')
-      .eq('doctors.is_active', true);
-    (links || []).forEach(l => {
-      counts[l.specialty_id] = (counts[l.specialty_id] || 0) + 1;
-    });
+    // 1) Aktív orvosok ID-i
+    const { data: activeDocs } = await db
+      .from('doctors')
+      .select('id')
+      .eq('is_active', true);
+    const activeIds = (activeDocs || []).map(d => d.id);
+
+    // 2) doctor_specialties kapcsolatok ezekhez
+    if(activeIds.length){
+      const { data: links } = await db
+        .from('doctor_specialties')
+        .select('specialty_id,doctor_id')
+        .in('doctor_id', activeIds);
+      (links || []).forEach(l => {
+        counts[l.specialty_id] = (counts[l.specialty_id] || 0) + 1;
+      });
+    }
+    console.log('[admin] szakterület counts:', counts);
   } catch(e) { console.warn('[doctor count]', e); }
 
   // Beírjuk a valós számokat
@@ -976,12 +987,19 @@ async function saveSpecialty(){
   let realCount = 0;
   if(id){
     try {
-      const { data: links } = await db
-        .from('doctor_specialties')
-        .select('doctor_id,doctors!inner(is_active)')
-        .eq('specialty_id', id)
-        .eq('doctors.is_active', true);
-      realCount = (links || []).length;
+      const { data: activeDocs } = await db
+        .from('doctors')
+        .select('id')
+        .eq('is_active', true);
+      const activeIds = (activeDocs || []).map(d => d.id);
+      if(activeIds.length){
+        const { data: links } = await db
+          .from('doctor_specialties')
+          .select('doctor_id')
+          .eq('specialty_id', id)
+          .in('doctor_id', activeIds);
+        realCount = (links || []).length;
+      }
     } catch(e) { console.warn('[count]', e); }
   }
 
