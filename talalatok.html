@@ -534,7 +534,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
           <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
         </a>
         <div class="dropdown">
-          <a href="talalatok.html?specialty=Háziorvostan">Háziorvos</a>
+          <a href="talalatok.html?specialty=Háziorvos">Háziorvos</a>
           <a href="talalatok.html">Szakorvos</a>
           <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
           <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
@@ -1122,7 +1122,7 @@ async function load(){
 
   const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
-  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
   const runQuery = async (selectClause) => {
     let q = db.from('doctors').select(selectClause).eq('is_active', true);
@@ -1366,7 +1366,10 @@ function renderList(){
   } else {document.getElementById('pagDiv').style.display='none';}
 }
 
-function specToTitle(s){
+function specToTitle(s, doctorName){
+  // 1. Ha admin írta doctor_name, azt használjuk pontosan
+  if(doctorName && doctorName.trim()) return doctorName.trim();
+  // 2. Fallback: hard-coded map
   if(!s) return 'Szakorvos';
   const map={
     'Bőrgyógyászat':'Bőrgyógyász szakorvos',
@@ -1421,7 +1424,8 @@ function specToTitle(s){
 
 function cardH(d,i){
   const specRaw=d.doctor_specialties?.[0]?.specialties?.name||'';
-  const spec=specToTitle(specRaw),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
+  const specDocName=d.doctor_specialties?.[0]?.specialties?.doctor_name||'';
+  const spec=specToTitle(specRaw, specDocName),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
   const tags=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
