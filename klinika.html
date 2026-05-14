@@ -148,7 +148,8 @@ img{max-width:100%;display:block}
      EGYSÉGES MENÜ — minden oldalon ugyanez
 ══════════════════════════════════════════ -->
 <style>
-nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05);font-family:'Inter',sans-serif}
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
 nav#mainNav *{box-sizing:border-box}
 nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
@@ -172,8 +173,8 @@ nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-we
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
-.mobile-drawer{position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-100%);transition:transform .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif}
-.mobile-drawer.open{transform:translateY(0)}
+.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
+.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
 .mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
 .mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
 .mobile-nav-item:hover{background:#eef2ff}
@@ -277,6 +278,20 @@ document.addEventListener('click',function(e){
   if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
 });
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
+</script>
+
+<script>
+// Görgetés-érzékeny menü
+(function(){
+  var nav = document.getElementById('mainNav');
+  if(!nav) return;
+  function update(){
+    if(window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
 
