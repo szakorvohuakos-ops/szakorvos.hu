@@ -1448,10 +1448,12 @@ function specToTitle(s, doctorName){
 }
 
 function cardH(d,i){
-  const specRaw=d.doctor_specialties?.[0]?.specialties?.name||'';
-  const specDocName=d.doctor_specialties?.[0]?.specialties?.doctor_name||'';
-  if(i===0) console.log('[cardH debug] specRaw:', specRaw, '| doctor_name:', specDocName);
-  const spec=specToTitle(specRaw, specDocName),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
+  const dsList=d.doctor_specialties||[];
+  const ds=dsList.find(x=>x.is_primary) || dsList.find(x=>x.specialties?.doctor_name) || dsList[0] || {};
+  const specRaw=ds.specialties?.name||'';
+  const specDocName=ds.specialties?.doctor_name||'';
+  const spec=specDocName || specRaw || 'Szakorvos';
+  const clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
   const tags=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
