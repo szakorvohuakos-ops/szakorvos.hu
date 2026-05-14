@@ -889,83 +889,15 @@ function formatPatientCount(n){
   return Math.floor(n / 1000) + 'k+';
 }
 function slugToHu(slug){
-  if(!slug) return '';
-  // Pontos slug → ékezetes magyar label térkép (a leggyakoribb orvosi slug-ok)
-  const exact = {
-    'borgyogyasz':'Bőrgyógyász',
-    'haziorvos':'Háziorvos',
-    'kardiologus':'Kardiológus',
-    'neurologus':'Neurológus',
-    'pszichiater':'Pszichiáter',
-    'pszichologus':'Pszichológus',
-    'fogorvos':'Fogorvos',
-    'fogszakorvos':'Fogszakorvos',
-    'fogasz':'Fogász',
-    'szemesz':'Szemész',
-    'fulorrgegesz':'Fül-orr-gégész',
-    'fulorrgegész':'Fül-orr-gégész',
-    'ful-orr-gegesz':'Fül-orr-gégész',
-    'urologus':'Urológus',
-    'nogyogyasz':'Nőgyógyász',
-    'belgyogyasz':'Belgyógyász',
-    'gyermekgyogyasz':'Gyermekgyógyász',
-    'ortoped':'Ortopéd',
-    'ortopedus':'Ortopéd',
-    'radiologus':'Radiológus',
-    'sebesz':'Sebész',
-    'onkologus':'Onkológus',
-    'allergologus':'Allergológus',
-    'reumatologus':'Reumatológus',
-    'endokrinologus':'Endokrinológus',
-    'gasztroenterologus':'Gasztroenterológus',
-    'hematologus':'Hematológus',
-    'pulmonologus':'Pulmonológus',
-    'nefrologus':'Nefrológus',
-    'angiologus':'Angiológus',
-    'aneszteziologus':'Aneszteziológus',
-    'andrologus':'Andrológus',
-    'foniater':'Foniáter',
-    'genetikus':'Genetikus',
-    'patologus':'Patológus',
-    'szuleszetnogyogyasz':'Szülész-nőgyógyász',
-    'plasztikai-sebesz':'Plasztikai sebész',
-    'idegsebesz':'Idegsebész',
-    'szivsebesz':'Szívsebész',
-    'erseebesz':'Érsebész',
-    'gyermeksebesz':'Gyermeksebész',
-    'altalanos-orvos':'Általános orvos'
-  };
-  if(exact[slug.toLowerCase()]) return exact[slug.toLowerCase()];
-  // Fallback: végződés-alapú dekódolás
-  let s = slug.toLowerCase();
-  // Általános magánhangzó visszaalakítások (csak az -ász/-ész/-ógus/-iáter végződésekre)
-  s = s.replace(/logus$/,'lógus')
-       .replace(/iater$/,'iáter')
-       .replace(/sz$/,'sz')
-       .replace(/gyogyasz$/,'gyógyász')
-       .replace(/sebesz$/,'sebész')
-       .replace(/peed$/,'péd')
-       .replace(/oped$/,'opéd');
-  // Első betű nagy
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  // Deprecated - csak doctor_name használatos
+  return '';
 }
 
 function specToTitle(s, doctorSlug, doctorName){
-  // 1. Ha van doctor_name (admin által írt pontos label), azt használjuk
+  // CSAK az admin által beírt doctor_name jelenik meg
   if(doctorName && doctorName.trim()) return doctorName.trim();
-  // 2. Ha van doctor_slug, használjuk azt ékezetesítve
-  if(doctorSlug){
-    const label = slugToHu(doctorSlug);
-    if(label) return label + ' szakorvos';
-  }
-  // 3. Fallback: szakterület név regex-szel
-  if(!s) return 'Szakorvos';
-  if(/lógia$/i.test(s)) return s.replace(/lógia$/i,'lógus') + ' szakorvos';
-  if(/iátria$/i.test(s)) return s.replace(/iátria$/i,'iáter') + ' szakorvos';
-  if(/észet$/i.test(s)) return s.replace(/észet$/i,'ész') + ' szakorvos';
-  if(/gyógyászat$/i.test(s)) return s.replace(/gyógyászat$/i,'gyógyász') + ' szakorvos';
-  if(/pédia$/i.test(s)) return s.replace(/pédia$/i,'péd') + ' szakorvos';
-  return s + ' szakorvos';
+  // Ha nincs, csak a szakterület nevét (suffix nélkül)
+  return s || 'Szakorvos';
 }
 
 /* ── Error ────────────────────────────────────────────────────────── */
