@@ -636,6 +636,13 @@ select.td-select:focus{border-color:var(--brand)}
         <div style="font-size:11px;color:var(--muted);margin-top:4px">Orvos profilnál: <code style="background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px">/orvos/[nev]/kardiologus</code></div>
       </div>
     </div>
+    <div class="form-row">
+      <div class="form-group" style="flex:1">
+        <label class="form-label">Orvos neve (megjelenítés)</label>
+        <input class="form-input" id="sDoctorName" placeholder="pl. Kardiológus szakorvos, Sportorvos, Háziorvos">
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Ez jelenik meg az orvos profil oldalon. Ne tegyél hozzá automatikus „szakorvos" suffixet — pontosan ezt írjuk ki.</div>
+      </div>
+    </div>
 
     <div class="form-row">
       <div class="form-group" style="flex:0 0 120px">
@@ -893,7 +900,7 @@ async function loadSpecialties(){
   const tb=document.getElementById('specsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
   const{data}=await db.from('specialties')
-    .select('id,name,slug,doctor_slug,icon,color,doctor_count,sort_order,is_active,description,license_text')
+    .select('id,name,slug,doctor_slug,doctor_name,icon,color,doctor_count,sort_order,is_active,description,license_text')
     .order('name',{ascending:true});
   if(!data||!data.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek szakterületek</td></tr>';return;}
 
@@ -929,7 +936,10 @@ async function loadSpecialties(){
     <td>
       <div style="display:flex;align-items:center;gap:8px">
         <div style="width:12px;height:12px;border-radius:3px;background:${esc(s.color||'#DCE3EA')};flex-shrink:0;border:1px solid rgba(0,0,0,.1)"></div>
-        <span class="td-name">${esc(s.name)}</span>
+        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+          <span class="td-name">${esc(s.name)}</span>
+          ${s.doctor_name ? `<span style="font-size:11.5px;color:var(--sub);font-weight:500;letter-spacing:-0.005em">${esc(s.doctor_name)}</span>` : ''}
+        </div>
       </div>
     </td>
     <td><code style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:12px;color:var(--sub)">${esc(s.slug)}</code></td>
@@ -951,7 +961,7 @@ async function loadSpecialties(){
 function openAddSpecModal(){
   document.getElementById('sEditId').value='';
   document.getElementById('specModalTitle').innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Új szakterület hozzáadása`;
-  ['sIcon','sName','sSlug','sDoctorSlug','sColor','sDoctorCount','sSortOrder','sDescription','sLicenseText'].forEach(id=>document.getElementById(id).value='');
+  ['sIcon','sName','sSlug','sDoctorSlug','sDoctorName','sColor','sDoctorCount','sSortOrder','sDescription','sLicenseText'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('sColorPicker').value='#e0f2fe';
   document.getElementById('sIsActive').value='true';
   document.getElementById('specModal').classList.add('open');
@@ -964,6 +974,7 @@ function openEditSpec(s){
   document.getElementById('sName').value=s.name||'';
   document.getElementById('sSlug').value=s.slug||'';
   document.getElementById('sDoctorSlug').value=s.doctor_slug||'';
+  document.getElementById('sDoctorName').value=s.doctor_name||'';
   document.getElementById('sColor').value=s.color||'';
   document.getElementById('sColorPicker').value=s.color||'#e0f2fe';
   document.getElementById('sDoctorCount').value=(s._realCount!=null ? s._realCount : (s.doctor_count||0));
@@ -1006,6 +1017,7 @@ async function saveSpecialty(){
   const payload={
     name,slug,
     doctor_slug:document.getElementById('sDoctorSlug').value.trim()||null,
+    doctor_name:document.getElementById('sDoctorName').value.trim()||null,
     icon:document.getElementById('sIcon').value.trim()||'🩺',
     color:document.getElementById('sColor').value.trim()||'#e0f2fe',
     doctor_count:realCount,
