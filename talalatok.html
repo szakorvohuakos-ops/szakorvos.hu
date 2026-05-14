@@ -1425,9 +1425,11 @@ function specToTitle(s, doctorName, doctorSlug){
 }
 
 function cardH(d,i){
-  const specRaw=d.doctor_specialties?.[0]?.specialties?.name||'';
-  const specDocName=d.doctor_specialties?.[0]?.specialties?.doctor_name||'';
-  const specDocSlug=d.doctor_specialties?.[0]?.specialties?.doctor_slug||'';
+  const dsList=d.doctor_specialties||[];
+  const ds=dsList.find(x=>x.is_primary) || dsList.find(x=>x.specialties?.doctor_name) || dsList[0] || {};
+  const specRaw=ds.specialties?.name||'';
+  const specDocName=ds.specialties?.doctor_name||'';
+  const specDocSlug=ds.specialties?.doctor_slug||'';
   const spec=specToTitle(specRaw, specDocName, specDocSlug),clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
