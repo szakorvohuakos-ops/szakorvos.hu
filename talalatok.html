@@ -1379,41 +1379,58 @@ function renderList(){
   } else {document.getElementById('pagDiv').style.display='none';}
 }
 
-// slug → ékezetes magyar megnevezés (pl. "gasztroenterologus" → "Gasztroenterológus")
-function slugToHu(slug){
-  if(!slug) return '';
-  const map={
-    'gasztroenterologus':'Gasztroenterológus','kardiologus':'Kardiológus',
-    'neurologus':'Neurológus','urologus':'Urológus','onkologus':'Onkológus',
-    'endokrinologus':'Endokrinológus','hematologus':'Hematológus',
-    'nefrologus':'Nefrológus','pulmonologus':'Pulmonológus','radiologus':'Radiológus',
-    'aneszteziologus':'Aneszteziológus','allergologus':'Allergológus',
-    'immunologus':'Immunológus','infektologus':'Infektológus',
-    'traumatologus':'Traumatológus','reumatologus':'Reumatológus',
-    'pszichiater':'Pszichiáter','pszichologus':'Pszichológus',
-    'borgyogyasz':'Bőrgyógyász','belgyogyasz':'Belgyógyász',
-    'nogyogyasz':'Nőgyógyász','szulesz-nogyogyasz':'Szülész-nőgyógyász',
-    'gyermekgyogyasz':'Gyermekgyógyász','sebesz':'Sebész',
-    'idegsebesz':'Idegsebész','plasztikai-sebesz':'Plasztikai sebész',
-    'ersebesz':'Érsebész','szivsebesz':'Szívsebész',
-    'mellkassebesz':'Mellkassebész','szajsebesz':'Szájsebész',
-    'fogorvos':'Fogorvos','fogszabalyozo':'Fogszabályozó',
-    'szemesz':'Szemész','ful-orr-gegesz':'Fül-orr-gégész',
-    'ortopod':'Ortopéd','haziorvos':'Háziorvos',
-    'uzemorvos':'Üzemorvos','sportorvos':'Sportorvos'
-  };
-  return map[slug.toLowerCase()] || '';
-}
+// Beépített fallback map: szakterület név → orvos megnevezés
+// (akkor használjuk, ha a DB-ből a doctor_name nem jön át)
+const SPEC_TO_DOCTOR = {
+  'Addiktológia':'Addiktológus','Allergológia és klinikai immunológia':'Allergológus',
+  'Alvásmedicina':'Alvásszakértő','Andrológia':'Andrológus',
+  'Aneszteziológia és intenzív terápia':'Aneszteziológus','Angiológia':'Angiológus',
+  'Arc-, állcsont- és szájsebészet':'Szájsebész','Audiológia':'Audiológus',
+  'Belgyógyászat':'Belgyógyász','Bőrgyógyászat':'Bőrgyógyász',
+  'Csecsemő- és gyermekgyógyászat':'Gyermekorvos','Dento-alveoláris sebészet':'Dento-alveoláris sebész',
+  'Diabetológia':'Diabetológus','Endokrinológia és anyagcsere-betegségek':'Endokrinológus',
+  'Érsebészet':'Érsebész','Esztétikai fogászat':'Esztétikai fogszakorvos',
+  'Fizikális medicina és rehabilitációs orvoslás':'Rehabilitációs orvos',
+  'Foglalkozás-orvostan':'Foglalkozás-egészségügyi orvos','Fogszabályozás':'Fogszabályozó',
+  'Foniátria':'Foniáter','Fül-orr-gégészet':'Fül-orr-gégész',
+  'Gasztroenterológia':'Gasztroenterológus','Geriátria':'Geriáter',
+  'Gyermek- és ifjúságpszichiátria':'Gyermekpszichiáter','Gyermek-gasztroenterológia':'Gyermek-gasztroenterológus',
+  'Gyermek-haematológia és onkológia':'Gyermek-onkológus','Gyermek-infektológia':'Gyermek-infektológus',
+  'Gyermek-kardiológia':'Gyermek-kardiológus','Gyermek-neurológia':'Gyermek-neurológus',
+  'Gyermek-nőgyógyászat':'Gyermek-nőgyógyász','Gyermek-tüdőgyógyászat':'Gyermek-tüdőgyógyász',
+  'Gyermekfogászat':'Gyermekfogorvos','Gyermekradiológia':'Gyermek-radiológus',
+  'Gyermekreumatológia':'Gyermek-reumatológus','Gyermeksebészet':'Gyermeksebész',
+  'Haematológia':'Hematológus','Háziorvos':'Háziorvos','Háziorvoslás':'Háziorvos',
+  'Honvéd-, katasztrófa- és rendvédelem-orvostan':'Katasztrófa-orvos',
+  'Idegsebészet':'Idegsebész','Igazságügyi orvostan':'Igazságügyi orvos',
+  'Implantológia':'Implantológus','Infektológia':'Infektológus',
+  'Kardiológia':'Kardiológus','Kézsebészet':'Kézsebész',
+  'Klinikai farmakológia':'Klinikai farmakológus','Klinikai neurofiziológia':'Neurofiziológus',
+  'Klinikai onkológia':'Onkológus','Konzerváló fogászat és fogpótlástan':'Fogorvos',
+  'Laboratóriumi medicina':'Laborszakorvos','Lipidológia':'Lipidológus',
+  'Meddőségi specialista':'Meddőségi szakorvos','Megelőző orvostan és népegészségtan':'Népegészségügyi szakorvos',
+  'Mellkassebészet':'Mellkassebész','Mozgásszervi rehabilitáció':'Mozgásszervi rehabilitációs orvos',
+  'Nefrológia':'Nefrológus','Neonatológia':'Neonatológus','Neurológia':'Neurológus',
+  'Nukleáris medicina':'Nukleáris medicina szakorvos','Obezitológia':'Obezitológus',
+  'Ortopédia és traumatológia':'Ortopéd traumatológus','Orvosi genetika':'Genetikus orvos',
+  'Orvosi mikrobiológia':'Mikrobiológus','Oxiológia':'Oxiológus',
+  'Palliatív medicina':'Palliatív szakorvos','Parodontológia':'Parodontológus',
+  'Patológia':'Patológus','Plasztikai és égéssebészet':'Plasztikai sebész',
+  'Pneumológia':'Pulmonológus','Pszichiátria':'Pszichiáter','Pszichoterápia':'Pszichoterapeuta',
+  'Radiológia':'Radiológus','Reumatológia':'Reumatológus','Sebészet':'Sebész',
+  'Sportorvostan':'Sportorvos','Sugárterápia':'Sugárterápiás szakorvos',
+  'Sürgősségi orvostan':'Sürgősségi orvos','Szemészet':'Szemész',
+  'Szívsebészet':'Szívsebész','Szülészet-nőgyógyászat':'Szülész-nőgyógyász',
+  'Transzfuziológia':'Transzfuziológus','Transzplantológia':'Transzplantációs szakorvos',
+  'Tüdőgyógyászat (Pulmonológia)':'Tüdőgyógyász','Urológia':'Urológus','Üzemorvoslás':'Üzemorvos'
+};
 
 function specToTitle(s, doctorName, doctorSlug){
-  // 1. Admin által beírt doctor_name elsőbbséget élvez
+  // 1. Admin által beírt doctor_name (ha valóban átjön)
   if(doctorName && doctorName.trim()) return doctorName.trim();
-  // 2. doctor_slug-ból ékezetes magyar
-  if(doctorSlug){
-    const label = slugToHu(doctorSlug);
-    if(label) return label;
-  }
-  // 3. Regex-szel a szakterület névből (pl. "Gasztroenterológia" → "Gasztroenterológus")
+  // 2. Beépített map (név alapján)
+  if(s && SPEC_TO_DOCTOR[s]) return SPEC_TO_DOCTOR[s];
+  // 3. Regex fallback ismeretlen szakterületekre
   if(!s) return 'Szakorvos';
   if(/lógia$/i.test(s)) return s.replace(/lógia$/i,'lógus');
   if(/iátria$/i.test(s)) return s.replace(/iátria$/i,'iáter');
