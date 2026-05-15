@@ -30,6 +30,23 @@
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
 const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const GMAPS_KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+
+// Google Maps loader
+let _gmapsPromise = null;
+function loadGoogleMaps(){
+  if(_gmapsPromise) return _gmapsPromise;
+  _gmapsPromise = new Promise((resolve, reject) => {
+    if(window.google && window.google.maps){ resolve(window.google.maps); return; }
+    window._onGMapsReady = () => resolve(window.google.maps);
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&callback=_onGMapsReady&language=hu&region=HU&loading=async`;
+    s.async = true; s.defer = true;
+    s.onerror = () => reject(new Error('Google Maps script failed to load'));
+    document.head.appendChild(s);
+  });
+  return _gmapsPromise;
+}
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -845,6 +862,16 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <div class="rtop">
       <div class="rcnt" id="rcnt">Betöltés…</div>
       <div class="rctrl">
+        <div class="vtog" style="display:flex;background:#fff;border:1px solid var(--border);border-radius:11px;padding:3px;gap:3px;box-shadow:0 1px 3px rgba(17,50,147,.04)">
+          <button class="vbtn on" id="btnViewList" onclick="setView('list')" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;color:#fff;background:var(--grad-blue, linear-gradient(135deg,#113293 0%,#264ACA 100%));border:none;display:flex;align-items:center;gap:5px;transition:all .15s;cursor:pointer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Lista
+          </button>
+          <button class="vbtn" id="btnViewMap" onclick="setView('map')" style="padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;color:var(--muted, #6b7a9a);background:transparent;border:none;display:flex;align-items:center;gap:5px;transition:all .15s;cursor:pointer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Térkép
+          </button>
+        </div>
         <select class="sort-sel" id="sortSel" onchange="applyFilters()">
           <option value="doctors">👨‍⚕️ Legtöbb orvos</option>
           <option value="rating">⭐ Legjobb értékelés</option>
@@ -855,6 +882,11 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </div>
 
     <div id="resList"><div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div></div>
+
+    <div id="resMap" style="display:none;width:100%;height:620px;border-radius:18px;border:1px solid var(--border, #DCE3EA);overflow:hidden;background:#eef2ff;position:relative">
+      <div id="mapEl" style="width:100%;height:100%"></div>
+      <div id="mapLoadingMsg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;background:#eef2ff;z-index:1">Térkép betöltése…</div>
+    </div>
 
     <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
       <div>
@@ -908,7 +940,7 @@ async function loadClinics(){
   try {
     const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, city_id, cities(name)')
+      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, city_id, lat, lng, cities(name)')
       .order('name');
     if(clinicsRes.error){ showError(clinicsRes.error.message); return; }
     const clinics = clinicsRes.data || [];
@@ -1039,7 +1071,8 @@ function applyFilters(){
   });
 
   curPg = 1;
-  renderList();
+  if(curView === 'map') renderMap();
+  else renderList();
   renderTags();
   updateBadge();
 }
@@ -1205,6 +1238,113 @@ function changePg(d){
 function loadMore(){
   const pages = Math.ceil(filtered.length / PER_PAGE);
   if(curPg < pages){ curPg++; renderList(); }
+}
+
+// ── Lista / Térkép nézet ──
+let curView = 'list';
+let _gmap = null;
+let _gmarkers = [];
+
+function setView(v){
+  curView = v;
+  const listEl = document.getElementById('resList');
+  const mapEl = document.getElementById('resMap');
+  const loadMoreWrap = document.getElementById('loadMoreWrap');
+  const pagDiv = document.getElementById('pagDiv');
+  const btnList = document.getElementById('btnViewList');
+  const btnMap = document.getElementById('btnViewMap');
+
+  if(v === 'map'){
+    listEl.style.display = 'none';
+    mapEl.style.display = 'block';
+    loadMoreWrap.style.display = 'none';
+    pagDiv.style.display = 'none';
+    btnList.style.background = 'transparent';
+    btnList.style.color = 'var(--muted, #6b7a9a)';
+    btnMap.style.background = 'var(--grad-blue, linear-gradient(135deg,#113293 0%,#264ACA 100%))';
+    btnMap.style.color = '#fff';
+    renderMap();
+  } else {
+    listEl.style.display = '';
+    mapEl.style.display = 'none';
+    btnList.style.background = 'var(--grad-blue, linear-gradient(135deg,#113293 0%,#264ACA 100%))';
+    btnList.style.color = '#fff';
+    btnMap.style.background = 'transparent';
+    btnMap.style.color = 'var(--muted, #6b7a9a)';
+    renderList();
+  }
+}
+
+async function renderMap(){
+  const loadingEl = document.getElementById('mapLoadingMsg');
+  try {
+    const maps = await loadGoogleMaps();
+    const mapEl = document.getElementById('mapEl');
+
+    // Csak a koordinátával rendelkező, szűrt klinikák
+    const withCoords = filtered.filter(c => c.lat && c.lng);
+
+    if(!withCoords.length){
+      if(loadingEl){
+        loadingEl.textContent = 'Nincs térképen megjeleníthető klinika a jelenlegi szűrőkkel.';
+        loadingEl.style.display = 'flex';
+      }
+      return;
+    }
+
+    if(!_gmap){
+      _gmap = new maps.Map(mapEl, {
+        center: { lat: 47.4979, lng: 19.0402 }, // Budapest default
+        zoom: 7,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true
+      });
+    }
+
+    // Régi markerek törlése
+    _gmarkers.forEach(m => m.setMap(null));
+    _gmarkers = [];
+
+    const bounds = new maps.LatLngBounds();
+    const infoWindow = new maps.InfoWindow();
+
+    withCoords.forEach(c => {
+      const pos = { lat: Number(c.lat), lng: Number(c.lng) };
+      const marker = new maps.Marker({
+        position: pos,
+        map: _gmap,
+        title: c.name
+      });
+      const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
+      marker.addListener('click', () => {
+        infoWindow.setContent(`
+          <div style="font-family:'Inter',sans-serif;max-width:240px">
+            <div style="font-weight:700;color:#113293;font-size:14px;margin-bottom:4px">${escapeHtml(c.name)}</div>
+            ${c._cityName ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:2px">📍 ${escapeHtml(c._cityName)}</div>` : ''}
+            ${c.address ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">${escapeHtml(c.address)}</div>` : ''}
+            <div style="font-size:12px;color:#475569;margin-bottom:8px"><strong>${c._docCount}</strong> orvos${c._avgRating > 0 ? ` · ⭐ ${c._avgRating.toFixed(1)}` : ''}</div>
+            <a href="${target}" style="display:inline-block;background:#113293;color:#fff;padding:6px 12px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600">Részletek →</a>
+          </div>
+        `);
+        infoWindow.open(_gmap, marker);
+      });
+      _gmarkers.push(marker);
+      bounds.extend(pos);
+    });
+
+    if(withCoords.length === 1){
+      _gmap.setCenter(bounds.getCenter());
+      _gmap.setZoom(14);
+    } else {
+      _gmap.fitBounds(bounds, 60);
+    }
+
+    if(loadingEl) loadingEl.style.display = 'none';
+  } catch(e){
+    console.error('Map error', e);
+    if(loadingEl) loadingEl.textContent = 'Térkép nem tölthető be.';
+  }
 }
 
 // Indulás
