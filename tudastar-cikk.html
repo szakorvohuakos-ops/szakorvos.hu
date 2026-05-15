@@ -764,15 +764,6 @@ async function loadArticle() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
-
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">Kapcsolódó szakterületek</div>
-          ${getRelatedSpecialties(specialty).map(([spec, ic]) => `
-            <a href="talalatok.html?specialty=${encodeURIComponent(spec)}" class="specialty-badge">
-              <span class="specialty-badge-icon">${ic}</span>
-              <span class="specialty-badge-text">${spec} szakorvos</span>
-            </a>`).join('')}
-        </div>
       </aside>
     `;
 
