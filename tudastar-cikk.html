@@ -730,7 +730,6 @@ async function loadArticle() {
       <!-- Főtartalom -->
       <main class="article-main" itemscope itemtype="https://schema.org/MedicalWebPage">
         <header class="article-header">
-          <span class="article-category">${specialty}</span>
           <h1 class="article-title" itemprop="name">${article.title}</h1>
           <div class="article-meta">
             <div class="article-meta-item">
@@ -757,9 +756,9 @@ async function loadArticle() {
       <!-- Oldalsáv -->
       <aside class="article-sidebar">
         <div class="sidebar-card cta-card">
-          <div class="sidebar-card-title">${icon} ${specialty} szakorvost keres?</div>
-          <p>Találja meg a legjobb ${specialty.toLowerCase()} orvost az Ön közelében – értékelések, időpontok, azonnali foglalás.</p>
-          <a href="talalatok.html?specialty=${encodeURIComponent(specialty)}" class="cta-btn">
+          <div class="sidebar-card-title">🩺 Szakorvost keres?</div>
+          <p>Találja meg a megfelelő szakorvost az Ön közelében – értékelések, időpontok, azonnali foglalás.</p>
+          <a href="talalatok.html" class="cta-btn">
             Szakorvosok keresése
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
