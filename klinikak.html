@@ -1017,7 +1017,12 @@ function applyFilters(){
   const sort = document.getElementById('sortSel').value;
 
   filtered = allClinics.filter(c => {
-    if(q && !((c.name||'').toLowerCase().includes(q) || (c.address||'').toLowerCase().includes(q))) return false;
+    if(q){
+      const inName = (c.name||'').toLowerCase().includes(q);
+      const inAddr = (c.address||'').toLowerCase().includes(q);
+      const inSpec = c._specs.some(s => (s.name||'').toLowerCase().includes(q));
+      if(!inName && !inAddr && !inSpec) return false;
+    }
     if(city && c._cityName !== city) return false;
     if(spec && !c._specs.some(s => s.name === spec)) return false;
     return true;
