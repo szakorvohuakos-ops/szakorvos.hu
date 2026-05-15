@@ -450,18 +450,6 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <!-- Rendered by JS -->
   </div>
 
-  <!-- View mode toggle -->
-  <div class="view-toggle-wrap">
-    <button id="btnViewAbc" class="view-toggle-btn active" onclick="setViewMode('abc')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
-      A–Z szerinti lista
-    </button>
-    <button id="btnViewSpec" class="view-toggle-btn" onclick="setViewMode('specialty')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
-      Szakterület szerint
-    </button>
-  </div>
-
   <!-- Search -->
   <div class="search-wrap">
     <div class="search-inner">
@@ -504,21 +492,7 @@ let searchQuery = '';
 let viewMode = 'abc'; // 'abc' vagy 'specialty'
 
 function setViewMode(mode) {
-  viewMode = mode;
-  const btnAbc = document.getElementById('btnViewAbc');
-  const btnSpec = document.getElementById('btnViewSpec');
-  const alphabetWrap = document.getElementById('alphabetWrap');
-
-  if (mode === 'abc') {
-    btnAbc.classList.add('active');
-    btnSpec.classList.remove('active');
-    alphabetWrap.style.display = '';
-  } else {
-    btnSpec.classList.add('active');
-    btnAbc.classList.remove('active');
-    alphabetWrap.style.display = 'none';
-    activeFilter = 'ALL';
-  }
+  viewMode = 'abc';
   renderArticles();
 }
 
@@ -606,7 +580,7 @@ async function loadArticles() {
       const to = from + pageSize - 1;
       const { data: batch, error } = await db
         .from('knowledge_articles')
-        .select('id, title, slug, specialty')
+        .select('id, title, slug, specialty, category')
         .order('title', { ascending: true })
         .range(from, to);
       if (error) throw error;
@@ -680,50 +654,6 @@ function buildAlphabet() {
 function renderArticles() {
   const section = document.getElementById('articlesSection');
 
-  // Szakterület nézet
-  if (viewMode === 'specialty' && !searchQuery) {
-    const grouped = {};
-    allArticles.forEach(a => {
-      const spec = a.specialty || 'Egyéb';
-      if (!grouped[spec]) grouped[spec] = [];
-      grouped[spec].push(a);
-    });
-
-    const SPEC_COLORS = {
-      'Belgyógyászat':'#1e3a8a','Neurológia':'#7c3aed','Kardiológia':'#dc2626',
-      'Ortopédia':'#0d9488','Gasztroenterológia':'#ea580c','Pszichiátria':'#9333ea',
-      'Endokrinológia':'#0891b2','Nőgyógyászat':'#db2777','Gyermekgyógyászat':'#16a34a',
-      'Fogászat':'#2563eb','Szemészet':'#0284c7','Bőrgyógyászat':'#d97706',
-      'Urológia':'#059669','Fül-orr-gégészet':'#7c3aed','Pulmonológia':'#0369a1',
-      'Allergológia':'#15803d','Reumatológia':'#b45309','Onkológia':'#be123c',
-      'Addiktológia':'#6d28d9','Infektológia':'#065f46','Traumatológia':'#92400e',
-      'Sebészet':'#1d4ed8','Rehabilitáció':'#0f766e'
-    };
-
-    const sortedSpecs = Object.keys(grouped).sort((a,b) => a.localeCompare(b, 'hu'));
-
-    section.innerHTML = `
-      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 5% 1.5rem;max-width:1200px;margin:0 auto">
-        ${sortedSpecs.map(spec => `
-          <a href="#spec-${encodeURIComponent(spec)}" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;background:${SPEC_COLORS[spec]||'#113293'}18;border:1.5px solid ${SPEC_COLORS[spec]||'#113293'}40;color:${SPEC_COLORS[spec]||'#113293'};font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;text-decoration:none;transition:all .15s;letter-spacing:-0.005em" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
-            ${spec} <span style="opacity:.65">(${grouped[spec].length})</span>
-          </a>`).join('')}
-      </div>
-      ${sortedSpecs.map(spec => `
-        <div class="letter-section" id="spec-${encodeURIComponent(spec)}">
-          <div class="letter-section-header">
-            <div class="letter-badge" style="background:${SPEC_COLORS[spec]||'#113293'};min-width:auto;padding:0 16px;font-size:13px;font-weight:600">${spec}</div>
-            <div>
-              <div style="font-family:'Inter',sans-serif;font-size:18px;font-weight:600;color:#113293;letter-spacing:-0.02em">${spec}</div>
-              <div class="letter-section-count">${grouped[spec].length} cikk</div>
-            </div>
-          </div>
-          <div class="articles-grid">${grouped[spec].sort(huCompare).map(cardHTML).join('')}</div>
-        </div>
-      `).join('')}`;
-    return;
-  }
-
   let filtered = allArticles;
 
   if (searchQuery) {
@@ -783,12 +713,10 @@ function renderArticles() {
 }
 
 function cardHTML(article) {
-  const spec = article.specialty ? `<div class="article-card__spec">${article.specialty}</div>` : '';
   return `
     <a class="article-card" href="/tudastar/${encodeURIComponent(article.slug)}" title="${article.title}" rel="dofollow">
       <div class="article-card__main">
         <div class="article-card__title">${article.title}</div>
-        ${spec}
       </div>
       <div class="article-card__arrow">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
