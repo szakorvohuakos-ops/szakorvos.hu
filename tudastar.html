@@ -427,28 +427,6 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 <section class="hero">
   <div class="hero-label">Egészségügyi Tudástár</div>
   <h1 class="hero-title">Tünetek és betegségek <span>A-tól Z-ig</span></h1>
-  <p class="hero-desc">
-    Keresd meg tüneted vagy betegséged nevét, és tudd meg, melyik szakorvoshoz érdemes fordulnod. Kattints bármelyik bejegyzésre az ajánlott orvos megkereséséhez.
-  </p>
-  <div class="hero-badges">
-    <div class="hero-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-      344+ tünet és betegség
-    </div>
-    <div class="hero-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Ajánlott szakterület minden esetben
-    </div>
-    <div class="hero-badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-      Azonnali időpontfoglalás
-    </div>
-  </div>
-
-  <!-- Alphabet -->
-  <div class="alphabet-wrap" id="alphabetWrap">
-    <!-- Rendered by JS -->
-  </div>
 
   <!-- Search -->
   <div class="search-wrap">
@@ -459,7 +437,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <input
         type="text"
         id="searchInput"
-        placeholder="Keress tünetet vagy betegséget... pl. fejfájás, ízületi fájdalom"
+        placeholder="Keress tünetet, betegséget vagy kulcsszót... pl. fejfájás, magas vérnyomás"
         autocomplete="off"
       />
     </div>
@@ -580,7 +558,7 @@ async function loadArticles() {
       const to = from + pageSize - 1;
       const { data: batch, error } = await db
         .from('knowledge_articles')
-        .select('id, title, slug, specialty, category')
+        .select('id, title, slug, specialty, category, description, content')
         .order('title', { ascending: true })
         .range(from, to);
       if (error) throw error;
@@ -592,7 +570,12 @@ async function loadArticles() {
 
     // Magyar ábécé szerinti rendezés
     allArticles = all.sort(huCompare);
-    buildAlphabet();
+
+    // Keresési index előkészítése (title + description + content szöveg)
+    allArticles.forEach(a => {
+      const plainContent = a.content ? String(a.content).replace(/<[^>]+>/g, ' ') : '';
+      a._searchText = normalize([a.title, a.description || '', plainContent].join(' '));
+    });
 
     // URL paraméterből előre kitöltés
     const urlParams = new URLSearchParams(window.location.search);
@@ -618,47 +601,18 @@ async function loadArticles() {
   }
 }
 
-function buildAlphabet() {
-  const lettersWithContent = new Set(allArticles.map(a => firstLetter(a.title)));
-  const wrap = document.getElementById('alphabetWrap');
-
-  // ALL button
-  const allBtn = document.createElement('button');
-  allBtn.className = 'alpha-btn' + (activeFilter === 'ALL' ? ' active' : '');
-  allBtn.textContent = 'Összes';
-  allBtn.style.width = 'auto';
-  allBtn.style.padding = '0 14px';
-  allBtn.style.fontSize = '13px';
-  allBtn.onclick = () => { activeFilter = 'ALL'; searchQuery = ''; document.getElementById('searchInput').value = ''; buildAlphabet(); renderArticles(); };
-  wrap.appendChild(allBtn);
-
-  ALPHABET.forEach(letter => {
-    const btn = document.createElement('button');
-    const hasContent = lettersWithContent.has(letter);
-    btn.className = 'alpha-btn' + (!hasContent ? ' empty' : '') + (activeFilter === letter ? ' active' : '');
-    btn.textContent = letter;
-    if (hasContent) {
-      btn.onclick = () => {
-        activeFilter = letter;
-        searchQuery = '';
-        document.getElementById('searchInput').value = '';
-        buildAlphabet();
-        renderArticles();
-        document.getElementById('articlesSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      };
-    }
-    wrap.appendChild(btn);
-  });
-}
-
 function renderArticles() {
   const section = document.getElementById('articlesSection');
 
   let filtered = allArticles;
 
   if (searchQuery) {
-    const q = normalize(searchQuery);
-    filtered = allArticles.filter(a => normalize(a.title).includes(q));
+    // Szabad szavas keresés: minden szót külön keresünk a cím + leírás + tartalom alapján
+    const terms = normalize(searchQuery).split(/\s+/).filter(Boolean);
+    filtered = allArticles.filter(a => {
+      const txt = a._searchText || normalize(a.title);
+      return terms.every(t => txt.includes(t));
+    });
   } else if (activeFilter !== 'ALL') {
     filtered = allArticles.filter(a => firstLetter(a.title) === activeFilter);
   }
@@ -731,7 +685,6 @@ document.getElementById('searchInput').addEventListener('input', e => {
   searchTimer = setTimeout(() => {
     searchQuery = e.target.value.trim();
     if (searchQuery) activeFilter = 'ALL';
-    buildAlphabet();
     renderArticles();
   }, 250);
 });
