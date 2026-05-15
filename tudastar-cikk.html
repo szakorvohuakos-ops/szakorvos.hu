@@ -597,8 +597,18 @@ function generateContent(title, specialty) {
 }
 
 async function loadArticle() {
+  // Slug kiolvasása — vagy a query-ből (?slug=...) vagy az URL path-ból (/tudastar/<slug>)
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug') || 'abortusz';
+  let slug = params.get('slug');
+  if (!slug) {
+    // path: pl. /tudastar/amnezia → ['', 'tudastar', 'amnezia']
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const tudIdx = parts.indexOf('tudastar');
+    if (tudIdx !== -1 && parts[tudIdx + 1]) {
+      slug = decodeURIComponent(parts[tudIdx + 1]);
+    }
+  }
+  if (!slug) slug = 'abortusz';
   const wrap = document.getElementById('articleWrap');
 
   // XSS-safe escape for user-controlled values (URL params)
@@ -635,38 +645,6 @@ async function loadArticle() {
     const article = rows[0];
     const specialty = article.specialty || guessSpecialty(article.title);
     const icon = SPEC_ICONS[specialty] || '🏥';
-
-    // ── 3) Kapcsolódó cikkek: egyetlen query .or()-ral ─────────────────
-    //    Specialty match + ugyanazzal a betűvel kezdődő cím (fallback).
-    //    Korábban 2 külön RTT volt — most 1.
-    const firstChar = article.title[0]?.toUpperCase() || '';
-    let related = [];
-    try {
-      const orFilter = [
-        specialty ? `specialty.eq.${specialty}` : null,
-        firstChar ? `title.ilike.${firstChar}%` : null,
-      ].filter(Boolean).join(',');
-
-      const { data: relData, error: relErr } = await db
-        .from('knowledge_articles')
-        .select('title, slug, specialty')
-        .or(orFilter)
-        .neq('slug', slug)
-        .not('content', 'is', null)
-        .limit(12);
-      if (!relErr && relData) {
-        // Prioritás: specialty match előrébb
-        related = relData
-          .sort((a, b) => {
-            const aMatch = a.specialty === specialty ? 0 : 1;
-            const bMatch = b.specialty === specialty ? 0 : 1;
-            return aMatch - bMatch;
-          })
-          .slice(0, 6);
-      }
-    } catch (e) {
-      console.warn('[related]', e);
-    }
 
     // SEO meta frissítése – gazdagabb description
     const seoTitle = `${article.title} – tünetek, kezelés, szakorvos | Szakorvos.hu`;
@@ -747,15 +725,6 @@ async function loadArticle() {
 
     // Oldal tartalom renderelése - ha van DB tartalom, azt használjuk
     const content = article.content ? article.content : generateContent(article.title, specialty);
-    const relatedHtml = related.length ? `
-      <div class="sidebar-card">
-        <div class="sidebar-card-title">Kapcsolódó cikkek</div>
-        ${related.map(r => `
-          <a href="/tudastar/${encodeURIComponent(r.slug)}" class="related-item" rel="dofollow">
-            <div class="related-item-dot"></div>
-            <div class="related-item-title">${escapeHtml(r.title)}</div>
-          </a>`).join('')}
-      </div>` : '';
 
     wrap.innerHTML = `
       <!-- Főtartalom -->
@@ -803,16 +772,6 @@ async function loadArticle() {
               <span class="specialty-badge-icon">${ic}</span>
               <span class="specialty-badge-text">${spec} szakorvos</span>
             </a>`).join('')}
-        </div>
-
-        ${relatedHtml}
-
-        <div class="sidebar-card">
-          <div class="sidebar-card-title">AI Egészségügyi Elemzés</div>
-          <p style="font-size:13px;color:#475569;line-height:1.6;margin-bottom:12px">Írja le tüneteit, és AI asszisztensünk azonnal megmondja melyik szakorvoshoz érdemes fordulni.</p>
-          <a href="index.html#ai-widget" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#f0f8f3;border:1.5px solid #c8e8d2;color:#1f6e3a;border-radius:10px;padding:10px 16px;text-decoration:none;font-size:13px;font-weight:700;transition:all .15s">
-            🤖 AI elemzés indítása
-          </a>
         </div>
       </aside>
     `;
