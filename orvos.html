@@ -279,7 +279,11 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .prof-section-h .sec-badge{display:inline-flex;align-items:center;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:6px}
 
 /* Bemutatkozás layout: bio + cols */
-.intro-bio{font-size:14.5px;color:var(--text-2);line-height:1.75;margin-bottom:24px;white-space:pre-line}
+.intro-bio{font-size:14.5px;color:var(--text-2);line-height:1.75;margin-bottom:0;white-space:pre-line}
+.info-list{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:6px 18px}
+@media (max-width:600px){.info-list{grid-template-columns:1fr}}
+.info-list li{position:relative;padding-left:14px;font-size:13.5px;color:var(--sub);line-height:1.6;font-weight:500}
+.info-list li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--brand-2)}
 .intro-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
 @media (max-width:880px){.intro-cols{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:480px){.intro-cols{grid-template-columns:1fr}}
@@ -680,24 +684,42 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           Bemutatkozás
         </div>
         <p class="intro-bio" id="aboutBio">–</p>
-        <div class="intro-cols">
-          <div class="intro-col">
-            <div class="intro-col-h">Végzettségek</div>
-            <ul id="colEdu"><li>–</li></ul>
-          </div>
-          <div class="intro-col">
-            <div class="intro-col-h">Szakterületek</div>
-            <ul id="colSpecs"><li>–</li></ul>
-          </div>
-          <div class="intro-col">
-            <div class="intro-col-h">Tagságok</div>
-            <ul id="colMember"><li>–</li></ul>
-          </div>
-          <div class="intro-col">
-            <div class="intro-col-h">Beszélt nyelvek</div>
-            <ul id="colLangs"><li>–</li></ul>
-          </div>
+      </div>
+
+      <!-- ─── VÉGZETTSÉGEK ──────────────────────────────────────── -->
+      <div class="prof-section">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Végzettségek
         </div>
+        <ul class="info-list" id="colEdu"><li>–</li></ul>
+      </div>
+
+      <!-- ─── SZAKTERÜLETEK ─────────────────────────────────────── -->
+      <div class="prof-section">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+          Szakterületek
+        </div>
+        <ul class="info-list" id="colSpecs"><li>–</li></ul>
+      </div>
+
+      <!-- ─── TAGSÁGOK ──────────────────────────────────────────── -->
+      <div class="prof-section">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Tagságok
+        </div>
+        <ul class="info-list" id="colMember"><li>–</li></ul>
+      </div>
+
+      <!-- ─── BESZÉLT NYELVEK ───────────────────────────────────── -->
+      <div class="prof-section">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+          Beszélt nyelvek
+        </div>
+        <ul class="info-list" id="colLangs"><li>–</li></ul>
       </div>
 
       <!-- ─── SZOLGÁLTATÁSOK ───────────────────────────────────── -->
@@ -760,27 +782,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     </div>
     <!-- /left column -->
 
-    <!-- ═════ RIGHT COLUMN: STICKY BOOKING WIDGET ═════════════════ -->
+    <!-- ═════ RIGHT COLUMN ════════════════════════════════════════ -->
     <aside>
-      <div class="bcard" id="bookingCard">
-        <div class="bcard-top">
-          <div class="bcard-label">Kezdő ár</div>
-          <div class="bcard-price" id="bPrice">– Ft</div>
-          <div class="bcard-sub">Első konzultáció</div>
-        </div>
-        <div class="bcard-body">
-          <div id="bcardRows"></div>
-          <button class="bcard-cta" onclick="document.getElementById('pane-booking')?.scrollIntoView({behavior:'smooth'})">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Időpontfoglalás
-          </button>
-          <button class="bcard-fav" id="favBtn" onclick="toggleFav()">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-            <span id="favLbl">Kedvencekhez adom</span>
-          </button>
-        </div>
-      </div>
-
       <!-- Elérhetőségek -->
       <div class="contact-card" id="contactCard">
         <div class="contact-card-h">Elérhetőségek</div>
@@ -1154,18 +1157,6 @@ function render(d){
   contactRows.push(contactRow('CLOCK','Rendelési idő', 'H–P: 08:00 – 18:00', null));
   contactRows.push(contactRow('STAR','Elégedettség', `${rat > 0 ? Math.round(rat * 20) : 98}% ajánlja`, null));
   document.getElementById('contactRows').innerHTML = contactRows.join('');
-
-  // ─── Booking widget right column ─────────────────────────────────
-  document.getElementById('bPrice').textContent = fee ? fmtHuf(fee) : 'Egyedi';
-  // Bcard rows: Kontroll vizit (~2/3 ár), Online (~85% ár)
-  const bcardRows = [];
-  if(fee){
-    bcardRows.push(`<div class="bcard-row"><span class="lbl">Kontroll vizit:</span><span class="val">${fmtHuf(Math.round(fee * 0.67 / 1000) * 1000)}</span></div>`);
-    bcardRows.push(`<div class="bcard-row"><span class="lbl">Online konzultáció:</span><span class="val">${fmtHuf(Math.round(fee * 0.85 / 1000) * 1000)}</span></div>`);
-  } else {
-    bcardRows.push(`<div class="bcard-row"><span class="lbl">Egyeztetés alapján</span><span class="val">–</span></div>`);
-  }
-  document.getElementById('bcardRows').innerHTML = bcardRows.join('');
 
   // ─── Szolgáltatások tab ──────────────────────────────────────────
   renderServicesTab(d, fee);
