@@ -128,13 +128,13 @@ input,textarea{font-family:'Inter',sans-serif;font-weight:500}
 /* ════════ NAV ════════ */
 nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
 nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
-.nav-row-top{display:flex;align-items:center;min-height:58px;padding:8px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+.nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-.nav-logo img{height:36px;width:auto;object-fit:contain}
+.nav-logo img{height:42px;width:auto;object-fit:contain}
 
 .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
 .nav-links li{position:relative}
-.nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:var(--text);padding:8px 14px;border-radius:10px;transition:background .25s cubic-bezier(.4,0,.2,1),color .25s ease;letter-spacing:-0.005em}
+.nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:var(--text);padding:10px 16px;border-radius:10px;transition:background .25s cubic-bezier(.4,0,.2,1),color .25s ease;letter-spacing:-0.005em}
 .nav-links li>a:hover{background:rgba(17,50,147,.05);color:var(--brand)}
 .nav-links li>a svg{opacity:.6}
 .nav-link-highlight{color:var(--text) !important}
@@ -165,15 +165,13 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero::before{content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none;z-index:0}
 .hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.04),transparent 60%);pointer-events:none;z-index:0}
 .hero-content{max-width:1400px;margin:0 auto;position:relative;z-index:2;width:100%}
-.hero-two-col{display:grid;grid-template-columns:1.8fr 1fr;gap:3.5rem;align-items:start}
+.hero-two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:2rem;align-items:start}
 .hero-left{min-width:0}
 
-.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.9rem,3.25vw,2.88rem);font-weight:500;color:var(--text);line-height:1.06;letter-spacing:-0.035em;margin-bottom:0;flex:0 1 auto;min-width:0;max-width:100%;font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1}
+.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.755rem,2.565vw,2.385rem);font-weight:600;color:var(--text);line-height:1.05;letter-spacing:-0.04em;margin-bottom:0;flex:0 1 auto;min-width:0;max-width:48%;font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1}
 .hero-title-line{display:block;white-space:nowrap}
-.hero-title-line + .hero-title-line{margin-top:.04em}
-.hero-title-accent{background:linear-gradient(135deg,#2C9650 0%,#3fb568 60%,#4cc97c 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;font-weight:500}
-.hero-title-blue{background:linear-gradient(135deg,#113293 0%,#264ACA 60%,#3957d5 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;font-weight:500}
-.hero-subtitle{font-family:'Inter',sans-serif;font-size:16px;font-weight:500;color:var(--sub);line-height:1.55;letter-spacing:-0.005em;margin:.7rem 0 1.25rem;max-width:600px}
+.hero-title-line + .hero-title-line{margin-top:.05em}
+.hero-title-accent{background:linear-gradient(135deg,#2C9650 0%,#3fb568 60%,#4cc97c 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;font-weight:600}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#5b6478;text-transform:none;letter-spacing:.005em;margin-top:0;margin-bottom:1.5rem;background:rgba(255,255,255,.7);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);padding:6px 14px 6px 10px;border-radius:100px;border:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04);position:relative}
 .hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);box-shadow:0 0 0 0 rgba(255,138,0,.45);animation:eyebrowDotPulse 2.4s ease-in-out infinite}
 @keyframes eyebrowDotPulse{
@@ -225,11 +223,9 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-divider-line{height:1px;background:var(--border)}
 
 /* ════ SEARCH BOX - DOMINÁNS, KIEMELT ════ */
-.hero-search-box{background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(253,254,255,.55) 100%);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);border:1.5px solid rgba(255,255,255,.7);border-radius:22px;padding:1.6rem;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 2px 4px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08),0 28px 60px rgba(17,50,147,.1),0 1px 0 rgba(255,255,255,.6) inset;width:100%;max-width:none;position:relative;z-index:2;transform:none;transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;animation:none}
-.hero-search-box::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,transparent 35%,transparent 65%,rgba(199,210,254,.15) 100%);opacity:.85;pointer-events:none;z-index:0}
-.hero-search-box > *{position:relative;z-index:1}
-.hero-search-box:hover{border-color:rgba(125,150,240,.6);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 4px 10px rgba(17,50,147,.08),0 18px 38px rgba(17,50,147,.16),0 36px 72px rgba(17,50,147,.18);transform:translateY(-4px)}
-.hero-search-box:focus-within{border-color:rgba(46,74,202,.7);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 4px rgba(46,74,202,.1),0 4px 10px rgba(46,74,202,.1),0 20px 42px rgba(46,74,202,.18),0 38px 80px rgba(46,74,202,.2);transform:translateY(-5px)}
+.hero-search-box{background:linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(253,254,255,.96) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1.5px solid rgba(220,227,234,.85);border-radius:20px;padding:1.4rem;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06),0 20px 48px rgba(17,50,147,.08);width:calc(95% + 1cm);max-width:none;position:relative;z-index:2;transform:translateX(1cm);transition:transform .5s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .35s ease,width .35s cubic-bezier(.4,0,.2,1);animation:search-float 5s ease-in-out infinite}
+.hero-search-box:hover{border-color:rgba(125,150,240,.7);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 10px rgba(17,50,147,.06),0 14px 32px rgba(17,50,147,.12),0 28px 64px rgba(17,50,147,.14);transform:translateY(-3px) scale(1.006);animation-play-state:paused}
+.hero-search-box:focus-within{border-color:var(--brand-2);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 0 0 4px rgba(46,74,202,.08),0 4px 10px rgba(46,74,202,.08),0 16px 36px rgba(46,74,202,.14),0 32px 70px rgba(46,74,202,.16);transform:translateY(-4px);animation-play-state:paused}
 @keyframes search-float{
   0%,100%{box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06),0 20px 48px rgba(17,50,147,.08);transform:translate(1cm,0)}
   50%{box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 3px rgba(17,50,147,.04),0 12px 30px rgba(17,50,147,.08),0 26px 60px rgba(17,50,147,.1);transform:translate(1cm,-2px)}
@@ -237,47 +233,47 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-search-box-label{font-size:13px;font-weight:600;color:var(--brand);letter-spacing:-0.005em;margin-bottom:.95rem;padding-left:6px}
 
 /* ─── HERO SEARCH TABS ─── */
-.search-tabs{display:flex;gap:6px;margin:-.4rem -.2rem 1.2rem;padding:6px;border-radius:14px;background:linear-gradient(180deg,rgba(238,242,255,.7) 0%,rgba(244,246,250,.55) 100%);border:1px solid rgba(199,210,254,.45);box-shadow:inset 0 1px 2px rgba(17,50,147,.04),0 1px 0 rgba(255,255,255,.5);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.search-tabs{display:flex;gap:0;margin:-1.4rem -1.4rem 1.1rem;padding:0 .9rem;border-bottom:1px solid var(--border-soft);background:linear-gradient(to bottom,#fafbff 0%,#fff 100%);border-radius:20px 20px 0 0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .search-tabs::-webkit-scrollbar{display:none}
-.search-tab{display:flex;align-items:center;gap:7px;padding:9px 16px;background:transparent;border:1px solid transparent;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#6b7a9a;cursor:pointer;position:relative;transition:all .3s cubic-bezier(.34,1.4,.64,1);white-space:nowrap;letter-spacing:-0.005em;flex:1;justify-content:center}
-.search-tab svg{flex-shrink:0;opacity:.55;transition:opacity .25s ease,transform .3s cubic-bezier(.34,1.4,.64,1);width:15px;height:15px}
-.search-tab:hover{color:var(--brand);background:rgba(255,255,255,.6);border-color:rgba(199,210,254,.4)}
-.search-tab:hover svg{opacity:.95;transform:scale(1.08)}
-.search-tab.active{color:#fff;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-color:rgba(17,50,147,.5);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(17,50,147,.18),0 8px 18px rgba(17,50,147,.22);transform:translateY(-1px)}
-.search-tab.active svg{opacity:1;color:#fff}
-.search-tab[data-mode="clinic"].active{background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);border-color:rgba(44,150,80,.5);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(44,150,80,.18),0 8px 18px rgba(44,150,80,.22)}
-.search-tab[data-mode="knowledge"].active{background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border-color:rgba(255,138,0,.5);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(255,138,0,.18),0 8px 18px rgba(255,138,0,.22)}
-.search-tab[data-mode="examination"].active{background:linear-gradient(135deg,#7c3aed 0%,#9555f3 100%);border-color:rgba(124,58,237,.5);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(124,58,237,.18),0 8px 18px rgba(124,58,237,.22)}
+.search-tab{display:flex;align-items:center;gap:6px;padding:11px 12px;background:transparent;border:none;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:#7d8aab;cursor:pointer;position:relative;transition:color .25s cubic-bezier(.4,0,.2,1),transform .25s cubic-bezier(.4,0,.2,1);white-space:nowrap;letter-spacing:-0.005em}
+.search-tab svg{flex-shrink:0;opacity:.65;transition:opacity .25s cubic-bezier(.4,0,.2,1),transform .25s cubic-bezier(.4,0,.2,1);width:15px;height:15px}
+.search-tab:hover{color:var(--brand)}
+.search-tab:hover svg{opacity:.95;transform:scale(1.05)}
+.search-tab.active{color:var(--brand)}
+.search-tab.active svg{opacity:1}
+.search-tab.active::after{content:'';position:absolute;left:14px;right:14px;bottom:-1px;height:3px;background:linear-gradient(90deg,#113293 0%,#264ACA 100%);border-radius:3px 3px 0 0;animation:tabSlideIn .35s cubic-bezier(.34,1.4,.64,1)}
 @keyframes tabSlideIn{
   from{transform:scaleX(.3);opacity:0}
   to{transform:scaleX(1);opacity:1}
 }
+.search-tab[data-mode="clinic"].active{color:#2C9650}
+.search-tab[data-mode="clinic"].active::after{background:linear-gradient(90deg,#2C9650 0%,#3fb568 100%)}
+.search-tab[data-mode="knowledge"].active{color:#FF8A00}
+.search-tab[data-mode="knowledge"].active::after{background:linear-gradient(90deg,#2C9650 0%,#FF8A00 100%)}
+.search-tab[data-mode="examination"].active{color:#7c3aed}
+.search-tab[data-mode="examination"].active::after{background:linear-gradient(90deg,#264ACA 0%,#7c3aed 100%)}
 @media(max-width:640px){
-  .search-tab{padding:8px 12px;font-size:12px}
-  .search-tab svg{width:14px;height:14px}
+  .search-tab{padding:12px 14px;font-size:13px}
+  .search-tab svg{width:16px;height:16px}
 }
 .hero-search-row{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
 .hero-search-row-single{position:relative}
-.hero-search-field{flex:3;min-width:220px;display:flex;align-items:center;gap:11px;background:#fff;border:1px solid rgba(220,227,234,.65);border-radius:11px;padding:10px 14px 10px 18px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
-.hero-search-field:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.1),0 2px 10px rgba(46,63,196,.07)}
+.hero-search-field{flex:3;min-width:220px;display:flex;align-items:center;gap:10px;background:var(--bg);border:1.5px solid transparent;border-radius:11px;padding:7px 12px 7px 16px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
+.hero-search-field:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.10),0 2px 10px rgba(46,63,196,.06)}
 .hero-search-field svg{flex-shrink:0;color:var(--muted);width:17px;height:17px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1)}
 .hero-search-field:focus-within svg{color:var(--brand-2);transform:scale(1.08)}
-.hero-search-field input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:15px;color:var(--text);outline:none;min-width:0;font-weight:500;letter-spacing:-0.005em}
+.hero-search-field input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14.5px;color:var(--text);outline:none;min-width:0;font-weight:500}
 .hero-search-field input::placeholder{color:#a0aabd;transition:color .25s ease}
 .hero-search-field:focus-within input::placeholder{color:#bcc4d4}
 
-.hero-search-location-box{flex:1;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(220,227,234,.65);border-radius:11px;padding:10px 16px;min-width:130px;max-width:200px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
-.hero-search-location-box:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.1),0 2px 10px rgba(46,63,196,.07)}
+.hero-search-location-box{flex:1;display:flex;align-items:center;gap:10px;background:var(--bg);border:1.5px solid transparent;border-radius:11px;padding:9px 16px;min-width:130px;max-width:200px;transition:background .3s cubic-bezier(.4,0,.2,1),border-color .3s cubic-bezier(.4,0,.2,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
+.hero-search-location-box:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.10),0 2px 10px rgba(46,63,196,.06)}
 .hero-search-location-box svg{flex-shrink:0;color:var(--muted);width:15px;height:15px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.4,.64,1)}
 .hero-search-location-box:focus-within svg{color:var(--brand-2);transform:scale(1.08)}
-.hero-search-location-box input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;min-width:0;font-weight:500}
+.hero-search-location-box input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:13.5px;color:var(--text);outline:none;min-width:0;font-weight:500}
 .hero-search-location-box input::placeholder{color:#a0aabd}
 
-.hero-inline-search-btn{background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:10px 22px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 1px 3px rgba(46,74,202,.15),0 4px 14px rgba(46,74,202,.25);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
-.hero-inline-search-btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
-.hero-inline-search-btn:hover{transform:translateY(-1.5px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 2px 5px rgba(46,74,202,.18),0 8px 22px rgba(46,74,202,.35),0 16px 38px rgba(46,74,202,.22)}
-.hero-inline-search-btn:hover::before{left:130%}
-.hero-inline-search-btn:active{transform:translateY(-1px);transition:transform .15s ease}
+.hero-inline-search-btn{background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:9px 22px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 1px 3px rgba(46,74,202,.15),0 4px 14px rgba(46,74,202,.25);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
 .hero-inline-search-btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);transition:left .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
 .hero-inline-search-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.18),0 14px 32px rgba(46,74,202,.4)}
 .hero-inline-search-btn:hover::before{left:130%}
@@ -317,7 +313,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 
 /* ─── Trending chip-sor ─── */
-.hero-trending{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border-soft);overflow:hidden}
+.hero-trending{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:.9rem;padding-top:.9rem;border-top:1px solid var(--border-soft)}
 .hero-trending-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--sub);letter-spacing:-0.005em;margin-right:4px}
 .hero-trending-flame{display:inline-block;color:#FF8A00;animation:flameFlicker 2.2s ease-in-out infinite}
 @keyframes flameFlicker{
@@ -329,21 +325,16 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-trending-chip-arrow{color:#9aa5c4;transition:color .25s ease,transform .3s ease}
 .hero-trending-chip:hover .hero-trending-chip-arrow{color:var(--brand);transform:translateX(2px)}
 
-.hero-trust-strip{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:18px;margin-top:1.1rem;padding-top:0;border-top:none}
-.hero-trust-strip-sep{width:1px;height:22px;background:linear-gradient(180deg,transparent,rgba(17,50,147,.18),transparent)}
-
-.hero-stat-mini{display:inline-flex;align-items:baseline;gap:7px;text-decoration:none;letter-spacing:-0.005em;white-space:nowrap;transition:transform .25s cubic-bezier(.34,1.4,.64,1)}
-.hero-stat-mini:hover{transform:translateY(-1px)}
-.hero-stat-mini-num{font-family:'Inter',sans-serif;font-size:18px;font-weight:800;color:var(--brand);letter-spacing:-0.02em;font-feature-settings:'tnum' 1;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero-stat-mini-lbl{font-size:12.5px;font-weight:600;color:var(--sub);transition:color .2s ease}
-.hero-stat-mini:hover .hero-stat-mini-lbl{color:var(--brand)}
-
-@media (max-width:900px){
-  .hero-trust-strip{gap:12px}
-  .hero-trust-strip-sep{display:none}
-  .hero-stat-mini-num{font-size:16px}
-  .hero-stat-mini-lbl{font-size:11.5px}
-}
+.hero-trust{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border-soft)}
+.hero-trust-item{display:flex;align-items:flex-start;gap:.85rem}
+.hero-trust-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#eef2ff}
+.hero-trust-icon.green{background:#dcfce7}
+.hero-trust-icon.green svg{color:#16a34a}
+.hero-trust-icon svg{color:#264ACA;width:20px;height:20px}
+.hero-trust-title{font-size:14px;font-weight:700;color:var(--brand);letter-spacing:-0.01em;margin-bottom:2px;line-height:1.3}
+.hero-trust-desc{font-size:12.5px;color:var(--sub);line-height:1.45}
+@media (max-width:900px){.hero-trust{grid-template-columns:repeat(2,1fr);gap:1rem}}
+@media (max-width:480px){.hero-trust{grid-template-columns:1fr}}
 
 /* ─── Recent searches a dropdown tetején ─── */
 .recent-section{padding:.65rem .85rem .35rem;border-bottom:1px solid var(--border-soft)}
@@ -379,7 +370,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .smart-dd-type{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 
 /* HERO JOBB OLDAL – AI chat oldalt */
-.hero-right-search{display:flex;flex-direction:column;gap:1.8rem;min-width:0;width:100%;position:relative}
+.hero-right-search{display:flex;flex-direction:column;gap:1rem;min-width:0;width:100%;position:relative}
 
 /* ════ AI CHAT WIDGET ════ */
 /* ─── PARTNER GOMB — finom fehér üveg, narancs accent ─── */
@@ -395,26 +386,26 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-partner-btn:hover .hero-partner-btn-arrow{transform:translateX(3px);background:var(--brand);color:#fff}
 
 /* ─── AI CTA KÁRTYA — fehér üveg, zöld accent ─── */
-.hero-ai-cta{display:flex;flex-direction:column;gap:.8rem;width:100%;margin-left:0;background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(253,254,255,.55) 100%);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);color:var(--text);border:1.5px solid rgba(255,255,255,.7);border-radius:18px;padding:1.25rem 1.35rem;text-align:left;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 2px 4px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08),0 28px 60px rgba(17,50,147,.1);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;position:relative;overflow:hidden;font-family:inherit}
+.hero-ai-cta{display:flex;flex-direction:column;gap:.95rem;width:65%;margin-left:auto;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(252,253,255,.85) 100%);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);color:var(--text);border:1px solid rgba(220,227,234,.5);border-radius:18px;padding:1.4rem 1.5rem;text-align:left;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 4px 16px rgba(17,50,147,.04),0 16px 40px rgba(17,50,147,.05);transition:transform .5s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .35s ease;position:relative;overflow:hidden;font-family:inherit}
 .hero-ai-cta::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.6) 0%,transparent 45%);opacity:.6;pointer-events:none}
 .hero-ai-cta-glow{position:absolute;top:-50%;right:-30%;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(44,150,80,.08) 0%,transparent 65%);pointer-events:none;animation:aiCtaGlow 8s ease-in-out infinite}
 @keyframes aiCtaGlow{
   0%,100%{transform:translate(0,0) scale(1);opacity:.85}
   50%{transform:translate(-10px,14px) scale(1.06);opacity:1}
 }
-.hero-ai-cta:hover{transform:translateY(-4px);border-color:rgba(125,150,240,.6);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 4px 10px rgba(17,50,147,.08),0 18px 38px rgba(17,50,147,.16),0 36px 72px rgba(17,50,147,.18)}
+.hero-ai-cta:hover{transform:translateY(-2px);border-color:rgba(44,150,80,.3);box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 6px 20px rgba(44,150,80,.06),0 24px 56px rgba(17,50,147,.08)}
 .hero-ai-cta:active{transform:translateY(-1px);transition:transform .15s ease}
 .hero-ai-cta-top{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
-.hero-ai-cta-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 2px 6px rgba(44,150,80,.25)}
+.hero-ai-cta-avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 2px 6px rgba(44,150,80,.25)}
 .hero-ai-cta-status{display:inline-flex;align-items:center;gap:5px;background:rgba(44,150,80,.1);color:var(--green-dark);padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:600;letter-spacing:.02em;margin-left:auto;border:1px solid rgba(44,150,80,.18)}
 .hero-ai-cta-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(44,150,80,.55);animation:dotPulse 2s ease-in-out infinite}
 @keyframes dotPulse{
   0%,100%{box-shadow:0 0 0 0 rgba(44,150,80,.45)}
   50%{box-shadow:0 0 0 6px rgba(44,150,80,0)}
 }
-.hero-ai-cta-title{font-family:'Inter',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:-0.028em;line-height:1.18;color:var(--text);position:relative;z-index:1}
-.hero-ai-cta-sub{font-size:12.5px;font-weight:500;line-height:1.5;color:var(--sub);position:relative;z-index:1}
-.hero-ai-cta-action{display:flex;align-items:center;justify-content:space-between;gap:8px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);color:#fff;padding:10px 14px;border-radius:11px;font-weight:600;font-size:13px;letter-spacing:-0.005em;position:relative;z-index:1;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(44,150,80,.18),0 8px 18px rgba(44,150,80,.22);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s ease;overflow:hidden}
+.hero-ai-cta-title{font-family:'Inter',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:-0.028em;line-height:1.15;color:var(--text);position:relative;z-index:1}
+.hero-ai-cta-sub{font-size:13.5px;font-weight:500;line-height:1.5;color:var(--sub);position:relative;z-index:1}
+.hero-ai-cta-action{display:flex;align-items:center;justify-content:space-between;gap:8px;background:linear-gradient(135deg,#2C9650 0%,#3fb568 100%);color:#fff;padding:12px 16px;border-radius:12px;font-weight:600;font-size:14px;letter-spacing:-0.005em;position:relative;z-index:1;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(44,150,80,.18),0 8px 18px rgba(44,150,80,.22);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .3s ease;overflow:hidden}
 .hero-ai-cta-action::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .7s cubic-bezier(.4,0,.2,1);pointer-events:none}
 .hero-ai-cta:hover .hero-ai-cta-action{box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 4px 10px rgba(44,150,80,.22),0 14px 28px rgba(44,150,80,.32)}
 .hero-ai-cta:hover .hero-ai-cta-action::after{left:130%}
@@ -423,48 +414,14 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-ai-cta-legal{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--sub);letter-spacing:.005em;position:relative;z-index:1}
 .hero-ai-cta-legal svg{flex-shrink:0;color:var(--green);opacity:.85}
 
-/* ── Hero mini-térkép kártya (AI alatt) ── */
-.hero-mini-map-card{display:flex;align-items:stretch;gap:.85rem;width:100%;margin-left:0;background:linear-gradient(180deg,rgba(255,255,255,.65) 0%,rgba(252,253,255,.5) 100%);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(255,255,255,.55);border-radius:16px;padding:.85rem;text-decoration:none;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.65) inset,0 2px 8px rgba(17,50,147,.04),0 10px 24px rgba(17,50,147,.06);transition:transform .4s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease}
-
-/* Nagyobb térkép kártya (felül, AI fölött) */
-.hero-mini-map-card-large{display:block;width:100%;margin-left:0;margin-bottom:0;padding:5px;border-radius:20px;position:relative;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(252,253,255,.5) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1.5px solid rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 6px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08),0 24px 56px rgba(17,50,147,.06);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;text-decoration:none;cursor:pointer}
-.hero-mini-map-card-large:hover{transform:translateY(-3px);border-color:rgba(125,150,240,.5);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 10px rgba(17,50,147,.06),0 16px 36px rgba(17,50,147,.14),0 32px 64px rgba(17,50,147,.1)}
-.hero-mini-map-card-large .hero-mini-map-frame{position:relative;width:100%;height:230px;min-height:230px;border-radius:16px;overflow:hidden;border:none;background:#e2e8f0}
-.hero-mini-map-card-large .hero-mini-map-overlay-top{position:absolute;top:10px;left:10px;right:10px;z-index:2;pointer-events:none;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.hero-mini-map-card-large .hero-mini-map-text-bottom{flex:1;min-width:160px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);padding:8px 12px;border-radius:11px;border:1px solid rgba(199,210,254,.45);box-shadow:0 2px 10px rgba(17,50,147,.08);pointer-events:auto}
-.hero-mini-map-card-large .hero-mini-map-overlay-bottom{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;justify-content:flex-end;gap:10px;z-index:2;pointer-events:none;flex-wrap:wrap}
-.hero-mini-map-card-large .hero-mini-map-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.2;margin-bottom:2px}
-.hero-mini-map-card-large .hero-mini-map-sub{font-size:10.5px;color:var(--sub);line-height:1.3}
-.hero-mini-map-card-large .hero-mini-map-link-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;padding:8px 13px;border-radius:11px;font-size:11.5px;font-weight:600;letter-spacing:-0.005em;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(17,50,147,.22),0 8px 18px rgba(17,50,147,.18);white-space:nowrap;pointer-events:auto}
-.hero-mini-map-card-large .hero-mini-map-link-btn svg{flex-shrink:0}
-.hero-mini-map-card-large .hero-mini-map-badge{position:relative;top:auto;right:auto;left:auto;bottom:auto;align-self:flex-start;pointer-events:auto}
-.hero-mini-map-card-large .hero-mini-map-eyebrow{display:none}
-.hero-mini-map-card:hover{transform:translateY(-2px);border-color:rgba(125,150,240,.45);box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 4px 10px rgba(17,50,147,.06),0 14px 32px rgba(17,50,147,.12)}
-.hero-mini-map-text{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:.25rem .35rem .25rem .5rem}
-.hero-mini-map-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(44,150,80,.1);color:var(--green-dark);padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:600;letter-spacing:.02em;border:1px solid rgba(44,150,80,.18);align-self:flex-start;margin-bottom:6px}
-.hero-mini-map-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(44,150,80,.55);animation:dotPulse 2s ease-in-out infinite}
-.hero-mini-map-title{font-family:'Inter',sans-serif;font-size:14.5px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.2;margin-bottom:4px}
-.hero-mini-map-accent{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:600}
-.hero-mini-map-sub{font-size:11.5px;color:var(--sub);line-height:1.4;margin-bottom:8px}
-.hero-mini-map-link{display:inline-flex;align-items:center;gap:5px;color:var(--brand);font-size:11.5px;font-weight:700;letter-spacing:-0.005em}
-.hero-mini-map-card:hover .hero-mini-map-link svg{transform:translateX(3px)}
-.hero-mini-map-link svg{flex-shrink:0;transition:transform .3s cubic-bezier(.34,1.4,.64,1)}
-.hero-mini-map-frame{position:relative;width:42%;min-width:130px;flex-shrink:0;height:auto;min-height:130px;border-radius:11px;overflow:hidden;border:1px solid rgba(199,210,254,.4);background:#e2e8f0}
-.hero-mini-map-badge{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--brand);padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:-0.005em;border:1px solid rgba(199,210,254,.5);box-shadow:0 2px 6px rgba(17,50,147,.08);z-index:2;pointer-events:none}
-.hero-mini-map-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(44,150,80,.55);animation:dotPulse 2s ease-in-out infinite}
-@media (max-width:900px){
-  .hero-mini-map-card{width:100%;flex-direction:column}
-  .hero-mini-map-frame{width:100%;height:160px}
-}
-
 @media(max-width:1100px){
   .hero-partner-btn,.hero-ai-cta{width:100%;margin-left:0}
 }
 
 /* ─── AI CHAT MODAL (alapból rejtett, kattintásra fullscreen) ─── */
-.ai-chat-overlay{position:fixed;inset:0;background:rgba(15,23,42,.35);backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);z-index:8000;opacity:0;visibility:hidden;transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s linear .3s}
+.ai-chat-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:8000;opacity:0;visibility:hidden;transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s linear .3s}
 .ai-chat-overlay.open{opacity:1;visibility:visible;transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s}
-.ai-chat-widget{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(480px,calc(100vw - 2rem));max-height:calc(100vh - 4rem);background:linear-gradient(180deg,rgba(255,255,255,.75) 0%,rgba(252,253,255,.62) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1.5px solid rgba(255,255,255,.75);border-radius:26px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.05),0 16px 48px rgba(17,50,147,.18),0 40px 80px rgba(17,50,147,.2);display:flex;flex-direction:column;z-index:8001;opacity:0;visibility:hidden;transition:opacity .35s cubic-bezier(.34,1.4,.64,1),transform .4s cubic-bezier(.34,1.4,.64,1),visibility 0s linear .35s;pointer-events:none}
+.ai-chat-widget{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%) scale(.96);width:min(466px,calc(100vw - 2rem));max-height:calc(100vh - 4rem);background:#fff;border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 12px 40px rgba(17,50,147,.18),0 32px 80px rgba(17,50,147,.22);display:flex;flex-direction:column;z-index:8001;opacity:0;visibility:hidden;transition:opacity .35s cubic-bezier(.34,1.4,.64,1),transform .4s cubic-bezier(.34,1.4,.64,1),visibility 0s linear .35s;pointer-events:none}
 .ai-chat-widget.open{opacity:1;visibility:visible;transform:translate(-50%,-50%) scale(1);pointer-events:auto;transition:opacity .35s cubic-bezier(.34,1.4,.64,1),transform .4s cubic-bezier(.34,1.4,.64,1),visibility 0s}
 .ai-chat-widget .ai-chat-messages{min-height:204px;max-height:36vh}
 .ai-chat-widget .ai-chat-close{display:flex}
@@ -512,8 +469,7 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
    Magasság MARAD ugyanaz mint collapsed-ben - csak SZÉLESSÉG nő */
 /* Régi .ai-collapsed és :not(.ai-collapsed) szabályok már nem érvényesek - a modal logika felülírja */
 
-.ai-chat-header{background:linear-gradient(135deg,rgba(17,50,147,.92) 0%,rgba(38,74,202,.88) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:1.1rem 1.4rem;display:flex;align-items:center;gap:12px;color:#fff;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.15)}
-.ai-chat-header::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%);pointer-events:none}
+.ai-chat-header{background:var(--grad-blue);padding:1.1rem 1.4rem;display:flex;align-items:center;gap:12px;color:#fff;position:relative;overflow:hidden}
 .ai-chat-header::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 65%);pointer-events:none}
 .ai-chat-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;z-index:1;transition:all .25s}
 .ai-chat-name{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;letter-spacing:-0.01em;line-height:1.2;transition:font-size .25s}
@@ -528,11 +484,11 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
 .ai-chat-widget:not(.ai-collapsed) .ai-chat-close{display:flex}
 .ai-chat-widget.ai-collapsed .ai-chat-close{display:none}
 
-.ai-chat-messages{flex:1;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;background:rgba(248,250,253,.7);min-height:266px}
+.ai-chat-messages{flex:1;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem;background:#fafbfd;min-height:266px}
 .ai-chat-msg{display:flex;gap:10px;animation:msgIn .25s ease}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .ai-chat-msg-avatar{width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ai-chat-bubble{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(220,227,234,.5);border-radius:14px 14px 14px 4px;padding:.85rem 1rem;font-size:13.5px;color:var(--text);line-height:1.55;font-weight:500;max-width:88%;box-shadow:0 1px 3px rgba(17,50,147,.04)}
+.ai-chat-bubble{background:#fff;border:1px solid var(--border);border-radius:14px 14px 14px 4px;padding:.85rem 1rem;font-size:13.5px;color:var(--text);line-height:1.55;font-weight:500;max-width:88%;box-shadow:0 1px 3px rgba(17,50,147,.04)}
 .user-bubble{margin-left:auto;background:var(--grad-blue);color:#fff;border:none;border-radius:14px 14px 4px 14px;font-weight:500;box-shadow:0 4px 12px rgba(17,50,147,.18)}
 .ai-chat-msg.user-msg{flex-direction:row-reverse}
 .ai-chat-msg.user-msg .ai-chat-msg-avatar{background:var(--brand-light);border-color:transparent}
@@ -548,9 +504,9 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
 .ai-dots span:nth-child(3){animation-delay:.3s}
 @keyframes dot-bounce{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
 
-.ai-chat-input-row{padding:.85rem 1.25rem;background:rgba(255,255,255,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(220,227,234,.4)}
-.ai-chat-input-inner{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.9);border:1.5px solid rgba(220,227,234,.6);border-radius:13px;padding:5px 5px 5px 14px;transition:all .2s;box-shadow:0 1px 3px rgba(17,50,147,.04)}
-.ai-chat-input-inner:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.1),0 2px 8px rgba(46,63,196,.07)}
+.ai-chat-input-row{padding:.85rem 1.25rem;background:#fff;border-top:1px solid var(--border-soft)}
+.ai-chat-input-inner{display:flex;gap:8px;align-items:center;background:var(--bg);border:1.5px solid transparent;border-radius:12px;padding:5px 5px 5px 14px;transition:all .15s}
+.ai-chat-input-inner:focus-within{background:#fff;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(46,63,196,.12)}
 .ai-chat-input-wrap{flex:1;min-width:0}
 .ai-chat-input{width:100%;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;font-weight:500;padding:9px 0}
 .ai-chat-input::placeholder{color:#a0aabd}
@@ -561,7 +517,7 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
 @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.5)}50%{box-shadow:0 0 0 8px rgba(220,38,38,0)}}
 .ai-chat-send:hover{transform:scale(1.05);box-shadow:0 5px 14px rgba(255,138,0,.4)}
 
-.ai-chat-footer-area{padding:.75rem 1.25rem;background:rgba(249,250,252,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(220,227,234,.3);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ai-chat-footer-area{padding:.75rem 1.25rem;background:var(--bg);border-top:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .chat-legal-info{font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:5px;font-weight:500}
 .chat-legal-info svg{color:var(--orange);flex-shrink:0}
 .chat-legal-more{font-size:11.5px;color:var(--brand-2);font-weight:600}
@@ -577,34 +533,6 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
 
 /* ════════ POPULAR SPECS ════════ */
 .popular-specs-section{padding:4.5rem 3.5%;background:var(--bg)}
-
-/* ── Élő mini-térkép szekció ── */
-.live-map-section{padding:3.5rem 3.5% 2rem;background:var(--bg)}
-.live-map-card{max-width:1400px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,.65) 0%,rgba(252,253,255,.5) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border:1.5px solid rgba(255,255,255,.6);border-radius:24px;padding:1.5rem;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 3px rgba(17,50,147,.04),0 12px 32px rgba(17,50,147,.08),0 28px 64px rgba(17,50,147,.06);position:relative;overflow:hidden}
-.live-map-card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 50%);opacity:.55;pointer-events:none;z-index:0}
-.live-map-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.1rem;gap:1rem;position:relative;z-index:1;flex-wrap:wrap}
-.live-map-title-wrap{flex:1;min-width:200px}
-.live-map-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(44,150,80,.1);color:var(--green-dark);padding:5px 12px;border-radius:99px;font-size:11.5px;font-weight:600;letter-spacing:.02em;border:1px solid rgba(44,150,80,.18);margin-bottom:.55rem}
-.live-map-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(44,150,80,.55);animation:dotPulse 2s ease-in-out infinite}
-.live-map-title{font-family:'Inter',sans-serif;font-size:clamp(1.5rem,2vw,1.9rem);font-weight:700;letter-spacing:-0.025em;color:var(--text);line-height:1.15;margin:0 0 .35rem}
-.live-map-title .accent{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:600}
-.live-map-sub{font-size:14px;color:var(--sub);line-height:1.5;letter-spacing:-0.005em;max-width:520px}
-.live-map-cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;border:none;padding:11px 20px;border-radius:11px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(17,50,147,.18),0 10px 22px rgba(17,50,147,.22);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1)}
-.live-map-cta:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 4px 10px rgba(17,50,147,.22),0 16px 32px rgba(17,50,147,.3)}
-.live-map-cta svg{flex-shrink:0}
-.live-map-frame{position:relative;width:100%;height:420px;border-radius:18px;overflow:hidden;border:1px solid rgba(199,210,254,.45);background:#e2e8f0;z-index:1}
-.live-map-frame-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13.5px;background:linear-gradient(135deg,#eef2ff 0%,#e2e8f0 100%);z-index:2}
-.live-map-stats{display:flex;align-items:center;gap:18px;margin-top:1rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
-.live-map-stat{display:inline-flex;align-items:baseline;gap:6px;font-size:13px;color:var(--sub);font-weight:500}
-.live-map-stat-num{font-weight:800;color:var(--brand);font-size:15px;font-feature-settings:'tnum' 1}
-.live-map-stat-sep{width:1px;height:14px;background:linear-gradient(180deg,transparent,rgba(17,50,147,.18),transparent)}
-@media (max-width:700px){
-  .live-map-section{padding:2.5rem 4% 1.5rem}
-  .live-map-card{padding:1.1rem;border-radius:18px}
-  .live-map-frame{height:320px;border-radius:14px}
-  .live-map-stat-sep{display:none}
-  .live-map-cta{width:100%;justify-content:center}
-}
 .popular-specs-inner{max-width:1400px;margin:0 auto}
 .popular-specs-header{text-align:center;margin-bottom:2.5rem}
 .popular-specs-title{font-family:'Inter',sans-serif;font-size:clamp(1.6rem,2.6vw,2.1rem);font-weight:600;color:var(--text);letter-spacing:-0.025em;margin-bottom:.5rem}
@@ -878,7 +806,7 @@ body.ai-modal-open nav#mainNav .nav-logo-text{text-shadow:none !important}
 .hero-stats-grid .hero-stat-box:nth-child(2){animation-delay:.32s}
 .hero-stats-grid .hero-stat-box:nth-child(3){animation-delay:.39s}
 .hero-stats-grid .hero-stat-box:nth-child(4){animation-delay:.46s}
-.hero-search-box{animation:heroRise .8s cubic-bezier(.34,1.4,.64,1) both;animation-delay:.3s}
+.hero-search-box{animation:heroRise .8s cubic-bezier(.34,1.4,.64,1) both,search-float 5s ease-in-out infinite;animation-delay:.3s,.9s}
 
 @media (prefers-reduced-motion: reduce){
   .hero-eyebrow,.hero-title-new,.hero-stat-box,.hero-search-box{animation:none !important}
@@ -1109,36 +1037,45 @@ section[class*="ai"]:not(.ai-chat-overlay):not(.ai-chat-widget){
 
 /* AI chat widget — futurisztikus medical */
 .ai-chat-widget{
-  border:1.5px solid rgba(255,255,255,.75) !important;
-  background:linear-gradient(180deg,rgba(255,255,255,.78) 0%,rgba(252,253,255,.65) 100%) !important;
-  backdrop-filter:blur(40px) saturate(200%) !important;
-  -webkit-backdrop-filter:blur(40px) saturate(200%) !important;
+  border:none !important;
+  background:
+    linear-gradient(180deg,#fff 0%,#fbfcff 100%) !important;
   box-shadow:
-    0 1px 0 rgba(255,255,255,.9) inset,
-    0 2px 6px rgba(17,50,147,.05),
-    0 16px 48px rgba(17,50,147,.18),
-    0 40px 80px rgba(17,50,147,.2) !important;
-  border-radius:26px !important;
+    var(--inset-glass),
+    0 0 0 1px rgba(38,74,202,.06),
+    0 12px 32px rgba(17,50,147,.12),
+    0 32px 72px rgba(17,50,147,.18),
+    0 64px 128px rgba(38,74,202,.1) !important;
+  border-radius:var(--r-xl) !important;
 }
-.ai-chat-widget::before{display:none !important}
+.ai-chat-widget::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  padding:1px;
+  background:linear-gradient(135deg,rgba(38,74,202,.4) 0%,transparent 30%,transparent 70%,rgba(44,150,80,.3) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+  opacity:.6;
+}
 
 .ai-chat-header{
-  background:linear-gradient(135deg,rgba(17,50,147,.92) 0%,rgba(38,74,202,.88) 100%) !important;
-  backdrop-filter:blur(20px) !important;
-  -webkit-backdrop-filter:blur(20px) !important;
-  border-bottom:1px solid rgba(255,255,255,.15) !important;
+  background:var(--grad-ai) !important;
   color:#fff !important;
   position:relative;
   overflow:hidden;
 }
 .ai-chat-header::before{
-  display:block !important;
-  content:"" !important;
-  position:absolute !important;
-  inset:0 !important;
-  background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%) !important;
-  pointer-events:none !important;
-}
+  content:"";
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 0%,rgba(38,74,202,.4) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 60% at 0% 100%,rgba(44,150,80,.3) 0%,transparent 60%);
+  pointer-events:none;
 }
 .ai-chat-header > *{position:relative;z-index:1}
 .ai-chat-avatar{
@@ -1202,22 +1139,20 @@ section[class*="ai"]:not(.ai-chat-overlay):not(.ai-chat-widget){
   box-shadow:0 2px 8px rgba(38,74,202,.25) !important;
 }
 
-/* AI input — premium glassmorphism */
+/* AI input — premium */
 .ai-chat-input-row{
-  background:rgba(255,255,255,.8) !important;
-  backdrop-filter:blur(16px) !important;
-  -webkit-backdrop-filter:blur(16px) !important;
-  border-top:1px solid rgba(220,227,234,.4) !important;
+  background:linear-gradient(180deg,#fafbfd 0%,#f4f6fb 100%) !important;
+  border-top:1px solid var(--border-soft) !important;
 }
 .ai-chat-input-wrap{
-  background:transparent !important;
-  border:none !important;
-  border-radius:0 !important;
-  transition:none !important;
+  background:#fff !important;
+  border:1.5px solid var(--border) !important;
+  border-radius:var(--r) !important;
+  transition:border-color .2s,box-shadow .2s !important;
 }
 .ai-chat-input-wrap:focus-within{
-  border:none !important;
-  box-shadow:none !important;
+  border-color:var(--brand-2) !important;
+  box-shadow:0 0 0 4px rgba(38,74,202,.1) !important;
 }
 .ai-chat-send{
   box-shadow:
@@ -1251,26 +1186,23 @@ section[class*="ai"]:not(.ai-chat-overlay):not(.ai-chat-widget){
 
 /* CTA gomb az AI-szekcióban (a hero alatti) */
 .hero-ai-cta{
-  background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(253,254,255,.55) 100%) !important;
-  backdrop-filter:blur(32px) saturate(200%) !important;
-  -webkit-backdrop-filter:blur(32px) saturate(200%) !important;
-  border:1.5px solid rgba(255,255,255,.7) !important;
-  border-radius:18px !important;
+  background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(252,253,255,.88) 100%) !important;
+  backdrop-filter:blur(20px) saturate(150%) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(150%) !important;
+  border:1px solid rgba(220,227,234,.6) !important;
   box-shadow:
-    0 1px 0 rgba(255,255,255,.85) inset,
-    0 2px 4px rgba(17,50,147,.05),
-    0 10px 28px rgba(17,50,147,.08),
-    0 28px 60px rgba(17,50,147,.1) !important;
+    var(--inset-top),
+    0 4px 16px rgba(17,50,147,.05),
+    0 16px 40px rgba(17,50,147,.06) !important;
   position:relative;
   overflow:hidden;
 }
 .hero-ai-cta:hover{
-  border-color:rgba(125,150,240,.6) !important;
+  border-color:rgba(44,150,80,.35) !important;
   box-shadow:
-    0 1px 0 rgba(255,255,255,.95) inset,
-    0 4px 10px rgba(17,50,147,.08),
-    0 18px 38px rgba(17,50,147,.16),
-    0 36px 72px rgba(17,50,147,.18) !important;
+    var(--inset-top),
+    0 6px 20px rgba(44,150,80,.08),
+    0 24px 56px rgba(17,50,147,.1) !important;
 }
 .hero-ai-cta::before{
   content:"";
@@ -1480,8 +1412,8 @@ section{
   section{scroll-margin-top:64px !important}
 
   /* ── NAV — mobile drawer már létezik, csak finomítás ── */
-  nav#mainNav .nav-row-top{min-height:54px !important;padding:8px 4% !important;gap:.75rem !important}
-  nav#mainNav .nav-logo-img{height:32px !important;width:32px !important}
+  nav#mainNav .nav-row-top{min-height:64px !important;padding:10px 4% !important;gap:.75rem !important}
+  nav#mainNav .nav-logo-img{height:36px !important;width:36px !important}
   nav#mainNav .nav-logo-text{font-size:18px !important}
   .mobile-drawer{top:64px !important}
 
@@ -1647,9 +1579,9 @@ body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
 body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
 nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:58px;padding:8px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
 nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
@@ -1658,7 +1590,7 @@ nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;m
 nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
 nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
 nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
 nav#mainNav .nav-links li>a:hover{background:#eef2ff}
 nav#mainNav .nav-links li>a svg{opacity:.6}
 nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
@@ -1666,13 +1598,10 @@ nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform
 nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
 nav#mainNav .dropdown a:hover{background:#eef2ff}
 nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
 nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#FF8A00;background:linear-gradient(180deg,rgba(255,247,237,.85) 0%,rgba(255,237,213,.75) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,138,0,.32);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 1px 2px rgba(255,138,0,.06),0 4px 12px rgba(255,138,0,.08);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap}
-nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);border-color:rgba(255,138,0,.55);background:linear-gradient(180deg,rgba(255,247,237,1) 0%,rgba(255,231,200,.92) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(255,138,0,.1),0 8px 18px rgba(255,138,0,.15)}
-nav#mainNav .btn-nav-partner svg{flex-shrink:0;color:#FF8A00}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 .mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
@@ -1704,10 +1633,6 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </ul>
 
     <div class="nav-actions">
-      <a href="register.html" class="btn-nav-partner">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        Legyen Ön is partnerünk
-      </a>
       <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
     </div>
 
@@ -1773,23 +1698,64 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <!-- BAL: cím + kereső + stat sor -->
       <div class="hero-left">
 
+        <!-- Eyebrow felirat -->
+        <div class="hero-eyebrow">Országos szakorvoskereső</div>
+
         <!-- Cím + Stat boxok rács -->
         <div class="hero-headline-row">
           <h1 class="hero-title-new">
-            <span class="hero-title-line"><span class="hero-title-blue">Magyarország</span></span>
-            <span class="hero-title-line"><span class="hero-title-accent">szakorvoskeresője</span></span>
+            <span class="hero-title-line">Nem tudja, milyen</span>
+            <span class="hero-title-line">szakorvosra van szüksége?</span>
+            <span class="hero-title-line hero-title-accent">Megmondjuk.</span>
           </h1>
+
+          <div class="hero-stats-grid">
+            <a href="talalatok.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statDoctors">38</div>
+              <div class="hero-stat-label">Szakorvos</div>
+            </a>
+            <a href="klinikak.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statClinics">20</div>
+              <div class="hero-stat-label">Klinika</div>
+            </a>
+            <a href="tudastar.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statArticles">2 661</div>
+              <div class="hero-stat-label">Tudástár cikk</div>
+            </a>
+            <a href="vizsgalatok.html" class="hero-stat-box">
+              <div class="hero-stat-num" id="statExams">24</div>
+              <div class="hero-stat-label">Vizsgálat</div>
+            </a>
+          </div>
         </div>
-        <p class="hero-subtitle">Szakorvosok, klinikák, vizsgálatok és tudástár egy helyen. Találja meg a megfelelő egészségügyi szakellátást percek alatt.</p>
 
         <!-- Inline search box -->
         <div class="hero-search-box hero-search-box-premium">
 
           <!-- TABOK: Szakorvos / Vizsgálat-Kezelés / Tudástár / Klinika -->
+          <div class="search-tabs" role="tablist" aria-label="Keresés típus">
+            <button class="search-tab active" data-mode="doctor" role="tab" aria-selected="true" onclick="setSearchMode('doctor')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+              Szakorvos keresés
+            </button>
+            <button class="search-tab" data-mode="examination" role="tab" aria-selected="false" onclick="setSearchMode('examination')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="10"/></svg>
+              Vizsgálat / Kezelés
+            </button>
+            <button class="search-tab" data-mode="knowledge" role="tab" aria-selected="false" onclick="setSearchMode('knowledge')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Tudástár keresés
+            </button>
+            <button class="search-tab" data-mode="clinic" role="tab" aria-selected="false" onclick="setSearchMode('clinic')">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/><path d="M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
+              Klinika keresés
+            </button>
+          </div>
+
           <div class="hero-search-row hero-search-row-single" style="position:relative;">
             <div class="hero-search-field">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input type="text" id="heroInlineSearch" placeholder="Keressen orvost, klinikát vagy szakterületet…" autocomplete="off"
+              <input type="text" id="heroInlineSearch" placeholder="pl. Kardiológus, EKG, Dr. Kiss János, Telki Magánkórház…" autocomplete="off"
                 oninput="smartSearch('heroInlineSearch','heroDropdown')"
                 onfocus="smartFocus('heroInlineSearch','heroDropdown')"
                 onblur="smartBlur('heroInlineSearch','heroDropdown')"
@@ -1813,7 +1779,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <!-- Trending keresések -->
           <div class="hero-trending" id="heroTrending">
             <span class="hero-trending-label">
-              <span class="hero-trending-flame">🔥</span> Tipp:
+              <span class="hero-trending-flame">🔥</span> Trending most:
             </span>
             <a class="hero-trending-chip" onclick="useTrending('Kardiológus')">
               Kardiológus
@@ -1836,60 +1802,66 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
               <svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
             </a>
           </div>
-        </div>
 
-        <!-- Prémium stat sor (kereső doboz alatt) -->
-        <div class="hero-trust-strip hero-stats-strip">
-          <a href="talalatok.html" class="hero-stat-mini">
-            <span class="hero-stat-mini-num" id="statDoctors">38</span>
-            <span class="hero-stat-mini-lbl">Szakorvos</span>
-          </a>
-          <span class="hero-trust-strip-sep"></span>
-          <a href="klinikak.html" class="hero-stat-mini">
-            <span class="hero-stat-mini-num" id="statClinics">20</span>
-            <span class="hero-stat-mini-lbl">Klinika</span>
-          </a>
-          <span class="hero-trust-strip-sep"></span>
-          <a href="tudastar.html" class="hero-stat-mini">
-            <span class="hero-stat-mini-num" id="statArticles">2 661</span>
-            <span class="hero-stat-mini-lbl">Tudástár cikk</span>
-          </a>
-          <span class="hero-trust-strip-sep"></span>
-          <a href="vizsgalatok.html" class="hero-stat-mini">
-            <span class="hero-stat-mini-num" id="statExams">24</span>
-            <span class="hero-stat-mini-lbl">Vizsgálat</span>
-          </a>
+          <!-- 4 bizalmi box a hero alján -->
+          <div class="hero-trust">
+            <div class="hero-trust-item">
+              <div class="hero-trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <div class="hero-trust-title">Ellenőrzött szakemberek</div>
+                <div class="hero-trust-desc">Minden orvos és klinika ellenőrzött profillal rendelkezik</div>
+              </div>
+            </div>
+            <div class="hero-trust-item">
+              <div class="hero-trust-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <div>
+                <div class="hero-trust-title">Biztonságos és titkos</div>
+                <div class="hero-trust-desc">Az Ön adatai nálunk biztonságban vannak</div>
+              </div>
+            </div>
+            <div class="hero-trust-item">
+              <div class="hero-trust-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              </div>
+              <div>
+                <div class="hero-trust-title">Gyors és egyszerű</div>
+                <div class="hero-trust-desc">Találja meg a megfelelő segítséget percek alatt</div>
+              </div>
+            </div>
+            <div class="hero-trust-item">
+              <div class="hero-trust-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="hero-trust-title">Országos lefedettség</div>
+                <div class="hero-trust-desc">Budapesttől vidéki városokig, mindenhol segítünk</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div><!-- end hero-left -->
 
       <!-- JOBB: AI CTA + partner gomb -->
       <div class="hero-right-search">
 
-        <!-- Mini térkép kártya (felül, nagyobb) -->
-        <a href="klinikak.html" class="hero-mini-map-card hero-mini-map-card-large" id="heroMiniMapCard">
-          <div class="hero-mini-map-frame">
-            <div id="heroMiniMapEl" style="width:100%;height:100%"></div>
-            <div class="hero-mini-map-overlay-top">
-              <div class="hero-mini-map-text-bottom">
-                <div class="hero-mini-map-title">Szakorvosok és klinikák <span class="hero-mini-map-accent">a térképen</span></div>
-                <div class="hero-mini-map-sub">Találja meg a legjobb szakembereket a közelében.</div>
-              </div>
-              <div class="hero-mini-map-badge">
-                <span class="hero-mini-map-dot"></span>
-                <span id="heroMiniMapCount">–</span> klinika
-              </div>
-            </div>
-            <div class="hero-mini-map-overlay-bottom">
-              <div class="hero-mini-map-link-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Térképes nézet megnyitása
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
-            </div>
+        <!-- 1. Partner gomb (felül) -->
+        <a href="register.html" class="hero-partner-btn">
+          <div class="hero-partner-btn-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="hero-partner-btn-text">
+            <div class="hero-partner-btn-label">Orvosoknak / Klinikáknak</div>
+            <div class="hero-partner-btn-title">Legyen Ön is a partnerünk</div>
+          </div>
+          <div class="hero-partner-btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </div>
         </a>
 
-        <!-- AI orvosi asszisztens CTA kártya -->
+        <!-- 2. AI orvosi asszisztens CTA kártya (kattintásra felugrik a chat) -->
         <button type="button" class="hero-ai-cta" id="aiCtaCard" onclick="openAiChatModal()">
           <div class="hero-ai-cta-glow"></div>
           <div class="hero-ai-cta-top">
@@ -1908,10 +1880,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
               Online · AI
             </div>
           </div>
-          <div class="hero-ai-cta-title">
-            Nem tudja, milyen szakorvosra van szüksége?
-            <span class="hero-title-accent">Megmondjuk.</span>
-          </div>
+          <div class="hero-ai-cta-title">Szakorvos.hu AI asszisztens</div>
           <div class="hero-ai-cta-sub">Írja le a tüneteit, és megtalálom Önnek a megfelelő szakorvost</div>
           <div class="hero-ai-cta-action">
             <span>Beszélgetés indítása</span>
@@ -2769,37 +2738,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   </div><!-- end hero-two-col -->
   </div><!-- end hero-content -->
 </div><!-- end hero -->
-
-<!-- ── ÉLŐ MINI-TÉRKÉP ── -->
-<section class="live-map-section">
-  <div class="live-map-card">
-    <div class="live-map-header">
-      <div class="live-map-title-wrap">
-        <div class="live-map-eyebrow">
-          <span class="live-map-eyebrow-dot"></span>
-          Ön közelében
-        </div>
-        <h2 class="live-map-title">Szakorvosok és klinikák <span class="accent">a térképen</span></h2>
-        <p class="live-map-sub">Találja meg a legjobb szakembereket Ön közelében — kattintson egy markerre a részletekért.</p>
-      </div>
-      <a href="klinikak.html" class="live-map-cta">
-        Térképes nézet megnyitása
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-    </div>
-    <div class="live-map-frame">
-      <div id="liveMiniMap" style="width:100%;height:100%"></div>
-      <div class="live-map-frame-loading" id="liveMiniMapLoading">Térkép betöltése…</div>
-    </div>
-    <div class="live-map-stats">
-      <span class="live-map-stat"><span class="live-map-stat-num" id="liveMapStatClinics">–</span> klinika a térképen</span>
-      <span class="live-map-stat-sep"></span>
-      <span class="live-map-stat">📍 Budapesttől vidékig</span>
-      <span class="live-map-stat-sep"></span>
-      <span class="live-map-stat">🔍 Kattintás a részletekért</span>
-    </div>
-  </div>
-</section>
 
 <!-- ── NÉPSZERŰ SZAKTERÜLETEK ── -->
 <section class="popular-specs-section">
@@ -3705,135 +3643,9 @@ function useExample(btn) {
 
   // ── DOMContentLoaded után induljunk ──
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); initLiveMiniMap(); });
+    document.addEventListener('DOMContentLoaded', () => { loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); });
   } else {
-    loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); initLiveMiniMap();
-  }
-
-  // ── ÉLŐ MINI-TÉRKÉP ──
-  const GMAPS_KEY_HOME = 'AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
-  let _gmapsHomePromise = null;
-  function loadGoogleMapsHome(){
-    if(_gmapsHomePromise) return _gmapsHomePromise;
-    _gmapsHomePromise = new Promise((resolve, reject) => {
-      if(window.google && window.google.maps){ resolve(window.google.maps); return; }
-      window._onGMapsReadyHome = () => resolve(window.google.maps);
-      const s = document.createElement('script');
-      s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY_HOME}&callback=_onGMapsReadyHome&language=hu&region=HU&loading=async`;
-      s.async = true; s.defer = true;
-      s.onerror = () => reject(new Error('Maps load failed'));
-      document.head.appendChild(s);
-    });
-    return _gmapsHomePromise;
-  }
-
-  const HOME_MAP_STYLE = [
-    { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
-    { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
-    { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
-    { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
-    { featureType: 'landscape.man_made', elementType: 'geometry', stylers: [{ color: '#dbe2ec' }] },
-    { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e6ece5' }] },
-    { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }, { weight: 700 }] },
-    { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-    { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
-    { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#94a3b8' }, { weight: 1.2 }] },
-    { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#eef2ff' }] },
-    { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#c7d2fe' }] },
-    { featureType: 'transit', stylers: [{ visibility: 'off' }] },
-    { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] }
-  ];
-
-  async function initLiveMiniMap(){
-    const loadingEl = document.getElementById('liveMiniMapLoading');
-    const statEl = document.getElementById('liveMapStatClinics');
-    const heroCntEl = document.getElementById('heroMiniMapCount');
-    try {
-      const { data: clinics, error } = await db
-        .from('clinics')
-        .select('id, slug, name, address, lat, lng, cities(name)')
-        .not('lat', 'is', null)
-        .not('lng', 'is', null);
-      if(error) throw error;
-
-      const withCoords = (clinics || []).filter(c => c.lat && c.lng);
-      if(statEl) statEl.textContent = withCoords.length;
-      if(heroCntEl) heroCntEl.textContent = withCoords.length;
-
-      if(!withCoords.length){
-        if(loadingEl) loadingEl.textContent = 'Még nincsenek klinikák a térképen.';
-        return;
-      }
-
-      const maps = await loadGoogleMapsHome();
-
-      const pinIcon = {
-        path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z',
-        fillColor: '#113293', fillOpacity: 1,
-        strokeColor: '#ffffff', strokeWeight: 2.5, scale: 1,
-        anchor: new maps.Point(12, 36)
-      };
-
-      // Nagy térkép (hero alatt)
-      const el = document.getElementById('liveMiniMap');
-      if(el){
-        const map = new maps.Map(el, {
-          center: { lat: 47.4979, lng: 19.0402 },
-          zoom: 7,
-          styles: HOME_MAP_STYLE,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: false,
-          zoomControl: true,
-          gestureHandling: 'cooperative'
-        });
-
-        const bounds = new maps.LatLngBounds();
-        const iw = new maps.InfoWindow();
-        withCoords.forEach(c => {
-          const pos = { lat: Number(c.lat), lng: Number(c.lng) };
-          const marker = new maps.Marker({ position: pos, map, title: c.name, icon: pinIcon });
-          marker.addListener('click', () => {
-            const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
-            iw.setContent(`
-              <div style="font-family:'Inter',sans-serif;max-width:240px">
-                <div style="font-weight:700;color:#113293;font-size:13px;margin-bottom:3px">${c.name}</div>
-                ${c.address ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">${c.address}</div>` : ''}
-                <a href="${target}" style="display:inline-block;background:#113293;color:#fff;padding:5px 11px;border-radius:6px;text-decoration:none;font-size:11.5px;font-weight:600">Részletek →</a>
-              </div>
-            `);
-            iw.open(map, marker);
-          });
-          bounds.extend(pos);
-        });
-        map.fitBounds(bounds, 50);
-      }
-      if(loadingEl) loadingEl.style.display = 'none';
-
-      // Hero mini-térkép (AI alatt) — nem interaktív, csak vizuális preview
-      const heroEl = document.getElementById('heroMiniMapEl');
-      if(heroEl){
-        const heroMap = new maps.Map(heroEl, {
-          center: { lat: 47.4979, lng: 19.0402 },
-          zoom: 12,
-          styles: HOME_MAP_STYLE,
-          disableDefaultUI: true,
-          gestureHandling: 'none',
-          clickableIcons: false,
-          keyboardShortcuts: false
-        });
-        withCoords.forEach(c => {
-          const pos = { lat: Number(c.lat), lng: Number(c.lng) };
-          new maps.Marker({
-            position: pos, map: heroMap, title: c.name,
-            icon: { ...pinIcon, scale: 0.7 }
-          });
-        });
-      }
-    } catch(e){
-      console.error('[live mini map]', e);
-      if(loadingEl) loadingEl.textContent = 'Térkép nem tölthető be.';
-    }
+    loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions();
   }
 })();
 </script>
