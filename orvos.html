@@ -194,7 +194,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 /* Right side of head card */
 .dh-info{min-width:0}
 .dh-name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
-.dh-name{font-size:26px;font-weight:600;color:var(--text);line-height:1.2;letter-spacing:-0.02em;margin:0}
+.dh-name{font-size:26px;font-weight:600;color:var(--brand);line-height:1.2;letter-spacing:-0.02em;margin:0}
 .dh-verified{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--brand-2);color:#fff;flex-shrink:0}
 .dh-verified svg{width:13px;height:13px}
 
@@ -280,13 +280,15 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 
 /* Bemutatkozás layout: bio + cols */
 .intro-bio{font-size:14.5px;color:var(--text-2);line-height:1.75;margin-bottom:24px;white-space:pre-line}
-.intro-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+.intro-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
 @media (max-width:880px){.intro-cols{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:480px){.intro-cols{grid-template-columns:1fr}}
-.intro-col-h{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:8px}
+.intro-col{background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(240,245,255,.8) 100%);border:1px solid rgba(199,210,254,.4);border-radius:14px;padding:16px 18px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04)}
+.intro-col-h{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.intro-col-h::before{content:'';width:3px;height:12px;border-radius:2px;background:var(--brand-2);flex-shrink:0}
 .intro-col ul{list-style:none}
-.intro-col li{position:relative;padding-left:14px;font-size:13px;color:var(--sub);line-height:1.55;margin-bottom:5px}
-.intro-col li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--brand-2)}
+.intro-col li{position:relative;padding-left:12px;font-size:13px;color:var(--sub);line-height:1.6;margin-bottom:5px;font-weight:500}
+.intro-col li::before{content:'';position:absolute;left:0;top:8px;width:4px;height:4px;border-radius:50%;background:var(--brand-2)}
 
 /* ═════════ SZOLGÁLTATÁSOK ═════════════════════════════════════════════ */
 .svc-table{width:100%;border-collapse:collapse;font-size:14px}
@@ -736,39 +738,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </button>
       </div>
 
-      <!-- ─── IDŐPONTOK ────────────────────────────────────────── -->
-      <div class="prof-section" id="pane-booking">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Időpontfoglalás
-        </div>
-        <p class="slots-h">Legkorábbi elérhető időpontok</p>
-        <div class="days-row" id="daysRow"></div>
-        <div class="slots-grid" id="slotsGrid"></div>
-        <button class="slots-more" onclick="alert('Foglalási folyamat hamarosan')">További időpontok</button>
-      </div>
-
-      <!-- ─── HELYSZÍNEK ───────────────────────────────────────── -->
-      <div class="prof-section" id="pane-locations">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Rendelési helyszínek
-        </div>
-        <div class="loc-grid" id="locGrid"></div>
-        <div class="loc-online">
-          <div>
-            <div class="loc-online-name">Online konzultáció</div>
-            <div class="loc-online-desc">Videóhívás bárhonnan, biztonságos titkosítással.</div>
-            <span class="loc-online-tag">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-              Online elérhető
-            </span>
-          </div>
-          <div class="loc-online-thumb">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-          </div>
-        </div>
-      </div>
 
       <!-- ─── KÉRDÉSEK ─────────────────────────────────────────── -->
       <div class="prof-section" id="pane-faq">
@@ -787,12 +756,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
 
       <!-- ─── HASONLÓ ORVOSOK ──────────────────────────────────── -->
-      <div class="sim-section">
-        <h2 class="sim-h">Hasonló szakorvosok</h2>
-        <div class="sim-grid" id="simGrid">
-          <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13.5px">Betöltés…</div>
-        </div>
-      </div>
 
     </div>
     <!-- /left column -->
@@ -811,14 +774,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Időpontfoglalás
           </button>
-          <div class="bcard-soonest" id="bcardSoonest">
-            <div class="ic">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Legkorábbi időpont
-            </div>
-            <div class="when" id="bcardSoonestWhen">Ma 18:30</div>
-          </div>
-          <div class="bcard-features" id="bcardFeats"></div>
           <button class="bcard-fav" id="favBtn" onclick="toggleFav()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             <span id="favLbl">Kedvencekhez adom</span>
@@ -834,6 +789,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           Üzenet küldése
         </button>
+      </div>
+
+      <!-- Rendelési helyszínek -->
+      <div class="contact-card" id="pane-locations" style="margin-top:14px">
+        <div class="contact-card-h">Rendelési helyszínek</div>
+        <div class="loc-grid" id="locGrid"></div>
+
       </div>
     </aside>
 
@@ -1141,16 +1103,6 @@ function render(d){
       <div class="dh-stat-info"><div class="dh-stat-v">${escapeHtml(langs[0])}</div><div class="dh-stat-l">${escapeHtml(langs.slice(1).join(', ') || '–')}</div></div>
     </div>`);
   }
-  // online + rendelői (heurisztika: ha van clinic + availability → mindkettő elérhető)
-  statsHtml.push(`<div class="dh-stat">
-    <div class="dh-stat-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-    <div class="dh-stat-info"><div class="dh-stat-v">Online és</div><div class="dh-stat-l">rendelői ellátás</div></div>
-  </div>`);
-  // válaszidő
-  statsHtml.push(`<div class="dh-stat">
-    <div class="dh-stat-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div>
-    <div class="dh-stat-info"><div class="dh-stat-v">2 órán belül</div><div class="dh-stat-l">válaszol</div></div>
-  </div>`);
   document.getElementById('dhStats').innerHTML = statsHtml.join('');
 
   // Bio collapsed/expanded
