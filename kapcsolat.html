@@ -3,40 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#113293">
-<title>Az oldal nem található (404) | Szakorvos.hu</title>
-<meta name="description" content="A keresett oldal nem található. Térjen vissza a főoldalra, keressen szakorvost, vagy böngésszen a tudástárban.">
-<meta name="robots" content="noindex,follow">
-<link rel="canonical" href="https://www.szakorvos.hu/404">
+<title>Kapcsolat — Szakorvos.hu</title>
+<meta name="description" content="Vegye fel velünk a kapcsolatot. Kérdés, partneri együttműködés, sajtó megkeresés — szívesen válaszolunk.">
+<link rel="canonical" href="https://www.szakorvos.hu/kapcsolat.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#F4F6F8;color:#113293;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
-a{color:#113293;text-decoration:none}
-a:hover{text-decoration:underline}
-nav{background:#fff;border-bottom:1px solid #DCE3EA;padding:14px 4%}
-.nav-logo{font-size:20px;font-weight:700;color:#113293}
-.nav-logo em{color:#FF8A00;font-style:normal}
-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 4%;text-align:center}
-.code{font-size:120px;font-weight:700;color:#264ACA;letter-spacing:-0.05em;line-height:1;margin-bottom:8px;background:linear-gradient(135deg,#113293,#264ACA);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.badge{display:inline-block;background:#eef2ff;color:#113293;padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
-h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;color:#113293;letter-spacing:-0.02em;margin-bottom:14px;max-width:600px}
-.lead{font-size:16px;color:#475569;max-width:560px;margin-bottom:32px}
-.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;transition:all .15s}
-.btn-primary{background:#FF8A00;color:#fff;box-shadow:0 4px 14px rgba(255,138,0,.3)}
-.btn-primary:hover{background:#e57a00;transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4);text-decoration:none}
-.btn-outline{background:#fff;color:#113293;border:1px solid rgba(17,50,147,.22)}
-.btn-outline:hover{border-color:#113293;background:#eef2ff;text-decoration:none}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:900px;width:100%;margin-bottom:24px}
-.card{background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:20px;text-align:left;transition:all .18s}
-.card:hover{border-color:#264ACA;box-shadow:0 8px 24px rgba(17,50,147,.08);transform:translateY(-2px);text-decoration:none}
-.card-title{font-size:15px;font-weight:600;color:#113293;margin-bottom:6px}
-.card-sub{font-size:13px;color:#475569}
-.footer{padding:20px 4%;background:#fff;border-top:1px solid #DCE3EA;text-align:center;font-size:12px;color:#94a3b8}
+:root{
+  --brand:#113293;
+  --brand-2:#264ACA;
+  --orange:#FF8A00;
+  --orange-2:#FFA726;
+  --green:#2C9650;
+  --text:#0F172A;
+  --sub:#64748B;
+  --border:#DCE3EA;
+  --bg:#F8FAFC;
+  --brand-light:#EEF2FF;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Inter',sans-serif;color:var(--text);background:#fff;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* ════════ PAGE HERO ════════ */
+.page-hero{background:linear-gradient(180deg,#F4F7FF 0%,#FFFFFF 100%);padding:5.5rem 0 3.5rem;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;background:radial-gradient(circle,rgba(38,74,202,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.page-hero::after{content:'';position:absolute;bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,138,0,.06) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.page-hero-inner{max-width:1100px;margin:0 auto;padding:0 3.5%;position:relative;z-index:2;text-align:center}
+.page-hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--brand-2);background:rgba(38,74,202,.08);padding:6px 14px;border-radius:100px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.25rem}
+.page-hero-eyebrow svg{width:14px;height:14px}
+.page-hero h1{font-family:'Inter',sans-serif;font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;color:var(--brand);letter-spacing:-0.025em;line-height:1.08;margin:0 0 1rem}
+.page-hero h1 em{color:var(--orange);font-style:normal}
+.page-hero p{font-size:1.075rem;color:var(--sub);max-width:620px;margin:0 auto;line-height:1.65}
+
+/* ════════ MAIN CONTENT ════════ */
+.contact-section{padding:3rem 0 5rem}
+.contact-inner{max-width:1200px;margin:0 auto;padding:0 3.5%}
+.contact-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:2.5rem;align-items:start}
+
+/* ── Info cards (left) ── */
+.info-stack{display:flex;flex-direction:column;gap:1rem}
+.info-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s}
+.info-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(17,50,147,.08);border-color:rgba(38,74,202,.25)}
+.info-icon{width:46px;height:46px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff}
+.info-icon.blue{background:var(--grad-blue);box-shadow:0 4px 12px rgba(17,50,147,.25)}
+.info-icon.orange{background:var(--grad-orange);box-shadow:0 4px 12px rgba(255,138,0,.25)}
+.info-icon.green{background:linear-gradient(135deg,#2C9650 0%,#3FB668 100%);box-shadow:0 4px 12px rgba(44,150,80,.25)}
+.info-icon svg{width:22px;height:22px}
+.info-body{flex:1;min-width:0}
+.info-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.info-value{font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.01em;margin-bottom:3px;line-height:1.35;word-break:break-word}
+.info-value a{color:var(--brand);transition:color .15s}
+.info-value a:hover{color:var(--orange)}
+.info-meta{font-size:12.5px;color:var(--sub);line-height:1.5}
+
+/* ── Contact form (right) ── */
+.contact-form-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:2.25rem;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 4px 14px rgba(17,50,147,.04),0 12px 32px rgba(17,50,147,.04)}
+.form-title{font-family:'Inter',sans-serif;font-size:1.5rem;font-weight:700;color:var(--brand);letter-spacing:-0.015em;margin:0 0 .35rem}
+.form-subtitle{font-size:14px;color:var(--sub);margin:0 0 1.75rem;line-height:1.55}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:1rem}
+.form-group label{font-size:12.5px;font-weight:600;color:var(--text);letter-spacing:-0.005em}
+.form-group label .req{color:var(--orange);margin-left:2px}
+.form-input,.form-select,.form-textarea{font-family:'Inter',sans-serif;font-size:14px;color:var(--text);padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:#fff;transition:border-color .2s,box-shadow .2s;outline:none;font-weight:500;width:100%}
+.form-input::placeholder,.form-textarea::placeholder{color:#94A3B8;font-weight:400}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(38,74,202,.1)}
+.form-textarea{min-height:130px;resize:vertical;line-height:1.55;font-family:'Inter',sans-serif}
+.form-select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23113293' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-consent{display:flex;align-items:flex-start;gap:10px;margin:.5rem 0 1.5rem;padding:.85rem 1rem;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
+.form-consent input[type="checkbox"]{margin-top:2px;accent-color:var(--brand-2);width:16px;height:16px;flex-shrink:0;cursor:pointer}
+.form-consent label{font-size:12.5px;color:var(--sub);line-height:1.55;cursor:pointer}
+.form-consent label a{color:var(--brand-2);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.form-consent label a:hover{color:var(--brand)}
+.btn-submit{font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;color:#fff;background:var(--grad-orange);border:none;padding:13px 28px;border-radius:11px;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(255,138,0,.3);cursor:pointer;transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s;letter-spacing:-0.005em;display:inline-flex;align-items:center;gap:8px}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 18px rgba(255,138,0,.4)}
+.btn-submit:active{transform:translateY(0)}
+.btn-submit svg{width:16px;height:16px}
+.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0c2370;color:#fff;padding:14px 22px;border-radius:12px;font-size:14px;font-weight:600;box-shadow:0 12px 32px rgba(17,50,147,.25);z-index:9999;opacity:0;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:10px;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{background:linear-gradient(135deg,#2C9650 0%,#3FB668 100%)}
+.toast.error{background:linear-gradient(135deg,#DC2626 0%,#EF4444 100%)}
+.toast svg{width:18px;height:18px;flex-shrink:0}
+
+/* ════════ FAQ MINI ════════ */
+.faq-section{padding:4rem 0 6rem;background:var(--bg)}
+.faq-inner{max-width:880px;margin:0 auto;padding:0 3.5%}
+.faq-section h2{font-family:'Inter',sans-serif;font-size:1.85rem;font-weight:700;color:var(--brand);letter-spacing:-0.02em;text-align:center;margin:0 0 .5rem}
+.faq-section .faq-sub{text-align:center;color:var(--sub);font-size:1rem;margin:0 0 2.5rem}
+.faq-item{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:.75rem;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.faq-item:hover{border-color:rgba(38,74,202,.25)}
+.faq-question{padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.005em;gap:1rem}
+.faq-toggle{width:28px;height:28px;border-radius:8px;background:var(--bg);color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .25s,background .2s}
+.faq-toggle svg{width:14px;height:14px}
+.faq-item.open .faq-toggle{transform:rotate(45deg);background:var(--brand-light)}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1);padding:0 1.4rem;color:var(--sub);font-size:14px;line-height:1.65}
+.faq-item.open .faq-answer{max-height:300px;padding:0 1.4rem 1.2rem}
+
+/* ════════ FOOTER ════════ */
 .site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
 .footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
@@ -47,17 +118,32 @@ h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;color:#113293;letter-spaci
 .footer-social{display:flex;gap:8px}
 .footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
 .footer-social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px)}
-
 .footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
 .footer-col{display:flex;flex-direction:column;gap:9px}
 .footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
 .footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
 .footer-col a:hover{color:#fff}
-
 .footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
 .footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
-@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-bottom{flex-direction:column;text-align:center}}
+
+/* ════════ RESPONSIVE ════════ */
+@media(max-width:900px){
+  .contact-grid{grid-template-columns:1fr;gap:1.75rem}
+  .form-row{grid-template-columns:1fr}
+  .contact-form-card{padding:1.75rem 1.5rem}
+  .page-hero{padding:3.5rem 0 2.5rem}
+  .footer-top{grid-template-columns:1fr;gap:2.5rem}
+  .footer-links{grid-template-columns:repeat(2,1fr);gap:1.5rem}
+  .footer-bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:520px){
+  .page-hero{padding:2.5rem 0 2rem}
+  .contact-section{padding:2rem 0 3.5rem}
+  .info-card{padding:1.15rem}
+  .contact-form-card{padding:1.5rem 1.15rem}
+  .faq-section{padding:3rem 0 4rem}
+}
 </style>
 </head>
 <body>
@@ -202,40 +288,252 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
 
 
-<main>
-  <div class="code">404</div>
-  <div class="badge">Az oldal nem található</div>
-  <h1>Sajnos nem találtuk meg amit keresett</h1>
-  <p class="lead">Lehet hogy a link már nem aktív, vagy elgépelte a címet. Próbálkozzon a lenti gyors linkek egyikével, vagy keressen az oldalon.</p>
-
-  <div class="actions">
-    <a class="btn btn-primary" href="/">Vissza a főoldalra</a>
-    <a class="btn btn-outline" href="/talalatok">Szakorvos kereső</a>
+<!-- ════════ PAGE HERO ════════ -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Kapcsolat
+    </div>
+    <h1>Beszéljünk – <em>itt vagyunk Önnek</em></h1>
+    <p>Kérdés, partneri együttműködés, sajtó megkeresés vagy visszajelzés? Töltse ki az űrlapot, és 1 munkanapon belül válaszolunk.</p>
   </div>
+</section>
 
-  <div class="cards">
-    <a href="/talalatok" class="card">
-      <div class="card-title">🩺 Szakorvos kereső</div>
-      <div class="card-sub">Találjon szakorvost a város, szakterület vagy név alapján</div>
-    </a>
-    <a href="/tudastar" class="card">
-      <div class="card-title">📚 Tudástár A–Z</div>
-      <div class="card-sub">Tünetek, betegségek, kezelések betűrendben</div>
-    </a>
-    <a href="/vizsgalatok" class="card">
-      <div class="card-title">🔬 Vizsgálatok</div>
-      <div class="card-sub">Vizsgálatok és kezelések szakterületenként</div>
-    </a>
+<!-- ════════ KAPCSOLAT GRID ════════ -->
+<section class="contact-section">
+  <div class="contact-inner">
+    <div class="contact-grid">
+
+      <!-- BAL: Info kártyák -->
+      <div class="info-stack">
+
+        <div class="info-card">
+          <div class="info-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="info-body">
+            <div class="info-label">Általános email</div>
+            <div class="info-value"><a href="mailto:info@szakorvos.hu">info@szakorvos.hu</a></div>
+            <div class="info-meta">Általános kérdésekkel ide írjon</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="info-body">
+            <div class="info-label">Partneri kapcsolat</div>
+            <div class="info-value"><a href="mailto:partner@szakorvos.hu">partner@szakorvos.hu</a></div>
+            <div class="info-meta">Orvosoknak, klinikáknak, együttműködéshez</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          </div>
+          <div class="info-body">
+            <div class="info-label">Válaszidő</div>
+            <div class="info-value">1 munkanapon belül</div>
+            <div class="info-meta">Hétfő – péntek: 9:00 – 17:00</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="info-body">
+            <div class="info-label">Székhely</div>
+            <div class="info-value">1051 Budapest, Magyarország</div>
+            <div class="info-meta">Postai megkereséshez kérjük előzetes egyeztetést</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- JOBB: Űrlap -->
+      <div class="contact-form-card">
+        <h2 class="form-title">Üzenetet küldök</h2>
+        <p class="form-subtitle">Töltse ki az alábbi mezőket, és kollégánk hamarosan jelentkezik.</p>
+
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="name">Név <span class="req">*</span></label>
+              <input type="text" id="name" name="name" class="form-input" placeholder="Teljes neve" required autocomplete="name">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="email">Email <span class="req">*</span></label>
+              <input type="email" id="email" name="email" class="form-input" placeholder="pelda@email.hu" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="phone">Telefon</label>
+              <input type="tel" id="phone" name="phone" class="form-input" placeholder="+36 30 123 4567" autocomplete="tel">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="topic">Téma <span class="req">*</span></label>
+              <select id="topic" name="topic" class="form-select" required>
+                <option value="">Válasszon témát…</option>
+                <option value="general">Általános kérdés</option>
+                <option value="partner">Partneri együttműködés</option>
+                <option value="doctor">Orvosként regisztrálnék</option>
+                <option value="clinic">Klinikát képviselek</option>
+                <option value="press">Sajtó megkeresés</option>
+                <option value="bug">Hiba bejelentés</option>
+                <option value="other">Egyéb</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Üzenet <span class="req">*</span></label>
+            <textarea id="message" name="message" class="form-textarea" placeholder="Írja le röviden, miben segíthetünk…" required></textarea>
+          </div>
+
+          <div class="form-consent">
+            <input type="checkbox" id="consent" required>
+            <label for="consent">Elfogadom az <a href="adatvedelem.html">adatvédelmi tájékoztatót</a> és hozzájárulok, hogy adataimat a megkeresés kezeléséhez felhasználják.</label>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span id="submitText">Üzenet küldése</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </form>
+      </div>
+
+    </div>
   </div>
-</main>
+</section>
 
-<footer class="footer">
-  <a href="/" style="color:#94a3b8">Főoldal</a> ·
-  <a href="/adatvedelem.html" style="color:#94a3b8">Adatvédelem</a> ·
-  <a href="/login.html" style="color:#94a3b8">Bejelentkezés</a>
-  <p style="margin-top:6px">© Szakorvos.hu</p>
-</footer>
+<!-- ════════ FAQ ════════ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <h2>Gyakori kérdések</h2>
+    <p class="faq-sub">A leggyakrabban kérdezett dolgok – ha itt nincs a válasz, írjon nyugodtan.</p>
 
+    <div class="faq-item">
+      <div class="faq-question">
+        Mennyi idő alatt válaszolnak az üzenetemre?
+        <div class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-answer">Munkanapokon általában 1 napon belül, hétvégén pedig hétfő reggelig válaszolunk. Sürgős esetben jelölje az üzenet elején „SÜRGŐS" megjelöléssel.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Orvosként hogyan tudok regisztrálni a platformon?
+        <div class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-answer">A <a href="register.html" style="color:var(--brand-2);font-weight:600">Regisztráció</a> oldalon kezdje el a folyamatot, vagy írjon a partner@szakorvos.hu címre, és kollégánk személyesen átvezeti a regisztráción.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Hogyan tudok hibát bejelenteni a weboldalon?
+        <div class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-answer">Az űrlapon válassza a „Hiba bejelentés" témát, és írja le röviden mi történt, milyen oldalon, milyen eszközön (telefon/asztali) és böngészőben. A képernyőképet emailben várjuk.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Klinikámat hogyan tudom feltüntetni az oldalon?
+        <div class="faq-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      </div>
+      <div class="faq-answer">Klinikákat partneri szerződés keretében veszünk fel. Írjon a partner@szakorvos.hu címre, vagy küldje el az űrlapot „Klinikát képviselek" témával — egy kollégánk felveszi Önnel a kapcsolatot.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+
+
+<!-- ════════ TOAST ════════ -->
+<div id="toast" class="toast">
+  <svg id="toastIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+  <span id="toastText">Üzenet sikeresen elküldve!</span>
+</div>
+
+<script>
+// FAQ akkordeon
+document.querySelectorAll('.faq-question').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Toast helper
+function showToast(message, type) {
+  const t = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  const text = document.getElementById('toastText');
+  t.classList.remove('success','error','show');
+  t.classList.add(type || 'success');
+  text.textContent = message;
+  if (type === 'error') {
+    icon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+  } else {
+    icon.innerHTML = '<polyline points="20,6 9,17 4,12"/>';
+  }
+  requestAnimationFrame(() => t.classList.add('show'));
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+// Form submit
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('submitText');
+
+  // Egyszerű kliens-oldali validáció
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const topic = form.topic.value;
+  const message = form.message.value.trim();
+  const consent = form.consent.checked;
+
+  if (!name || !email || !topic || !message) {
+    showToast('Kérjük töltse ki a kötelező mezőket', 'error');
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('Érvénytelen email cím', 'error');
+    return;
+  }
+  if (!consent) {
+    showToast('Kérjük fogadja el az adatvédelmi tájékoztatót', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btnText.textContent = 'Küldés…';
+
+  // Itt a tényleges küldést kell megvalósítani (Supabase edge function, EmailJS, stb.)
+  // Most csak szimulált siker - a backend integrációt később lehet bekötni
+  try {
+    await new Promise(r => setTimeout(r, 900));
+    showToast('Köszönjük! Üzenetét megkaptuk, hamarosan válaszolunk.', 'success');
+    form.reset();
+  } catch (err) {
+    showToast('Hiba történt. Próbálja újra később.', 'error');
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = 'Üzenet küldése';
+  }
+});
+</script>
 
 
 <!-- ══════ LÁBLÉC KEZDETE ══════ -->

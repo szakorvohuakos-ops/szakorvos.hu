@@ -282,9 +282,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 ───────────────────────────────────── */
 .dc{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s,border-color .3s;animation:cdin .4s both;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04),0 6px 20px rgba(17,50,147,.06)}
 @keyframes cdin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad-blue);opacity:0;transition:opacity .25s}
 .dc:hover{box-shadow:0 12px 36px rgba(17,50,147,.1),0 2px 8px rgba(17,50,147,.05);border-color:#bcc5e0;transform:translateY(-2px)}
-.dc:hover::before{opacity:1}
 .dc.prem{border-color:#fde68a;background:linear-gradient(180deg,#fffdf7,#fff 60%)}
 .dc.prem:hover{border-color:#f59e0b;box-shadow:0 12px 36px rgba(245,158,11,.12)}
 .prem-lbl{position:absolute;top:1rem;right:1rem;background:var(--grad-orange);color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius:100px;z-index:2;box-shadow:0 2px 8px rgba(255,138,0,.3)}
@@ -522,13 +520,32 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
   .dc-nm{font-size:16px}.rgrid{grid-template-columns:1fr}
   .pp{width:100vw}.pp-stats{grid-template-columns:repeat(2,1fr)}
 }
+.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
+.footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
+.footer-brand{min-width:0}
+.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
+.footer-logo span{color:var(--orange-2)}
+.footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
+.footer-social{display:flex;gap:8px}
+.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+.footer-social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px)}
+
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
+.footer-col{display:flex;flex-direction:column;gap:9px}
+.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
+.footer-col a:hover{color:#fff}
+
+.footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
+.footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-bottom{flex-direction:column;text-align:center}}
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Szakorvos kereső", "url": "https://www.szakorvos.hu/klinikak", "description": "Találja meg a legjobb szakorvost az Ön közelében.", "inLanguage": "hu", "isPartOf": {"@type": "WebSite", "name": "Szakorvos.hu", "url": "https://www.szakorvos.hu"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://www.szakorvos.hu"}, {"@type": "ListItem", "position": 2, "name": "Orvos kereső", "item": "https://www.szakorvos.hu/klinikak"}]}</script>
 </head>
 <body>
-
-
 
 <!-- ══════════════════════════════════════════
      EGYSÉGES MENÜ — minden oldalon ugyanez
@@ -546,9 +563,9 @@ body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
 body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
 nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:58px;padding:8px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
 nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
@@ -557,7 +574,7 @@ nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;m
 nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
 nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
 nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
 nav#mainNav .nav-links li>a:hover{background:#eef2ff}
 nav#mainNav .nav-links li>a svg{opacity:.6}
 nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
@@ -565,10 +582,13 @@ nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform
 nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
 nav#mainNav .dropdown a:hover{background:#eef2ff}
 nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
 nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#FF8A00;background:linear-gradient(180deg,rgba(255,247,237,.85) 0%,rgba(255,237,213,.75) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,138,0,.32);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 1px 2px rgba(255,138,0,.06),0 4px 12px rgba(255,138,0,.08);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap}
+nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);border-color:rgba(255,138,0,.55);background:linear-gradient(180deg,rgba(255,247,237,1) 0%,rgba(255,231,200,.92) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(255,138,0,.1),0 8px 18px rgba(255,138,0,.15)}
+nav#mainNav .btn-nav-partner svg{flex-shrink:0;color:#FF8A00}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 .mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
@@ -600,6 +620,10 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </ul>
 
     <div class="nav-actions">
+      <a href="register.html" class="btn-nav-partner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Legyen Ön is partnerünk
+      </a>
       <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
     </div>
 
@@ -619,7 +643,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
     <a href="tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
     <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
-    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <a href="kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
   </div>
@@ -656,131 +680,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
 
-<!-- ══════════════════════════════════════════
-     EGYSÉGES MENÜ — minden oldalon ugyanez
-══════════════════════════════════════════ -->
-<style>
-nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
-nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
 
-/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
-body.is-index nav#mainNav{background:rgba(255,255,255,.35) !important;backdrop-filter:blur(10px) saturate(140%) !important;-webkit-backdrop-filter:blur(10px) saturate(140%) !important;border-bottom:1px solid rgba(220,227,234,.2) !important;box-shadow:none !important}
-body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
-/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
-body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
-body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
-body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
-nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
-nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
-nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
-nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
-nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
-nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
-nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
-nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
-nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
-nav#mainNav .nav-links li>a:hover{background:#eef2ff}
-nav#mainNav .nav-links li>a svg{opacity:.6}
-nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
-nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
-nav#mainNav .dropdown a:hover{background:#eef2ff}
-nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
-nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
-nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
-.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
-.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
-.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
-.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
-.mobile-nav-item:hover{background:#eef2ff}
-.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
-@media(max-width:900px){
-  nav#mainNav .nav-links{display:none}
-  nav#mainNav .nav-actions{display:none}
-  nav#mainNav .nav-mobile-toggle{display:flex}
-}
-</style>
 
-<script>
-// Görgetés-érzékeny menü
-(function(){
-  var nav = document.getElementById('mainNav');
-  if(!nav) return;
-  function update(){
-    if(window.scrollY > 8) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-})();
-</script>
-<!-- ══════ MENÜ VÉGE ══════ -->
 
-<!-- ══════════════════════════════════════════
-     EGYSÉGES MENÜ — minden oldalon ugyanez
-══════════════════════════════════════════ -->
-<style>
-nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
-nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
-nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
-nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
-nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
-nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
-nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
-nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
-nav#mainNav .nav-links li>a:hover{background:#eef2ff}
-nav#mainNav .nav-links li>a svg{opacity:.6}
-nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
-nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
-nav#mainNav .dropdown a:hover{background:#eef2ff}
-nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
-nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
-nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
-.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
-.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
-.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
-.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
-.mobile-nav-item:hover{background:#eef2ff}
-.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
-@media(max-width:900px){
-  nav#mainNav .nav-links{display:none}
-  nav#mainNav .nav-actions{display:none}
-  nav#mainNav .nav-mobile-toggle{display:flex}
-}
-</style>
 
-<script>
-// Görgetés-érzékeny menü
-(function(){
-  var nav = document.getElementById('mainNav');
-  if(!nav) return;
-  function update(){
-    if(window.scrollY > 8) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-})();
-</script>
-<!-- ══════ MENÜ VÉGE ══════ -->
 
 
 <!-- NAV -->
@@ -1381,5 +1285,57 @@ async function renderMap(){
 document.addEventListener('DOMContentLoaded', loadClinics);
 </script>
 
+
+<!-- ══════ LÁBLÉC KEZDETE ══════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <p class="footer-tagline">Az okos orvoskeresés platform</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn">f</a>
+          <a href="#" class="footer-social-btn">in</a>
+          <a href="#" class="footer-social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="talalatok.html">Orvoskeresés</a>
+          <a href="index.html">AI asszisztens</a>
+          <a href="talalatok.html">Időpontfoglalás</a>
+          <a href="vizsgalatok.html">Vizsgálatok</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Partnereknek</div>
+          <a href="register.html">Orvosoknak</a>
+          <a href="register.html">Klinikáknak</a>
+          <a href="register.html">Árak</a>
+          <a href="register.html">Regisztráció</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Cég</div>
+          <a href="#">Rólunk</a>
+          <a href="kapcsolat.html">Kapcsolat</a>
+          <a href="tudastar.html">Blog</a>
+          <a href="#">Karrier</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Jogi</div>
+          <a href="adatvedelem.html">Adatvédelem</a>
+          <a href="#">ÁSZF</a>
+          <a href="#">Cookie</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
+      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
+    </div>
+  </div>
+</footer>
+<!-- ══════ LÁBLÉC VÉGE ══════ -->
 </body>
 </html>
