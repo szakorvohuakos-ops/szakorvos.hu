@@ -770,7 +770,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
         <div class="bcard-body">
           <div id="bcardRows"></div>
-          <button class="bcard-cta" onclick="document.getElementById('pane-booking').scrollIntoView({behavior:'smooth'})">
+          <button class="bcard-cta" onclick="document.getElementById('pane-booking')?.scrollIntoView({behavior:'smooth'})">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Időpontfoglalás
           </button>
@@ -1167,23 +1167,6 @@ function render(d){
   }
   document.getElementById('bcardRows').innerHTML = bcardRows.join('');
 
-  // Legkorábbi időpont (mock — első szabad slot)
-  const soonest = computeSoonest(d);
-  document.getElementById('bcardSoonestWhen').textContent = soonest;
-
-  // Features list
-  const feats = [
-    'Online konzultáció',
-    'Videókonzultáció',
-    'Rendelői vizit'
-  ];
-  document.getElementById('bcardFeats').innerHTML = feats.map(f => `
-    <div class="bcard-feat">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-      ${escapeHtml(f)}
-    </div>
-  `).join('');
-
   // ─── Szolgáltatások tab ──────────────────────────────────────────
   renderServicesTab(d, fee);
   renderReviewsTab(d, rat, reviews);
@@ -1361,54 +1344,6 @@ function computeBarDist(rat, count){
 }
 
 /* ── Időpontok tab ────────────────────────────────────────────────── */
-function renderBookingTab(d){
-  // 5 nap a maitól
-  const days = [];
-  const today = new Date();
-  for(let i = 0; i < 5; i++){
-    const dt = new Date(today);
-    dt.setDate(today.getDate() + i);
-    const dow = dt.getDay() === 0 ? 7 : dt.getDay();
-    days.push({
-      date: dt,
-      label: i === 0 ? 'Ma' : HU_DAY_SHORT[dt.getDay()],
-      sub: i === 0 ? `Máj. ${dt.getDate()}.` : `${HU_MONTH_SHORT[dt.getMonth()]}. ${dt.getDate()}.`,
-      dow: dow,
-      available: (d.availability || []).some(a => a.day_of_week === dow)
-    });
-  }
-  const daysHtml = days.map((day, i) => `
-    <div class="day-cell ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="selectDay(${i})">
-      <div class="day-name">${escapeHtml(day.label)}</div>
-      <div class="day-num">${escapeHtml(day.sub)}</div>
-    </div>
-  `).join('');
-  document.getElementById('daysRow').innerHTML = daysHtml;
-  window._daysCache = days;
-
-  // Default: első aktív nap (vagy mai)
-  selectDay(0);
-}
-
-function selectDay(idx){
-  document.querySelectorAll('.day-cell').forEach(c => c.classList.toggle('active', parseInt(c.dataset.idx) === idx));
-  const day = window._daysCache?.[idx];
-  if(!day){ document.getElementById('slotsGrid').innerHTML = ''; return; }
-
-  // Slot generálás: ha elérhető, 6 időpont (18:30 körül + délután)
-  if(!day.available){
-    document.getElementById('slotsGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);font-size:13.5px">Ezen a napon nincs rendelés.</div>`;
-    return;
-  }
-  const slots = ['18:30','19:00','19:30','20:00','20:30'];
-  const html = slots.map((s,i) => `<button class="slot${i===0?' sel':''}" onclick="selectSlot(this)">${s}</button>`).join('');
-  document.getElementById('slotsGrid').innerHTML = html;
-}
-
-function selectSlot(el){
-  document.querySelectorAll('.slot').forEach(s => s.classList.remove('sel'));
-  el.classList.add('sel');
-}
 
 /* ── Helyszínek tab ───────────────────────────────────────────────── */
 function renderLocationsTab(d){
@@ -1528,53 +1463,10 @@ function toggleFav(){
 }
 
 /* ── Hasonló orvosok ──────────────────────────────────────────────── */
-async function loadSimilar(d){
-  try{
-    const spec = d.doctor_specialties?.[0]?.specialty_id;
-    let q = db.from('doctors')
-      .select(`id,name,title,rating,review_count,photo_url,doctor_specialties!inner(specialty_id,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(cities(name)))`)
-      .eq('is_active', true)
-      .neq('id', d.id);
-    if(spec) q = q.eq('doctor_specialties.specialty_id', spec);
-    const{data,error} = await q.limit(4);
-    if(error || !data?.length){
-      document.getElementById('simGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13.5px">Nincs hasonló orvos a közelben.</div>`;
-      return;
-    }
-    document.getElementById('simGrid').innerHTML = data.map(s => simCard(s)).join('');
-  } catch(e){
-    console.warn('[loadSimilar]', e);
-  }
-}
-function simCard(s){
-  const spec = s.doctor_specialties?.[0]?.specialties?.name || 'Szakorvos';
-  const specSlug = s.doctor_specialties?.[0]?.specialties?.doctor_slug || '';
-  const specName = s.doctor_specialties?.[0]?.specialties?.doctor_name || '';
-  const city = s.doctor_clinics?.[0]?.clinics?.cities?.name || '–';
-  const fee  = s.doctor_clinics?.[0]?.consultation_fee || 0;
-  const rat  = parseFloat(s.rating) || 0;
-  const reviews = parseInt(s.review_count) || 0;
-  const init = (s.name||'OR').replace(/^Dr\.\s*/i,'').split(/\s+/).map(w => w[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
-  const slugOrId = s.slug || s.id;
-  return `<a class="sim-card" href="/orvos/${escapeHtml(slugOrId)}">
-    <div class="sim-photo">
-      ${s.photo_url ? `<img src="${escapeHtml(s.photo_url)}" alt="${escapeHtml(s.name)}">` : `<div class="sim-av">${escapeHtml(init)}</div>`}
-    </div>
-    <div class="sim-name">${escapeHtml(s.name)}</div>
-    <div class="sim-spec">${escapeHtml(specToTitle(spec, specSlug, specName))}</div>
-    ${rat ? `<div class="sim-rating"><span class="star">★</span> <strong>${rat.toFixed(1)}</strong> <span>(${reviews})</span></div>` : ''}
-    <div class="sim-loc">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      ${escapeHtml(city)}
-    </div>
-    <div class="sim-price">${fee ? fmtHuf(fee) + '-tól' : 'Egyedi ár'}</div>
-  </a>`;
-}
-
 /* ── Misc handlers ────────────────────────────────────────────────── */
 function doNavSearch(){
-  const spec = document.getElementById('navSearchSpec').value.trim();
-  const city = document.getElementById('navSearchCity').value.trim();
+  const spec = document.getElementById('navSearchSpec')?.value.trim() || '';
+  const city = document.getElementById('navSearchCity')?.value.trim() || '';
   const p = new URLSearchParams();
   if(spec) p.set('specialty', spec);
   if(city) p.set('city', city);
