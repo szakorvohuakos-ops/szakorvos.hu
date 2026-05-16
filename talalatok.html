@@ -59,18 +59,18 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
   --grad-hero:linear-gradient(135deg,#113293 0%,#2C9650 100%);
 }
-body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden}
+body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#eef2ff 0%,#f4f6f8 30%,#f4f6f8 70%,#e8f4ec 100%);overflow-x:hidden;min-height:100vh}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 
 /* ───── NAV ───── */
-nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05)}
+nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 2px 20px rgba(17,50,147,.05)}
 .ni{display:flex;align-items:center;height:68px;padding:0 3.5%;gap:1.25rem;max-width:1600px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .logo-txt{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:var(--brand);letter-spacing:-0.01em}
 .logo-txt em{color:var(--green);font-style:normal}
-.nav-srch{flex:1;max-width:560px;display:flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:100px;padding:6px 7px 6px 18px;box-shadow:0 2px 8px rgba(17,50,147,.04);transition:border-color .15s,box-shadow .15s}
+.nav-srch{flex:1;max-width:560px;display:flex;align-items:center;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.6);border-radius:100px;padding:6px 7px 6px 18px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 8px rgba(17,50,147,.04);transition:border-color .15s,box-shadow .15s}
 .nav-srch:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
 .nav-div{width:1px;height:18px;background:var(--border);margin:0 8px;flex-shrink:0}
 .ni-inp{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);outline:none;min-width:0}
@@ -84,7 +84,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .btn-pill:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
 
 /* ───── HERO BAR ───── */
-.hbar{background:#fff;border-bottom:none;padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden}
+.hbar{background:linear-gradient(180deg,rgba(255,255,255,.75) 0%,rgba(244,246,248,.6) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.7) inset}
 .hbar::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none}
 .hbar::after{display:none}
 .hbar-in{max-width:1400px;margin:0 auto;display:block;position:relative;z-index:1}
@@ -103,15 +103,15 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 
 /* New: top "Új keresés" search bar - more premium */
 .topbar{max-width:1400px;margin:0 auto;padding:0 3.5% 2rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:relative;z-index:1}
-.topbar-field{flex:1;min-width:240px;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 18px;box-shadow:0 4px 16px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.04);transition:border-color .15s,box-shadow .15s,transform .15s}
+.topbar-field{flex:1;min-width:240px;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.8);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.65);border-radius:14px;padding:11px 18px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 8px rgba(17,50,147,.04),0 8px 20px rgba(17,50,147,.06);transition:border-color .2s,box-shadow .2s,transform .2s}
 .topbar-field:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(17,50,147,.1),0 2px 6px rgba(17,50,147,.05)}
 .topbar-field:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(38,74,202,.12),0 4px 16px rgba(17,50,147,.08)}
 .topbar-field svg{flex-shrink:0;color:var(--brand)}
 .topbar-field input{flex:1;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:15px;color:var(--text);outline:none;min-width:0;font-weight:500}
 .topbar-field input::placeholder{color:#b0bcd4;font-weight:400}
-.topbar-btn{background:var(--grad-blue);color:#fff;border:none;border-radius:14px;padding:16px 36px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(17,50,147,.25),inset 0 1px 0 rgba(255,255,255,.15);transition:all .15s;white-space:nowrap;letter-spacing:-0.01em;position:relative;overflow:hidden}
+.topbar-btn{background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:14px;padding:13px 28px;font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.2),0 8px 22px rgba(46,74,202,.32);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;white-space:nowrap;letter-spacing:-0.01em;position:relative;overflow:hidden}
 .topbar-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 50%);pointer-events:none}
-.topbar-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(17,50,147,.35),inset 0 1px 0 rgba(255,255,255,.2)}
+.topbar-btn:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 4px 10px rgba(46,74,202,.25),0 14px 32px rgba(46,74,202,.4)}
 .topbar-btn:active{transform:translateY(0)}
 
 /* ───── PAGE LAYOUT ───── */
@@ -120,12 +120,12 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ══════════════════════════════════════════
    FILTER SIDEBAR – PREMIUM DETAILED
 ══════════════════════════════════════════ */
-.fsb{background:#fff;border:1px solid var(--border);border-radius:20px;overflow:hidden;position:sticky;top:80px;box-shadow:0 4px 24px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.03);max-height:calc(100vh - 100px);overflow-y:auto}
+.fsb{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;overflow:hidden;position:sticky;top:80px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 4px 24px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.03);max-height:calc(100vh - 100px);overflow-y:auto}
 .fsb::-webkit-scrollbar{width:4px}
 .fsb::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 
 /* Header */
-.fsb-hd{padding:1.2rem 1.5rem;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+.fsb-hd{padding:1.2rem 1.5rem;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(220,227,234,.4);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
 .fsb-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;letter-spacing:-0.01em}
 .fsb-badge{background:var(--grad-blue);color:#fff;border-radius:100px;padding:2px 9px;font-size:11px;font-weight:600;display:none;box-shadow:0 2px 6px rgba(17,50,147,.25)}
 .fsb-badge.on{display:inline-flex}
@@ -213,10 +213,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .rcnt{font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;color:var(--text);letter-spacing:-0.01em}
 .rcnt span{color:var(--brand)}
 .rctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.sort-sel{border:1px solid var(--border);border-radius:10px;padding:9px 16px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;font-weight:600;box-shadow:0 1px 3px rgba(17,50,147,.04)}
+.sort-sel{border:1px solid rgba(220,227,234,.6);border-radius:10px;padding:9px 16px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);outline:none;transition:border-color .15s,box-shadow .15s;font-weight:600;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04)}
 .sort-sel:hover{border-color:var(--brand-2)}
 .sort-sel:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(38,74,202,.12)}
-.vtog{display:flex;background:#fff;border:1px solid var(--border);border-radius:11px;padding:3px;gap:3px;box-shadow:0 1px 3px rgba(17,50,147,.04)}
+.vtog{display:flex;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.65);border-radius:11px;padding:3px;gap:3px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04)}
 .vbtn{padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;color:var(--sub);background:transparent;border:none;display:flex;align-items:center;gap:5px;transition:all .15s}
 .vbtn:hover:not(.on){color:var(--text);background:var(--bg)}
 .vbtn.on{background:var(--grad-blue);color:#fff;box-shadow:0 2px 8px rgba(17,50,147,.25)}
@@ -224,10 +224,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ─────────────────────────────────────
    DOCTOR CARD (premium visual)
 ───────────────────────────────────── */
-.dc{background:#fff;border:1px solid var(--border);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .25s,transform .25s,border-color .25s;animation:cdin .4s both;box-shadow:0 1px 3px rgba(17,50,147,.04)}
+.dc{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s,border-color .3s;animation:cdin .4s both;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04),0 6px 20px rgba(17,50,147,.06)}
 @keyframes cdin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad-blue);opacity:0;transition:opacity .25s}
-.dc:hover{box-shadow:0 12px 36px rgba(17,50,147,.1),0 2px 8px rgba(17,50,147,.05);border-color:#bcc5e0;transform:translateY(-2px)}
+.dc:hover{box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 10px rgba(17,50,147,.06),0 16px 40px rgba(17,50,147,.14),0 28px 60px rgba(17,50,147,.08);border-color:rgba(125,150,240,.5);transform:translateY(-3px)}
 .dc:hover::before{opacity:1}
 .dc.prem{border-color:#fde68a;background:linear-gradient(180deg,#fffdf7,#fff 60%)}
 .dc.prem:hover{border-color:#f59e0b;box-shadow:0 12px 36px rgba(245,158,11,.12)}
@@ -269,13 +269,13 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
 
 /* Right column - premium green CTA card */
-.dc-right{background:linear-gradient(180deg,#f0fdf4,#ecfdf5);border:1px solid #c4ead2;border-radius:16px;padding:1.2rem 1.25rem;display:flex;flex-direction:column;gap:.85rem;align-items:stretch;min-width:0;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.dc-right{background:linear-gradient(180deg,rgba(240,253,244,.9),rgba(236,253,245,.75));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(196,234,210,.6);border-radius:16px;padding:1.2rem 1.25rem;display:flex;flex-direction:column;gap:.85rem;align-items:stretch;min-width:0;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 8px rgba(44,150,80,.04)}
 .dc-right-lbl{font-size:11px;color:var(--green-dark);font-weight:600;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px}
 .dc-right-lbl::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(44,150,80,.2)}
 .dc-price{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:var(--text);letter-spacing:-0.025em;line-height:1.1;margin-top:2px}
 .dc-price small{font-size:12px;color:var(--green-dark);font-weight:600;display:block;margin-top:3px;letter-spacing:0}
 .dc-divider{height:1px;background:#c4ead2;margin:.05rem 0}
-.btn-prof{width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;box-shadow:0 4px 14px rgba(17,50,147,.22),inset 0 1px 0 rgba(255,255,255,.15);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
+.btn-prof{width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.2),0 8px 18px rgba(46,74,202,.28);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
 .btn-prof::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 50%);pointer-events:none}
 .btn-prof:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,50,147,.32),inset 0 1px 0 rgba(255,255,255,.2)}
 .btn-prof:active{transform:translateY(0)}
@@ -313,7 +313,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* Skeleton */
 .skel{background:linear-gradient(90deg,#f4f6fb 25%,#eaeef8 50%,#f4f6fb 75%);background-size:200% 100%;animation:shim 1.4s infinite;border-radius:18px;height:178px;margin-bottom:.85rem}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.empty-st{background:#fff;border:1px solid var(--border);border-radius:18px;padding:4rem 2rem;text-align:center}
+.empty-st{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.7);border-radius:18px;padding:4rem 2rem;text-align:center;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 4px 20px rgba(17,50,147,.06)}
 .empty-icon{font-size:52px;margin-bottom:1rem}
 .empty-title{font-family:'Inter',sans-serif;font-size:20px;font-weight:600;margin-bottom:.5rem}
 .empty-sub{font-size:14px;color:var(--sub);line-height:1.7}
@@ -327,7 +327,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .pgb:disabled{opacity:.3;cursor:default}
 .pg-ellipsis{display:inline-flex;align-items:center;color:#c7d2f5;padding:0 3px;font-size:14px;letter-spacing:2px}
 .load-more-wrap{display:flex;justify-content:center;padding:1.5rem 0 0}
-.load-more-btn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--brand);border:1.5px solid var(--border);padding:13px 26px;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(17,50,147,.04)}
+.load-more-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--brand);border:1.5px solid rgba(199,210,254,.6);padding:13px 26px;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s,border-color .2s;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 8px rgba(17,50,147,.04)}
 .load-more-btn:hover{border-color:var(--brand);background:var(--brand-light, #eef2ff);transform:translateY(-1px);box-shadow:0 6px 16px rgba(17,50,147,.1)}
 .load-more-btn:disabled{opacity:.5;cursor:default;transform:none}
 .load-more-btn svg{transition:transform .2s}
@@ -338,14 +338,14 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ══════════════════════════════════════════
    PROFILE PANEL (slide-in)
 ══════════════════════════════════════════ */
-.ov{position:fixed;inset:0;background:rgba(10,18,50,.5);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(5px)}
+.ov{position:fixed;inset:0;background:rgba(10,18,50,.35);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%)}
 .ov.open{opacity:1;pointer-events:all}
-.pp{position:fixed;top:0;right:0;bottom:0;width:min(720px,100vw);background:#fff;z-index:601;transform:translateX(110%);transition:transform .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-10px 0 60px rgba(40,56,151,.2)}
+.pp{position:fixed;top:0;right:0;bottom:0;width:min(720px,100vw);background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(252,253,255,.88) 100%);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border-left:1px solid rgba(255,255,255,.65);z-index:601;transform:translateX(110%);transition:transform .38s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-2px 0 8px rgba(17,50,147,.05),-20px 0 60px rgba(17,50,147,.15),-40px 0 100px rgba(17,50,147,.1)}
 .pp.open{transform:translateX(0)}
 .pp::-webkit-scrollbar{width:4px}
 
 /* Panel topbar */
-.pp-top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.875rem 1.6rem;display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.pp-top{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.4);padding:.875rem 1.6rem;display:flex;align-items:center;gap:1rem;flex-shrink:0}
 .pp-close{background:none;border:1.5px solid var(--border);color:var(--sub);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
 .pp-close:hover{border-color:var(--brand);color:var(--brand);background:#eef2ff}
 .pp-top-name{font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -353,7 +353,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .pp-book-btn:hover{background:var(--navy)}
 
 /* Panel hero section */
-.pp-hero{background:linear-gradient(145deg,#eef2ff,#f4f6fb);padding:2rem 1.75rem 1.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;flex-shrink:0}
+.pp-hero{background:linear-gradient(145deg,rgba(238,242,255,.8),rgba(244,246,251,.65));backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:2rem 1.75rem 1.5rem;border-bottom:1px solid rgba(220,227,234,.35);position:relative;overflow:hidden;flex-shrink:0}
 .pp-hero::before{content:'';position:absolute;top:-80px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(40,56,151,.07),transparent 70%);pointer-events:none}
 .pp-hero-row{display:flex;gap:1.4rem;align-items:flex-start;position:relative;z-index:1;margin-bottom:1.1rem}
 .pp-av{width:100px;height:100px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:34px;font-weight:600;color:#fff;flex-shrink:0;box-shadow:0 8px 28px rgba(0,0,0,.18)}
@@ -473,6 +473,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 <body>
 
 
+
 <!-- ══════════════════════════════════════════
      EGYSÉGES MENÜ — minden oldalon ugyanez
 ══════════════════════════════════════════ -->
@@ -489,7 +490,7 @@ body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
 body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
 nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:84px;padding:14px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
 nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
@@ -535,39 +536,11 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </a>
 
     <ul class="nav-links">
-      <li>
-        <a href="talalatok.html">Orvosok
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
-        </a>
-        <div class="dropdown">
-          <a href="talalatok.html?specialty=Háziorvos">Háziorvos</a>
-          <a href="talalatok.html">Szakorvos</a>
-          <a href="talalatok.html?specialty=Konzerváló fogászat és fogpótlástan">Fogász</a>
-          <a href="talalatok.html?specialty=Pszichiátria">Pszichológus</a>
-        </div>
-      </li>
-      <li>
-        <a href="klinikak.html">Klinikák
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
-        </a>
-        <div class="dropdown">
-          <a href="#">Magánklinikák</a>
-          <a href="#">Kórházak</a>
-          <a href="#">Rendelők</a>
-          <a href="#">Diagnosztikai központok</a>
-        </div>
-      </li>
+      <li><a href="talalatok.html">Orvosok</a></li>
+      <li><a href="klinikak.html">Klinikák</a></li>
       <li><a href="tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
       <li><a href="vizsgalatok.html">Vizsgálatok</a></li>
-      <li>
-        <a href="#">Kapcsolat
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4l4 4 4-4"/></svg>
-        </a>
-        <div class="dropdown">
-          <a href="#">Ügyfélszolgálat</a>
-          <a href="register.html">Orvosoknak</a>
-        </div>
-      </li>
+      <li><a href="kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -611,6 +584,75 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
 </script>
+
+<script>
+// Görgetés-érzékeny menü
+(function(){
+  var nav = document.getElementById('mainNav');
+  if(!nav) return;
+  function update(){
+    if(window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
+</script>
+<!-- ══════ MENÜ VÉGE ══════ -->
+
+<!-- ══════════════════════════════════════════
+     EGYSÉGES MENÜ — minden oldalon ugyanez
+══════════════════════════════════════════ -->
+<style>
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
+
+/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
+body.is-index nav#mainNav{background:rgba(255,255,255,.35) !important;backdrop-filter:blur(10px) saturate(140%) !important;-webkit-backdrop-filter:blur(10px) saturate(140%) !important;border-bottom:1px solid rgba(220,227,234,.2) !important;box-shadow:none !important}
+body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
+/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
+body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
+body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
+body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
+
+nav#mainNav *{box-sizing:border-box}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
+nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
+nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
+nav#mainNav .nav-links li{position:relative}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a:hover{background:#eef2ff}
+nav#mainNav .nav-links li>a svg{opacity:.6}
+nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
+nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
+nav#mainNav .dropdown a:hover{background:#eef2ff}
+nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
+.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
+.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
+.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
+.mobile-nav-item:hover{background:#eef2ff}
+.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
+@media(max-width:900px){
+  nav#mainNav .nav-links{display:none}
+  nav#mainNav .nav-actions{display:none}
+  nav#mainNav .nav-mobile-toggle{display:flex}
+}
+</style>
 
 <script>
 // Görgetés-érzékeny menü
@@ -690,40 +732,22 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 
 <!-- HERO -->
 <div class="hbar">
-  <div class="hbar-in">
-    <div class="crumb">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <a href="index.html">Kezdőlap</a>
-      <span class="crumb-sep">›</span>
-      <a href="index.html">Orvos keresése</a>
-      <span class="crumb-sep">›</span>
-      <span class="crumb-current" id="crumb2">Találatok</span>
-    </div>
+  <div class="hbar-in" style="text-align:center">
     <h1 class="htitle">Orvos keresési <b>találatok</b></h1>
     <div class="hsub" id="hsubText"><span id="hsubQuery">Keresés folyamatban</span> <span class="hcount" id="heroCnt"></span></div>
   </div>
 </div>
-
-<!-- TOP SEARCH BAR (Új keresés) -->
-<div class="topbar">
-  <div class="topbar-field">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="navSpec" placeholder="Szakterület vagy orvos neve">
-  </div>
-  <div class="topbar-field">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    <input type="text" id="navCity" placeholder="Helyszín">
-  </div>
-  <button class="topbar-btn" onclick="doSearch()">Új keresés</button>
-</div>
+<!-- hidden inputs a JS-hez -->
+<input type="hidden" id="navSpec">
+<input type="hidden" id="navCity">
 
 <!-- ── ORVOS / KLINIKA TOGGLE ── -->
 <style>
 .view-toggle{max-width:1400px;margin:0 auto;padding:0 3.5% 1.25rem;display:flex;justify-content:center}
-.view-toggle-inner{display:inline-flex;background:#fff;border:1px solid var(--border);border-radius:14px;padding:5px;gap:3px;box-shadow:0 2px 8px rgba(17,50,147,.05)}
+.view-toggle-inner{display:inline-flex;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.65);border-radius:14px;padding:5px;gap:3px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 8px rgba(17,50,147,.05)}
 .view-toggle-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;border:none;background:transparent;color:var(--muted, #6b7a9a);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;text-decoration:none;white-space:nowrap}
 .view-toggle-btn:hover{color:var(--brand)}
-.view-toggle-btn.active{background:var(--brand, #113293);color:#fff;box-shadow:0 2px 8px rgba(17,50,147,.18)}
+.view-toggle-btn.active{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 8px rgba(17,50,147,.22),0 6px 18px rgba(17,50,147,.18)}
 .view-toggle-btn svg{flex-shrink:0}
 @media(max-width:520px){.view-toggle-btn{padding:9px 16px;font-size:13px}}
 </style>
@@ -733,7 +757,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Orvosok
     </button>
-    <a href="klinikak.html" class="view-toggle-btn" role="tab" aria-selected="false">
+    <a href="klinikak.html" class="view-toggle-btn" role="tab" aria-selected="false" id="toggleToClinics" onclick="event.preventDefault();window.location.href='klinikak.html'+window.location.search;">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
       Klinikák
     </a>

@@ -611,9 +611,218 @@ function switchTab(tab,el){
   if(el) el.classList.add('active');
   document.getElementById('pageTitle').textContent=TAB_TITLES[tab]||tab;
   document.getElementById('btnSaveClinic').style.display=tab==='clinic'?'flex':'none';
-  if(tab==='appointments') loadAppointments('');
-  if(tab==='schedule') loadSchedule();
+  if(tab==='appointments') loadAppointments?.('');
+  if(tab==='schedule') loadSchedule?.();
+  if(tab==='clinic') ensureMapInjected();
 }
+
+/* ═══ KLINIKA BETÖLTÉSE ═══ */
+async function loadClinicData(){
+  try {
+    // Először a session-höz tartozó klinika admin szerepe alapján
+    const { data: { session } } = await db.auth.getSession();
+    if(!session?.user) return;
+    // Klinika admin: clinic_admins-ből kapjuk meg a klinika ID-t
+    const { data: link } = await db
+      .from('clinic_admins')
+      .select('clinic_id')
+      .eq('user_id', session.user.id)
+      .maybeSingle();
+    let clinicId = link?.clinic_id;
+    if(!clinicId){
+      // Fallback: első klinika (superadmin esetén)
+      const { data: first } = await db.from('clinics').select('id').limit(1).single();
+      clinicId = first?.id;
+    }
+    if(!clinicId) return;
+    const { data } = await db.from('clinics').select('*, cities(name)').eq('id', clinicId).single();
+    clinicData = data;
+    fillClinicForm(data);
+  } catch(e){
+    console.error('loadClinicData', e);
+  }
+}
+
+function fillClinicForm(c){
+  if(!c) return;
+  const set = (id, v) => { const el = document.getElementById(id); if(el) el.value = v ?? ''; };
+  set('cName', c.name);
+  set('cCity', c.cities?.name || '');
+  set('cAddress', c.address);
+  set('cPhone', c.phone);
+  set('cEmail', c.email);
+  set('cWebsite', c.website);
+  set('cTax', c.tax_number);
+  set('cDesc', c.description);
+}
+
+/* ═══ MENTÉS + AUTOMATIKUS GEOCODING ═══ */
+async function saveClinic(){
+  const btn = document.getElementById('btnSaveClinic');
+  if(!clinicData?.id){ alert('Nincs betöltött klinika.'); return; }
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> Mentés…';
+
+  const newAddress = document.getElementById('cAddress').value.trim();
+  const addressChanged = newAddress !== (clinicData.address || '');
+
+  const payload = {
+    name: document.getElementById('cName').value.trim(),
+    address: newAddress,
+    phone: document.getElementById('cPhone').value.trim() || null,
+    email: document.getElementById('cEmail').value.trim() || null,
+    website: document.getElementById('cWebsite').value.trim() || null,
+    tax_number: document.getElementById('cTax').value.trim() || null,
+    description: document.getElementById('cDesc').value.trim() || null
+  };
+
+  // Ha a cím változott, ürítsük a koordinátákat hogy újra geocode-oljon
+  if(addressChanged){
+    payload.lat = null;
+    payload.lng = null;
+  }
+
+  const { error } = await db.from('clinics').update(payload).eq('id', clinicData.id);
+  if(error){
+    alert('Mentés hiba: ' + error.message);
+    btn.disabled = false;
+    btn.innerHTML = old;
+    return;
+  }
+
+  Object.assign(clinicData, payload);
+
+  // Automatikus geocoding ha új/változott a cím
+  if(addressChanged && newAddress){
+    btn.innerHTML = '🌐 Geocoding…';
+    try {
+      const cityName = clinicData.cities?.name || '';
+      const fullAddr = [newAddress, cityName, 'Hungary'].filter(Boolean).join(', ');
+      const { data: { session } } = await db.auth.getSession();
+      const token = session?.access_token;
+      const r = await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/geocode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : `Bearer ${SUPABASE_KEY}`,
+          'apikey': SUPABASE_KEY
+        },
+        body: JSON.stringify({ address: fullAddr })
+      });
+      const data = await r.json();
+      if(data.lat && data.lng){
+        await db.from('clinics').update({ lat: data.lat, lng: data.lng }).eq('id', clinicData.id);
+        clinicData.lat = data.lat;
+        clinicData.lng = data.lng;
+        renderClinicMap();
+      }
+    } catch(e){
+      console.error('Geocoding hiba', e);
+    }
+  } else if(clinicData.lat && clinicData.lng){
+    renderClinicMap();
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Mentve!';
+  setTimeout(() => { btn.innerHTML = old; }, 2000);
+}
+
+/* ═══ TÉRKÉP ELŐNÉZET ═══ */
+const ADM_GMAPS_KEY = 'AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+let _admGmapsPromise = null;
+function admLoadGoogleMaps(){
+  if(_admGmapsPromise) return _admGmapsPromise;
+  _admGmapsPromise = new Promise((resolve, reject) => {
+    if(window.google && window.google.maps){ resolve(window.google.maps); return; }
+    window._onGMapsReady = () => resolve(window.google.maps);
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${ADM_GMAPS_KEY}&callback=_onGMapsReady&language=hu&region=HU&loading=async`;
+    s.async = true; s.defer = true;
+    s.onerror = () => reject(new Error('Maps failed'));
+    document.head.appendChild(s);
+  });
+  return _admGmapsPromise;
+}
+
+const ADM_MAP_STYLE_K = [
+  { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry', stylers: [{ color: '#dbe2ec' }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e6ece5' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#94a3b8' }, { weight: 1.2 }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] }
+];
+
+function ensureMapInjected(){
+  // Csak egyszer szúrjuk be a térkép kártyát a clinic tabba
+  if(document.getElementById('clinicMapCard')) {
+    renderClinicMap();
+    return;
+  }
+  const tab = document.querySelector('[data-tab="clinic"]');
+  if(!tab) return;
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'clinicMapCard';
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-title">📍 Helyszín térképen</div>
+      <span style="font-size:12px;color:var(--muted)">A koordináták automatikusan generálódnak a cím alapján mentéskor</span>
+    </div>
+    <div class="card-body">
+      <div id="clinicMapEl" style="width:100%;height:300px;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#eef2ff;position:relative">
+        <div id="clinicMapMsg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">Még nincs koordináta. Adja meg a címet és nyomja meg a Mentés gombot.</div>
+      </div>
+      <div style="margin-top:.5rem;font-size:12px;color:var(--muted)" id="clinicCoordInfo"></div>
+    </div>`;
+  tab.appendChild(card);
+  renderClinicMap();
+}
+
+async function renderClinicMap(){
+  if(!clinicData) return;
+  const msg = document.getElementById('clinicMapMsg');
+  const info = document.getElementById('clinicCoordInfo');
+  if(!clinicData.lat || !clinicData.lng){
+    if(msg){ msg.textContent = 'Még nincs koordináta. Adja meg a címet és nyomja meg a Mentés gombot.'; msg.style.display = 'flex'; }
+    if(info) info.textContent = '';
+    return;
+  }
+  try {
+    const maps = await admLoadGoogleMaps();
+    const el = document.getElementById('clinicMapEl');
+    if(!el) return;
+    const pos = { lat: Number(clinicData.lat), lng: Number(clinicData.lng) };
+    const map = new maps.Map(el, {
+      center: pos, zoom: 15, styles: ADM_MAP_STYLE_K,
+      mapTypeControl: false, streetViewControl: false, fullscreenControl: true
+    });
+    new maps.Marker({
+      position: pos, map, title: clinicData.name,
+      icon: {
+        path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z',
+        fillColor: '#113293', fillOpacity: 1,
+        strokeColor: '#ffffff', strokeWeight: 2.5, scale: 1.2,
+        anchor: new maps.Point(12, 36)
+      }
+    });
+    if(msg) msg.style.display = 'none';
+    if(info) info.textContent = `Koordináta: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+  } catch(e){
+    console.error(e);
+    if(msg) msg.textContent = 'Térkép nem tölthető be.';
+  }
+}
+
+// Indítás
+document.addEventListener('DOMContentLoaded', () => {
+  loadClinicData();
+});
 
 
 </script>

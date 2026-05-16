@@ -466,14 +466,40 @@ select.td-select:focus{border-color:var(--brand)}
           </tbody>
         </table>
         <div class="pag" id="doctorPag" style="display:none">
-          <div class="pag-info" id="docPagInfo">–</div>
-          <div class="pag-btns" id="docPagBtns"></div>
+          <div class="pag-info" id="doctorPagInfo">–</div>
+          <div class="pag-btns" id="doctorPagBtns"></div>
         </div>
       </div>
     </div>
 
     <!-- ══════════════ CLINICS ══════════════ -->
     <div data-tab="clinics">
+
+      <!-- Térkép panel -->
+      <div class="table-card" style="margin-bottom:1rem">
+        <div class="tc-header">
+          <div class="tc-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Klinikák térképen
+          </div>
+          <div class="tc-controls">
+            <button id="btnRunGeocode" class="btn btn-ghost" onclick="runGeocodeAll()" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:7px 14px;background:#eef2ff;color:#113293;border:1px solid #c7d2fe;border-radius:9px;font-weight:600;cursor:pointer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              Geocode hiányzók
+            </button>
+          </div>
+        </div>
+        <div style="padding:0 1.25rem 1.25rem">
+          <div id="adminMap" style="width:100%;height:380px;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#eef2ff;position:relative">
+            <div id="adminMapLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">Térkép betöltése…</div>
+          </div>
+          <div id="missingCoordsWrap" style="margin-top:.75rem;display:none">
+            <div style="font-size:13px;color:#b45309;font-weight:600;margin-bottom:.4rem">⚠️ Koordináta nélküli klinikák:</div>
+            <div id="missingCoordsList" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="table-card">
         <div class="tc-header">
           <div class="tc-title">
@@ -851,13 +877,16 @@ function filterDoctorsByStatus(v){
 async function loadClinics(){
   const tb=document.getElementById('clinicsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="6"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('clinics').select('id,name,address,phone,cities(name),doctor_clinics(doctor_id)').order('name');
+  const{data}=await db.from('clinics').select('id,name,address,phone,lat,lng,cities(name),doctor_clinics(doctor_id)').order('name');
   allClinics=data||[];
-  if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek klinikák</td></tr>';return;}
-  tb.innerHTML=allClinics.map((c,i)=>`<tr>
+  if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek klinikák</td></tr>';renderAdminMap();return;}
+  tb.innerHTML=allClinics.map((c,i)=>{
+    const hasCoord = c.lat && c.lng;
+    return `<tr>
     <td><div class="av-chip">
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px">${esc(c.name.charAt(0))}</div>
       <span class="td-name">${esc(c.name)}</span>
+      ${!hasCoord ? '<span class="badge badge-orange" style="margin-left:6px;font-size:10px">⚠ Nincs koord.</span>' : ''}
     </div></td>
     <td>${esc(c.cities?.name||'–')}</td>
     <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
@@ -866,7 +895,148 @@ async function loadClinics(){
     <td><div class="act-row">
       <button class="btn btn-ghost btn-sm">Szerkesztés</button>
     </div></td>
-  </tr>`).join('');
+  </tr>`;}).join('');
+
+  renderAdminMap();
+}
+
+/* ═══ ADMIN MAP ═══ */
+const ADMIN_GMAPS_KEY = 'AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+let _admGmapsPromise = null;
+function adminLoadGoogleMaps(){
+  if(_admGmapsPromise) return _admGmapsPromise;
+  _admGmapsPromise = new Promise((resolve, reject) => {
+    if(window.google && window.google.maps){ resolve(window.google.maps); return; }
+    window._onGMapsReady = () => resolve(window.google.maps);
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${ADMIN_GMAPS_KEY}&callback=_onGMapsReady&language=hu&region=HU&loading=async`;
+    s.async = true; s.defer = true;
+    s.onerror = () => reject(new Error('Google Maps load failed'));
+    document.head.appendChild(s);
+  });
+  return _admGmapsPromise;
+}
+
+const ADM_MAP_STYLE = [
+  { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry', stylers: [{ color: '#dbe2ec' }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e6ece5' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }, { weight: 700 }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#94a3b8' }, { weight: 1.2 }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#eef2ff' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#c7d2fe' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] }
+];
+
+let _admMap = null, _admMarkers = [];
+
+async function renderAdminMap(){
+  const mapEl = document.getElementById('adminMap');
+  const loadingEl = document.getElementById('adminMapLoading');
+  const missingWrap = document.getElementById('missingCoordsWrap');
+  const missingList = document.getElementById('missingCoordsList');
+  if(!mapEl) return;
+
+  const withCoords = (allClinics || []).filter(c => c.lat && c.lng);
+  const missing = (allClinics || []).filter(c => !c.lat || !c.lng);
+
+  if(missing.length){
+    missingWrap.style.display = 'block';
+    missingList.innerHTML = missing.map(c =>
+      `<span style="background:#fef3c7;color:#92400e;border:1px solid #fcd34d;padding:4px 10px;border-radius:9px;font-size:12px;font-weight:600">${esc(c.name)}${c.address ? ' · ' + esc(c.address) : ''}</span>`
+    ).join('');
+  } else {
+    missingWrap.style.display = 'none';
+  }
+
+  if(!withCoords.length){
+    loadingEl.textContent = 'Nincs megjeleníthető klinika a térképen.';
+    loadingEl.style.display = 'flex';
+    return;
+  }
+
+  try {
+    const maps = await adminLoadGoogleMaps();
+    if(!_admMap){
+      _admMap = new maps.Map(mapEl, {
+        center: { lat: 47.4979, lng: 19.0402 },
+        zoom: 7,
+        styles: ADM_MAP_STYLE,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true
+      });
+    }
+    _admMarkers.forEach(m => m.setMap(null));
+    _admMarkers = [];
+    const bounds = new maps.LatLngBounds();
+    const pinIcon = {
+      path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z',
+      fillColor: '#113293', fillOpacity: 1,
+      strokeColor: '#ffffff', strokeWeight: 2.5, scale: 1,
+      anchor: new maps.Point(12, 36)
+    };
+    const iw = new maps.InfoWindow();
+    withCoords.forEach(c => {
+      const pos = { lat: Number(c.lat), lng: Number(c.lng) };
+      const m = new maps.Marker({ position: pos, map: _admMap, title: c.name, icon: pinIcon });
+      m.addListener('click', () => {
+        iw.setContent(`<div style="font-family:'Inter',sans-serif;max-width:240px">
+          <div style="font-weight:700;color:#113293;font-size:13px;margin-bottom:3px">${esc(c.name)}</div>
+          ${c.address ? `<div style="font-size:12px;color:#6b7a9a">${esc(c.address)}</div>` : ''}
+          ${c.cities?.name ? `<div style="font-size:11px;color:#94a3b8;margin-top:2px">📍 ${esc(c.cities.name)}</div>` : ''}
+        </div>`);
+        iw.open(_admMap, m);
+      });
+      _admMarkers.push(m);
+      bounds.extend(pos);
+    });
+    if(withCoords.length === 1){
+      _admMap.setCenter(bounds.getCenter());
+      _admMap.setZoom(14);
+    } else {
+      _admMap.fitBounds(bounds, 60);
+    }
+    loadingEl.style.display = 'none';
+  } catch(e){
+    console.error(e);
+    loadingEl.textContent = 'Térkép nem tölthető be.';
+  }
+}
+
+async function runGeocodeAll(){
+  const btn = document.getElementById('btnRunGeocode');
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Geocoding…';
+  try {
+    const sess = await db.auth.getSession();
+    const token = sess?.data?.session?.access_token;
+    const r = await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/geocode-all-clinics', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY
+      },
+      body: JSON.stringify({})
+    });
+    const data = await r.json();
+    alert(`Kész!\nÖsszesen: ${data.total || 0}\nSikeres: ${data.success || 0}\nHibás: ${data.failed || 0}\nKihagyott: ${data.skipped || 0}`);
+    await loadClinics();
+  } catch(e){
+    alert('Hiba: ' + (e.message || e));
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = old;
+  }
+}
 }
 
 /* ═══ USERS ═══ */

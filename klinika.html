@@ -35,6 +35,47 @@ function loadGoogleMaps(){
   });
   return _gmapsPromise;
 }
+
+// Szakorvos.hu brand térkép stílus
+const SZK_MAP_STYLE = [
+  { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#c7d2fe' }] },
+  { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry', stylers: [{ color: '#dbe2ec' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry.stroke', stylers: [{ color: '#cbd5e1' }, { weight: 0.5 }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e6ece5' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }, { weight: 700 }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dcfce7' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#1f6e3a' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#94a3b8' }, { weight: 1.2 }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#6b7a9a' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#eef2ff' }] },
+  { featureType: 'road.arterial', elementType: 'geometry.stroke', stylers: [{ color: '#c7d2fe' }, { weight: 0.6 }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#c7d2fe' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#a5b4fc' }, { weight: 0.7 }] },
+  { featureType: 'road.local', elementType: 'labels', stylers: [{ visibility: 'simplified' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }] }
+];
+
+// Szakorvos.hu brand pin SVG (egészségügyi kereszt)
+function szkPinIcon(maps){
+  return {
+    path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z',
+    fillColor: '#113293',
+    fillOpacity: 1,
+    strokeColor: '#ffffff',
+    strokeWeight: 2.5,
+    scale: 1.2,
+    anchor: new maps.Point(12, 36),
+    labelOrigin: new maps.Point(12, 14)
+  };
+}
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -721,6 +762,7 @@ function render(c){
       const map = new maps.Map(el, {
         center: pos,
         zoom: 15,
+        styles: SZK_MAP_STYLE,
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: true,
@@ -729,7 +771,8 @@ function render(c){
       new maps.Marker({
         position: pos,
         map,
-        title: c.name
+        title: c.name,
+        icon: szkPinIcon(maps)
       });
       if(loading) loading.style.display = 'none';
     }).catch(e => {

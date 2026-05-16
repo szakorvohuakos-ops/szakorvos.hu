@@ -47,6 +47,45 @@ function loadGoogleMaps(){
   });
   return _gmapsPromise;
 }
+
+const SZK_MAP_STYLE = [
+  { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'administrative.country', elementType: 'geometry.stroke', stylers: [{ color: '#c7d2fe' }] },
+  { featureType: 'administrative.land_parcel', stylers: [{ visibility: 'off' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry', stylers: [{ color: '#dbe2ec' }] },
+  { featureType: 'landscape.man_made', elementType: 'geometry.stroke', stylers: [{ color: '#cbd5e1' }, { weight: 0.5 }] },
+  { featureType: 'landscape.natural', elementType: 'geometry', stylers: [{ color: '#e6ece5' }] },
+  { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }, { weight: 700 }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dcfce7' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#1f6e3a' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#94a3b8' }, { weight: 1.2 }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#6b7a9a' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#eef2ff' }] },
+  { featureType: 'road.arterial', elementType: 'geometry.stroke', stylers: [{ color: '#c7d2fe' }, { weight: 0.6 }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#c7d2fe' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#a5b4fc' }, { weight: 0.7 }] },
+  { featureType: 'road.local', elementType: 'labels', stylers: [{ visibility: 'simplified' }] },
+  { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }] }
+];
+
+function szkPinIcon(maps){
+  return {
+    path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z',
+    fillColor: '#113293',
+    fillOpacity: 1,
+    strokeColor: '#ffffff',
+    strokeWeight: 2.5,
+    scale: 1.2,
+    anchor: new maps.Point(12, 36),
+    labelOrigin: new maps.Point(12, 14)
+  };
+}
 </script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -76,7 +115,7 @@ function loadGoogleMaps(){
   --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
   --grad-hero:linear-gradient(135deg,#113293 0%,#2C9650 100%);
 }
-body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);overflow-x:hidden}
+body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#eef2ff 0%,#f4f6f8 30%,#f4f6f8 70%,#e8f4ec 100%);overflow-x:hidden;min-height:100vh}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
@@ -101,7 +140,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .btn-pill:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
 
 /* ───── HERO BAR ───── */
-.hbar{background:#fff;border-bottom:none;padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden}
+.hbar{background:linear-gradient(180deg,rgba(255,255,255,.75) 0%,rgba(244,246,248,.6) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.7) inset}
 .hbar::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none}
 .hbar::after{display:none}
 .hbar-in{max-width:1400px;margin:0 auto;display:block;position:relative;z-index:1}
@@ -137,12 +176,12 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ══════════════════════════════════════════
    FILTER SIDEBAR – PREMIUM DETAILED
 ══════════════════════════════════════════ */
-.fsb{background:#fff;border:1px solid var(--border);border-radius:20px;overflow:hidden;position:sticky;top:80px;box-shadow:0 4px 24px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.03);max-height:calc(100vh - 100px);overflow-y:auto}
+.fsb{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;overflow:hidden;position:sticky;top:80px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 4px 24px rgba(17,50,147,.06),0 1px 3px rgba(17,50,147,.03);max-height:calc(100vh - 100px);overflow-y:auto}
 .fsb::-webkit-scrollbar{width:4px}
 .fsb::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 
 /* Header */
-.fsb-hd{padding:1.2rem 1.5rem;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;backdrop-filter:blur(8px)}
+.fsb-hd{padding:1.2rem 1.5rem;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(220,227,234,.4);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
 .fsb-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;letter-spacing:-0.01em}
 .fsb-badge{background:var(--grad-blue);color:#fff;border-radius:100px;padding:2px 9px;font-size:11px;font-weight:600;display:none;box-shadow:0 2px 6px rgba(17,50,147,.25)}
 .fsb-badge.on{display:inline-flex}
@@ -241,7 +280,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ─────────────────────────────────────
    DOCTOR CARD (premium visual)
 ───────────────────────────────────── */
-.dc{background:#fff;border:1px solid var(--border);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .25s,transform .25s,border-color .25s;animation:cdin .4s both;box-shadow:0 1px 3px rgba(17,50,147,.04)}
+.dc{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s,border-color .3s;animation:cdin .4s both;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04),0 6px 20px rgba(17,50,147,.06)}
 @keyframes cdin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad-blue);opacity:0;transition:opacity .25s}
 .dc:hover{box-shadow:0 12px 36px rgba(17,50,147,.1),0 2px 8px rgba(17,50,147,.05);border-color:#bcc5e0;transform:translateY(-2px)}
@@ -758,23 +797,12 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <span class="crumb-sep">›</span>
       <span class="crumb-current" id="crumb2">Találatok</span>
     </div>
-    <h1 class="htitle">Klinikák és <b>magánrendelők</b></h1>
-    <div class="hsub" id="hsubText"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
+    <h1 class="htitle" style="text-align:center">Klinikák és <b>magánrendelők</b></h1>
+    <div class="hsub" id="hsubText" style="text-align:center"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
   </div>
 </div>
-
-<!-- TOP SEARCH BAR (Új keresés) -->
-<div class="topbar">
-  <div class="topbar-field">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="navSpec" placeholder="Klinika neve, szakterület">
-  </div>
-  <div class="topbar-field">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    <input type="text" id="navCity" placeholder="Helyszín">
-  </div>
-  <button class="topbar-btn" onclick="doSearch()">Új keresés</button>
-</div>
+<input type="hidden" id="navSpec">
+<input type="hidden" id="navCity">
 
 <!-- ── ORVOS / KLINIKA TOGGLE ── -->
 <style>
@@ -1294,8 +1322,9 @@ async function renderMap(){
 
     if(!_gmap){
       _gmap = new maps.Map(mapEl, {
-        center: { lat: 47.4979, lng: 19.0402 }, // Budapest default
+        center: { lat: 47.4979, lng: 19.0402 },
         zoom: 7,
+        styles: SZK_MAP_STYLE,
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: true
@@ -1314,7 +1343,8 @@ async function renderMap(){
       const marker = new maps.Marker({
         position: pos,
         map: _gmap,
-        title: c.name
+        title: c.name,
+        icon: szkPinIcon(maps)
       });
       const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
       marker.addListener('click', () => {
