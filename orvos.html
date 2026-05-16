@@ -1020,7 +1020,7 @@ async function load(){
     currentDoctor = data;
     updateSeoMeta(data);
     render(data);
-    loadSimilar(data);
+
   } catch(e){
     console.error(e);
     showError();
@@ -1186,17 +1186,8 @@ function render(d){
 
   // ─── Szolgáltatások tab ──────────────────────────────────────────
   renderServicesTab(d, fee);
-
-  // ─── Értékelések tab ─────────────────────────────────────────────
   renderReviewsTab(d, rat, reviews);
-
-  // ─── Időpontok tab ──────────────────────────────────────────────
-  renderBookingTab(d);
-
-  // ─── Helyszínek tab ─────────────────────────────────────────────
   renderLocationsTab(d);
-
-  // ─── Kérdések tab ───────────────────────────────────────────────
   renderFaqTab(d);
 
   // ─── Megmutatjuk az oldalt ──────────────────────────────────────
