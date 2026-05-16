@@ -178,8 +178,48 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 @media (max-width:980px){.pw-grid{grid-template-columns:1fr}}
 
 /* ═════════ HERO ROW: doctor card + booking widget ═══════════════════ */
-.dcard{background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(240,245,255,.8) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:28px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04),0 16px 40px rgba(17,50,147,.07);position:relative;overflow:hidden}
-.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9) 30%,rgba(255,255,255,.9) 70%,transparent);pointer-events:none}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes ambientPulse{0%,100%{opacity:.5}50%{opacity:.85}}
+
+.dcard{
+  background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(220,232,255,.4) 50%,rgba(240,235,255,.45) 100%);
+  backdrop-filter:blur(50px) saturate(200%);
+  -webkit-backdrop-filter:blur(50px) saturate(200%);
+  border:1px solid rgba(255,255,255,.6);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 -1px 0 rgba(255,255,255,.25) inset,
+    0 2px 4px rgba(17,50,147,.04),
+    0 12px 32px rgba(17,50,147,.1),
+    0 40px 80px rgba(17,50,147,.15);
+  position:relative;
+  overflow:hidden;
+  animation:float 8s ease-in-out infinite;
+}
+.dcard::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);
+  pointer-events:none;
+  z-index:2;
+}
+.dcard::after{
+  content:'';
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(ellipse 50% 40% at 20% 20%,rgba(120,150,255,.18),transparent 60%),
+    radial-gradient(ellipse 40% 50% at 85% 80%,rgba(180,140,255,.15),transparent 60%),
+    radial-gradient(ellipse 60% 30% at 50% 50%,rgba(140,200,255,.1),transparent 60%);
+  pointer-events:none;
+  z-index:0;
+  animation:ambientPulse 6s ease-in-out infinite;
+}
+.dcard > *{position:relative;z-index:1}
 .dcard-row{display:grid;grid-template-columns:160px 1fr;gap:28px;align-items:start}
 @media (max-width:640px){.dcard-row{grid-template-columns:1fr;text-align:center}}
 
@@ -273,10 +313,15 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .contact-msg-btn:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 
 /* ═════════ SZEKCIÓK (tab helyett scrollozható) ══════════════════════ */
-.prof-section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;margin-top:16px;box-shadow:var(--shadow-sm)}
-.prof-section-h{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-0.012em;padding-bottom:14px;border-bottom:1px solid var(--border-soft)}
-.prof-section-h svg{flex-shrink:0;color:var(--brand)}
-.prof-section-h .sec-badge{display:inline-flex;align-items:center;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:6px}
+.prof-section{background:#fff;border:1px solid var(--border-soft);border-radius:14px;padding:24px 26px;margin-top:12px;box-shadow:0 1px 2px rgba(15,23,42,.03)}
+.prof-section-h{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--text);margin-bottom:16px;letter-spacing:-0.005em;padding-bottom:12px;border-bottom:1px solid var(--border-soft)}
+.prof-section-h svg{flex-shrink:0;color:var(--brand);opacity:.8}
+.prof-section-h .sec-badge{display:inline-flex;align-items:center;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:600;padding:2px 8px;border-radius:100px;margin-left:6px}
+
+/* Reviews szekció — enyhe glow */
+#pane-reviews{background:linear-gradient(180deg,#fff 0%,#fefdf8 100%);border:1px solid #fef3c7;box-shadow:0 1px 2px rgba(245,158,11,.04),0 8px 24px rgba(245,158,11,.06),0 0 0 1px rgba(245,158,11,.02)}
+#pane-reviews .prof-section-h svg{color:var(--star);opacity:1}
+#pane-reviews .rev-summary-num{background:linear-gradient(135deg,#f59e0b,#f97316);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 
 /* Bemutatkozás layout: bio + cols */
 .intro-bio{font-size:14.5px;color:var(--text-2);line-height:1.75;margin-bottom:0;white-space:pre-line}
@@ -379,12 +424,13 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .faq-link{font-size:13.5px;color:var(--brand);font-weight:500;cursor:pointer}
 .faq-link:hover{text-decoration:underline}
 .faq-list{display:flex;flex-direction:column;gap:8px}
-.faq-item{background:#fff;border:1px solid var(--border);border-radius:12px;transition:all .15s;overflow:hidden}
-.faq-item:hover{border-color:var(--brand-2)}
-.faq-q{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--text)}
+.faq-item{background:transparent;border:none;border-bottom:1px solid var(--border-soft);border-radius:0;transition:none;overflow:hidden}
+.faq-item:last-child{border-bottom:none}
+.faq-item:hover{border-bottom-color:var(--border)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;cursor:pointer;font-size:14px;font-weight:500;color:var(--text)}
 .faq-q .chev{color:var(--muted);transition:transform .2s;flex-shrink:0}
 .faq-item.open .faq-q .chev{transform:rotate(180deg);color:var(--brand)}
-.faq-a{display:none;padding:0 16px 14px;font-size:13.5px;color:var(--sub);line-height:1.65}
+.faq-a{display:none;padding:0 0 18px;font-size:13.5px;color:var(--sub);line-height:1.7}
 .faq-item.open .faq-a{display:block;animation:fadeIn .2s ease-out}
 .faq-cta{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;background:var(--brand);color:#fff;border-radius:11px;font-weight:600;font-size:14px;margin-top:14px;cursor:pointer;border:none;transition:all .15s}
 .faq-cta:hover{background:var(--brand-2)}
