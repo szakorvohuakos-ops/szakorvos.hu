@@ -178,8 +178,9 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 @media (max-width:980px){.pw-grid{grid-template-columns:1fr}}
 
 /* ═════════ HERO ROW: doctor card + booking widget ═══════════════════ */
-.dcard{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:var(--shadow-sm)}
-.dcard-row{display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:start}
+.dcard{background:linear-gradient(135deg,rgba(255,255,255,.92) 0%,rgba(240,245,255,.8) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:28px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04),0 16px 40px rgba(17,50,147,.07);position:relative;overflow:hidden}
+.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9) 30%,rgba(255,255,255,.9) 70%,transparent);pointer-events:none}
+.dcard-row{display:grid;grid-template-columns:160px 1fr;gap:28px;align-items:start}
 @media (max-width:640px){.dcard-row{grid-template-columns:1fr;text-align:center}}
 
 /* Photo */
@@ -234,7 +235,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-bio.expanded .dh-bio-full{display:inline}
 
 /* ═════════ BOOKING WIDGET (right column, sticky) ═══════════════════ */
-.bcard{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:0;box-shadow:var(--shadow-sm);position:sticky;top:84px;overflow:hidden}
+.bcard{background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(240,245,255,.88) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:0;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04),0 16px 40px rgba(17,50,147,.07);position:sticky;top:84px;overflow:hidden}
 .bcard-top{background:linear-gradient(135deg,#ecfdf5 0%,#f0fdf4 100%);border-bottom:1px solid #d1fae5;padding:18px 22px}
 .bcard-label{font-size:10.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .bcard-price{font-size:30px;font-weight:700;color:var(--text);letter-spacing:-0.02em;line-height:1;margin-bottom:3px}
@@ -244,40 +245,41 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .bcard-row + .bcard-row{border-top:1px solid var(--border-soft)}
 .bcard-row .lbl{color:var(--sub);font-weight:500}
 .bcard-row .val{color:var(--text);font-weight:600}
-.bcard-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--brand);color:#fff;font-weight:600;font-size:15px;padding:14px;border-radius:12px;width:100%;margin-top:14px;transition:all .2s;border:none;cursor:pointer}
-.bcard-cta:hover{background:var(--brand-2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(17,50,147,.25)}
+.bcard-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;font-weight:600;font-size:15px;padding:14px;border-radius:12px;width:100%;margin-top:14px;transition:all .2s;border:none;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 4px 14px rgba(17,50,147,.28)}
+.bcard-cta:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 20px rgba(17,50,147,.36)}
 .bcard-soonest{display:flex;justify-content:space-between;align-items:center;background:var(--green-light);border:1px solid #d1fae5;border-radius:10px;padding:10px 14px;margin-top:12px}
 .bcard-soonest .ic{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--green);font-weight:600}
 .bcard-soonest .when{font-size:13px;font-weight:700;color:var(--text)}
 .bcard-features{margin-top:14px}
 .bcard-feat{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding:5px 0;font-weight:500}
 .bcard-feat svg{color:var(--green);flex-shrink:0}
-.bcard-fav{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;color:var(--text);font-weight:500;font-size:13.5px;padding:11px;border:1px solid var(--border);border-radius:11px;margin-top:12px;background:#fff;transition:all .15s;cursor:pointer}
+.bcard-fav{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;color:var(--text);font-weight:500;font-size:13.5px;padding:11px;border:1px solid var(--border);border-radius:11px;margin-top:12px;background:rgba(255,255,255,.7);transition:all .15s;cursor:pointer}
 .bcard-fav:hover{border-color:var(--brand);background:var(--brand-light);color:var(--brand)}
 .bcard-fav.active{border-color:#fecaca;background:#fef2f2;color:#dc2626}
 .bcard-fav.active svg{fill:#dc2626;stroke:#dc2626}
 
-/* ═════════ TABS ═════════════════════════════════════════════════════ */
-.tabs-wrap{background:var(--card);border:1px solid var(--border);border-radius:18px;margin-top:20px;overflow:hidden;box-shadow:var(--shadow-sm)}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{display:inline-flex;align-items:center;gap:8px;padding:16px 22px;font-size:14px;font-weight:500;color:var(--sub);border-bottom:2.5px solid transparent;cursor:pointer;transition:all .15s;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none}
-.tab:hover{color:var(--text)}
-.tab.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
-.tab svg{flex-shrink:0}
-.tab .tab-count{display:inline-flex;align-items:center;background:var(--border-soft);color:var(--sub);font-size:11px;font-weight:600;padding:1px 7px;border-radius:100px;margin-left:2px}
-.tab.on .tab-count{background:var(--brand-light);color:var(--brand)}
+/* Elérhetőségek kártya (jobb sidebar) */
+.contact-card{background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(240,245,255,.88) 100%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:20px 22px;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04),0 10px 24px rgba(17,50,147,.05)}
+.contact-card-h{font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;opacity:.6}
+.contact-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid rgba(199,210,254,.25)}
+.contact-row:last-child{border-bottom:none;padding-bottom:0}
+.contact-ico{width:34px;height:34px;border-radius:10px;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-ico svg{width:15px;height:15px}
+.contact-lbl{font-size:11px;color:var(--sub);font-weight:500;margin-bottom:1px}
+.contact-val{font-size:13px;font-weight:600;color:var(--text);letter-spacing:-0.005em}
+.contact-val a{color:var(--brand);text-decoration:none}
+.contact-val a:hover{text-decoration:underline}
+.contact-msg-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:rgba(17,50,147,.06);color:var(--brand);font-weight:600;font-size:13.5px;padding:11px;border-radius:11px;margin-top:14px;border:1px solid rgba(17,50,147,.15);transition:all .15s;cursor:pointer}
+.contact-msg-btn:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 
-/* ═════════ TAB CONTENT ════════════════════════════════════════════════ */
-.tab-pane{display:none;padding:28px;animation:fadeIn .25s ease-out}
-.tab-pane.on{display:block}
+/* ═════════ SZEKCIÓK (tab helyett scrollozható) ══════════════════════ */
+.prof-section{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px;margin-top:16px;box-shadow:var(--shadow-sm)}
+.prof-section-h{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;color:var(--text);margin-bottom:20px;letter-spacing:-0.012em;padding-bottom:14px;border-bottom:1px solid var(--border-soft)}
+.prof-section-h svg{flex-shrink:0;color:var(--brand)}
+.prof-section-h .sec-badge{display:inline-flex;align-items:center;background:var(--brand-light);color:var(--brand);font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:6px}
 
-/* Bemutatkozás layout: bio + side panel */
-.intro-grid{display:grid;grid-template-columns:1fr 320px;gap:24px}
-@media (max-width:880px){.intro-grid{grid-template-columns:1fr}}
-.intro-h{font-size:18px;font-weight:700;color:var(--text);margin-bottom:12px;letter-spacing:-0.01em}
+/* Bemutatkozás layout: bio + cols */
 .intro-bio{font-size:14.5px;color:var(--text-2);line-height:1.75;margin-bottom:24px;white-space:pre-line}
-
 .intro-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
 @media (max-width:880px){.intro-cols{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:480px){.intro-cols{grid-template-columns:1fr}}
@@ -285,19 +287,6 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .intro-col ul{list-style:none}
 .intro-col li{position:relative;padding-left:14px;font-size:13px;color:var(--sub);line-height:1.55;margin-bottom:5px}
 .intro-col li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--brand-2)}
-
-/* Side panel: Kapcsolat & jellemzők */
-.side-panel{background:#f8fafc;border:1px solid var(--border-soft);border-radius:14px;padding:18px}
-.side-panel-h{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px}
-.side-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;font-size:13px;border-bottom:1px solid var(--border-soft)}
-.side-row:last-of-type{border-bottom:none}
-.side-row-lbl{display:flex;align-items:center;gap:7px;color:var(--sub);font-weight:500;flex-shrink:0;min-width:0}
-.side-row-lbl svg{flex-shrink:0;color:var(--muted)}
-.side-row-val{color:var(--text);font-weight:600;text-align:right;font-size:13px}
-.side-row-val.pct-good{color:var(--green)}
-.side-row-val.link{color:var(--brand)}
-.side-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:var(--brand);font-weight:600;font-size:14px;padding:12px;border-radius:11px;width:100%;border:1px solid var(--brand-light);margin-top:14px;transition:all .15s;cursor:pointer}
-.side-cta:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
 
 /* ═════════ SZOLGÁLTATÁSOK ═════════════════════════════════════════════ */
 .svc-table{width:100%;border-collapse:collapse;font-size:14px}
@@ -442,11 +431,30 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
   .dcard{padding:18px}
   .pw{padding:14px 4% 40px}
 }
+.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
+.footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
+.footer-brand{min-width:0}
+.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
+.footer-logo span{color:var(--orange-2)}
+.footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
+.footer-social{display:flex;gap:8px}
+.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+.footer-social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px)}
+
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
+.footer-col{display:flex;flex-direction:column;gap:9px}
+.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
+.footer-col a:hover{color:#fff}
+
+.footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
+.footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-bottom{flex-direction:column;text-align:center}}
 </style>
 </head>
 <body>
-
-
 
 <!-- ══════════════════════════════════════════
      EGYSÉGES MENÜ — minden oldalon ugyanez
@@ -464,9 +472,9 @@ body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
 body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
 nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:58px;padding:8px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
 nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
 nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
@@ -475,7 +483,7 @@ nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;m
 nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
 nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
 nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
 nav#mainNav .nav-links li>a:hover{background:#eef2ff}
 nav#mainNav .nav-links li>a svg{opacity:.6}
 nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
@@ -483,10 +491,13 @@ nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform
 nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
 nav#mainNav .dropdown a:hover{background:#eef2ff}
 nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
 nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#FF8A00;background:linear-gradient(180deg,rgba(255,247,237,.85) 0%,rgba(255,237,213,.75) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,138,0,.32);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 1px 2px rgba(255,138,0,.06),0 4px 12px rgba(255,138,0,.08);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap}
+nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);border-color:rgba(255,138,0,.55);background:linear-gradient(180deg,rgba(255,247,237,1) 0%,rgba(255,231,200,.92) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(255,138,0,.1),0 8px 18px rgba(255,138,0,.15)}
+nav#mainNav .btn-nav-partner svg{flex-shrink:0;color:#FF8A00}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 .mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
@@ -518,6 +529,10 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </ul>
 
     <div class="nav-actions">
+      <a href="register.html" class="btn-nav-partner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Legyen Ön is partnerünk
+      </a>
       <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
     </div>
 
@@ -537,7 +552,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
     <a href="tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
     <a href="vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
-    <a href="#" class="mobile-nav-item">Kapcsolat</a>
+    <a href="kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
   </div>
@@ -574,131 +589,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
 
-<!-- ══════════════════════════════════════════
-     EGYSÉGES MENÜ — minden oldalon ugyanez
-══════════════════════════════════════════ -->
-<style>
-nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
-nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
 
-/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
-body.is-index nav#mainNav{background:rgba(255,255,255,.35) !important;backdrop-filter:blur(10px) saturate(140%) !important;-webkit-backdrop-filter:blur(10px) saturate(140%) !important;border-bottom:1px solid rgba(220,227,234,.2) !important;box-shadow:none !important}
-body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
-/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
-body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
-body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
-body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
 
-nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:68px;padding:10px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
-nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-img{height:48px;width:48px;object-fit:contain;display:block;flex-shrink:0}
-nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
-nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
-nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
-nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
-nav#mainNav .nav-link-tudastar{color:#FF8A00 !important;font-weight:700}
-nav#mainNav .nav-link-tudastar:hover{background:rgba(255,138,0,.08) !important;color:#FF8A00 !important}
-nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
-nav#mainNav .nav-links li>a:hover{background:#eef2ff}
-nav#mainNav .nav-links li>a svg{opacity:.6}
-nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
-nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
-nav#mainNav .dropdown a:hover{background:#eef2ff}
-nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:10px 20px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
-nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
-nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
-.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
-.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
-.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
-.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
-.mobile-nav-item:hover{background:#eef2ff}
-.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
-@media(max-width:900px){
-  nav#mainNav .nav-links{display:none}
-  nav#mainNav .nav-actions{display:none}
-  nav#mainNav .nav-mobile-toggle{display:flex}
-}
-</style>
 
-<script>
-// Görgetés-érzékeny menü
-(function(){
-  var nav = document.getElementById('mainNav');
-  if(!nav) return;
-  function update(){
-    if(window.scrollY > 8) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-})();
-</script>
-<!-- ══════ MENÜ VÉGE ══════ -->
 
-<!-- ══════════════════════════════════════════
-     EGYSÉGES MENÜ — minden oldalon ugyanez
-══════════════════════════════════════════ -->
-<style>
-nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
-nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
-nav#mainNav *{box-sizing:border-box}
-nav#mainNav .nav-row-top{display:flex;align-items:center;height:72px;padding:0 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
-nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
-nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
-nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
-nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
-nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
-nav#mainNav .nav-links li{position:relative}
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:9px 14px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
-nav#mainNav .nav-links li>a:hover{background:#eef2ff}
-nav#mainNav .nav-links li>a svg{opacity:.6}
-nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
-nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
-nav#mainNav .dropdown a:hover{background:#eef2ff}
-nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.22);padding:9px 18px;border-radius:9px;transition:all .15s;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-outline:hover{border-color:#113293;background:#eef2ff}
-nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:10px 22px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
-nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
-nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
-.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
-.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
-.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
-.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
-.mobile-nav-item:hover{background:#eef2ff}
-.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
-@media(max-width:900px){
-  nav#mainNav .nav-links{display:none}
-  nav#mainNav .nav-actions{display:none}
-  nav#mainNav .nav-mobile-toggle{display:flex}
-}
-</style>
 
-<script>
-// Görgetés-érzékeny menü
-(function(){
-  var nav = document.getElementById('mainNav');
-  if(!nav) return;
-  function update(){
-    if(window.scrollY > 8) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  }
-  update();
-  window.addEventListener('scroll', update, { passive: true });
-})();
-</script>
-<!-- ══════ MENÜ VÉGE ══════ -->
 
 
 <!-- LOADING -->
@@ -776,153 +671,120 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
         </div>
       </div>
 
-      <!-- ─── TABS ───────────────────────────────────────────────── -->
-      <div class="tabs-wrap">
-        <div class="tabs" role="tablist">
-          <button class="tab on" role="tab" onclick="switchTab('about',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Bemutatkozás
-          </button>
-          <button class="tab" role="tab" onclick="switchTab('services',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            Szolgáltatások
-          </button>
-          <button class="tab" role="tab" onclick="switchTab('reviews',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            Értékelések <span class="tab-count" id="tabRevCount">0</span>
-          </button>
-          <button class="tab" role="tab" onclick="switchTab('booking',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Időpontok
-          </button>
-          <button class="tab" role="tab" onclick="switchTab('locations',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Helyszínek
-          </button>
-          <button class="tab" role="tab" onclick="switchTab('faq',this)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Kérdések
-          </button>
+      <!-- ─── BEMUTATKOZÁS ──────────────────────────────────────── -->
+      <div class="prof-section" id="pane-about">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Bemutatkozás
         </div>
-
-        <!-- ── TAB: BEMUTATKOZÁS ──────────────────────────────── -->
-        <div class="tab-pane on" id="pane-about">
-          <div class="intro-grid">
-            <div>
-              <h2 class="intro-h">Bemutatkozás</h2>
-              <p class="intro-bio" id="aboutBio">–</p>
-
-              <div class="intro-cols">
-                <div class="intro-col">
-                  <div class="intro-col-h">Végzettségek</div>
-                  <ul id="colEdu"><li>–</li></ul>
-                </div>
-                <div class="intro-col">
-                  <div class="intro-col-h">Szakterületek</div>
-                  <ul id="colSpecs"><li>–</li></ul>
-                </div>
-                <div class="intro-col">
-                  <div class="intro-col-h">Tagságok</div>
-                  <ul id="colMember"><li>–</li></ul>
-                </div>
-                <div class="intro-col">
-                  <div class="intro-col-h">Beszélt nyelvek</div>
-                  <ul id="colLangs"><li>–</li></ul>
-                </div>
-              </div>
-            </div>
-
-            <!-- Side panel: Kapcsolat & jellemzők -->
-            <aside class="side-panel" id="sidePanel">
-              <div class="side-panel-h">Kapcsolat &amp; jellemzők</div>
-              <div id="sideRows"></div>
-              <button class="side-cta" onclick="alert('Üzenetküldés hamarosan elérhető')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                Üzenet küldése
-              </button>
-            </aside>
+        <p class="intro-bio" id="aboutBio">–</p>
+        <div class="intro-cols">
+          <div class="intro-col">
+            <div class="intro-col-h">Végzettségek</div>
+            <ul id="colEdu"><li>–</li></ul>
+          </div>
+          <div class="intro-col">
+            <div class="intro-col-h">Szakterületek</div>
+            <ul id="colSpecs"><li>–</li></ul>
+          </div>
+          <div class="intro-col">
+            <div class="intro-col-h">Tagságok</div>
+            <ul id="colMember"><li>–</li></ul>
+          </div>
+          <div class="intro-col">
+            <div class="intro-col-h">Beszélt nyelvek</div>
+            <ul id="colLangs"><li>–</li></ul>
           </div>
         </div>
+      </div>
 
-        <!-- ── TAB: SZOLGÁLTATÁSOK ──────────────────────────── -->
-        <div class="tab-pane" id="pane-services">
-          <h2 class="intro-h">Szolgáltatások és árak</h2>
-          <table class="svc-table" id="svcTable">
-            <tbody></tbody>
-          </table>
-          <a class="svc-more" id="svcMore" href="javascript:void(0)" onclick="alert('A teljes szolgáltatáslista hamarosan')">
-            Összes szolgáltatás megtekintése (<span id="svcTotal">12</span>)
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <!-- ─── SZOLGÁLTATÁSOK ───────────────────────────────────── -->
+      <div class="prof-section" id="pane-services">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Szolgáltatások és árak
+        </div>
+        <table class="svc-table" id="svcTable"><tbody></tbody></table>
+        <a class="svc-more" id="svcMore" href="javascript:void(0)" onclick="alert('A teljes szolgáltatáslista hamarosan')">
+          Összes szolgáltatás megtekintése (<span id="svcTotal">12</span>)
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+      <!-- ─── ÉRTÉKELÉSEK ──────────────────────────────────────── -->
+      <div class="prof-section" id="pane-reviews">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Páciensek értékelései
+          <span class="sec-badge" id="tabRevCount">0</span>
+        </div>
+        <div class="rev-grid">
+          <div class="rev-summary">
+            <div class="rev-summary-rating">
+              <span class="rev-summary-num" id="revAvg">4.9</span>
+              <span class="rev-summary-out">/ 5</span>
+            </div>
+            <div class="rev-summary-stars" id="revStars">★ ★ ★ ★ ★</div>
+            <div class="rev-summary-count"><span id="revCount">0</span> értékelés alapján</div>
+          </div>
+          <div class="rev-bars" id="revBars"></div>
+        </div>
+        <div class="rev-list" id="revList"></div>
+        <button class="rev-show-all" onclick="alert('Az összes értékelés betöltése hamarosan')">
+          Összes értékelés elolvasása
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+      <!-- ─── IDŐPONTOK ────────────────────────────────────────── -->
+      <div class="prof-section" id="pane-booking">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Időpontfoglalás
+        </div>
+        <p class="slots-h">Legkorábbi elérhető időpontok</p>
+        <div class="days-row" id="daysRow"></div>
+        <div class="slots-grid" id="slotsGrid"></div>
+        <button class="slots-more" onclick="alert('Foglalási folyamat hamarosan')">További időpontok</button>
+      </div>
+
+      <!-- ─── HELYSZÍNEK ───────────────────────────────────────── -->
+      <div class="prof-section" id="pane-locations">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Rendelési helyszínek
+        </div>
+        <div class="loc-grid" id="locGrid"></div>
+        <div class="loc-online">
+          <div>
+            <div class="loc-online-name">Online konzultáció</div>
+            <div class="loc-online-desc">Videóhívás bárhonnan, biztonságos titkosítással.</div>
+            <span class="loc-online-tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+              Online elérhető
+            </span>
+          </div>
+          <div class="loc-online-thumb">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── KÉRDÉSEK ─────────────────────────────────────────── -->
+      <div class="prof-section" id="pane-faq">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Kérdések és válaszok
+          <a class="faq-link" href="javascript:void(0)" onclick="alert('Összes kérdés hamarosan')" style="margin-left:auto;font-size:13px;font-weight:500">
+            Összes (<span id="faqTotal">0</span>)
           </a>
         </div>
-
-        <!-- ── TAB: ÉRTÉKELÉSEK ─────────────────────────────── -->
-        <div class="tab-pane" id="pane-reviews">
-          <div class="rev-grid">
-            <div class="rev-summary">
-              <h2 class="intro-h" style="margin-bottom:4px;text-align:left">Páciensek értékelései</h2>
-              <div class="rev-summary-rating">
-                <span class="rev-summary-num" id="revAvg">4.9</span>
-                <span class="rev-summary-out">/ 5</span>
-              </div>
-              <div class="rev-summary-stars" id="revStars">★ ★ ★ ★ ★</div>
-              <div class="rev-summary-count"><span id="revCount">0</span> értékelés alapján</div>
-            </div>
-            <div class="rev-bars" id="revBars"></div>
-          </div>
-
-          <div class="rev-list" id="revList"></div>
-          <button class="rev-show-all" onclick="alert('Az összes értékelés betöltése hamarosan')">
-            Összes értékelés elolvasása
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-        </div>
-
-        <!-- ── TAB: IDŐPONTOK ───────────────────────────────── -->
-        <div class="tab-pane" id="pane-booking">
-          <h2 class="intro-h">Időpontfoglalás</h2>
-          <p class="slots-h">Legkorábbi elérhető időpontok</p>
-          <div class="days-row" id="daysRow"></div>
-          <div class="slots-grid" id="slotsGrid"></div>
-          <button class="slots-more" onclick="alert('Foglalási folyamat hamarosan')">További időpontok</button>
-        </div>
-
-        <!-- ── TAB: HELYSZÍNEK ──────────────────────────────── -->
-        <div class="tab-pane" id="pane-locations">
-          <h2 class="intro-h">Rendelési helyszínek</h2>
-          <div class="loc-grid" id="locGrid"></div>
-          <div class="loc-online">
-            <div>
-              <div class="loc-online-name">Online konzultáció</div>
-              <div class="loc-online-desc">Videóhívás bárhonnan, biztonságos titkosítással.</div>
-              <span class="loc-online-tag">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
-                Online elérhető
-              </span>
-            </div>
-            <div class="loc-online-thumb">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── TAB: KÉRDÉSEK (FAQ) ──────────────────────────── -->
-        <div class="tab-pane" id="pane-faq">
-          <div class="faq-h">
-            <h2 class="intro-h" style="margin-bottom:0">Kérdések és válaszok</h2>
-            <a class="faq-link" href="javascript:void(0)" onclick="alert('Összes kérdés megtekintése hamarosan')">
-              Összes kérdés megtekintése (<span id="faqTotal">0</span>)
-            </a>
-          </div>
-          <div class="faq-list" id="faqList"></div>
-          <button class="faq-cta" onclick="alert('Kérdés feltevése hamarosan')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            Kérdés feltevése
-          </button>
-        </div>
-
+        <div class="faq-list" id="faqList"></div>
+        <button class="faq-cta" onclick="alert('Kérdés feltevése hamarosan')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Kérdés feltevése
+        </button>
       </div>
-      <!-- /tabs-wrap -->
 
       <!-- ─── HASONLÓ ORVOSOK ──────────────────────────────────── -->
       <div class="sim-section">
@@ -945,7 +807,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
         </div>
         <div class="bcard-body">
           <div id="bcardRows"></div>
-          <button class="bcard-cta" onclick="onBookCta()">
+          <button class="bcard-cta" onclick="document.getElementById('pane-booking').scrollIntoView({behavior:'smooth'})">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Időpontfoglalás
           </button>
@@ -962,6 +824,16 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
             <span id="favLbl">Kedvencekhez adom</span>
           </button>
         </div>
+      </div>
+
+      <!-- Elérhetőségek -->
+      <div class="contact-card" id="contactCard">
+        <div class="contact-card-h">Elérhetőségek</div>
+        <div id="contactRows"></div>
+        <button class="contact-msg-btn" onclick="alert('Üzenetküldés hamarosan elérhető')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Üzenet küldése
+        </button>
       </div>
     </aside>
 
@@ -1321,17 +1193,15 @@ function render(d){
   const langList = langs.length ? langs : ['Magyar'];
   document.getElementById('colLangs').innerHTML = langList.map(s => `<li>${escapeHtml(s)}</li>`).join('');
 
-  // ─── Side panel: Kapcsolat & jellemzők ───────────────────────────
-  const sideRows = [];
-  sideRows.push(sideRow('M12 6V12L16 14','Válaszadási idő','Átlagosan <strong>2 órán belül</strong>'));
-  sideRows.push(sideRow('STAR','Páciensek elégedettsége', `<span class="pct-good">${rat > 0 ? Math.round(rat * 20) : 98}%</span>`));
-  sideRows.push(sideRow('STAR','Páciensek ajánlanák másoknak','<span class="pct-good">96%</span>'));
-  sideRows.push(sideRow('CLOCK','Rendelési idő','H-P: 08:00 – 18:00'));
+  // ─── Elérhetőségek (jobb sidebar contact-card) ───────────────────
+  const contactRows = [];
   const phone = d.phone || clinic?.phone || '+36 30 123 4567';
-  sideRows.push(sideRow('PHONE','Telefonszám',`<a href="tel:${escapeHtml(phone.replace(/\s/g,''))}" class="link">${escapeHtml(phone)}</a>`));
   const email = d.email || clinic?.email || `info@${(d.name||'orvos').replace(/^Dr\.\s*/i,'').split(' ').pop().toLowerCase()}.hu`;
-  sideRows.push(sideRow('MAIL','E-mail',`<a href="mailto:${escapeHtml(email)}" class="link">${escapeHtml(email)}</a>`));
-  document.getElementById('sideRows').innerHTML = sideRows.join('');
+  contactRows.push(contactRow('PHONE','Telefonszám', phone, `tel:${phone.replace(/\s/g,'')}`));
+  contactRows.push(contactRow('MAIL','E-mail', email, `mailto:${email}`));
+  contactRows.push(contactRow('CLOCK','Rendelési idő', 'H–P: 08:00 – 18:00', null));
+  contactRows.push(contactRow('STAR','Elégedettség', `${rat > 0 ? Math.round(rat * 20) : 98}% ajánlja`, null));
+  document.getElementById('contactRows').innerHTML = contactRows.join('');
 
   // ─── Booking widget right column ─────────────────────────────────
   document.getElementById('bPrice').textContent = fee ? fmtHuf(fee) : 'Egyedi';
@@ -1380,6 +1250,26 @@ function render(d){
   // ─── Megmutatjuk az oldalt ──────────────────────────────────────
   document.getElementById('loadingOv').classList.add('hidden');
   document.getElementById('pageWrap').style.display = 'block';
+}
+
+/* Contact row builder */
+function contactRow(iconKey, lbl, val, href){
+  const icons = {
+    'PHONE':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>',
+    'MAIL':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    'CLOCK':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    'STAR':'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+  };
+  const valHtml = href
+    ? `<a href="${escapeHtml(href)}">${escapeHtml(val)}</a>`
+    : escapeHtml(val);
+  return `<div class="contact-row">
+    <div class="contact-ico">${icons[iconKey]||''}</div>
+    <div>
+      <div class="contact-lbl">${escapeHtml(lbl)}</div>
+      <div class="contact-val">${valHtml}</div>
+    </div>
+  </div>`;
 }
 
 /* Side panel sor builder */
@@ -1686,11 +1576,12 @@ function toggleFaq(i){
 }
 
 /* ── Tab switch ───────────────────────────────────────────────────── */
-function switchTab(name, btn){
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
-  btn?.classList.add('on');
-  document.getElementById('pane-' + name)?.classList.add('on');
+/* ── Misc handlers ────────────────────────────────────────────────── */
+function toggleFav(){
+  const btn = document.getElementById('favBtn');
+  const lbl = document.getElementById('favLbl');
+  const isFav = btn.classList.toggle('active');
+  lbl.textContent = isFav ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom';
 }
 
 /* ── Hasonló orvosok ──────────────────────────────────────────────── */
@@ -1738,18 +1629,6 @@ function simCard(s){
 }
 
 /* ── Misc handlers ────────────────────────────────────────────────── */
-function onBookCta(){
-  switchTab('booking', document.querySelectorAll('.tab')[3]);
-  document.getElementById('pane-booking').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function toggleFav(){
-  const btn = document.getElementById('favBtn');
-  const lbl = document.getElementById('favLbl');
-  const isFav = btn.classList.toggle('active');
-  lbl.textContent = isFav ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom';
-}
-
 function doNavSearch(){
   const spec = document.getElementById('navSearchSpec').value.trim();
   const city = document.getElementById('navSearchCity').value.trim();
@@ -1856,5 +1735,57 @@ load();
 </script>
 
 
+
+<!-- ══════ LÁBLÉC KEZDETE ══════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <p class="footer-tagline">Az okos orvoskeresés platform</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn">f</a>
+          <a href="#" class="footer-social-btn">in</a>
+          <a href="#" class="footer-social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="talalatok.html">Orvoskeresés</a>
+          <a href="index.html">AI asszisztens</a>
+          <a href="talalatok.html">Időpontfoglalás</a>
+          <a href="vizsgalatok.html">Vizsgálatok</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Partnereknek</div>
+          <a href="register.html">Orvosoknak</a>
+          <a href="register.html">Klinikáknak</a>
+          <a href="register.html">Árak</a>
+          <a href="register.html">Regisztráció</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Cég</div>
+          <a href="#">Rólunk</a>
+          <a href="kapcsolat.html">Kapcsolat</a>
+          <a href="tudastar.html">Blog</a>
+          <a href="#">Karrier</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Jogi</div>
+          <a href="adatvedelem.html">Adatvédelem</a>
+          <a href="#">ÁSZF</a>
+          <a href="#">Cookie</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
+      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
+    </div>
+  </div>
+</footer>
+<!-- ══════ LÁBLÉC VÉGE ══════ -->
 </body>
 </html>
