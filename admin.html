@@ -708,6 +708,24 @@ select.td-select:focus{border-color:var(--brand)}
       <div style="font-size:11px;color:var(--muted);margin-top:4px">Csak az adminok és az orvosok látják – az orvos profilhoz és ellenőrzéshez használjuk.</div>
     </div>
 
+    <!-- VIZSGÁLATOK SZEKCIÓ -->
+    <div class="form-group" id="treatmentsSection" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <label class="form-label" style="margin:0">Vizsgálatok és kezelések</label>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:12px;padding:5px 10px" onclick="aiGenerateTreatments()" id="btnAiTreatments">
+            ✨ AI bővítés
+          </button>
+          <button class="btn btn-primary" style="font-size:12px;padding:5px 10px" onclick="addTreatmentRow()">
+            + Új vizsgálat
+          </button>
+        </div>
+      </div>
+      <div id="treatmentsList" style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto">
+        <div style="color:var(--sub);font-size:13px;padding:12px;text-align:center">Mentsd el a szakterületet először, majd szerkeszd újra a vizsgálatokhoz</div>
+      </div>
+    </div>
+
     <input type="hidden" id="sEditId">
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeSpecModal()">Mégse</button>
@@ -1152,9 +1170,134 @@ function openEditSpec(s){
   document.getElementById('sDescription').value=s.description||'';
   document.getElementById('sLicenseText').value=s.license_text||'';
   document.getElementById('specModal').classList.add('open');
+  // Vizsgalatok betoltese
+  document.getElementById('treatmentsSection').style.display='block';
+  loadTreatments(s.name);
 }
 
-function closeSpecModal(){document.getElementById('specModal').classList.remove('open');}
+let _currentTreatments = [];
+
+async function loadTreatments(specName) {
+  const list = document.getElementById('treatmentsList');
+  list.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:8px">Betoltes...</div>';
+  const { data, error } = await db.from('treatments').select('id,title,slug').eq('specialty', specName).order('title');
+  if (error) { list.innerHTML = '<div style="color:var(--red);font-size:13px;padding:8px">Hiba: '+error.message+'</div>'; return; }
+  _currentTreatments = data || [];
+  renderTreatments();
+}
+
+function renderTreatments() {
+  const list = document.getElementById('treatmentsList');
+  if (!_currentTreatments.length) {
+    list.innerHTML = '<div style="color:var(--sub);font-size:13px;padding:12px;text-align:center">Meg nincsenek vizsgalatok</div>';
+    return;
+  }
+  list.innerHTML = _currentTreatments.map(t => `
+    <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px">
+      <span style="flex:1;font-size:13px">${esc(t.title)}</span>
+      <code style="font-size:11px;color:var(--sub);background:var(--sb2);padding:2px 6px;border-radius:4px">${esc(t.slug)}</code>
+      <button class="btn btn-ghost btn-sm" style="padding:3px 8px" onclick="editTreatment(${t.id},'${esc(t.title).replace(/'/g,"\\'")}','${esc(t.slug)}')">✏</button>
+      <button class="btn btn-danger btn-sm" style="padding:3px 8px" onclick="deleteTreatment(${t.id},'${esc(t.title).replace(/'/g,"\\'")}')">✕</button>
+    </div>`).join('');
+}
+
+function addTreatmentRow() {
+  const specName = document.getElementById('sName').value.trim();
+  if (!specName) { alert('Elobb add meg a szakterulet nevet!'); return; }
+  const title = prompt('Vizsgalat neve:');
+  if (!title) return;
+  const slug = title.toLowerCase()
+    .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e')
+    .replace(/[íìîï]/g,'i').replace(/[óòôöő]/g,'o')
+    .replace(/[úùûüű]/g,'u').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  saveTreatment(null, title, slug, specName);
+}
+
+async function editTreatment(id, currentTitle, currentSlug) {
+  const title = prompt('Vizsgalat neve:', currentTitle);
+  if (!title || title === currentTitle) return;
+  const slug = title.toLowerCase()
+    .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e')
+    .replace(/[íìîï]/g,'i').replace(/[óòôöő]/g,'o')
+    .replace(/[úùûüű]/g,'u').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const { error } = await db.from('treatments').update({ title, slug }).eq('id', id);
+  if (error) { alert('Hiba: '+error.message); return; }
+  _currentTreatments = _currentTreatments.map(t => t.id===id ? {...t,title,slug} : t);
+  renderTreatments();
+}
+
+async function deleteTreatment(id, title) {
+  if (!confirm(`Torlod ezt a vizsgalatot?
+"${title}"`)) return;
+  const { error } = await db.from('treatments').delete().eq('id', id);
+  if (error) { alert('Hiba: '+error.message); return; }
+  _currentTreatments = _currentTreatments.filter(t => t.id !== id);
+  renderTreatments();
+}
+
+async function saveTreatment(id, title, slug, specName) {
+  const payload = { title, slug, specialty: specName, content: '', description: '' };
+  let error;
+  if (id) {
+    ({ error } = await db.from('treatments').update(payload).eq('id', id));
+  } else {
+    const res = await db.from('treatments').insert(payload).select().single();
+    error = res.error;
+    if (!error && res.data) _currentTreatments.push(res.data);
+  }
+  if (error) { alert('Hiba menteskor: '+error.message); return; }
+  renderTreatments();
+}
+
+async function aiGenerateTreatments() {
+  const specName = document.getElementById('sName').value.trim();
+  if (!specName) { alert('Elobb add meg a szakterulet nevet!'); return; }
+  const btn = document.getElementById('btnAiTreatments');
+  btn.disabled = true; btn.textContent = '⏳ Generalas...';
+  const existing = _currentTreatments.map(t => t.title).join(', ');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 800,
+        messages: [{ role: 'user', content: `Adj meg 8-10 tipikus vizsgalatot es kezelest a kovetkezo orvosi szakterulethez: "${specName}".
+Mar meglevo vizsgalatok (ne ismeteld meg): ${existing || 'nincs'}
+Valaszolj CSAK JSON tombkent, pl.: ["EKG vizsgalat","Holter EKG"]
+Csak a neveket add meg, semmi mas szoveget!` }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text?.trim() || '[]';
+    const match = text.match(/\[.*\]/s);
+    if (!match) throw new Error('Ervenytelen valasz');
+    const newTreatments = JSON.parse(match[0]);
+    const existingTitles = _currentTreatments.map(t => t.title.toLowerCase());
+    const toAdd = newTreatments.filter(t => !existingTitles.includes(t.toLowerCase()));
+    if (!toAdd.length) { alert('Nem lett uj vizsgalat generalva.'); return; }
+    if (!confirm(`Az AI ${toAdd.length} vizsgalatot javasol:
+
+${toAdd.join('
+')}
+
+Hozzaadjuk?`)) return;
+    for (const title of toAdd) {
+      const slug = title.toLowerCase()
+        .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e')
+        .replace(/[íìîï]/g,'i').replace(/[óòôöő]/g,'o')
+        .replace(/[úùûüű]/g,'u').replace(/[()]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+      await saveTreatment(null, title, slug, specName);
+    }
+    renderTreatments();
+  } catch(e) {
+    alert('Hiba az AI generalasnal: '+e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '✨ AI bovites';
+  }
+}
+
+function closeSpecModal(){document.getElementById('specModal').classList.remove('open');document.getElementById('treatmentsSection').style.display='none';_currentTreatments=[];}
 
 async function saveSpecialty(){
   const id=document.getElementById('sEditId').value;
