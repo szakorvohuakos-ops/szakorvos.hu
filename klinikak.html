@@ -116,6 +116,8 @@ function szkPinIcon(maps){
   --grad-hero:linear-gradient(135deg,#113293 0%,#2C9650 100%);
 }
 body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#eef2ff 0%,#f4f6f8 30%,#f4f6f8 70%,#e8f4ec 100%);overflow-x:hidden;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(120,150,255,.1),transparent 60%),radial-gradient(ellipse 60% 40% at 90% 70%,rgba(180,140,255,.07),transparent 60%),radial-gradient(ellipse 50% 30% at 50% 100%,rgba(140,200,255,.06),transparent 60%);pointer-events:none;z-index:0}
+body > *{position:relative;z-index:1}
 a{text-decoration:none;color:inherit}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
@@ -280,9 +282,14 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 /* ─────────────────────────────────────
    DOCTOR CARD (premium visual)
 ───────────────────────────────────── */
-.dc{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,.7);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .3s,transform .3s,border-color .3s;animation:cdin .4s both;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 3px rgba(17,50,147,.04),0 6px 20px rgba(17,50,147,.06)}
-@keyframes cdin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.dc:hover{box-shadow:0 12px 36px rgba(17,50,147,.1),0 2px 8px rgba(17,50,147,.05);border-color:#bcc5e0;transform:translateY(-2px)}
+.dc{background:linear-gradient(180deg,rgba(255,255,255,.55) 0%,rgba(245,248,255,.42) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.7);border-radius:22px;padding:1.6rem 1.75rem;margin-bottom:1.1rem;display:grid;grid-template-columns:130px 1fr 230px;gap:1.75rem;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.4,.64,1),border-color .3s;animation:cdin .4s both;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 -1px 0 rgba(255,255,255,.3) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09)}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
+.dc::after{content:'';position:absolute;inset:-40%;background:radial-gradient(ellipse 40% 30% at 15% 20%,rgba(140,170,255,.1),transparent 60%),radial-gradient(ellipse 30% 40% at 90% 80%,rgba(180,150,255,.08),transparent 60%);pointer-events:none;z-index:0}
+.dc > *{position:relative;z-index:1}
+@keyframes cdin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.dc:hover{box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 -1px 0 rgba(255,255,255,.4) inset,0 2px 4px rgba(17,50,147,.05),0 16px 40px rgba(17,50,147,.14),0 40px 80px rgba(17,50,147,.16);border-color:rgba(140,170,255,.55);transform:translateY(-4px)}
+.dc:first-of-type{background:linear-gradient(135deg,rgba(255,255,255,.65) 0%,rgba(230,238,255,.5) 50%,rgba(235,225,255,.55) 100%);border:1.5px solid rgba(140,170,255,.6);box-shadow:0 2px 0 rgba(255,255,255,1) inset,0 -1px 0 rgba(255,255,255,.5) inset,0 1px 2px rgba(17,50,147,.05),0 16px 40px rgba(17,50,147,.14),0 40px 80px rgba(17,50,147,.18),0 0 60px rgba(120,150,255,.25);transform:scale(1.01)}
+.dc:first-of-type:hover{transform:translateY(-5px) scale(1.01);border-color:rgba(140,170,255,.85);box-shadow:0 2px 0 rgba(255,255,255,1) inset,0 20px 48px rgba(17,50,147,.18),0 48px 96px rgba(17,50,147,.22),0 0 80px rgba(120,150,255,.35)}
 .dc.prem{border-color:#fde68a;background:linear-gradient(180deg,#fffdf7,#fff 60%)}
 .dc.prem:hover{border-color:#f59e0b;box-shadow:0 12px 36px rgba(245,158,11,.12)}
 .prem-lbl{position:absolute;top:1rem;right:1rem;background:var(--grad-orange);color:#fff;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius:100px;z-index:2;box-shadow:0 2px 8px rgba(255,138,0,.3)}
@@ -323,13 +330,13 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
 
 /* Right column - premium green CTA card */
-.dc-right{background:linear-gradient(180deg,#f0fdf4,#ecfdf5);border:1px solid #c4ead2;border-radius:16px;padding:1.2rem 1.25rem;display:flex;flex-direction:column;gap:.85rem;align-items:stretch;min-width:0;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.dc-right{display:flex;flex-direction:column;gap:.6rem;align-items:stretch;min-width:0;justify-content:center}
 .dc-right-lbl{font-size:11px;color:var(--green-dark);font-weight:600;text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:5px}
 .dc-right-lbl::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(44,150,80,.2)}
 .dc-price{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:var(--text);letter-spacing:-0.025em;line-height:1.1;margin-top:2px}
 .dc-price small{font-size:12px;color:var(--green-dark);font-weight:600;display:block;margin-top:3px;letter-spacing:0}
 .dc-divider{height:1px;background:#c4ead2;margin:.05rem 0}
-.btn-prof{width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;box-shadow:0 4px 14px rgba(17,50,147,.22),inset 0 1px 0 rgba(255,255,255,.15);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
+.btn-prof{width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.2),0 8px 18px rgba(46,74,202,.28);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
 .btn-prof::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 50%);pointer-events:none}
 .btn-prof:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,50,147,.32),inset 0 1px 0 rgba(255,255,255,.2)}
 .btn-prof:active{transform:translateY(0)}
@@ -1142,12 +1149,15 @@ function clinicCardHTML(c, i){
       ${specsHtml ? `<div class="dc-meta" style="margin-top:.55rem;gap:6px">${specsHtml}</div>` : ''}
     </div>
 
-    <div class="dc-right">
-      <div class="dc-right-lbl">Klinika</div>
-      <div class="dc-price" style="font-size:18px">${c._docCount} szakorvos</div>
-      ${c._cityName ? `<div style="font-size:12.5px;color:var(--green-dark);font-weight:600">📍 ${escapeHtml(c._cityName)}</div>` : ''}
-      <div class="dc-divider"></div>
-      <button class="btn-prof" onclick="event.stopPropagation();window.location.href='${target}'">Részletek megtekintése</button>
+    <div class="dc-right" onclick="event.stopPropagation()">
+      <button class="btn-prof" onclick="event.stopPropagation();window.location.href='${target}'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
+        Klinika megtekintése
+      </button>
+      <button class="btn-prof-alt" onclick="event.stopPropagation();window.location.href='${target}'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        ${c._docCount} szakorvos
+      </button>
     </div>
   </div>`;
 }
