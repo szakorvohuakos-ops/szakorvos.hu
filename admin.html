@@ -1276,12 +1276,7 @@ Csak a neveket add meg, semmi mas szoveget!` }]
     const existingTitles = _currentTreatments.map(t => t.title.toLowerCase());
     const toAdd = newTreatments.filter(t => !existingTitles.includes(t.toLowerCase()));
     if (!toAdd.length) { alert('Nem lett uj vizsgalat generalva.'); return; }
-    if (!confirm(`Az AI ${toAdd.length} vizsgalatot javasol:
-
-${toAdd.join('
-')}
-
-Hozzaadjuk?`)) return;
+    if (!confirm('Az AI ' + toAdd.length + ' vizsgalatot javasol:\n\n' + toAdd.join('\n') + '\n\nHozzaadjuk?')) return;
     for (const title of toAdd) {
       const slug = title.toLowerCase()
         .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e')
