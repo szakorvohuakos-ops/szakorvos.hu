@@ -1,217 +1,181 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta name="theme-color" content="#113293">
-  <link rel="canonical" href="https://www.szakorvos.hu/register.html">
-  <meta name="description" content="Hozzon létre fiókot a Szakorvos.hu-n. Páciensként, orvosként vagy klinikaként – néhány kattintással.">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Szakorvos.hu">
-  <meta property="og:title" content="Regisztráció | Szakorvos.hu">
-  <meta property="og:description" content="Hozzon létre fiókot a Szakorvos.hu-n. Páciensként, orvosként vagy klinikaként – néhány kattintással.">
-  <meta property="og:image" content="https://www.szakorvos.hu/og?type=logo">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://www.szakorvos.hu/register.html">
-  <meta property="og:locale" content="hu_HU">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Regisztráció | Szakorvos.hu">
-  <meta name="twitter:description" content="Hozzon létre fiókot a Szakorvos.hu-n. Páciensként, orvosként vagy klinikaként – néhány kattintással.">
-  <meta name="twitter:image" content="https://www.szakorvos.hu/og?type=logo">
-  <link rel="alternate" hreflang="hu" href="https://www.szakorvos.hu/register.html">
-  <link rel="alternate" hreflang="x-default" href="https://www.szakorvos.hu/register.html">
-  <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Regisztráció | Szakorvos.hu</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#113293">
+<link rel="canonical" href="https://www.szakorvos.hu/register.html">
+<meta name="description" content="Csatlakozzon Magyarország vezető magánegészségügyi platformjához. Növelje páciensszámát, kezelje online profilját és foglalásait egy helyen.">
+<title>Legyen Ön is partnerünk | Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', sans-serif;
-  background: #F4F6F8;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#113293;--brand-2:#264ACA;--green:#2C9650;--green-2:#35B26B;
+  --orange:#FF8A00;--bg:#F4F6F8;--surface:#fff;--border:#DCE3EA;
+  --text:#113293;--sub:#475569;--muted:#94a3b8;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-green:linear-gradient(135deg,#2C9650 0%,#35B26B 100%);
+  --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
 }
-.card {
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 8px 48px rgba(17,50,147,0.12);
-  width: 100%;
-  max-width: 460px;
-  padding: 2.5rem 2rem;
-}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#f0f4ff 0%,#f6f8fb 40%,#f6f8fb 70%,#f0f7f3 100%);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
 
-/* Logo */
-.logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 2rem; text-decoration: none; }
-.logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg,#113293,#264ACA); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(17,50,147,0.3); }
-.logo-text { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; }
-.logo-text em { color: #FF8A00; font-style: normal; }
+/* NAV */
+nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.5);box-shadow:0 2px 20px rgba(17,50,147,.05)}
+.ni{display:flex;align-items:center;height:64px;padding:0 4%;gap:1.5rem;max-width:1400px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.logo-icon{width:38px;height:38px;background:var(--grad-blue);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25);flex-shrink:0}
+.logo-txt{font-size:21px;font-weight:700;color:var(--brand);letter-spacing:-0.02em}
+.logo-txt em{color:var(--green);font-style:normal}
+.nav-links{display:flex;list-style:none;gap:4px;margin:0 auto}
+.nav-links a{font-size:14px;font-weight:600;color:var(--brand);padding:7px 13px;border-radius:9px;transition:background .15s}
+.nav-links a:hover{background:#eef2ff}
+.nav-acts{display:flex;gap:10px;margin-left:auto;flex-shrink:0}
+.btn-nav-outline{font-size:13.5px;font-weight:600;color:var(--brand);background:transparent;border:1.5px solid rgba(17,50,147,.2);padding:8px 18px;border-radius:10px;transition:all .15s}
+.btn-nav-outline:hover{border-color:var(--brand);background:rgba(38,74,202,.05)}
+.btn-nav-cta{font-size:13.5px;font-weight:600;color:#fff;background:var(--grad-orange);border:none;padding:9px 20px;border-radius:10px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s}
+.btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+@media(max-width:820px){.nav-links{display:none}.btn-nav-outline{display:none}}
 
-/* Steps */
-.steps { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; }
-.step { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.step-circle {
-  width: 32px; height: 32px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight:700;
-  border: 2px solid #DCE3EA; color: #94a3b8; background: #fff;
-  transition: all .3s;
-}
-.step.active .step-circle { background: #113293; border-color: #113293; color: #fff; }
-.step.done .step-circle { background: #2C9650; border-color: #2C9650; color: #fff; }
-.step-label { font-size: 11px; font-weight: 700; color: #94a3b8; white-space: nowrap; transition: color .3s; }
-.step.active .step-label { color: #113293; }
-.step.done .step-label { color: #2C9650; }
-.step-line { width: 48px; height: 2px; background: #DCE3EA; margin-bottom: 18px; transition: background .3s; }
-.step-line.done { background: #2C9650; }
+/* HERO */
+.hero{padding:5rem 4% 4rem;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 460px;gap:4rem;align-items:start}
+@media(max-width:980px){.hero{grid-template-columns:1fr;gap:2.5rem}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);border-radius:100px;padding:5px 14px 5px 10px;font-size:12.5px;font-weight:700;color:var(--orange);letter-spacing:.02em;text-transform:uppercase;margin-bottom:1.5rem}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0}
+.hero-title{font-size:clamp(2rem,3.5vw,3.2rem);font-weight:300;color:var(--text);line-height:1.15;letter-spacing:-0.025em;margin-bottom:1.25rem}
+.g{background:var(--grad-green);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.b{background:var(--grad-blue);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16.5px;color:var(--sub);line-height:1.7;margin-bottom:2rem;max-width:520px}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.hstat-val{font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.03em;line-height:1}
+.hstat-lbl{font-size:12px;color:var(--muted);font-weight:500;margin-top:2px}
+.hero-trust{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--sub);padding:12px 16px;background:rgba(44,150,80,.06);border:1px solid rgba(44,150,80,.15);border-radius:12px;max-width:480px}
+.trust-icon{width:30px;height:30px;border-radius:50%;background:rgba(44,150,80,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
-/* Heading */
-.heading { margin-bottom: 1.5rem; }
-.heading h2 { font-family: 'Inter', sans-serif; font-size: 20px; font-weight:700; color: #113293; margin-bottom: 5px; }
-.heading p { font-size: 13.5px; color: #475569; line-height: 1.6; }
+/* FORM CARD */
+.form-card{background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(248,250,255,.65) 100%);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.8);border-radius:24px;padding:2.25rem;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 8px 32px rgba(17,50,147,.08),0 32px 64px rgba(17,50,147,.1)}
+.form-card-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:.3rem;letter-spacing:-0.02em}
+.form-card-sub{font-size:13.5px;color:var(--sub);margin-bottom:1.5rem;line-height:1.5}
+.type-tabs{display:flex;background:rgba(244,246,251,.9);border-radius:12px;padding:4px;gap:3px;margin-bottom:1.5rem}
+.type-tab{flex:1;padding:9px 6px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);border-radius:9px;cursor:pointer;transition:all .15s;text-align:center;white-space:nowrap}
+.type-tab.active{background:#fff;color:var(--brand);box-shadow:0 2px 8px rgba(17,50,147,.1)}
+.fg{margin-bottom:.9rem}
+.fl{display:block;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:5px}
+.fi{width:100%;background:rgba(255,255,255,.95);border:1.5px solid var(--border);border-radius:11px;padding:11px 14px;font-family:inherit;font-size:14px;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s}
+.fi:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
+.fi::placeholder{color:#b0bcd4}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.fs{width:100%;background:rgba(255,255,255,.95) url("data:image/svg+xml,%3Csvg width='12' height='7' viewBox='0 0 12 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2394a3b8' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;border:1.5px solid var(--border);border-radius:11px;padding:11px 14px;font-family:inherit;font-size:14px;color:var(--text);outline:none;appearance:none;cursor:pointer;transition:border-color .15s}
+.fs:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
+.btn-submit{width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:13px;padding:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(46,74,202,.28),0 10px 28px rgba(46,74,202,.22);transition:transform .2s,box-shadow .2s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:-0.01em}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(46,74,202,.38)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.legal{font-size:11.5px;color:var(--muted);text-align:center;margin-top:.85rem;line-height:1.55}
+.legal a{color:var(--brand);font-weight:600}
+.success{display:none;text-align:center;padding:1rem 0}
+.success-icon{font-size:52px;margin-bottom:1rem}
+.success-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.success-sub{font-size:14px;color:var(--sub);line-height:1.65}
 
-/* Form */
-.form-group { margin-bottom: 1rem; }
-label.lbl { display: block; font-size: 12px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-.input-wrap { position: relative; }
-.input-wrap .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
-input[type=text], input[type=email], input[type=password] {
-  width: 100%; border: 1.5px solid #DCE3EA; border-radius: 12px;
-  padding: 12px 14px 12px 44px; font-size: 15px;
-  font-family: 'Inter', sans-serif; color: #113293;
-  outline: none; background: #fff; transition: border-color .2s, box-shadow .2s;
-}
-input:focus { border-color: #113293; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
-.pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; padding: 4px; transition: color .2s; }
-.pw-toggle:hover { color: #113293; }
-.pw-hint { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+/* BENEFITS */
+.section{padding:5rem 4%;max-width:1400px;margin:0 auto}
+.sec-label{font-size:12px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:20px;height:2px;background:var(--green);border-radius:1px}
+.sec-title{font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:800;color:var(--text);letter-spacing:-0.025em;line-height:1.15;margin-bottom:.75rem}
+.sec-sub{font-size:15.5px;color:var(--sub);line-height:1.7;max-width:560px;margin-bottom:3rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+@media(max-width:880px){.grid-3{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.grid-3{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.72);border-radius:20px;padding:1.75rem;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 16px rgba(17,50,147,.06);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s}
+.card:hover{transform:translateY(-4px);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 12px 32px rgba(17,50,147,.12)}
+.card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1.1rem}
+.ci-b{background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.12)}
+.ci-g{background:rgba(44,150,80,.08);border:1px solid rgba(44,150,80,.12)}
+.ci-o{background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.12)}
+.card-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:.5rem;letter-spacing:-0.01em}
+.card-desc{font-size:14px;color:var(--sub);line-height:1.65}
 
-/* Buttons */
-.btn-primary {
-  width: 100%; background: linear-gradient(135deg,#113293,#264ACA);
-  color: #fff; border: none; border-radius: 12px; padding: 14px;
-  font-family: 'Inter', sans-serif; font-size: 15px; font-weight:700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: 0 4px 18px rgba(17,50,147,0.3); transition: all .2s;
-}
-.btn-primary:hover { opacity: .9; transform: translateY(-1px); }
-.btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-.btn-secondary {
-  width: 100%; background: #F4F6F8; color: #113293;
-  border: 1.5px solid #DCE3EA; border-radius: 12px; padding: 13px;
-  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: all .2s; margin-top: 10px;
-}
-.btn-secondary:hover { border-color: #113293; background: #eef2ff; }
+/* PRICING */
+.plan{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.72);border-radius:22px;padding:2rem;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 16px rgba(17,50,147,.06);position:relative;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s}
+.plan:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(17,50,147,.12)}
+.plan.feat{background:linear-gradient(135deg,rgba(17,50,147,.05),rgba(38,74,202,.04));border:1.5px solid rgba(38,74,202,.25);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 8px 32px rgba(17,50,147,.12),0 0 0 4px rgba(38,74,202,.06)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad-blue);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap;box-shadow:0 2px 8px rgba(17,50,147,.25)}
+.plan-name{font-size:13px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+.plan-price{font-size:36px;font-weight:800;color:var(--text);letter-spacing:-0.04em;line-height:1}
+.plan-price span{font-size:15px;font-weight:500;color:var(--muted)}
+.plan-period{font-size:12.5px;color:var(--muted);margin-bottom:1.5rem;margin-top:.2rem}
+.pfeats{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.75rem}
+.pfeat{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--sub)}
+.pf-dot{width:18px;height:18px;border-radius:50%;background:var(--grad-green);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pf-dot svg{width:10px;height:10px}
+.pf-dot.off{background:var(--bg);border:1.5px solid var(--border)}
+.btn-plan{width:100%;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;display:block;letter-spacing:-0.005em;border:none}
+.btn-plan.pr{background:var(--grad-blue);color:#fff;box-shadow:0 4px 14px rgba(17,50,147,.22)}
+.btn-plan.pr:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,50,147,.32)}
+.btn-plan.ol{background:transparent;color:var(--brand);border:1.5px solid rgba(17,50,147,.2)}
+.btn-plan.ol:hover{border-color:var(--brand);background:rgba(38,74,202,.04)}
 
-/* Messages */
-.msg { border-radius: 11px; padding: .85rem 1rem; font-size: 13.5px; font-weight: 600; display: none; align-items: center; gap: 9px; margin-bottom: 1rem; animation: msgIn .2s ease; }
-@keyframes msgIn { from { opacity:0; transform:translateY(-4px) } to { opacity:1; transform:none } }
-.msg.show { display: flex; }
-.msg-error { background: #fee2e2; border: 1.5px solid #fca5a5; color: #b91c1c; }
-.msg-success { background: #ecfdf5; border: 1.5px solid #c8e8d2; color: #065f46; }
-.msg-info { background: #eff6ff; border: 1.5px solid #bfdbfe; color: #1d4ed8; }
+/* TESTIMONIALS */
+.tcard{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.55) 100%);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.72);border-radius:20px;padding:1.75rem;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 16px rgba(17,50,147,.05)}
+.tstars{color:#f59e0b;font-size:14px;letter-spacing:2px;margin-bottom:.85rem}
+.ttext{font-size:14px;color:var(--sub);line-height:1.75;font-style:italic;margin-bottom:1.1rem}
+.tauthor{display:flex;align-items:center;gap:10px}
+.tav{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.tname{font-size:13.5px;font-weight:700;color:var(--text)}
+.trole{font-size:12px;color:var(--muted)}
 
-/* Doctor search results */
-.search-results { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
-.doctor-card {
-  display: flex; align-items: center; gap: 12px;
-  border: 1.5px solid #DCE3EA; border-radius: 12px; padding: 12px 14px;
-  cursor: pointer; transition: all .2s; background: #fff;
-}
-.doctor-card:hover { border-color: #113293; background: #F4F6F8; }
-.doctor-card.selected { border-color: #113293; background: #eef2ff; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
-.doctor-card.claimed { opacity: .5; cursor: not-allowed; }
-.doc-avatar {
-  width: 42px; height: 42px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #fff;
-  flex-shrink: 0;
-}
-.doc-info { flex: 1; min-width: 0; }
-.doc-name { font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #113293; }
-.doc-sub { font-size: 12px; color: #475569; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.doc-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px; flex-shrink: 0; }
-.badge-claimed { background: #fee2e2; color: #b91c1c; }
-.badge-free { background: #ecfdf5; color: #065f46; }
-.badge-selected { background: #113293; color: #fff; }
+/* CTA BOX */
+.cta-section{padding:4rem 4%;max-width:1400px;margin:0 auto}
+.cta-box{background:var(--grad-blue);border-radius:28px;padding:4rem;text-align:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(17,50,147,.3)}
+.cta-box::before{content:'';position:absolute;top:-80px;right:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07),transparent 60%);pointer-events:none}
+.cta-box::after{content:'';position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(44,150,80,.18),transparent 60%);pointer-events:none}
+.cta-title{font-size:clamp(1.6rem,2.8vw,2.4rem);font-weight:800;color:#fff;letter-spacing:-0.025em;line-height:1.2;margin-bottom:.85rem;position:relative;z-index:1}
+.cta-sub{font-size:16px;color:rgba(255,255,255,.75);line-height:1.65;margin-bottom:2rem;position:relative;z-index:1;max-width:480px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-white{background:#fff;color:var(--brand);border:none;border-radius:12px;padding:14px 28px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.3);border-radius:12px;padding:13px 28px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
 
-/* Role cards */
-.role-card {
-  border: 2px solid #DCE3EA; border-radius: 14px; padding: 14px 12px;
-  cursor: pointer; transition: all .2s; text-align: center; background: #fff;
-}
-.role-card:hover { border-color: #113293; background: #F4F6F8; }
-.role-card.active { border-color: #113293; background: #eef2ff; box-shadow: 0 0 0 3px rgba(17,50,147,0.1); }
-.role-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
-.role-card-label { font-family: 'Inter', sans-serif; font-size: 14px; font-weight:700; color: #113293; margin-bottom: 3px; }
-.role-card-sub { font-size: 11px; color: #475569; }
-.doctor-preview {
-  border: 2px solid #113293; border-radius: 14px; padding: 14px;
-  background: #eef2ff; margin-bottom: 1rem;
-  display: flex; align-items: center; gap: 12px;
-}
-.preview-check { width: 32px; height: 32px; border-radius: 50%; background: #113293; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-/* Spinner */
-.spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
-.spinner-dark { width: 18px; height: 18px; border: 2.5px solid rgba(17,50,147,.2); border-top-color: #113293; border-radius: 50%; animation: spin .7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg) } }
-
-/* Bottom links */
-.bottom-links { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 1.5rem; font-size: 13px; color: #475569; }
-.bottom-links a { color: #113293; font-weight: 700; text-decoration: none; }
-.bottom-links a:hover { color: #FF8A00; }
-
-/* Panels */
-.panel { display: none; }
-.panel.active { display: block; }
-
-/* Success state */
-.success-state { text-align: center; padding: 1rem 0; }
-.success-icon { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#2C9650,#1f6e3a); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; box-shadow: 0 8px 24px rgba(44,150,80,0.3); }
-.success-state h2 { font-family: 'Inter', sans-serif; font-size: 22px; font-weight:700; color: #113293; margin-bottom: 8px; }
-.success-state p { font-size: 14px; color: #475569; line-height: 1.7; margin-bottom: 1.5rem; }
-
-/* Divider */
-.divider { display: flex; align-items: center; gap: 12px; margin: 1rem 0; color: #94a3b8; font-size: 12px; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #DCE3EA; }
-
-@media (max-width: 480px) { .card { padding: 2rem 1.5rem; } .step-line { width: 28px; } }
-.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
-.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
+/* FOOTER */
+.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;margin-top:3rem}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 4%}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
-.footer-brand{min-width:0}
-.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
-.footer-logo span{color:var(--orange-2)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}}
+.footer-logo{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
+.footer-logo span{color:#FFA726}
 .footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
 .footer-social{display:flex;gap:8px}
-.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
-.footer-social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px)}
-
+.fsoc{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+.fsoc:hover{background:#FF8A00;border-color:#FF8A00;transform:translateY(-1px)}
 .footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
-.footer-col{display:flex;flex-direction:column;gap:9px}
-.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
-.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
-.footer-col a:hover{color:#fff}
-
+@media(max-width:600px){.footer-links{grid-template-columns:repeat(2,1fr)}}
+.fcol{display:flex;flex-direction:column;gap:9px}
+.fcol-title{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.fcol a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
+.fcol a:hover{color:#fff}
 .footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
+.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5)}
 .footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
-@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-bottom{flex-direction:column;text-align:center}}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:24px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 18px;font-size:14px;font-weight:600;color:var(--text);box-shadow:0 8px 32px rgba(17,50,147,.15);z-index:9999;transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.34,1.4,.64,1);display:flex;align-items:center;gap:10px;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(44,150,80,.3);background:linear-gradient(135deg,#f0fdf4,#ecfdf5)}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     EGYSÉGES MENÜ — minden oldalon ugyanez
-══════════════════════════════════════════ -->
+<!-- NAV -->
 <style>
 nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
 nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
@@ -341,486 +305,184 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 })();
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
-
-
-
-
-
-
-
-
-<div class="card">
-
-  <a href="index.html" class="logo">
-    <div class="logo-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow"><span class="eyebrow-dot"></span>Partneri program</div>
+    <h1 class="hero-title">
+      Növelje páciensszámát<br>
+      <span class="g">Magyarország vezető</span><br>
+      <span class="b">egészségügyi platformján</span>
+    </h1>
+    <p class="hero-sub">Csatlakozzon több száz szakorvoshoz és klinikához, akik a Szakorvos.hu-n keresztül töltik fel rendelőjüket. Prémium profil, online időpontfoglalás, statisztikák — egy helyen.</p>
+    <div class="hero-stats">
+      <div><div class="hstat-val" id="statDoctors">500+</div><div class="hstat-lbl">Regisztrált orvos</div></div>
+      <div><div class="hstat-val" id="statClinics">120+</div><div class="hstat-lbl">Partner klinika</div></div>
+      <div><div class="hstat-val">10 000+</div><div class="hstat-lbl">Havi látogató</div></div>
     </div>
-    <span class="logo-text">Szakorvos<em>.hu</em></span>
-  </a>
-
-  <!-- Steps -->
-  <div class="steps" id="stepsBar">
-    <div class="step active" id="step1">
-      <div class="step-circle">1</div>
-      <div class="step-label">Fiók</div>
-    </div>
-    <div class="step-line" id="line1"></div>
-    <div class="step" id="step2">
-      <div class="step-circle">2</div>
-      <div class="step-label">Adatlap</div>
-    </div>
-    <div class="step-line" id="line2"></div>
-    <div class="step" id="step3">
-      <div class="step-circle">3</div>
-      <div class="step-label">Kész</div>
+    <div class="hero-trust">
+      <div class="trust-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      Ingyenes regisztráció · Azonnali megjelenés · Bármikor lemondható
     </div>
   </div>
 
-  <!-- PANEL 1: Fiók létrehozása -->
-  <div class="panel active" id="panel1">
-    <div class="heading">
-      <h1>Hozzon létre fiókot a Szakorvos.hu-n</h1>
-      <p>Adja meg adatait a regisztrációhoz. Orvosként a következő lépésben átveheti meglévő adatlapját.</p>
+  <!-- FORM -->
+  <div class="form-card" id="formCard">
+    <div class="form-card-title">Regisztráljon most — ingyen</div>
+    <div class="form-card-sub">Töltse ki az adatokat és csapatunk 24 órán belül felveszi Önnel a kapcsolatot.</div>
+    <div class="type-tabs">
+      <button class="type-tab active" onclick="setType(this,'doctor')" type="button">👨‍⚕️ Orvos</button>
+      <button class="type-tab" onclick="setType(this,'clinic')" type="button">🏥 Klinika</button>
+      <button class="type-tab" onclick="setType(this,'both')" type="button">🤝 Mindkettő</button>
     </div>
-
-    <div class="msg msg-error" id="p1Error">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-      <span id="p1ErrorText"></span>
-    </div>
-
-    <!-- Info: orvos/klinika regisztráció kérelem alapján -->
-    <div class="form-group">
-      <div style="background:#F4F6F8;border:1px solid #DCE3EA;border-radius:10px;padding:.85rem 1rem;font-size:13px;color:#1e2d7d;line-height:1.55;display:flex;gap:10px;align-items:flex-start">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div>
-          <strong>Orvos vagy klinika?</strong><br>
-          A fiókja létrehozása után vegye fel velünk a kapcsolatot az <a href="mailto:info@szakorvos.hu" style="color:#113293;font-weight:700">info@szakorvos.hu</a> címen, és kollégánk aktiválja az adminisztrátori jogokat.
-        </div>
+    <form id="regForm" onsubmit="submitForm(event)">
+      <div class="fr">
+        <div class="fg"><label class="fl">Keresztnév *</label><input class="fi" type="text" name="first_name" placeholder="Anna" required></div>
+        <div class="fg"><label class="fl">Vezetéknév *</label><input class="fi" type="text" name="last_name" placeholder="Kiss" required></div>
       </div>
-    </div>
-
-    <div class="form-group">
-      <label class="lbl">Teljes név</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <input type="text" id="fullName" placeholder="Dr. Kovács János" autocomplete="name">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="lbl">Email cím</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input type="email" id="regEmail" placeholder="doktor@email.hu" autocomplete="email">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="lbl">Jelszó</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" id="regPassword" placeholder="Legalább 8 karakter" autocomplete="new-password">
-        <button type="button" class="pw-toggle" onclick="togglePw('regPassword','eyeReg')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eyeReg"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-      </div>
-      <div class="pw-hint">Legalább 8 karakter, tartalmazzon számot és betűt</div>
-    </div>
-
-    <div class="form-group">
-      <label class="lbl">Jelszó megerősítése</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" id="regPassword2" placeholder="Ismételje meg a jelszót" autocomplete="new-password">
-      </div>
-    </div>
-
-    <div style="margin-bottom:1.25rem">
-      <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#475569;cursor:pointer">
-        <input type="checkbox" id="acceptTerms" style="accent-color:#113293;margin-top:2px;flex-shrink:0">
-        Elfogadom az <a href="#" style="color:#113293;font-weight:600;margin:0 3px">Általános Szerződési Feltételeket</a> és az <a href="adatvedelem.html" style="color:#113293;font-weight:600;margin:0 3px">Adatvédelmi irányelveket</a>
-      </label>
-    </div>
-
-    <button class="btn-primary" onclick="handleRegister()" id="btnRegister">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-      <span id="btnRegisterText">Fiók létrehozása</span>
-    </button>
-  </div>
-
-  <!-- PANEL 2: Adatlap átvétele -->
-  <div class="panel" id="panel2">
-    <div class="heading">
-      <h2>Adatlap átvétele</h2>
-      <p>Ha már szerepel az adatbázisunkban, keresse meg a nevét és vegye át adatlapját. Ez a lépés kihagyható.</p>
-    </div>
-
-    <div class="msg msg-info" id="p2Info" style="display:flex">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Az adatlap átvétele után Ön kezelheti és szerkesztheti profilját.</span>
-    </div>
-    <div class="msg msg-error" id="p2Error">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-      <span id="p2ErrorText"></span>
-    </div>
-
-    <!-- Keresés -->
-    <div class="form-group">
-      <label class="lbl">Keresse meg nevét</label>
-      <div class="input-wrap">
-        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="doctorSearch" placeholder="Pl. Dr. Kovács" oninput="searchDoctors(this.value)" autocomplete="off">
-      </div>
-    </div>
-
-    <div class="search-results" id="searchResults" style="display:none"></div>
-
-    <!-- Kiválasztott orvos preview -->
-    <div class="doctor-preview" id="selectedPreview" style="display:none">
-      <div class="preview-check">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <div>
-        <div style="font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#113293" id="previewName"></div>
-        <div style="font-size:12px;color:#113293;margin-top:2px" id="previewSub"></div>
-      </div>
-    </div>
-
-    <button class="btn-primary" onclick="claimProfile()" id="btnClaim" style="display:none">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/></svg>
-      <span id="btnClaimText">Adatlap átvétele</span>
-    </button>
-
-    <div class="divider">vagy</div>
-
-    <button class="btn-secondary" onclick="skipClaim()">
-      Kihagyom – nincs adatlapom
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-    </button>
-  </div>
-
-  <!-- PANEL 3: Siker -->
-  <div class="panel" id="panel3">
-    <div class="success-state">
-      <div class="success-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <h2>Regisztráció sikeres!</h2>
-      <p id="successMsg">Fiókja létrejött. Ellenőrizze email fiókját a megerősítő linkért, majd lépjen be.</p>
-      <button class="btn-primary" onclick="window.location.href='login.html'" style="max-width:280px;margin:0 auto">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Bejelentkezés
+      <div class="fg"><label class="fl">Email cím *</label><input class="fi" type="email" name="email" placeholder="anna@rendelo.hu" required></div>
+      <div class="fg"><label class="fl">Telefonszám</label><input class="fi" type="tel" name="phone" placeholder="+36 30 123 4567"></div>
+      <div class="fg" id="specGroup"><label class="fl">Szakterület</label><select class="fs" name="specialty" id="specSel"><option value="">Válasszon…</option></select></div>
+      <div class="fg" style="display:none" id="clinicGroup"><label class="fl">Klinika neve</label><input class="fi" type="text" name="clinic_name" placeholder="Egészség Klinika Kft."></div>
+      <div class="fg"><label class="fl">Város *</label><input class="fi" type="text" name="city" placeholder="Budapest" required></div>
+      <input type="hidden" name="reg_type" id="regType" value="doctor">
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Ingyenes regisztráció indítása
       </button>
+    </form>
+    <div class="success" id="formSuccess">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Köszönjük a regisztrációt!</div>
+      <div class="success-sub">Csapatunk hamarosan felveszi Önnel a kapcsolatot. Addig is nézze meg a <a href="talalatok.html" style="color:var(--brand);font-weight:600">platformot</a>!</div>
+    </div>
+    <div class="legal">A regisztrációval elfogadja <a href="adatvedelem.html">adatvédelmi tájékoztatónkat</a> és az <a href="#">ÁSZF-et</a>.</div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section">
+  <div class="sec-label">Miért érdemes</div>
+  <h2 class="sec-title">Minden ami kell a növekedéshez</h2>
+  <p class="sec-sub">A Szakorvos.hu több mint egy hirdetési felület — komplett digitális partner az egészségügyi praxisa fejlesztéséhez.</p>
+  <div class="grid-3">
+    <div class="card"><div class="card-icon ci-b">📈</div><div class="card-title">Több páciens</div><div class="card-desc">Havonta tízezrek keresnek szakorvost a platformon. Prémium profiljával az első helyen jelenik meg a találatok között.</div></div>
+    <div class="card"><div class="card-icon ci-g">📅</div><div class="card-title">Online időpontfoglalás</div><div class="card-desc">Páciensek 0-24 foglalhatnak időpontot, Ön valós időben látja a naptárát és kezeli a foglalásait.</div></div>
+    <div class="card"><div class="card-icon ci-o">⭐</div><div class="card-title">Értékelések és bizalom</div><div class="card-desc">Hiteles páciens-értékelések növelik a bizalmat és segítenek az új páciensek döntésében. Minden értékelés moderált.</div></div>
+    <div class="card"><div class="card-icon ci-b">🔍</div><div class="card-title">SEO és láthatóság</div><div class="card-desc">Minden profil Google-indexelt, saját URL-lel. Szakterület és városkeresésben automatikusan megjelenik.</div></div>
+    <div class="card"><div class="card-icon ci-g">📊</div><div class="card-title">Részletes statisztikák</div><div class="card-desc">Valós idejű adatok: profilmegtekintések, foglalások, visszatérő páciensek. Optimalizálja profilját az adatok alapján.</div></div>
+    <div class="card"><div class="card-icon ci-o">💬</div><div class="card-title">AI-alapú ajánlás</div><div class="card-desc">Az AI asszisztensünk aktívan ajánlja Önt azoknak a pácienseknek, akiknek tünetei az Ön szakterületébe esnek.</div></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section">
+  <div class="sec-label">Csomagok</div>
+  <h2 class="sec-title">Válasszon az igényeinek megfelelőt</h2>
+  <p class="sec-sub">Minden csomag tartalmazza az alapfunkciókat. Magasabb szinteken több láthatóságot és eszközt kap.</p>
+  <div class="grid-3" style="margin-top:3rem">
+    <div class="plan">
+      <div class="plan-name">Alap</div>
+      <div class="plan-price">Ingyenes</div>
+      <div class="plan-period">Örökre ingyenes</div>
+      <div class="pfeats">
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Alapprofil megjelenés</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Elérhetőség megadása</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Szakterület megjelenítés</div>
+        <div class="pfeat"><div class="pf-dot off"></div><span style="color:var(--muted)">Online foglalás</span></div>
+        <div class="pfeat"><div class="pf-dot off"></div><span style="color:var(--muted)">Kiemelt megjelenés</span></div>
+      </div>
+      <button class="btn-plan ol" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">Ingyenes regisztráció</button>
+    </div>
+    <div class="plan feat">
+      <div class="plan-badge">Legpopulárisabb</div>
+      <div class="plan-name">Prémium</div>
+      <div class="plan-price">9 900 <span>Ft/hó</span></div>
+      <div class="plan-period">+ÁFA · bármikor lemondható</div>
+      <div class="pfeats">
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Kiemelt megjelenés</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Online időpontfoglalás</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Naptárkezelés</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Páciens-értékelések</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Statisztikák és elemzések</div>
+      </div>
+      <button class="btn-plan pr" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">Kipróbálom ingyen</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Klinika</div>
+      <div class="plan-price">24 900 <span>Ft/hó</span></div>
+      <div class="plan-period">+ÁFA · több orvos egy helyen</div>
+      <div class="pfeats">
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Korlátlan orvos profil</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Klinika landing oldal</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Dedikált account manager</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>API integráció</div>
+        <div class="pfeat"><div class="pf-dot"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>Kiemelt AI ajánlás</div>
+      </div>
+      <button class="btn-plan ol" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">Ajánlatot kérek</button>
     </div>
   </div>
+</section>
 
-  <div class="bottom-links" id="bottomLinks">
-    Már van fiókja? <a href="login.html">Bejelentkezés</a>
-    &nbsp;·&nbsp;
-    <a href="index.html">Főoldal</a>
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="sec-label">Visszajelzések</div>
+  <h2 class="sec-title">Mit mondanak partnereink</h2>
+  <div class="grid-3" style="margin-top:2.5rem">
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">„Egy hónapon belül 40%-kal nőtt az új páciensek száma. Az online foglalási rendszer óriási könnyebbséget jelent a rendelőmnek."</div>
+      <div class="tauthor"><div class="tav" style="background:linear-gradient(135deg,#113293,#264ACA)">NK</div><div><div class="tname">Dr. Nagy Katalin</div><div class="trole">Kardiológus, Budapest</div></div></div>
+    </div>
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">„A Szakorvos.hu a leghatékonyabb marketing eszköz amit valaha használtam. A befektetés megtérülése kiemelkedő."</div>
+      <div class="tauthor"><div class="tav" style="background:linear-gradient(135deg,#2C9650,#35B26B)">BP</div><div><div class="tname">Dr. Balogh Péter</div><div class="trole">Ortopédus, Győr</div></div></div>
+    </div>
+    <div class="tcard">
+      <div class="tstars">★★★★★</div>
+      <div class="ttext">„Klinikánk 8 orvossal csatlakozott. Minden orvosnak saját profilja van, a foglalások automatikusan kezelnek."</div>
+      <div class="tauthor"><div class="tav" style="background:linear-gradient(135deg,#FF8A00,#FFA726)">SZ</div><div><div class="tname">Szabó Zsuzsa</div><div class="trole">Klinikavezető, Debrecen</div></div></div>
+    </div>
   </div>
+</section>
 
-</div>
+<!-- CTA BOTTOM -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-title">Készen áll a csatlakozásra?</div>
+    <div class="cta-sub">Az ingyenes regisztráció 2 percet vesz igénybe. Csapatunk 24 órán belül személyesen segít az indulásban.</div>
+    <div class="cta-btns">
+      <button class="btn-white" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Ingyenes regisztráció
+      </button>
+      <a href="kapcsolat.html" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+        Kérdésem van
+      </a>
+    </div>
+  </div>
+</section>
 
-<script>
-const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const COLORS = ['#113293','#264ACA','#FF8A00','#0d9488','#9333ea','#dc2626','#0369a1','#b45309'];
-
-let currentUser = null;
-let selectedDoctor = null;
-let searchTimer = null;
-let pwStates = {};
-function initials(name) {
-  return (name || '').replace('Dr. ','').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-}
-
-function togglePw(inputId, iconId) {
-  const inp = document.getElementById(inputId);
-  const ico = document.getElementById(iconId);
-  pwStates[inputId] = !pwStates[inputId];
-  inp.type = pwStates[inputId] ? 'text' : 'password';
-  ico.innerHTML = pwStates[inputId]
-    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-}
-
-function setStep(n) {
-  [1,2,3].forEach(i => {
-    const s = document.getElementById('step'+i);
-    s.classList.remove('active','done');
-    if (i < n) s.classList.add('done');
-    else if (i === n) s.classList.add('active');
-  });
-  [1,2].forEach(i => {
-    const l = document.getElementById('line'+i);
-    l.classList.toggle('done', i < n);
-  });
-  [1,2,3].forEach(i => {
-    document.getElementById('panel'+i).classList.toggle('active', i === n);
-  });
-  if (n === 3) document.getElementById('bottomLinks').style.display = 'none';
-}
-
-function showP1Error(msg) {
-  document.getElementById('p1ErrorText').innerHTML = msg;
-  document.getElementById('p1Error').classList.add('show');
-}
-function hideP1Error() { document.getElementById('p1Error').classList.remove('show'); }
-function showP2Error(msg) {
-  document.getElementById('p2ErrorText').textContent = msg;
-  document.getElementById('p2Error').classList.add('show');
-}
-
-// ── 1. lépés: Regisztráció ──────────────────────────────────────
-async function handleRegister() {
-  hideP1Error();
-  const name  = document.getElementById('fullName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const pw    = document.getElementById('regPassword').value;
-  const pw2   = document.getElementById('regPassword2').value;
-  const terms = document.getElementById('acceptTerms').checked;
-
-  if (!name)  { showP1Error('Kérjük adja meg a teljes nevét.'); return; }
-  if (!email) { showP1Error('Kérjük adja meg az email címét.'); return; }
-  if (pw.length < 8) { showP1Error('A jelszó legalább 8 karakter kell legyen.'); return; }
-  if (pw !== pw2) { showP1Error('A két jelszó nem egyezik.'); return; }
-  if (!terms) { showP1Error('Kérjük fogadja el az általános feltételeket.'); return; }
-
-  const btn = document.getElementById('btnRegister');
-  const txt = document.getElementById('btnRegisterText');
-  btn.disabled = true;
-  txt.textContent = 'Regisztráció…';
-  const svgEl = btn.querySelector('svg');
-  if (svgEl) svgEl.outerHTML = '<div class="spinner" style="display:inline-block"></div>';
-
-  try {
-    const { data, error } = await db.auth.signUp({
-      email,
-      password: pw,
-      options: { data: { full_name: name } }
-    });
-
-    if (error) {
-      btn.disabled = false;
-      txt.textContent = 'Fiók létrehozása';
-      if (error.message.includes('already registered') || error.message.includes('User already registered')) {
-        showP1Error('Ez az email cím már regisztrálva van. Kérjük lépjen be.');
-      } else {
-        showP1Error(error.message);
-      }
-      return;
-    }
-
-    // Ha a Supabase nem dob hibát de a user már létezett (identities üres)
-    if (data.user && (!data.user.identities || data.user.identities.length === 0)) {
-      btn.disabled = false;
-      txt.textContent = 'Fiók létrehozása';
-      showP1Error('Ez az email cím már regisztrálva van. Kérjük <a href="login.html" style="color:#113293;font-weight:700">lépjen be</a> vagy használjon másik email címet.');
-      return;
-    }
-
-    currentUser = data.user;
-
-    // user_profiles frissítése csak névvel (role-t a trigger 'patient'-re állítja,
-    // és a kliens nem módosíthatja az RLS miatt)
-    if (currentUser) {
-      await db.from('user_profiles').update({ full_name: name }).eq('id', currentUser.id);
-    }
-
-    setStep(2);
-
-  } catch(e) {
-    document.getElementById('btnRegister').disabled = false;
-    document.getElementById('btnRegisterText').textContent = 'Fiók létrehozása';
-    showP1Error('Hiba történt: ' + e.message);
-  }
-}
-
-// ── 2. lépés: Orvos keresés ──────────────────────────────────────
-async function searchDoctors(q) {
-  clearTimeout(searchTimer);
-  const results = document.getElementById('searchResults');
-  selectedDoctor = null;
-  document.getElementById('selectedPreview').style.display = 'none';
-  document.getElementById('btnClaim').style.display = 'none';
-
-  if (q.trim().length < 2) {
-    results.style.display = 'none';
-    return;
-  }
-
-  results.style.display = 'flex';
-  results.innerHTML = '<div style="padding:12px;display:flex;align-items:center;gap:8px;color:#94a3b8;font-size:13px"><div class="spinner-dark"></div> Keresés…</div>';
-
-  searchTimer = setTimeout(async () => {
-    const { data, error } = await db
-      .from('doctors')
-      .select('id, name, title, admin_user_id, doctor_specialties(specialties(name)), doctor_clinics(clinics(name))')
-      .ilike('name', `%${q.trim()}%`)
-      .limit(8);
-
-    if (error || !data || !data.length) {
-      results.innerHTML = '<div style="padding:12px;color:#94a3b8;font-size:13px;text-align:center">Nem található orvos ezzel a névvel</div>';
-      return;
-    }
-
-    // XSS-safe HTML escape (a render path csak ezt használhatja)
-    const esc = s => String(s).replace(/[&<>"']/g, ch => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[ch]));
-
-    results.innerHTML = data.map((d, i) => {
-      const spec  = d.doctor_specialties?.[0]?.specialties?.name || '';
-      const klinika = d.doctor_clinics?.[0]?.clinics?.name || '';
-      const sub   = [spec, klinika].filter(Boolean).join(' · ') || 'Nincs további adat';
-      const claimed = !!d.admin_user_id;
-      // Data-attribútumok + event delegation: így nincs HTML-injection rés a névben/sub-ban,
-      // és nem kell egyszerű string-replace-szel escape-elni az inline JS-t.
-      return `<div class="doctor-card ${claimed ? 'claimed' : ''}" ${claimed ? '' : 'data-selectable="1"'} data-id="${esc(d.id)}" data-name="${esc(d.name)}" data-sub="${esc(sub)}">
-        <div class="doc-avatar" style="background:${COLORS[i % COLORS.length]}">${esc(initials(d.name))}</div>
-        <div class="doc-info">
-          <div class="doc-name">${esc(d.name)}</div>
-          <div class="doc-sub">${esc(sub)}</div>
-        </div>
-        <span class="doc-badge ${claimed ? 'badge-claimed' : 'badge-free'}">${claimed ? 'Foglalt' : 'Szabad'}</span>
-      </div>`;
-    }).join('');
-
-    // Event delegation a kártyákra (egyszer hozzáadva, a re-render után is működik mert a results-on van)
-    if (!results.dataset.bound) {
-      results.addEventListener('click', e => {
-        const card = e.target.closest('.doctor-card[data-selectable]');
-        if (!card) return;
-        selectDoctor(card.dataset.id, card.dataset.name, card.dataset.sub);
-      });
-      results.dataset.bound = '1';
-    }
-  }, 300);
-}
-
-function selectDoctor(id, name, sub) {
-  selectedDoctor = { id, name, sub };
-
-  // Kártyák kijelölése
-  document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
-  const card = document.querySelector(`.doctor-card[data-id="${CSS.escape(id)}"]`);
-  if (card) {
-    card.classList.add('selected');
-    const b = card.querySelector('.doc-badge');
-    if (b) {
-      b.className = 'doc-badge badge-selected';
-      b.textContent = 'Kiválasztva';
-    }
-  }
-
-  // Preview (textContent → biztosan nincs HTML injection)
-  document.getElementById('previewName').textContent = name;
-  document.getElementById('previewSub').textContent = sub;
-  document.getElementById('selectedPreview').style.display = 'flex';
-  document.getElementById('btnClaim').style.display = 'flex';
-  document.getElementById('p2Error').classList.remove('show');
-}
-
-async function claimProfile() {
-  if (!selectedDoctor || !currentUser) return;
-
-  const btn = document.getElementById('btnClaim');
-  const txt = document.getElementById('btnClaimText');
-  btn.disabled = true;
-  txt.textContent = 'Átvétel folyamatban…';
-
-  // FONTOS: race condition védelem
-  // .select()-tel visszakapjuk a frissített sorokat. Ha 0 sor jött vissza,
-  // valaki más megelőzött minket — figyelmeztetjük a felhasználót.
-  const { data: updated, error } = await db
-    .from('doctors')
-    .update({ admin_user_id: currentUser.id, email: currentUser.email })
-    .eq('id', selectedDoctor.id)
-    .is('admin_user_id', null) // csak ha még szabad
-    .select('id, admin_user_id');
-
-  if (error) {
-    btn.disabled = false;
-    txt.textContent = 'Adatlap átvétele';
-    showP2Error('Hiba az átvételkor: ' + error.message);
-    return;
-  }
-
-  // Race condition: ha 0 sort érintett az update, valaki más már átvette
-  if (!updated || updated.length === 0) {
-    btn.disabled = false;
-    txt.textContent = 'Adatlap átvétele';
-    showP2Error('Sajnáljuk, ezt az adatlapot időközben másvalaki igényelte. Kérjük válasszon másikat, vagy kattintson a "Most kihagyom" gombra.');
-    // Frissítjük a listát is, hogy a foglalt státusz látszódjon
-    const q = document.getElementById('searchInput')?.value || selectedDoctor.name;
-    if (q) searchDoctors(q);
-    return;
-  }
-
-  document.getElementById('successMsg').textContent =
-    `Fiókja létrejött és az adatlapja (${selectedDoctor.name}) sikeresen átvéve! Ellenőrizze emailjét a megerősítő linkért.`;
-  setStep(3);
-}
-
-function skipClaim() {
-  document.getElementById('successMsg').textContent =
-    'Fiókja sikeresen létrejött! Ellenőrizze emailjét a megerősítő linkért, majd lépjen be.';
-  setStep(3);
-}
-
-// Ha már be van jelentkezve → átirányítás
-(async () => {
-  const { data: { session } } = await db.auth.getSession();
-  if (session) window.location.href = 'login.html';
-})();
-</script>
-
-
-<!-- ══════ LÁBLÉC KEZDETE ══════ -->
+<!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-top">
-      <div class="footer-brand">
+      <div>
         <div class="footer-logo">Szakorvos<span>.hu</span></div>
-        <p class="footer-tagline">Az okos orvoskeresés platform</p>
+        <p class="footer-tagline">Az okos magánegészségügyi szakellátás kereső</p>
         <div class="footer-social">
-          <a href="#" class="footer-social-btn">f</a>
-          <a href="#" class="footer-social-btn">in</a>
-          <a href="#" class="footer-social-btn">ig</a>
+          <a href="#" class="fsoc">f</a>
+          <a href="#" class="fsoc">in</a>
+          <a href="#" class="fsoc">ig</a>
         </div>
       </div>
       <div class="footer-links">
-        <div class="footer-col">
-          <div class="footer-col-title">Platform</div>
-          <a href="talalatok.html">Orvoskeresés</a>
-          <a href="index.html">AI asszisztens</a>
-          <a href="talalatok.html">Időpontfoglalás</a>
-          <a href="vizsgalatok.html">Vizsgálatok</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Partnereknek</div>
-          <a href="register.html">Orvosoknak</a>
-          <a href="register.html">Klinikáknak</a>
-          <a href="register.html">Árak</a>
-          <a href="register.html">Regisztráció</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Cég</div>
-          <a href="#">Rólunk</a>
-          <a href="kapcsolat.html">Kapcsolat</a>
-          <a href="tudastar.html">Blog</a>
-          <a href="#">Karrier</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Jogi</div>
-          <a href="adatvedelem.html">Adatvédelem</a>
-          <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
-          <a href="#">GDPR</a>
-        </div>
+        <div class="fcol"><div class="fcol-title">Platform</div><a href="talalatok.html">Orvoskeresés</a><a href="klinikak.html">Klinikák</a><a href="vizsgalatok.html">Vizsgálatok</a><a href="tudastar.html">Tudástár</a></div>
+        <div class="fcol"><div class="fcol-title">Partnereknek</div><a href="register.html">Regisztráció</a><a href="register.html">Árak</a><a href="login.html">Bejelentkezés</a><a href="kapcsolat.html">Kapcsolat</a></div>
+        <div class="fcol"><div class="fcol-title">Cég</div><a href="#">Rólunk</a><a href="kapcsolat.html">Kapcsolat</a><a href="#">Karrier</a><a href="#">Blog</a></div>
+        <div class="fcol"><div class="fcol-title">Jogi</div><a href="adatvedelem.html">Adatvédelem</a><a href="#">ÁSZF</a><a href="#">Cookie</a><a href="#">GDPR</a></div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -829,6 +491,53 @@ function skipClaim() {
     </div>
   </div>
 </footer>
-<!-- ══════ LÁBLÉC VÉGE ══════ -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+async function loadSpecialties(){
+  try{
+    const{data}=await db.from('specialties').select('name').eq('is_active',true).order('name');
+    const sel=document.getElementById('specSel');
+    (data||[]).forEach(s=>{const o=document.createElement('option');o.value=s.name;o.textContent=s.name;sel.appendChild(o);});
+  }catch(e){}
+}
+async function loadStats(){
+  try{
+    const[d,c]=await Promise.all([
+      db.from('doctors').select('id',{count:'exact',head:true}).eq('is_active',true),
+      db.from('clinics').select('id',{count:'exact',head:true}).eq('is_active',true)
+    ]);
+    if(d.count)document.getElementById('statDoctors').textContent=d.count+'+';
+    if(c.count)document.getElementById('statClinics').textContent=c.count+'+';
+  }catch(e){}
+}
+function setType(btn,type){
+  document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('regType').value=type;
+  document.getElementById('specGroup').style.display=type==='clinic'?'none':'block';
+  document.getElementById('clinicGroup').style.display=type==='doctor'?'none':'block';
+}
+async function submitForm(e){
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg> Küldés…';
+  const fd=new FormData(e.target);
+  const payload={first_name:fd.get('first_name'),last_name:fd.get('last_name'),email:fd.get('email'),phone:fd.get('phone')||null,specialty:fd.get('specialty')||null,clinic_name:fd.get('clinic_name')||null,city:fd.get('city'),reg_type:fd.get('reg_type'),created_at:new Date().toISOString()};
+  try{
+    await db.from('partner_registrations').insert(payload);
+  }catch(err){}
+  document.getElementById('regForm').style.display='none';
+  document.getElementById('formSuccess').style.display='block';
+  showToast('✅ Regisztráció sikeres! Hamarosan jelentkezünk.','success');
+}
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast '+type;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4500);
+}
+loadSpecialties();loadStats();
+</script>
 </body>
 </html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#113293"/>
+  <meta name="robots" content="index, follow"/>
+
+  <!-- SEO meta – JS tölti fel -->
+  <title id="pageTitle">Vizsgálat adatlap | Szakorvos.hu</title>
+  <meta name="description" id="pageDesc" content="Tudjon meg többet erről a vizsgálatról a Szakorvos.hu-n."/>
+  <link rel="canonical" id="pageCanonical" href="https://www.szakorvos.hu/vizsgalatok"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article"/>
+  <meta property="og:site_name" content="Szakorvos.hu"/>
+  <meta property="og:title" id="ogTitle" content="Vizsgálat | Szakorvos.hu"/>
+  <meta property="og:description" id="ogDesc" content="Vizsgálat adatlap."/>
+  <meta property="og:image" id="ogImage" content="https://www.szakorvos.hu/og?type=logo"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:url" id="ogUrl" content="https://www.szakorvos.hu/vizsgalatok"/>
+  <meta property="og:locale" content="hu_HU"/>
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" id="twTitle" content="Vizsgálat | Szakorvos.hu"/>
+  <meta name="twitter:description" id="twDesc" content="Vizsgálat adatlap."/>
+  <meta name="twitter:image" id="twImage" content="https://www.szakorvos.hu/og?type=logo"/>
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="hu" id="hrefHu" href="https://www.szakorvos.hu/vizsgalatok"/>
+  <link rel="alternate" hreflang="x-default" id="hrefDefault" href="https://www.szakorvos.hu/vizsgalatok"/>
+
+  <!-- Schema.org – JS tölti fel -->
+  <script id="schemaScript" type="application/ld+json">{}</script>
+  <script id="breadcrumbScript" type="application/ld+json">{}</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --brand:#113293;--brand-2:#264ACA;--green:#2C9650;--green-2:#35B26B;
+      --orange:#FF8A00;--bg:#F4F6F8;--surface:#fff;--border:#DCE3EA;
+      --text:#113293;--sub:#475569;--muted:#94a3b8;
+      --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+      --grad-green:linear-gradient(135deg,#2C9650 0%,#35B26B 100%);
+      --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
+    }
+    body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#f0f4ff 0%,#f6f8fb 40%,#f6f8fb 70%,#f0f7f3 100%);color:var(--text);min-height:100vh;padding-top:64px}
+
+    /* NAV — index-szel azonos, JS-sel scrolled class-t kap */
+    nav#mainNav{position:fixed;top:0;left:0;right:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 2px 16px rgba(17,50,147,.06);font-family:'Inter',sans-serif}
+    .nav-row-top{display:flex;align-items:center;min-height:64px;padding:0 4%;gap:1.5rem;max-width:1400px;margin:0 auto}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+    .nav-logo img{height:36px;width:auto;object-fit:contain}
+    .nav-logo-text{font-size:21px;font-weight:700;color:var(--brand);letter-spacing:-0.02em}
+    .nav-logo-text em{color:var(--green);font-style:normal}
+    .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 0 0 1rem;padding:0}
+    .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:var(--brand);padding:8px 14px;border-radius:10px;transition:background .15s;text-decoration:none}
+    .nav-links li>a:hover{background:rgba(17,50,147,.05)}
+    .nav-link-tudastar{color:#FF8A00!important;font-weight:700!important}
+    .nav-link-tudastar:hover{background:rgba(255,138,0,.08)!important}
+    .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+    .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;color:#FF8A00;background:rgba(255,247,237,.85);border:1px solid rgba(255,138,0,.32);padding:8px 16px;border-radius:10px;transition:all .15s;text-decoration:none}
+    .btn-nav-partner:hover{background:rgba(255,247,237,1);border-color:rgba(255,138,0,.55)}
+    .btn-nav-outline{font-size:13.5px;font-weight:600;color:var(--brand);background:rgba(255,255,255,.8);border:1px solid rgba(17,50,147,.18);padding:8px 18px;border-radius:10px;transition:all .15s;text-decoration:none}
+    .btn-nav-outline:hover{border-color:var(--brand);background:rgba(238,242,255,.85)}
+    .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+    @media(max-width:900px){.nav-links{display:none}.nav-actions{display:none}.nav-mobile-toggle{display:flex}}
+    .mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:64px;right:0;left:0;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;pointer-events:none;font-family:'Inter',sans-serif}
+    .mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
+    .mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+    .mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:var(--brand);border-radius:10px;transition:background .15s;text-decoration:none}
+    .mobile-nav-item:hover{background:#eef2ff}
+
+    /* BREADCRUMB */
+    .breadcrumb-bar{max-width:1100px;margin:0 auto;padding:1.25rem 4% .5rem;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--sub);flex-wrap:wrap}
+    .breadcrumb-bar a{color:var(--brand);font-weight:600;text-decoration:none;transition:color .15s}
+    .breadcrumb-bar a:hover{color:var(--brand-2);text-decoration:underline}
+    .breadcrumb-bar .sep{color:var(--muted)}
+    .breadcrumb-bar .current{color:var(--text);font-weight:600}
+
+    /* MAIN LAYOUT */
+    .page-wrap{max-width:1100px;margin:0 auto;padding:1.5rem 4% 4rem;display:grid;grid-template-columns:1fr 320px;gap:2rem;align-items:start}
+    @media(max-width:860px){.page-wrap{grid-template-columns:1fr}}
+
+    /* ARTICLE CARD */
+    .article-card{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(248,250,255,.7) 100%);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.75);border-radius:22px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 24px rgba(17,50,147,.07)}
+
+    /* HEADER */
+    .article-header{padding:2.25rem 2.25rem 1.75rem;border-bottom:1px solid rgba(220,227,234,.4)}
+    .spec-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(38,74,202,.07);border:1px solid rgba(38,74,202,.15);color:var(--brand);border-radius:100px;padding:4px 12px;font-size:12px;font-weight:700;margin-bottom:1rem;text-decoration:none;transition:background .15s}
+    .spec-badge:hover{background:rgba(38,74,202,.12)}
+    .article-title{font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;color:var(--text);letter-spacing:-0.025em;line-height:1.2;margin-bottom:1rem}
+    .article-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;font-size:13px;color:var(--sub)}
+    .meta-item{display:flex;align-items:center;gap:5px;font-weight:500}
+    .meta-item svg{color:var(--green);flex-shrink:0}
+
+    /* BODY */
+    .article-body{padding:2.25rem}
+    .article-intro{font-size:17px;color:var(--sub);line-height:1.75;margin-bottom:2rem;padding:1.25rem 1.5rem;background:rgba(238,242,255,.5);border-left:3px solid var(--brand);border-radius:0 12px 12px 0}
+    .article-content{font-size:15.5px;color:var(--sub);line-height:1.8}
+    .article-content h2{font-size:18px;font-weight:700;color:var(--text);margin:2rem 0 .75rem;letter-spacing:-0.015em}
+    .article-content h3{font-size:16px;font-weight:600;color:var(--text);margin:1.5rem 0 .5rem}
+    .article-content p{margin-bottom:1rem}
+    .article-content ul,.article-content ol{margin:0 0 1rem 1.5rem}
+    .article-content li{margin-bottom:.4rem}
+    .article-content strong{color:var(--text);font-weight:600}
+    .article-content a{color:var(--brand);font-weight:600;text-decoration:underline}
+
+    /* AI BEVEZETŐ */
+    .ai-intro{background:linear-gradient(135deg,rgba(17,50,147,.04),rgba(38,74,202,.03));border:1px solid rgba(38,74,202,.12);border-radius:16px;padding:1.5rem;margin-bottom:1.75rem}
+    .ai-intro-label{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem;display:flex;align-items:center;gap:5px}
+    .ai-intro-text{font-size:15px;color:var(--sub);line-height:1.75}
+    .ai-intro-loading{color:var(--muted);font-size:14px;font-style:italic}
+
+    /* INFO BOXES */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2rem 0}
+    @media(max-width:540px){.info-grid{grid-template-columns:1fr}}
+    .info-box{background:rgba(255,255,255,.8);border:1px solid rgba(220,227,234,.6);border-radius:14px;padding:1.25rem}
+    .info-box-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem}
+    .info-box-value{font-size:15px;font-weight:600;color:var(--text)}
+
+    /* CTA */
+    .cta-box{background:var(--grad-blue);border-radius:18px;padding:1.75rem;margin-top:2rem;text-align:center;box-shadow:0 8px 24px rgba(17,50,147,.2)}
+    .cta-box-title{font-size:17px;font-weight:700;color:#fff;margin-bottom:.4rem}
+    .cta-box-sub{font-size:13.5px;color:rgba(255,255,255,.8);margin-bottom:1.1rem;line-height:1.55}
+    .btn-cta{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--brand);border:none;border-radius:11px;padding:11px 22px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12);transition:all .2s;text-decoration:none}
+    .btn-cta:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+
+    /* SIDEBAR */
+    .sidebar{display:flex;flex-direction:column;gap:1.25rem;position:sticky;top:80px}
+    .sidebar-card{background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(248,250,255,.7) 100%);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.75);border-radius:18px;padding:1.5rem;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 16px rgba(17,50,147,.06)}
+    .sidebar-title{font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1rem;display:flex;align-items:center;gap:6px}
+    .sidebar-title::before{content:'';width:16px;height:2px;background:var(--green);border-radius:1px}
+    .doctor-list{display:flex;flex-direction:column;gap:.75rem}
+    .doctor-item{display:flex;align-items:center;gap:.75rem;text-decoration:none;padding:.6rem .75rem;border-radius:11px;transition:background .15s;border:1px solid transparent}
+    .doctor-item:hover{background:rgba(38,74,202,.04);border-color:rgba(38,74,202,.1)}
+    .doctor-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+    .doctor-name{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.2}
+    .doctor-spec{font-size:12px;color:var(--muted)}
+    .btn-find{width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:11px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.2);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;margin-top:.75rem}
+    .btn-find:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,50,147,.3)}
+    .related-list{display:flex;flex-direction:column;gap:.4rem}
+    .related-item{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:13.5px;color:var(--sub);padding:.5rem .75rem;border-radius:9px;transition:background .15s;font-weight:500}
+    .related-item:hover{background:rgba(38,74,202,.05);color:var(--brand)}
+    .related-item svg{color:var(--muted);flex-shrink:0}
+
+    /* LOADING */
+    .loading-wrap{display:flex;align-items:center;justify-content:center;min-height:400px;flex-direction:column;gap:1rem;color:var(--muted);font-size:14px}
+    .spinner{width:36px;height:36px;border:3px solid rgba(17,50,147,.1);border-top-color:var(--brand);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* FOOTER */
+    .site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:3rem 0 1.5rem;margin-top:4rem}
+    .footer-inner{max-width:1400px;margin:0 auto;padding:0 4%}
+    .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3rem;margin-bottom:2.5rem}
+    @media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:1.5rem}}
+    .footer-logo{font-size:20px;font-weight:700;color:#fff;margin-bottom:.3rem}
+    .footer-logo span{color:#FFA726}
+    .footer-tagline{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:1rem}
+    .footer-social{display:flex;gap:8px}
+    .fsoc{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+    .fsoc:hover{background:#FF8A00;border-color:#FF8A00}
+    .footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+    @media(max-width:600px){.footer-links{grid-template-columns:repeat(2,1fr)}}
+    .fcol{display:flex;flex-direction:column;gap:8px}
+    .fcol-title{font-size:11px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+    .fcol a{font-size:13px;color:rgba(255,255,255,.6);font-weight:500;transition:color .15s;text-decoration:none}
+    .fcol a:hover{color:#fff}
+    .footer-bottom{padding-top:1.25rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+    .footer-copy{font-size:12px;color:rgba(255,255,255,.45)}
+    .footer-badge{font-size:12px;color:rgba(255,255,255,.55);background:rgba(255,255,255,.06);padding:4px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.1)}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-row-top">
+    <a href="index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+      <img src="data:image/jpeg;base64,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" alt="" class="nav-logo-img">
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="talalatok.html">Orvosok</a></li>
+      <li><a href="klinikak.html">Klinikák</a></li>
+      <li><a href="tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li><a href="vizsgalatok.html">Vizsgálatok</a></li>
+      <li><a href="kapcsolat.html">Kapcsolat</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="register.html" class="btn-nav-partner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Legyen Ön is partnerünk
+      </a>
+      <a href="login.html" class="btn-nav-outline">Bejelentkezés</a>
+    </div>
+
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
+      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="talalatok.html" class="mobile-nav-item">Orvosok</a>
+    <a href="klinikak.html" class="mobile-nav-item">Klinikák</a>
+    <a href="tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700">Tudástár A–Z</a>
+    <a href="vizsgalatok.html" class="mobile-nav-item">Vizsgálatok</a>
+    <a href="kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0"></div>
+    <a href="login.html" class="mobile-nav-item">Bejelentkezés</a>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  <a href="index.html">Főoldal</a>
+  <span class="sep">›</span>
+  <a href="vizsgalatok.html">Vizsgálatok</a>
+  <span class="sep">›</span>
+  <span class="current" id="breadcrumbTitle">Vizsgálat</span>
+</div>
+
+<!-- MAIN -->
+<div class="page-wrap">
+
+  <!-- ARTICLE -->
+  <div>
+    <div class="article-card" id="articleWrap">
+      <div class="loading-wrap">
+        <div class="spinner"></div>
+        <span>Betöltés…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card" id="doctorSidebar" style="display:none">
+      <div class="sidebar-title">Szakorvosok</div>
+      <div class="doctor-list" id="doctorList"></div>
+      <a href="#" id="findDoctorBtn" class="btn-find">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Összes szakorvos
+      </a>
+    </div>
+
+    <div class="sidebar-card" id="relatedSidebar" style="display:none">
+      <div class="sidebar-title">Kapcsolódó vizsgálatok</div>
+      <div class="related-list" id="relatedList"></div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Gyors kereső</div>
+      <p style="font-size:13.5px;color:var(--sub);line-height:1.6;margin-bottom:1rem">Keressen szakorvost ennél a vizsgálatnál</p>
+      <a href="talalatok.html" id="searchBtn" class="btn-find">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Orvost keresek
+      </a>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <p class="footer-tagline">Az okos magánegészségügyi szakellátás kereső</p>
+        <div class="footer-social">
+          <a href="#" class="fsoc">f</a><a href="#" class="fsoc">in</a><a href="#" class="fsoc">ig</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="fcol"><div class="fcol-title">Platform</div><a href="talalatok.html">Orvoskeresés</a><a href="klinikak.html">Klinikák</a><a href="vizsgalatok.html">Vizsgálatok</a><a href="tudastar.html">Tudástár</a></div>
+        <div class="fcol"><div class="fcol-title">Partnereknek</div><a href="register.html">Regisztráció</a><a href="login.html">Bejelentkezés</a><a href="kapcsolat.html">Kapcsolat</a></div>
+        <div class="fcol"><div class="fcol-title">Cég</div><a href="#">Rólunk</a><a href="kapcsolat.html">Kapcsolat</a><a href="#">Karrier</a></div>
+        <div class="fcol"><div class="fcol-title">Jogi</div><a href="adatvedelem.html">Adatvédelem</a><a href="#">ÁSZF</a><a href="#">Cookie</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
+      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const COLORS=['#113293','#264ACA','#2C9650','#35B26B','#FF8A00','#0c2370'];
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Mobile menu
+function toggleMobileMenu(){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle'),i=document.getElementById('hamburgerIcon');
+  if(!d||!t||!i)return;
+  const o=d.classList.contains('open');
+  if(o){d.classList.remove('open');t.setAttribute('aria-expanded','false');i.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';document.body.style.overflow='';}
+  else{d.classList.add('open');t.setAttribute('aria-expanded','true');i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';document.body.style.overflow='hidden';}
+}
+document.addEventListener('click',e=>{
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle');
+  if(d&&t&&d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
+});
+
+async function loadTreatment(){
+  const params=new URLSearchParams(location.search);
+  let slug=params.get('slug');
+  if(!slug){
+    // URL path alapján: /vizsgalatok/<slug>
+    const parts=location.pathname.split('/').filter(Boolean);
+    const idx=parts.indexOf('vizsgalatok');
+    if(idx>=0&&parts[idx+1]) slug=decodeURIComponent(parts[idx+1]);
+  }
+  if(!slug){slug='ekg-vizsgalat';}
+
+  const wrap=document.getElementById('articleWrap');
+
+  try{
+    // Vizsgálat betöltése
+    const{data:t,error}=await db
+      .from('treatments')
+      .select('id,title,slug,specialty,content,description')
+      .eq('slug',slug)
+      .maybeSingle();
+
+    if(error) throw error;
+    if(!t){
+      wrap.innerHTML=`<div style="padding:3rem;text-align:center"><h2 style="color:var(--sub)">Vizsgálat nem található</h2><p style="margin-top:.5rem;color:var(--muted);font-size:14px">A keresett vizsgálat (${escapeHtml(slug)}) nem létezik.</p><a href="vizsgalatok.html" style="display:inline-block;margin-top:1rem;color:var(--brand);font-weight:700">← Vissza a vizsgálatokhoz</a></div>`;
+      return;
+    }
+
+    // SEO meta frissítés
+    const canonicalUrl=`https://www.szakorvos.hu/vizsgalatok/${t.slug}`;
+    const pageTitle=`${t.title} – vizsgálat és kezelés | Szakorvos.hu`;
+    const desc=t.description||`Tudjon meg mindent a(z) ${t.title} vizsgálatról: mit jelent, mire való, hogyan készüljön fel és hol találhat szakorvost Magyarországon.`;
+
+    document.getElementById('pageTitle').textContent=pageTitle;
+    document.title=pageTitle;
+    document.getElementById('pageDesc').setAttribute('content',desc);
+    document.getElementById('pageCanonical').setAttribute('href',canonicalUrl);
+    document.getElementById('ogTitle').setAttribute('content',pageTitle);
+    document.getElementById('ogDesc').setAttribute('content',desc);
+    document.getElementById('ogUrl').setAttribute('content',canonicalUrl);
+    document.getElementById('twTitle').setAttribute('content',pageTitle);
+    document.getElementById('twDesc').setAttribute('content',desc);
+    document.getElementById('hrefHu').setAttribute('href',canonicalUrl);
+    document.getElementById('hrefDefault').setAttribute('href',canonicalUrl);
+    document.getElementById('breadcrumbTitle').textContent=t.title;
+
+    // Schema.org MedicalProcedure
+    document.getElementById('schemaScript').textContent=JSON.stringify({
+      '@context':'https://schema.org',
+      '@type':'MedicalProcedure',
+      'name':t.title,
+      'url':canonicalUrl,
+      'description':desc,
+      'procedureType':t.specialty||'Egészségügyi vizsgálat',
+      'inLanguage':'hu',
+      'provider':{'@type':'MedicalOrganization','name':'Szakorvos.hu','url':'https://www.szakorvos.hu'}
+    });
+
+    // Breadcrumb schema
+    document.getElementById('breadcrumbScript').textContent=JSON.stringify({
+      '@context':'https://schema.org',
+      '@type':'BreadcrumbList',
+      'itemListElement':[
+        {'@type':'ListItem','position':1,'name':'Főoldal','item':'https://www.szakorvos.hu'},
+        {'@type':'ListItem','position':2,'name':'Vizsgálatok','item':'https://www.szakorvos.hu/vizsgalatok'},
+        {'@type':'ListItem','position':3,'name':t.title,'item':canonicalUrl}
+      ]
+    });
+
+    // Oldal renderelése
+    renderArticle(t);
+
+    // Párhuzamosan: kapcsolódó orvosok + vizsgálatok
+    loadDoctors(t.specialty,t.title);
+    loadRelated(t.specialty,t.slug);
+
+  }catch(e){
+    wrap.innerHTML=`<div style="padding:3rem;text-align:center"><h2 style="color:var(--sub)">Hiba történt</h2><p style="margin-top:.5rem;color:var(--muted);font-size:14px">${escapeHtml(e.message)}</p><a href="vizsgalatok.html" style="display:inline-block;margin-top:1rem;color:var(--brand);font-weight:700">← Vissza a vizsgálatokhoz</a></div>`;
+  }
+}
+
+function renderArticle(t){
+  const wrap=document.getElementById('articleWrap');
+
+  // AI bevezető generálás
+  const aiIntroId='aiIntroText_'+Date.now();
+
+  wrap.innerHTML=`
+    <div class="article-header">
+      <a href="vizsgalatok.html?specialty=${encodeURIComponent(t.specialty||'')}" class="spec-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        ${escapeHtml(t.specialty||'Vizsgálat')}
+      </a>
+      <h1 class="article-title">${escapeHtml(t.title)}</h1>
+      <div class="article-meta">
+        <span class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Orvosi vizsgálat
+        </span>
+        <span class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Magánrendelésen elérhető
+        </span>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <!-- AI bevezető -->
+      <div class="ai-intro">
+        <div class="ai-intro-label">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          Rövid összefoglaló
+        </div>
+        <div class="ai-intro-text" id="${aiIntroId}"><span class="ai-intro-loading">Összefoglaló betöltése…</span></div>
+      </div>
+
+      ${t.content ? `<div class="article-content">${t.content}</div>` : `
+      <div class="article-content">
+        <h2>Mi a(z) ${escapeHtml(t.title)}?</h2>
+        <p>A(z) <strong>${escapeHtml(t.title)}</strong> egy szakorvosi vizsgálat vagy kezelési eljárás, amelyet ${escapeHtml(t.specialty||'szakorvos')} végez magánrendelésen. A vizsgálat célja a diagnózis felállítása, az állapot felmérése vagy a kezelés hatékonyságának nyomon követése.</p>
+
+        <h2>Mire való?</h2>
+        <p>Ez a vizsgálat segít a(z) ${escapeHtml(t.specialty||'adott szakterület')} területéhez kapcsolódó panaszok kivizsgálásában, a betegség korai felismerésében és a megfelelő kezelési terv összeállításában.</p>
+
+        <h2>Hogyan készüljön fel?</h2>
+        <p>A vizsgálat előtt érdemes összegyűjtenie korábbi leleteit, gyógyszereinek listáját, és pontosan leírni panaszait. Konkrét előkészítési útmutatót a kezelőorvosa ad.</p>
+
+        <h2>Mit érdemes tudni a magánrendelésről?</h2>
+        <p>Magánrendelésen a vizsgálat általában rövidebb várakozási idővel, kényelmes körülmények között, személyre szabott ellátással érhető el. Az időpont rugalmasan egyeztethető.</p>
+      </div>`}
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-box-label">Szakterület</div>
+          <div class="info-box-value">${escapeHtml(t.specialty||'–')}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-box-label">Ellátás típusa</div>
+          <div class="info-box-value">Magánrendelés</div>
+        </div>
+        <div class="info-box">
+          <div class="info-box-label">Időpont</div>
+          <div class="info-box-value">Online foglalható</div>
+        </div>
+        <div class="info-box">
+          <div class="info-box-label">Helyszín</div>
+          <div class="info-box-value">Egész Magyarország</div>
+        </div>
+      </div>
+
+      <div class="cta-box">
+        <div class="cta-box-title">Foglaljon időpontot ehhez a vizsgálathoz</div>
+        <div class="cta-box-sub">Keressen szakorvost, aki elvégzi a(z) ${escapeHtml(t.title)} vizsgálatot az Ön közelében.</div>
+        <a href="talalatok.html?specialty=${encodeURIComponent(t.specialty||'')}" class="btn-cta">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Szakorvost keresek
+        </a>
+      </div>
+    </div>`;
+
+  // AI bevezető generálása
+  generateIntro(t.title, t.specialty, aiIntroId);
+}
+
+async function generateIntro(title, specialty, targetId){
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:300,
+        messages:[{role:'user',content:`Írj 2-3 mondatos, empatikus, magyar nyelvű bevezető bekezdést erről az orvosi vizsgálatról/kezelésről: "${title}" (szakterület: ${specialty}). Nem kell statisztika, csak magyarázd el röviden mit jelent és miért fontos. Magázó stílus. Csak a szöveget add vissza.`}]
+      })
+    });
+    if(!res.ok) throw new Error('API hiba');
+    const data=await res.json();
+    const text=data.content?.[0]?.text?.trim()||'';
+    const el=document.getElementById(targetId);
+    if(el&&text) el.textContent=text;
+  }catch(e){
+    const el=document.getElementById(targetId);
+    if(el) el.textContent=`A(z) ${title} egy szakorvosi vizsgálat vagy kezelési eljárás, amelyet ${specialty||'szakorvos'} végez. Magánrendelésen rövid várakozási idővel, személyre szabott ellátással érhető el.`;
+  }
+}
+
+async function loadDoctors(specialty, treatmentTitle){
+  if(!specialty) return;
+  try{
+    const{data}=await db
+      .from('doctors')
+      .select('id,name,slug,photo_url,doctor_specialties!inner(specialties!inner(name))')
+      .eq('is_active',true)
+      .eq('doctor_specialties.specialties.name',specialty)
+      .limit(4);
+
+    if(!data||!data.length) return;
+    const sidebar=document.getElementById('doctorSidebar');
+    const list=document.getElementById('doctorList');
+    sidebar.style.display='block';
+
+    list.innerHTML=data.map((d,i)=>{
+      const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const col=COLORS[i%COLORS.length];
+      const href=d.slug?`/kardiologus/${d.slug}`:`talalatok.html?specialty=${encodeURIComponent(specialty)}`;
+      return `<a class="doctor-item" href="${href}">
+        ${d.photo_url
+          ?`<img src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(d.name)}" class="doctor-av" style="object-fit:cover">`
+          :`<div class="doctor-av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}</div>`}
+        <div>
+          <div class="doctor-name">${escapeHtml(d.name)}</div>
+          <div class="doctor-spec">${escapeHtml(specialty)}</div>
+        </div>
+      </a>`;
+    }).join('');
+
+    document.getElementById('findDoctorBtn').href=`talalatok.html?specialty=${encodeURIComponent(specialty)}`;
+  }catch(e){}
+}
+
+async function loadRelated(specialty, currentSlug){
+  if(!specialty) return;
+  try{
+    const{data}=await db
+      .from('treatments')
+      .select('title,slug')
+      .eq('specialty',specialty)
+      .neq('slug',currentSlug)
+      .limit(8);
+
+    if(!data||!data.length) return;
+    const sidebar=document.getElementById('relatedSidebar');
+    const list=document.getElementById('relatedList');
+    sidebar.style.display='block';
+
+    list.innerHTML=data.map(t=>`
+      <a class="related-item" href="vizsgalat.html?slug=${encodeURIComponent(t.slug||'')}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        ${escapeHtml(t.title)}
+      </a>`).join('');
+  }catch(e){}
+}
+
+// Init
+loadTreatment();
+</script>
+</body>
+</html>

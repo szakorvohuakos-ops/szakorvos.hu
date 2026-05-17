@@ -698,7 +698,7 @@ async function loadData() {
       const to = from + pageSize - 1;
       const { data: batch, error: tErr } = await db
         .from('treatments')
-        .select('title, specialty')
+        .select('title, specialty, slug')
         .order('specialty', { ascending: true })
         .order('title', { ascending: true })
         .range(from, to);
@@ -713,7 +713,7 @@ async function loadData() {
     const treatmentsBySpec = {};
     treatments.forEach(t => {
       if (!treatmentsBySpec[t.specialty]) treatmentsBySpec[t.specialty] = [];
-      treatmentsBySpec[t.specialty].push(t.title);
+      treatmentsBySpec[t.specialty].push({title: t.title, slug: t.slug});
     });
 
     // 4. SPECIALTIES tömb összeállítása
@@ -721,7 +721,7 @@ async function loadData() {
       name: s.name,
       icon: getMeta(s.name).icon,
       color: getMeta(s.name).color,
-      treatments: treatmentsBySpec[s.name] || []
+      treatments: (treatmentsBySpec[s.name] || []).map(t => typeof t === 'string' ? {title:t,slug:''} : t)
     })).filter(s => s.treatments.length > 0); // csak ahol van vizsgálat
 
     buildSpecNav();
@@ -834,7 +834,11 @@ function displayName(name, spec) {
   return name;
 }
 
-function treatmentCard(name, spec) {
+function treatmentCard(item, spec) {
+  // item can be string (legacy) or {title, slug} object
+  const name = typeof item === 'string' ? item : (item.title || '');
+  const slug = typeof item === 'string' ? '' : (item.slug || '');
+
   const isPhone = name.toLowerCase().includes('telefonos');
   const isVideo = name.toLowerCase().includes('videós');
   let tag = '';
@@ -843,7 +847,11 @@ function treatmentCard(name, spec) {
 
   const shown = displayName(name, spec);
 
-  return `<a class="treatment-card" href="talalatok.html?specialty=${encodeURIComponent(spec)}&service=${encodeURIComponent(name)}">
+  const href = slug
+    ? `vizsgalat.html?slug=${encodeURIComponent(slug)}`
+    : `talalatok.html?specialty=${encodeURIComponent(spec)}&service=${encodeURIComponent(name)}`;
+
+  return `<a class="treatment-card" href="${href}">
     <div class="treatment-card__title">${shown}${tag}</div>
     <div class="treatment-card__arrow">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
