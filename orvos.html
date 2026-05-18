@@ -985,8 +985,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
 
         <!-- Gombok -->
-        <button onclick="alert('Időpontfoglalás hamarosan')" style="width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.25);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(17,50,147,.35)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(17,50,147,.25)'">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <button onclick="alert('Időpontkérés hamarosan')" style="width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.25);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           Időpontkérés
         </button>
 
@@ -1009,22 +1009,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
       </div>
 
-      <!-- Elérhetőségek -->
-      <div class="contact-card" id="contactCard" style="margin-top:12px">
-        <div class="contact-card-h">Elérhetőségek</div>
-        <div id="contactRows"></div>
-        <button class="contact-msg-btn" onclick="alert('Üzenetküldés hamarosan elérhető')">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          Üzenet küldése
-        </button>
-      </div>
-
       <!-- Rendelési helyszínek -->
-      <div class="contact-card" id="pane-locations" style="margin-top:14px">
+      <div class="contact-card" id="pane-locations" style="margin-top:12px">
         <div class="contact-card-h">Rendelési helyszínek</div>
         <div class="loc-grid" id="locGrid"></div>
-
       </div>
+
+
     </aside>
 
   </div>
@@ -1314,19 +1305,33 @@ function render(d){
   const expTxt = d.experience_years ? `${d.experience_years} éves tapasztalatával` : 'szakmai tapasztalatával';
   const cityTxt = sumCity ? `${sumCity}ban` : 'magánrendelésen';
   const clinicTxt = sumClinicName ? ` a ${sumClinicName} rendelőben` : '';
-  let summaryText = '';
-  if (d.bio && d.bio.length > 40) {
-    summaryText = d.bio;
-  } else {
-    const tpls = [
-      `${fullName} ${expTxt} nyújt megbízható ${(specRaw||'').toLowerCase()} ellátást ${cityTxt}${clinicTxt}. Pácienscentrikus szemlélettel dolgozik — minden esethez egyénre szabott kezelési tervet állít össze, és különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza. Pácienseitől különösen fontos számára az őszinte kommunikáció és a bizalmi kapcsolat kialakítása.`,
-      `${fullName} ${expTxt} a ${(specRaw||'').toLowerCase()} területén kiemelkedő szakember${clinicTxt}. Különös figyelmet fordít a pontos diagnózisra és az egyéni kezelési tervre. A legkorszerűbb diagnosztikai módszereket alkalmazza, empatikus hozzáállásával biztonságos környezetet teremt pácienseinek. Céljai között szerepel, hogy minden páciens egyénre szabott, átfogó ellátást kapjon, és hosszú távon is megőrizhesse egészségét.`,
-      `${fullName} ${expTxt} szerzett kiemelkedő tapasztalatot a ${(specRaw||'').toLowerCase()} területén${clinicTxt}. Munkája során kiemelt figyelmet fordít a megelőzésre és a korai diagnózisra. Empatikus, türelmes hozzáállásával és alapos vizsgálataival pácienseinek valódi megoldást nyújt. A gyors, hatékony ellátás mellett fontosnak tartja, hogy páciensei minden kérdésükre részletes, érthető választ kapjanak.`,
-    ];
-    summaryText = tpls[(d.id || 0) % tpls.length];
-  }
+  // AI összefoglaló — Edge Function hívja, cache-eli DB-ben
   const summaryEl = document.getElementById('dhSummary');
-  if (summaryEl) summaryEl.textContent = summaryText;
+  if (summaryEl) {
+    summaryEl.textContent = d.bio || 'Összefoglaló betöltése...';
+    summaryEl.style.color = 'var(--muted)';
+    fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/get-doctor-summary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0` },
+      body: JSON.stringify({ doctor_id: d.id })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.summary) {
+        summaryEl.textContent = data.summary;
+        summaryEl.style.color = '';
+      } else if (d.bio) {
+        summaryEl.textContent = d.bio;
+        summaryEl.style.color = '';
+      } else {
+        summaryEl.textContent = '';
+      }
+    })
+    .catch(() => {
+      summaryEl.textContent = d.bio || '';
+      summaryEl.style.color = '';
+    });
+  }
 
   // Bio collapsed/expanded
   const bio = d.bio || `${fullName} ${d.experience_years ? d.experience_years + ' éves' : 'több éves'} szakmai tapasztalattal rendelkező ${specRaw.toLowerCase() || 'szakorvos'}. Pácienseit empatikusan, alapos vizsgálat után látja el. Szakterületén a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza, különös figyelmet fordít a megelőzésre és arra, hogy minden páciens egyedi kezelési tervet kapjon.`;
@@ -1569,22 +1574,19 @@ function renderSidebar(d, rat, reviews) {
   if (nameEl) nameEl.textContent = clinic?.name || 'Magánrendelő';
   if (addrEl) addrEl.textContent = [clinic?.address, city].filter(Boolean).join(', ') || 'Cím nem elérhető';
 
-  // Rendelési idő
-  const avail = d.availability || [];
-  if (avail.length) {
-    const days = ['H','K','Sze','Cs','P','Szo','V'];
-    const dayMap = {};
-    avail.forEach(a => {
-      const d = days[a.day_of_week] || a.day_of_week;
-      const time = `${(a.start_time||'').slice(0,5)} – ${(a.end_time||'').slice(0,5)}`;
-      if (!dayMap[time]) dayMap[time] = [];
-      dayMap[time].push(d);
-    });
-    const lines = Object.entries(dayMap).map(([time, ds]) => `${ds.join(', ')}: ${time}`);
-    const hoursEl = document.getElementById('sidebarHoursContent');
-    const hoursBox = document.getElementById('sidebarHours');
-    if (hoursEl) hoursEl.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
-    if (hoursBox) hoursBox.style.display = 'block';
+  // Klinika nyitvatartási idő
+  const openingHours = clinic?.opening_hours;
+  const hoursEl = document.getElementById('sidebarHoursContent');
+  const hoursBox = document.getElementById('sidebarHours');
+  if (openingHours && hoursEl && hoursBox) {
+    let hoursHtml = '';
+    if (typeof openingHours === 'string') {
+      hoursHtml = openingHours.split('\n').map(l => `<div>${escapeHtml(l)}</div>`).join('');
+    } else if (typeof openingHours === 'object') {
+      const dayNames = {'mon':'H–P','tue':'K','wed':'Sze','thu':'Cs','fri':'P','sat':'Szo','sun':'V','weekdays':'H–P','weekend':'Szo–V'};
+      hoursHtml = Object.entries(openingHours).map(([k,v]) => `<div>${dayNames[k]||k}: ${v}</div>`).join('');
+    }
+    if (hoursHtml) { hoursEl.innerHTML = hoursHtml; hoursBox.style.display = 'block'; }
   }
 
   // Ajánlás
