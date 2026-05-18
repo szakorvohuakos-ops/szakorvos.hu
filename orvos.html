@@ -208,7 +208,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
   -webkit-backdrop-filter:blur(80px) saturate(220%);
   border:1px solid rgba(255,255,255,.75);
   border-radius:26px;
-  padding:30px;
+  padding:2rem 2.25rem;
   box-shadow:
     0 2px 0 rgba(255,255,255,1) inset,
     0 -2px 0 rgba(255,255,255,.4) inset,
@@ -244,7 +244,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
   animation:ambientPulse 6s ease-in-out infinite;
 }
 .dcard > *{position:relative;z-index:1}
-.dcard-row{display:grid;grid-template-columns:160px 1fr;gap:28px;align-items:start}
+.dcard-row{display:grid;grid-template-columns:160px 1fr;gap:2rem;align-items:start}
 @media (max-width:640px){.dcard-row{grid-template-columns:1fr;text-align:center}}
 
 /* Photo */
@@ -403,7 +403,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .related-article-date{font-size:11.5px;color:var(--muted)}
 
 /* ═════════ SZEKCIÓK (tab helyett scrollozható) ══════════════════════ */
-.prof-section{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;padding:1.6rem 1.75rem;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,-1px 0 0 rgba(255,255,255,.5) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);transition:box-shadow .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.4,.64,1),border-color .3s;position:relative;overflow:hidden}
+.prof-section{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;padding:1.6rem 1.75rem;margin-top:8px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,-1px 0 0 rgba(255,255,255,.5) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);transition:box-shadow .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.4,.64,1),border-color .3s;position:relative;overflow:hidden}
 .prof-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
 .prof-section>*{position:relative;z-index:1}
 .prof-section:hover{box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08);border-color:rgba(199,210,254,.5)}
@@ -814,7 +814,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
             <div class="dh-stats" id="dhStats"></div>
 
-            <div class="dh-summary" id="dhSummary"></div>
+
           </div>
         </div>
       </div>
@@ -1285,33 +1285,7 @@ function render(d){
   const expTxt = d.experience_years ? `${d.experience_years} éves tapasztalatával` : 'szakmai tapasztalatával';
   const cityTxt = sumCity ? `${sumCity}ban` : 'magánrendelésen';
   const clinicTxt = sumClinicName ? ` a ${sumClinicName} rendelőben` : '';
-  // AI összefoglaló — Edge Function hívja, cache-eli DB-ben
-  const summaryEl = document.getElementById('dhSummary');
-  if (summaryEl) {
-    summaryEl.textContent = d.bio || 'Összefoglaló betöltése...';
-    summaryEl.style.color = 'var(--muted)';
-    fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/get-doctor-summary', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0` },
-      body: JSON.stringify({ doctor_id: d.id })
-    })
-    .then(r => r.json())
-    .then(data => {
-      if (data.summary) {
-        summaryEl.textContent = data.summary;
-        summaryEl.style.color = '';
-      } else if (d.bio) {
-        summaryEl.textContent = d.bio;
-        summaryEl.style.color = '';
-      } else {
-        summaryEl.textContent = '';
-      }
-    })
-    .catch(() => {
-      summaryEl.textContent = d.bio || '';
-      summaryEl.style.color = '';
-    });
-  }
+  // AI összefoglaló a találati kártyán jelenik meg
 
   // Bio collapsed/expanded
   const bio = d.bio || `${fullName} ${d.experience_years ? d.experience_years + ' éves' : 'több éves'} szakmai tapasztalattal rendelkező ${specRaw.toLowerCase() || 'szakorvos'}. Pácienseit empatikusan, alapos vizsgálat után látja el. Szakterületén a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza, különös figyelmet fordít a megelőzésre és arra, hogy minden páciens egyedi kezelési tervet kapjon.`;

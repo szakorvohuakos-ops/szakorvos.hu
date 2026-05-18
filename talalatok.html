@@ -1467,6 +1467,14 @@ function renderList(){
     list.innerHTML=pg.map((d,i)=>cardH(d,st+i)).join('');
   }
 
+  // AI összefoglalók lazy betöltése a kártyákhoz
+  setTimeout(() => {
+    pg.forEach(d => {
+      const el = document.getElementById('sum-' + d.id);
+      if (el) loadSummaryForCard(d.id, el);
+    });
+  }, 200);
+
   // ─ Load More gomb ─ (csak ha van még hátra)
   const loadMoreWrap=document.getElementById('loadMoreWrap');
   const loadMoreInfo=document.getElementById('loadMoreInfo');
@@ -1502,17 +1510,26 @@ function specToTitle(s, doctorName){
   return s || 'Szakorvos';
 }
 
-function buildSummary(d, spec, city, clinic) {
-  const name = d.name || 'Az orvos';
-  const exp = d.experience_years;
-  const expTxt = exp ? `${exp} éves tapasztalatával` : 'szakmai tapasztalatával';
-  const cityTxt = city ? `${city}ban` : 'magánrendelésen';
-  const clinicTxt = clinic?.name ? ` a ${clinic.name} rendelőben` : '';
-  const bio = d.bio || '';
+// AI összefoglaló cache a kártyákhoz
+const summaryCache = {};
 
-  if (bio && bio.length > 40) {
-    return bio;
-  }
+async function loadSummaryForCard(doctorId, el) {
+  if (!el) return;
+  if (summaryCache[doctorId]) { el.textContent = summaryCache[doctorId]; return; }
+  try {
+    const res = await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/get-doctor-summary', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0' },
+      body: JSON.stringify({ doctor_id: doctorId })
+    });
+    const data = await res.json();
+    if (data.summary) {
+      summaryCache[doctorId] = data.summary;
+      el.textContent = data.summary;
+    }
+  } catch(e) {}
+}
+
 
   const templates = [
     `${name} ${expTxt} nyújt megbízható ${spec.toLowerCase()} ellátást ${cityTxt}${clinicTxt}. Pácienscentrikus szemlélettel dolgozik — minden esethez egyénre szabott kezelési tervet állít össze, és különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`,
@@ -1565,7 +1582,7 @@ function cardH(d,i){
       </div>
 
       ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
-      <div class="dc-summary">${escapeHtml(buildSummary(d, spec, city, clinic))}</div>
+      <div class="dc-summary" id="sum-${d.id}">${escapeHtml(d.bio || 'Összefoglaló betöltése...')}</div>
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <button class="btn-prof" onclick="event.stopPropagation();goToProfile('${d.id}')">
