@@ -1433,16 +1433,10 @@ function sideRow(iconKey, lbl, val){
   </div>`;
 }
 
-/* Bio render — collapsed/expanded */
+/* Bio render — a Bemutatkozás szekcióba tölti */
 function renderBio(bio){
-  const sentences = bio.split(/(?<=[.!?])\s+/);
-  const firstChunk = sentences.slice(0, 2).join(' ');
-  const rest = sentences.slice(2).join(' ');
-  document.getElementById('dhBioShort').textContent = firstChunk;
-  if(rest){
-    document.getElementById('dhBioFull').textContent = ' ' + rest;
-    // dhBioToggle removed from header
-  }
+  const el = document.getElementById('aboutBio');
+  if(el) el.textContent = bio;
 }
 function toggleBio(){
   const wrap = document.getElementById('dhBio');
