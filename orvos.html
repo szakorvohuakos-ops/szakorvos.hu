@@ -1804,6 +1804,7 @@ function openMap(addr){
 
 /* ── FAQ tab ──────────────────────────────────────────────────────── */
 function renderFaqTab(d){
+  if (!document.getElementById('faqList')) return;
   const faqs = d._faq || [];
   document.getElementById('faqTotal').textContent = faqs.length;
 
