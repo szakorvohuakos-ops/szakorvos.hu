@@ -1531,14 +1531,6 @@ async function loadSummaryForCard(doctorId, el) {
 }
 
 
-  const templates = [
-    `${name} ${expTxt} nyújt megbízható ${spec.toLowerCase()} ellátást ${cityTxt}${clinicTxt}. Pácienscentrikus szemlélettel dolgozik — minden esethez egyénre szabott kezelési tervet állít össze, és különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`,
-    `${name} ${expTxt} a ${spec.toLowerCase()} területén kiemelkedő szakember${clinicTxt}. Különös figyelmet fordít a pontos diagnózisra és az egyéni kezelési tervre. A legkorszerűbb diagnosztikai módszereket alkalmazza, és empatikus hozzáállásával biztonságos környezetet teremt pácienseinek.`,
-    `${cityTxt.charAt(0).toUpperCase() + cityTxt.slice(1)} praktizáló ${spec.toLowerCase()}${clinicTxt} — ${name} ${expTxt} segít megtalálni a legmegfelelőbb kezelést. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb terápiás módszereket alkalmazza, és minden pácienst a lehető legmagasabb szinten lásson el.`,
-    `${name} ${expTxt} szerzett kiemelkedő tapasztalatot a ${spec.toLowerCase()} területén${clinicTxt}. Munkája során kiemelt figyelmet fordít a megelőzésre és a korai diagnózisra. Empatikus, türelmes hozzáállásával és alapos vizsgálataival pácienseinek valódi megoldást nyújt.`,
-  ];
-  return templates[Math.abs(d.id || 0) % templates.length];
-}
 
 function cardH(d,i){
   const spec=d.doctor_specialties?.[0]?.specialties?.doctor_name||'Szakorvos';
