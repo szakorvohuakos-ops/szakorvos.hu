@@ -450,6 +450,62 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .svc-more{display:inline-flex;align-items:center;gap:5px;font-size:13.5px;color:var(--brand);font-weight:500;margin-top:14px;cursor:pointer}
 .svc-more:hover{text-decoration:underline}
 
+/* ═════════ SZOLGÁLTATÁS MODÁL ═══════════════════════════════════════ */
+.svc-modal-overlay{
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(15,23,42,0.55); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  opacity:0; visibility:hidden;
+  transition:opacity .2s ease, visibility .2s ease;
+}
+.svc-modal-overlay.open{ opacity:1; visibility:visible; }
+.svc-modal{
+  background:#fff; border-radius:16px;
+  width:100%; max-width:680px; max-height:85vh;
+  display:flex; flex-direction:column;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  transform:translateY(10px); transition:transform .2s ease;
+}
+.svc-modal-overlay.open .svc-modal{ transform:translateY(0); }
+.svc-modal-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:22px 26px 16px; border-bottom:1px solid var(--border-soft);
+}
+.svc-modal-head h3{ margin:0; font-size:19px; font-weight:700; color:var(--text); letter-spacing:-0.01em; }
+.svc-modal-close{
+  width:32px; height:32px; border:none; background:transparent;
+  font-size:26px; line-height:1; color:#94a3b8; cursor:pointer;
+  border-radius:8px; transition:background .15s;
+}
+.svc-modal-close:hover{ background:#f1f5f9; color:#475569; }
+.svc-modal-search{ padding:14px 26px 0; }
+.svc-modal-search input{
+  width:100%; padding:11px 14px; border:1.5px solid var(--border-soft);
+  border-radius:10px; font-size:14px; outline:none;
+  transition:border-color .15s; font-family:inherit;
+}
+.svc-modal-search input:focus{ border-color:var(--brand); }
+.svc-modal-body{
+  flex:1; overflow-y:auto; padding:6px 26px 0;
+}
+.svc-modal-table{ font-size:14px; }
+.svc-modal-table tr:first-child{ border-top:1px solid var(--border-soft); }
+.svc-modal-empty{
+  text-align:center; color:#64748b; padding:32px 0;
+  font-size:14px;
+}
+.svc-modal-foot{
+  padding:14px 26px 18px; border-top:1px solid var(--border-soft);
+}
+.svc-modal-foot small{ color:#64748b; font-size:12.5px; }
+@media (max-width:560px){
+  .svc-modal{ max-height:92vh; border-radius:14px; }
+  .svc-modal-head{ padding:18px 18px 14px; }
+  .svc-modal-head h3{ font-size:17px; }
+  .svc-modal-search, .svc-modal-body, .svc-modal-foot{ padding-left:18px; padding-right:18px; }
+}
+
 /* ═════════ ÉRTÉKELÉSEK ═══════════════════════════════════════════════ */
 .rev-grid{display:grid;grid-template-columns:240px 1fr;gap:30px}
 @media (max-width:780px){.rev-grid{grid-template-columns:1fr}}
@@ -860,15 +916,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
       </div>
 
-      <!-- ─── SZAKTERÜLETEK ─────────────────────────────────────── -->
-      <div class="prof-section">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
-          Szakterületek
-        </div>
-        <ul class="info-list" id="colSpecs"><li>–</li></ul>
-      </div>
-
       <!-- ─── TAGSÁGOK + NYELVEK 2 OSZLOPBAN ──────────────────── -->
       <div class="two-col-sections">
         <div class="prof-section" style="margin:0">
@@ -894,7 +941,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           Szolgáltatások és árak
         </div>
         <table class="svc-table" id="svcTable"><tbody></tbody></table>
-        <a class="svc-more" id="svcMore" href="javascript:void(0)" onclick="alert('A teljes szolgáltatáslista hamarosan')">
+        <a class="svc-more" id="svcMore" href="javascript:void(0)">
           Összes szolgáltatás megtekintése (<span id="svcTotal">12</span>)
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
@@ -977,6 +1024,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <span style="font-size:12.5px;color:#1a7a3e;font-weight:600">Ellenőrzött orvos</span>
           <span style="font-size:12px;color:var(--muted);margin-left:2px">— A profil teljessége által ellenőrizve.</span>
         </div>
+      </div>
+
+      <!-- Rendelési idő box -->
+      <div class="contact-card" id="hoursSidebarBox" style="display:none">
+        <div class="contact-card-h">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Rendelési idő
+        </div>
+        <div id="hoursSidebarContent" style="font-size:13.5px;color:var(--text);font-weight:500;line-height:1.85"></div>
       </div>
 
       <!-- Értékelések sidebar box -->
@@ -1182,14 +1238,26 @@ async function load(){
 
     // Kiegészítő táblák lekérdezése — fail-silent ha nem léteznek
     const safeQuery = (q) => q.then(r => r).catch(e => { console.warn(e); return { data: [] }; });
-    const[svcRes,sympRes,faqRes] = await Promise.all([
+
+    // Az orvos összes szakterülete (vizsgálatok keresése ezek alapján a treatments táblából)
+    const docSpecNames = (data.doctor_specialties || [])
+      .map(ds => ds.specialties?.name).filter(Boolean);
+
+    const[svcRes,sympRes,faqRes,treatRes] = await Promise.all([
       safeQuery(db.from('doctor_services').select('*').eq('doctor_id',data.id).eq('is_active',true).order('sort_order')),
       safeQuery(db.from('doctor_symptoms').select('*').eq('doctor_id',data.id).order('sort_order')),
-      safeQuery(db.from('doctor_faq').select('*').eq('doctor_id',data.id).order('sort_order'))
+      safeQuery(db.from('doctor_faq').select('*').eq('doctor_id',data.id).order('sort_order')),
+      docSpecNames.length
+        ? safeQuery(db.from('treatments')
+            .select('id,title,slug,specialty,price_huf')
+            .in('specialty', docSpecNames)
+            .order('price_huf', { ascending: false }))
+        : Promise.resolve({ data: [] })
     ]);
-    data._services = svcRes.data || [];
-    data._symptoms = sympRes.data || [];
-    data._faq      = faqRes.data  || [];
+    data._services   = svcRes.data || [];
+    data._symptoms   = sympRes.data || [];
+    data._faq        = faqRes.data  || [];
+    data._treatments = treatRes.data || [];
 
     currentDoctor = data;
     updateSeoMeta(data);
@@ -1323,9 +1391,7 @@ function render(d){
   }
   document.getElementById('colEdu').innerHTML = edu.map(s => `<li>${escapeHtml(s)}</li>`).join('') || '<li>–</li>';
 
-  // Szakterületek lista (max 5)
-  const specsList = allSpecs.length ? allSpecs : [specRaw || 'Szakorvos'];
-  document.getElementById('colSpecs').innerHTML = specsList.slice(0,5).map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  // Szakterületek lista (törölve a UI-ról)
 
   // Tagságok — placeholder, ha nincs DB-ben
   const memberships = [`Magyar ${specRaw || 'Orvos'} Szakmai Kollégium`];
@@ -1427,27 +1493,132 @@ function computeSoonest(d){
 /* ── Szolgáltatások tab ───────────────────────────────────────────── */
 function renderServicesTab(d, fee){
   const tbody = document.querySelector('#svcTable tbody');
-  let rows = [];
+  const PREVIEW = 5;
+  let list = [];
+
+  // 1) PRIORITÁS: orvos-specifikus override (doctor_services)
   if((d._services || []).length){
-    rows = d._services.map(s => `<tr>
-      <td>${escapeHtml(s.name)}</td>
-      <td>${s.price_huf ? fmtHuf(s.price_huf) : 'Egyedi'}</td>
-    </tr>`);
-    document.getElementById('svcTotal').textContent = d._services.length;
-  } else {
-    // Heurisztikus default lista
-    const specRaw = d.doctor_specialties?.[0]?.specialties?.name || 'Szakorvosi';
-    const fallback = [
-      [`Első ${specRaw.toLowerCase()}i vizsgálat`, fee || 15000],
-      ['Kontroll vizsgálat',                       Math.round((fee || 12000) * 0.67 / 1000) * 1000],
-      ['Online konzultáció',                       Math.round((fee || 12000) * 0.85 / 1000) * 1000],
-      ['Részletes anamnézis',                      fee || 15000],
-      ['Záró konzultáció',                         Math.round((fee || 12000) * 0.5 / 1000) * 1000],
-    ];
-    rows = fallback.map(([n,p]) => `<tr><td>${escapeHtml(n)}</td><td>${fmtHuf(p)}</td></tr>`);
-    document.getElementById('svcTotal').textContent = rows.length;
+    list = d._services.map(s => ({
+      name:  s.name,
+      price: s.price_huf || s.price || null,
+      slug:  null
+    }));
   }
-  tbody.innerHTML = rows.join('');
+  // 2) Treatments tábla az orvos szakterületei alapján
+  else if((d._treatments || []).length){
+    list = d._treatments.map(t => ({
+      name:  t.title,
+      price: t.price_huf,
+      slug:  t.slug,
+      specialty: t.specialty
+    }));
+  }
+  // 3) Fallback heurisztikus lista, ha sem treatments sem doctor_services
+  else {
+    const specRaw = d.doctor_specialties?.[0]?.specialties?.name || 'Szakorvosi';
+    list = [
+      { name:`Első ${specRaw.toLowerCase()}i vizsgálat`, price: fee || 15000 },
+      { name:'Kontroll vizsgálat',                       price: Math.round((fee || 12000) * 0.67 / 1000) * 1000 },
+      { name:'Online konzultáció',                       price: Math.round((fee || 12000) * 0.85 / 1000) * 1000 },
+      { name:'Részletes anamnézis',                      price: fee || 15000 },
+      { name:'Záró konzultáció',                         price: Math.round((fee || 12000) * 0.5 / 1000) * 1000 }
+    ];
+  }
+
+  // Preview (max 5 sor a kártyán)
+  const preview = list.slice(0, PREVIEW);
+  tbody.innerHTML = preview.map(s => `<tr>
+    <td>${escapeHtml(s.name)}</td>
+    <td>${s.price ? fmtHuf(s.price) : 'Egyedi'}</td>
+  </tr>`).join('');
+
+  // Számláló
+  const total = list.length;
+  document.getElementById('svcTotal').textContent = total;
+
+  // "Összes szolgáltatás megtekintése" gomb — modál megnyitás
+  const moreBtn = document.getElementById('svcMore');
+  if(moreBtn){
+    if(total > PREVIEW){
+      moreBtn.style.display = '';
+      moreBtn.onclick = (e) => { e.preventDefault(); openServicesModal(list, d); };
+    } else {
+      moreBtn.style.display = 'none';
+    }
+  }
+
+  // Modálba töltjük előre az adatokat (egyszerűbb újranyitásnál)
+  window._allServices = list;
+}
+
+/* ── Szolgáltatások modál ─────────────────────────────────────────── */
+function openServicesModal(list, d){
+  let modal = document.getElementById('servicesModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'servicesModal';
+    modal.className = 'svc-modal-overlay';
+    modal.innerHTML = `
+      <div class="svc-modal" role="dialog" aria-modal="true" aria-labelledby="svcModalTitle">
+        <div class="svc-modal-head">
+          <h3 id="svcModalTitle">Összes szolgáltatás és ár</h3>
+          <button class="svc-modal-close" aria-label="Bezárás">&times;</button>
+        </div>
+        <div class="svc-modal-search">
+          <input type="text" id="svcModalQ" placeholder="Keresés a szolgáltatások között…" autocomplete="off">
+        </div>
+        <div class="svc-modal-body">
+          <table class="svc-table svc-modal-table"><tbody id="svcModalTbody"></tbody></table>
+          <div class="svc-modal-empty" id="svcModalEmpty" style="display:none">Nincs találat a keresésre.</div>
+        </div>
+        <div class="svc-modal-foot">
+          <small>Az árak indikatív jellegűek, a konkrét ár az orvostól és klinikától függhet.</small>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+
+    // Bezárás
+    const close = () => { modal.classList.remove('open'); document.body.style.overflow = ''; };
+    modal.querySelector('.svc-modal-close').onclick = close;
+    modal.addEventListener('click', (e) => { if(e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modal.classList.contains('open')) close();
+    });
+
+    // Keresés
+    modal.querySelector('#svcModalQ').addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      const all = window._allServices || [];
+      const filtered = q ? all.filter(s => s.name.toLowerCase().includes(q)) : all;
+      renderSvcModalRows(filtered);
+    });
+  }
+
+  // Tartalom renderelés
+  renderSvcModalRows(list);
+  modal.querySelector('#svcModalQ').value = '';
+
+  // Nyitás
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Fókusz a keresőre — kis késleltetéssel hogy az animáció ne zavarja meg
+  setTimeout(() => { modal.querySelector('#svcModalQ').focus(); }, 50);
+}
+
+function renderSvcModalRows(list){
+  const tbody = document.getElementById('svcModalTbody');
+  const empty = document.getElementById('svcModalEmpty');
+  if(!tbody) return;
+  if(!list.length){
+    tbody.innerHTML = '';
+    if(empty) empty.style.display = '';
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+  tbody.innerHTML = list.map(s => `<tr>
+    <td>${escapeHtml(s.name)}</td>
+    <td>${s.price ? fmtHuf(s.price) : 'Egyedi'}</td>
+  </tr>`).join('');
 }
 
 /* ── Értékelések tab (mock review-k ha nincs DB-ben) ─────────────── */
@@ -1584,6 +1755,9 @@ function renderSidebar(d, rat, reviews) {
     if (hoursHtml) { hoursEl.innerHTML = hoursHtml; hoursBox.style.display = 'block'; }
   }
 
+  // Rendelési idő (külön sidebar box) — orvos availability-ből
+  renderHoursSidebar(d.availability || []);
+
   // Rating sidebar
   renderRatingSidebar(rat, reviews);
 
@@ -1604,6 +1778,43 @@ function renderSidebar(d, rat, reviews) {
   } else if (callBtn && !phone) {
     callBtn.style.display = 'none';
   }
+}
+
+/* ── Rendelési idő sidebar box ──────────────────────────────────── */
+function renderHoursSidebar(availability){
+  const box = document.getElementById('hoursSidebarBox');
+  const el  = document.getElementById('hoursSidebarContent');
+  if(!box || !el) return;
+
+  if(!availability || !availability.length){
+    box.style.display = 'none';
+    return;
+  }
+
+  // day_of_week: 0=vasárnap … 6=szombat (Postgres standard)
+  const dayLabels = ['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
+  const today = new Date().getDay();
+  const order = [1,2,3,4,5,6,0]; // H–V sorrendben
+
+  // day_of_week → időablakok tömbje
+  const byDay = {};
+  availability.forEach(a => {
+    if(!byDay[a.day_of_week]) byDay[a.day_of_week] = [];
+    byDay[a.day_of_week].push(`${(a.start_time||'').slice(0,5)} – ${(a.end_time||'').slice(0,5)}`);
+  });
+
+  const rows = order.map(d => {
+    const isToday = d === today;
+    const slots = byDay[d];
+    const val = slots ? slots.join(', ') : '<span style="color:var(--muted);font-weight:500">Zárva</span>';
+    return `<div style="display:flex;justify-content:space-between;gap:10px;${isToday?'color:#1a7a3e;font-weight:700':''}">
+      <span style="min-width:80px">${dayLabels[d]}${isToday?' <small style="font-weight:600;opacity:.8">(ma)</small>':''}</span>
+      <span style="text-align:right">${val}</span>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = rows;
+  box.style.display = 'block';
 }
 
 /* ── Tab scroll navigáció ────────────────────────────────────────── */
