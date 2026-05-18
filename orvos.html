@@ -1382,15 +1382,8 @@ function render(d){
   const langList = langs.length ? langs : ['Magyar'];
   document.getElementById('colLangs').innerHTML = langList.map(s => `<li>${escapeHtml(s)}</li>`).join('');
 
-  // ─── Elérhetőségek (jobb sidebar contact-card) ───────────────────
-  const contactRows = [];
-  const phone = d.phone || clinic?.phone || '+36 30 123 4567';
-  const email = d.email || clinic?.email || `info@${(d.name||'orvos').replace(/^Dr\.\s*/i,'').split(' ').pop().toLowerCase()}.hu`;
-  contactRows.push(contactRow('PHONE','Telefonszám', phone, `tel:${phone.replace(/\s/g,'')}`));
-  contactRows.push(contactRow('MAIL','E-mail', email, `mailto:${email}`));
-  contactRows.push(contactRow('CLOCK','Rendelési idő', 'H–P: 08:00 – 18:00', null));
-  contactRows.push(contactRow('STAR','Elégedettség', `${rat > 0 ? Math.round(rat * 20) : 98}% ajánlja`, null));
-  document.getElementById('contactRows').innerHTML = contactRows.join('');
+  // ─── Elérhetőségek (jobb sidebar contact-card) — törölve ────────
+  // contactRows box removed from sidebar
 
   // ─── Szolgáltatások tab ──────────────────────────────────────────
   renderServicesTab(d, fee);
