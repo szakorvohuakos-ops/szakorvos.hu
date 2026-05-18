@@ -1320,11 +1320,11 @@ function render(d){
   document.getElementById('dhStats').innerHTML = statsHtml.join('');
 
   // Összegző 2 sor a profil tetején
-  const city = d.doctor_clinics?.[0]?.clinics?.cities?.name || '';
-  const clinicName = d.doctor_clinics?.[0]?.clinics?.name || '';
+  const sumCity = d.doctor_clinics?.[0]?.clinics?.cities?.name || '';
+  const sumClinicName = d.doctor_clinics?.[0]?.clinics?.name || '';
   const expTxt = d.experience_years ? `${d.experience_years} éves tapasztalatával` : 'szakmai tapasztalatával';
-  const cityTxt = city ? `${city}ban` : 'magánrendelésen';
-  const clinicTxt = clinicName ? ` a ${clinicName} rendelőben` : '';
+  const cityTxt = sumCity ? `${sumCity}ban` : 'magánrendelésen';
+  const clinicTxt = sumClinicName ? ` a ${sumClinicName} rendelőben` : '';
   let summaryText = '';
   if (d.bio && d.bio.length > 40) {
     summaryText = d.bio;
@@ -1603,9 +1603,9 @@ function renderExperience(d) {
       <div class="exp-item">
         <div class="exp-years">${e.start_year || ''}${e.end_year ? ' – ' + e.end_year : e.start_year ? ' – jelen' : ''}</div>
         <div>
-          <div class="exp-role">${escHtml(e.role || e.title || '')}</div>
-          <div class="exp-place">${escHtml(e.institution || e.place || '')}</div>
-          ${e.type ? `<div class="exp-type">${escHtml(e.type)}</div>` : ''}
+          <div class="exp-role">${escapeHtml(e.role || e.title || '')}</div>
+          <div class="exp-place">${escapeHtml(e.institution || e.place || '')}</div>
+          ${e.type ? `<div class="exp-type">${escapeHtml(e.type)}</div>` : ''}
         </div>
       </div>`).join('');
   } else {
@@ -1623,8 +1623,8 @@ function renderExperience(d) {
         <div class="exp-item">
           <div class="exp-years">${startYear && i === 0 ? startYear + ' – jelen' : '–'}</div>
           <div>
-            <div class="exp-role">${escHtml(specs[0] || 'Szakorvos')}</div>
-            <div class="exp-place">${escHtml(c.name)}${c.city ? ', ' + escHtml(c.city) : ''}</div>
+            <div class="exp-role">${escapeHtml(specs[0] || 'Szakorvos')}</div>
+            <div class="exp-place">${escapeHtml(c.name)}${c.city ? ', ' + escapeHtml(c.city) : ''}</div>
           </div>
         </div>`).join('');
     } else {
@@ -1663,7 +1663,7 @@ function renderArticles(el, articles) {
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#264ACA" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
       <div>
-        <div class="related-article-title">${escHtml(a.title)}</div>
+        <div class="related-article-title">${escapeHtml(a.title)}</div>
         <div class="related-article-date">${a.created_at ? new Date(a.created_at).toLocaleDateString('hu-HU') : ''}</div>
       </div>
     </a>`).join('');
