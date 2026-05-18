@@ -1474,17 +1474,18 @@ function renderServicesTab(d, fee){
 /* ── Értékelések tab (mock review-k ha nincs DB-ben) ─────────────── */
 function renderReviewsTab(d, rat, reviews){
   const avg = rat > 0 ? rat.toFixed(1) : '–';
-  document.getElementById('revAvg').textContent = avg;
-  document.getElementById('revCount').textContent = reviews || 0;
-  document.getElementById('tabRevCount').textContent = reviews || 0;
+  const setEl = (id, val) => { const e = document.getElementById(id); if(e) e.textContent = val; };
+  setEl('revAvg', avg);
+  setEl('revCount', reviews || 0);
+  setEl('tabRevCount', reviews || 0);
 
   // Stars filled
   const filled = Math.round(rat);
-  document.getElementById('revStars').textContent = '★'.repeat(filled) + '☆'.repeat(Math.max(0, 5 - filled));
+  setEl('revStars', '★'.repeat(filled) + '☆'.repeat(Math.max(0, 5 - filled)));
 
   // Bars — heurisztika (4.9 → 93% 5-csillag, stb.)
   const bars = computeBarDist(rat, reviews);
-  document.getElementById('revBars').innerHTML = bars.map(b => `
+  const revBarsEl = document.getElementById('revBars'); if(revBarsEl) revBarsEl.innerHTML = bars.map(b => `
     <div class="rev-bar-row">
       <span><strong>${b.star}</strong> <span class="star-s">★</span></span>
       <div class="rev-bar-bg"><div class="rev-bar-fill" style="width:${b.pct}%"></div></div>
@@ -1498,7 +1499,7 @@ function renderReviewsTab(d, rat, reviews){
     {author:'Ádám, 28 éves',    date:'1 hónapja', stars:5, text:'Hosszú évek után végre valaki segített a problémámon. Köszönöm szépen!'},
     {author:'Zsófia, 41 éves',  date:'2 hónapja', stars:5, text:`Profi, pontos, kedves. A legjobb ${d.doctor_specialties?.[0]?.specialties?.name?.toLowerCase() || 'orvos'}, akinél eddig jártam.`}
   ];
-  document.getElementById('revList').innerHTML = mockRevs.map(r => {
+  const revListEl = document.getElementById('revList'); if(revListEl) revListEl.innerHTML = mockRevs.map(r => {
     const init = r.author.split(',')[0].trim().slice(0,1);
     return `<div class="rev-item">
       <div class="rev-item-top">
