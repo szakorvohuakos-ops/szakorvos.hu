@@ -121,6 +121,9 @@ function szkPinIcon(maps){
 }
 
 html,body{font-family:'Inter',sans-serif;height:100%}
+body{background:linear-gradient(160deg,#f0f4ff 0%,#f6f8fb 40%,#f6f8fb 70%,#f0f7f3 100%);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 15% 10%,rgba(120,150,255,.08),transparent 60%),radial-gradient(ellipse 60% 40% at 90% 70%,rgba(180,140,255,.06),transparent 60%),radial-gradient(ellipse 50% 30% at 50% 100%,rgba(140,200,255,.05),transparent 60%);pointer-events:none;z-index:0}
+body>*{position:relative;z-index:1}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   background:var(--bg);color:var(--text);line-height:1.6;
@@ -297,7 +300,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-bio.expanded .dh-bio-full{display:inline}
 
 /* ═════════ BOOKING WIDGET (right column, sticky) ═══════════════════ */
-.bcard{background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(240,245,255,.88) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:0;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.04),0 16px 40px rgba(17,50,147,.07);position:sticky;top:84px;overflow:hidden}
+.bcard{background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(240,245,255,.88) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(199,210,254,.5);border-radius:20px;padding:0;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.08),0 32px 64px rgba(17,50,147,.12);position:sticky;top:84px;overflow:hidden}
 .bcard-top{background:linear-gradient(135deg,#ecfdf5 0%,#f0fdf4 100%);border-bottom:1px solid #d1fae5;padding:18px 22px}
 .bcard-label{font-size:10.5px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .bcard-price{font-size:30px;font-weight:700;color:var(--text);letter-spacing:-0.02em;line-height:1;margin-bottom:3px}
@@ -339,7 +342,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .contact-msg-btn:active{transform:translateY(0);box-shadow:0 2px 8px rgba(17,50,147,.2)}
 
 /* ─── Tab navigáció ─── */
-.prof-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;background:#fff;border-radius:16px 16px 0 0;padding:0 1rem}
+.prof-tabs{display:flex;gap:0;border-bottom:2px solid rgba(220,227,234,.5);margin-bottom:1.25rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px 16px 0 0;padding:0 1rem;border:1px solid rgba(255,255,255,.7);border-bottom:2px solid rgba(220,227,234,.5);box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
 .prof-tabs::-webkit-scrollbar{display:none}
 .prof-tab{padding:.85rem 1.1rem;font-size:13.5px;font-weight:600;color:var(--sub);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;font-family:inherit}
 .prof-tab:hover{color:var(--text)}
@@ -400,7 +403,9 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .related-article-date{font-size:11.5px;color:var(--muted)}
 
 /* ═════════ SZEKCIÓK (tab helyett scrollozható) ══════════════════════ */
-.prof-section{background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(252,253,255,.85) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(199,210,254,.35);border-radius:16px;padding:26px 28px;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.03),0 6px 18px rgba(17,50,147,.05);transition:box-shadow .3s,transform .3s,border-color .3s;position:relative;overflow:hidden}
+.prof-section{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;padding:1.6rem 1.75rem;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,-1px 0 0 rgba(255,255,255,.5) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);transition:box-shadow .4s cubic-bezier(.4,0,.2,1),transform .4s cubic-bezier(.34,1.4,.64,1),border-color .3s;position:relative;overflow:hidden}
+.prof-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
+.prof-section>*{position:relative;z-index:1}
 .prof-section:hover{box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08);border-color:rgba(199,210,254,.5)}
 .prof-section-h{display:flex;align-items:center;gap:11px;font-size:16px;font-weight:600;color:var(--text);margin-bottom:18px;letter-spacing:-0.018em;padding-bottom:14px;border-bottom:1px solid rgba(199,210,254,.25)}
 .prof-section-h svg{flex-shrink:0;color:var(--brand);opacity:.9;width:18px;height:18px}
