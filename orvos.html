@@ -367,6 +367,23 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .trust-sub{font-size:12px;color:var(--sub);line-height:1.4}
 
 /* ─── Verified badge jobb sáv ─── */
+/* ─── Rating sidebar box ─── */
+.rating-sidebar-box{margin-top:12px}
+.rating-big{font-size:40px;font-weight:800;color:var(--text);letter-spacing:-0.04em;line-height:1}
+.rating-stars-lg{color:#f59e0b;font-size:20px;letter-spacing:2px;margin:4px 0}
+.rating-count-sub{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.rating-bar-row{display:grid;grid-template-columns:28px 1fr 32px;gap:6px;align-items:center;margin-bottom:5px}
+.rating-bar-row span{font-size:12px;color:var(--sub);font-weight:500;display:flex;align-items:center;gap:2px}
+.rating-bar-bg{background:rgba(17,50,147,.08);border-radius:99px;height:6px;overflow:hidden}
+.rating-bar-fill{height:100%;background:linear-gradient(90deg,#f59e0b,#f97316);border-radius:99px;transition:width .6s}
+.rating-bar-pct{font-size:11.5px;color:var(--muted);text-align:right}
+.rev-mini-item{padding:.75rem 0;border-bottom:1px solid var(--border-soft)}
+.rev-mini-item:last-child{border-bottom:none}
+.rev-mini-stars{color:#f59e0b;font-size:12px;letter-spacing:1px;margin-bottom:3px}
+.rev-mini-text{font-size:13px;color:var(--sub);line-height:1.55;font-style:italic;margin-bottom:5px}
+.rev-mini-author{font-size:12px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:5px}
+.rev-mini-verified{color:var(--green);font-size:11px;display:flex;align-items:center;gap:3px}
+
 .verified-badge{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(44,150,80,.07),rgba(44,150,80,.04));border:1px solid rgba(44,150,80,.2);border-radius:12px;padding:.85rem 1rem;margin-top:12px}
 .verified-badge-icon{width:32px;height:32px;border-radius:8px;background:rgba(44,150,80,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .verified-badge-title{font-size:13px;font-weight:700;color:#1a7a3e}
@@ -805,7 +822,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <button class="prof-tab" onclick="scrollToSection('pane-services',this)">Árak</button>
         <button class="prof-tab" onclick="scrollToSection('pane-reviews',this)">Értékelések</button>
         <button class="prof-tab" onclick="scrollToSection('pane-faq',this)">Kérdések</button>
-        <button class="prof-tab" onclick="scrollToSection('pane-articles',this)">Cikkek</button>
+
       </div>
 
       <!-- ─── BEMUTATKOZÁS ──────────────────────────────────────── -->
@@ -922,15 +939,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </button>
       </div>
 
-      <!-- ─── KAPCSOLÓDÓ CIKKEK ──────────────────────────────── -->
-      <div class="prof-section" id="pane-articles">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Tudástár – Kapcsolódó cikkek
-          <a href="tudastar.html" style="margin-left:auto;font-size:13px;font-weight:500;color:var(--brand);text-decoration:none">Összes cikk →</a>
-        </div>
-        <div id="relatedArticlesList"></div>
-      </div>
+
 
       <!-- ─── TRUST BADGE-EK ────────────────────────────────────── -->
       <div class="trust-bar">
@@ -963,7 +972,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <aside>
 
       <!-- ─── FŐ KÁRTYA: Rendelési helyszín + gombok ──────────── -->
-      <div class="contact-card" id="bookingCard" style="background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(245,248,255,.9) 100%);border-color:rgba(38,74,202,.15);padding:1.25rem">
+      <!-- Rendelési helyszínek + gombok -->
+      <div class="contact-card" id="pane-locations">
 
         <!-- Ajánlás badge -->
         <div id="sidebarRecoBox" style="display:none;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,191,36,.05));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:8px 12px;margin-bottom:12px">
@@ -971,50 +981,60 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <span id="sidebarRecoText" style="font-size:12.5px;font-weight:700;color:#d97706"></span>
         </div>
 
-        <!-- Klinika neve + cím -->
-        <div id="sidebarClinicName" style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px"></div>
-        <div id="sidebarClinicAddr" style="font-size:13px;color:var(--sub);margin-bottom:12px"></div>
+        <div class="contact-card-h">Rendelési helyszínek</div>
+        <div class="loc-grid" id="locGrid"></div>
 
-        <!-- Rendelési idő -->
-        <div id="sidebarHours" style="display:none;margin-bottom:14px">
+        <!-- Nyitvatartás -->
+        <div id="sidebarHours" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)">
           <div style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:5px">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Rendelési idő
+            Nyitvatartás
           </div>
           <div id="sidebarHoursContent" style="font-size:13.5px;color:var(--text);font-weight:500;line-height:1.7"></div>
         </div>
 
         <!-- Gombok -->
-        <button onclick="alert('Időpontkérés hamarosan')" style="width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.25);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Időpontkérés
-        </button>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <button id="sidebarCallBtn" onclick="sidebarCall()" style="background:rgba(44,150,80,.08);color:#1a7a3e;border:1.5px solid rgba(44,150,80,.2);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s" onmouseover="this.style.background='rgba(44,150,80,.14)'" onmouseout="this.style.background='rgba(44,150,80,.08)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
-            Hívás
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft);display:flex;flex-direction:column;gap:8px">
+          <button onclick="alert('Időpontkérés hamarosan')" style="width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.25);display:flex;align-items:center;justify-content:center;gap:7px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Időpontkérés
           </button>
-          <button onclick="alert('Üzenetküldés hamarosan')" style="background:rgba(17,50,147,.06);color:var(--brand);border:1.5px solid rgba(17,50,147,.15);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s" onmouseover="this.style.background='rgba(17,50,147,.1)'" onmouseout="this.style.background='rgba(17,50,147,.06)'">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            Üzenet
-          </button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button id="sidebarCallBtn" onclick="sidebarCall()" style="background:rgba(44,150,80,.08);color:#1a7a3e;border:1.5px solid rgba(44,150,80,.2);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+              Hívás
+            </button>
+            <button onclick="alert('Üzenetküldés hamarosan')" style="background:rgba(17,50,147,.06);color:var(--brand);border:1.5px solid rgba(17,50,147,.15);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              Üzenet
+            </button>
+          </div>
         </div>
 
         <!-- Ellenőrzött orvos badge -->
-        <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft)">
+        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
           <span style="font-size:12.5px;color:#1a7a3e;font-weight:600">Ellenőrzött orvos</span>
           <span style="font-size:12px;color:var(--muted);margin-left:2px">— A profil teljessége által ellenőrizve.</span>
         </div>
       </div>
 
-      <!-- Rendelési helyszínek -->
-      <div class="contact-card" id="pane-locations" style="margin-top:12px">
-        <div class="contact-card-h">Rendelési helyszínek</div>
-        <div class="loc-grid" id="locGrid"></div>
+      <!-- Értékelések sidebar box -->
+      <div class="contact-card rating-sidebar-box" id="ratingSidebarBox" style="display:none">
+        <div class="contact-card-h">Páciensek értékelései</div>
+        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:12px">
+          <div style="text-align:center;flex-shrink:0">
+            <div class="rating-big" id="ratingSidebarAvg">–</div>
+            <div class="rating-stars-lg" id="ratingSidebarStars">☆☆☆☆☆</div>
+            <div class="rating-count-sub" id="ratingSidebarCount"></div>
+          </div>
+          <div style="flex:1" id="ratingSidebarBars"></div>
+        </div>
+        <div id="ratingSidebarRevs"></div>
+        <a href="#pane-reviews" onclick="scrollToSection('pane-reviews',null);return false" style="display:block;text-align:center;font-size:13px;font-weight:600;color:var(--brand);margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);text-decoration:none">
+          Összes értékelés megtekintése →
+        </a>
       </div>
-
 
     </aside>
 
@@ -1555,17 +1575,64 @@ function computeBarDist(rat, count){
   return [5,4,3,2,1].map(s => ({star:s, pct:dist[s]}));
 }
 
+/* ── Értékelés sidebar feltöltése ───────────────────────────────── */
+function renderRatingSidebar(rat, reviews) {
+  if (!rat || rat <= 0) return;
+  const box = document.getElementById('ratingSidebarBox');
+  if (box) box.style.display = 'block';
+
+  const avg = document.getElementById('ratingSidebarAvg');
+  const stars = document.getElementById('ratingSidebarStars');
+  const count = document.getElementById('ratingSidebarCount');
+  const bars = document.getElementById('ratingSidebarBars');
+  const revs = document.getElementById('ratingSidebarRevs');
+
+  if (avg) avg.textContent = rat.toFixed(1);
+  if (stars) {
+    const filled = Math.round(rat);
+    stars.textContent = '★'.repeat(filled) + '☆'.repeat(Math.max(0, 5 - filled));
+  }
+  if (count) count.textContent = reviews ? `${reviews} értékelés alapján` : '';
+
+  // Bars
+  if (bars) {
+    const dist = computeBarDist(rat, reviews);
+    bars.innerHTML = dist.map(b => `
+      <div class="rating-bar-row">
+        <span><strong>${b.star}</strong> <span style="color:#f59e0b;font-size:11px">★</span></span>
+        <div class="rating-bar-bg"><div class="rating-bar-fill" style="width:${b.pct}%"></div></div>
+        <span class="rating-bar-pct">${b.pct}%</span>
+      </div>`).join('');
+  }
+
+  // 2 mini review
+  if (revs) {
+    const mock = [
+      {stars:5, text:'Nagyon kedves és alapos orvos, mindent érthetően elmagyarázott.', author:'Katalin, 34 éves'},
+      {stars:5, text:'Hosszú évek után végre valaki segített a problémámon. Köszönöm!', author:'Ádám, 28 éves'},
+    ];
+    revs.innerHTML = mock.map(r => `
+      <div class="rev-mini-item">
+        <div class="rev-mini-stars">${'★'.repeat(r.stars)}</div>
+        <div class="rev-mini-text">"${escapeHtml(r.text)}"</div>
+        <div class="rev-mini-author">
+          ${escapeHtml(r.author)}
+          <span class="rev-mini-verified">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            Ellenőrzött
+          </span>
+        </div>
+      </div>`).join('');
+  }
+}
+
 /* ── Jobb sáv adatok feltöltése ─────────────────────────────────── */
 function renderSidebar(d, rat, reviews) {
   const clinic = d.doctor_clinics?.[0]?.clinics;
   const city = clinic?.cities?.name || '';
   const phone = d.phone || clinic?.phone || '';
 
-  // Klinika neve + cím
-  const nameEl = document.getElementById('sidebarClinicName');
-  const addrEl = document.getElementById('sidebarClinicAddr');
-  if (nameEl) nameEl.textContent = clinic?.name || 'Magánrendelő';
-  if (addrEl) addrEl.textContent = [clinic?.address, city].filter(Boolean).join(', ') || 'Cím nem elérhető';
+  // Klinika neve + cím — a loc-grid rendereli, nincs külön elem
 
   // Klinika nyitvatartási idő
   const openingHours = clinic?.opening_hours;
@@ -1581,6 +1648,9 @@ function renderSidebar(d, rat, reviews) {
     }
     if (hoursHtml) { hoursEl.innerHTML = hoursHtml; hoursBox.style.display = 'block'; }
   }
+
+  // Rating sidebar
+  renderRatingSidebar(rat, reviews);
 
   // Ajánlás
   if (rat && rat > 4.5 && reviews > 20) {
