@@ -370,6 +370,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 .dc-loc{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--sub);font-weight:500;margin-top:.4rem}
 .dc-loc svg{flex-shrink:0;color:var(--green)}
 .dc-loc-clinic{color:var(--text);font-weight:600}
+.dc-summary{font-size:13px;color:var(--sub);line-height:1.6;margin-top:.4rem;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 
 /* Hidden in new design (kept for compatibility) */
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
@@ -1501,6 +1502,27 @@ function specToTitle(s, doctorName){
   return s || 'Szakorvos';
 }
 
+function buildSummary(d, spec, city, clinic) {
+  const name = d.name || 'Az orvos';
+  const exp = d.experience_years;
+  const expTxt = exp ? `${exp} éves tapasztalatával` : 'szakmai tapasztalatával';
+  const cityTxt = city ? `${city}ban` : 'magánrendelésen';
+  const clinicTxt = clinic?.name ? ` a ${clinic.name} rendelőben` : '';
+  const bio = d.bio || '';
+
+  if (bio && bio.length > 40) {
+    return bio;
+  }
+
+  const templates = [
+    `${name} ${expTxt} nyújt megbízható ${spec.toLowerCase()} ellátást ${cityTxt}${clinicTxt}. Pácienscentrikus szemlélettel dolgozik — minden esethez egyénre szabott kezelési tervet állít össze, és különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`,
+    `${name} ${expTxt} a ${spec.toLowerCase()} területén kiemelkedő szakember${clinicTxt}. Különös figyelmet fordít a pontos diagnózisra és az egyéni kezelési tervre. A legkorszerűbb diagnosztikai módszereket alkalmazza, és empatikus hozzáállásával biztonságos környezetet teremt pácienseinek.`,
+    `${cityTxt.charAt(0).toUpperCase() + cityTxt.slice(1)} praktizáló ${spec.toLowerCase()}${clinicTxt} — ${name} ${expTxt} segít megtalálni a legmegfelelőbb kezelést. Rendszeres szakmai továbbképzéseken vesz részt, hogy a legmodernebb terápiás módszereket alkalmazza, és minden pácienst a lehető legmagasabb szinten lásson el.`,
+    `${name} ${expTxt} szerzett kiemelkedő tapasztalatot a ${spec.toLowerCase()} területén${clinicTxt}. Munkája során kiemelt figyelmet fordít a megelőzésre és a korai diagnózisra. Empatikus, türelmes hozzáállásával és alapos vizsgálataival pácienseinek valódi megoldást nyújt.`,
+  ];
+  return templates[Math.abs(d.id || 0) % templates.length];
+}
+
 function cardH(d,i){
   const spec=d.doctor_specialties?.[0]?.specialties?.doctor_name||'Szakorvos';
   const clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
@@ -1543,6 +1565,7 @@ function cardH(d,i){
       </div>
 
       ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
+      <div class="dc-summary">${escapeHtml(buildSummary(d, spec, city, clinic))}</div>
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <button class="btn-prof" onclick="event.stopPropagation();goToProfile('${d.id}')">

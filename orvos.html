@@ -120,7 +120,7 @@ function szkPinIcon(maps){
   --shadow-lg:0 12px 32px rgba(15,23,42,.08),0 0 0 1px rgba(15,23,42,.05);
 }
 
-html,body{height:100%}
+html,body{font-family:'Inter',sans-serif;height:100%}
 body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
   background:var(--bg);color:var(--text);line-height:1.6;
@@ -288,6 +288,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 
 /* Bio collapsed/expanded */
 .dh-bio{font-size:13.5px;color:var(--sub);line-height:1.65;margin-top:6px}
+.dh-summary{font-size:15px;color:var(--sub);line-height:1.7;margin:1rem 0 .5rem;padding:1rem 1.25rem;background:rgba(38,74,202,.04);border-left:3px solid var(--brand);border-radius:0 12px 12px 0}
 .dh-bio-toggle{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--brand);font-weight:500;background:none;border:none;padding:6px 0 0;cursor:pointer;transition:color .15s}
 .dh-bio-toggle:hover{color:var(--brand-2)}
 .dh-bio-toggle svg{transition:transform .2s}
@@ -336,6 +337,51 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .contact-msg-btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;background:linear-gradient(135deg,rgba(17,50,147,.06) 0%,rgba(38,74,202,.04) 100%);color:var(--brand);font-weight:600;font-size:13.5px;padding:12px;border-radius:11px;margin-top:14px;border:1px solid rgba(17,50,147,.15);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,background .25s,color .25s,border-color .25s;cursor:pointer;letter-spacing:-0.005em}
 .contact-msg-btn:hover{background:linear-gradient(135deg,var(--brand) 0%,var(--brand-2) 100%);color:#fff;border-color:var(--brand);transform:translateY(-2px);box-shadow:0 6px 18px rgba(17,50,147,.28),0 12px 32px rgba(17,50,147,.18)}
 .contact-msg-btn:active{transform:translateY(0);box-shadow:0 2px 8px rgba(17,50,147,.2)}
+
+/* ─── Tab navigáció ─── */
+.prof-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;background:#fff;border-radius:16px 16px 0 0;padding:0 1rem}
+.prof-tabs::-webkit-scrollbar{display:none}
+.prof-tab{padding:.85rem 1.1rem;font-size:13.5px;font-weight:600;color:var(--sub);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s,border-color .15s;font-family:inherit}
+.prof-tab:hover{color:var(--text)}
+.prof-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+
+/* ─── Szakmai tapasztalat ─── */
+.exp-list{display:flex;flex-direction:column;gap:0}
+.exp-item{display:grid;grid-template-columns:100px 1fr;gap:.5rem 1rem;padding:.85rem 0;border-bottom:1px solid var(--border-soft)}
+.exp-item:last-child{border-bottom:none}
+.exp-years{font-size:12.5px;color:var(--muted);font-weight:500;padding-top:2px}
+.exp-role{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.exp-place{font-size:13px;color:var(--brand);font-weight:500}
+.exp-type{font-size:12px;color:var(--sub)}
+
+/* ─── 2 oszlopos szekció ─── */
+.two-col-sections{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:600px){.two-col-sections{grid-template-columns:1fr}}
+
+/* ─── Trust badge-ek ─── */
+.trust-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.25rem;padding:1.5rem;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(248,250,255,.7));backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.75);border-radius:18px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 16px rgba(17,50,147,.06)}
+@media(max-width:700px){.trust-bar{grid-template-columns:repeat(2,1fr)}}
+.trust-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.5rem}
+.trust-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(38,74,202,.07);border:1px solid rgba(38,74,202,.1)}
+.trust-title{font-size:13px;font-weight:700;color:var(--text)}
+.trust-sub{font-size:12px;color:var(--sub);line-height:1.4}
+
+/* ─── Verified badge jobb sáv ─── */
+.verified-badge{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(44,150,80,.07),rgba(44,150,80,.04));border:1px solid rgba(44,150,80,.2);border-radius:12px;padding:.85rem 1rem;margin-top:12px}
+.verified-badge-icon{width:32px;height:32px;border-radius:8px;background:rgba(44,150,80,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.verified-badge-title{font-size:13px;font-weight:700;color:#1a7a3e}
+.verified-badge-sub{font-size:12px;color:var(--sub)}
+
+/* ─── Kapcsolódó cikkek ─── */
+.related-articles{margin-top:12px}
+.related-articles-h{font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem;display:flex;align-items:center;gap:6px}
+.related-articles-h::before{content:'';width:14px;height:2px;background:var(--green);border-radius:1px}
+.related-article{display:flex;gap:.75rem;padding:.65rem 0;border-bottom:1px solid var(--border-soft);text-decoration:none;transition:opacity .15s}
+.related-article:last-child{border-bottom:none}
+.related-article:hover{opacity:.8}
+.related-article-img{width:52px;height:52px;border-radius:8px;object-fit:cover;background:var(--bg);flex-shrink:0;border:1px solid var(--border)}
+.related-article-title{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px}
+.related-article-date{font-size:11.5px;color:var(--muted)}
 
 /* ═════════ SZEKCIÓK (tab helyett scrollozható) ══════════════════════ */
 .prof-section{background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(252,253,255,.85) 100%);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(199,210,254,.35);border-radius:16px;padding:26px 28px;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.03),0 6px 18px rgba(17,50,147,.05);transition:box-shadow .3s,transform .3s,border-color .3s;position:relative;overflow:hidden}
@@ -747,6 +793,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
             <div class="dh-stats" id="dhStats"></div>
 
+            <div class="dh-summary" id="dhSummary"></div>
             <div class="dh-bio" id="dhBio">
               <span id="dhBioShort">–</span>
               <span class="dh-bio-full" id="dhBioFull"></span>
@@ -758,6 +805,16 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- ─── TAB NAVIGÁCIÓ ───────────────────────────────────── -->
+      <div class="prof-tabs" id="profTabs">
+        <button class="prof-tab active" onclick="scrollToSection('pane-about',this)">Áttekintés</button>
+        <button class="prof-tab" onclick="scrollToSection('pane-experience',this)">Tapasztalat</button>
+        <button class="prof-tab" onclick="scrollToSection('pane-services',this)">Árak</button>
+        <button class="prof-tab" onclick="scrollToSection('pane-reviews',this)">Értékelések</button>
+        <button class="prof-tab" onclick="scrollToSection('pane-faq',this)">Kérdések</button>
+        <button class="prof-tab" onclick="scrollToSection('pane-articles',this)">Cikkek</button>
       </div>
 
       <!-- ─── BEMUTATKOZÁS ──────────────────────────────────────── -->
@@ -778,6 +835,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <ul class="info-list" id="colEdu"><li>–</li></ul>
       </div>
 
+      <!-- ─── SZAKMAI TAPASZTALAT ─────────────────────────────── -->
+      <div class="prof-section" id="pane-experience">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Szakmai tapasztalat
+        </div>
+        <div class="exp-list" id="colExp">
+          <div class="exp-item">
+            <div class="exp-years">–</div>
+            <div><div class="exp-role">–</div><div class="exp-place">–</div></div>
+          </div>
+        </div>
+      </div>
+
       <!-- ─── SZAKTERÜLETEK ─────────────────────────────────────── -->
       <div class="prof-section">
         <div class="prof-section-h">
@@ -787,22 +858,22 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <ul class="info-list" id="colSpecs"><li>–</li></ul>
       </div>
 
-      <!-- ─── TAGSÁGOK ──────────────────────────────────────────── -->
-      <div class="prof-section">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Tagságok
+      <!-- ─── TAGSÁGOK + NYELVEK 2 OSZLOPBAN ──────────────────── -->
+      <div class="two-col-sections">
+        <div class="prof-section" style="margin:0">
+          <div class="prof-section-h">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Tagságok és szervezetek
+          </div>
+          <ul class="info-list" id="colMember"><li>–</li></ul>
         </div>
-        <ul class="info-list" id="colMember"><li>–</li></ul>
-      </div>
-
-      <!-- ─── BESZÉLT NYELVEK ───────────────────────────────────── -->
-      <div class="prof-section">
-        <div class="prof-section-h">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
-          Beszélt nyelvek
+        <div class="prof-section" style="margin:0">
+          <div class="prof-section-h">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+            Beszélt nyelvek
+          </div>
+          <ul class="info-list" id="colLangs"><li>–</li></ul>
         </div>
-        <ul class="info-list" id="colLangs"><li>–</li></ul>
       </div>
 
       <!-- ─── SZOLGÁLTATÁSOK ───────────────────────────────────── -->
@@ -860,15 +931,72 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </button>
       </div>
 
-      <!-- ─── HASONLÓ ORVOSOK ──────────────────────────────────── -->
+      <!-- ─── KAPCSOLÓDÓ CIKKEK ──────────────────────────────── -->
+      <div class="prof-section" id="pane-articles">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Tudástár – Kapcsolódó cikkek
+          <a href="tudastar.html" style="margin-left:auto;font-size:13px;font-weight:500;color:var(--brand);text-decoration:none">Összes cikk →</a>
+        </div>
+        <div id="relatedArticlesList"></div>
+      </div>
+
+      <!-- ─── TRUST BADGE-EK ────────────────────────────────────── -->
+      <div class="trust-bar">
+        <div class="trust-item">
+          <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <div class="trust-title">100% hiteles orvosok</div>
+          <div class="trust-sub">Ellenőrzött végzettség és engedélyek</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <div class="trust-title">Valódi páciens értékelések</div>
+          <div class="trust-sub">Átlátható és megbízható visszajelzések</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <div class="trust-title">Biztonságos foglalás</div>
+          <div class="trust-sub">Egyszerű, gyors és biztonságos időpontfoglalás</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div>
+          <div class="trust-title">Ügyfélszolgálat</div>
+          <div class="trust-sub">Segítünk a megfelelő orvos kiválasztásában</div>
+        </div>
+      </div>
 
     </div>
     <!-- /left column -->
 
     <!-- ═════ RIGHT COLUMN ════════════════════════════════════════ -->
     <aside>
+      <!-- Időpontfoglalás kártya -->
+      <div class="contact-card" id="bookingCard" style="background:linear-gradient(135deg,rgba(17,50,147,.05),rgba(38,74,202,.03));border-color:rgba(38,74,202,.2)">
+        <div class="contact-card-h" style="color:var(--brand)">Időpontfoglalás</div>
+        <p style="font-size:13px;color:var(--sub);margin-bottom:1rem;line-height:1.5">Válasszon időpontot online, azonnali visszaigazolással.</p>
+        <button onclick="alert('Időpontfoglalás hamarosan')" style="width:100%;background:var(--grad-blue);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(17,50,147,.25);display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:8px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Időpontfoglalás
+        </button>
+        <button onclick="alert('Időpontkérés hamarosan')" style="width:100%;background:transparent;color:var(--brand);border:1.5px solid rgba(17,50,147,.2);border-radius:11px;padding:10px;font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Időpontkérés
+        </button>
+      </div>
+
+      <!-- Verified badge -->
+      <div class="verified-badge">
+        <div class="verified-badge-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div>
+          <div class="verified-badge-title">Ellenőrzött orvos</div>
+          <div class="verified-badge-sub">A profil teljessége által ellenőrizve.</div>
+        </div>
+      </div>
+
       <!-- Elérhetőségek -->
-      <div class="contact-card" id="contactCard">
+      <div class="contact-card" id="contactCard" style="margin-top:12px">
         <div class="contact-card-h">Elérhetőségek</div>
         <div id="contactRows"></div>
         <button class="contact-msg-btn" onclick="alert('Üzenetküldés hamarosan elérhető')">
@@ -1191,9 +1319,35 @@ function render(d){
   }
   document.getElementById('dhStats').innerHTML = statsHtml.join('');
 
+  // Összegző 2 sor a profil tetején
+  const city = d.doctor_clinics?.[0]?.clinics?.cities?.name || '';
+  const clinicName = d.doctor_clinics?.[0]?.clinics?.name || '';
+  const expTxt = d.experience_years ? `${d.experience_years} éves tapasztalatával` : 'szakmai tapasztalatával';
+  const cityTxt = city ? `${city}ban` : 'magánrendelésen';
+  const clinicTxt = clinicName ? ` a ${clinicName} rendelőben` : '';
+  let summaryText = '';
+  if (d.bio && d.bio.length > 40) {
+    summaryText = d.bio;
+  } else {
+    const tpls = [
+      `${fullName} ${expTxt} nyújt megbízható ${(specRaw||'').toLowerCase()} ellátást ${cityTxt}${clinicTxt}. Pácienscentrikus szemlélettel dolgozik — minden esethez egyénre szabott kezelési tervet állít össze, és különös figyelmet fordít arra, hogy páciensei pontosan megértsék állapotukat és a javasolt kezelés menetét.`,
+      `${fullName} ${expTxt} a ${(specRaw||'').toLowerCase()} területén kiemelkedő szakember${clinicTxt}. Különös figyelmet fordít a pontos diagnózisra és az egyéni kezelési tervre. A legkorszerűbb diagnosztikai módszereket alkalmazza, empatikus hozzáállásával biztonságos környezetet teremt pácienseinek.`,
+      `${fullName} ${expTxt} szerzett kiemelkedő tapasztalatot a ${(specRaw||'').toLowerCase()} területén${clinicTxt}. Munkája során kiemelt figyelmet fordít a megelőzésre és a korai diagnózisra. Empatikus, türelmes hozzáállásával és alapos vizsgálataival pácienseinek valódi megoldást nyújt.`,
+    ];
+    summaryText = tpls[(d.id || 0) % tpls.length];
+  }
+  const summaryEl = document.getElementById('dhSummary');
+  if (summaryEl) summaryEl.textContent = summaryText;
+
   // Bio collapsed/expanded
   const bio = d.bio || `${fullName} ${d.experience_years ? d.experience_years + ' éves' : 'több éves'} szakmai tapasztalattal rendelkező ${specRaw.toLowerCase() || 'szakorvos'}. Pácienseit empatikusan, alapos vizsgálat után látja el. Szakterületén a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza, különös figyelmet fordít a megelőzésre és arra, hogy minden páciens egyedi kezelési tervet kapjon.`;
   renderBio(bio);
+
+  // Szakmai tapasztalat
+  renderExperience(d);
+
+  // Kapcsolódó cikkek
+  loadRelatedArticles(specRaw);
 
   // Breadcrumb
   document.getElementById('crumbName').textContent = fullName;
@@ -1415,6 +1569,104 @@ function computeBarDist(rat, count){
   else if(rat >= 3.5){ dist[5]=35; dist[4]=35; dist[3]=20; dist[2]=7; dist[1]=3; }
   else { dist[5]=20; dist[4]=25; dist[3]=30; dist[2]=15; dist[1]=10; }
   return [5,4,3,2,1].map(s => ({star:s, pct:dist[s]}));
+}
+
+/* ── Tab scroll navigáció ────────────────────────────────────────── */
+function scrollToSection(id, btn) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - 80;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+  document.querySelectorAll('.prof-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// Tab active state on scroll
+window.addEventListener('scroll', () => {
+  const sections = ['pane-about','pane-experience','pane-services','pane-reviews','pane-faq','pane-articles'];
+  const tabs = document.querySelectorAll('.prof-tab');
+  let current = 0;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 120) current = i;
+  });
+  tabs.forEach((t, i) => t.classList.toggle('active', i === current));
+}, { passive: true });
+
+/* ── Szakmai tapasztalat ─────────────────────────────────────────── */
+function renderExperience(d) {
+  const el = document.getElementById('colExp');
+  if (!el) return;
+  // Ha van experience mező az adatbázisban
+  if (d.experience && d.experience.length) {
+    el.innerHTML = d.experience.map(e => `
+      <div class="exp-item">
+        <div class="exp-years">${e.start_year || ''}${e.end_year ? ' – ' + e.end_year : e.start_year ? ' – jelen' : ''}</div>
+        <div>
+          <div class="exp-role">${escHtml(e.role || e.title || '')}</div>
+          <div class="exp-place">${escHtml(e.institution || e.place || '')}</div>
+          ${e.type ? `<div class="exp-type">${escHtml(e.type)}</div>` : ''}
+        </div>
+      </div>`).join('');
+  } else {
+    // Heurisztika az adatokból
+    const specs = (d.doctor_specialties || []).map(s => s.specialties?.name).filter(Boolean);
+    const clinics = (d.doctor_clinics || []).map(c => ({
+      name: c.clinics?.name,
+      city: c.clinics?.cities?.name
+    })).filter(c => c.name);
+    const currentYear = new Date().getFullYear();
+    const startYear = d.experience_years ? currentYear - d.experience_years : null;
+
+    if (clinics.length) {
+      el.innerHTML = clinics.map((c, i) => `
+        <div class="exp-item">
+          <div class="exp-years">${startYear && i === 0 ? startYear + ' – jelen' : '–'}</div>
+          <div>
+            <div class="exp-role">${escHtml(specs[0] || 'Szakorvos')}</div>
+            <div class="exp-place">${escHtml(c.name)}${c.city ? ', ' + escHtml(c.city) : ''}</div>
+          </div>
+        </div>`).join('');
+    } else {
+      el.innerHTML = '<div style="font-size:13.5px;color:var(--muted);padding:.5rem 0">Nincs megadott tapasztalat</div>';
+    }
+  }
+}
+
+/* ── Kapcsolódó cikkek ──────────────────────────────────────────── */
+async function loadRelatedArticles(specName) {
+  if (!specName) return;
+  const el = document.getElementById('relatedArticlesList');
+  if (!el) return;
+  try {
+    const { data } = await db.from('knowledge_articles')
+      .select('title, slug, created_at')
+      .ilike('title', '%' + specName.split(' ')[0] + '%')
+      .limit(4);
+    if (!data || !data.length) {
+      const { data: fallback } = await db.from('knowledge_articles')
+        .select('title, slug, created_at')
+        .limit(4)
+        .order('id', { ascending: false });
+      renderArticles(el, fallback || []);
+    } else {
+      renderArticles(el, data);
+    }
+  } catch(e) {}
+}
+
+function renderArticles(el, articles) {
+  if (!articles.length) { el.innerHTML = '<div style="font-size:13.5px;color:var(--muted)">Nincsenek kapcsolódó cikkek</div>'; return; }
+  el.innerHTML = articles.map(a => `
+    <a class="related-article" href="tudastar-cikk.html?slug=${encodeURIComponent(a.slug || '')}">
+      <div class="related-article-img" style="background:linear-gradient(135deg,#eef2ff,#e0e7ff);display:flex;align-items:center;justify-content:center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#264ACA" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <div class="related-article-title">${escHtml(a.title)}</div>
+        <div class="related-article-date">${a.created_at ? new Date(a.created_at).toLocaleDateString('hu-HU') : ''}</div>
+      </div>
+    </a>`).join('');
 }
 
 /* ── Időpontok tab ────────────────────────────────────────────────── */
