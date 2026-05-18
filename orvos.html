@@ -1134,8 +1134,15 @@ async function load(){
   }
 
   if(!id && !slug){
-    showError('Hiányzó orvos azonosító','Az URL-ben nincs orvos ID vagy slug megadva.');
-    return;
+    // Fallback: load first active doctor for demo
+    try {
+      const { data: first } = await db.from('doctors').select('id').eq('is_active',true).limit(1).single();
+      if(first) { id = String(first.id); }
+      else { showError('Hiányzó orvos azonosító','Az URL-ben nincs orvos ID vagy slug megadva.'); return; }
+    } catch(e) {
+      showError('Hiányzó orvos azonosító','Az URL-ben nincs orvos ID vagy slug megadva.');
+      return;
+    }
   }
   try{
     // Részletes query — minden lehetséges mező. Ha valamelyik nem létezik
