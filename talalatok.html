@@ -370,7 +370,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 .dc-loc{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--sub);font-weight:500;margin-top:.4rem}
 .dc-loc svg{flex-shrink:0;color:var(--green)}
 .dc-loc-clinic{color:var(--text);font-weight:600}
-.dc-summary{font-size:13px;color:var(--sub);line-height:1.6;margin-top:.4rem;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.dc-summary{grid-column:1 / -1;font-size:13px;color:var(--sub);line-height:1.6;margin-top:.6rem;padding-top:.9rem;border-top:1px solid rgba(17,50,147,.07);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 
 /* Hidden in new design (kept for compatibility) */
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
@@ -383,9 +383,9 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 .dc-price small{font-size:12px;color:var(--green-dark);font-weight:600;display:block;margin-top:3px;letter-spacing:0}
 .dc-divider{height:1px;background:#c4ead2;margin:.05rem 0}
 .btn-prof{width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(46,74,202,.2),0 8px 18px rgba(46,74,202,.28);white-space:nowrap;letter-spacing:-0.005em;position:relative;overflow:hidden}
-.btn-call{display:flex;align-items:center;justify-content:center;width:100%;background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:#fff;border:none;border-radius:11px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(34,197,94,.22),0 8px 18px rgba(22,163,74,.3);white-space:nowrap;letter-spacing:-0.005em}
-.btn-call:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(22,163,74,.35),inset 0 1px 0 rgba(255,255,255,.2);color:#fff}
-.btn-call:active{transform:translateY(0)}
+.btn-call{display:flex;align-items:center;justify-content:center;width:100%;background:#ecfdf5;color:#15803d;border:1.5px solid #bbf7d0;border-radius:11px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;letter-spacing:-0.005em}
+.btn-call:hover{background:#dcfce7;border-color:#86efac;color:#166534}
+.btn-call:active{background:#bbf7d0}
 .btn-prof::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 50%);pointer-events:none}
 .btn-prof:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(17,50,147,.32),inset 0 1px 0 rgba(255,255,255,.2)}
 .btn-prof:active{transform:translateY(0)}
@@ -1272,12 +1272,20 @@ async function load(){
   const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
   const runQuery = async (selectClause) => {
-    let q = db.from('doctors').select(selectClause).eq('is_active', true);
-    if(specQ) q = q.ilike('doctor_specialties.specialties.name', `%${specQ}%`);
-    if(cityQ) q = q.ilike('doctor_clinics.clinics.cities.name', `%${cityQ}%`);
-    const res = await q;
-    // JSON round-trip hogy elkerüljük a DataCloneError-t (Headers nem klónozható)
-    return { data: res.data ? JSON.parse(JSON.stringify(res.data)) : null, error: res.error ? { message: res.error.message, code: res.error.code, details: res.error.details } : null };
+    try {
+      let q = db.from('doctors').select(selectClause).eq('is_active', true);
+      if(specQ) q = q.ilike('doctor_specialties.specialties.name', `%${specQ}%`);
+      if(cityQ) q = q.ilike('doctor_clinics.clinics.cities.name', `%${cityQ}%`);
+      const res = await q;
+      // JSON round-trip hogy elkerüljük a DataCloneError-t (Headers nem klónozható)
+      return {
+        data: res.data ? JSON.parse(JSON.stringify(res.data)) : null,
+        error: res.error ? { message: res.error.message, code: res.error.code, details: res.error.details } : null
+      };
+    } catch(e){
+      // Headers / DataClone hiba — string-é alakítjuk a hibát
+      return { data: null, error: { message: e.message || String(e), code: 'CATCH' } };
+    }
   };
 
   let { data, error } = await runQuery(fullSelect);
@@ -1577,7 +1585,6 @@ function cardH(d,i){
       </div>
 
       ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
-      <div class="dc-summary" id="sum-${d.id}">${escapeHtml(d.bio || 'Összefoglaló betöltése...')}</div>
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <a class="btn-call" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
@@ -1586,6 +1593,7 @@ function cardH(d,i){
       </a>
       <button class="btn-prof-alt" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
     </div>
+    <div class="dc-summary" id="sum-${d.id}">${escapeHtml(d.bio || 'Összefoglaló betöltése...')}</div>
   </div>`;
 }
 
