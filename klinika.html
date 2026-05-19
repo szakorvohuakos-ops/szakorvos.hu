@@ -101,22 +101,21 @@ img{max-width:100%;display:block}
 
 /* ═══ HERO ═══ */
 .hero{max-width:1200px;margin:1rem auto 2rem;padding:0 4%}
-.hero-card{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);position:relative}
+.hero-card{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;padding:1.75rem 2rem;display:grid;grid-template-columns:160px 1fr;gap:2rem;align-items:center;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);position:relative}
 .hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
-.hero-img{aspect-ratio:21/8;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-img{width:160px;aspect-ratio:1/1;border-radius:16px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hero-img img{width:100%;height:100%;object-fit:cover}
-.hero-img-placeholder{color:rgba(255,255,255,.4)}
-.hero-img-placeholder svg{width:96px;height:96px}
-.hero-badges{position:absolute;top:1.25rem;left:1.25rem;display:flex;gap:8px}
-.hero-badge{background:rgba(255,255,255,.96);color:var(--brand);padding:6px 14px;border-radius:999px;font-size:12.5px;font-weight:600;backdrop-filter:blur(10px);display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.hero-rating{position:absolute;top:1.25rem;right:1.25rem;background:rgba(255,255,255,.96);padding:7px 14px;border-radius:999px;display:flex;align-items:center;gap:6px;font-weight:700;color:var(--text);backdrop-filter:blur(10px);box-shadow:0 2px 8px rgba(0,0,0,.1);font-size:14px}
-.hero-rating svg{color:#FFB400}
-.hero-info{padding:1.75rem 2rem 2rem}
-.hero-info h1{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-0.03em;line-height:1.2;margin-bottom:.6rem;color:var(--text)}
-.hero-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;color:var(--muted);font-size:14px;margin-bottom:1.1rem}
+.hero-img-placeholder{color:rgba(255,255,255,.45)}
+.hero-img-placeholder svg{width:64px;height:64px}
+.hero-badges{display:none}
+.hero-rating{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.96);padding:4px 10px;border-radius:999px;display:flex;align-items:center;gap:5px;font-weight:700;color:var(--text);backdrop-filter:blur(10px);box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:12.5px}
+.hero-rating svg{color:#FFB400;width:12px;height:12px}
+.hero-info{padding:0;min-width:0}
+.hero-info h1{font-size:clamp(1.5rem,2.6vw,1.9rem);font-weight:700;letter-spacing:-0.025em;line-height:1.2;margin-bottom:.6rem;color:var(--text)}
+.hero-meta{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;color:var(--muted);font-size:13.5px;margin-bottom:1rem}
 .hero-meta-item{display:flex;align-items:center;gap:5px;font-weight:500}
 .hero-meta-item svg{color:var(--brand);opacity:.7;flex-shrink:0}
-.hero-actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:.5rem}
+.hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.25rem}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:11px;font-weight:600;font-size:14px;border:none;transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,background .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer}
 .btn-primary{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 2px 6px rgba(17,50,147,.18),0 8px 20px rgba(17,50,147,.22)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(17,50,147,.22),0 14px 28px rgba(17,50,147,.3)}
@@ -202,8 +201,10 @@ img{max-width:100%;display:block}
   .side{position:static}
 }
 @media(max-width:640px){
-  .hero-img{aspect-ratio:16/10}
-  .hero-info{padding:1.25rem 1.25rem 1.5rem}
+  .hero-card{grid-template-columns:1fr;gap:1.25rem;text-align:center;padding:1.5rem}
+  .hero-img{margin:0 auto;width:130px}
+  .hero-meta{justify-content:center}
+  .hero-actions{justify-content:center}
   .section{padding:1.25rem}
   .docs-grid{grid-template-columns:1fr}
 }
@@ -546,9 +547,9 @@ function render(c){
               ${escapeHtml(city)}
             </span>` : ''}
           </div>
-          ${avgRating > 0 ? `<div class="hero-rating">
+          ${(c.google_rating || avgRating) > 0 ? `<div class="hero-rating">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            ${avgRating.toFixed(1)}
+            ${(c.google_rating || avgRating).toFixed(1)}${c.google_review_count ? `<span style="opacity:.7;font-weight:500;margin-left:3px">(${c.google_review_count})</span>` : ''}
           </div>` : ''}
         </div>
         <div class="hero-info">
@@ -562,10 +563,13 @@ function render(c){
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               ${docs.length} orvos
             </span>
-            ${totalReviews > 0 ? `<span class="hero-meta-item">
+            ${c.google_rating ? `<span class="hero-meta-item" style="color:#0f172a;font-weight:600">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFB400" stroke="none"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              ${c.google_rating.toFixed(1)}${c.google_review_count ? ` <span style="opacity:.6;font-weight:500">(${c.google_review_count} Google vélemény)</span>` : ''}
+            </span>` : (totalReviews > 0 ? `<span class="hero-meta-item">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               ${totalReviews} vélemény
-            </span>` : ''}
+            </span>` : '')}
           </div>
           <div class="hero-actions">
             ${c.phone ? `<a href="tel:${escapeHtml(c.phone)}" class="btn btn-primary">
@@ -665,8 +669,8 @@ function render(c){
           <div class="stats">
             <div class="stat"><div class="stat-val">${docs.length}</div><div class="stat-lbl">Orvos</div></div>
             <div class="stat"><div class="stat-val">${specs.length}</div><div class="stat-lbl">Szakterület</div></div>
-            <div class="stat"><div class="stat-val">${avgRating > 0 ? avgRating.toFixed(1) : '—'}</div><div class="stat-lbl">Értékelés</div></div>
-            <div class="stat"><div class="stat-val">${totalReviews}</div><div class="stat-lbl">Vélemény</div></div>
+            <div class="stat"><div class="stat-val">${(c.google_rating || avgRating) > 0 ? (c.google_rating || avgRating).toFixed(1) : '—'}</div><div class="stat-lbl">${c.google_rating ? 'Google értékelés' : 'Értékelés'}</div></div>
+            <div class="stat"><div class="stat-val">${c.google_review_count || totalReviews}</div><div class="stat-lbl">Vélemény</div></div>
           </div>
         </section>
 
