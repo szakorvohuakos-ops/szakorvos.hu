@@ -142,10 +142,22 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .btn-pill:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
 
 /* ───── HERO BAR ───── */
-.hbar{background:linear-gradient(180deg,rgba(255,255,255,.75) 0%,rgba(244,246,248,.6) 100%);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(255,255,255,.6);padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.7) inset}
+.hbar{background:transparent;padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden}
 .hbar::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none}
 .hbar::after{display:none}
-.hbar-in{max-width:1400px;margin:0 auto;display:block;position:relative;z-index:1}
+.hbar-in{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start;position:relative;z-index:1}
+.hbar-left{min-width:0;text-align:left;padding-top:.5rem}
+@media(max-width:880px){.hbar-in{grid-template-columns:1fr}.hbar-map{display:none}}
+
+.hbar-map{background:linear-gradient(135deg,rgba(255,255,255,.6) 0%,rgba(230,238,255,.45) 100%);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.7);border-radius:18px;padding:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.06),0 16px 36px rgba(17,50,147,.1);position:relative;overflow:hidden;text-decoration:none;color:inherit;display:grid;grid-template-columns:1fr 140px;gap:14px;align-items:center;transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s}
+.hbar-map:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 4px 10px rgba(17,50,147,.08),0 24px 48px rgba(17,50,147,.14);text-decoration:none}
+.hbar-map-frame{position:relative;width:100%;height:130px;border-radius:12px;overflow:hidden;background:#e2e8f0;order:2}
+.hbar-map-frame-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;background:linear-gradient(135deg,#eef2ff 0%,#e2e8f0 100%);z-index:2;text-align:center;padding:0 6px}
+.hbar-map-body{padding:0 0 0 4px;min-width:0;order:1}
+.hbar-map-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.hbar-map-title svg{color:var(--green);flex-shrink:0}
+.hbar-map-sub{font-size:12px;color:var(--sub);line-height:1.45;margin-bottom:10px}
+.hbar-map-cta{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:10px;letter-spacing:-0.005em;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 2px 8px rgba(17,50,147,.25)}
 .crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--brand);margin-bottom:1.25rem;font-weight:600}
 .crumb a{color:var(--brand);transition:color .15s}
 .crumb a:hover{color:var(--brand-2);text-decoration:underline}
@@ -751,16 +763,35 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 <!-- HERO -->
 <div class="hbar">
   <div class="hbar-in">
-    <div class="crumb">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <a href="index.html">Kezdőlap</a>
-      <span class="crumb-sep">›</span>
-      <a href="index.html">Klinika keresése</a>
-      <span class="crumb-sep">›</span>
-      <span class="crumb-current" id="crumb2">Találatok</span>
+    <div class="hbar-left">
+      <div class="crumb">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <a href="index.html">Kezdőlap</a>
+        <span class="crumb-sep">›</span>
+        <a href="index.html">Klinika keresése</a>
+        <span class="crumb-sep">›</span>
+        <span class="crumb-current" id="crumb2">Találatok</span>
+      </div>
+      <h1 class="htitle">Klinikák és <b>magánrendelők</b></h1>
+      <div class="hsub" id="hsubText"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
     </div>
-    <h1 class="htitle" style="text-align:center">Klinikák és <b>magánrendelők</b></h1>
-    <div class="hsub" id="hsubText" style="text-align:center"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
+    <a href="talalatok.html" class="hbar-map">
+      <div class="hbar-map-frame">
+        <div id="hbarMiniMap" style="width:100%;height:100%"></div>
+        <div class="hbar-map-frame-loading" id="hbarMiniMapLoading">Térkép betöltése…</div>
+      </div>
+      <div class="hbar-map-body">
+        <div class="hbar-map-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
+          Orvos keresés
+        </div>
+        <div class="hbar-map-sub">Szakorvosok és magánrendelők országosan.</div>
+        <span class="hbar-map-cta">
+          Orvosos nézet
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </div>
+    </a>
   </div>
 </div>
 <input type="hidden" id="navSpec">
@@ -1202,7 +1233,7 @@ function clinicCardHTML(c, i){
     ${photoBlock}
     <div class="dc-mid">
       <div class="dc-nm">${escapeHtml(c.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
-      <div class="dc-deg">${escapeHtml([c._cityName, c.street].filter(Boolean).join(', ') || c.address || 'Magyarország')}</div>
+      <div class="dc-deg">${escapeHtml([[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ') || c.address || 'Magyarország')}</div>
 
       ${ratingFmt || c._totalReviews ? `<div class="dc-meta dc-meta-rating">
         ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${c._totalReviews ? ` <span style="color:var(--muted);font-weight:500">(${c._totalReviews} értékelés)</span>` : ''}</span>` : ''}
@@ -1332,7 +1363,7 @@ async function renderMap(){
         infoWindow.setContent(`
           <div style="font-family:'Inter',sans-serif;max-width:240px">
             <div style="font-weight:700;color:#113293;font-size:14px;margin-bottom:4px">${escapeHtml(c.name)}</div>
-            ${(c._cityName || c.street) ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">📍 ${escapeHtml([c._cityName, c.street].filter(Boolean).join(', '))}</div>` : (c.address ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">📍 ${escapeHtml(c.address)}</div>` : '')}
+            ${(c._cityName || c.street) ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">📍 ${escapeHtml([[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', '))}</div>` : (c.address ? `<div style="font-size:12px;color:#6b7a9a;margin-bottom:6px">📍 ${escapeHtml(c.address)}</div>` : '')}
             <div style="font-size:12px;color:#475569;margin-bottom:8px"><strong>${c._docCount}</strong> orvos${c._avgRating > 0 ? ` · ⭐ ${c._avgRating.toFixed(1)}` : ''}</div>
             <a href="${target}" style="display:inline-block;background:#113293;color:#fff;padding:6px 12px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600">Részletek →</a>
           </div>
@@ -1359,6 +1390,68 @@ async function renderMap(){
 
 // Indulás
 document.addEventListener('DOMContentLoaded', loadClinics);
+
+// ───── Hero mini map (mint a talalatok.html-en) ─────
+(async function initHbarMap(){
+  const start = () => {
+    const el = document.getElementById('hbarMiniMap');
+    const loadingEl = document.getElementById('hbarMiniMapLoading');
+    if(!el) return;
+    const MAP_STYLE_MINI = [
+      { elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
+      { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
+      { elementType: 'labels.text.stroke', stylers: [{ color: '#f8fafc' }] },
+      { featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#113293' }] },
+      { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#c7d2fe' }] },
+      { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] }
+    ];
+    (async () => {
+      try {
+        const { data: clinics } = await db
+          .from('clinics')
+          .select('lat,lng')
+          .not('lat','is',null)
+          .not('lng','is',null);
+        const withCoords = (clinics || []).filter(c => c.lat && c.lng);
+        const maps = await loadGoogleMaps();
+        const map = new maps.Map(el, {
+          center: { lat: 47.4979, lng: 19.0402 },
+          zoom: 7,
+          styles: MAP_STYLE_MINI,
+          disableDefaultUI: true,
+          gestureHandling: 'none',
+          clickableIcons: false,
+          keyboardShortcuts: false
+        });
+        const pinIcon = {
+          path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z',
+          fillColor: '#113293', fillOpacity: 1,
+          strokeColor: '#ffffff', strokeWeight: 2, scale: .6,
+          anchor: new maps.Point(12, 36)
+        };
+        const bounds = new maps.LatLngBounds();
+        withCoords.forEach(c => {
+          const pos = { lat: Number(c.lat), lng: Number(c.lng) };
+          new maps.Marker({ position: pos, map, icon: pinIcon });
+          bounds.extend(pos);
+        });
+        if(withCoords.length) map.fitBounds(bounds, 20);
+        if(loadingEl) loadingEl.style.display = 'none';
+      } catch(e){
+        console.warn('[hbarMap] init failed:', e.message);
+        if(loadingEl) loadingEl.textContent = 'Térkép nem elérhető';
+      }
+    })();
+  };
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
+})();
 </script>
 
 
