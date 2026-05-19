@@ -939,7 +939,7 @@ async function loadClinics(){
   try {
     const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, clinic_photos, city_id, lat, lng, cities(name)')
+      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, cities(name)')
       .order('name');
     if(clinicsRes.error){ showError(clinicsRes.error.message); return; }
     const clinics = clinicsRes.data || [];
