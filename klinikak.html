@@ -939,7 +939,7 @@ async function loadClinics(){
   try {
     const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, phone, email, website, photo_url, clinic_photos, city_id, lat, lng, cities(name)')
+      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, clinic_photos, city_id, lat, lng, cities(name)')
       .order('name');
     if(clinicsRes.error){ showError(clinicsRes.error.message); return; }
     const clinics = clinicsRes.data || [];
@@ -1051,8 +1051,13 @@ function applyFilters(){
     if(q){
       const inName = (c.name||'').toLowerCase().includes(q);
       const inAddr = (c.address||'').toLowerCase().includes(q);
+      const inPostal = (c.postal_code||'').toLowerCase().includes(q);
+      const inDistrict = (c.district||'').toLowerCase() === q.toLowerCase() ||
+                        ((c.district||'') + '. kerület').toLowerCase().includes(q) ||
+                        ((c.district||'') + '. ker').toLowerCase().includes(q);
+      const inStreet = (c.street||'').toLowerCase().includes(q);
       const inSpec = c._specs.some(s => (s.name||'').toLowerCase().includes(q));
-      if(!inName && !inAddr && !inSpec) return false;
+      if(!inName && !inAddr && !inPostal && !inDistrict && !inStreet && !inSpec) return false;
     }
     if(city && c._cityName !== city) return false;
     if(spec && !c._specs.some(s => s.name === spec)) return false;

@@ -1,5 +1,69 @@
 # Szakorvos.hu — Változások
 
+## 2026-05-19 — Klinika cím komponensek szétválasztása (kereshetőség)
+
+### Adatbázis (migráció `004_clinics_address_split.sql`)
+- **clinics.postal_code** (varchar(10)) — irányítószám
+- **clinics.street** (text) — utca + házszám
+- **clinics.district** (varchar(8)) — budapesti kerület római számmal (I-XXIII)
+- Indexek mindkét új mezőre a gyors kereséshez
+- **`bp_district_from_zip(zip)`** SQL függvény: budapesti zip-ből automatikus kerület meghatározás
+- **Trigger `clinics_address_sync`**: a strukturált mezőkből BEFORE INSERT/UPDATE újraépíti az `address` mezőt formázott alakra: `"1122 Budapest XII. kerület, Maros utca 16/b"`
+- Adatmigráció: a meglévő `address` szövegekből regex-szel kihámozza a postal_code-ot, utcanevet, és Budapestnél a kerületet zip alapján
+
+### admin-klinika.html
+- A régi egyetlen "Cím" mező helyett: **Irányítószám, Kerület (dropdown), Utca és házszám** külön mezők
+- A kerület dropdown csak Budapestnél jelenik meg (`toggleDistrictVisibility`)
+- **Automatikus kerület felajánlás**: 4 jegyű budapesti zip beírásakor (1XYY) automatikusan kiválasztja a megfelelő kerületet a dropdown-ban (csak ha még üres)
+- `saveClinic` átírva: a 3 új mezőt menti, a trigger újraépíti az `address`-t, geocoding az így keletkezett szépen formázott címmel fut
+
+### klinika.html
+- Hero meta + Kapcsolat szekció a strukturált komponenseket jeleníti meg külön sorokban
+- `formatAddressShort(c, city)` → "1122 Budapest XII. ker., Maros utca 16/b"
+- `formatAddressFull(c, city)` → két sor: "1122 Budapest XII. kerület" / "Maros utca 16/b"
+
+### klinikak.html (találati lista)
+- Select bővítve: `postal_code, street, district, cover_url`
+- **Kereső bővített match**: irányítószám, kerület (pl. "XII", "1122", "XII. kerület"), utcanév, address — a felhasználó bármelyikre keresve találatot kap
+
+---
+
+## 2026-05-19 — Klinika profil teljes felfrissítés
+
+### Adatbázis (Supabase, migráció 003_clinics_cover_gallery.sql)
+- **clinics.cover_url** (text, nullable) — banner kép URL a profil tetejére
+- **clinics.gallery** (jsonb, default `[]`) — galéria képek tömbje `[{url, caption?}]` formátumban
+- Adatmigráció: ha létezett legacy `clinic_photos` array oszlop, a tartalma áttöltve a gallery-be
+- **clinic-photos** Supabase Storage bucket létrehozva (public read, auth write, 5 MB/file, image MIME only)
+- Storage RLS policies: SELECT public, INSERT/UPDATE/DELETE authenticated
+
+### klinika.html — Új profil oldal
+- **Új hero design** (banner-stílusú, mint a doctolib/booksy):
+  - Szélesvásznú banner kép a tetején (1600×600 ajánlott)
+  - Logo "kerek doboz" alulra lóg (104×104px, fehér keret + árnyék)
+  - Google rating badge a banner jobb felső sarkában
+  - Név + meta (cím, orvosok, szakterületek száma) + Telefon/Weboldal CTA-k
+- **Bemutatkozás szekció** — `description` mezőből, "Tovább olvasom" toggle ha hosszú
+- **Galéria szekció** — 3/4 oszlopos rács, lightbox-szal (◀▶ navigáció, ESC, kattintsa kívülre)
+- **Vizsgálatok és árak szekció** — `treatments` táblából a klinika orvosainak szakterületei alapján:
+  - Top 6 vizsgálat preview-ban, ár szerint csökkenő sorrendben
+  - "Összes (XX) megtekintése" modal — keresős, mint az orvos profilon
+  - Vizsgálat mellett szakterület chip
+- **Sticky CTA mobilon** — csak hívás gomb, 240px görgetés után jelenik meg
+- Layout hiba javítva: a `<div class="side">` nyitó tag hiányzott a régiből (sticky-positioning miatt fontos)
+
+### admin-klinika.html — Bővített kép-kezelő
+- **Logo + Borító kép külön** — két feltöltő UI (négyzetes 400×400 logónak, szélesvásznú 1600×600 borítónak)
+- **Eltávolítás gomb** mindkét képhez (storage törlés + DB null)
+- **Galéria kártya** új szekció:
+  - Rács előnézet a meglévő képekből (hover-on jelenik meg az X gomb)
+  - Multiple file upload (egy lépésben több kép)
+  - Maximum 20 kép, 5 MB/kép
+  - Automatikus storage cleanup törléskor
+- Storage bucket: `clinic-photos` (clinics/{id}/logo-{ts}.ext, cover-{ts}.ext, gallery-{ts}-{i}.ext)
+
+---
+
 ## 2026-05-18 — Orvos profil: szolgáltatások és árak a vizsgálatok adattárából
 
 ### Adatbázis (Supabase, alkalmazva)

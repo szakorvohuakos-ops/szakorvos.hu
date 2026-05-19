@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Klinika Email Scraper – Szakorvos.hu Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#f0f4ff 0%,#f6f8fb 50%,#f0f7f3 100%);min-height:100vh;color:#0f172a;-webkit-font-smoothing:antialiased;line-height:1.5;padding:2rem 1.5rem}
+.wrap{max-width:900px;margin:0 auto}
+.head{text-align:center;margin-bottom:2rem}
+.head h1{font-size:1.8rem;font-weight:700;color:#113293;margin-bottom:.4rem;letter-spacing:-0.025em}
+.head p{color:#475569;font-size:14.5px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.78) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:18px;padding:1.75rem;margin-bottom:1.25rem;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07)}
+.card h2{font-size:1.05rem;font-weight:700;color:#113293;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.card h2 .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#113293;color:#fff;font-size:13px;font-weight:700}
+label{display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px}
+input[type=text],input[type=password],input[type=number]{width:100%;padding:11px 14px;font-family:inherit;font-size:14px;color:#0f172a;background:rgba(255,255,255,.7);border:1.5px solid rgba(220,227,234,.7);border-radius:10px;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus{border-color:#264ACA;background:#fff;box-shadow:0 0 0 4px rgba(38,74,202,.1)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.row.full{grid-template-columns:1fr}
+.checkbox{display:flex;align-items:center;gap:8px;font-size:13.5px;color:#334155;cursor:pointer;margin-top:8px}
+.checkbox input{width:16px;height:16px;accent-color:#113293;cursor:pointer}
+.help{font-size:12px;color:#64748b;margin-top:6px;line-height:1.5}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;font-family:inherit;font-size:14.5px;font-weight:600;border:none;border-radius:11px;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 2px 6px rgba(17,50,147,.2),0 8px 20px rgba(17,50,147,.25)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-secondary{background:rgba(255,255,255,.6);color:#264ACA;border:1px solid rgba(17,50,147,.18)}
+.btn-secondary:hover{background:rgba(238,242,255,.85)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem}
+.log-box{margin-top:1rem;background:#0f172a;color:#cbd5e1;border-radius:10px;padding:1rem 1.25rem;font-family:'SF Mono',Consolas,monospace;font-size:12.5px;line-height:1.65;max-height:500px;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+.log-box .ok{color:#4ade80}
+.log-box .err{color:#f87171}
+.log-box .info{color:#60a5fa}
+.log-box .warn{color:#fbbf24}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.7rem;margin-top:1rem}
+.stat{background:rgba(255,255,255,.6);padding:.85rem;border-radius:10px;text-align:center;border:1px solid rgba(220,227,234,.7)}
+.stat-val{font-size:1.6rem;font-weight:800;color:#113293;letter-spacing:-0.02em;line-height:1}
+.stat-lbl{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-top:4px}
+.note{background:#dbeafe;border:1px solid #93c5fd;color:#1e40af;padding:11px 14px;border-radius:10px;font-size:13px;line-height:1.55;margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <h1>📧 Klinika E-mail Scraper</h1>
+    <p>E-mail címek kinyerése a klinikák weboldaláról</p>
+  </div>
+
+  <div class="note">
+    A scraper ellátogat a klinika főoldalára + <code>/kapcsolat</code>, <code>/elerhetoseg</code>, <code>/contact</code> aloldalakra, és kiszedi belőlük a legjobban illő e-mail címet (info@, kapcsolat@ stb. preferált).
+  </div>
+
+  <!-- 1. SERVICE ROLE KEY -->
+  <div class="card">
+    <h2><span class="num">1</span> Supabase Service Role Key</h2>
+    <div class="row full">
+      <div>
+        <label>Service role key (ugyanaz mint a klinika importnál)</label>
+        <input type="password" id="srk" placeholder="eyJhbGciOi... vagy sb_secret_..." autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PARAMÉTEREK -->
+  <div class="card">
+    <h2><span class="num">2</span> Beállítások</h2>
+    <div class="row">
+      <div>
+        <label>Mennyit dolgozzon fel egy futásban</label>
+        <input type="number" id="limit" value="20" min="1" max="50">
+        <div class="help">1-50 között. A Supabase function 150 mp után timeoutol — egy klinika ~5-15 mp. Javasolt: 20-30.</div>
+      </div>
+      <div>
+        <label>Csak email nélkülieket</label>
+        <label class="checkbox" style="margin-top:9px">
+          <input type="checkbox" id="skipExisting" checked>
+          Igen — kihagyja amik már megvannak
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. INDÍTÁS + LOG -->
+  <div class="card">
+    <h2><span class="num">3</span> Indítás</h2>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="runBtn" onclick="runScraper()">
+        <span id="runBtnLabel">Email scraper indítása</span>
+      </button>
+      <button class="btn btn-secondary" onclick="clearLog()">Log ürítése</button>
+    </div>
+
+    <div class="stats" id="stats" style="display:none">
+      <div class="stat"><div class="stat-val" id="statProcessed">0</div><div class="stat-lbl">Feldolgozott</div></div>
+      <div class="stat"><div class="stat-val" id="statFound">0</div><div class="stat-lbl">Email megtalálva</div></div>
+      <div class="stat"><div class="stat-val" id="statNotFound">0</div><div class="stat-lbl">Nem találtuk</div></div>
+      <div class="stat"><div class="stat-val" id="statErrors">0</div><div class="stat-lbl">Hibák</div></div>
+    </div>
+
+    <div class="log-box" id="log">[Naplózás itt jelenik meg]</div>
+  </div>
+
+</div>
+
+<script>
+const FN_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/clinic-email-scraper';
+const SRK_KEY = 'szakorvos_admin_srk';
+
+const srkInput = document.getElementById('srk');
+const saved = localStorage.getItem(SRK_KEY);
+if (saved) srkInput.value = saved;
+srkInput.addEventListener('change', () => localStorage.setItem(SRK_KEY, srkInput.value.trim()));
+
+const logEl = document.getElementById('log');
+function log(msg, cls = '') {
+  const ts = new Date().toLocaleTimeString('hu-HU');
+  const span = cls ? `<span class="${cls}">${msg}</span>` : msg;
+  logEl.innerHTML += `[${ts}] ${span}\n`;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function clearLog() { logEl.innerHTML = ''; document.getElementById('stats').style.display = 'none'; }
+
+async function runScraper() {
+  const srk = srkInput.value.trim();
+  if (!srk) { log('❌ Service role key kötelező!', 'err'); return; }
+  localStorage.setItem(SRK_KEY, srk);
+
+  const limit = parseInt(document.getElementById('limit').value || '20', 10);
+  const skipExisting = document.getElementById('skipExisting').checked;
+
+  const runBtn = document.getElementById('runBtn');
+  const runBtnLabel = document.getElementById('runBtnLabel');
+  runBtn.disabled = true;
+  runBtnLabel.innerHTML = '<span class="spinner"></span> Scraper fut…';
+
+  clearLog();
+  log(`🚀 Email scraper indul...`, 'info');
+  log(`Limit: ${limit}, csak email nélkülieket: ${skipExisting ? 'igen' : 'nem'}`, 'info');
+  log(``);
+  log(`Várakozás... (klinikánként ~5-15 másodperc)`, 'warn');
+
+  try {
+    const t0 = Date.now();
+    const res = await fetch(FN_URL, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${srk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ limit, skip_existing: skipExisting }),
+    });
+
+    const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      log(`❌ Hiba (HTTP ${res.status}): ${data.error || JSON.stringify(data)}`, 'err');
+      runBtn.disabled = false;
+      runBtnLabel.textContent = 'Email scraper indítása';
+      return;
+    }
+
+    const s = data.stats;
+    log(``);
+    log(`✅ Sikeres futás (${elapsed} mp)`, 'ok');
+    log(``);
+    log(`Feldolgozott: ${s.processed}`, 'info');
+    log(`Email megtalálva: ${s.found}`, 'ok');
+    log(`Nem találtuk: ${s.not_found}`, 'warn');
+    log(`Hibák: ${s.errors}`, s.errors > 0 ? 'err' : 'ok');
+
+    document.getElementById('statProcessed').textContent = s.processed;
+    document.getElementById('statFound').textContent = s.found;
+    document.getElementById('statNotFound').textContent = s.not_found;
+    document.getElementById('statErrors').textContent = s.errors;
+    document.getElementById('stats').style.display = '';
+
+    if (s.details && s.details.length) {
+      log(``);
+      log(`Részletek:`);
+      s.details.forEach(d => {
+        if (d.status === 'found') {
+          log(`  ✓ ${d.name} → ${d.email}`, 'ok');
+        } else {
+          log(`  ✗ ${d.name} (${d.website})`, 'warn');
+        }
+      });
+    }
+  } catch (e) {
+    log(`❌ Hálózati hiba: ${e.message}`, 'err');
+  } finally {
+    runBtn.disabled = false;
+    runBtnLabel.textContent = 'Email scraper indítása';
+  }
+}
+</script>
+</body>
+</html>
