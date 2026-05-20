@@ -970,7 +970,8 @@ async function loadClinics(){
   try {
     const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, cities(name)')
+      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, cities(name)')
+      .in('status', ['active', 'partner'])
       .order('name');
     if(clinicsRes.error){ showError(clinicsRes.error.message); return; }
     const clinics = clinicsRes.data || [];
@@ -1413,6 +1414,7 @@ document.addEventListener('DOMContentLoaded', loadClinics);
         const { data: clinics } = await db
           .from('clinics')
           .select('lat,lng')
+          .in('status', ['active', 'partner'])
           .not('lat','is',null)
           .not('lng','is',null);
         const withCoords = (clinics || []).filter(c => c.lat && c.lng);

@@ -404,6 +404,14 @@ textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             Klinika alapadatai
           </div>
+          <div style="display:flex;align-items:center;gap:.6rem">
+            <label style="font-size:12px;font-weight:600;color:var(--muted)">Státusz:</label>
+            <select id="cStatus" onchange="saveClinicStatus(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">
+              <option value="inactive">Inaktív</option>
+              <option value="active">Aktív</option>
+              <option value="partner">Szakorvos.hu Partner</option>
+            </select>
+          </div>
         </div>
         <div class="card-body">
           <!-- LOGO FELTÖLTÉS -->
@@ -732,20 +740,25 @@ function switchTab(tab,el){
 /* ═══ KLINIKA BETÖLTÉSE ═══ */
 async function loadClinicData(){
   try {
-    // Először a session-höz tartozó klinika admin szerepe alapján
-    const { data: { session } } = await db.auth.getSession();
-    if(!session?.user) return;
-    // Klinika admin: clinic_admins-ből kapjuk meg a klinika ID-t
-    const { data: link } = await db
-      .from('clinic_admins')
-      .select('clinic_id')
-      .eq('user_id', session.user.id)
-      .maybeSingle();
-    let clinicId = link?.clinic_id;
+    // 1) URL param ?id=... (admin oldalról jövet)
+    const urlId = new URLSearchParams(window.location.search).get('id');
+    let clinicId = urlId || null;
+
     if(!clinicId){
-      // Fallback: első klinika (superadmin esetén)
-      const { data: first } = await db.from('clinics').select('id').limit(1).single();
-      clinicId = first?.id;
+      // 2) Session-höz tartozó klinika admin szerepe alapján
+      const { data: { session } } = await db.auth.getSession();
+      if(!session?.user) return;
+      const { data: link } = await db
+        .from('clinic_admins')
+        .select('clinic_id')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+      clinicId = link?.clinic_id;
+      if(!clinicId){
+        // 3) Fallback: első klinika (superadmin esetén)
+        const { data: first } = await db.from('clinics').select('id').limit(1).single();
+        clinicId = first?.id;
+      }
     }
     if(!clinicId) return;
     const { data } = await db.from('clinics').select('*, cities(name)').eq('id', clinicId).single();
@@ -769,6 +782,8 @@ function fillClinicForm(c){
   set('cWebsite', c.website);
   set('cTax', c.tax_number);
   set('cDesc', c.description);
+  const statusSel = document.getElementById('cStatus');
+  if(statusSel) statusSel.value = c.status || 'active';
   toggleDistrictVisibility(c.cities?.name || '');
 
   updatePhotoPreview('logo', c.photo_url);
@@ -851,6 +866,24 @@ function renderGalleryManager(items){
 }
 
 /* ═══ MENTÉS + AUTOMATIKUS GEOCODING ═══ */
+async function saveClinicStatus(newStatus){
+  if(!clinicData?.id) return;
+  const sel = document.getElementById('cStatus');
+  const old = sel.style.background;
+  sel.disabled = true;
+  const { error } = await db.from('clinics').update({ status: newStatus }).eq('id', clinicData.id);
+  sel.disabled = false;
+  if(error){
+    alert('Státusz mentési hiba: ' + error.message);
+    sel.value = clinicData.status || 'active';
+    return;
+  }
+  clinicData.status = newStatus;
+  // Vizuális visszajelzés
+  sel.style.background = '#ecfdf5';
+  setTimeout(() => { sel.style.background = old; }, 1000);
+}
+
 async function saveClinic(){
   const btn = document.getElementById('btnSaveClinic');
   if(!clinicData?.id){ alert('Nincs betöltött klinika.'); return; }

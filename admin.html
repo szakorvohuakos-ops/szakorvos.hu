@@ -514,9 +514,9 @@ select.td-select:focus{border-color:var(--brand)}
           </div>
         </div>
         <table>
-          <thead><tr><th>Klinika neve</th><th>Város</th><th>Cím</th><th>Telefon</th><th>Orvosok</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th>Klinika neve</th><th>Város</th><th>Cím</th><th>Telefon</th><th>Orvosok</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="clinicsBody">
-            <tr class="skel-row"><td colspan="6"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
+            <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
         </table>
       </div>
@@ -894,13 +894,14 @@ function filterDoctorsByStatus(v){
 /* ═══ CLINICS ═══ */
 async function loadClinics(){
   const tb=document.getElementById('clinicsBody');
-  tb.innerHTML='<tr class="skel-row"><td colspan="6"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('clinics').select('id,name,address,phone,lat,lng,cities(name),doctor_clinics(doctor_id)').order('name');
+  tb.innerHTML='<tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
+  const{data}=await db.from('clinics').select('id,slug,name,address,phone,lat,lng,status,cities(name),doctor_clinics(doctor_id)').order('name');
   allClinics=data||[];
-  if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">Nincsenek klinikák</td></tr>';renderAdminMap();return;}
+  if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek klinikák</td></tr>';renderAdminMap();return;}
   tb.innerHTML=allClinics.map((c,i)=>{
     const hasCoord = c.lat && c.lng;
-    return `<tr>
+    const status = c.status || 'active';
+    return `<tr data-id="${c.id}">
     <td><div class="av-chip">
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px">${esc(c.name.charAt(0))}</div>
       <span class="td-name">${esc(c.name)}</span>
@@ -910,12 +911,49 @@ async function loadClinics(){
     <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
     <td style="color:var(--sub)">${c.phone||'–'}</td>
     <td><span class="badge badge-teal">${c.doctor_clinics?.length||0} orvos</span></td>
+    <td>
+      <select class="status-sel" data-id="${c.id}" onchange="setClinicStatus('${c.id}',this.value,this)" style="padding:5px 8px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:${statusBg(status)};color:${statusFg(status)}">
+        <option value="inactive" ${status==='inactive'?'selected':''}>Inaktív</option>
+        <option value="active" ${status==='active'?'selected':''}>Aktív</option>
+        <option value="partner" ${status==='partner'?'selected':''}>Partner</option>
+      </select>
+    </td>
     <td><div class="act-row">
-      <button class="btn btn-ghost btn-sm">Szerkesztés</button>
+      <a href="admin-klinika.html?id=${c.id}" class="btn btn-ghost btn-sm">Szerkesztés</a>
+      ${c.slug ? `<a href="/klinikak/${c.slug}" target="_blank" class="btn btn-ghost btn-sm" title="Megnyitás" style="padding:6px 10px">↗</a>` : ''}
     </div></td>
   </tr>`;}).join('');
 
   renderAdminMap();
+}
+
+function statusBg(s){
+  if(s==='partner') return '#fef3c7';
+  if(s==='inactive') return '#fee2e2';
+  return '#dcfce7';
+}
+function statusFg(s){
+  if(s==='partner') return '#92400e';
+  if(s==='inactive') return '#991b1b';
+  return '#166534';
+}
+
+async function setClinicStatus(id, newStatus, sel){
+  const oldBg = sel.style.background;
+  sel.disabled = true;
+  sel.style.background = '#f1f5f9';
+  const { error } = await db.from('clinics').update({ status: newStatus }).eq('id', id);
+  sel.disabled = false;
+  if(error){
+    alert('Státusz mentési hiba: ' + error.message);
+    sel.style.background = oldBg;
+    return;
+  }
+  sel.style.background = statusBg(newStatus);
+  sel.style.color = statusFg(newStatus);
+  // Frissítjük a memóriában is
+  const c = allClinics.find(x => x.id === id);
+  if(c) c.status = newStatus;
 }
 
 /* ═══ ADMIN MAP ═══ */
