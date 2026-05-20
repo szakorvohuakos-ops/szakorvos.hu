@@ -68,38 +68,42 @@ document.addEventListener('DOMContentLoaded', async () => {
   --brand:#113293;--navy:#0c2370;--orange:#FF8A00;--olight:#ff8c5a;
   --teal:#00c4b4;--green:#2C9650;--red:#ef4444;--amber:#f59e0b;
   --sidebar:240px;
+  --topnav:56px;
   --bg:#F4F6F8;--surface:#fff;--border:#DCE3EA;
   --text:#113293;--sub:#475569;--muted:#94a3b8;
 }
-body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);display:flex;min-height:100vh;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
 
-/* ══ SIDEBAR ══ */
+/* ══ TOP NAV (volt sidebar) ══ */
 .sidebar{
-  width:var(--sidebar);background:linear-gradient(175deg,#0f1a5e 0%,#0c2370 40%,#113293 100%);
-  color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:200;
-  box-shadow:4px 0 24px rgba(10,20,80,.25);
+  width:100%;background:linear-gradient(95deg,#0f1a5e 0%,#0c2370 40%,#113293 100%);
+  color:#fff;display:flex;flex-direction:row;align-items:center;position:sticky;top:0;left:0;right:0;z-index:200;
+  box-shadow:0 4px 16px rgba(10,20,80,.18);
+  height:var(--topnav);padding:0 1rem;gap:.5rem;
 }
-.sb-logo{padding:1.4rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
-.sb-logo-txt{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:#fff}
+.sb-logo{padding:0 1rem 0 .25rem;border-right:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;height:100%;flex-shrink:0;border-bottom:none}
+.sb-logo-txt{font-family:'Inter',sans-serif;font-size:17px;font-weight:700;color:#fff}
 .sb-logo-txt em{color:var(--green);font-style:normal}
-.sb-role{padding:.6rem 1.25rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:6px}
-.sb-role::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);flex-shrink:0}
-.sb-section{padding:.75rem 1.25rem .3rem;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:.7rem 1.25rem;font-size:13.5px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent;position:relative}
-.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav-item.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--orange)}
-.nav-item.active::after{content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:rgba(255,255,255,.15);border-radius:2px 0 0 2px}
-.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.8}
+.sb-role{display:none}
+.sb-section{display:none}
+.sb-nav-scroll{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto;height:100%;scrollbar-width:none;-ms-overflow-style:none}
+.sb-nav-scroll::-webkit-scrollbar{display:none}
+.nav-item{display:flex;align-items:center;gap:7px;padding:0 .9rem;height:calc(var(--topnav) - 12px);font-size:13px;color:rgba(255,255,255,.65);cursor:pointer;transition:all .15s;border-left:none;border-bottom:3px solid transparent;position:relative;border-radius:8px;white-space:nowrap;flex-shrink:0;font-weight:500}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.1);color:#fff;border-bottom-color:var(--orange);border-radius:8px 8px 0 0}
+.nav-item.active::after{display:none}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.8}
 .nav-item.active svg{opacity:1}
-.nav-badge{margin-left:auto;background:var(--orange);color:#fff;border-radius:100px;padding:1px 7px;font-size:10px;font-weight:700}
-.sb-footer{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.07)}
+.nav-badge{margin-left:4px;background:var(--orange);color:#fff;border-radius:100px;padding:1px 6px;font-size:10px;font-weight:700}
+.sb-footer{margin-top:0;margin-left:auto;padding:0 .75rem;border-top:none;border-left:1px solid rgba(255,255,255,.1);height:100%;display:flex;align-items:center;flex-shrink:0}
 .sb-user{display:flex;align-items:center;gap:9px}
-.sb-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--olight));display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-.sb-user-name{font-size:13px;font-weight:700;color:#fff}
-.sb-user-role{font-size:11px;color:rgba(255,255,255,.4)}
+.sb-avatar{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--orange),var(--olight));display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.sb-user-name{font-size:12.5px;font-weight:700;color:#fff;line-height:1.2}
+.sb-user-role{font-size:10.5px;color:rgba(255,255,255,.5);line-height:1.2}
+@media(max-width:640px){.sb-user-name,.sb-user-role{display:none}}
 
 /* ══ MAIN ══ */
-.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.main{margin-left:0;flex:1;display:flex;flex-direction:column;min-height:calc(100vh - var(--topnav));width:100%}
 
 /* Topbar */
 .topbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(17,50,147,.06)}
@@ -250,7 +254,7 @@ select.td-select:focus{border-color:var(--brand)}
 .info-box{background:linear-gradient(135deg,#eef2ff,#f4f6fb);border:1.5px solid #DCE3EA;border-radius:14px;padding:1rem 1.25rem;font-size:13px;color:var(--brand);display:flex;align-items:flex-start;gap:10px}
 
 @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr 1fr}}
-@media(max-width:900px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}}
+@media(max-width:900px){.main{margin-left:0}}
 </style>
 </head>
 <body>
@@ -267,54 +271,50 @@ select.td-select:focus{border-color:var(--brand)}
 <!-- ══ APP (rejtve amíg auth nem OK) ══ -->
 <div id="appContent" style="display:none">
 
-<!-- ══ SIDEBAR ══ -->
+<!-- ══ TOP NAV ══ -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="10" r="5.5" fill="rgba(255,255,255,.2)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="10" r="5.5" fill="rgba(255,255,255,.2)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
     <span class="sb-logo-txt">Szakorvos<em>.hu</em></span>
   </div>
-  <div class="sb-role">Szuperadmin</div>
 
-  <div class="sb-section">Áttekintés</div>
-  <div class="nav-item active" onclick="switchTab('overview',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    Vezérlőpult
-  </div>
-
-  <div class="sb-section">Adatkezelés</div>
-  <div class="nav-item" onclick="switchTab('doctors',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    Orvosok
-    <span class="nav-badge" id="navDoctorCount">–</span>
-  </div>
-  <div class="nav-item" onclick="switchTab('clinics',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Klinikák
-    <span class="nav-badge" id="navClinicCount">–</span>
-  </div>
-  <div class="nav-item" onclick="switchTab('users',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
-    Felhasználók
-  </div>
-  <div class="nav-item" onclick="switchTab('specialties',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-    Szakterületek
-  </div>
-
-  <div class="sb-section">Analitika</div>
-  <div class="nav-item" onclick="switchTab('logs',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Keresési naplók
+  <div class="sb-nav-scroll">
+    <div class="nav-item active" onclick="switchTab('overview',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Vezérlőpult
+    </div>
+    <div class="nav-item" onclick="switchTab('doctors',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Orvosok
+      <span class="nav-badge" id="navDoctorCount">–</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('clinics',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Klinikák
+      <span class="nav-badge" id="navClinicCount">–</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('users',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+      Felhasználók
+    </div>
+    <div class="nav-item" onclick="switchTab('specialties',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Szakterületek
+    </div>
+    <div class="nav-item" onclick="switchTab('logs',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Keresési naplók
+    </div>
   </div>
 
   <div class="sb-footer">
     <div class="sb-user">
       <div class="sb-avatar">SA</div>
-      <div style="flex:1;min-width:0">
+      <div style="min-width:0">
         <div class="sb-user-name" id="sbUserName">Super Admin</div>
         <div class="sb-user-role">Szuperadmin</div>
       </div>
-      <button onclick="logoutAdmin()" title="Kijelentkezés" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);padding:4px;border-radius:6px;transition:all .2s;flex-shrink:0" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='rgba(255,255,255,.4)'">
+      <button onclick="logoutAdmin()" title="Kijelentkezés" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);padding:6px;border-radius:6px;transition:all .2s;flex-shrink:0;margin-left:8px" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='rgba(255,255,255,.5)'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </button>
     </div>
