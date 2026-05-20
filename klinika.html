@@ -1187,14 +1187,14 @@ function fmtHuf(n){
 
 // Rövid cím a hero-meta-hez: "1122 Budapest XII. ker., Maros utca 16/b"
 function formatAddressShort(c, cityName){
-  const loc = [c.postal_code, cityName, c.district ? c.district + '. ker.' : null]
+  const loc = [c.postal_code, cityName]
     .filter(Boolean).join(' ');
   return [loc, c.street].filter(Boolean).join(', ');
 }
 
 // Teljes cím a kapcsolat szekcióhoz, két sorban (lokáció / utca)
 function formatAddressFull(c, cityName){
-  const loc = [c.postal_code, cityName, c.district ? c.district + '. kerület' : null]
+  const loc = [c.postal_code, cityName]
     .filter(Boolean).join(' ');
   const street = c.street || '';
   if(loc && street){

@@ -34,49 +34,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   --brand:#113293;--navy:#0c2370;--orange:#FF8A00;--olight:#ff8c5a;
   --teal:#00c4b4;--green:#2C9650;--red:#ef4444;--amber:#f59e0b;
   --sidebar:260px;
+  --topnav:56px;
   --bg:#F4F6F8;--surface:#fff;--border:#DCE3EA;
   --text:#113293;--sub:#475569;--muted:#94a3b8;
 }
-body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);display:flex;min-height:100vh;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
 
-/* ══ SIDEBAR ══ */
-.sidebar{width:var(--sidebar);background:linear-gradient(175deg,#0a1a3a 0%,#0d9488 60%,#00c4b4 100%);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:200;box-shadow:4px 0 28px rgba(0,50,50,.3)}
-.sb-logo{padding:1.4rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px}
-.sb-logo-txt{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:#fff}
+/* ══ TOP NAV (volt sidebar) ══ */
+.sidebar{width:100%;background:linear-gradient(95deg,#0a1a3a 0%,#0d9488 60%,#00c4b4 100%);color:#fff;display:flex;flex-direction:row;align-items:center;position:sticky;top:0;left:0;right:0;z-index:200;box-shadow:0 4px 16px rgba(0,50,50,.2);height:var(--topnav);padding:0 1rem;gap:.5rem}
+.sb-logo{padding:0 1rem 0 .25rem;border-right:1px solid rgba(255,255,255,.12);display:flex;align-items:center;gap:10px;height:100%;flex-shrink:0;border-bottom:none}
+.sb-logo-txt{font-family:'Inter',sans-serif;font-size:17px;font-weight:700;color:#fff}
 .sb-logo-txt em{color:#7fffd4;font-style:normal}
-.sb-role{padding:.6rem 1.25rem;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:6px}
-.sb-role::before{content:'';width:7px;height:7px;border-radius:50%;background:#7fffd4;box-shadow:0 0 6px #7fffd4;flex-shrink:0}
-
-/* Clinic card in sidebar */
-.sb-clinic-card{padding:1.1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:11px}
-.sb-clinic-av{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:17px;font-weight:700;color:#fff;flex-shrink:0;background:rgba(255,255,255,.15);box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.sb-clinic-name{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.25}
-.sb-clinic-city{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
-.sb-active{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#7fffd4;margin-top:4px}
-.sb-active::before{content:'';width:6px;height:6px;border-radius:50%;background:#7fffd4;box-shadow:0 0 5px #7fffd4}
-
-.sb-section{padding:.75rem 1.25rem .3rem;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:.7rem 1.25rem;font-size:13.5px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent}
-.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-item.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:#7fffd4}
-.nav-item svg{width:17px;height:17px;flex-shrink:0;opacity:.7}
-.nav-item.active svg,.nav-item:hover svg{opacity:1}
-.nav-notif{margin-left:auto;background:var(--orange);color:#fff;border-radius:100px;padding:1px 7px;font-size:10px;font-weight:700}
-
-.sb-stat-row{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08)}
-.sb-mini-stat{flex:1;padding:.75rem .6rem;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
-.sb-mini-stat:last-child{border-right:none}
-.sb-mini-val{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
-.sb-mini-lbl{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
-
-.sb-footer{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
-.sb-footer-link{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.4);cursor:pointer;padding:.4rem 0;transition:color .2s}
-.sb-footer-link:hover{color:#fff}
-.sb-footer-link svg{width:15px;height:15px}
+.sb-role{display:none}
+.sb-clinic-card{display:none}
+.sb-stat-row{display:none}
+.sb-section{display:none}
+.sb-nav-scroll{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto;height:100%;scrollbar-width:none;-ms-overflow-style:none}
+.sb-nav-scroll::-webkit-scrollbar{display:none}
+.nav-item{display:flex;align-items:center;gap:7px;padding:0 .9rem;height:calc(var(--topnav) - 12px);font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .15s;border-left:none;border-bottom:3px solid transparent;position:relative;border-radius:8px;white-space:nowrap;flex-shrink:0;font-weight:500}
+.nav-item:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{background:rgba(255,255,255,.15);color:#fff;border-bottom-color:#7fffd4;border-radius:8px 8px 0 0}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.85}
+.nav-item.active svg{opacity:1}
+.nav-notif{margin-left:4px;background:#ef4444;color:#fff;border-radius:100px;padding:1px 6px;font-size:10px;font-weight:700}
+.sb-footer{display:flex;align-items:center;margin-left:auto;height:100%;flex-shrink:0;padding:0 .5rem;border-left:1px solid rgba(255,255,255,.12);border-top:none;gap:.5rem}
+.sb-footer-link{display:flex;align-items:center;gap:6px;padding:6px 10px;font-size:12.5px;color:rgba(255,255,255,.75);cursor:pointer;border-radius:8px;font-weight:500;transition:background .15s,color .15s;white-space:nowrap}
+.sb-footer-link:hover{background:rgba(255,255,255,.1);color:#fff}
+.sb-footer-link svg{width:14px;height:14px}
+@media(max-width:640px){.sb-footer-link:not(.essential) span{display:none}}
 
 /* ══ MAIN ══ */
-.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(17,50,147,.06)}
+.main{margin-left:0;flex:1;display:flex;flex-direction:column;min-height:calc(100vh - var(--topnav));width:100%}
+
+.topbar{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.875rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:var(--topnav);z-index:100;box-shadow:0 2px 12px rgba(17,50,147,.06)}
 .page-title{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
 .topbar-right{display:flex;align-items:center;gap:.75rem}
 .btn{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;border-radius:9px;padding:8px 16px;cursor:pointer;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:6px}
@@ -105,6 +95,46 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);displ
 .trend-up{color:var(--green)}.trend-dn{color:var(--red)}
 
 /* ══ CARDS ══ */
+/* ═══ PROFIL ELŐNÉZET (klinika hero mintára) ═══ */
+@keyframes prevFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes prevAmbient{0%,100%{opacity:.5}50%{opacity:.85}}
+.prof-preview-card{
+  background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,rgba(210,225,255,.25) 50%,rgba(180,240,220,.3) 100%);
+  backdrop-filter:blur(80px) saturate(220%);
+  -webkit-backdrop-filter:blur(80px) saturate(220%);
+  border:1px solid rgba(255,255,255,.75);
+  border-radius:22px;padding:1.5rem 1.75rem;margin-bottom:1.25rem;
+  box-shadow:0 2px 0 rgba(255,255,255,1) inset,0 -2px 0 rgba(255,255,255,.4) inset,0 1px 2px rgba(17,50,147,.05),0 12px 32px rgba(13,148,136,.1),0 32px 64px rgba(13,148,136,.12);
+  position:relative;overflow:hidden;animation:prevFloat 8s ease-in-out infinite;
+}
+.prof-preview-card::before{content:'';position:absolute;top:0;left:0;right:0;height:60%;background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,.15) 40%,transparent 100%);pointer-events:none;z-index:2;border-radius:inherit}
+.prof-preview-card::after{content:'';position:absolute;inset:-50%;background:radial-gradient(ellipse 50% 40% at 20% 15%,rgba(160,220,200,.25),transparent 60%),radial-gradient(ellipse 40% 50% at 85% 80%,rgba(170,200,255,.2),transparent 60%);pointer-events:none;z-index:0;animation:prevAmbient 6s ease-in-out infinite}
+.prof-preview-card > *{position:relative;z-index:1}
+.prof-preview-row{display:grid;grid-template-columns:110px 1fr;gap:1.5rem;align-items:start}
+@media (max-width:640px){.prof-preview-row{grid-template-columns:1fr;text-align:center}}
+.prof-preview-logo{width:110px;aspect-ratio:1/1;border-radius:16px;background:linear-gradient(135deg,#eef2ff,#dbeafe);overflow:hidden;flex-shrink:0;margin:0 auto;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:600;color:#fff;background:linear-gradient(135deg,#0d9488,#00c4b4);letter-spacing:-.02em;box-shadow:0 4px 16px rgba(13,148,136,.25)}
+.prof-preview-logo img{width:100%;height:100%;object-fit:cover}
+.prof-preview-info{min-width:0}
+.prof-preview-name-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+@media (max-width:640px){.prof-preview-name-row{justify-content:center}}
+.prof-preview-name{font-size:22px;font-weight:700;color:var(--brand);line-height:1.2;letter-spacing:-.02em;margin:0}
+.prof-preview-verified{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#0d9488;color:#fff;flex-shrink:0}
+.prof-preview-verified svg{width:11px;height:11px}
+.prof-preview-addr{font-size:13.5px;color:var(--sub);font-weight:500;margin-bottom:8px}
+.prof-preview-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);margin-bottom:12px}
+@media (max-width:640px){.prof-preview-meta{justify-content:center}}
+.prof-preview-meta-item{font-weight:500}
+.prof-preview-actions{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+@media (max-width:640px){.prof-preview-actions{justify-content:center}}
+.prof-preview-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.85);color:var(--brand);border:1px solid rgba(255,255,255,.95);padding:8px 14px;border-radius:10px;font-weight:600;font-size:13px;text-decoration:none;transition:all .15s;box-shadow:0 2px 8px rgba(17,50,147,.06)}
+.prof-preview-btn:hover{background:#fff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(17,50,147,.1);text-decoration:none;color:var(--brand)}
+.prof-preview-status-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(220,252,231,.85);color:#166534;border:1px solid rgba(34,197,94,.3);padding:6px 12px;border-radius:99px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.prof-preview-status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:#16a34a;box-shadow:0 0 6px #16a34a}
+.prof-preview-status-pill.s-inactive{background:rgba(254,226,226,.85);color:#991b1b;border-color:rgba(220,38,38,.3)}
+.prof-preview-status-pill.s-inactive::before{background:#dc2626;box-shadow:0 0 6px #dc2626}
+.prof-preview-status-pill.s-partner{background:rgba(254,243,199,.85);color:#92400e;border-color:rgba(245,158,11,.3)}
+.prof-preview-status-pill.s-partner::before{background:#f59e0b;box-shadow:0 0 6px #f59e0b}
+
 .card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.5rem;animation:fadeUp .4s both}
 .card-header{padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
 .card-title{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -247,7 +277,7 @@ textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
 .gallery-mgr-progress{margin-top:.75rem;display:none;font-size:12px;color:var(--muted);text-align:center}
 
 @media(max-width:1200px){.stats-row{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:900px){.sidebar{transform:translateX(-100%)}.main{margin-left:0}.two-col{grid-template-columns:1fr}}
+@media(max-width:900px){.main{margin-left:0}.two-col{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -266,60 +296,44 @@ textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
 <!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="10" r="5.5" fill="rgba(255,255,255,.15)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#7fffd4"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#7fffd4"/></svg>
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="rgba(255,255,255,.9)"/><circle cx="14" cy="10" r="5.5" fill="rgba(255,255,255,.15)"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#7fffd4"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#7fffd4"/></svg>
     <span class="sb-logo-txt">Szakorvos<em>.hu</em></span>
   </div>
-  <div class="sb-role">Klinika Admin</div>
 
-  <div class="sb-clinic-card">
-    <div class="sb-clinic-av" id="sbAv">BK</div>
-    <div>
-      <div class="sb-clinic-name" id="sbName">Betöltés…</div>
-      <div class="sb-clinic-city" id="sbCity">–</div>
-      <div class="sb-active">Aktív klinika</div>
+  <div class="sb-nav-scroll">
+    <div class="nav-item active" onclick="switchTab('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Vezérlőpult
     </div>
-  </div>
-
-  <div class="sb-stat-row">
-    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbDocCnt">–</div><div class="sb-mini-lbl">Orvos</div></div>
-    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbApptCnt">–</div><div class="sb-mini-lbl">Foglalás</div></div>
-    <div class="sb-mini-stat"><div class="sb-mini-val" id="sbRatNum">–</div><div class="sb-mini-lbl">Értékelés</div></div>
-  </div>
-
-  <div class="sb-section">Menü</div>
-  <div class="nav-item active" onclick="switchTab('dashboard',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    Vezérlőpult
-  </div>
-  <div class="nav-item" onclick="switchTab('clinic',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Klinika adatai
-  </div>
-  <div class="nav-item" onclick="switchTab('doctors',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    Orvosaink
-    <span class="nav-notif" id="navDocBadge" style="display:none">0</span>
-  </div>
-  <div class="nav-item" onclick="switchTab('appointments',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    Foglalások
-    <span class="nav-notif" id="navApptBadge" style="display:none">0</span>
-  </div>
-  <div class="nav-item" onclick="switchTab('schedule',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    Rendelési rend
-  </div>
-  <div class="nav-item" onclick="switchTab('settings',this)">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    Beállítások
+    <div class="nav-item" onclick="switchTab('clinic',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Klinika adatai
+    </div>
+    <div class="nav-item" onclick="switchTab('doctors',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Orvosaink
+      <span class="nav-notif" id="navDocBadge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('appointments',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Foglalások
+      <span class="nav-notif" id="navApptBadge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('schedule',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Rendelési rend
+    </div>
+    <div class="nav-item" onclick="switchTab('settings',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Beállítások
+    </div>
   </div>
 
   <div class="sb-footer">
-    <div class="sb-footer-link" onclick="window.location='index.html'">
+    <div class="sb-footer-link" onclick="window.location='index.html'" title="Főoldal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-      Főoldalra vissza
+      <span>Főoldal</span>
     </div>
-    <div class="sb-footer-link" style="color:rgba(255,255,255,.2)">v1.0 · Szakorvos.hu</div>
   </div>
 </aside>
 
@@ -398,6 +412,33 @@ textarea.form-input{resize:vertical;min-height:90px;line-height:1.6}
 
     <!-- ══════════ CLINIC DATA ══════════ -->
     <div data-tab="clinic">
+      <!-- ═══ PROFIL ELŐNÉZET (klinika profil hero mintára) ═══ -->
+      <div class="prof-preview-card">
+        <div class="prof-preview-row">
+          <div class="prof-preview-logo" id="prevLogo"><span id="prevInitials">K</span></div>
+          <div class="prof-preview-info">
+            <div class="prof-preview-name-row">
+              <h2 class="prof-preview-name" id="prevName">Betöltés…</h2>
+              <span class="prof-preview-verified" title="Ellenőrzött klinika">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+            </div>
+            <div class="prof-preview-addr" id="prevAddr">–</div>
+            <div class="prof-preview-meta">
+              <span class="prof-preview-meta-item" id="prevDocs">– orvos</span>
+              <span class="prof-preview-meta-item" id="prevSpecs">– szakterület</span>
+            </div>
+            <div class="prof-preview-actions">
+              <a href="#" id="prevViewLink" target="_blank" class="prof-preview-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Publikus profil megnyitása
+              </a>
+              <span class="prof-preview-status-pill" id="prevStatus">Aktív</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">
@@ -789,6 +830,51 @@ function fillClinicForm(c){
   updatePhotoPreview('logo', c.photo_url);
   updatePhotoPreview('cover', c.cover_url);
   renderGalleryManager(parseGallery(c.gallery));
+  updateProfilePreview();
+}
+
+// Klinika profil hero előnézet frissítése (élő preview)
+function updateProfilePreview(){
+  const c = clinicData;
+  if(!c) return;
+  const cityName = c.cities?.name || '';
+  const initials = (c.name || 'K').split(/\s+/).slice(0,2).map(s => s[0] || '').join('').toUpperCase() || 'K';
+
+  // Logo
+  const logoEl = document.getElementById('prevLogo');
+  if(logoEl){
+    if(c.photo_url){
+      logoEl.innerHTML = `<img src="${c.photo_url}" alt="">`;
+    } else {
+      logoEl.innerHTML = `<span id="prevInitials">${initials}</span>`;
+    }
+  }
+  // Név
+  const nameEl = document.getElementById('prevName');
+  if(nameEl) nameEl.textContent = c.name || 'Névtelen klinika';
+  // Cím (postal city, street)
+  const loc = [c.postal_code, cityName].filter(Boolean).join(' ');
+  const addr = [loc, c.street].filter(Boolean).join(', ') || c.address || '–';
+  const addrEl = document.getElementById('prevAddr');
+  if(addrEl) addrEl.textContent = '📍 ' + addr;
+  // Meta — orvosok és szakterületek (ha betöltődött)
+  const docsEl = document.getElementById('prevDocs');
+  const specsEl = document.getElementById('prevSpecs');
+  const docCnt = window._docCount ?? (c.doctor_clinics?.length || 0);
+  const specCnt = window._specCount ?? 0;
+  if(docsEl) docsEl.textContent = `👥 ${docCnt} orvos`;
+  if(specsEl) specsEl.style.display = specCnt > 0 ? '' : 'none';
+  if(specsEl && specCnt > 0) specsEl.textContent = `🎓 ${specCnt} szakterület`;
+  // Publikus profil link
+  const link = document.getElementById('prevViewLink');
+  if(link) link.href = c.slug ? `/klinikak/${c.slug}` : `klinika.html?id=${c.id}`;
+  // Status pill
+  const pill = document.getElementById('prevStatus');
+  if(pill){
+    const s = c.status || 'active';
+    pill.className = 'prof-preview-status-pill' + (s === 'inactive' ? ' s-inactive' : s === 'partner' ? ' s-partner' : '');
+    pill.textContent = s === 'inactive' ? 'Inaktív' : s === 'partner' ? 'Partner' : 'Aktív';
+  }
 }
 
 // Csak Budapestnél mutatjuk a kerület-választót
@@ -879,6 +965,7 @@ async function saveClinicStatus(newStatus){
     return;
   }
   clinicData.status = newStatus;
+  updateProfilePreview();
   // Vizuális visszajelzés
   sel.style.background = '#ecfdf5';
   setTimeout(() => { sel.style.background = old; }, 1000);
@@ -1112,6 +1199,7 @@ async function handleClinicUpload(input, kind){
     if(progressFill) progressFill.style.width = '100%';
     clinicData[dbField] = publicUrl;
     updatePhotoPreview(kind, publicUrl);
+    updateProfilePreview();
     if(success) success.style.display = 'flex';
     setTimeout(() => {
       if(progress) progress.style.display = 'none';
@@ -1144,6 +1232,7 @@ async function removeClinicPhoto(kind){
     }
     clinicData[dbField] = null;
     updatePhotoPreview(kind, null);
+    updateProfilePreview();
   } catch(e){
     alert('Eltávolítás hiba: ' + (e.message || 'ismeretlen'));
   }
