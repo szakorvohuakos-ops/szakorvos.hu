@@ -1634,8 +1634,8 @@ function cardH(d,i){
   return `<div class="dc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
     ${avEl}
     <div class="dc-mid">
-      <div class="dc-nm">${escapeHtml(d.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
-      <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}${d.title?' · '+escapeHtml(d.title):''}</div>
+      <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+      <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}</div>
 
       ${ratingFmt || patientCount ? `<div class="dc-meta dc-meta-rating">
         ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span style="color:var(--muted);font-weight:500">(${reviewCount} értékelés)</span>` : ''}</span>` : ''}
@@ -1727,12 +1727,11 @@ function openPanel(id){
   ppAv.style.background=`linear-gradient(135deg,${col},${col}bb)`;
 
   // Név + verified badge
-  document.getElementById('ppName').innerHTML = `${escapeHtml(d.name)}<span class="pp-name-verified" title="Ellenőrzött orvos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+  document.getElementById('ppName').innerHTML = `${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}<span class="pp-name-verified" title="Ellenőrzött orvos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>`;
 
-  // Title sor: "Bőrgyógyász szakorvos · PhD"  (a fő szakterület + cím)
+  // Title sor: csak a fő szakterület
   const titleParts = [];
   titleParts.push(`<strong>${escapeHtml(spec)}</strong>`);
-  if (d.title && d.title.trim()) titleParts.push(`<em>${escapeHtml(d.title)}</em>`);
   document.getElementById('ppTitle').innerHTML = titleParts.join(' ');
 
   // Chip sor: a többi szakterület (max 3 + "+N" overflow)

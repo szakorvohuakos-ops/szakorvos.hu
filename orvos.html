@@ -1342,7 +1342,7 @@ async function load(){
 
 /* ── Render fő ────────────────────────────────────────────────────── */
 function render(d){
-  const fullName = d.name;
+  const fullName = (d.title ? d.title + ' ' : '') + (d.name || '');
   const specRaw = d.doctor_specialties?.[0]?.specialties?.name || '';
   const docSlug = d.doctor_specialties?.[0]?.specialties?.doctor_slug || '';
   const docName = d.doctor_specialties?.[0]?.specialties?.doctor_name || '';
