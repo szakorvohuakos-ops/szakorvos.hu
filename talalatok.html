@@ -1719,7 +1719,7 @@ function openPanel(id){
   const f=fee(d),rat=parseFloat(d.rating||0),avD=(d.availability||[]).map(a=>a.day_of_week);
 
   // Topbar
-  document.getElementById('ppTopName').textContent=d.name;
+  document.getElementById('ppTopName').textContent=(d.title?d.title+' ':'')+d.name;
 
   // ─── Hero ─────────────────────────────────────────────────────────────
   const ppAv=document.getElementById('ppAv');
