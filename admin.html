@@ -150,7 +150,8 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);displ
 .trend-up{color:var(--green)}.trend-dn{color:var(--red)}
 
 /* ══ TABLE CARD ══ */
-.table-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.5rem;animation:fadeUp .4s both}
+.table-card{background:var(--surface);border:1.5px solid var(--border);border-radius:18px;margin-bottom:1.5rem;animation:fadeUp .4s both;overflow:hidden}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tc-header{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.75rem}
 .tc-title{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
 .tc-controls{display:flex;align-items:center;gap:.6rem}
@@ -158,14 +159,20 @@ body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);displ
 .srch-sm:focus-within{border-color:var(--brand)}
 .srch-sm input{border:none;background:transparent;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none;width:160px}
 .srch-sm input::placeholder{color:var(--muted)}
-table{width:100%;border-collapse:collapse}
-thead th{padding:.75rem 1.25rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:#fafbff;border-bottom:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;min-width:980px}
+thead th{padding:.75rem 1.25rem;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:#fafbff;border-bottom:1px solid var(--border);white-space:nowrap}
 tbody td{padding:.875rem 1.25rem;font-size:13.5px;border-bottom:1px solid var(--border);vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
 tbody tr{transition:background .15s}
 tbody tr:hover td{background:#fafbff}
 .td-name{font-weight:700;color:var(--text)}
 .td-sub{font-size:12px;color:var(--sub);margin-top:1px}
+
+/* Műveletek oszlop — sticky right, mindig látható */
+.act-row{display:flex;gap:6px;flex-wrap:nowrap;white-space:nowrap}
+tbody td:last-child, thead th:last-child{position:sticky;right:0;background:#fff;box-shadow:-4px 0 8px -4px rgba(17,50,147,.08);z-index:2}
+thead th:last-child{background:#fafbff}
+tbody tr:hover td:last-child{background:#fafbff}
 
 /* Badges */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:11px;font-weight:700}
@@ -430,12 +437,12 @@ select.td-select:focus{border-color:var(--brand)}
           </div>
           <button class="btn btn-ghost btn-sm" onclick="switchTab('doctors',document.querySelector('[onclick*=doctors]'))">Összes megtekintése →</button>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Orvos</th><th>Szakterület</th><th>Klinika</th><th>Értékelés</th><th>Státusz</th></tr></thead>
           <tbody id="overviewTable">
             <tr class="skel-row"><td><div class="skel-cell" style="width:160px"></div></td><td><div class="skel-cell" style="width:100px"></div></td><td><div class="skel-cell" style="width:120px"></div></td><td><div class="skel-cell" style="width:60px"></div></td><td><div class="skel-cell" style="width:70px"></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
@@ -459,12 +466,12 @@ select.td-select:focus{border-color:var(--brand)}
             </select>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Orvos neve</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="doctorsBody">
             <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
         <div class="pag" id="doctorPag" style="display:none">
           <div class="pag-info" id="doctorPagInfo">–</div>
           <div class="pag-btns" id="doctorPagBtns"></div>
@@ -513,12 +520,12 @@ select.td-select:focus{border-color:var(--brand)}
             </div>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th style="max-width:240px">Klinika neve</th><th>Email</th><th>Cím</th><th>Telefon</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="clinicsBody">
             <tr class="skel-row"><td colspan="8"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
@@ -571,12 +578,12 @@ select.td-select:focus{border-color:var(--brand)}
             </div>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Felhasználó</th><th>Email</th><th>Szerepkör</th><th>Regisztrálva</th><th>Szerepkör módosítása</th></tr></thead>
           <tbody id="usersBody">
             <tr class="skel-row"><td colspan="5"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
@@ -599,12 +606,12 @@ select.td-select:focus{border-color:var(--brand)}
             </button>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th style="width:44px;text-align:center">#</th><th style="width:36px">Ikon</th><th>Neve</th><th>Slug</th><th>Orvosok</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="specsBody">
             <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
@@ -620,12 +627,12 @@ select.td-select:focus{border-color:var(--brand)}
             <span style="font-size:13px;color:var(--sub)">Utolsó 50 keresés</span>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Keresési kifejezés</th><th>Város</th><th>Szakterület</th><th>Találatok</th><th>Időpont</th></tr></thead>
           <tbody id="logsBody">
             <tr class="empty-row"><td colspan="5">Nincsenek keresési naplók</td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </div>
 
