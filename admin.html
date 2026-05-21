@@ -467,7 +467,7 @@ select.td-select:focus{border-color:var(--brand)}
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Orvos neve</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th>Orvos neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th style="text-align:center;width:80px">Partner</th><th>Műveletek</th></tr></thead>
           <tbody id="doctorsBody">
             <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
@@ -839,7 +839,7 @@ async function loadDoctors(){
   let offset=0;
   while(true){
     const{data,error}=await db.from('doctors')
-      .select('id,name,title,is_active,rating,review_count,experience_years,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
+      .select('id,name,title,is_active,is_partner,rating,review_count,experience_years,on_foglaljorvost,foglaljorvost_url,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
       .order('name',{ascending:true})
       .range(offset,offset+999);
     if(error||!data||!data.length) break;
@@ -852,7 +852,7 @@ async function loadDoctors(){
 
 function renderDoctors(docs,page=1){
   const tb=document.getElementById('doctorsBody');
-  if(!docs.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
+  if(!docs.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
   tb.innerHTML=docs.map((d,i)=>{
     const fullName=(d.title?d.title+' ':'')+(d.name||'');
     return `<tr>
@@ -860,11 +860,13 @@ function renderDoctors(docs,page=1){
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]}">${esc(initials(d.name))}</div>
       <div><div class="td-name">${esc(fullName)}</div></div>
     </div></td>
+    <td style="text-align:center">${d.on_foglaljorvost?`<a href="${esc(d.foglaljorvost_url||'#')}" target="_blank" rel="noopener" title="FoglaljOrvost profil" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#dcfce7;color:#16a34a;font-weight:700;text-decoration:none;font-size:12px">F</a>`:'<span style="color:var(--muted)">–</span>'}</td>
     <td><span class="badge badge-blue">${esc(d.doctor_specialties?.[0]?.specialties?.name||'–')}</span></td>
     <td>${esc(d.doctor_clinics?.[0]?.clinics?.name||'–')} ${d.doctor_clinics?.[0]?.clinics?.cities?.name?`<span class="td-sub">· ${esc(d.doctor_clinics[0].clinics.cities.name)}</span>`:''}</td>
     <td><span style="font-weight:700">${esc(d.experience_years||'–')}</span> <span style="color:var(--muted);font-size:12px">év</span></td>
     <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating?esc(parseFloat(d.rating).toFixed(1)):'–'}</span> <span style="color:var(--muted);font-size:12px">(${esc(d.review_count||0)})</span></td>
     <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
+    <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Partner orvos jelölése"><input type="checkbox" ${d.is_partner?'checked':''} onchange="togglePartner('${esc(d.id)}',this.checked)" style="width:18px;height:18px;cursor:pointer;accent-color:#7c3aed"></label></td>
     <td><div class="act-row">
       <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${esc(d.id)}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
     </div></td>
@@ -1415,6 +1417,14 @@ async function loadLogs(){
 async function toggleDoctor(id,isActive){
   await db.from('doctors').update({is_active:!isActive}).eq('id',id);
   loadDoctors();loadStats();
+}
+
+async function togglePartner(id,isPartner){
+  const{error}=await db.from('doctors').update({is_partner:isPartner}).eq('id',id);
+  if(error){alert('Hiba: '+error.message);loadDoctors();return;}
+  // Helyben frissítjük az allDoctors-ben, hogy ne kelljen újratölteni
+  const d=allDoctors.find(x=>x.id===id);
+  if(d) d.is_partner=isPartner;
 }
 
 async function changeRole(id,role){
