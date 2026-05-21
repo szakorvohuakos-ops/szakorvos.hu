@@ -496,7 +496,7 @@ select.td-select:focus{border-color:var(--brand)}
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th style="max-width:240px">Klinika neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th style="max-width:180px">Email</th><th>Cím</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th style="max-width:240px">Klinika neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th title="Odoktor.hu" style="text-align:center;width:36px">O</th><th style="max-width:180px">Email</th><th>Cím</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="clinicsBody">
             <tr class="skel-row"><td colspan="9"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
@@ -889,7 +889,7 @@ function filterDoctorsByStatus(v){
 async function loadClinics(){
   const tb=document.getElementById('clinicsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="8"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,cities(name),doctor_clinics(doctor_id)').order('name');
+  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name),doctor_clinics(doctor_id)').order('name');
   allClinics=data||[];
   if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek klinikák</td></tr>';return;}
   tb.innerHTML=allClinics.map((c,i)=>{
@@ -902,6 +902,7 @@ async function loadClinics(){
       ${!hasCoord ? '<span class="badge badge-orange" style="margin-left:6px;font-size:10px;flex-shrink:0">⚠</span>' : ''}
     </div></td>
     <td style="text-align:center">${c.on_foglaljorvost ? `<a href="${esc(c.foglaljorvost_url||'#')}" target="_blank" rel="noopener" title="Megnyit foglaljorvost.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dcfce7;color:#166534;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">F</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
+    <td style="text-align:center">${c.on_odoktor ? `<a href="${esc(c.odoktor_url||'#')}" target="_blank" rel="noopener" title="Megnyit odoktor.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dbeafe;color:#1e40af;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">O</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
     <td style="max-width:180px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px">${c.email ? `<a href="mailto:${esc(c.email)}" style="color:var(--brand);text-decoration:none;font-size:13px" title="${esc(c.email)}">${esc(c.email)}</a>` : '<span style="color:var(--muted)">–</span>'}</div></td>
     <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
     <td><span class="badge badge-teal">${c.doctor_clinics?.length||0}</span></td>
