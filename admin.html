@@ -852,13 +852,12 @@ async function loadDoctors(){
 
 function renderDoctors(docs,page=1){
   const tb=document.getElementById('doctorsBody');
-  const total=docs.length,pages=Math.ceil(total/PAGE),st=(page-1)*PAGE,pg=docs.slice(st,st+PAGE);
-  if(!pg.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
-  tb.innerHTML=pg.map((d,i)=>{
+  if(!docs.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
+  tb.innerHTML=docs.map((d,i)=>{
     const fullName=(d.title?d.title+' ':'')+(d.name||'');
     return `<tr>
     <td><div class="av-chip">
-      <div class="av-sm" style="background:${COLORS[(st+i)%COLORS.length]}">${esc(initials(d.name))}</div>
+      <div class="av-sm" style="background:${COLORS[i%COLORS.length]}">${esc(initials(d.name))}</div>
       <div><div class="td-name">${esc(fullName)}</div></div>
     </div></td>
     <td><span class="badge badge-blue">${esc(d.doctor_specialties?.[0]?.specialties?.name||'–')}</span></td>
@@ -870,7 +869,7 @@ function renderDoctors(docs,page=1){
       <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${esc(d.id)}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
     </div></td>
   </tr>`;}).join('');
-  renderPag('doctor',total,page,pages,(p)=>renderDoctors(docs,p));
+  hidePag('doctor');
 }
 
 function filterTable(tbodyId,q){
