@@ -452,7 +452,7 @@ select.td-select:focus{border-color:var(--brand)}
         <div class="tc-header">
           <div class="tc-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-            Összes orvos
+            <span id="doctorTabTitle">Összes orvos</span>
           </div>
           <div class="tc-controls">
             <div class="srch-sm">
@@ -466,8 +466,14 @@ select.td-select:focus{border-color:var(--brand)}
             </select>
           </div>
         </div>
+        <!-- Fül választó -->
+        <div style="display:flex;gap:4px;padding:0 1.25rem 0.5rem;border-bottom:1px solid #e2e8f0">
+          <button class="doctor-tab-btn active" data-doctab="all" onclick="setDoctorTab('all')" style="background:none;border:none;padding:10px 16px;font-size:13px;font-weight:600;color:#113293;cursor:pointer;border-bottom:2px solid #113293">Mindenki <span class="dtb-count" id="doctorTabCountAll">–</span></button>
+          <button class="doctor-tab-btn" data-doctab="doctor" onclick="setDoctorTab('doctor')" style="background:none;border:none;padding:10px 16px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;border-bottom:2px solid transparent">Csak orvos <span class="dtb-count" id="doctorTabCountDoctor">–</span></button>
+          <button class="doctor-tab-btn" data-doctab="professional" onclick="setDoctorTab('professional')" style="background:none;border:none;padding:10px 16px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;border-bottom:2px solid transparent">Eü. szakember <span class="dtb-count" id="doctorTabCountProf">–</span></button>
+        </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Orvos neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th style="text-align:center;width:80px">Partner</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th>Orvos neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th style="text-align:center;width:80px">Partner</th><th style="text-align:center;width:80px" title="Egészségügyi szakember (nem orvos)">Eü.</th><th>Műveletek</th></tr></thead>
           <tbody id="doctorsBody">
             <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
@@ -839,7 +845,7 @@ async function loadDoctors(){
   let offset=0;
   while(true){
     const{data,error}=await db.from('doctors')
-      .select('id,name,title,is_active,is_partner,rating,review_count,experience_years,on_foglaljorvost,foglaljorvost_url,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
+      .select('id,name,title,is_active,is_partner,is_professional,rating,review_count,experience_years,on_foglaljorvost,foglaljorvost_url,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
       .order('name',{ascending:true})
       .range(offset,offset+999);
     if(error||!data||!data.length) break;
@@ -847,12 +853,12 @@ async function loadDoctors(){
     if(data.length<1000) break;
     offset+=1000;
   }
-  renderDoctors(allDoctors,1);
+  applyDoctorTab();
 }
 
 function renderDoctors(docs,page=1){
   const tb=document.getElementById('doctorsBody');
-  if(!docs.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
+  if(!docs.length){tb.innerHTML='<tr class="empty-row"><td colspan="10">Nincsenek orvosok a szűrőnek megfelelően</td></tr>';hidePag('doctor');return;}
   tb.innerHTML=docs.map((d,i)=>{
     const fullName=(d.title?d.title+' ':'')+(d.name||'');
     return `<tr>
@@ -867,6 +873,7 @@ function renderDoctors(docs,page=1){
     <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating?esc(parseFloat(d.rating).toFixed(1)):'–'}</span> <span style="color:var(--muted);font-size:12px">(${esc(d.review_count||0)})</span></td>
     <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
     <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Partner orvos jelölése"><input type="checkbox" ${d.is_partner?'checked':''} onchange="togglePartner('${esc(d.id)}',this.checked)" style="width:18px;height:18px;cursor:pointer;accent-color:#7c3aed"></label></td>
+    <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Egészségügyi szakember (nem orvos)"><input type="checkbox" ${d.is_professional?'checked':''} onchange="toggleProfessional('${esc(d.id)}',this.checked)" style="width:18px;height:18px;cursor:pointer;accent-color:#0891b2"></label></td>
     <td><div class="act-row">
       <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${esc(d.id)}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
     </div></td>
@@ -879,10 +886,47 @@ function filterTable(tbodyId,q){
   rows.forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none');
 }
 
+let currentDoctorTab='all'; // 'all', 'doctor', 'professional'
+let currentDoctorStatus=''; // '', 'active', 'inactive'
+
+function setDoctorTab(tab){
+  currentDoctorTab=tab;
+  // UI: aktív gomb stílus
+  document.querySelectorAll('.doctor-tab-btn').forEach(b=>{
+    const active=b.dataset.doctab===tab;
+    b.style.color=active?'#113293':'#64748b';
+    b.style.fontWeight=active?'600':'500';
+    b.style.borderBottomColor=active?'#113293':'transparent';
+  });
+  // Cím frissítés
+  const titles={all:'Összes orvos',doctor:'Csak orvosok',professional:'Eü. szakemberek'};
+  const ttl=document.getElementById('doctorTabTitle');
+  if(ttl) ttl.textContent=titles[tab]||'Orvosok';
+  applyDoctorTab();
+}
+
+function applyDoctorTab(){
+  let filtered=allDoctors;
+  // Fül szűrés
+  if(currentDoctorTab==='doctor') filtered=filtered.filter(d=>!d.is_professional);
+  else if(currentDoctorTab==='professional') filtered=filtered.filter(d=>d.is_professional);
+  // Státusz szűrés
+  if(currentDoctorStatus==='active') filtered=filtered.filter(d=>d.is_active);
+  else if(currentDoctorStatus==='inactive') filtered=filtered.filter(d=>!d.is_active);
+  // Számolás (összesről, nem a szűrtről)
+  const totalAll=allDoctors.length;
+  const totalProf=allDoctors.filter(d=>d.is_professional).length;
+  const totalDoc=totalAll-totalProf;
+  const setText=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setText('doctorTabCountAll',totalAll);
+  setText('doctorTabCountDoctor',totalDoc);
+  setText('doctorTabCountProf',totalProf);
+  renderDoctors(filtered,1);
+}
+
 function filterDoctorsByStatus(v){
-  if(!v){renderDoctors(allDoctors,1);return;}
-  const f=v==='active'?allDoctors.filter(d=>d.is_active):allDoctors.filter(d=>!d.is_active);
-  renderDoctors(f,1);
+  currentDoctorStatus=v;
+  applyDoctorTab();
 }
 
 /* ═══ CLINICS ═══ */
@@ -1426,6 +1470,15 @@ async function togglePartner(id,isPartner){
   // Helyben frissítjük az allDoctors-ben, hogy ne kelljen újratölteni
   const d=allDoctors.find(x=>x.id===id);
   if(d) d.is_partner=isPartner;
+}
+
+async function toggleProfessional(id,isProfessional){
+  const{error}=await db.from('doctors').update({is_professional:isProfessional}).eq('id',id);
+  if(error){alert('Hiba: '+error.message);loadDoctors();return;}
+  const d=allDoctors.find(x=>x.id===id);
+  if(d) d.is_professional=isProfessional;
+  // Friss tab szerinti renderelés
+  applyDoctorTab();
 }
 
 async function changeRole(id,role){
