@@ -693,7 +693,13 @@ function render(c){
   const city = c.cities?.name || '';
   const docs = (c.doctor_clinics || [])
     .map(dc => ({ ...dc.doctors, _fee: dc.consultation_fee }))
-    .filter(d => d && d.is_active);
+    .filter(d => d && d.is_active)
+    .sort((a, b) => {
+      // Sortírozás vezetéknév szerint (Dr. eltávolítva)
+      const cleanA = (a.name || '').replace(/^(Dr\.?|Prof\.?|med\.?\s*habil\.?)\s+/gi, '').replace(/\s+Dr\.?$/i, '').trim();
+      const cleanB = (b.name || '').replace(/^(Dr\.?|Prof\.?|med\.?\s*habil\.?)\s+/gi, '').replace(/\s+Dr\.?$/i, '').trim();
+      return cleanA.localeCompare(cleanB, 'hu');
+    });
 
   // Szakterületek
   const specMap = new Map();
@@ -1104,14 +1110,18 @@ function renderDocCard(d){
   const specName = primarySpec?.specialties?.name || '';
   const specSlug = primarySpec?.specialties?.doctor_slug;
   const url = (d.slug && specSlug) ? `/${specSlug}/${d.slug}` : `orvos.html?slug=${d.slug || d.id}`;
-  const initials = (d.name || '').split(' ').filter(p => !p.startsWith('Dr')).slice(0,2).map(p => p[0]).join('').toUpperCase();
+  // title (Dr., Prof. Dr. stb.) hozzáfűzése a névhez, ha nincs már benne
+  const rawName = d.name || '';
+  const hasTitle = /\b(Dr\.?|Prof\.?)\b/i.test(rawName);
+  const displayName = (d.title && d.title.trim() && !hasTitle) ? d.title.trim() + ' ' + rawName : rawName;
+  const initials = displayName.split(' ').filter(p => !/^(Dr|Prof)/i.test(p)).slice(0,2).map(p => p[0]).join('').toUpperCase();
   
   return `<a href="${url}" class="doc-card">
     <div class="doc-avatar">
-      ${d.photo_url ? `<img src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(d.name)}" onerror="this.style.display='none';this.parentElement.textContent='${initials}';">` : initials || '?'}
+      ${d.photo_url ? `<img src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(displayName)}" onerror="this.style.display='none';this.parentElement.textContent='${initials}';">` : initials || '?'}
     </div>
     <div class="doc-info">
-      <div class="doc-name">${escapeHtml(d.name)}</div>
+      <div class="doc-name">${escapeHtml(displayName)}</div>
       <div class="doc-spec">${escapeHtml(specName)}</div>
       ${d.rating ? `<div class="doc-rating">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
