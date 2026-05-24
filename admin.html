@@ -934,17 +934,31 @@ function filterDoctorsByStatus(v){
 async function loadClinics(){
   const tb=document.getElementById('clinicsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="8"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name),doctor_clinics(doctor_id)');
+  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)');
   allClinics=data||[];
-  // Sortírozás: város (ABC) → kerület (numerikusan) → klinika név (ABC)
+  // Sortírozás:
+  // 1. Budapest előre (kerület számszerűen)
+  // 2. Aztán a többi: megye (ABC) → város (ABC) → klinika név (ABC)
   allClinics.sort((a,b) => {
-    const cityA = (a.cities?.name || 'ZZZ').toLowerCase();
-    const cityB = (b.cities?.name || 'ZZZ').toLowerCase();
-    if (cityA !== cityB) return cityA.localeCompare(cityB, 'hu');
-    // Kerület: római/arab számok kivonása
-    const distA = parseInt(String(a.district||'').replace(/[^\d]/g,'')) || 999;
-    const distB = parseInt(String(b.district||'').replace(/[^\d]/g,'')) || 999;
-    if (distA !== distB) return distA - distB;
+    const cityA = a.cities?.name || '';
+    const cityB = b.cities?.name || '';
+    const isBpA = cityA === 'Budapest';
+    const isBpB = cityB === 'Budapest';
+    // Budapest legyen elöl
+    if (isBpA && !isBpB) return -1;
+    if (!isBpA && isBpB) return 1;
+    // Mindkettő Budapest → kerület szerint
+    if (isBpA && isBpB) {
+      const distA = parseInt(String(a.district||'').replace(/[^\d]/g,'')) || 999;
+      const distB = parseInt(String(b.district||'').replace(/[^\d]/g,'')) || 999;
+      if (distA !== distB) return distA - distB;
+      return (a.name||'').localeCompare(b.name||'', 'hu');
+    }
+    // Egyik sem Budapest → megye → város → név
+    const countyA = (a.cities?.county || 'ZZZ').toLowerCase();
+    const countyB = (b.cities?.county || 'ZZZ').toLowerCase();
+    if (countyA !== countyB) return countyA.localeCompare(countyB, 'hu');
+    if (cityA !== cityB) return cityA.toLowerCase().localeCompare(cityB.toLowerCase(), 'hu');
     return (a.name||'').localeCompare(b.name||'', 'hu');
   });
   if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek klinikák</td></tr>';return;}
@@ -972,11 +986,26 @@ async function loadClinics(){
       </select>
     </td>
     <td><div class="act-row">
-      <a href="admin-klinika-edit.html?id=${c.id}" class="btn btn-ghost btn-sm">Szerkesztés</a>
+      <a href="admin-klinika-edit.html?id=${c.id}" onclick="sessionStorage.setItem('lastEditedClinic','${c.id}')" class="btn btn-ghost btn-sm">Szerkesztés</a>
       ${c.slug ? `<a href="/klinikak/${c.slug}" target="_blank" class="btn btn-ghost btn-sm" title="Megnyitás" style="padding:6px 10px">↗</a>` : ''}
       <button onclick="deleteClinicRow('${c.id}')" class="btn btn-sm" title="Törlés" style="padding:6px 10px;background:#fff;color:#ef4444;border:1.5px solid rgba(239,68,68,.3);cursor:pointer;border-radius:7px;font-weight:600;font-size:12px">🗑️</button>
     </div></td>
   </tr>`;}).join('');
+  
+  // Visszatérés szerkesztésből: görgessünk és emeljük ki a legutoljára szerkesztett klinikát
+  const lastEditedId = sessionStorage.getItem('lastEditedClinic');
+  if (lastEditedId) {
+    sessionStorage.removeItem('lastEditedClinic');
+    setTimeout(() => {
+      const row = document.querySelector(`tr[data-id="${lastEditedId}"]`);
+      if (row) {
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.style.transition = 'background-color 0.3s';
+        row.style.backgroundColor = '#fef3c7';
+        setTimeout(() => { row.style.backgroundColor = ''; }, 2500);
+      }
+    }, 100);
+  }
 }
 
 async function deleteClinicRow(clinicId) {
