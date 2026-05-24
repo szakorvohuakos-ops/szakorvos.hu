@@ -503,7 +503,7 @@ select.td-select:focus{border-color:var(--brand)}
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th style="max-width:240px">Klinika neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th title="Odoktor.hu" style="text-align:center;width:36px">O</th><th style="max-width:180px">Email</th><th>Cím</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th style="min-width:320px">Klinika neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th title="Odoktor.hu" style="text-align:center;width:36px">O</th><th title="Email" style="text-align:center;width:50px">✉️</th><th>Cím</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="clinicsBody">
             <tr class="skel-row"><td colspan="9"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
@@ -941,14 +941,14 @@ async function loadClinics(){
     const hasCoord = c.lat && c.lng;
     const status = c.status || 'active';
     return `<tr data-id="${c.id}">
-    <td style="max-width:240px"><div class="av-chip" style="max-width:100%;align-items:flex-start">
+    <td style="min-width:320px"><div class="av-chip" style="max-width:100%;align-items:center">
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px;flex-shrink:0">${esc(c.name.charAt(0))}</div>
-      <span class="td-name" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;font-size:12px;word-break:break-word" title="${esc(c.name)}">${esc(c.name)}</span>
+      <span class="td-name" style="font-size:13px;font-weight:600;line-height:1.35;word-break:break-word" title="${esc(c.name)}">${esc(c.name)}</span>
       ${!hasCoord ? '<span class="badge badge-orange" style="margin-left:6px;font-size:10px;flex-shrink:0">⚠</span>' : ''}
     </div></td>
     <td style="text-align:center">${c.on_foglaljorvost ? `<a href="${esc(c.foglaljorvost_url||'#')}" target="_blank" rel="noopener" title="Megnyit foglaljorvost.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dcfce7;color:#166534;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">F</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
     <td style="text-align:center">${c.on_odoktor ? `<a href="${esc(c.odoktor_url||'#')}" target="_blank" rel="noopener" title="Megnyit odoktor.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dbeafe;color:#1e40af;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">O</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
-    <td style="max-width:180px"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px">${c.email ? `<a href="mailto:${esc(c.email)}" style="color:var(--brand);text-decoration:none;font-size:13px" title="${esc(c.email)}">${esc(c.email)}</a>` : '<span style="color:var(--muted)">–</span>'}</div></td>
+    <td style="text-align:center;width:50px">${c.email ? `<a href="mailto:${esc(c.email)}" title="${esc(c.email)}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#eef2ff;color:#113293;border-radius:6px;text-decoration:none;font-size:12px">✉</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
     <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
     <td><span class="badge badge-teal">${c.doctor_clinics?.length||0}</span></td>
     <td style="white-space:nowrap">${c.google_rating ? `<span style="font-weight:600;color:#0f172a">★ ${Number(c.google_rating).toFixed(1)}</span> <span style="color:var(--muted);font-size:12px">(${c.google_review_count||0})</span>` : '<span style="color:var(--muted)">–</span>'}</td>
@@ -960,7 +960,7 @@ async function loadClinics(){
       </select>
     </td>
     <td><div class="act-row">
-      <a href="admin-klinika.html?id=${c.id}" class="btn btn-ghost btn-sm">Szerkesztés</a>
+      <a href="admin-klinika-edit.html?id=${c.id}" class="btn btn-ghost btn-sm">Szerkesztés</a>
       ${c.slug ? `<a href="/klinikak/${c.slug}" target="_blank" class="btn btn-ghost btn-sm" title="Megnyitás" style="padding:6px 10px">↗</a>` : ''}
     </div></td>
   </tr>`;}).join('');

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Klinika szerkesztése – Szakorvos.hu Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let CLINIC_ID = null;
+let CLINIC = null;
+let CITIES = [];
+let DIRTY = false;
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) { window.location.replace('/login.html?redirect=' + encodeURIComponent(window.location.pathname + window.location.search)); return; }
+  const { data: profile } = await db.from('user_profiles').select('role,full_name').eq('id', session.user.id).single();
+  if (profile?.role !== 'superadmin') {
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#F4F6F8;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#113293;margin:0">Hozzáférés megtagadva</h2><a href="/login.html" style="background:#113293;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza</a></div>';
+    return;
+  }
+  CLINIC_ID = new URLSearchParams(window.location.search).get('id');
+  if (!CLINIC_ID) { alert('Nincs klinika ID megadva'); window.location.replace('/admin.html'); return; }
+  document.getElementById('userName').textContent = profile.full_name || session.user.email || 'Admin';
+  await loadCities();
+  await loadClinic();
+});
+
+function escapeHtml(s){if(s==null)return '';return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+async function loadCities() {
+  const { data } = await db.from('cities').select('id,name').order('name');
+  CITIES = data || [];
+}
+
+async function loadClinic() {
+  const { data, error } = await db.from('clinics').select('*, cities(name)').eq('id', CLINIC_ID).single();
+  if (error || !data) {
+    document.getElementById('main').innerHTML = '<div style="text-align:center;padding:60px;color:#ef4444"><h2>Klinika nem található</h2><p>'+escapeHtml(error?.message||'Ismeretlen hiba')+'</p></div>';
+    return;
+  }
+  CLINIC = data;
+  document.title = `${data.name} – Szerkesztés – Szakorvos.hu Admin`;
+  document.getElementById('headerName').textContent = data.name || '(név nélküli klinika)';
+  render();
+}
+
+function dirty() { DIRTY = true; document.getElementById('saveBtn').classList.add('dirty'); document.getElementById('saveBtn').textContent = '💾 Mentés (módosítva)'; }
+
+window.addEventListener('beforeunload', e => {
+  if (DIRTY) { e.preventDefault(); e.returnValue = ''; }
+});
+
+function val(id) { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+function numVal(id) { const v = val(id); return v === '' ? null : parseFloat(v); }
+
+function buildOpeningHours() {
+  const days = ['mon','tue','wed','thu','fri','sat','sun'];
+  const result = {};
+  days.forEach(d => {
+    const open = document.getElementById('oh_'+d+'_open').value;
+    const close = document.getElementById('oh_'+d+'_close').value;
+    const closed = document.getElementById('oh_'+d+'_closed').checked;
+    if (closed) { result[d] = { closed: true }; }
+    else if (open || close) { result[d] = { open: open || '08:00', close: close || '16:00' }; }
+  });
+  return Object.keys(result).length ? result : null;
+}
+
+function buildGallery() {
+  const list = [];
+  document.querySelectorAll('.gal-item input').forEach(inp => {
+    const v = inp.value.trim();
+    if (v) list.push(v);
+  });
+  return list.length ? list : null;
+}
+
+async function save() {
+  if (!CLINIC) return;
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Mentés...';
+  
+  try {
+    const updates = {
+      name: val('f_name'),
+      slug: val('f_slug'),
+      address: val('f_address'),
+      street: val('f_street'),
+      postal_code: val('f_postal') || null,
+      district: val('f_district') || null,
+      city_id: val('f_city_id') || null,
+      lat: numVal('f_lat'),
+      lng: numVal('f_lng'),
+      phone: val('f_phone') || null,
+      email: val('f_email') || null,
+      website: val('f_website') || null,
+      photo_url: val('f_photo_url') || null,
+      cover_url: val('f_cover_url') || null,
+      gallery: buildGallery(),
+      parking_info: val('f_parking') || null,
+      public_transport: val('f_transport') || null,
+      accessibility: val('f_accessibility') || null,
+      opening_hours: buildOpeningHours(),
+      google_place_id: val('f_google_place_id') || null,
+      foglaljorvost_url: val('f_foglaljorvost_url') || null,
+      odoktor_url: val('f_odoktor_url') || null,
+      on_foglaljorvost: document.getElementById('f_on_foglaljorvost').checked,
+      on_odoktor: document.getElementById('f_on_odoktor').checked,
+      status: val('f_status') || 'active'
+    };
+    
+    const { error } = await db.from('clinics').update(updates).eq('id', CLINIC_ID);
+    if (error) throw error;
+    
+    DIRTY = false;
+    btn.disabled = false;
+    btn.classList.remove('dirty');
+    btn.textContent = '✓ Mentve!';
+    btn.classList.add('saved');
+    setTimeout(() => { btn.classList.remove('saved'); btn.textContent = '💾 Mentés'; }, 2500);
+    await loadClinic(); // újratölt
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = '💾 Mentés';
+    alert('Hiba a mentéskor: ' + (e.message || e));
+    console.error(e);
+  }
+}
+
+function addGalleryItem(url = '') {
+  const list = document.getElementById('galList');
+  const i = list.children.length;
+  const div = document.createElement('div');
+  div.className = 'gal-item';
+  div.innerHTML = `
+    <div class="gal-thumb" style="background-image:url('${escapeHtml(url)}')"></div>
+    <input type="url" placeholder="https://..." value="${escapeHtml(url)}" oninput="this.parentElement.querySelector('.gal-thumb').style.backgroundImage='url('+this.value.replace(/'/g,&quot;\\'&quot;)+')';dirty();">
+    <button class="gal-remove" onclick="this.parentElement.remove();dirty()" title="Eltávolítás">🗑️</button>
+  `;
+  list.appendChild(div);
+}
+
+async function deleteClinic() {
+  if (!confirm(`Biztos törlöd a "${CLINIC.name}" klinikát?\nEz visszafordíthatatlan!`)) return;
+  if (!confirm('Tényleg? Az összes hozzá kapcsolódó orvos-kapcsolat is törlődik.')) return;
+  try {
+    const { error } = await db.from('clinics').delete().eq('id', CLINIC_ID);
+    if (error) throw error;
+    alert('Törölve.');
+    window.location.replace('/admin.html');
+  } catch (e) {
+    alert('Hiba: ' + (e.message || e));
+  }
+}
+
+function render() {
+  const c = CLINIC;
+  const oh = c.opening_hours || {};
+  const dayKeys = [['mon','Hétfő'],['tue','Kedd'],['wed','Szerda'],['thu','Csütörtök'],['fri','Péntek'],['sat','Szombat'],['sun','Vasárnap']];
+  const gallery = Array.isArray(c.gallery) ? c.gallery : [];
+  const initials = (c.name||'?').split(' ').filter(Boolean).slice(0,2).map(s=>s[0]).join('').toUpperCase();
+  
+  document.getElementById('main').innerHTML = `
+    <!-- HERO PREVIEW -->
+    <div class="hero-card" id="heroCard">
+      <div class="hero-row">
+        <div class="hero-logo" id="heroLogo">${c.photo_url ? `<img src="${escapeHtml(c.photo_url)}" alt="" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initials)}'">` : escapeHtml(initials)}</div>
+        <div class="hero-info">
+          <div class="hero-name" id="heroName">${escapeHtml(c.name || '(név nélkül)')}</div>
+          <div class="hero-addr" id="heroAddr">${escapeHtml([c.street, c.district ? c.district + '. ker.' : null, c.cities?.name || '', c.postal_code].filter(Boolean).join(', ') || '(nincs cím)')}</div>
+          <div class="hero-meta">
+            ${c.phone ? `<span>📞 ${escapeHtml(c.phone)}</span>` : ''}
+            ${c.email ? `<span>✉️ ${escapeHtml(c.email)}</span>` : ''}
+            ${c.website ? `<span>🌐 <a href="${escapeHtml(c.website)}" target="_blank" rel="noopener">Weboldal</a></span>` : ''}
+          </div>
+          <div class="hero-pills">
+            <span class="pill ${c.status==='active'?'pill-green':'pill-red'}">${c.status==='active'?'✓ Aktív':'⏸ Inaktív'}</span>
+            ${c.on_foglaljorvost ? '<span class="pill pill-blue">FoglaljOrvost</span>' : ''}
+            ${c.on_odoktor ? '<span class="pill pill-blue">Odoktor</span>' : ''}
+            ${c.google_rating ? `<span class="pill pill-yellow">⭐ ${c.google_rating.toFixed(1)} (${c.google_review_count||0} értékelés)</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTIONS GRID -->
+    <div class="sections">
+      <!-- ALAPADATOK -->
+      <section class="sec">
+        <h3 class="sec-title"><span>📋</span> Alapadatok</h3>
+        <div class="grid grid-2">
+          <div class="f"><label>Klinika neve <span class="req">*</span></label><input id="f_name" type="text" value="${escapeHtml(c.name||'')}" oninput="dirty()" required></div>
+          <div class="f"><label>URL slug <span class="req">*</span></label><input id="f_slug" type="text" value="${escapeHtml(c.slug||'')}" oninput="dirty()" required><small>pl: cmed-klinika-budapest</small></div>
+        </div>
+        <div class="f"><label>Státusz</label>
+          <select id="f_status" onchange="dirty()">
+            <option value="active" ${c.status==='active'?'selected':''}>Aktív (látszik a weboldalon)</option>
+            <option value="inactive" ${c.status==='inactive'?'selected':''}>Inaktív (nem látszik)</option>
+            <option value="pending" ${c.status==='pending'?'selected':''}>Függőben</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- CÍM -->
+      <section class="sec">
+        <h3 class="sec-title"><span>📍</span> Cím</h3>
+        <div class="f"><label>Teljes cím (rendezvény)</label><input id="f_address" type="text" value="${escapeHtml(c.address||'')}" oninput="dirty()" placeholder="pl: 1024 Budapest, Margit krt. 5"></div>
+        <div class="grid grid-2">
+          <div class="f"><label>Utca, házszám</label><input id="f_street" type="text" value="${escapeHtml(c.street||'')}" oninput="dirty()"></div>
+          <div class="f"><label>Irányítószám</label><input id="f_postal" type="text" value="${escapeHtml(c.postal_code||'')}" oninput="dirty()"></div>
+        </div>
+        <div class="grid grid-2">
+          <div class="f"><label>Város</label>
+            <select id="f_city_id" onchange="dirty()">
+              <option value="">— válasszon —</option>
+              ${CITIES.map(ci => `<option value="${ci.id}" ${ci.id===c.city_id?'selected':''}>${escapeHtml(ci.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="f"><label>Kerület (csak Budapest)</label><input id="f_district" type="text" value="${escapeHtml(c.district||'')}" oninput="dirty()" placeholder="pl: II"></div>
+        </div>
+        <div class="grid grid-2">
+          <div class="f"><label>Szélesség (lat)</label><input id="f_lat" type="number" step="0.0000001" value="${c.lat??''}" oninput="dirty()"></div>
+          <div class="f"><label>Hosszúság (lng)</label><input id="f_lng" type="number" step="0.0000001" value="${c.lng??''}" oninput="dirty()"></div>
+        </div>
+        ${c.lat && c.lng ? `<a href="https://maps.google.com/?q=${c.lat},${c.lng}" target="_blank" class="link-btn">🗺️ Megnyitás Google Maps-en</a>` : ''}
+      </section>
+
+      <!-- KAPCSOLAT -->
+      <section class="sec">
+        <h3 class="sec-title"><span>📞</span> Kapcsolat</h3>
+        <div class="f"><label>Telefonszám</label><input id="f_phone" type="tel" value="${escapeHtml(c.phone||'')}" oninput="dirty()" placeholder="+36 1 234 5678"></div>
+        <div class="f"><label>E-mail cím</label><input id="f_email" type="email" value="${escapeHtml(c.email||'')}" oninput="dirty()"></div>
+        <div class="f"><label>Weboldal URL</label><input id="f_website" type="url" value="${escapeHtml(c.website||'')}" oninput="dirty()" placeholder="https://..."></div>
+      </section>
+
+      <!-- KÉPEK -->
+      <section class="sec">
+        <h3 class="sec-title"><span>🖼️</span> Képek</h3>
+        <div class="f"><label>Logó / Profil kép URL</label><input id="f_photo_url" type="url" value="${escapeHtml(c.photo_url||'')}" oninput="document.getElementById('heroLogo').innerHTML = this.value ? '<img src=&quot;'+this.value.replace(/&/g,'&amp;').replace(/&quot;/g,'&amp;quot;')+'&quot; alt=&quot;&quot;>' : '${escapeHtml(initials)}';dirty()"></div>
+        <div class="f"><label>Borító kép URL</label><input id="f_cover_url" type="url" value="${escapeHtml(c.cover_url||'')}" oninput="dirty()" placeholder="https://..."></div>
+        <div class="f">
+          <label style="display:flex;justify-content:space-between;align-items:center">Galéria
+            <button class="btn-mini" onclick="addGalleryItem();dirty()">+ Új kép</button>
+          </label>
+          <div id="galList"></div>
+        </div>
+      </section>
+
+      <!-- KIEGÉSZÍTŐ INFÓK -->
+      <section class="sec">
+        <h3 class="sec-title"><span>ℹ️</span> Egyéb információk</h3>
+        <div class="f"><label>Parkolás</label><textarea id="f_parking" oninput="dirty()" rows="2" placeholder="pl: Ingyenes parkolás a klinika előtt">${escapeHtml(c.parking_info||'')}</textarea></div>
+        <div class="f"><label>Tömegközlekedés</label><textarea id="f_transport" oninput="dirty()" rows="2" placeholder="pl: 4-es, 6-os villamos">${escapeHtml(c.public_transport||'')}</textarea></div>
+        <div class="f"><label>Akadálymentesítés</label><textarea id="f_accessibility" oninput="dirty()" rows="2" placeholder="pl: Lift, akadálymentes WC">${escapeHtml(c.accessibility||'')}</textarea></div>
+      </section>
+
+      <!-- NYITVATARTÁS -->
+      <section class="sec">
+        <h3 class="sec-title"><span>🕐</span> Nyitvatartás</h3>
+        <div class="oh-grid">
+          ${dayKeys.map(([k,label]) => {
+            const d = oh[k] || {};
+            const closed = d.closed === true;
+            return `
+              <div class="oh-row">
+                <div class="oh-day">${label}</div>
+                <input type="time" id="oh_${k}_open" value="${d.open||''}" oninput="dirty()" ${closed?'disabled':''}>
+                <span class="oh-sep">–</span>
+                <input type="time" id="oh_${k}_close" value="${d.close||''}" oninput="dirty()" ${closed?'disabled':''}>
+                <label class="oh-closed">
+                  <input type="checkbox" id="oh_${k}_closed" ${closed?'checked':''} onchange="document.getElementById('oh_${k}_open').disabled=this.checked;document.getElementById('oh_${k}_close').disabled=this.checked;dirty()">
+                  Zárva
+                </label>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </section>
+
+      <!-- KÜLSŐ FORRÁSOK -->
+      <section class="sec">
+        <h3 class="sec-title"><span>🔗</span> Külső források</h3>
+        <div class="f"><label>Google Place ID</label><input id="f_google_place_id" type="text" value="${escapeHtml(c.google_place_id||'')}" oninput="dirty()"><small>Google Maps értékelésekhez</small></div>
+        <div class="grid grid-2">
+          <div class="f">
+            <label><input type="checkbox" id="f_on_foglaljorvost" ${c.on_foglaljorvost?'checked':''} onchange="dirty()"> Foglaljorvost.hu-n elérhető</label>
+            <input id="f_foglaljorvost_url" type="url" value="${escapeHtml(c.foglaljorvost_url||'')}" oninput="dirty()" placeholder="URL">
+          </div>
+          <div class="f">
+            <label><input type="checkbox" id="f_on_odoktor" ${c.on_odoktor?'checked':''} onchange="dirty()"> Odoktor.hu-n elérhető</label>
+            <input id="f_odoktor_url" type="url" value="${escapeHtml(c.odoktor_url||'')}" oninput="dirty()" placeholder="URL">
+          </div>
+        </div>
+      </section>
+
+      <!-- TECHNIKAI -->
+      <section class="sec sec-danger">
+        <h3 class="sec-title"><span>⚙️</span> Technikai / Veszélyes zóna</h3>
+        <div class="info-grid">
+          <div><strong>ID:</strong> <code>${escapeHtml(c.id)}</code></div>
+          <div><strong>Forrás:</strong> ${escapeHtml(c.source||'—')}</div>
+          <div><strong>Létrehozva:</strong> ${c.created_at ? new Date(c.created_at).toLocaleString('hu-HU') : '—'}</div>
+          <div><strong>Utolsó Google sync:</strong> ${c.last_google_sync ? new Date(c.last_google_sync).toLocaleString('hu-HU') : '—'}</div>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <a href="/klinikak/${escapeHtml(c.slug)}" target="_blank" class="link-btn">👁️ Megnyitás publikus oldalon</a>
+          <button class="btn-danger" onclick="deleteClinic()">🗑️ Klinika törlése</button>
+        </div>
+      </section>
+    </div>
+  `;
+  
+  // Galéria betöltése
+  gallery.forEach(url => addGalleryItem(url));
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brand:#113293;--navy:#0c2370;--orange:#FF8A00;
+  --teal:#0d9488;--green:#16a34a;--red:#ef4444;--amber:#f59e0b;
+  --bg:#F4F6F8;--surface:#fff;--border:#DCE3EA;
+  --text:#113293;--sub:#475569;--muted:#94a3b8;
+}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);min-height:100vh}
+
+/* === TOP BAR === */
+.topbar{background:linear-gradient(95deg,#0f1a5e 0%,#0c2370 40%,#113293 100%);color:#fff;padding:0 1.5rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:200;box-shadow:0 4px 16px rgba(10,20,80,.18)}
+.tb-left{display:flex;align-items:center;gap:.75rem;min-width:0}
+.tb-back{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.85);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:7px;transition:background .15s}
+.tb-back:hover{background:rgba(255,255,255,.1);color:#fff}
+.tb-title{font-size:15px;font-weight:700;color:#fff;border-left:1px solid rgba(255,255,255,.2);padding-left:1rem;margin-left:.25rem;display:flex;flex-direction:column;gap:2px;min-width:0;overflow:hidden}
+.tb-title-main{font-size:11.5px;color:rgba(255,255,255,.7);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.tb-title-name{font-size:15px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50ch}
+.tb-right{display:flex;align-items:center;gap:.5rem}
+.tb-user{color:rgba(255,255,255,.7);font-size:12px;padding-right:.5rem;border-right:1px solid rgba(255,255,255,.15)}
+@media(max-width:640px){.tb-user{display:none}}
+.btn{font-family:inherit;font-size:13px;font-weight:700;border-radius:9px;padding:8px 16px;cursor:pointer;transition:all .2s;border:none;display:inline-flex;align-items:center;gap:6px}
+.btn-save{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(255,138,0,.35);font-weight:700;font-size:13.5px;padding:10px 20px}
+.btn-save:hover:not(:disabled){background:#e67a00;transform:translateY(-1px)}
+.btn-save:disabled{opacity:.7;cursor:wait}
+.btn-save.dirty{animation:pulse 1.5s infinite}
+.btn-save.saved{background:var(--green)!important;box-shadow:0 3px 12px rgba(22,163,74,.4)}
+@keyframes pulse{0%,100%{box-shadow:0 3px 12px rgba(255,138,0,.35)}50%{box-shadow:0 3px 16px rgba(255,138,0,.6),0 0 0 4px rgba(255,138,0,.15)}}
+.btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);font-size:12px;padding:7px 12px}
+.btn-logout:hover{background:rgba(255,255,255,.18);color:#fff}
+
+/* === MAIN === */
+.wrap{max-width:1100px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
+
+/* === HERO PREVIEW === */
+.hero-card{
+  background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(210,225,255,.45) 50%,rgba(180,240,220,.5) 100%);
+  backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  border:1px solid rgba(255,255,255,.75);border-radius:20px;padding:1.5rem 1.75rem;margin-bottom:1.5rem;
+  box-shadow:0 2px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.05),0 12px 32px rgba(13,148,136,.08);
+}
+.hero-row{display:grid;grid-template-columns:90px 1fr;gap:1.25rem;align-items:start}
+@media(max-width:640px){.hero-row{grid-template-columns:1fr;text-align:center}}
+.hero-logo{width:90px;height:90px;border-radius:16px;background:linear-gradient(135deg,#0d9488,#00c4b4);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;overflow:hidden;flex-shrink:0;margin:0 auto;box-shadow:0 4px 16px rgba(13,148,136,.25)}
+.hero-logo img{width:100%;height:100%;object-fit:cover}
+.hero-info{min-width:0}
+.hero-name{font-size:22px;font-weight:700;color:var(--brand);line-height:1.2;letter-spacing:-.02em;margin-bottom:4px}
+.hero-addr{font-size:13.5px;color:var(--sub);font-weight:500;margin-bottom:8px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--sub);margin-bottom:12px}
+.hero-meta a{color:var(--brand);text-decoration:none;font-weight:600}
+.hero-meta a:hover{text-decoration:underline}
+.hero-pills{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:640px){.hero-pills,.hero-meta{justify-content:center}}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:99px;font-size:11.5px;font-weight:600}
+.pill-green{background:rgba(220,252,231,.85);color:#166534;border:1px solid rgba(34,197,94,.3)}
+.pill-red{background:rgba(254,226,226,.85);color:#991b1b;border:1px solid rgba(220,38,38,.3)}
+.pill-blue{background:rgba(219,234,254,.85);color:#1e40af;border:1px solid rgba(59,130,246,.3)}
+.pill-yellow{background:rgba(254,243,199,.85);color:#92400e;border:1px solid rgba(245,158,11,.3)}
+
+/* === SECTIONS === */
+.sections{display:grid;grid-template-columns:1fr;gap:1.25rem}
+@media(min-width:900px){.sections{grid-template-columns:1fr 1fr}.sec-full{grid-column:span 2}}
+.sec{background:var(--surface);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem;animation:fadeUp .3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-title{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.sec-title span{font-size:18px}
+.sec-danger{border-color:rgba(239,68,68,.25);background:rgba(254,242,242,.4)}
+
+/* === FORM === */
+.f{margin-bottom:1rem}
+.f:last-child{margin-bottom:0}
+.f label{display:block;font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:6px}
+.f small{display:block;font-size:11.5px;color:var(--muted);margin-top:4px}
+.req{color:var(--red)}
+.f input[type=text],.f input[type=url],.f input[type=tel],.f input[type=email],.f input[type=number],.f input[type=time],.f select,.f textarea{
+  width:100%;font-family:inherit;font-size:13.5px;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--text);transition:border .15s,box-shadow .15s;
+}
+.f input:focus,.f select:focus,.f textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(17,50,147,.1)}
+.f textarea{resize:vertical;min-height:60px;font-family:inherit}
+.f input[type=checkbox]{margin-right:6px;cursor:pointer;width:auto}
+.grid{display:grid;gap:.75rem}
+.grid-2{grid-template-columns:1fr 1fr}
+@media(max-width:560px){.grid-2{grid-template-columns:1fr}}
+
+/* === GALÉRIA === */
+.gal-item{display:flex;align-items:center;gap:8px;padding:8px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
+.gal-thumb{width:50px;height:50px;background-size:cover;background-position:center;background-color:#e2e8f0;border-radius:6px;flex-shrink:0}
+.gal-item input{flex:1;min-width:0;font-size:12px!important;padding:6px 10px!important}
+.gal-remove{background:none;border:none;font-size:16px;cursor:pointer;padding:6px 8px;border-radius:6px;transition:background .15s}
+.gal-remove:hover{background:rgba(239,68,68,.1)}
+.btn-mini{background:var(--brand);color:#fff;border:none;padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer}
+.btn-mini:hover{background:var(--navy)}
+
+/* === NYITVATARTÁS === */
+.oh-grid{display:flex;flex-direction:column;gap:8px}
+.oh-row{display:grid;grid-template-columns:90px 1fr 12px 1fr auto;gap:8px;align-items:center}
+@media(max-width:560px){.oh-row{grid-template-columns:80px 1fr 8px 1fr;gap:6px}.oh-closed{grid-column:1/-1;margin-top:2px}}
+.oh-day{font-size:13px;font-weight:600;color:var(--text)}
+.oh-row input[type=time]{font-size:13px;padding:7px 10px}
+.oh-sep{color:var(--muted);text-align:center}
+.oh-closed{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap}
+
+/* === TECHNIKAI === */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:12.5px;color:var(--sub)}
+@media(max-width:560px){.info-grid{grid-template-columns:1fr}}
+.info-grid code{background:#fff;border:1px solid var(--border);padding:1px 6px;border-radius:4px;font-size:11px;color:var(--text)}
+.link-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;color:var(--brand);border:1.5px solid var(--border);padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;text-decoration:none;transition:all .15s;cursor:pointer}
+.link-btn:hover{border-color:var(--brand);background:#eef2ff}
+.btn-danger{background:#fff;color:var(--red);border:1.5px solid rgba(239,68,68,.3);padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* === LOADING === */
+#loading{display:flex;justify-content:center;align-items:center;min-height:300px;color:var(--muted);font-size:14px}
+#loading::before{content:'';width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite;margin-right:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-left">
+    <a href="/admin.html" class="tb-back">← Vissza</a>
+    <div class="tb-title">
+      <span class="tb-title-main">Klinika szerkesztése</span>
+      <span class="tb-title-name" id="headerName">Betöltés…</span>
+    </div>
+  </div>
+  <div class="tb-right">
+    <span class="tb-user" id="userName">—</span>
+    <button id="saveBtn" class="btn btn-save" onclick="save()">💾 Mentés</button>
+    <button class="btn btn-logout" onclick="db.auth.signOut().then(()=>window.location.replace('/login.html'))">Kilépés</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="main">
+    <div id="loading">Klinika betöltése…</div>
+  </div>
+</div>
+
+</body>
+</html>
