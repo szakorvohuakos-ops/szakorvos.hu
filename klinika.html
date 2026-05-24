@@ -177,16 +177,7 @@ img{max-width:100%;display:block}
 .hero-chip:hover{border-color:var(--brand);color:var(--brand)}
 .hero-chip.more{background:transparent;border:none;color:var(--muted);font-weight:600;padding:5px 4px}
 
-/* 4-oszlopos statisztika sor (mint orvosnál dh-stats) */
-.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
-@media(max-width:640px){.hero-stats{grid-template-columns:repeat(2,1fr);text-align:left}}
-.hero-stat{display:flex;gap:9px;align-items:flex-start}
-.hero-stat-ico{flex-shrink:0;width:30px;height:30px;border-radius:9px;background:var(--brand-light, #eef2ff);color:var(--brand);display:flex;align-items:center;justify-content:center}
-.hero-stat-info{min-width:0;line-height:1.3}
-.hero-stat-v{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hero-stat-l{font-size:11.5px;color:var(--muted);font-weight:500;margin-top:1px}
-
-/* CTA gombok a fejléc alatt */
+/* ═══ CTA gombok a fejléc alatt ═══ */
 .hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:14px}
 @media(max-width:640px){.hero-actions{justify-content:center}}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:11px;font-weight:600;font-size:14px;border:none;transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,background .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer}
@@ -204,7 +195,7 @@ img{max-width:100%;display:block}
 .section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
 .section>*{position:relative;z-index:1}
 .section:hover{box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08);border-color:rgba(199,210,254,.5)}
-.map-wrap{width:100%;height:380px;border-radius:14px;overflow:hidden;border:1px solid rgba(199,210,254,.4);background:#eef2ff;position:relative}
+.map-wrap{width:100%;height:260px;border-radius:14px;overflow:hidden;border:1px solid rgba(199,210,254,.4);background:#eef2ff;position:relative}
 .map-wrap .map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;background:#eef2ff;z-index:1}
 .map-actions{display:flex;gap:.6rem;margin-top:.75rem;flex-wrap:wrap}
 .map-actions a{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.6);color:var(--brand);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(17,50,147,.12);transition:all .15s}
@@ -788,37 +779,6 @@ function render(c){
               ${specs.length > 6 ? `<span class="hero-chip more">+${specs.length - 6} további</span>` : ''}
             </div>` : ''}
 
-            <div class="hero-stats">
-              <div class="hero-stat">
-                <div class="hero-stat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                <div class="hero-stat-info">
-                  <div class="hero-stat-v">${escapeHtml(city || 'Magyarország')}</div>
-                  <div class="hero-stat-l">${c.district ? c.district + '. kerület' : 'Helyszín'}</div>
-                </div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.5-2 2-3.5 2-5.5C21 4.91 17.5 2 14 2c-2.5 0-4.5 1.5-5.5 3.5"/><path d="M3.27 6.96 12 12.01l8.73-5.05"/></svg></div>
-                <div class="hero-stat-info">
-                  <div class="hero-stat-v">${specs.length}</div>
-                  <div class="hero-stat-l">Szakterület</div>
-                </div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-                <div class="hero-stat-info">
-                  <div class="hero-stat-v">${docs.length}</div>
-                  <div class="hero-stat-l">Orvos</div>
-                </div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="hero-stat-info">
-                  <div class="hero-stat-v">${c.opening_hours ? 'Igen' : '—'}</div>
-                  <div class="hero-stat-l">Nyitvatartás</div>
-                </div>
-              </div>
-            </div>
-
             <div class="hero-actions">
               ${c.phone ? `<a href="tel:${escapeHtml(c.phone)}" class="btn btn-primary">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
@@ -851,12 +811,6 @@ function render(c){
           </div>
         </section>` : ''}
 
-        <!-- Galéria -->
-        ${gallery.length ? renderGallery(gallery) : ''}
-
-        <!-- Vizsgálatok és árak -->
-        ${services.length ? renderServices(services, PREVIEW_SVC) : ''}
-
         <!-- Orvosok -->
         <section class="section">
           <h2>
@@ -867,6 +821,12 @@ function render(c){
             ${docs.map(d => renderDocCard(d)).join('')}
           </div>` : '<p class="empty-msg">Még nincs hozzárendelt orvos.</p>'}
         </section>
+
+        <!-- Galéria -->
+        ${gallery.length ? renderGallery(gallery) : ''}
+
+        <!-- Vizsgálatok és árak -->
+        ${services.length ? renderServices(services, PREVIEW_SVC) : ''}
 
         <!-- További információk -->
         ${(c.parking_info || c.public_transport || c.accessibility) ? `<section class="section">
@@ -893,24 +853,6 @@ function render(c){
               </div>
               <div><div class="info-lbl">Akadálymentesség</div><div class="info-val">${escapeHtml(c.accessibility)}</div></div>
             </div>` : ''}
-          </div>
-        </section>` : ''}
-        <!-- Térkép -->
-        ${c.lat && c.lng ? `<section class="section">
-          <h2>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Hol található
-          </h2>
-          <div class="map-wrap"><div id="clinicMap" style="width:100%;height:100%"></div><div class="map-loading" id="mapLoading">Térkép betöltése…</div></div>
-          <div class="map-actions">
-            <a href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank" rel="noopener">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-              Útvonal Google Maps-szel
-            </a>
-            <a href="https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}" target="_blank" rel="noopener">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              Megnyitás Google Maps-en
-            </a>
           </div>
         </section>` : ''}
       </div>
@@ -945,19 +887,24 @@ function render(c){
         <!-- Nyitvatartás -->
         ${renderHours(c.opening_hours)}
 
-        <!-- Stats -->
-        <section class="section">
+        <!-- Térkép (csak ha van koordináta) -->
+        ${c.lat && c.lng ? `<section class="section">
           <h2>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Statisztikák
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hol található
           </h2>
-          <div class="stats">
-            <div class="stat"><div class="stat-val">${docs.length}</div><div class="stat-lbl">Orvos</div></div>
-            <div class="stat"><div class="stat-val">${specs.length}</div><div class="stat-lbl">Szakterület</div></div>
-            <div class="stat"><div class="stat-val">${(c.google_rating || avgRating) > 0 ? (c.google_rating || avgRating).toFixed(1) : '—'}</div><div class="stat-lbl">${c.google_rating ? 'Google értékelés' : 'Értékelés'}</div></div>
-            <div class="stat"><div class="stat-val">${c.google_review_count || totalReviews}</div><div class="stat-lbl">Vélemény</div></div>
+          <div class="map-wrap"><div id="clinicMap" style="width:100%;height:100%"></div><div class="map-loading" id="mapLoading">Térkép betöltése…</div></div>
+          <div class="map-actions">
+            <a href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              Útvonal
+            </a>
+            <a href="https://www.google.com/maps/search/?api=1&query=${c.lat},${c.lng}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Google Maps
+            </a>
           </div>
-        </section>
+        </section>` : ''}
 
         <!-- Google reviews (csak ha van google_place_id) -->
         ${c.google_place_id ? `
