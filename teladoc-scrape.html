@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Teladoc Scraper</title>
+<style>
+body{font-family:system-ui,sans-serif;padding:1.5rem;max-width:1200px;margin:0 auto;background:#f4f6f8;color:#113293}
+h1{font-size:22px;margin:0 0 1rem}
+button{background:#113293;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px}
+button:hover{background:#0c2370}
+button:disabled{opacity:.6;cursor:wait}
+button.success{background:#16a34a}
+button.success:hover{background:#15803d}
+.box{background:#fff;border:1.5px solid #dce3ea;border-radius:8px;padding:1rem;margin-bottom:1rem}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid #f0f4ff}
+th{background:#f8fafc;font-weight:600;color:#475569;font-size:11.5px;text-transform:uppercase}
+tr:hover td{background:#fafbff}
+.logo{width:32px;height:32px;object-fit:contain;border-radius:6px;background:#f8fafc}
+.stats{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.stat{background:#fff;border:1.5px solid #dce3ea;border-radius:8px;padding:.75rem 1rem;flex:1;min-width:140px}
+.stat-val{font-size:22px;font-weight:700;color:#113293}
+.stat-lbl{font-size:11.5px;color:#475569;text-transform:uppercase}
+.progress{height:8px;background:#dce3ea;border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-bar{height:100%;background:linear-gradient(90deg,#113293,#16a34a);transition:width .3s;width:0}
+.task-log{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;font-size:11px}
+.task-tag{padding:2px 8px;background:#f0f4ff;border:1px solid #c7d2f5;border-radius:99px}
+.task-tag.ok{background:#dcfce7;border-color:#86efac}
+.task-tag.empty{background:#fef3c7;border-color:#fcd34d}
+.task-tag.err{background:#fee2e2;border-color:#fca5a5}
+</style>
+</head>
+<body>
+<h1>🏥 Teladoc Scraper — Pagination</h1>
+
+<div class="box">
+  <p style="margin:0 0 1rem;font-size:13px;color:#475569">
+    <b>Hardcoded merítés:</b> 5 szakterület × 6 oldal = 30 hívás. Várható futás: <b>~15 perc</b>.<br>
+    Pagination "page=1, 2, 3..." paraméterrel. Ha egy oldal 0 klinikát ad → tovább megy a következő szakterületre.
+  </p>
+  <button onclick="run('list')">📋 Megtekintés</button>
+  <button class="success" onclick="run('import')">💾 Importálás DB-be</button>
+</div>
+
+<div id="progress"></div>
+<div id="result"></div>
+
+<script>
+const FN_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/teladoc-scrape';
+const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+
+const SUBS = [
+  { id: 1,  name: 'Belgyógyászat' },
+  { id: 11, name: 'Kardiológia' },
+  { id: 13, name: 'Nőgyógyászat' },
+  { id: 15, name: 'Ortopédia' },
+  { id: 3,  name: 'Bőrgyógyászat' },
+];
+const MAX_PAGES = 6;
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function callOne(subfunction, page, action){
+  const r = await fetch(FN_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + ANON_KEY,
+      'apikey': ANON_KEY,
+    },
+    body: JSON.stringify({ subfunction, page, action, wait: 20 }),
+  });
+  return await r.json();
+}
+
+async function run(action){
+  if (action === 'import' && !confirm('Importáljam DB-be? ~15 perc futás.')) return;
+  
+  const progEl = document.getElementById('progress');
+  const resEl = document.getElementById('result');
+  resEl.innerHTML = '';
+  
+  const allItemsMap = new Map();
+  const totalStats = { inserted: 0, updated: 0, linked: 0, error: 0 };
+  const tasks = []; // {sub, page, count, status}
+  
+  const totalTasks = SUBS.length * MAX_PAGES;
+  let completed = 0;
+  
+  for (const sub of SUBS) {
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      
+      // Render progress
+      progEl.innerHTML = `
+        <div class="box">
+          <div style="font-size:13px;margin-bottom:8px">⏳ <b>${sub.name}</b>, oldal ${page}/${MAX_PAGES} — ${completed + 1}/${totalTasks}</div>
+          <div class="progress"><div class="progress-bar" style="width:${(completed/totalTasks)*100}%"></div></div>
+          <div style="margin-top:8px;font-size:12px;color:#475569">
+            Eddig egyedi klinika: <b>${allItemsMap.size}</b>
+            ${action === 'import' ? ` · Új: <b style="color:#16a34a">${totalStats.inserted}</b>` : ''}
+          </div>
+          <div class="task-log">
+            ${tasks.map(t => `<span class="task-tag ${t.status}">${escapeHtml(t.sub)} p${t.page}: ${t.count}</span>`).join('')}
+          </div>
+        </div>`;
+      
+      try {
+        const data = await callOne(sub.id, page, action);
+        const count = data.items?.length || 0;
+        
+        let status = 'ok';
+        if (data.error) status = 'err';
+        else if (count === 0) status = 'empty';
+        
+        tasks.push({ sub: sub.name, page, count, status });
+        
+        for (const item of (data.items || [])) {
+          if (!allItemsMap.has(item.teladoc_id)) allItemsMap.set(item.teladoc_id, item);
+        }
+        if (data.import) {
+          totalStats.inserted += data.import.inserted;
+          totalStats.updated += data.import.updated;
+          totalStats.linked += data.import.linked;
+          totalStats.error += data.import.error;
+        }
+        
+        completed++;
+        
+        // Ha 0 találat → következő szakterületre
+        if (count === 0) break;
+      } catch (e) {
+        console.error(sub, page, e);
+        tasks.push({ sub: sub.name, page, count: 0, status: 'err' });
+        completed++;
+        break;
+      }
+    }
+  }
+  
+  progEl.innerHTML = '';
+  
+  const items = [...allItemsMap.values()];
+  let html = '';
+  
+  html += `<div class="stats">`;
+  html += `<div class="stat"><div class="stat-val">${items.length}</div><div class="stat-lbl">Egyedi klinika</div></div>`;
+  if (action === 'import') {
+    html += `<div class="stat" style="border-color:#16a34a"><div class="stat-val" style="color:#16a34a">${totalStats.inserted}</div><div class="stat-lbl">Új beszúrva</div></div>`;
+    html += `<div class="stat" style="border-color:#3b82f6"><div class="stat-val" style="color:#3b82f6">${totalStats.updated}</div><div class="stat-lbl">Frissítve</div></div>`;
+    html += `<div class="stat"><div class="stat-val">${totalStats.linked}</div><div class="stat-lbl">Már linkelve</div></div>`;
+  }
+  html += `</div>`;
+  
+  // Log
+  html += `<div class="box"><h3 style="margin:0 0 .5rem;font-size:13px">Lekérési log (${tasks.length})</h3><div class="task-log">`;
+  tasks.forEach(t => html += `<span class="task-tag ${t.status}">${escapeHtml(t.sub)} p${t.page}: ${t.count}</span>`);
+  html += `</div></div>`;
+  
+  if (items.length) {
+    html += `<div class="box"><table><thead><tr><th>Logo</th><th>Klinika név</th><th>Cím</th><th>★</th><th>ID</th></tr></thead><tbody>`;
+    items.forEach(p => {
+      html += `<tr>`;
+      html += `<td>${p.logo ? `<img class="logo" src="${escapeHtml(p.logo)}" loading="lazy">` : '–'}</td>`;
+      html += `<td><b>${escapeHtml(p.name)}</b></td>`;
+      html += `<td>${escapeHtml(p.address || '–')}</td>`;
+      html += `<td>${p.rating ? '⭐ ' + p.rating : '–'}</td>`;
+      html += `<td>${escapeHtml(p.teladoc_id)}</td>`;
+      html += `</tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  
+  resEl.innerHTML = html;
+}
+</script>
+</body>
+</html>

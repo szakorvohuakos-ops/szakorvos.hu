@@ -538,6 +538,12 @@ function generateContent(title, specialty) {
   `;
 }
 
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+
 async function loadArticle() {
   // Slug kiolvasása — vagy a query-ből (?slug=...) vagy az URL path-ból (/tudastar/<slug>)
   const params = new URLSearchParams(window.location.search);
@@ -678,7 +684,7 @@ async function loadArticle() {
       <!-- Főtartalom -->
       <main class="article-main" itemscope itemtype="https://schema.org/MedicalWebPage">
         <header class="article-header">
-          <h1 class="article-title" itemprop="name">${article.title}</h1>
+          <h1 class="article-title" itemprop="name">${escapeHtml(article.title)}</h1>
           <div class="article-meta">
             <div class="article-meta-item">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>

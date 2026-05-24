@@ -60,7 +60,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // App init
   loadStats();
-  loadTab('overview');
+  // Ha klinika szerkesztésből jövünk vissza → klinikák tab
+  if (sessionStorage.getItem('lastEditedClinic')) {
+    const clinicsNav = document.querySelector('.nav-item[onclick*="clinics"]');
+    switchTab('clinics', clinicsNav);
+  } else {
+    loadTab('overview');
+  }
 });
 </script>
 <style>
@@ -965,7 +971,18 @@ async function loadClinics(){
   tb.innerHTML=allClinics.map((c,i)=>{
     const hasCoord = c.lat && c.lng;
     const status = c.status || 'active';
-    const cityLabel = c.cities?.name ? (c.cities.name + (c.district ? ' · ' + c.district + '. ker.' : '')) : '';
+    const cityName = c.cities?.name || '';
+    const county = c.cities?.county || '';
+    const isBudapest = cityName === 'Budapest';
+    // Cimke: Budapest esetén "Budapest · X. ker.", egyébként "Megye · Város"
+    let cityLabel = '';
+    if (cityName) {
+      if (isBudapest) {
+        cityLabel = cityName + (c.district ? ' · ' + c.district + '. ker.' : '');
+      } else {
+        cityLabel = (county ? county + ' · ' : '') + cityName;
+      }
+    }
     return `<tr data-id="${c.id}">
     <td style="min-width:320px"><div class="av-chip" style="max-width:100%;align-items:center">
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px;flex-shrink:0">${esc(c.name.charAt(0))}</div>
