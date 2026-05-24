@@ -934,12 +934,24 @@ function filterDoctorsByStatus(v){
 async function loadClinics(){
   const tb=document.getElementById('clinicsBody');
   tb.innerHTML='<tr class="skel-row"><td colspan="8"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
-  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name),doctor_clinics(doctor_id)').order('name');
+  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name),doctor_clinics(doctor_id)');
   allClinics=data||[];
+  // Sortírozás: város (ABC) → kerület (numerikusan) → klinika név (ABC)
+  allClinics.sort((a,b) => {
+    const cityA = (a.cities?.name || 'ZZZ').toLowerCase();
+    const cityB = (b.cities?.name || 'ZZZ').toLowerCase();
+    if (cityA !== cityB) return cityA.localeCompare(cityB, 'hu');
+    // Kerület: római/arab számok kivonása
+    const distA = parseInt(String(a.district||'').replace(/[^\d]/g,'')) || 999;
+    const distB = parseInt(String(b.district||'').replace(/[^\d]/g,'')) || 999;
+    if (distA !== distB) return distA - distB;
+    return (a.name||'').localeCompare(b.name||'', 'hu');
+  });
   if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek klinikák</td></tr>';return;}
   tb.innerHTML=allClinics.map((c,i)=>{
     const hasCoord = c.lat && c.lng;
     const status = c.status || 'active';
+    const cityLabel = c.cities?.name ? (c.cities.name + (c.district ? ' · ' + c.district + '. ker.' : '')) : '';
     return `<tr data-id="${c.id}">
     <td style="min-width:320px"><div class="av-chip" style="max-width:100%;align-items:center">
       <div class="av-sm" style="background:${COLORS[i%COLORS.length]};border-radius:8px;font-size:10px;flex-shrink:0">${esc(c.name.charAt(0))}</div>
@@ -949,7 +961,7 @@ async function loadClinics(){
     <td style="text-align:center">${c.on_foglaljorvost ? `<a href="${esc(c.foglaljorvost_url||'#')}" target="_blank" rel="noopener" title="Megnyit foglaljorvost.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dcfce7;color:#166534;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">F</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
     <td style="text-align:center">${c.on_odoktor ? `<a href="${esc(c.odoktor_url||'#')}" target="_blank" rel="noopener" title="Megnyit odoktor.hu-n" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#dbeafe;color:#1e40af;border-radius:6px;font-weight:800;font-size:12px;text-decoration:none">O</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
     <td style="text-align:center;width:50px">${c.email ? `<a href="mailto:${esc(c.email)}" title="${esc(c.email)}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:#eef2ff;color:#113293;border-radius:6px;text-decoration:none;font-size:12px">✉</a>` : '<span style="color:#cbd5e1;font-size:12px">–</span>'}</td>
-    <td style="color:var(--sub);font-size:13px">${c.address||'–'}</td>
+    <td style="color:var(--sub);font-size:13px">${cityLabel ? `<div style="font-weight:600;color:var(--text);font-size:12.5px">${esc(cityLabel)}</div>` : ''}${c.address ? `<div style="font-size:12px;color:var(--muted)">${esc(c.address)}</div>` : (cityLabel ? '' : '–')}</td>
     <td><span class="badge badge-teal">${c.doctor_clinics?.length||0}</span></td>
     <td style="white-space:nowrap">${c.google_rating ? `<span style="font-weight:600;color:#0f172a">★ ${Number(c.google_rating).toFixed(1)}</span> <span style="color:var(--muted);font-size:12px">(${c.google_review_count||0})</span>` : '<span style="color:var(--muted)">–</span>'}</td>
     <td>
@@ -962,8 +974,65 @@ async function loadClinics(){
     <td><div class="act-row">
       <a href="admin-klinika-edit.html?id=${c.id}" class="btn btn-ghost btn-sm">Szerkesztés</a>
       ${c.slug ? `<a href="/klinikak/${c.slug}" target="_blank" class="btn btn-ghost btn-sm" title="Megnyitás" style="padding:6px 10px">↗</a>` : ''}
+      <button onclick="deleteClinicRow('${c.id}')" class="btn btn-sm" title="Törlés" style="padding:6px 10px;background:#fff;color:#ef4444;border:1.5px solid rgba(239,68,68,.3);cursor:pointer;border-radius:7px;font-weight:600;font-size:12px">🗑️</button>
     </div></td>
   </tr>`;}).join('');
+}
+
+async function deleteClinicRow(clinicId) {
+  const clinic = allClinics.find(c => c.id === clinicId);
+  if (!clinic) return alert('Klinika nem található.');
+  const clinicName = clinic.name;
+  const doctorCount = clinic.doctor_clinics?.length || 0;
+  
+  if (!confirm(`Biztos törlöd a(z) "${clinicName}" klinikát?\n\n• Klinika törlődik\n• ${doctorCount} orvos-kapcsolat törlődik\n• Az orvosok, akik CSAK ehhez a klinikához tartoznak, szintén törlődnek\n\nEz visszafordíthatatlan!`)) return;
+  
+  try {
+    // 1. Megkeressük azokat az orvosokat, akik CSAK ehhez a klinikához kapcsolódnak
+    const { data: linkedDocs, error: e1 } = await db
+      .from('doctor_clinics')
+      .select('doctor_id')
+      .eq('clinic_id', clinicId);
+    if (e1) throw e1;
+    
+    const doctorIds = (linkedDocs || []).map(d => d.doctor_id);
+    
+    // Az árva orvosokat (csak ehhez a klinikához kötődnek) meghatározzuk
+    let orphanDocIds = [];
+    if (doctorIds.length > 0) {
+      const { data: allLinks, error: e2 } = await db
+        .from('doctor_clinics')
+        .select('doctor_id, clinic_id')
+        .in('doctor_id', doctorIds);
+      if (e2) throw e2;
+      
+      // Egy orvos árva, ha az ÖSSZES kapcsolata ehhez a clinic_id-hez tartozik
+      const docClinicMap = {};
+      (allLinks || []).forEach(l => {
+        if (!docClinicMap[l.doctor_id]) docClinicMap[l.doctor_id] = [];
+        docClinicMap[l.doctor_id].push(l.clinic_id);
+      });
+      orphanDocIds = Object.entries(docClinicMap)
+        .filter(([_, clinicIds]) => clinicIds.length === 1 && clinicIds[0] === clinicId)
+        .map(([docId]) => docId);
+    }
+    
+    // 2. Klinika törlése (a doctor_clinics CASCADE-del törlődik a clinics törlésével)
+    const { error: e3 } = await db.from('clinics').delete().eq('id', clinicId);
+    if (e3) throw e3;
+    
+    // 3. Árva orvosok törlése
+    if (orphanDocIds.length > 0) {
+      const { error: e4 } = await db.from('doctors').delete().in('id', orphanDocIds);
+      if (e4) console.warn('Árva orvosok törlése nem sikerült:', e4);
+    }
+    
+    alert(`Sikeresen törölve!\n• 1 klinika\n• ${doctorIds.length} orvos-kapcsolat\n• ${orphanDocIds.length} árva orvos`);
+    await loadClinics();
+  } catch (e) {
+    alert('Hiba a törléskor: ' + (e.message || e));
+    console.error(e);
+  }
 }
 
 function statusBg(s){
