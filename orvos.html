@@ -1236,7 +1236,9 @@ function showError(title, desc){
 }
 
 /* ── Load ─────────────────────────────────────────────────────────── */
-async function load(){ const params = new URLSearchParams(window.location.search);
+async function load(){
+  console.log('[Szakorvos.hu] orvos.html — verzió 2026-05-13 (SEO URL: /:specialty/dr-:slug)');
+  const params = new URLSearchParams(window.location.search);
   let id = params.get('id');
   let slug = params.get('slug');
   let spec = params.get('spec'); // doctor_slug a specialties táblából (pl. "belgyogyasz")
@@ -1253,7 +1255,9 @@ async function load(){ const params = new URLSearchParams(window.location.search
     let m = path.match(/^\/([a-z0-9-]+)\/(dr-[^\/\?#]+)/i);
     if(m){
       spec = decodeURIComponent(m[1]);
-      slug = decodeURIComponent(m[2]); } else {
+      slug = decodeURIComponent(m[2]);
+      console.log('[load] SEO URL parsed → spec:', spec, '| slug:', slug);
+    } else {
       // 2. próba: /orvos/xxx prefix-szel
       m = path.match(/^\/orvos\/([^\/\?#]+)/i);
       if(!m){
@@ -1261,7 +1265,9 @@ async function load(){ const params = new URLSearchParams(window.location.search
         m = path.match(/^\/(dr-[^\/\?#]+)/i);
       }
       if(m && m[1]){
-        slug = decodeURIComponent(m[1]); }
+        slug = decodeURIComponent(m[1]);
+        console.log('[load] legacy URL parsed → slug:', slug);
+      }
     }
   }
 
@@ -1301,14 +1307,18 @@ async function load(){ const params = new URLSearchParams(window.location.search
         // Slug alapú próba elsőként
         const r1 = await buildQuery(selectClause).eq('slug', slug).single();
         if(!r1.error) return r1;
-        // Ha slug hibázik, ID-ként is megpróbáljuk (régebbi URL-ek miatt) return await buildQuery(selectClause).eq('id', slug).single();
+        // Ha slug hibázik, ID-ként is megpróbáljuk (régebbi URL-ek miatt)
+        console.warn('[load] slug query failed, trying ID:', r1.error.message);
+        return await buildQuery(selectClause).eq('id', slug).single();
       }
     };
 
     let { data, error } = await tryQuery(fullSelect);
 
     // Ha a részletes query hibázik (pl. hiányzó oszlop), fallback minimális query-re
-    if(error){ ({ data, error } = await tryQuery(minimalSelect));
+    if(error){
+      console.warn('[load] full query failed, falling back to minimal:', error.message);
+      ({ data, error } = await tryQuery(minimalSelect));
     }
 
     if(error || !data){ showError(); return; }
@@ -1325,16 +1335,20 @@ async function load(){ const params = new URLSearchParams(window.location.search
 
       // Ha NEM a kanonikus URL-en vagyunk, átirányítunk (303 - history replace)
       // Kivétel: ha id= query paraméterrel jöttek (pl. admin nézet), maradunk
-      if(currentPath !== canonicalPath && !params.get('id')){ window.history.replaceState(null, '', canonicalPath + window.location.search + window.location.hash);
+      if(currentPath !== canonicalPath && !params.get('id')){
+        console.log('[load] redirecting to canonical URL:', canonicalPath);
+        window.history.replaceState(null, '', canonicalPath + window.location.search + window.location.hash);
       }
       // Ha a spec param meg van adva, de NEM az elsődlegesnek felel meg,
       // akkor csak figyelmeztetünk a console-ban (de még mindig betöltjük az oldalt)
-      if(spec && spec !== correctSpec){ }
+      if(spec && spec !== correctSpec){
+        console.warn('[load] URL specialty mismatch — expected:', correctSpec, '| got:', spec);
+      }
     }
     // ────────────────────────────────────────────────────────────────
 
     // Kiegészítő táblák lekérdezése — fail-silent ha nem léteznek
-    const safeQuery = (q) => q.then(r => r).catch(e => { return { data: [] }; });
+    const safeQuery = (q) => q.then(r => r).catch(e => { console.warn(e); return { data: [] }; });
 
     // Az orvos összes szakterülete (vizsgálatok keresése ezek alapján a treatments táblából)
     const docSpecNames = (data.doctor_specialties || [])
@@ -1360,7 +1374,9 @@ async function load(){ const params = new URLSearchParams(window.location.search
     updateSeoMeta(data);
     render(data);
 
-  } catch(e){ showError();
+  } catch(e){
+    console.error(e);
+    showError();
   }
 }
 
@@ -1381,7 +1397,7 @@ function render(d){
   const init = (d.name || 'OR').replace(/^Dr\.\s*/i,'').split(/\s+/).map(w => w[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
   const photoWrap = document.getElementById('dhPhotoWrap');
   if(d.photo_url){
-    photoWrap.innerHTML = `<img loading="lazy" decoding="async" src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(fullName)}">${(d.availability||[]).length?'<div class="dh-online-dot"></div>':''}`;
+    photoWrap.innerHTML = `<img src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(fullName)}">${(d.availability||[]).length?'<div class="dh-online-dot"></div>':''}`;
   } else {
     document.getElementById('dhAvatar').textContent = init;
     if((d.availability||[]).length) document.getElementById('dhOnlineDot').style.display = 'block';
@@ -2087,7 +2103,7 @@ function renderLocationsTab(d){
           ${hasCoords ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank" rel="noopener" class="loc-map-btn" style="text-decoration:none">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             Útvonal
-          </a>` : `<button class="loc-map-btn" onclick="openMap('${escapeHtml(addr)}')">
+          </a>` : `<button class="loc-map-btn" type="button" data-open-map="${escapeHtml(addr)}">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             Térkép
           </button>`}
@@ -2100,6 +2116,10 @@ function renderLocationsTab(d){
     </div>`;
   }).join('');
   document.getElementById('locGrid').innerHTML = html;
+  // Delegált event listener az openMap-hez (biztonságos string-átadás)
+  document.querySelectorAll('#locGrid [data-open-map]').forEach(btn => {
+    btn.addEventListener('click', () => openMap(btn.getAttribute('data-open-map')));
+  });
 
   // Térképek inicializálása (csak ahol van koordináta)
   clinics.forEach((c, i) => {
@@ -2120,7 +2140,8 @@ function renderLocationsTab(d){
       new maps.Marker({ position: pos, map, title: c.name, icon: szkPinIcon(maps) });
       const loader = el.querySelector('[class^="loc-map-loading-"]');
       if(loader) loader.style.display = 'none';
-    }).catch(e => });
+    }).catch(e => console.error('Map load', e));
+  });
 }
 
 function openMap(addr){
