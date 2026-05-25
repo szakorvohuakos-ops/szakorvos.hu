@@ -640,8 +640,9 @@ nav#mainNav .btn-nav-fb{color:#1877F2}
 nav#mainNav .btn-nav-fb:hover{background:#e7f0fe;border-color:rgba(24,119,242,.4);color:#1877F2}
 
 </style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Szakorvos kereső", "url": "https://www.szakorvos.hu/talalatok", "description": "Találja meg a legjobb szakorvost az Ön közelében.", "inLanguage": "hu", "isPartOf": {"@type": "WebSite", "name": "Szakorvos.hu", "url": "https://www.szakorvos.hu"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://www.szakorvos.hu"}, {"@type": "ListItem", "position": 2, "name": "Orvos kereső", "item": "https://www.szakorvos.hu/talalatok"}]}</script>
+<script type="application/ld+json" id="schemaCollection">{"@context":"https://schema.org","@type":"CollectionPage","name":"Szakorvos kereső","url":"https://www.szakorvos.hu/talalatok","description":"Találja meg a legjobb szakorvost az Ön közelében.","inLanguage":"hu","isPartOf":{"@type":"WebSite","name":"Szakorvos.hu","url":"https://www.szakorvos.hu"}}</script>
+<script type="application/ld+json" id="schemaBreadcrumb">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Főoldal","item":"https://www.szakorvos.hu"},{"@type":"ListItem","position":2,"name":"Orvos kereső","item":"https://www.szakorvos.hu/talalatok"}]}</script>
+<script type="application/ld+json" id="schemaItemList"></script>
 </head>
 <body>
 
@@ -1427,7 +1428,20 @@ async function load(){ document.getElementById('resList').innerHTML='<div class=
 }
 
 /* ═════ FILTER ═════ */
-function fee(d){return d.doctor_clinics?.[0]?.consultation_fee||0}
+// Ha cityQ van, válassza azt a klinikát ami abban a városban van; egyébként az első
+function pickClinic(d) {
+  const clinics = d.doctor_clinics || [];
+  if (!clinics.length) return null;
+  if (cityQ) {
+    const match = clinics.find(dc => {
+      const cn = dc?.clinics?.cities?.name || '';
+      return cn.toLowerCase() === cityQ.toLowerCase();
+    });
+    if (match) return match;
+  }
+  return clinics[0];
+}
+function fee(d){const dc=pickClinic(d);return dc?.consultation_fee||0}
 
 function applyF(){
   let docs=[...allDocs];
@@ -1445,7 +1459,7 @@ function applyF(){
   if(days.length) docs=docs.filter(d=>{const ad=(d.availability||[]).map(a=>a.day_of_week);return days.every(x=>ad.includes(x));});
   // Cities
   const cities=[...document.querySelectorAll('#cityList input:checked')].map(i=>i.value);
-  if(cities.length) docs=docs.filter(d=>cities.includes(d.doctor_clinics?.[0]?.clinics?.cities?.name));
+  if(cities.length) docs=docs.filter(d=>(d.doctor_clinics||[]).some(dc=>cities.includes(dc?.clinics?.cities?.name)));
   // Languages
   const langs=[...document.querySelectorAll('[data-lang].on')].map(c=>c.dataset.lang);
   if(langs.length) docs=docs.filter(d=>{
@@ -1564,6 +1578,81 @@ function starsH(r,sz=14){
   return `<div class="stars">${Array.from({length:5},(_,i)=>`<span class="st${i<f?' f':i===f&&h?' h':''}" style="font-size:${sz}px">★</span>`).join('')}</div>`;
 }
 
+
+// ── SEO: dinamikus JSON-LD frissítés a tényleges szűrőktől + találati eredménytől ──
+function updateSearchSchema(){
+  try {
+    const specSlugEnc = specQ ? encodeURIComponent(specQ) : '';
+    const citySlug = cityQ ? cityQ.toLowerCase() : '';
+    const cityEnc = cityQ ? encodeURIComponent(cityQ) : '';
+
+    // Páldául: /talalatok?specialty=borgyogyasz&city=Budapest
+    const currentUrl = 'https://www.szakorvos.hu/talalatok' + (() => {
+      const ps = [];
+      if(specQ) ps.push('specialty=' + specSlugEnc);
+      if(cityQ) ps.push('city=' + cityEnc);
+      return ps.length ? '?' + ps.join('&') : '';
+    })();
+
+    const docLabel = (typeof DOCTOR_LABEL === 'string' && DOCTOR_LABEL) ? DOCTOR_LABEL : (specQ || 'Szakorvosok');
+    const cityLabel = cityQ || '';
+    const collName = docLabel + (cityLabel ? ' – ' + cityLabel : '') + ' | Szakorvos.hu';
+    const collDesc = (cityLabel
+      ? docLabel + ' ' + cityLabel + 'en — találja meg a legjobb szakorvost.'
+      : docLabel + ' Magyarországon — keressen szakorvost, foglaljon időpontot.').slice(0, 160);
+
+    // CollectionPage frissítés
+    const collEl = document.getElementById('schemaCollection');
+    if(collEl){
+      collEl.textContent = JSON.stringify({
+        '@context':'https://schema.org','@type':'CollectionPage',
+        name: collName, url: currentUrl, description: collDesc, inLanguage: 'hu',
+        isPartOf: {'@type':'WebSite','name':'Szakorvos.hu','url':'https://www.szakorvos.hu'}
+      });
+    }
+
+    // Breadcrumb frissítés
+    const bcEl = document.getElementById('schemaBreadcrumb');
+    if(bcEl){
+      const items = [
+        {'@type':'ListItem',position:1,name:'Főoldal',item:'https://www.szakorvos.hu'},
+        {'@type':'ListItem',position:2,name:'Orvos kereső',item:'https://www.szakorvos.hu/talalatok'}
+      ];
+      if(specQ) items.push({'@type':'ListItem',position:items.length+1,name:docLabel,item:'https://www.szakorvos.hu/talalatok?specialty='+specSlugEnc});
+      if(cityQ) items.push({'@type':'ListItem',position:items.length+1,name:cityLabel,item:currentUrl});
+      bcEl.textContent = JSON.stringify({
+        '@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:items
+      });
+    }
+
+    // ItemList — első 20 orvos (Physician)
+    const listEl = document.getElementById('schemaItemList');
+    if(listEl && Array.isArray(filtered) && filtered.length){
+      const top = filtered.slice(0, 20);
+      const items = top.map((d, idx) => {
+        const docCanonical = d.slug
+          ? ('https://www.szakorvos.hu/orvos/' + encodeURIComponent(d.slug))
+          : 'https://www.szakorvos.hu/talalatok';
+        const primarySpec = (d.doctor_specialties || []).find(s => s.is_primary) || d.doctor_specialties?.[0];
+        return {
+          '@type':'ListItem', position: idx + 1,
+          item: {
+            '@type':'Physician',
+            name: (d.title ? d.title + ' ' : '') + (d.name || ''),
+            url: docCanonical,
+            medicalSpecialty: primarySpec?.specialties?.name || undefined,
+            image: d.photo_url || undefined,
+          }
+        };
+      });
+      listEl.textContent = JSON.stringify({
+        '@context':'https://schema.org','@type':'ItemList',
+        name: collName, numberOfItems: filtered.length, itemListElement: items
+      });
+    }
+  } catch(_) {}
+}
+
 function renderList(){
   const tot=filtered.length,pgs=Math.ceil(tot/PGS);
   // Load-more módban: az 1. oldaltól a curPg oldalig minden mutatva van
@@ -1587,6 +1676,9 @@ function renderList(){
   } else {
     list.innerHTML=pg.map((d,i)=>cardH(d,st+i)).join('');
   }
+
+  // SEO: schema frissítés
+  updateSearchSchema();
 
   // AI összefoglalók lazy betöltése a kártyákhoz
   setTimeout(() => {
@@ -1655,7 +1747,7 @@ async function loadSummaryForCard(doctorId, el) {
 
 function cardH(d,i){
   const spec=d.doctor_specialties?.[0]?.specialties?.doctor_name||'Szakorvos';
-  const clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'',f=fee(d);
+  const dcPick=pickClinic(d),clinic=dcPick?.clinics,city=clinic?.cities?.name||'',f=fee(d);
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase(),col=COLORS[i%COLORS.length];
   const avD=(d.availability||[]).map(a=>a.day_of_week);
   const tags=(d.doctor_specialties||[]).map(s=>s.specialties?.name).filter(Boolean);
@@ -1814,7 +1906,7 @@ function openPanel(id){
   const idx=allDocs.indexOf(d),col=COLORS[idx%COLORS.length];
   const init=d.name.replace('Dr. ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   const spec=d.doctor_specialties?.[0]?.specialties?.name||'Szakorvos';
-  const clinic=d.doctor_clinics?.[0]?.clinics,city=clinic?.cities?.name||'';
+  const dcPick=pickClinic(d),clinic=dcPick?.clinics,city=clinic?.cities?.name||'';
   const f=fee(d),rat=parseFloat(d.rating||0),avD=(d.availability||[]).map(a=>a.day_of_week);
 
   // Topbar

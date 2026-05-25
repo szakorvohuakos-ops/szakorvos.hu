@@ -347,6 +347,67 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .contact-card:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.05),0 12px 32px rgba(17,50,147,.12),0 32px 64px rgba(17,50,147,.1)}
 .contact-card > *{position:relative;z-index:1}
 .contact-card-h{font-size:11px;font-weight:700;color:var(--brand);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;opacity:.7}
+
+/* ═══ KLINIKA-szerű sidebar tartalom ═══ */
+.kli-section{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(248,250,255,.58) 100%);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid rgba(255,255,255,.78);border-radius:22px;padding:1.6rem 1.75rem;margin-top:14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.07),0 24px 48px rgba(17,50,147,.09);transition:box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .3s;position:relative;overflow:hidden}
+.kli-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,1) 30%,rgba(255,255,255,1) 70%,transparent);pointer-events:none;z-index:2}
+.kli-section>*{position:relative;z-index:1}
+.kli-section:hover{box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08);border-color:rgba(199,210,254,.5)}
+.kli-section h2{font-size:1.05rem;font-weight:700;margin:0 0 1.1rem;display:flex;align-items:center;gap:9px;letter-spacing:-0.018em;padding-bottom:12px;border-bottom:1px solid rgba(199,210,254,.25);color:var(--brand)}
+.kli-section h2 svg{color:var(--brand);opacity:.9;flex-shrink:0}
+.kli-section h2 .h-sub{font-size:11.5px;font-weight:500;color:var(--muted);margin-left:auto;text-transform:none;letter-spacing:0}
+
+/* Ikonos info-rowok (Kapcsolat) */
+.kli-info-list{display:flex;flex-direction:column;gap:.85rem;list-style:none;padding:0;margin:0}
+.kli-info-row{display:flex;align-items:flex-start;gap:.85rem;font-size:14px}
+.kli-info-row::before{content:none}
+.kli-info-ico{flex-shrink:0;width:38px;height:38px;background:linear-gradient(135deg,rgba(17,50,147,.08),rgba(38,74,202,.06));border:1px solid rgba(17,50,147,.1);border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--brand)}
+.kli-info-ico svg{display:block}
+.kli-info-text{min-width:0;flex:1}
+.kli-info-lbl{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:1px}
+.kli-info-val{font-weight:500;color:var(--text);word-break:break-word;font-size:14px;line-height:1.45}
+.kli-info-val a{color:var(--brand);font-weight:500}
+.kli-info-val a:hover{text-decoration:underline}
+
+/* Térkép szekció */
+.kli-map-wrap{width:100%;height:220px;border-radius:14px;overflow:hidden;border:1px solid rgba(199,210,254,.4);background:#eef2ff;position:relative}
+.kli-map-wrap .kli-map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;background:#eef2ff;z-index:1}
+.kli-map-actions{display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
+.kli-map-actions a{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.6);color:var(--brand);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid rgba(17,50,147,.12);transition:all .15s}
+.kli-map-actions a:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* Nyitvatartás (mint a klinikán) */
+.kli-hours-list{display:flex;flex-direction:column;gap:2px}
+.kli-hours-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(199,210,254,.3);font-size:13.5px}
+.kli-hours-row:last-child{border-bottom:none}
+.kli-hours-day{font-weight:500;color:var(--muted)}
+.kli-hours-time{font-weight:600;color:var(--text)}
+.kli-hours-time.closed{color:#dc2626;font-weight:500}
+.kli-hours-row.today{background:linear-gradient(135deg,rgba(17,50,147,.06),rgba(38,74,202,.04));margin:0 -.85rem;padding:9px .85rem;border-radius:10px;border-bottom:none;border:1px solid rgba(17,50,147,.1)}
+.kli-hours-row.today .kli-hours-day{color:var(--brand);font-weight:700}
+
+/* Értékelés szummary */
+.kli-rating-summary{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.kli-rating-big{font-size:2.4rem;font-weight:800;color:var(--brand);letter-spacing:-0.025em;line-height:1;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.kli-rating-stars-lg{color:#FFB400;font-size:16px;letter-spacing:2px;margin-top:4px}
+.kli-rating-count-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.kli-rating-bars{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}
+
+/* CTA gombsor a Kapcsolat alatt */
+.kli-cta-stack{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(199,210,254,.3)}
+.kli-cta-primary{width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(38,74,202,.35);display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .25s,box-shadow .25s}
+.kli-cta-primary:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 18px rgba(38,74,202,.4)}
+.kli-cta-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kli-cta-call{background:rgba(44,150,80,.08);color:#1a7a3e;border:1.5px solid rgba(44,150,80,.2);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.kli-cta-call:hover{background:rgba(44,150,80,.14);border-color:rgba(44,150,80,.4)}
+.kli-cta-msg{background:rgba(17,50,147,.06);color:var(--brand);border:1.5px solid rgba(17,50,147,.15);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.kli-cta-msg:hover{background:rgba(17,50,147,.1);border-color:rgba(17,50,147,.3)}
+
+/* Verified badge sorocska */
+.kli-verified-row{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(199,210,254,.3)}
+.kli-verified-row .v-txt{font-size:12.5px;color:#1a7a3e;font-weight:600}
+.kli-verified-row .v-sub{font-size:12px;color:var(--muted);margin-left:2px}
+
 .contact-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid rgba(199,210,254,.2)}
 .contact-row:last-child{border-bottom:none;padding-bottom:0}
 .contact-ico{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,rgba(17,50,147,.1),rgba(38,74,202,.06));color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.5) inset}
@@ -1052,70 +1113,65 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- ═════ RIGHT COLUMN ════════════════════════════════════════ -->
     <aside>
 
-      <!-- ─── FŐ KÁRTYA: Rendelési helyszín + gombok ──────────── -->
-      <!-- Rendelési helyszínek + gombok -->
-      <div class="contact-card" id="pane-locations">
+      <!-- ─── KAPCSOLAT (ikonos sorok mint a klinikán) ──────────── -->
+      <section class="kli-section" id="kliContact">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+          Kapcsolat
+        </h2>
+        <ul class="kli-info-list" id="kliContactList"></ul>
 
-        <!-- Ajánlás badge -->
-        <div id="sidebarRecoBox" style="display:none;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,191,36,.05));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:8px 12px;margin-bottom:12px">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <span id="sidebarRecoText" style="font-size:12.5px;font-weight:700;color:#d97706"></span>
-        </div>
-
-        <div class="contact-card-h">Rendelési helyszínek</div>
-        <div class="loc-grid" id="locGrid"></div>
-
-        <!-- Nyitvatartás -->
-        <div id="sidebarHours" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)">
-          <div style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:5px">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Nyitvatartás
-          </div>
-          <div id="sidebarHoursContent" style="font-size:13.5px;color:var(--text);font-weight:500;line-height:1.7"></div>
-        </div>
-
-        <!-- Gombok -->
-        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft);display:flex;flex-direction:column;gap:8px">
-          <button onclick="alert('Időpontkérés hamarosan')" style="width:100%;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(38,74,202,.35);display:flex;align-items:center;justify-content:center;gap:7px">
+        <!-- CTA gombok -->
+        <div class="kli-cta-stack">
+          <button class="kli-cta-primary" onclick="alert('Időpontkérés hamarosan')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             Időpontkérés
           </button>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <button id="sidebarCallBtn" onclick="sidebarCall()" style="background:rgba(44,150,80,.08);color:#1a7a3e;border:1.5px solid rgba(44,150,80,.2);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+          <div class="kli-cta-row">
+            <button class="kli-cta-call" id="kliCtaCall" onclick="sidebarCall()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
               Hívás
             </button>
-            <button onclick="alert('Üzenetküldés hamarosan')" style="background:rgba(17,50,147,.06);color:var(--brand);border:1.5px solid rgba(17,50,147,.15);border-radius:11px;padding:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+            <button class="kli-cta-msg" onclick="alert('Üzenetküldés hamarosan')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
               Üzenet
             </button>
           </div>
         </div>
 
-        <!-- Ellenőrzött orvos badge -->
-        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-soft)">
+        <!-- Ellenőrzött orvos -->
+        <div class="kli-verified-row">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          <span style="font-size:12.5px;color:#1a7a3e;font-weight:600">Ellenőrzött orvos</span>
-          <span style="font-size:12px;color:var(--muted);margin-left:2px">— A profil teljessége által ellenőrizve.</span>
+          <span class="v-txt">Ellenőrzött orvos</span>
         </div>
-      </div>
+      </section>
 
-      <!-- Rendelési idő box -->
-      <div class="contact-card" id="hoursSidebarBox" style="display:none">
-        <div class="contact-card-h">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <!-- ─── RENDELÉSI IDŐ ─────────────────────────────────────── -->
+      <section class="kli-section" id="kliHours" style="display:none">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Rendelési idő
-        </div>
-        <div id="hoursSidebarContent" style="font-size:13.5px;color:var(--text);font-weight:500;line-height:1.85"></div>
-      </div>
+        </h2>
+        <div class="kli-hours-list" id="kliHoursList"></div>
+      </section>
 
-      <!-- Fizetési lehetőségek box -->
-      <div class="contact-card">
-        <div class="contact-card-h">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:5px"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <!-- ─── HOL TALÁLHATÓ (térkép) ────────────────────────────── -->
+      <section class="kli-section" id="kliMap" style="display:none">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Hol található
+        </h2>
+        <div class="kli-map-wrap"><div id="kliMapEl" style="width:100%;height:100%"></div><div class="kli-map-loading" id="kliMapLoading">Térkép betöltése…</div></div>
+        <div class="kli-map-actions" id="kliMapActions"></div>
+      </section>
+
+      <!-- ─── FIZETÉSI LEHETŐSÉGEK ──────────────────────────────── -->
+      <section class="kli-section">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           Fizetési lehetőségek
-        </div>
-        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:13.5px;color:var(--text);font-weight:500">
+        </h2>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--text);font-weight:500">
           <li style="display:flex;align-items:center;gap:8px">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
             Készpénz
@@ -1132,29 +1188,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C9650" stroke-width="2.5" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
             SZÉP Kártya (egészségpénztár)
           </li>
-          <li style="display:flex;align-items:center;gap:8px;color:var(--muted)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            TB-támogatás: nincs
-          </li>
         </ul>
-      </div>
+      </section>
 
-      <!-- Értékelések sidebar box -->
-      <div class="contact-card rating-sidebar-box" id="ratingSidebarBox" style="display:none">
-        <div class="contact-card-h">Páciensek értékelései</div>
-        <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:12px">
+      <!-- ─── PÁCIENS VÉLEMÉNYEK ────────────────────────────────── -->
+      <section class="kli-section" id="kliReviews" style="display:none">
+        <h2>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          Páciensek értékelései
+        </h2>
+        <div class="kli-rating-summary">
           <div style="text-align:center;flex-shrink:0">
-            <div class="rating-big" id="ratingSidebarAvg">–</div>
-            <div class="rating-stars-lg" id="ratingSidebarStars">☆☆☆☆☆</div>
-            <div class="rating-count-sub" id="ratingSidebarCount"></div>
+            <div class="kli-rating-big" id="kliRatingAvg">–</div>
+            <div class="kli-rating-stars-lg" id="kliRatingStars">☆☆☆☆☆</div>
+            <div class="kli-rating-count-sub" id="kliRatingCount"></div>
           </div>
-          <div style="flex:1" id="ratingSidebarBars"></div>
+          <div class="kli-rating-bars" id="kliRatingBars"></div>
         </div>
-        <div id="ratingSidebarRevs"></div>
-        <a href="talalatok.html" style="display:block;text-align:center;font-size:13px;font-weight:600;color:var(--brand);margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);text-decoration:none">
-          Összes értékelés megtekintése →
-        </a>
-      </div>
+        <div id="kliRatingRevs"></div>
+      </section>
 
     </aside>
 
@@ -1836,14 +1888,14 @@ function computeBarDist(rat, count){
 /* ── Értékelés sidebar feltöltése ───────────────────────────────── */
 function renderRatingSidebar(rat, reviews) {
   if (!rat || rat <= 0) return;
-  const box = document.getElementById('ratingSidebarBox');
+  const box = document.getElementById('kliReviews');
   if (box) box.style.display = 'block';
 
-  const avg = document.getElementById('ratingSidebarAvg');
-  const stars = document.getElementById('ratingSidebarStars');
-  const count = document.getElementById('ratingSidebarCount');
-  const bars = document.getElementById('ratingSidebarBars');
-  const revs = document.getElementById('ratingSidebarRevs');
+  const avg = document.getElementById('kliRatingAvg');
+  const stars = document.getElementById('kliRatingStars');
+  const count = document.getElementById('kliRatingCount');
+  const bars = document.getElementById('kliRatingBars');
+  const revs = document.getElementById('kliRatingRevs');
 
   if (avg) avg.textContent = rat.toFixed(1);
   if (stars) {
@@ -1889,53 +1941,104 @@ function renderSidebar(d, rat, reviews) {
   const clinic = d.doctor_clinics?.[0]?.clinics;
   const city = clinic?.cities?.name || '';
   const phone = d.phone || clinic?.phone || '';
+  const email = d.email || clinic?.email || '';
+  const website = clinic?.website || '';
+  const addr = clinic?.address || (city ? city : '');
 
-  // Klinika neve + cím — a loc-grid rendereli, nincs külön elem
-
-  // Klinika nyitvatartási idő
-  const openingHours = clinic?.opening_hours;
-  const hoursEl = document.getElementById('sidebarHoursContent');
-  const hoursBox = document.getElementById('sidebarHours');
-  if (openingHours && hoursEl && hoursBox) {
-    let hoursHtml = '';
-    if (typeof openingHours === 'string') {
-      hoursHtml = openingHours.split('\n').map(l => `<div>${escapeHtml(l)}</div>`).join('');
-    } else if (typeof openingHours === 'object') {
-      const dayNames = {'mon':'H–P','tue':'K','wed':'Sze','thu':'Cs','fri':'P','sat':'Szo','sun':'V','weekdays':'H–P','weekend':'Szo–V'};
-      hoursHtml = Object.entries(openingHours).map(([k,v]) => `<div>${dayNames[k]||k}: ${v}</div>`).join('');
+  // ── KAPCSOLAT: ikonos info-rowok ──────────────────────────
+  const contactEl = document.getElementById('kliContactList');
+  if (contactEl) {
+    const rows = [];
+    if (clinic?.name) {
+      rows.push(`<li class="kli-info-row">
+        <div class="kli-info-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+        <div class="kli-info-text"><div class="kli-info-lbl">Rendelő</div><div class="kli-info-val">${escapeHtml(clinic.name)}</div></div>
+      </li>`);
     }
-    if (hoursHtml) { hoursEl.innerHTML = hoursHtml; hoursBox.style.display = 'block'; }
-  }
-
-  // Rendelési idő (külön sidebar box) — orvos availability-ből
-  renderHoursSidebar(d.availability || []);
-
-  // Rating sidebar
-  renderRatingSidebar(rat, reviews);
-
-  // Ajánlás
-  if (rat && rat > 4.5 && reviews > 20) {
-    const recoBox = document.getElementById('sidebarRecoBox');
-    const recoText = document.getElementById('sidebarRecoText');
-    if (recoBox && recoText) {
-      recoText.textContent = `${Math.round(rat * 20)}% ajánlja — ${reviews} értékelés alapján`;
-      recoBox.style.display = 'flex';
+    if (addr) {
+      rows.push(`<li class="kli-info-row">
+        <div class="kli-info-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div class="kli-info-text"><div class="kli-info-lbl">Cím</div><div class="kli-info-val">${escapeHtml(addr)}${city && !addr.includes(city) ? ', ' + escapeHtml(city) : ''}</div></div>
+      </li>`);
     }
+    if (phone) {
+      rows.push(`<li class="kli-info-row">
+        <div class="kli-info-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div>
+        <div class="kli-info-text"><div class="kli-info-lbl">Telefon</div><div class="kli-info-val"><a href="tel:${escapeHtml(phone)}">${escapeHtml(phone)}</a></div></div>
+      </li>`);
+    }
+    if (email) {
+      rows.push(`<li class="kli-info-row">
+        <div class="kli-info-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="kli-info-text"><div class="kli-info-lbl">E-mail</div><div class="kli-info-val"><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></div></div>
+      </li>`);
+    }
+    if (website) {
+      const webDisplay = website.replace(/^https?:\/\//,'').replace(/\/$/,'');
+      rows.push(`<li class="kli-info-row">
+        <div class="kli-info-ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="kli-info-text"><div class="kli-info-lbl">Weboldal</div><div class="kli-info-val"><a href="${escapeHtml(website)}" target="_blank" rel="noopener">${escapeHtml(webDisplay)}</a></div></div>
+      </li>`);
+    }
+    contactEl.innerHTML = rows.join('') || '<li class="kli-info-row"><div class="kli-info-text" style="color:var(--muted);font-size:13.5px">Nincs elérhetőség megadva.</div></li>';
   }
 
   // Hívás gomb
-  const callBtn = document.getElementById('sidebarCallBtn');
+  const callBtn = document.getElementById('kliCtaCall');
   if (callBtn && phone) {
     callBtn.onclick = () => window.location.href = 'tel:' + phone.replace(/\s/g,'');
   } else if (callBtn && !phone) {
     callBtn.style.display = 'none';
   }
+
+  // ── RENDELÉSI IDŐ ──────────────────────────────────────────
+  renderHoursSidebar(d.availability || []);
+
+  // ── HOL TALÁLHATÓ (térkép) ────────────────────────────────
+  if (clinic?.lat && clinic?.lng) {
+    const mapBox = document.getElementById('kliMap');
+    if (mapBox) mapBox.style.display = 'block';
+    const actionsEl = document.getElementById('kliMapActions');
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${clinic.lat},${clinic.lng}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Útvonal
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=${clinic.lat},${clinic.lng}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Google Maps
+        </a>`;
+    }
+    // Térkép init
+    try {
+      loadGoogleMaps().then(maps => {
+        const el = document.getElementById('kliMapEl');
+        const loading = document.getElementById('kliMapLoading');
+        if (!el) return;
+        const pos = { lat: Number(clinic.lat), lng: Number(clinic.lng) };
+        const map = new maps.Map(el, {
+          center: pos, zoom: 15, styles: SZK_MAP_STYLE,
+          mapTypeControl: false, streetViewControl: false,
+          fullscreenControl: true, zoomControl: true
+        });
+        new maps.Marker({ position: pos, map, title: clinic.name || '', icon: szkPinIcon(maps) });
+        if (loading) loading.style.display = 'none';
+      }).catch(e => {
+        const loading = document.getElementById('kliMapLoading');
+        if (loading) loading.textContent = 'Térkép nem tölthető be.';
+      });
+    } catch(_) {}
+  }
+
+  // ── PÁCIENS ÉRTÉKELÉSEK ───────────────────────────────────
+  renderRatingSidebar(rat, reviews);
 }
 
 /* ── Rendelési idő sidebar box ──────────────────────────────────── */
 function renderHoursSidebar(availability){
-  const box = document.getElementById('hoursSidebarBox');
-  const el  = document.getElementById('hoursSidebarContent');
+  const box = document.getElementById('kliHours');
+  const el  = document.getElementById('kliHoursList');
   if(!box || !el) return;
 
   if(!availability || !availability.length){
@@ -1948,20 +2051,22 @@ function renderHoursSidebar(availability){
   const today = new Date().getDay();
   const order = [1,2,3,4,5,6,0]; // H–V sorrendben
 
-  // day_of_week → időablakok tömbje
   const byDay = {};
   availability.forEach(a => {
     if(!byDay[a.day_of_week]) byDay[a.day_of_week] = [];
-    byDay[a.day_of_week].push(`${(a.start_time||'').slice(0,5)} – ${(a.end_time||'').slice(0,5)}`);
+    byDay[a.day_of_week].push(`${(a.start_time||'').slice(0,5)}–${(a.end_time||'').slice(0,5)}`);
   });
 
   const rows = order.map(d => {
     const isToday = d === today;
     const slots = byDay[d];
-    const val = slots ? slots.join(', ') : '<span style="color:var(--muted);font-weight:500">Zárva</span>';
-    return `<div style="display:flex;justify-content:space-between;gap:10px;${isToday?'color:#1a7a3e;font-weight:700':''}">
-      <span style="min-width:80px">${dayLabels[d]}${isToday?' <small style="font-weight:600;opacity:.8">(ma)</small>':''}</span>
-      <span style="text-align:right">${val}</span>
+    const closed = !slots;
+    const valHtml = closed
+      ? `<span class="kli-hours-time closed">Zárva</span>`
+      : `<span class="kli-hours-time">${slots.join(', ')}</span>`;
+    return `<div class="kli-hours-row${isToday?' today':''}">
+      <span class="kli-hours-day">${dayLabels[d]}${isToday?' (ma)':''}</span>
+      ${valHtml}
     </div>`;
   }).join('');
 

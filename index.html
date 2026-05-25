@@ -4150,9 +4150,9 @@ function useExample(btn) {
 
   // ── DOMContentLoaded után induljunk ──
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => { loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); });
+    document.addEventListener('DOMContentLoaded', () => { loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); initLiveMiniMap(); initLiveMiniMap(); });
   } else {
-    loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions();
+    loadHeroStats(); loadPopularSpecs(); loadSearchSuggestions(); initLiveMiniMap();
   }
 
   // ── ÉLŐ MINI-TÉRKÉP ──
