@@ -158,7 +158,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 /* Mobile drawer és nav-cta stílusok a beégetett menüblokkban definiálva (lejjebb) */
 
 /* ════════ HERO ════════ */
-.hero{padding:2rem 5.5% 3rem;position:relative;overflow:hidden;background-color:#eef1f8;background-size:100% 100%;background-position:center;background-repeat:no-repeat}
+.hero{padding:2rem 5.5% 3rem;position:relative;overflow:visible;background-color:#eef1f8;background-size:100% 100%;background-position:center;background-repeat:no-repeat}
 @media(min-width:1101px){
   .hero{max-height:720px}
 }
@@ -284,8 +284,115 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
    Animált gradient háttér, sparkle effektek, élénk gradient text,
    nagy küldés gomb, prémium chip-ek
    ════════════════════════════════════════════════════════════════ */
-.hero-ai-panel{
+/* Wrapper — helyfoglaló a kompakt panel magasságához.
+   A panel maga absolute pozícionálva alulra ragad, felfelé nő amikor messages megnyílik. */
+/* ══════ OKOS KERESŐ — szabad-szöveges, AI-támogatott ══════ */
+.hero-smart-search-wrap{
   position:relative;
+  margin-bottom:1.1rem;
+  z-index:50;
+}
+.hero-smart-search{
+  display:flex;align-items:center;gap:.65rem;
+  background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(248,252,250,.85) 100%);
+  backdrop-filter:blur(28px) saturate(190%);
+  -webkit-backdrop-filter:blur(28px) saturate(190%);
+  border:1.5px solid rgba(38,74,202,.45);
+  border-radius:18px;
+  padding:.65rem .7rem .65rem 1rem;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 0 0 3px rgba(38,74,202,.08),
+    0 2px 8px rgba(15,23,42,.05),
+    0 12px 28px rgba(15,23,42,.07);
+  transition:border-color .25s ease,box-shadow .25s ease,transform .25s cubic-bezier(.34,1.4,.64,1);
+}
+.hero-smart-search:hover{
+  border-color:rgba(38,74,202,.6);transform:translateY(-2px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 3px rgba(38,74,202,.12),0 4px 10px rgba(15,23,42,.06),0 18px 36px rgba(15,23,42,.09);
+}
+.hero-smart-search:focus-within{
+  border-color:rgba(38,74,202,.85);transform:translateY(-3px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 4px rgba(38,74,202,.18),0 4px 10px rgba(15,23,42,.07),0 20px 44px rgba(15,23,42,.1);
+}
+.hero-smart-search-icon{
+  flex-shrink:0;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#264ACA 0%,#113293 100%);
+  color:#fff;border-radius:10px;
+  box-shadow:0 2px 6px rgba(38,74,202,.3);
+}
+.hero-smart-search-icon svg{width:17px;height:17px}
+.hero-smart-search-input{
+  flex:1;border:0;outline:0;background:transparent;
+  font-family:inherit;font-size:15.5px;font-weight:500;
+  color:#0a1a3d;letter-spacing:-0.005em;
+  padding:.55rem 0;min-width:0;
+}
+.hero-smart-search-input::placeholder{color:#7986a7;font-weight:400;letter-spacing:-0.005em}
+.hero-smart-search-status{
+  flex-shrink:0;font-size:11.5px;color:#64748b;
+  display:flex;align-items:center;gap:6px;font-weight:500;
+  padding-right:6px;letter-spacing:-0.005em;
+}
+.hero-smart-search-status .ss-spinner{
+  width:13px;height:13px;border:2px solid #cbd5e1;border-top-color:#264ACA;
+  border-radius:50%;animation:ssSpin .7s linear infinite;
+}
+@keyframes ssSpin{to{transform:rotate(360deg)}}
+.hero-smart-search-btn{
+  flex-shrink:0;display:flex;align-items:center;gap:.45rem;
+  background:linear-gradient(135deg,#264ACA 0%,#113293 100%);
+  color:#fff;border:0;border-radius:12px;
+  padding:.7rem 1.15rem;
+  font-family:inherit;font-size:14.5px;font-weight:700;letter-spacing:-0.005em;
+  cursor:pointer;
+  box-shadow:0 2px 4px rgba(38,74,202,.25),0 6px 16px rgba(38,74,202,.18);
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease;
+}
+.hero-smart-search-btn:hover{transform:translateY(-1px);filter:brightness(1.06);box-shadow:0 3px 6px rgba(38,74,202,.3),0 10px 22px rgba(38,74,202,.25)}
+.hero-smart-search-btn:active{transform:translateY(0);filter:brightness(0.96)}
+.hero-smart-search-btn:disabled{opacity:.6;cursor:wait}
+.hero-smart-search-btn-arrow{width:15px;height:15px;transition:transform .2s ease}
+.hero-smart-search-btn:hover .hero-smart-search-btn-arrow{transform:translateX(2px)}
+.hero-smart-search-examples{
+  display:flex;align-items:center;flex-wrap:wrap;gap:.4rem .5rem;
+  margin-top:.7rem;padding-left:.2rem;
+}
+.hero-smart-search-examples-label{
+  font-size:11.5px;font-weight:600;color:#64748b;letter-spacing:.005em;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.hero-smart-search-chip{
+  display:inline-flex;align-items:center;
+  font-family:inherit;font-size:12.5px;font-weight:500;color:#264ACA;
+  background:rgba(38,74,202,.06);border:1px solid rgba(38,74,202,.15);
+  padding:.32rem .65rem;border-radius:99px;cursor:pointer;
+  transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.hero-smart-search-chip:hover{background:rgba(38,74,202,.12);border-color:rgba(38,74,202,.35);transform:translateY(-1px)}
+@media (max-width:680px){
+  .hero-smart-search{padding:.55rem .6rem .55rem .85rem;gap:.5rem;border-radius:14px}
+  .hero-smart-search-icon{width:30px;height:30px;border-radius:8px}
+  .hero-smart-search-icon svg{width:15px;height:15px}
+  .hero-smart-search-input{font-size:15px}
+  .hero-smart-search-btn{padding:.6rem .85rem;font-size:13.5px}
+  .hero-smart-search-btn-text{display:none}
+  .hero-smart-search-btn-arrow{width:17px;height:17px}
+  .hero-smart-search-status{display:none}
+}
+/* ══════ end okos kereső ══════ */
+
+.hero-ai-panel-wrap{
+  position:relative;
+  min-height:215px;
+  margin-bottom:1.1rem;
+  z-index:600;
+}
+.hero-ai-panel{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  display:flex;flex-direction:column;
   background:
     radial-gradient(ellipse 90% 100% at 0% 0%,rgba(38,74,202,.09) 0%,transparent 55%),
     radial-gradient(ellipse 80% 100% at 100% 100%,rgba(59,90,216,.06) 0%,transparent 55%),
@@ -296,7 +403,6 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   border:1.5px solid rgba(38,74,202,.55);
   border-radius:20px;
   padding:1.1rem 1.25rem;
-  margin-bottom:1.1rem;
   box-shadow:
     0 1px 0 rgba(255,255,255,.9) inset,
     0 0 0 3px rgba(38,74,202,.1),
@@ -305,7 +411,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
     0 16px 32px rgba(15,23,42,.06);
   isolation:isolate;
   transition:transform .4s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .3s ease;
-  z-index:3;
+  z-index:500;
 }
 .hero-ai-panel::before{
   content:'';position:absolute;inset:0;border-radius:inherit;
@@ -510,35 +616,22 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   border-top:1px solid rgba(220,227,234,.4);
 }
 
-/* Beszélgetés terület — FELFELÉ nyílik, absolute pozicionálva,
-   nem tolja az alatta lévő tartalmat (még a hero címet is kitakarhatja) */
+/* Beszélgetés terület — a panelen belül kitölti a rendelkezésre álló helyet,
+   maga a panel max-magassága a navbar aljáig terjedhet. Belül scrollozható. */
 .hero-ai-messages{
   display:none;flex-direction:column;gap:.7rem;
-  position:absolute;
-  left:0;right:0;bottom:calc(100% + 10px);
-  max-height:min(440px,55vh);overflow-y:auto;
-  padding:1rem 1.1rem;
-  background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(250,252,255,.94) 100%);
-  backdrop-filter:blur(32px) saturate(200%);
-  -webkit-backdrop-filter:blur(32px) saturate(200%);
-  border:1.5px solid rgba(38,74,202,.55);
-  border-radius:20px;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.95) inset,
-    0 0 0 3px rgba(38,74,202,.1),
-    0 2px 6px rgba(15,23,42,.05),
-    0 12px 32px rgba(15,23,42,.12),
-    0 32px 64px rgba(15,23,42,.1);
+  flex:1;min-height:0;overflow-y:auto;
+  padding:.9rem 6px .9rem 2px;margin-bottom:.3rem;
+  border-top:1px solid rgba(220,227,234,.5);
   scrollbar-width:thin;scrollbar-color:rgba(38,74,202,.3) transparent;
-  z-index:20;
 }
 .hero-ai-messages.has-messages{
   display:flex;
-  animation:msgAreaIn .35s cubic-bezier(.34,1.4,.64,1);
+  animation:msgFadeIn .35s ease-out;
 }
-@keyframes msgAreaIn{
-  from{opacity:0;transform:translateY(12px) scale(.98)}
-  to{opacity:1;transform:translateY(0) scale(1)}
+@keyframes msgFadeIn{
+  from{opacity:0}
+  to{opacity:1}
 }
 .hero-ai-messages::-webkit-scrollbar{width:6px}
 .hero-ai-messages::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#264ACA,#113293);border-radius:3px}
@@ -2361,66 +2454,39 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
         <p class="hero-subtitle-new">Keressen <strong id="subDoctors">–</strong> magánorvos, <strong id="subClinics">–</strong> klinika és <strong id="subProfessionals">–</strong> egészségügyi szakember között.</p>
 
-        <!-- ════ AI BESZÉLGETŐ PANEL — prémium, inline chat ════ -->
-        <div class="hero-ai-panel" id="heroAiPanel">
-          <div class="hero-ai-head">
-            <div class="hero-ai-icon">
+        <!-- ════ OKOS KERESŐ — egyetlen szabad-szöveges keresődoboz ════ -->
+        <div class="hero-smart-search-wrap">
+          <form class="hero-smart-search" id="heroSmartSearch" onsubmit="heroSmartSubmit(event)">
+            <div class="hero-smart-search-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 3 L13.5 8.5 L19 10 L13.5 11.5 L12 17 L10.5 11.5 L5 10 L10.5 8.5 Z"/>
-                <path d="M18 16 L18.7 18.3 L21 19 L18.7 19.7 L18 22 L17.3 19.7 L15 19 L17.3 18.3 Z"/>
+                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
             </div>
-            <div class="hero-ai-headbody">
-              <div class="hero-ai-title">
-                Szakorvos.hu AI asszisztense
-                <span class="hero-ai-badge" id="heroAiOnlineBadge" style="display:none">
-                  <span class="hero-ai-online-dot"></span>
-                  Online
-                </span>
-              </div>
-              <div class="hero-ai-subtitle" id="heroAiSubtitle">Írja le tüneteit vagy mit keres — pillanatok alatt megtalálom Önnek a megfelelő szakorvost vagy klinikát.</div>
-            </div>
-            <button type="button" class="hero-ai-reset" id="heroAiReset" onclick="heroAiReset()" aria-label="Új beszélgetés" style="display:none">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Beszélgetés terület (alapból rejtett, megjelenik az első üzenetnél) -->
-          <div class="hero-ai-messages" id="chatMessages"></div>
-
-          <form class="hero-ai-input-wrap" onsubmit="heroAiSubmit(event)">
-            <input type="text" id="chatInput" class="hero-ai-input"
-              placeholder="Pl. „Fáj a hátam, melyik orvoshoz menjek?” vagy „Bőrgyógyász Debrecenben”"
-              autocomplete="off" maxlength="300"
-              onkeydown="if(event.key==='Enter'){event.preventDefault();sendChat();}" />
-            <button type="button" class="hero-ai-mic" id="heroAiMic" onclick="toggleSpeechInput()" aria-label="Mikrofon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/>
-                <line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/>
-              </svg>
-            </button>
-            <button type="submit" class="hero-ai-send" aria-label="Küldés">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/>
+            <input
+              type="text"
+              id="heroSmartInput"
+              class="hero-smart-search-input"
+              placeholder="Pl. „fáj a térdem Szombathelyen” vagy „bőrgyógyász Budapest XIII kerület”"
+              autocomplete="off"
+              maxlength="200"
+              spellcheck="false" />
+            <div class="hero-smart-search-status" id="heroSmartStatus"></div>
+            <button type="submit" class="hero-smart-search-btn" id="heroSmartBtn">
+              <span class="hero-smart-search-btn-text">Keresés</span>
+              <svg class="hero-smart-search-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>
             </button>
           </form>
-
-          <div class="hero-ai-examples" id="heroAiExamples">
-            <span class="hero-ai-examples-label">💬 Példák:</span>
-            <a class="hero-ai-chip" onclick="heroAiAsk('Régóta fáj a hátam, mit tegyek?')">Régóta fáj a hátam</a>
-            <a class="hero-ai-chip" onclick="heroAiAsk('Bőrgyógyász Debrecenben')">Bőrgyógyász Debrecenben</a>
-            <a class="hero-ai-chip" onclick="heroAiAsk('Affidea klinikák')">Affidea klinikák</a>
-            <a class="hero-ai-chip" onclick="heroAiAsk('MRI vizsgálat ára')">MRI vizsgálat ára</a>
-          </div>
-
-          <div class="hero-ai-disclaimer">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Az AI nem helyettesíti az orvosi diagnózist
+          <div class="hero-smart-search-examples">
+            <span class="hero-smart-search-examples-label">Próbálja:</span>
+            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('fáj a térdem Szombathelyen')">fáj a térdem Szombathelyen</button>
+            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('bőrgyógyász Debrecen')">bőrgyógyász Debrecen</button>
+            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('anyajegyszűrés')">anyajegyszűrés</button>
+            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('migrén')">migrén</button>
           </div>
         </div>
+        <!-- ════ END okos kereső ════ -->
 
 
         <!-- Bizalmi box (kereső doboz alatt) -->
@@ -2573,868 +2639,125 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     </div><!-- end hero-right-search -->
 
     <script>
-      const chatMessages = document.getElementById('chatMessages');
-      // ── TYPING ANIMATION — 1 javaslat, folyamatos, gépeléskor leáll ──
-      const chatInput = document.getElementById('chatInput');
-      if (chatInput) {
-        const phrase = 'Írja le a panaszát… pl. fáj a térdem lépcsőzéskor';
-        let charIdx = 0;
-        let isDeleting = false;
-        let typingTimer = null;
-        let stopped = false;
+      // ══════════════════════════════════════════════════════════════════
+      // OKOS KERESŐ — egyszerű AI-támogatott
+      // ══════════════════════════════════════════════════════════════════
+      //
+      // Flow:
+      //   1. User beír egy szabad szöveget (pl. "fáj a térdem szombathelyen")
+      //   2. Submit-kor a parse-search edge function-t hívjuk
+      //      → kapunk { specialty_slug, city, district, confidence }
+      //   3. Átirányítjuk a talalatok.html-re a megfelelő paraméterekkel.
+      //   4. Ha az AI nem talál szakterületet (specialty_slug=null), akkor
+      //      szabad-szöveg querykint mehet a `q=` paraméterrel
+      //      (a talalatok.html-ben az új ranked-search úgyis kezeli).
+      //
+      // Cache: 24h DB cache + 5 perces local memory cache duplikációk ellen.
+      // ══════════════════════════════════════════════════════════════════
 
-        function typeEffect() {
-          if (stopped) return;
-          if (!isDeleting) {
-            charIdx++;
-            chatInput.setAttribute('placeholder', phrase.slice(0, charIdx));
-            if (charIdx === phrase.length) {
-              isDeleting = true;
-              typingTimer = setTimeout(typeEffect, 2200);
-              return;
-            }
-          } else {
-            charIdx--;
-            chatInput.setAttribute('placeholder', phrase.slice(0, charIdx));
-            if (charIdx === 0) {
-              isDeleting = false;
-              typingTimer = setTimeout(typeEffect, 400);
-              return;
-            }
-          }
-          typingTimer = setTimeout(typeEffect, isDeleting ? 30 : 60);
-        }
+      const PARSE_SEARCH_URL = `${SUPABASE_URL}/functions/v1/parse-search`;
+      const _localParseCache = new Map();  // query → result, 5 perc
+      const LOCAL_CACHE_TTL_MS = 5 * 60 * 1000;
 
-        chatInput.addEventListener('input', function() {
-          if (this.value.length > 0) {
-            stopped = true;
-            clearTimeout(typingTimer);
-            this.setAttribute('placeholder', '');
-            const ex = document.getElementById('chatExamples');
-            if (ex) ex.style.display = 'none';
-          }
-        });
+      async function parseSearchQuery(query) {
+        const key = query.trim().toLowerCase();
+        const cached = _localParseCache.get(key);
+        if (cached && (Date.now() - cached.ts < LOCAL_CACHE_TTL_MS)) return cached.result;
 
-        setTimeout(typeEffect, 1200);
-      }
-
-      const chatInputEl = document.getElementById('chatInput');
-
-      // Demo válaszok kulcsszavak alapján
-      const demoResponses = {
-        mellkas: { chat: 'A mellkasi fájdalom több okból adódhat – szívproblémától izomfeszülésen át emésztési panaszig. Mindenképpen érdemes kardiológushoz fordulni, különösen ha a fájdalom sugárzik vagy légszomjjal jár.', szakterulet: 'Kardiológus', orvosok: [{nev:'Dr. Nagy Katalin',spec:'Kardiológus · Budapest, II. ker.',iniciale:'NK',szin:'#113293',rating:'4.9',elerhetoseg:'Ma 14:30'},{nev:'Dr. Varga Péter',spec:'Kardiológus · Budapest, V. ker.',iniciale:'VP',szin:'#113293',rating:'4.8',elerhetoseg:'Holnap 10:00'}] },
-        fej: { chat: 'A visszatérő fejfájás lehet feszültség típusú, migrén vagy ritkábban más ok. Neurológushoz érdemes fordulni kivizsgálásra, aki pontos diagnózist és kezelési tervet tud adni.', szakterulet: 'Neurológus', orvosok: [{nev:'Dr. Kovács Ágnes',spec:'Neurológus · Budapest, XII. ker.',iniciale:'KÁ',szin:'#6d5ce7',rating:'4.9',elerhetoseg:'Ma 16:00'},{nev:'Dr. Szabó Márton',spec:'Neurológus · Budapest, VII. ker.',iniciale:'SzM',szin:'#8b5cf6',rating:'4.7',elerhetoseg:'Holnap 09:00'}] },
-        gyomor: { chat: 'Gyomorfájás és emésztési panaszok esetén gasztroenterológiai vizsgálat javasolt. Az orvos endoszkópiával és laborvizsgálatokkal pontosan feltérképezheti a problémát.', szakterulet: 'Gasztroenterológus', orvosok: [{nev:'Dr. Fekete Eszter',spec:'Gasztroenterológus · Budapest, I. ker.',iniciale:'FE',szin:'#059669',rating:'5.0',elerhetoseg:'Holnap 11:00'},{nev:'Dr. Horváth Béla',spec:'Gasztroenterológus · Budapest, IX. ker.',iniciale:'HB',szin:'#10b981',rating:'4.6',elerhetoseg:'Csütörtök'}] },
-        bor: { chat: 'Bőrpanaszok és kiütések esetén bőrgyógyász vizsgálata szükséges. Korai diagnózis esetén a legtöbb bőrprobléma hatékonyan kezelhető.', szakterulet: 'Bőrgyógyász', orvosok: [{nev:'Dr. Molnár Réka',spec:'Bőrgyógyász · Budapest, VI. ker.',iniciale:'MR',szin:'#ec4899',rating:'4.9',elerhetoseg:'Ma 15:00'},{nev:'Dr. Tóth László',spec:'Bőrgyógyász · Budapest, XIII. ker.',iniciale:'TL',szin:'#db2777',rating:'4.7',elerhetoseg:'Holnap'}] },
-        def: { chat: 'A leírtak alapján belgyógyászati kivizsgálást javaslok első lépésként. A belgyógyász átfogó vizsgálatot végez, és szükség esetén szakorvoshoz irányít tovább.', szakterulet: 'Belgyógyász', orvosok: [{nev:'Dr. Kiss Judit',spec:'Belgyógyász · Budapest, II. ker.',iniciale:'KJ',szin:'#113293',rating:'4.8',elerhetoseg:'Ma 13:00'},{nev:'Dr. Papp Zoltán',spec:'Belgyógyász · Budapest, XIV. ker.',iniciale:'PZ',szin:'#113293',rating:'4.9',elerhetoseg:'Holnap 08:30'}] }
-      };
-
-      function getDemoResponse(q) {
-        const ql = q.toLowerCase();
-        if (ql.includes('mellkas') || ql.includes('szív') || ql.includes('légszomj')) return demoResponses.mellkas;
-        if (ql.includes('fejfáj') || ql.includes('fejfájás') || ql.includes('migr') || ql.includes('ideg')) return demoResponses.fej;
-        if (ql.includes('gyomor') || ql.includes('emésztés') || ql.includes('hányás') || ql.includes('puffad')) return demoResponses.gyomor;
-        if (ql.includes('bőr') || ql.includes('kiütés') || ql.includes('viszket')) return demoResponses.bor;
-        return demoResponses.def;
-      }
-
-      function hideProcessHint() {
-        const hint = document.getElementById('chatProcessHint');
-        if (hint) hint.classList.add('hidden');
-        setTimeout(() => { if(hint) hint.style.display='none'; }, 300);
-      }
-
-      // Hide hint when user types
-      document.getElementById('chatInput').addEventListener('input', hideProcessHint);
-
-      function escapeHtml(s){
-        if(s == null) return '';
-        return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      }
-      function addMsg(text, type) {
-        // Első üzenetnél: jelenítsük meg a messages area-t és rejtsük az examples-t
-        const msgArea = document.getElementById('chatMessages');
-        if (msgArea && !msgArea.classList.contains('has-messages')) {
-          msgArea.classList.add('has-messages');
-          const ex = document.getElementById('heroAiExamples');
-          if (ex) ex.style.display = 'none';
-          const sub = document.getElementById('heroAiSubtitle');
-          if (sub) sub.style.display = 'none';
-          const reset = document.getElementById('heroAiReset');
-          if (reset) reset.style.display = 'flex';
-        }
-
-        const wrap = document.createElement('div');
-        wrap.className = `ai-chat-msg ${type === 'user' ? 'user-msg' : 'ai-msg'}`;
-        if (type === 'ai_html') {
-          // Trusted HTML — orvos-/klinika-kártya
-          wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble" style="background:transparent;padding:0;border:none;max-width:100%;width:100%">${text}</div>`;
-        } else if (type === 'user') {
-          wrap.innerHTML = `<div class="ai-chat-bubble user-bubble">${escapeHtml(text)}</div>`;
-        } else {
-          // 'ai' — sima szöveges AI válasz
-          wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble">${escapeHtml(text)}</div>`;
-        }
-        chatMessages.appendChild(wrap);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      // Reset: új beszélgetés
-      window.heroAiReset = function() {
-        const msgArea = document.getElementById('chatMessages');
-        if (msgArea) {
-          msgArea.innerHTML = '';
-          msgArea.classList.remove('has-messages');
-        }
-        const ex = document.getElementById('heroAiExamples');
-        if (ex) ex.style.display = '';
-        const sub = document.getElementById('heroAiSubtitle');
-        if (sub) sub.style.display = '';
-        const reset = document.getElementById('heroAiReset');
-        if (reset) reset.style.display = 'none';
-        if (typeof chatHistory !== 'undefined') chatHistory.length = 0;
-        const inp = document.getElementById('chatInput');
-        if (inp) inp.focus();
-      };
-
-      // ═══ AI Online status — periodikus health check ═══
-      (function initAiHealthCheck(){
-        const badge = document.getElementById('heroAiOnlineBadge');
-        if (!badge) return;
-        const HEALTH_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/ai-chat?health=1';
-        async function check(){
-          try {
-            const ctrl = new AbortController();
-            const tid = setTimeout(() => ctrl.abort(), 5000);
-            const res = await fetch(HEALTH_URL, { method: 'GET', signal: ctrl.signal });
-            clearTimeout(tid);
-            if (!res.ok) { badge.style.display = 'none'; return; }
-            const data = await res.json().catch(() => ({}));
-            badge.style.display = data && data.online ? 'inline-flex' : 'none';
-          } catch (_e) {
-            badge.style.display = 'none';
-          }
-        }
-        // Első ellenőrzés DOM ready után, majd 2 percenként
-        check();
-        setInterval(check, 2 * 60 * 1000);
-      })();
-
-      function addTyping() {
-        const wrap = document.createElement('div');
-        wrap.className = 'ai-chat-msg ai-msg'; wrap.id = 'typingWrap';
-        wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble"><div class="ai-dots"><span></span><span></span><span></span></div></div>`;
-        chatMessages.appendChild(wrap);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function removeTyping() {
-        const t = document.getElementById('typingWrap');
-        if (t) t.remove();
-      }
-
-      // ═══ Hangbevitel (Web Speech API) ═══
-      let speechRecognition = null;
-      let isRecording = false;
-
-      window.toggleSpeechInput = function() {
-        const micBtn = document.getElementById('heroAiMic');
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-        if (!SpeechRecognition) {
-          alert('A böngészője nem támogatja a hangbevitelt. Próbálja Chrome, Edge vagy Safari böngészővel.');
-          return;
-        }
-
-        if (isRecording && speechRecognition) {
-          speechRecognition.stop();
-          return;
-        }
-
-        speechRecognition = new SpeechRecognition();
-        speechRecognition.lang = 'hu-HU';
-        speechRecognition.continuous = false;
-        speechRecognition.interimResults = true;
-
-        speechRecognition.onstart = () => {
-          isRecording = true;
-          micBtn.classList.add('recording');
-          if (chatInputEl) {
-            chatInputEl.placeholder = 'Beszéljen most…';
-          }
-        };
-
-        speechRecognition.onresult = (ev) => {
-          let transcript = '';
-          for (let i = 0; i < ev.results.length; i++) {
-            transcript += ev.results[i][0].transcript;
-          }
-          if (chatInputEl) chatInputEl.value = transcript;
-        };
-
-        speechRecognition.onerror = (ev) => {
-          console.warn('Speech recognition error:', ev.error);
-          if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') {
-            alert('A mikrofon hozzáférés letiltva. Engedélyezze a böngésző beállításaiban.');
-          } else if (ev.error === 'no-speech') {
-            // csendes timeout – nem zavarjuk a felhasználót
-          }
-        };
-
-        speechRecognition.onend = () => {
-          isRecording = false;
-          micBtn.classList.remove('recording');
-          if (chatInputEl) {
-            chatInputEl.placeholder = 'Írja le a panaszát… pl. fáj a térdem lépcsőzéskor';
-            // Automatikus küldés, ha van szöveg
-            if (chatInputEl.value.trim().length > 2) {
-              setTimeout(() => sendChat(), 400);
-            }
-          }
-        };
-
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 8000); // 8s timeout
         try {
-          speechRecognition.start();
-        } catch(e) {
-          console.warn('Speech start error:', e);
-        }
-      };
-
-      // Chat előzmények tárolása
-      let chatHistory = [];
-
-      async function sendChat() {
-        const q = chatInputEl.value.trim(); if (!q) return;
-        chatInputEl.value = '';
-        const startSec = document.getElementById('chatStartSection');
-        if (startSec) startSec.style.display = 'none';
-        addMsg(q, 'user');
-        addTyping();
-
-        chatHistory.push({ role: 'user', content: q });
-
-        try {
-          // Klienskorlát: max 12 történet, max ~3000 char teljes payload — XSS / abuse védelem
-          if (chatHistory.length > 24) {
-            chatHistory.splice(0, chatHistory.length - 24);
-          }
-          const payloadStr = JSON.stringify({ messages: chatHistory });
-          if (payloadStr.length > 12000) {
-            throw new Error('Túl hosszú beszélgetés. Frissítse az oldalt és kezdje újra.');
-          }
-
-          const res = await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/ai-chat', {
+          const res = await fetch(PARSE_SEARCH_URL, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              // Supabase anon kulcs: így az Edge Function-höz tartozó beépített
-              // rate limit (anon role) is érvényesül, és könnyebb visszakövetni a hívásokat.
-              'Authorization': `Bearer ${SUPABASE_KEY}`,
-              'apikey': SUPABASE_KEY
-            },
-            body: payloadStr
+            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+            body: JSON.stringify({ query }),
+            signal: ctrl.signal
           });
-
-          // 429 Too Many Requests speciális kezelés
-          if (res.status === 429) {
-            removeTyping();
-            addMsg('Túl sok kérés érkezett rövid idő alatt. Kérlek várj egy kicsit, majd próbáld újra.', 'ai');
-            return;
-          }
-
+          clearTimeout(timeout);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const data = await res.json();
-          removeTyping();
-
-          if (data.error) throw new Error(data.error);
-
-          const reply = data.reply;
-          const specialty = data.specialty;
-          const city = data.city;
-          const clinics = Array.isArray(data.clinics) ? data.clinics : [];
-          const isQuestion = data.isQuestion;
-          const options = Array.isArray(data.options) ? data.options : [];
-
-          chatHistory.push({ role: 'assistant', content: reply + (specialty ? ` [SZAKTERÜLET: ${specialty}]` : '') + (city ? ` [VÁROS: ${city}]` : '') });
-
-          addMsg(reply, 'ai');
-
-          // Ha visszakérdez és vannak opciók — jelenítsük meg kattintható chip-ekként
-          if (isQuestion && options.length) {
-            renderAiOptions(options);
-          }
-
-          // Ha vannak klinikák → klinika-kártyák megjelenítése
-          if (clinics.length) {
-            await showClinicResults(clinics);
-          }
-
-          // Ha van szakterület → orvosok kártyája (városszűrővel ha van)
-          if (specialty) {
-            await showDoctorResults(specialty, city);
-          }
-
-        } catch(e) {
-          removeTyping();
-          addMsg('Sajnálom, technikai hiba történt. Kérjük, próbálja újra!', 'ai');
-          console.error('AI chat error:', e);
+          _localParseCache.set(key, { result: data, ts: Date.now() });
+          return data;
+        } catch (e) {
+          clearTimeout(timeout);
+          console.warn('[parseSearchQuery] failed:', e.message);
+          return null; // fallback: szabad-szöveg q= paraméter
         }
       }
 
-      function renderAiOptions(opts) {
-        const msgs = document.getElementById('aiChatMessages') || document.querySelector('.ai-chat-messages');
-        if (!msgs) return;
-        const wrap = document.createElement('div');
-        wrap.className = 'ai-chat-options';
-        wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin:.4rem 0 .2rem;padding-left:40px';
-        opts.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className = 'ai-chat-option-chip';
-          btn.textContent = opt;
-          btn.style.cssText = 'font-family:inherit;font-size:12.5px;font-weight:500;color:#113293;background:#eef2ff;border:1px solid rgba(17,50,147,.18);padding:7px 12px;border-radius:18px;cursor:pointer;transition:all .15s;text-align:left';
-          btn.onmouseover = () => { btn.style.background='#dbe3fb'; btn.style.borderColor='rgba(17,50,147,.35)'; };
-          btn.onmouseout  = () => { btn.style.background='#eef2ff'; btn.style.borderColor='rgba(17,50,147,.18)'; };
-          btn.onclick = () => {
-            // Eltávolítja a többi opciót
-            wrap.remove();
-            // Beírja a választ az inputba és elküldi
-            if (chatInputEl) {
-              chatInputEl.value = opt;
-              sendChat();
-            }
-          };
-          wrap.appendChild(btn);
-        });
-        msgs.appendChild(wrap);
-        msgs.scrollTop = msgs.scrollHeight;
+      function setSmartStatus(html) {
+        const el = document.getElementById('heroSmartStatus');
+        if (el) el.innerHTML = html;
       }
 
-      async function showDoctorResults(specialty, city) {
-        const icons = {
-          'Kardiológia':'❤️','Neurológia':'🧠','Gasztroenterológia':'🫁',
-          'Bőrgyógyászat':'🌿','Háziorvos':'⚕️','Ortopédia':'🦴',
-          'Szemészet':'👁️','Nőgyógyászat':'💜','Fogászat':'🦷',
-          'Pszichológia':'💭','Reumatológia':'🦴','Endokrinológia':'⚗️',
-          'Urológia':'🔬','Fül-orr-gégészet':'👂','Pszichiátria':'🧩',
-          'Belgyógyászat':'🩺','Gyermekgyógyászat':'👶','Allergológia':'🌸'
-        };
-
-        // Szép név lekérdezése: a specialty most a doctor_slug (pl. 'ful-orr-gege-szakorvos')
-        let displayName = specialty;
-        try {
-          const { data: spec } = await db
-            .from('specialties')
-            .select('name')
-            .eq('doctor_slug', specialty)
-            .maybeSingle();
-          if (spec?.name) displayName = spec.name;
-        } catch(e) { /* fallback marad */ }
-
-        const icon = icons[displayName] || '🏥';
-        const safeSpec = escapeHtml(displayName);
-        const safeCity = city ? escapeHtml(city) : '';
-        const cityLabel = city ? ` ${safeCity}-ban/-ben` : '';
-        const cityParam = city ? `&city=${encodeURIComponent(city)}` : '';
-        const html = `
-          <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:16px">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-              <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#113293,#264ACA);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${icon}</div>
-              <div>
-                <div style="font-size:16px;font-weight:600;color:#113293;font-family:'Inter',sans-serif">${safeSpec}${city ? ' — ' + safeCity : ''}</div>
-                <div style="font-size:12px;color:#475569;margin-top:2px">${city ? 'A keresett szakorvosok' : 'Az Ön tünetei alapján ajánlott szakterület'}</div>
-              </div>
-            </div>
-            <a href="talalatok.html?specialty=${encodeURIComponent(displayName)}${cityParam}"
-              style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#113293,#264ACA);border-radius:12px;padding:12px 16px;text-decoration:none;box-shadow:0 4px 14px rgba(17,50,147,0.3)">
-              <div style="font-size:13px;font-weight:600;color:#fff;font-family:'Inter',sans-serif">${safeSpec} szakorvosok${city ? ' ' + safeCity + '-ben' : ''}</div>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>`;
-
-        addMsg(html, 'ai_html');
-      }
-
-      // Klinika-találatok megjelenítése
-      async function showClinicResults(clinics) {
-        if (!clinics || !clinics.length) return;
-        const items = clinics.map(c => {
-          const safeName = escapeHtml(c.name || 'Klinika');
-          const safeCity = c.city ? escapeHtml(c.city) : '';
-          const slug = c.slug ? encodeURIComponent(c.slug) : '';
-          const href = slug ? `klinika.html?slug=${slug}` : '#';
-          return `
-            <a href="${href}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fff;border:1px solid rgba(17,50,147,0.12);border-radius:10px;text-decoration:none;transition:all .15s">
-              <div style="min-width:0;flex:1">
-                <div style="font-size:13px;font-weight:600;color:#113293;font-family:'Inter',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${safeName}</div>
-                ${safeCity ? `<div style="font-size:11px;color:#64748b;margin-top:2px">${safeCity}</div>` : ''}
-              </div>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>`;
-        }).join('');
-        const html = `
-          <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:14px">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-              <div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#113293,#264ACA);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏥</div>
-              <div style="font-size:14px;font-weight:600;color:#113293;font-family:'Inter',sans-serif">Talált klinikák</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:8px">${items}</div>
-          </div>`;
-        addMsg(html, 'ai_html');
-      }
-
-      function sendChip(text) {
-        chatInputEl.value = text;
-        sendChat();
-      }
-
-      // ── NAV SEARCH ──
-      const specialties = [
-        {name:'Háziorvos', icon:'🏥', bg:'#e8f0ff'},
-        {name:'Kardiológus', icon:'❤️', bg:'#ffeaea'},
-        {name:'Bőrgyógyász', icon:'🌿', bg:'#e8f5e9'},
-        {name:'Fogász', icon:'🦷', bg:'#e3f2fd'},
-        {name:'Pszichológus', icon:'🧠', bg:'#f3e5f5'},
-        {name:'Nőgyógyász', icon:'💜', bg:'#fce4ec'},
-        {name:'Neurológus', icon:'⚡', bg:'#fffde7'},
-        {name:'Szemész', icon:'👁️', bg:'#e0f7fa'},
-        {name:'Ortopéd', icon:'🦴', bg:'#fff3e0'},
-        {name:'Gyermekgyógyász', icon:'👶', bg:'#e8f5e9'},
-        {name:'Endokrinológus', icon:'⚗️', bg:'#ede7f6'},
-        {name:'Urológus', icon:'🔬', bg:'#e3f2fd'},
-        {name:'Fül-orr-gégész', icon:'👂', bg:'#fff8e1'},
-        {name:'Reumatológus', icon:'🦴', bg:'#fce4ec'},
-        {name:'Onkológus', icon:'🎗️', bg:'#fbe9e7'},
-      ];
-
-      // ── SCROLL: két sorból egy sor ──
-      const mainNav = document.getElementById('mainNav');
-      const hero = document.querySelector('.hero');
-      function toggleSend(checkbox) {
-        // just visual feedback, no disabling
-        const legalLabel = document.getElementById('legalLabel');
-        if (checkbox.checked) {
-          legalLabel.style.opacity = '1';
+      window.heroSmartFill = function(text) {
+        const inp = document.getElementById('heroSmartInput');
+        if (inp) {
+          inp.value = text;
+          inp.focus();
+          // Auto-submit a chip kattintásra — gyorsabb élmény
+          setTimeout(() => {
+            const form = document.getElementById('heroSmartSearch');
+            if (form) form.requestSubmit();
+          }, 60);
         }
-      }
-
-      // Remove DOMContentLoaded disable
-      function sendQuick(text) {
-        document.getElementById('chatInput').value = text;
-        sendChat();
-      }
-
-      function startFreeText() {
-        document.getElementById('chatStartSection').style.display = 'none';
-        document.getElementById('chatInput').focus();
-        addMsg('Rendben! Írd le részletesen a panaszait, és segítünk megtalálni a megfelelő szakorvost.', 'ai');
-      }
-
-      function startGuided() {
-        document.getElementById('chatStartSection').style.display = 'none';
-        addMsg('Segítek kérdésekkel! Először is: hol érzed a legtöbb panaszt? (fejed, mellkasod, hasd, hátad, végtagjaid, máshol)', 'ai');
-      }
-
-      // ── SMART SEARCH ──
-      const suggestions = [
-        {label:'kardiológus budapest', type:'Szakterület vagy helyszín', icon:'🔍'},
-        {label:'Dr. Kovács János', type:'Orvos neve', icon:'👨‍⚕️'},
-        {label:'kardiológia', type:'Szakterület', icon:'🔍'},
-        {label:'gasztroenterológus budapest', type:'Szakterület vagy helyszín', icon:'🔍'},
-        {label:'Dr. Szabó Anna', type:'Orvos neve', icon:'👩‍⚕️'},
-        {label:'bőrgyógyász', type:'Szakterület', icon:'🔍'},
-        {label:'neurológus', type:'Szakterület', icon:'🔍'},
-        {label:'pszichológus online', type:'Szakterület', icon:'🔍'},
-        {label:'fogász Budapest II. ker', type:'Szakterület vagy helyszín', icon:'🔍'},
-        {label:'nőgyógyász', type:'Szakterület', icon:'🔍'},
-        {label:'gyermekorvos debrecen', type:'Szakterület vagy helyszín', icon:'🔍'},
-      ];
-
-      function smartFilter(val) {
-        document.getElementById('smartClear').style.display = val ? 'block' : 'none';
-        const drop = document.getElementById('smartDropdown');
-        if (!drop) return;
-        const list = document.getElementById('smartSuggestions');
-        if (!val) { drop.style.display = 'none'; return; }
-        const filtered = suggestions.filter(s => s.label.toLowerCase().includes(val.toLowerCase())).slice(0,6);
-        if (!filtered.length) { drop.style.display = 'none'; return; }
-        list.innerHTML = filtered.map(s => `<div class="smart-dd-item" onmousedown="setSmartSearch('${s.label}')"><div class="smart-dd-icon">${s.icon}</div><span>${escapeHtml(s.label)}</span><span class="smart-dd-type">${escapeHtml(s.type)}</span></div>`).join('');
-        drop.style.display = 'block';
-      }
-
-      function showSmartDrop() {
-        const val = document.getElementById('smartSearchInput').value;
-        const list = document.getElementById('smartSuggestions');
-        if (!list) return;
-        const items = val ? suggestions.filter(s => s.label.toLowerCase().includes(val.toLowerCase())).slice(0,6) : suggestions.slice(0,5);
-        list.innerHTML = items.map(s => `<div class="smart-dd-item" onmousedown="setSmartSearch('${s.label}')"><div class="smart-dd-icon">${s.icon}</div><span>${escapeHtml(s.label)}</span><span class="smart-dd-type">${escapeHtml(s.type)}</span></div>`).join('');
-        document.getElementById('smartDropdown').style.display = 'block';
-      }
-
-      function hideSmartDrop() {
-        const d = document.getElementById('smartDropdown');
-        if (d) d.style.display = 'none';
-      }
-
-      function setSmartSearch(val) {
-        const inp = document.getElementById('smartSearchInput');
-        if (inp) { inp.value = val; document.getElementById('smartClear').style.display = 'block'; }
-        hideSmartDrop();
-      }
-
-      function clearSmart() {
-        const inp = document.getElementById('smartSearchInput');
-        if (inp) { inp.value = ''; inp.focus(); }
-        document.getElementById('smartClear').style.display = 'none';
-      }
-
-      function scrollHow(dir) {
-        const cards = document.getElementById('howCards');
-        if (cards) cards.scrollBy({ left: dir * 360, behavior: 'smooth' });
-      }
-
-      function doSmartSearch() {
-        const v = document.getElementById('smartSearchInput')?.value?.trim() || '';
-        window.location = 'talalatok.html' + (v ? '?specialty=' + encodeURIComponent(v) : '');
-      }
-
-      function heroSearch() {
-        const spec = document.getElementById('heroSearchInput')?.value?.trim() || '';
-        const city = document.getElementById('heroSearchCity')?.value?.trim() || '';
-        const params = new URLSearchParams();
-        if (spec) params.set('specialty', spec);
-        if (city) params.set('city', city);
-        window.location.href = 'talalatok?' + params.toString();
-      }
-
-      function heroQuickSearch(specialty) {
-        window.location.href = 'talalatok?specialty=' + encodeURIComponent(specialty);
-      }
-
-      // ═══ Top 10 magyar város népességszám alapján ═══
-      const TOP_HU_CITIES = ['Budapest','Debrecen','Szeged','Miskolc','Pécs','Győr','Nyíregyháza','Kecskemét','Székesfehérvár','Szombathely'];
-
-      function goToSpecCity(specialty, city, ev){
-        if(ev){ ev.stopPropagation(); ev.preventDefault(); }
-        const params = new URLSearchParams();
-        if(specialty) params.set('specialty', specialty);
-        if(city) params.set('city', city);
-        window.location.href = 'talalatok?' + params.toString();
-      }
-
-      function onPopularKeydown(ev, card){
-        if(ev.key === 'Enter' || ev.key === ' '){
-          ev.preventDefault();
-          togglePopularSpec(card, ev);
-        }
-      }
-
-      function togglePopularSpec(card, ev){
-        if(ev) ev.stopPropagation();
-        const wasExpanded = card.classList.contains('expanded');
-        // Egyszerre csak egy lehet nyitva
-        document.querySelectorAll('.popular-spec-card.expanded').forEach(c => c.classList.remove('expanded'));
-        if(wasExpanded) return;
-        // Cities feltöltése
-        const spec = card.dataset.spec;
-        const citiesDiv = card.querySelector('.popular-spec-cities');
-        if(citiesDiv && !citiesDiv.children.length){
-          citiesDiv.innerHTML = `
-            <div class="popular-spec-cities-label">Válasszon várost</div>
-            <div class="popular-spec-cities-grid">
-              <a class="popular-spec-city-chip" style="background:var(--brand-light);color:var(--brand);border-color:rgba(17,50,147,.2)" onclick="goToSpecCity('${spec.replace(/'/g,"\\'")}','',event)">
-                Összes • Magyarország
-              </a>
-              ${TOP_HU_CITIES.map(city => `
-                <a class="popular-spec-city-chip" onclick="goToSpecCity('${spec.replace(/'/g,"\\'")}','${city}',event)">
-                  ${city}
-                </a>
-              `).join('')}
-            </div>`;
-        }
-        card.classList.add('expanded');
-      }
-
-      // Kattintás kívülre: zárja be az expandolt kártyát
-      document.addEventListener('click', (e) => {
-        if(!e.target.closest('.popular-spec-card')){
-          document.querySelectorAll('.popular-spec-card.expanded').forEach(c => c.classList.remove('expanded'));
-        }
-      });
-
-      const ssi = document.getElementById('smartSearchInput');
-      if (ssi) ssi.addEventListener('keydown', e => { if (e.key === 'Enter') doSmartSearch(); });
-
-      // (A régi scroll handler eltávolítva - az új .scrolled osztály-alapú megoldás kezeli a beégetett menü scriptje)
-
-      // ── HAMBURGER ──
-      function toggleHamburger() {
-        const hb = document.getElementById('hamburger');
-        const mm = document.getElementById('mobileMenu');
-        hb.classList.toggle('open');
-        mm.classList.toggle('open');
-      }
-
-      // ── ROTATING PLACEHOLDER ──
-      // disabled - static placeholder only
-
-      // ── FREETEXT SEARCH ──
-      let freetextTimeout = null;
-      let freetextActiveIdx = -1;
-      let freetextItems = [];
-      let activeDropdownId = null;
-
-      const TYPE_CONFIG = {
-        specialty: { label: 'Szakterület', bg: '#fff3ed', color: '#FF8A00' },
-        exam:      { label: 'Vizsgálat',   bg: '#f3e8ff', color: '#7c3aed' },
-        treatment: { label: 'Kezelés',     bg: '#fef3c7', color: '#d97706' },
-        doctor:    { label: 'Orvos',       bg: '#eef2ff', color: '#113293' },
-        clinic:    { label: 'Klinika',     bg: '#ecfdf5', color: '#059669' },
       };
 
-      const DEFAULT_SUGGESTIONS = [
-        // Szakterületek
-        { type: 'specialty', icon: '❤️', name: 'Kardiológus', sub: 'Szív- és érrendszeri betegségek' },
-        { type: 'specialty', icon: '🧠', name: 'Neurológus', sub: 'Idegrendszeri betegségek' },
-        { type: 'specialty', icon: '🌿', name: 'Bőrgyógyász', sub: 'Bőr-, haj- és körömproblémák' },
-        // Vizsgálatok
-        { type: 'exam',      icon: '🩺', name: 'EKG vizsgálat', sub: 'Szívritmus és szívfunkció mérés' },
-        { type: 'exam',      icon: '🩻', name: 'Ultrahang vizsgálat', sub: 'Képalkotó diagnosztika' },
-        { type: 'exam',      icon: '🔬', name: 'Vérvétel és laborvizsgálat', sub: 'Általános laboratóriumi vizsgálatok' },
-        // Kezelések
-        { type: 'treatment', icon: '💉', name: 'Védőoltás', sub: 'Megelőző immunizálás' },
-        { type: 'treatment', icon: '🩹', name: 'Fizikoterápia', sub: 'Mozgásszervi rehabilitáció' },
-      ];
-
-      // Bővített vizsgálat és kezelés lista a kereséshez
-      const EXAM_TREATMENT_LIST = [
-        // Vizsgálatok
-        { type: 'exam', icon: '🩺', name: 'EKG vizsgálat', sub: 'Szívritmus és szívfunkció mérés' },
-        { type: 'exam', icon: '🩻', name: 'Ultrahang vizsgálat', sub: 'Képalkotó diagnosztika' },
-        { type: 'exam', icon: '🔬', name: 'Vérvétel és laborvizsgálat', sub: 'Általános laboratóriumi vizsgálatok' },
-        { type: 'exam', icon: '🩻', name: 'Röntgen vizsgálat', sub: 'Csontok és belszervek képalkotása' },
-        { type: 'exam', icon: '🧲', name: 'MR (MRI) vizsgálat', sub: 'Mágneses rezonancia képalkotás' },
-        { type: 'exam', icon: '💻', name: 'CT vizsgálat', sub: 'Komputertomográfia' },
-        { type: 'exam', icon: '🫀', name: 'Szív ultrahang (echokardiográfia)', sub: 'Szívműködés képalkotó vizsgálata' },
-        { type: 'exam', icon: '🩸', name: 'Vérnyomásmérés', sub: 'Holter monitoring' },
-        { type: 'exam', icon: '🔍', name: 'Endoszkópos vizsgálat', sub: 'Gasztroszkópia, kolonoszkópia' },
-        { type: 'exam', icon: '👁️', name: 'Látásvizsgálat', sub: 'Szemészeti komplett kontroll' },
-        { type: 'exam', icon: '🦴', name: 'Csontsűrűség mérés', sub: 'Csontritkulás kiszűrése' },
-        { type: 'exam', icon: '🫁', name: 'Légzésfunkció vizsgálat', sub: 'Spirometria' },
-        { type: 'exam', icon: '🦷', name: 'Fogászati szűrés', sub: 'Általános fogászati vizsgálat' },
-        { type: 'exam', icon: '🤰', name: 'Terhességi ultrahang', sub: 'Magzati fejlődés vizsgálata' },
-        { type: 'exam', icon: '💊', name: 'Allergia teszt', sub: 'Bőr- és vérvizsgálati allergia szűrés' },
-        // Kezelések
-        { type: 'treatment', icon: '💉', name: 'Védőoltás', sub: 'Megelőző immunizálás' },
-        { type: 'treatment', icon: '🩹', name: 'Fizikoterápia', sub: 'Mozgásszervi rehabilitáció' },
-        { type: 'treatment', icon: '💆', name: 'Gyógymasszázs', sub: 'Izomfeszültség oldás' },
-        { type: 'treatment', icon: '🦷', name: 'Fogfehérítés', sub: 'Esztétikai fogászati kezelés' },
-        { type: 'treatment', icon: '🪥', name: 'Fogkőeltávolítás', sub: 'Professzionális szájhigiénia' },
-        { type: 'treatment', icon: '💊', name: 'Allergia immunterápia', sub: 'Allergén-specifikus deszenzitizálás' },
-        { type: 'treatment', icon: '✨', name: 'Botox kezelés', sub: 'Esztétikai bőrgyógyászat' },
-        { type: 'treatment', icon: '🧴', name: 'Anyajegy eltávolítás', sub: 'Bőrgyógyászati beavatkozás' },
-        { type: 'treatment', icon: '⚡', name: 'Lézeres szemműtét', sub: 'Látáskorrekciós beavatkozás' },
-        { type: 'treatment', icon: '🦴', name: 'Ízületi infiltráció', sub: 'Fájdalomcsillapító injekció' },
-        { type: 'treatment', icon: '🧠', name: 'Pszichoterápia', sub: 'Mentális egészség kezelése' },
-        { type: 'treatment', icon: '🩻', name: 'Műtét utáni rehabilitáció', sub: 'Posztoperatív gyógytorna' },
-      ];
-
-      // ── GENERIC SMART SEARCH (nav + hero + klassz) ──
-      // Supabase JS SDK használata — konzisztens a többi oldallal,
-      // jobb hibakezelés mint a sima fetch-csel.
-
-      function smartSearch(inputId, dropId) {
-        const val = document.getElementById(inputId).value;
-        activeDropdownId = dropId;
-        const clr = document.getElementById('freetextClear');
-        if (clr && inputId === 'freetextInput') clr.style.display = val ? 'flex' : 'none';
-        const spn = document.getElementById('freetextSpinner');
-        clearTimeout(freetextTimeout);
-        if (!val || val.length < 1) { 
-          const drop = document.getElementById(dropId);
-          if (drop) { drop.innerHTML = ''; drop.classList.remove('open'); }
-          return; 
-        }
-        if (spn && inputId === 'freetextInput') spn.classList.add('active');
-        freetextTimeout = setTimeout(async () => {
-          try {
-            const q = val.toLowerCase();
-            const like = `%${val}%`;
-            const results = [];
-            const [docRes, clinicRes, specRes] = await Promise.all([
-              db.from('doctors')
-                .select('id, name, title, doctor_specialties(specialties(name))')
-                .ilike('name', like)
-                .limit(4),
-              db.from('clinics')
-                .select('id, name, cities!clinics_city_id_fkey(name)')
-                .ilike('name', like)
-                .limit(3),
-              db.from('specialties')
-                .select('id, name, icon')
-                .ilike('name', like)
-                .limit(4),
-            ]);
-            const docData    = docRes.data    || [];
-            const clinicData = clinicRes.data || [];
-            const specData   = specRes.data   || [];
-            docData.forEach(d => results.push({ type: 'doctor', icon: '👨‍⚕️', name: (d.title ? d.title + ' ' : '') + d.name, value: d.name, sub: d.doctor_specialties?.[0]?.specialties?.name || 'Orvos', id: d.id }));
-            clinicData.forEach(c => results.push({ type: 'clinic', icon: '🏥', name: c.name, sub: c.cities?.name || 'Klinika', id: c.id }));
-            specData.forEach(s => results.push({ type: 'specialty', icon: s.icon || '🔬', name: s.name, sub: 'Szakterület', id: s.id }));
-            // Vizsgálatok és kezelések szűrése a teljes listából
-            const examTreatmentMatches = EXAM_TREATMENT_LIST.filter(e => e.name.toLowerCase().includes(q) || e.sub.toLowerCase().includes(q));
-            results.push(...examTreatmentMatches);
-            renderDropdown(results.slice(0, 12), dropId);
-          } catch(e) { console.error(e); }
-          finally { if (spn && inputId === 'freetextInput') spn.classList.remove('active'); }
-        }, 100);
-      }
-
-      function smartFocus(inputId, dropId) {
-        activeDropdownId = dropId;
-        const val = document.getElementById(inputId).value;
-        if (val) {
-          smartSearch(inputId, dropId);
-        } else if (inputId === 'heroInlineSearch' && typeof renderRecentInDropdown === 'function') {
-          renderRecentInDropdown(inputId, dropId);
-        }
-      }
-
-      function smartKeydown(e, inputId, dropId) {
-        const drop = document.getElementById(dropId);
-        const items = drop.querySelectorAll('.freetext-item');
-        if (e.key === 'ArrowDown') { e.preventDefault(); freetextActiveIdx = Math.min(freetextActiveIdx + 1, items.length - 1); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); freetextActiveIdx = Math.max(freetextActiveIdx - 1, -1); }
-        else if (e.key === 'Enter') {
-          if (freetextActiveIdx >= 0) selectItem(parseInt(items[freetextActiveIdx].dataset.idx), inputId, dropId);
-          else smartGo(inputId);
-          return;
-        } else if (e.key === 'Escape') { drop.classList.remove('open'); return; }
-        items.forEach((el, i) => el.classList.toggle('active', i === freetextActiveIdx));
-      }
-
-      function smartGo(inputId) {
-        const v = document.getElementById(inputId).value.trim();
-        if (v) window.location.href = `talalatok?specialty=${encodeURIComponent(v)}`;
-      }
-
-      function selectItem(idx, inputId, dropId) {
-        const item = freetextItems[idx];
-        if (!item) return;
-        const inp = document.getElementById(inputId);
-        const drop = document.getElementById(dropId);
-        inp.value = item.value || item.name;
-        if (drop) { drop.innerHTML = ''; drop.classList.remove('open'); }
-        inp.focus();
-      }
-
-      function smartBlur(inputId, dropId) {
-        // Késleltetés, hogy a kattintás onmousedown be tudjon fűződni a dropdown elemnél
-        setTimeout(() => {
-          const drop = document.getElementById(dropId);
-          if (drop) { drop.innerHTML = ''; drop.classList.remove('open'); }
-        }, 180);
-      }
-
-      function renderDropdown(items, dropId) {
-        const drop = document.getElementById(dropId);
-        if (!drop) return;
-        freetextActiveIdx = -1;
-        if (!items.length) { drop.classList.remove('open'); return; }
-        const ORDER = ['specialty', 'exam', 'treatment', 'doctor', 'clinic'];
-        const groups = {};
-        ORDER.forEach(t => groups[t] = []);
-        items.forEach(item => { if (groups[item.type]) groups[item.type].push(item); else groups[item.type] = [item]; });
-        // Az ORDER szerint újrarendezett lista (hogy az idx megegyezzen a megjelenítési sorrenddel)
-        const orderedItems = [];
-        ORDER.forEach(type => { (groups[type] || []).forEach(it => orderedItems.push(it)); });
-        freetextItems = orderedItems;
-        let html = ''; let idx = 0;
-        ORDER.forEach(type => {
-          const groupItems = groups[type] || [];
-          if (!groupItems.length) return;
-          const cfg = TYPE_CONFIG[type] || { label: type, bg: '#f4f7fb', color: '#374151' };
-          html += `<div class="freetext-group-label">${cfg.label}</div>`;
-          groupItems.forEach(item => {
-            html += `<div class="freetext-item" data-idx="${idx}" onmousedown="selectItem(${idx},'${document.activeElement.id||'freetextInput'}','${dropId}')">
-              <div class="freetext-item-icon" style="background:${cfg.bg}">${item.icon}</div>
-              <div class="freetext-item-main"><div class="freetext-item-name">${item.name}</div><div class="freetext-item-sub">${item.sub}</div></div>
-              <span class="freetext-item-badge" style="background:${cfg.bg};color:${cfg.color}">${cfg.label}</span>
-            </div>`;
-            idx++;
-          });
-        });
-        drop.innerHTML = html;
-        drop.classList.add('open');
-      }
-
-      // ── LEGACY wrappers for klassz section ──
-      function freetextSearch(val) { smartSearch('freetextInput', 'freetextDropdown'); }
-      function showDefaultSuggestions() { renderDropdown(DEFAULT_SUGGESTIONS, 'freetextDropdown'); }
-      function freetextFocus() { smartFocus('freetextInput', 'freetextDropdown'); }
-      function freetextKeydown(e) { smartKeydown(e, 'freetextInput', 'freetextDropdown'); }
-      function clearFreetext() {
-        document.getElementById('freetextInput').value = '';
-        document.getElementById('freetextClear').style.display = 'none';
-        document.getElementById('freetextDropdown').classList.remove('open');
-        document.getElementById('freetextInput').focus();
-      }
-      function selectFreetextItem(idx) { selectItem(idx, 'freetextInput', 'freetextDropdown'); }
-
-
-      // ─── AI CHAT MODAL ───
-      // Régi modal-megnyitó — most az új inline chat-be focusol és scrollol
-      window.openAiChatModal = function(e) {
-        const panel = document.getElementById('heroAiPanel');
-        const inp = document.getElementById('chatInput');
-        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        if (inp) setTimeout(() => inp.focus(), 350);
-        if (e) e.stopPropagation();
-      };
-
-      window.closeAiChatModal = function(e) {
-        // No-op (nincs többé modal)
-        if (e) { e.stopPropagation(); e.preventDefault(); }
-      };
-
-      window.toggleAiChat = window.openAiChatModal;
-      window.closeAiChat = window.closeAiChatModal;
-
-      // ═══ HERO AI PANEL — input → AI chat ═══
-      window.heroAiAsk = function(text) {
-        const t = (text || '').trim();
-        if (!t) return;
-        const inp = document.getElementById('chatInput');
-        if (inp) inp.value = t;
-        // Scroll a panelre + sendChat
-        const panel = document.getElementById('heroAiPanel');
-        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof sendChat === 'function') sendChat();
-      };
-
-      window.heroAiSubmit = function(e) {
+      window.heroSmartSubmit = async function(e) {
         if (e) e.preventDefault();
-        const inp = document.getElementById('chatInput');
+        const inp = document.getElementById('heroSmartInput');
+        const btn = document.getElementById('heroSmartBtn');
         if (!inp) return;
-        const t = inp.value.trim();
-        if (!t) return;
-        if (typeof sendChat === 'function') sendChat();
+        const query = inp.value.trim();
+        if (!query) { inp.focus(); return; }
+
+        if (btn) btn.disabled = true;
+        setSmartStatus('<span class="ss-spinner"></span> Értelmezem…');
+
+        const result = await parseSearchQuery(query);
+        if (btn) btn.disabled = false;
+        setSmartStatus('');
+
+        // Build talalatok URL params
+        const params = new URLSearchParams();
+        if (result && result.specialty_slug) {
+          // Slug-ból kinyerjük a megjeleníthető nevet (a talalatok.html `specialty=` paramétert úgyis vissza-mappeli)
+          params.set('specialty', result.specialty_slug);
+        }
+        if (result && result.city) {
+          params.set('city', result.city);
+        }
+        if (result && result.district) {
+          params.set('district', result.district);
+        }
+        // Mindig elmentjük a nyers query-t is, hogy a találati oldal megmutathassa
+        // és fallback-elhessen ha a parser nem talált szakterületet
+        params.set('q', query);
+
+        const url = 'talalatok.html?' + params.toString();
+        window.location.href = url;
       };
 
-      // Escape gombra zár
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          const w = document.getElementById('aiChatWidget');
-          if (w && w.classList.contains('open')) window.closeAiChatModal();
+      // ── ENTER nyomásra is keresés ──
+      document.addEventListener('DOMContentLoaded', () => {
+        const inp = document.getElementById('heroSmartInput');
+        if (inp) {
+          inp.focus();
         }
       });
 
-      document.addEventListener('click', e => {
-        ['freetextDropdown','navDropdown','heroDropdown'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el && !e.target.closest(`#${id}`) && !e.target.closest('input')) el.classList.remove('open');
-        });
-      });
+      // ══════════════════════════════════════════════════════════════════
+      // Régi DOM-elemek polyfill — ha valami másik scriptből hivatkozni
+      // próbálja a chatInput-ot/chatMessages-t, ne dobjon hibát.
+      // ══════════════════════════════════════════════════════════════════
+      window.heroAiAsk = window.heroSmartFill;     // kompat
+      window.sendChat = function(){};              // no-op
+      window.heroAiSubmit = window.heroSmartSubmit;
+      window.heroAiReset = function(){};
+      window.toggleSpeechInput = function(){};
 
     </script>
+
 
   </div><!-- end hero-two-col -->
   </div><!-- end hero-content -->

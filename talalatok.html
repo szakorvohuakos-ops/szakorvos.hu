@@ -1187,7 +1187,7 @@ const COLORS=['#113293','#264ACA','#2C9650','#35B26B','#1f6e3a','#0c2370','#1e3a
 const DS=['V','H','K','Sze','Cs','P','Szo'],DF=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
 const PGS=8;
 const UP=new URLSearchParams(location.search);
-let specQ=UP.get('specialty')||'',cityQ=UP.get('city')||'';
+let specQ=UP.get('specialty')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
 let allDocs=[],filtered=[],curPg=1,curView='list';
 
 // XSS-safe HTML escape for user-controlled values (URL params, free-text)
@@ -1321,31 +1321,29 @@ async function load(){
   document.getElementById('pagDiv').style.display='none';
 
   // ═══ ÚJ: rangsorolt keresés a search_doctors_ranked RPC-vel ═══
-  // Ez visszaadja a relevancia-szűrt, score-rendezett orvosokat a partner-prioritással.
-  // Ha sikeres, kiegészítjük a részletes adatokkal és visszaadjuk.
-  // Ha üres vagy hibázik, fallback a régi PostgREST query-re.
+  // Az index.html parse-search-e már kinyerte a specialty_slug + city + district-et.
+  // A `specQ` paraméter MOST már slug (vagy üres). Ha üres, használjuk a `freeQ`-t mint szabad-szöveg.
   let rankedSuccess = false;
   try {
-    // Specialty név → slug konverzió (az URL-ben "Bőrgyógyászat" van, az RPC "borgyogyasz"-t vár)
+    // Specialty értelmezés: lehet slug ("borgyogyasz") vagy név ("Bőrgyógyászat") — mindkettőt elfogadjuk
     let specSlug = null;
     if(specQ){
+      // Először feltételezzük hogy slug; ha nem, megpróbáljuk feloldani
       const sp = await db.from('specialties')
         .select('doctor_slug,name')
-        .or(`name.ilike.${specQ},doctor_slug.eq.${specQ.toLowerCase()},slug.eq.${specQ.toLowerCase()}`)
+        .or(`doctor_slug.eq.${specQ.toLowerCase()},slug.eq.${specQ.toLowerCase()},name.ilike.${specQ}`)
         .limit(1).maybeSingle();
       if(sp.data) specSlug = sp.data.doctor_slug;
     }
 
-    // ⚡ Új: a `specQ` szabad-szöveg is lehet (pl. "anyajegyszűrés szombathely")
-    // Ha NEM találtunk slug-ot belőle, akkor mint szabad query menjen az RPC-be
-    // — a parser DB-szinten szétbontja városra + topikra.
-    const freeQuery = (specQ && !specSlug) ? specQ : null;
+    // Ha nincs konkrét slug, de van szabad-szöveg, az lesz a query
+    const freeQuery = !specSlug ? (freeQ || specQ || null) : null;
 
     const { data: ranked, error: rankedErr } = await db.rpc('search_doctors_ranked', {
       p_query: freeQuery,
       p_specialty_slug: specSlug,
       p_city: cityQ || null,
-      p_min_relevance: freeQuery ? 30 : 45,  // szabad-szöveg esetén kicsit megengedőbb
+      p_min_relevance: freeQuery ? 30 : 45,
       p_limit: 200,
       p_offset: 0
     });
