@@ -293,21 +293,22 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
     linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(248,252,250,.78) 100%);
   backdrop-filter:blur(40px) saturate(220%);
   -webkit-backdrop-filter:blur(40px) saturate(220%);
-  border:1.5px solid rgba(255,255,255,.85);
+  border:1.5px solid rgba(38,74,202,.55);
   border-radius:20px;
   padding:1.1rem 1.25rem;
   margin-bottom:1.1rem;
   box-shadow:
     0 1px 0 rgba(255,255,255,.9) inset,
+    0 0 0 3px rgba(38,74,202,.1),
     0 1px 2px rgba(15,23,42,.04),
     0 4px 12px rgba(15,23,42,.05),
     0 16px 32px rgba(15,23,42,.06);
-  overflow:hidden;
+  isolation:isolate;
   transition:transform .4s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .3s ease;
   z-index:3;
 }
 .hero-ai-panel::before{
-  content:'';position:absolute;inset:-50%;border-radius:50%;
+  content:'';position:absolute;inset:0;border-radius:inherit;
   background:conic-gradient(from 0deg at 50% 50%,
     transparent 0deg,rgba(38,74,202,.05) 60deg,transparent 120deg,
     rgba(59,90,216,.04) 180deg,transparent 240deg,
@@ -330,17 +331,18 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 @keyframes aiSparkle{0%{opacity:.3}100%{opacity:.55}}
 .hero-ai-panel > *{position:relative;z-index:2}
 .hero-ai-panel:hover{
-  border-color:rgba(59,90,216,.55);transform:translateY(-4px);
-  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 4px rgba(15,23,42,.05),0 8px 20px rgba(15,23,42,.07),0 24px 48px rgba(15,23,42,.08);
+  border-color:rgba(38,74,202,.7);transform:translateY(-3px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 3px rgba(38,74,202,.12),0 2px 4px rgba(15,23,42,.05),0 8px 20px rgba(15,23,42,.07),0 24px 48px rgba(15,23,42,.08);
 }
 .hero-ai-panel:focus-within{
-  border-color:rgba(38,74,202,.75);transform:translateY(-5px);
-  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 3px rgba(38,74,202,.12),0 4px 10px rgba(15,23,42,.06),0 16px 36px rgba(15,23,42,.08);
+  border-color:rgba(38,74,202,.9);transform:translateY(-5px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 4px rgba(38,74,202,.18),0 4px 10px rgba(15,23,42,.06),0 16px 36px rgba(15,23,42,.08);
 }
 
-.hero-ai-head{display:flex;align-items:center;gap:11px;margin-bottom:.85rem}
+.hero-ai-head{display:flex;align-items:center;gap:13px;margin-bottom:1rem}
+.hero-ai-headbody{min-width:0;flex:1;display:flex;flex-direction:column;gap:0}
 .hero-ai-icon{
-  position:relative;width:36px;height:36px;border-radius:11px;flex-shrink:0;
+  position:relative;width:40px;height:40px;border-radius:12px;flex-shrink:0;
   background:linear-gradient(135deg,#264ACA 0%,#113293 50%,#0c2266 100%);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 2px 6px rgba(38,74,202,.22),0 6px 16px rgba(15,23,42,.08),
@@ -349,9 +351,9 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 @keyframes aiIconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .hero-ai-icon::before{
-  content:'';position:absolute;inset:-4px;border-radius:14px;
+  content:'';position:absolute;inset:-5px;border-radius:15px;
   background:radial-gradient(circle,rgba(38,74,202,.35) 0%,transparent 70%);
-  filter:blur(8px);opacity:.5;z-index:-1;
+  filter:blur(9px);opacity:.5;z-index:-1;
   animation:aiIconGlow 3.5s ease-in-out infinite alternate;
 }
 @keyframes aiIconGlow{0%{opacity:.3}100%{opacity:.55}}
@@ -359,35 +361,53 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   content:'';position:absolute;inset:0;border-radius:inherit;
   background:linear-gradient(135deg,rgba(255,255,255,.45) 0%,transparent 50%);pointer-events:none;
 }
-.hero-ai-icon svg{width:20px;height:20px;color:#fff;position:relative;z-index:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
+.hero-ai-icon svg{width:22px;height:22px;color:#fff;position:relative;z-index:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
 
+/* ── Title — prémium serif-feel tipográfia gradient text-tel ── */
 .hero-ai-title{
-  font-family:'Inter',sans-serif;font-size:14.5px;font-weight:800;
-  letter-spacing:-0.02em;line-height:1.2;
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  background:linear-gradient(135deg,#08174a 0%,#0c2266 45%,#3b5ad8 100%);
+  font-family:'Inter',sans-serif;
+  font-size:16px;font-weight:700;
+  letter-spacing:-0.022em;line-height:1.25;
+  display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#0a1542 0%,#113293 55%,#264ACA 100%);
   -webkit-background-clip:text;background-clip:text;
   -webkit-text-fill-color:transparent;color:transparent;
+  font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1;
 }
+
+/* ── Online badge — kifinomult glass pill ── */
 .hero-ai-badge{
   position:relative;
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
-  padding:3px 8px;border-radius:6px;
-  background:linear-gradient(135deg,#264ACA,#113293);
-  color:#fff;
-  box-shadow:0 1px 3px rgba(38,74,202,.25),0 1px 1px rgba(255,255,255,.3) inset;
-  -webkit-text-fill-color:#fff;
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'Inter',sans-serif;
+  font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:4px 10px 4px 9px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(236,253,245,.95) 0%,rgba(240,253,250,.85) 100%);
+  color:#047857;
+  border:1px solid rgba(16,185,129,.28);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 1px 2px rgba(16,185,129,.08),
+    0 2px 6px rgba(15,23,42,.04);
+  -webkit-text-fill-color:#047857;
 }
-.hero-ai-badge::before{
-  content:'';width:5px;height:5px;border-radius:50%;background:#fff;
-  box-shadow:0 0 0 2px rgba(255,255,255,.35);
+/* Pulzáló pötty az "Online" előtt */
+.hero-ai-online-dot{
+  position:relative;
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#10b981,#059669);
+  box-shadow:0 0 0 2.5px rgba(16,185,129,.18);
   animation:aiBadgePulse 1.8s ease-in-out infinite;
 }
-@keyframes aiBadgePulse{0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,.35)}50%{box-shadow:0 0 0 4px rgba(255,255,255,.15)}}
+@keyframes aiBadgePulse{
+  0%,100%{box-shadow:0 0 0 2.5px rgba(16,185,129,.18)}
+  50%{box-shadow:0 0 0 5px rgba(16,185,129,.08)}
+}
+
+/* ── Subtitle — finom, jól olvasható ── */
 .hero-ai-subtitle{
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
-  color:#64748b;line-height:1.4;margin-top:2px;letter-spacing:-0.005em;
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;
+  color:#64748b;line-height:1.5;margin-top:4px;letter-spacing:-0.005em;
 }
 
 .hero-ai-input-wrap{
@@ -490,15 +510,36 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   border-top:1px solid rgba(220,227,234,.4);
 }
 
+/* Beszélgetés terület — FELFELÉ nyílik, absolute pozicionálva,
+   nem tolja az alatta lévő tartalmat (még a hero címet is kitakarhatja) */
 .hero-ai-messages{
   display:none;flex-direction:column;gap:.7rem;
+  position:absolute;
+  left:0;right:0;bottom:calc(100% + 10px);
   max-height:min(440px,55vh);overflow-y:auto;
-  padding:1rem 2px;margin-bottom:.3rem;
-  border-top:1px solid rgba(220,227,234,.5);
+  padding:1rem 1.1rem;
+  background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(250,252,255,.94) 100%);
+  backdrop-filter:blur(32px) saturate(200%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  border:1.5px solid rgba(38,74,202,.55);
+  border-radius:20px;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 0 0 3px rgba(38,74,202,.1),
+    0 2px 6px rgba(15,23,42,.05),
+    0 12px 32px rgba(15,23,42,.12),
+    0 32px 64px rgba(15,23,42,.1);
   scrollbar-width:thin;scrollbar-color:rgba(38,74,202,.3) transparent;
+  z-index:20;
 }
-.hero-ai-messages.has-messages{display:flex;animation:msgAreaIn .4s cubic-bezier(.34,1.4,.64,1)}
-@keyframes msgAreaIn{from{opacity:0;max-height:0}to{opacity:1;max-height:440px}}
+.hero-ai-messages.has-messages{
+  display:flex;
+  animation:msgAreaIn .35s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes msgAreaIn{
+  from{opacity:0;transform:translateY(12px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 .hero-ai-messages::-webkit-scrollbar{width:6px}
 .hero-ai-messages::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#264ACA,#113293);border-radius:3px}
 
@@ -542,10 +583,13 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 
 @media(max-width:640px){
   .hero-ai-panel{padding:.95rem 1rem;border-radius:16px}
-  .hero-ai-icon{width:34px;height:34px;border-radius:10px}
-  .hero-ai-icon svg{width:18px;height:18px}
-  .hero-ai-title{font-size:13.5px;gap:6px}
-  .hero-ai-subtitle{font-size:11.5px}
+  .hero-ai-icon{width:36px;height:36px;border-radius:11px}
+  .hero-ai-icon svg{width:19px;height:19px}
+  .hero-ai-head{gap:11px;margin-bottom:.85rem}
+  .hero-ai-title{font-size:14.5px;gap:8px}
+  .hero-ai-subtitle{font-size:11.5px;margin-top:3px}
+  .hero-ai-badge{font-size:9.5px;padding:3px 8px 3px 7px}
+  .hero-ai-online-dot{width:6px;height:6px}
   .hero-ai-input{font-size:14px;padding:10px 0}
   .hero-ai-send,.hero-ai-mic{width:36px;height:36px}
   .hero-ai-examples-label{display:none}
@@ -580,7 +624,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 
 .hero-quick-search-head{
-  display:flex;align-items:center;gap:9px;margin-bottom:.8rem;
+  display:flex;align-items:center;gap:10px;margin-bottom:.85rem;
 }
 .hero-quick-search-icon{
   width:32px;height:32px;border-radius:10px;flex-shrink:0;
@@ -590,12 +634,41 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 .hero-quick-search-icon svg{width:16px;height:16px;color:#fff}
 .hero-quick-search-title{
-  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;
-  color:#059669;letter-spacing:-0.01em;line-height:1.2;
+  flex:1;min-width:0;
+  font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  color:#059669;letter-spacing:-0.015em;line-height:1.2;
 }
+.hero-quick-search-chevron{
+  width:16px;height:16px;color:#94a3b8;flex-shrink:0;
+  transition:transform .2s ease,color .2s ease;
+}
+.hero-quick-search:hover .hero-quick-search-chevron{color:#059669}
 .hero-quick-search-sub{
   font-family:'Inter',sans-serif;font-size:11.5px;font-weight:500;
   color:#64748b;line-height:1.3;margin-top:1px;
+}
+
+/* ── Tab váltó: Orvos / Klinika ── */
+.hero-qs-tabs{
+  display:flex;gap:6px;margin-bottom:.7rem;
+  padding:4px;background:rgba(236,253,245,.6);
+  border-radius:12px;border:1px solid rgba(16,185,129,.12);
+}
+.hero-qs-tab{
+  flex:1;min-width:0;cursor:pointer;border:none;
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
+  color:#64748b;background:transparent;
+  padding:8px 12px;border-radius:9px;
+  transition:all .2s ease;letter-spacing:-0.005em;
+  white-space:nowrap;text-overflow:ellipsis;overflow:hidden;
+}
+.hero-qs-tab:hover{color:#059669;background:rgba(255,255,255,.6)}
+.hero-qs-tab.active{
+  color:#059669;background:#fff;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 3px 8px rgba(5,150,105,.08);
+}
+@media(max-width:640px){
+  .hero-qs-tab{font-size:11.5px;padding:7px 10px}
 }
 
 /* Felső sor — live search input */
@@ -897,15 +970,15 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-mini-map-card{display:flex;align-items:stretch;gap:.85rem;width:100%;margin-left:0;background:linear-gradient(180deg,rgba(255,255,255,.65) 0%,rgba(252,253,255,.5) 100%);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(255,255,255,.55);border-radius:16px;padding:.85rem;text-decoration:none;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.65) inset,0 2px 8px rgba(17,50,147,.04),0 10px 24px rgba(17,50,147,.06);transition:transform .4s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease}
 
 /* Nagyobb térkép kártya (felül, AI fölött) */
-.hero-mini-map-card-large{aspect-ratio:1/1;display:block;width:100%;margin-left:0;margin-bottom:0;padding:5px;border-radius:20px;position:relative;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(252,253,255,.5) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1.5px solid rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 6px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08),0 24px 56px rgba(17,50,147,.06);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;text-decoration:none;cursor:pointer}
+.hero-mini-map-card-large{display:flex;flex-direction:column;gap:8px;width:100%;margin-left:0;margin-bottom:0;padding:14px;border-radius:20px;position:relative;z-index:2;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.72) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1.5px solid rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 6px rgba(17,50,147,.04),0 10px 28px rgba(17,50,147,.08),0 24px 56px rgba(17,50,147,.06);transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;text-decoration:none;cursor:pointer}
 .hero-mini-map-card-large:hover{transform:translateY(-3px);border-color:rgba(125,150,240,.5);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 4px 10px rgba(17,50,147,.06),0 16px 36px rgba(17,50,147,.14),0 32px 64px rgba(17,50,147,.1)}
-.hero-mini-map-card-large .hero-mini-map-frame{position:relative;width:100%;height:100%;min-height:0;border-radius:16px;overflow:hidden;border:none;background:#e2e8f0}
-.hero-mini-map-card-large .hero-mini-map-overlay-top{position:absolute;top:10px;left:10px;right:10px;z-index:2;pointer-events:none;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.hero-mini-map-card-large .hero-mini-map-text-bottom{flex:1;min-width:160px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);padding:8px 12px;border-radius:11px;border:1px solid rgba(199,210,254,.45);box-shadow:0 2px 10px rgba(17,50,147,.08);pointer-events:auto}
-.hero-mini-map-card-large .hero-mini-map-overlay-bottom{position:absolute;left:10px;right:10px;bottom:10px;display:flex;align-items:center;justify-content:flex-end;gap:10px;z-index:2;pointer-events:none;flex-wrap:wrap}
-.hero-mini-map-card-large .hero-mini-map-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.2;margin-bottom:2px}
-.hero-mini-map-card-large .hero-mini-map-sub{font-size:10.5px;color:var(--sub);line-height:1.3}
-.hero-mini-map-card-large .hero-mini-map-link-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;padding:8px 13px;border-radius:11px;font-size:11.5px;font-weight:600;letter-spacing:-0.005em;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(17,50,147,.22),0 8px 18px rgba(17,50,147,.18);white-space:nowrap;pointer-events:auto}
+.hero-mini-map-card-large .hero-mini-map-frame{position:relative;width:100%;aspect-ratio:1.35/1;min-height:0;border-radius:14px;overflow:hidden;border:1px solid rgba(220,227,234,.6);background:#e2e8f0}
+.hero-mini-map-card-large .hero-mini-map-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:2px 4px 0}
+.hero-mini-map-card-large .hero-mini-map-footer{display:flex;align-items:center;justify-content:center;padding:0 2px 2px}
+.hero-mini-map-card-large .hero-mini-map-text-bottom{flex:1;min-width:0}
+.hero-mini-map-card-large .hero-mini-map-title{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;color:var(--text);letter-spacing:-0.015em;line-height:1.2;margin-bottom:2px}
+.hero-mini-map-card-large .hero-mini-map-sub{font-size:11px;color:var(--sub);line-height:1.35}
+.hero-mini-map-card-large .hero-mini-map-link-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;padding:9px 14px;border-radius:11px;font-size:12px;font-weight:600;letter-spacing:-0.005em;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 6px rgba(17,50,147,.22),0 8px 18px rgba(17,50,147,.18);white-space:nowrap;width:100%}
 .hero-mini-map-card-large .hero-mini-map-link-btn svg{flex-shrink:0}
 .hero-mini-map-card-large .hero-mini-map-badge{position:relative;top:auto;right:auto;left:auto;bottom:auto;align-self:flex-start;pointer-events:auto}
 .hero-mini-map-card-large .hero-mini-map-eyebrow{display:none}
@@ -2283,7 +2356,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             Országos szakorvoskereső
           </div>
           <h1 class="hero-title-new">
-            <span class="hero-title-line"><span class="hero-title-blue">Írja le, mit keres</span> <span class="hero-title-accent">– segítünk</span></span>
+            <span class="hero-title-line"><span class="hero-title-blue">Írja le, mit keres</span> <span class="hero-title-accent">– segítünk megtalálni Önnek</span></span>
           </h1>
         </div>
         <p class="hero-subtitle-new">Keressen <strong id="subDoctors">–</strong> magánorvos, <strong id="subClinics">–</strong> klinika és <strong id="subProfessionals">–</strong> egészségügyi szakember között.</p>
@@ -2297,10 +2370,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
                 <path d="M18 16 L18.7 18.3 L21 19 L18.7 19.7 L18 22 L17.3 19.7 L15 19 L17.3 18.3 Z"/>
               </svg>
             </div>
-            <div style="min-width:0;flex:1">
+            <div class="hero-ai-headbody">
               <div class="hero-ai-title">
-                AI orvosi asszisztens
-                <span class="hero-ai-badge">GPT-5 ALAPÚ</span>
+                Szakorvos.hu AI asszisztense
+                <span class="hero-ai-badge" id="heroAiOnlineBadge" style="display:none">
+                  <span class="hero-ai-online-dot"></span>
+                  Online
+                </span>
               </div>
               <div class="hero-ai-subtitle" id="heroAiSubtitle">Írja le tüneteit vagy mit keres — pillanatok alatt megtalálom Önnek a megfelelő szakorvost vagy klinikát.</div>
             </div>
@@ -2423,10 +2499,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <div class="hero-quick-search-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <div>
-              <div class="hero-quick-search-title">Gyorskereső</div>
-              <div class="hero-quick-search-sub">Orvos vagy klinika név szerint</div>
-            </div>
+            <div class="hero-quick-search-title">Hagyományos kereső</div>
+            <svg class="hero-quick-search-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+
+          <!-- Tab váltó: Orvos / Klinika -->
+          <div class="hero-qs-tabs" role="tablist">
+            <button type="button" class="hero-qs-tab active" id="qsTabDoctor" data-tab="doctor" role="tab" aria-selected="true" onclick="setQuickSearchTab('doctor')">
+              Orvos / szakterület
+            </button>
+            <button type="button" class="hero-qs-tab" id="qsTabClinic" data-tab="clinic" role="tab" aria-selected="false" onclick="setQuickSearchTab('clinic')">
+              Klinika keresése
+            </button>
           </div>
 
           <!-- 1. sor: live kereső -->
@@ -2434,7 +2520,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <div class="hero-qs-input-wrap">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
               <input type="text" id="heroQuickSearch" class="hero-qs-input" autocomplete="off"
-                placeholder="Orvos, klinika, szakterület…"
+                placeholder="Orvos, szakterület megadása…"
                 oninput="smartSearch('heroQuickSearch','heroQuickDropdown')"
                 onfocus="smartFocus('heroQuickSearch','heroQuickDropdown')"
                 onblur="smartBlur('heroQuickSearch','heroQuickDropdown')"
@@ -2447,7 +2533,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <div class="hero-qs-row-bottom">
             <div class="hero-qs-city-wrap">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <input type="text" id="heroQuickCity" class="hero-qs-city" placeholder="Város (pl. Budapest)…"
+              <input type="text" id="heroQuickCity" class="hero-qs-city" placeholder="Város (pl. Budapest)"
                 onkeydown="if(event.key==='Enter') heroQuickSearchSubmit()">
             </div>
             <button type="button" class="hero-qs-submit" onclick="heroQuickSearchSubmit()">
@@ -2459,24 +2545,27 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
         <!-- Mini térkép kártya (gyorskereső ALATT) -->
         <a href="klinikak.html" class="hero-mini-map-card hero-mini-map-card-large" id="heroMiniMapCard">
+          <!-- Header — szöveg a térkép FÖLÖTT -->
+          <div class="hero-mini-map-header">
+            <div class="hero-mini-map-text-bottom">
+              <div class="hero-mini-map-title">Szakorvosok és klinikák <span class="hero-mini-map-accent">a térképen</span></div>
+              <div class="hero-mini-map-sub">Találja meg a legjobb szakembereket a közelében.</div>
+            </div>
+            <div class="hero-mini-map-badge">
+              <span class="hero-mini-map-dot"></span>
+              <span id="heroMiniMapCount">–</span> klinika
+            </div>
+          </div>
+          <!-- Térkép maga — semmi átfedés -->
           <div class="hero-mini-map-frame">
             <div id="heroMiniMapEl" style="width:100%;height:100%"></div>
-            <div class="hero-mini-map-overlay-top">
-              <div class="hero-mini-map-text-bottom">
-                <div class="hero-mini-map-title">Szakorvosok és klinikák <span class="hero-mini-map-accent">a térképen</span></div>
-                <div class="hero-mini-map-sub">Találja meg a legjobb szakembereket a közelében.</div>
-              </div>
-              <div class="hero-mini-map-badge">
-                <span class="hero-mini-map-dot"></span>
-                <span id="heroMiniMapCount">–</span> klinika
-              </div>
-            </div>
-            <div class="hero-mini-map-overlay-bottom">
-              <div class="hero-mini-map-link-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                Térképes nézet megnyitása
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </div>
+          </div>
+          <!-- Footer — gomb a térkép ALATT -->
+          <div class="hero-mini-map-footer">
+            <div class="hero-mini-map-link-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Térképes nézet megnyitása
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </div>
           </div>
         </a>
@@ -2607,6 +2696,29 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         const inp = document.getElementById('chatInput');
         if (inp) inp.focus();
       };
+
+      // ═══ AI Online status — periodikus health check ═══
+      (function initAiHealthCheck(){
+        const badge = document.getElementById('heroAiOnlineBadge');
+        if (!badge) return;
+        const HEALTH_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/ai-chat?health=1';
+        async function check(){
+          try {
+            const ctrl = new AbortController();
+            const tid = setTimeout(() => ctrl.abort(), 5000);
+            const res = await fetch(HEALTH_URL, { method: 'GET', signal: ctrl.signal });
+            clearTimeout(tid);
+            if (!res.ok) { badge.style.display = 'none'; return; }
+            const data = await res.json().catch(() => ({}));
+            badge.style.display = data && data.online ? 'inline-flex' : 'none';
+          } catch (_e) {
+            badge.style.display = 'none';
+          }
+        }
+        // Első ellenőrzés DOM ready után, majd 2 percenként
+        check();
+        setInterval(check, 2 * 60 * 1000);
+      })();
 
       function addTyping() {
         const wrap = document.createElement('div');
@@ -3900,16 +4012,37 @@ function useTrending(term){
   heroInlineSearch();
 }
 
+// ═══ Hero gyorskereső tab váltó (Orvos / Klinika) ═══
+let heroQuickTab = 'doctor';
+function setQuickSearchTab(t){
+  heroQuickTab = t;
+  document.querySelectorAll('.hero-qs-tab').forEach(b => {
+    const isActive = b.getAttribute('data-tab') === t;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+  // Placeholder igazítás
+  const inp = document.getElementById('heroQuickSearch');
+  if(inp){
+    inp.placeholder = t === 'clinic' ? 'Klinika nevének megadása…' : 'Orvos, szakterület megadása…';
+  }
+}
+
 // ═══ Hero gyorskereső (jobb oldal) submit ═══
 function heroQuickSearchSubmit(){
   const query = (document.getElementById('heroQuickSearch')?.value || '').trim();
   const city = (document.getElementById('heroQuickCity')?.value || '').trim();
   const params = new URLSearchParams();
-  // Alapértelmezett: doctor / specialty keresés
-  if(query) params.set('specialty', query);
-  if(city) params.set('city', city);
   if(query) saveRecentSearch(query);
-  window.location.href = 'talalatok.html?' + params.toString();
+  if(heroQuickTab === 'clinic'){
+    if(query) params.set('q', query);
+    if(city) params.set('city', city);
+    window.location.href = 'klinikak.html?' + params.toString();
+  } else {
+    if(query) params.set('specialty', query);
+    if(city) params.set('city', city);
+    window.location.href = 'talalatok.html?' + params.toString();
+  }
 }
 
 // ═══ ⌘K / Ctrl+K shortcut ═══
