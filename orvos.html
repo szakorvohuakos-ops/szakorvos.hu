@@ -265,6 +265,13 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-verified-badge svg{flex-shrink:0;width:12px;height:12px}
 .dh-source-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:#64748b;background:linear-gradient(135deg,rgba(248,250,252,.95) 0%,rgba(241,245,249,.85) 100%);border:1.5px solid rgba(148,163,184,.32);padding:5px 11px;border-radius:999px;letter-spacing:.01em;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
 .dh-source-badge svg{flex-shrink:0;width:12px;height:12px;opacity:.8}
+.dh-completeness{margin-top:.85rem;max-width:380px}
+.dh-completeness-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}
+.dh-completeness-title{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
+.dh-completeness-pct{font-family:'Inter',sans-serif;font-size:14px;font-weight:800;letter-spacing:-0.01em}
+.dh-completeness-track{height:7px;background:rgba(148,163,184,.18);border-radius:99px;overflow:hidden}
+.dh-completeness-fill{height:100%;width:0%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.dh-completeness-sub{font-size:11.5px;color:#64748b;margin-top:5px;font-weight:500}
 
 .dh-deg{font-size:14px;color:var(--sub);margin-bottom:10px;font-weight:500}
 .dh-deg strong{color:var(--text);font-weight:600}
@@ -911,6 +918,17 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
             <div class="dh-chips" id="dhChips"></div>
 
+            <div class="dh-completeness" id="dhCompleteness" style="display:none">
+              <div class="dh-completeness-label">
+                <span class="dh-completeness-title">Profil kitöltöttsége</span>
+                <span class="dh-completeness-pct" id="dhCompletenessPct">–%</span>
+              </div>
+              <div class="dh-completeness-track">
+                <div class="dh-completeness-fill" id="dhCompletenessFill"></div>
+              </div>
+              <div class="dh-completeness-sub" id="dhCompletenessSub"></div>
+            </div>
+
             <div class="dh-stats" id="dhStats"></div>
 
 
@@ -1164,6 +1182,24 @@ function capitalize(s){
   if(!s) return '';
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
+// ═══ Profil teljesség — ugyanaz a logika mint a DB-ben (calc_doctor_completeness) ═══
+function calcDoctorCompleteness(d){
+  let s = 0;
+  if(d.photo_url && d.photo_url.length > 5) s += 20;
+  if(d.short_intro && d.short_intro.length > 20) s += 15;
+  if(d.bio && d.bio.length > 50) s += 12;
+  if(d.experience_years && d.experience_years > 0) s += 8;
+  if(Array.isArray(d.languages) ? d.languages.length > 0 : !!d.languages) s += 6;
+  if(d.phone && String(d.phone).length > 5) s += 6;
+  if(d.email && String(d.email).length > 5) s += 4;
+  if(d.university && d.university.length > 2) s += 3;
+  if(d.graduation_year) s += 3;
+  if(Array.isArray(d.board_certifications) && d.board_certifications.length > 0) s += 5;
+  if(d.has_online_consultation || d.has_eprescription || d.has_online_results || d.has_telemedicine) s += 5;
+  if(Array.isArray(d.doctor_specialties) && d.doctor_specialties.length > 0) s += 7;
+  if(Array.isArray(d.doctor_clinics) && d.doctor_clinics.length > 0) s += 6;
+  return Math.min(s, 100);
+}
 function estimatePatientCount(d){
   const reviews = parseInt(d.review_count) || 0;
   if(reviews <= 0) return 0;
@@ -1384,6 +1420,24 @@ function render(d){
       vbEl.title = 'A profil adatai több nyilvános forrásból származnak. Az adatok pontossága még nincs hivatalosan ellenőrizve.';
       vbEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból';
     }
+  }
+
+  // Profil teljesség
+  const pct = calcDoctorCompleteness(d);
+  const compEl = document.getElementById('dhCompleteness');
+  if(compEl){
+    compEl.style.display = '';
+    let color, label;
+    if(pct >= 90){ color='#059669'; label='Teljes profil — minden lényeges adat kitöltve.'; }
+    else if(pct >= 70){ color='#65a30d'; label='Részletes profil.'; }
+    else if(pct >= 40){ color='#d97706'; label='Részben kitöltött profil.'; }
+    else { color='#94a3b8'; label='Az alapadatok elérhetők; további részletek hamarosan.'; }
+    const pctEl = document.getElementById('dhCompletenessPct');
+    const fillEl = document.getElementById('dhCompletenessFill');
+    const subEl = document.getElementById('dhCompletenessSub');
+    if(pctEl){ pctEl.textContent = pct + '%'; pctEl.style.color = color; }
+    if(fillEl){ fillEl.style.width = pct + '%'; fillEl.style.background = color; }
+    if(subEl) subEl.textContent = label;
   }
 
   // Title + PhD

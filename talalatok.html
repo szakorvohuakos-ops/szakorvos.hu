@@ -373,7 +373,11 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 .dc-loc{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--sub);font-weight:500;margin-top:.4rem}
 .dc-loc svg{flex-shrink:0;color:var(--green)}
 .dc-loc-clinic{color:var(--text);font-weight:600}
-.dc-summary{grid-column:2 / -1;font-size:13px;color:var(--sub);line-height:1.6;margin-top:.2rem;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.dc-summary{grid-column:2 / -1;font-size:13px;color:var(--sub);line-height:1.5;margin-top:.2rem;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc-completeness{display:flex;align-items:center;gap:8px;margin-top:.3rem;max-width:260px}
+.dc-completeness-track{flex:1;height:5px;border-radius:99px;overflow:hidden;min-width:80px}
+.dc-completeness-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.dc-completeness-pct{font-size:11px;font-weight:700;letter-spacing:.01em;min-width:30px;text-align:right}
 
 /* Hidden in new design (kept for compatibility) */
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
@@ -1316,9 +1320,9 @@ async function load(){
   // hiányzik a specialties táblából, vagy más mező hiányzik), automatikusan
   // egy minimális query-re fallback-elünk, ami biztosan működik.
 
-  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,verified_at,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
-  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,verified_at,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
   const runQuery = async (selectClause) => {
     try {
@@ -1653,6 +1657,7 @@ function cardH(d,i){
       </div>
 
       ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
+      ${renderCompletenessMini(calcCompleteness(d))}
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
       <a class="btn-call" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
@@ -1661,7 +1666,49 @@ function cardH(d,i){
       </a>
       <button class="btn-prof-alt" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
     </div>
-    <div class="dc-summary" id="sum-${d.id}">${escapeHtml(d.bio || 'Összefoglaló betöltése...')}</div>
+    ${(d.bio || d.short_intro) ? `<div class="dc-summary" id="sum-${d.id}">${escapeHtml(truncateWords(d.bio || d.short_intro, 7))}</div>` : ''}
+  </div>`;
+}
+
+// 6-7 szó után "…" — a kártya rövid summary-jéhez
+function truncateWords(text, n){
+  if(!text) return '';
+  const words = String(text).trim().split(/\s+/);
+  if(words.length <= n) return text;
+  return words.slice(0, n).join(' ') + '…';
+}
+
+// ═══ Profil teljesség — ugyanaz a logika mint a DB-ben (calc_doctor_completeness) ═══
+function calcCompleteness(d){
+  let s = 0;
+  if(d.photo_url && d.photo_url.length > 5) s += 20;
+  if(d.short_intro && d.short_intro.length > 20) s += 15;
+  if(d.bio && d.bio.length > 50) s += 12;
+  if(d.experience_years && d.experience_years > 0) s += 8;
+  if(Array.isArray(d.languages) ? d.languages.length > 0 : !!d.languages) s += 6;
+  if(d.phone && String(d.phone).length > 5) s += 6;
+  if(d.email && String(d.email).length > 5) s += 4;
+  if(d.university && d.university.length > 2) s += 3;
+  if(d.graduation_year) s += 3;
+  if(Array.isArray(d.board_certifications) && d.board_certifications.length > 0) s += 5;
+  if(d.has_online_consultation || d.has_eprescription || d.has_online_results || d.has_telemedicine) s += 5;
+  if(Array.isArray(d.doctor_specialties) && d.doctor_specialties.length > 0) s += 7;
+  if(Array.isArray(d.doctor_clinics) && d.doctor_clinics.length > 0) s += 6;
+  return Math.min(s, 100);
+}
+
+// Mini progress bar a kártyára: szöveg + színes csík + százalék
+function renderCompletenessMini(pct){
+  let color, bgColor, label;
+  if(pct >= 90){ color='#059669'; bgColor='rgba(16,185,129,.15)'; label='Teljes profil'; }
+  else if(pct >= 70){ color='#65a30d'; bgColor='rgba(132,204,22,.15)'; label='Részletes profil'; }
+  else if(pct >= 40){ color='#d97706'; bgColor='rgba(245,158,11,.15)'; label='Részben kitöltött'; }
+  else { color='#94a3b8'; bgColor='rgba(148,163,184,.18)'; label='Alap adatok'; }
+  return `<div class="dc-completeness" title="Profil kitöltöttsége: ${pct}% — ${label}">
+    <div class="dc-completeness-track" style="background:${bgColor}">
+      <div class="dc-completeness-fill" style="width:${pct}%;background:${color}"></div>
+    </div>
+    <span class="dc-completeness-pct" style="color:${color}">${pct}%</span>
   </div>`;
 }
 
