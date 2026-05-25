@@ -173,7 +173,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-two-col{display:grid;grid-template-columns:2.5fr 1fr;gap:3.5rem;align-items:start}
 .hero-left{min-width:0}
 
-.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.69rem,2.9vw,2.54rem);font-weight:500;color:var(--text);line-height:1.35;letter-spacing:-0.02em;margin-bottom:0;flex:0 1 auto;min-width:0;max-width:100%;font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1}
+.hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.69rem,2.9vw,2.54rem);font-weight:500;color:var(--text);line-height:1.15;letter-spacing:-0.02em;margin-bottom:0;flex:0 1 auto;min-width:0;max-width:100%;font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1}
 
 /* ── Eyebrow felirat a H1 fölé — prémium pill ── */
 .hero-eyebrow-title{
@@ -232,7 +232,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   .hero-pstat-divider{height:30px}
 }
 .hero-title-line{display:block;white-space:nowrap}
-.hero-title-line + .hero-title-line{margin-top:.25em}
+.hero-title-line + .hero-title-line{margin-top:.05em}
 .hero-title-accent{background:linear-gradient(135deg,#2C9650 0%,#3fb568 60%,#4cc97c 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;font-weight:500}
 .hero-title-blue{background:linear-gradient(135deg,#113293 0%,#264ACA 60%,#3957d5 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;font-weight:500}
 .hero-subtitle{font-family:'Inter',sans-serif;font-size:16px;font-weight:500;color:var(--sub);line-height:1.55;letter-spacing:-0.005em;margin:.7rem 0 1.25rem;max-width:600px}
@@ -290,34 +290,124 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
    ════════════════════════════════════════════════════════════════ */
 /* Wrapper — helyfoglaló a kompakt panel magasságához.
    A panel maga absolute pozícionálva alulra ragad, felfelé nő amikor messages megnyílik. */
-/* ══════ OKOS KERESŐ — szabad-szöveges, AI-támogatott ══════ */
-.hero-smart-search-wrap{
+/* ══════ PRÉMIUM OKOS KERESŐ — glassmorf doboz AI badge-vel ══════ */
+.hero-smart-box{
   position:relative;
+  /* a suggest dropdown teljes szélességére számítjuk */
   margin-bottom:1.1rem;
-  z-index:50;
+  border-radius:22px;
+  padding:1.5px;
+  background:
+    linear-gradient(135deg,
+      rgba(38,74,202,.55) 0%,
+      rgba(59,90,216,.25) 25%,
+      rgba(99,128,238,.15) 50%,
+      rgba(59,90,216,.25) 75%,
+      rgba(38,74,202,.55) 100%);
+  background-size:200% 200%;
+  animation:heroSmartBoxBorder 8s ease-in-out infinite;
+  box-shadow:
+    0 1px 2px rgba(15,23,42,.04),
+    0 4px 12px rgba(15,23,42,.05),
+    0 16px 40px rgba(38,74,202,.1),
+    0 32px 64px rgba(38,74,202,.08);
+  z-index:200;
+  transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s ease;
+}
+.hero-smart-box:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    0 2px 4px rgba(15,23,42,.05),
+    0 8px 18px rgba(15,23,42,.07),
+    0 24px 52px rgba(38,74,202,.14),
+    0 44px 80px rgba(38,74,202,.12);
+}
+@keyframes heroSmartBoxBorder{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.hero-smart-box-glow{
+  position:absolute;inset:-2px;border-radius:inherit;
+  background:radial-gradient(ellipse 60% 80% at 50% 0%,rgba(38,74,202,.18) 0%,transparent 60%);
+  filter:blur(20px);opacity:.7;z-index:-1;pointer-events:none;
+  transition:opacity .35s ease;
+}
+.hero-smart-box:hover .hero-smart-box-glow{opacity:1}
+.hero-smart-box-inner{
+  position:relative;
+  background:
+    radial-gradient(ellipse 80% 100% at 0% 0%,rgba(38,74,202,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 100% at 100% 100%,rgba(99,128,238,.05) 0%,transparent 60%),
+    linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(250,252,255,.92) 100%);
+  backdrop-filter:blur(32px) saturate(200%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  border-radius:20.5px;
+  padding:1.1rem 1.2rem 1.1rem;
+}
+.hero-smart-box-inner::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(circle at 30% 0%,rgba(255,255,255,.65) 0%,transparent 50%);
+  pointer-events:none;z-index:0;
+}
+.hero-smart-box-inner > *{position:relative;z-index:1}
+.hero-smart-box-head{
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+  margin-bottom:.85rem;flex-wrap:wrap;
+}
+.hero-smart-box-eyebrow{
+  display:inline-flex;align-items:center;gap:.45rem;
+  font-family:'Inter',sans-serif;
+  font-size:11.5px;font-weight:700;color:#264ACA;
+  text-transform:uppercase;letter-spacing:.075em;
+}
+.hero-smart-box-eyebrow svg{
+  width:13px;height:13px;color:#264ACA;
+  animation:heroSparkle 2.8s ease-in-out infinite;
+}
+@keyframes heroSparkle{
+  0%,100%{transform:rotate(0deg) scale(1);opacity:1}
+  50%{transform:rotate(180deg) scale(1.1);opacity:.85}
+}
+.hero-smart-box-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:700;color:#047857;
+  background:linear-gradient(180deg,rgba(16,185,129,.12) 0%,rgba(16,185,129,.06) 100%);
+  border:1px solid rgba(16,185,129,.25);
+  border-radius:99px;
+  padding:.22rem .55rem .22rem .5rem;
+  letter-spacing:.01em;
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 1px 3px rgba(16,185,129,.08);
+}
+.hero-smart-box-badge-dot{
+  width:6px;height:6px;border-radius:50%;background:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.18);
+  animation:heroSmartPulse 1.8s ease-in-out infinite;
+}
+@keyframes heroSmartPulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(16,185,129,.18)}
+  50%{box-shadow:0 0 0 5px rgba(16,185,129,.08)}
 }
 .hero-smart-search{
-  display:flex;align-items:center;gap:.65rem;
-  background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(248,252,250,.85) 100%);
-  backdrop-filter:blur(28px) saturate(190%);
-  -webkit-backdrop-filter:blur(28px) saturate(190%);
-  border:1.5px solid rgba(38,74,202,.45);
-  border-radius:18px;
-  padding:.65rem .7rem .65rem 1rem;
+  position:relative;
+  display:flex;align-items:center;gap:.55rem;
+  background:#fff;
+  border:1.5px solid rgba(220,227,234,.7);
+  border-radius:14px;
+  padding:.45rem .5rem .45rem .85rem;
   box-shadow:
-    0 1px 0 rgba(255,255,255,.9) inset,
-    0 0 0 3px rgba(38,74,202,.08),
-    0 2px 8px rgba(15,23,42,.05),
-    0 12px 28px rgba(15,23,42,.07);
-  transition:border-color .25s ease,box-shadow .25s ease,transform .25s cubic-bezier(.34,1.4,.64,1);
+    inset 0 1px 2px rgba(15,23,42,.04),
+    0 1px 0 rgba(255,255,255,.8) inset;
+  transition:border-color .22s ease,box-shadow .22s ease;
 }
 .hero-smart-search:hover{
-  border-color:rgba(38,74,202,.6);transform:translateY(-2px);
-  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 3px rgba(38,74,202,.12),0 4px 10px rgba(15,23,42,.06),0 18px 36px rgba(15,23,42,.09);
+  border-color:rgba(38,74,202,.45);
 }
 .hero-smart-search:focus-within{
-  border-color:rgba(38,74,202,.85);transform:translateY(-3px);
-  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 4px rgba(38,74,202,.18),0 4px 10px rgba(15,23,42,.07),0 20px 44px rgba(15,23,42,.1);
+  border-color:rgba(38,74,202,.85);
+  box-shadow:
+    inset 0 1px 2px rgba(15,23,42,.04),
+    0 0 0 4px rgba(38,74,202,.12);
 }
 .hero-smart-search-icon{
   flex-shrink:0;width:34px;height:34px;
@@ -328,12 +418,69 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 .hero-smart-search-icon svg{width:17px;height:17px}
 .hero-smart-search-input{
-  flex:1;border:0;outline:0;background:transparent;
-  font-family:inherit;font-size:15.5px;font-weight:500;
-  color:#0a1a3d;letter-spacing:-0.005em;
-  padding:.55rem 0;min-width:0;
+  display:block;width:100%;border:0;outline:0;background:transparent;
+  font-family:inherit;font-size:16px;font-weight:600;
+  color:#113293;letter-spacing:-0.005em;
+  padding:.78rem 0;min-width:0;
+  line-height:1.4;
 }
-.hero-smart-search-input::placeholder{color:#7986a7;font-weight:400;letter-spacing:-0.005em}
+.hero-smart-search-input::placeholder{color:#7986a7;font-weight:400;letter-spacing:-0.005em;line-height:1.4}
+.hero-smart-search-input:focus{color:#113293}
+/* ── Autocomplete javaslatok ── */
+.hero-smart-suggest{
+  display:none;
+  position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:#ffffff !important;
+  background-color:#ffffff !important;
+  border:1.5px solid rgba(38,74,202,.35);
+  border-radius:14px;
+  box-shadow:
+    0 4px 12px rgba(15,23,42,.12),
+    0 16px 40px rgba(15,23,42,.2),
+    0 32px 64px rgba(15,23,42,.18);
+  max-height:340px;overflow-y:auto;
+  z-index:9999;
+  padding:.4rem;
+  isolation:isolate;
+  opacity:1;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.hero-smart-suggest.show{display:block}
+.hero-smart-suggest::before{
+  /* második fehér réteg biztos hogy semmi nem sugárzik át */
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:#ffffff;z-index:-1;
+}
+/* Amikor a dropdown látható, a chipeket elrejtjük hogy ne legyen átfedés */
+.hero-smart-box:has(.hero-smart-suggest.show) .hero-smart-search-examples{
+  visibility:hidden;
+}
+.hero-smart-suggest-item{
+  display:flex;align-items:center;gap:.55rem;
+  width:100%;text-align:left;
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;
+  color:#113293;
+  background:transparent;border:0;border-radius:8px;cursor:pointer;
+  padding:.55rem .65rem;
+  transition:background .12s ease;
+}
+.hero-smart-suggest-item:hover,.hero-smart-suggest-item.active{
+  background:rgba(38,74,202,.07);
+}
+.hero-smart-suggest-item-icon{
+  width:22px;height:22px;flex-shrink:0;border-radius:6px;
+  background:linear-gradient(135deg,rgba(38,74,202,.1),rgba(59,90,216,.06));
+  display:flex;align-items:center;justify-content:center;
+  color:#264ACA;
+}
+.hero-smart-suggest-item-icon svg{width:12px;height:12px}
+.hero-smart-suggest-item-text{flex:1;min-width:0}
+.hero-smart-suggest-item-type{
+  font-size:10.5px;font-weight:700;color:#7986a7;
+  text-transform:uppercase;letter-spacing:.05em;
+  margin-left:auto;flex-shrink:0;
+}
 .hero-smart-search-status{
   flex-shrink:0;font-size:11.5px;color:#64748b;
   display:flex;align-items:center;gap:6px;font-weight:500;
@@ -376,7 +523,12 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 .hero-smart-search-chip:hover{background:rgba(38,74,202,.12);border-color:rgba(38,74,202,.35);transform:translateY(-1px)}
 @media (max-width:680px){
-  .hero-smart-search{padding:.55rem .6rem .55rem .85rem;gap:.5rem;border-radius:14px}
+  .hero-smart-box{border-radius:18px}
+  .hero-smart-box-inner{padding:.85rem .9rem;border-radius:16.5px}
+  .hero-smart-box-head{margin-bottom:.65rem;gap:.5rem}
+  .hero-smart-box-eyebrow{font-size:10.5px;letter-spacing:.06em}
+  .hero-smart-box-badge{font-size:10px;padding:.18rem .45rem}
+  .hero-smart-search{padding:.4rem .45rem .4rem .7rem;gap:.45rem;border-radius:12px}
   .hero-smart-search-icon{width:30px;height:30px;border-radius:8px}
   .hero-smart-search-icon svg{width:15px;height:15px}
   .hero-smart-search-input{font-size:15px}
@@ -699,14 +851,14 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
   backdrop-filter:blur(32px) saturate(200%);
   -webkit-backdrop-filter:blur(32px) saturate(200%);
   border:1.5px solid rgba(255,255,255,.75);
-  border-radius:20px;padding:1.1rem 1.2rem;
+  border-radius:18px;padding:.99rem 1.08rem;
   box-shadow:
     0 1px 0 rgba(255,255,255,.9) inset,
     0 2px 6px rgba(5,150,105,.05),
     0 12px 32px rgba(5,150,105,.1),
     0 32px 64px rgba(5,150,105,.12);
   transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;
-  z-index:3;
+  z-index:1;
 }
 .hero-quick-search::before{
   content:'';position:absolute;inset:0;border-radius:inherit;
@@ -721,18 +873,18 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 
 .hero-quick-search-head{
-  display:flex;align-items:center;gap:10px;margin-bottom:.85rem;
+  display:flex;align-items:center;gap:9px;margin-bottom:.76rem;
 }
 .hero-quick-search-icon{
-  width:32px;height:32px;border-radius:10px;flex-shrink:0;
+  width:29px;height:29px;border-radius:9px;flex-shrink:0;
   background:linear-gradient(135deg,#059669,#10b981);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 3px 10px rgba(5,150,105,.3);
 }
-.hero-quick-search-icon svg{width:16px;height:16px;color:#fff}
+.hero-quick-search-icon svg{width:14px;height:14px;color:#fff}
 .hero-quick-search-title{
   flex:1;min-width:0;
-  font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;
   color:#059669;letter-spacing:-0.015em;line-height:1.2;
 }
 .hero-quick-search-chevron{
@@ -747,15 +899,15 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 
 /* ── Tab váltó: Orvos / Klinika ── */
 .hero-qs-tabs{
-  display:flex;gap:6px;margin-bottom:.7rem;
-  padding:4px;background:rgba(236,253,245,.6);
-  border-radius:12px;border:1px solid rgba(16,185,129,.12);
+  display:flex;gap:5px;margin-bottom:.63rem;
+  padding:3px;background:rgba(236,253,245,.6);
+  border-radius:11px;border:1px solid rgba(16,185,129,.12);
 }
 .hero-qs-tab{
   flex:1;min-width:0;cursor:pointer;border:none;
-  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
+  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;
   color:#64748b;background:transparent;
-  padding:8px 12px;border-radius:9px;
+  padding:7px 11px;border-radius:8px;
   transition:all .2s ease;letter-spacing:-0.005em;
   white-space:nowrap;text-overflow:ellipsis;overflow:hidden;
 }
@@ -769,12 +921,12 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 }
 
 /* Felső sor — live search input */
-.hero-qs-row-top{position:relative;margin-bottom:.55rem}
+.hero-qs-row-top{position:relative;margin-bottom:.49rem}
 .hero-qs-input-wrap{
-  display:flex;align-items:center;gap:9px;
+  display:flex;align-items:center;gap:8px;
   background:rgba(255,255,255,.9);
   border:1.5px solid rgba(220,227,234,.7);
-  border-radius:12px;padding:9px 13px;
+  border-radius:11px;padding:8px 12px;
   transition:all .2s ease;
 }
 .hero-qs-input-wrap:focus-within{
@@ -785,19 +937,19 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-qs-input-wrap:focus-within svg{color:#10b981;transform:scale(1.08)}
 .hero-qs-input{
   flex:1;min-width:0;border:none;outline:none;background:transparent;
-  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;color:var(--text);
   letter-spacing:-0.005em;
 }
 .hero-qs-input::placeholder{color:#a0aabd;font-weight:500}
 
 /* Alsó sor — város + gomb */
-.hero-qs-row-bottom{display:flex;gap:8px;align-items:center}
+.hero-qs-row-bottom{display:flex;gap:7px;align-items:center}
 .hero-qs-city-wrap{
   flex:1;min-width:0;
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;gap:7px;
   background:rgba(255,255,255,.9);
   border:1.5px solid rgba(220,227,234,.7);
-  border-radius:12px;padding:9px 13px;
+  border-radius:11px;padding:8px 12px;
   transition:all .2s ease;
 }
 .hero-qs-city-wrap:focus-within{
@@ -808,21 +960,21 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-qs-city-wrap:focus-within svg{color:#10b981;transform:scale(1.08)}
 .hero-qs-city{
   flex:1;min-width:0;border:none;outline:none;background:transparent;
-  font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--text);
 }
 .hero-qs-city::placeholder{color:#a0aabd;font-weight:500}
 .hero-qs-submit{
   flex-shrink:0;
-  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
-  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;
+  display:inline-flex;align-items:center;gap:5px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;
   background:linear-gradient(135deg,#059669,#10b981);
-  border:none;border-radius:11px;padding:11px 16px;
+  border:none;border-radius:10px;padding:10px 14px;
   box-shadow:0 4px 12px rgba(5,150,105,.3),0 1px 2px rgba(255,255,255,.25) inset;
   transition:transform .2s,box-shadow .2s;
 }
 .hero-qs-submit:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.4),0 1px 2px rgba(255,255,255,.25) inset}
 .hero-qs-submit:active{transform:translateY(0)}
-.hero-qs-submit svg{width:14px;height:14px}
+.hero-qs-submit svg{width:13px;height:13px}
 
 /* Mobil */
 @media(max-width:640px){
@@ -2453,44 +2605,64 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             Országos szakorvoskereső
           </div>
           <h1 class="hero-title-new">
-            <span class="hero-title-line"><span class="hero-title-blue">Írja le, mit keres</span> <span class="hero-title-accent">– segítünk megtalálni Önnek</span></span>
+            <span class="hero-title-line"><span class="hero-title-blue">Találja meg a megfelelő</span></span>
+            <span class="hero-title-line"><span class="hero-title-blue">szakorvost</span> <span class="hero-title-accent">egyszerűen</span></span>
           </h1>
         </div>
         <p class="hero-subtitle-new">Keressen <strong id="subDoctors">–</strong> magánorvos, <strong id="subClinics">–</strong> klinika és <strong id="subProfessionals">–</strong> egészségügyi szakember között.</p>
 
-        <!-- ════ OKOS KERESŐ — egyetlen szabad-szöveges keresődoboz ════ -->
-        <div class="hero-smart-search-wrap">
-          <form class="hero-smart-search" id="heroSmartSearch" onsubmit="heroSmartSubmit(event)">
-            <div class="hero-smart-search-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
+        <!-- ════ PRÉMIUM OKOS KERESŐ — glassmorf, AI badge, szegéllyel ════ -->
+        <div class="hero-smart-box" id="heroSmartBox">
+          <div class="hero-smart-box-glow"></div>
+          <div class="hero-smart-box-inner">
+            <div class="hero-smart-box-head">
+              <span class="hero-smart-box-eyebrow">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3 L13.5 8.5 L19 10 L13.5 11.5 L12 17 L10.5 11.5 L5 10 L10.5 8.5 Z"/>
+                </svg>
+                Írja le, mit keres – megtaláljuk Önnek
+              </span>
+              <span class="hero-smart-box-badge">
+                <span class="hero-smart-box-badge-dot"></span>
+                Online
+              </span>
             </div>
-            <input
-              type="text"
-              id="heroSmartInput"
-              class="hero-smart-search-input"
-              placeholder="Pl. „fáj a térdem Szombathelyen” vagy „bőrgyógyász Budapest XIII kerület”"
-              autocomplete="off"
-              maxlength="200"
-              spellcheck="false" />
-            <div class="hero-smart-search-status" id="heroSmartStatus"></div>
-            <button type="submit" class="hero-smart-search-btn" id="heroSmartBtn">
-              <span class="hero-smart-search-btn-text">Keresés</span>
-              <svg class="hero-smart-search-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-              </svg>
-            </button>
-          </form>
-          <div class="hero-smart-search-examples">
-            <span class="hero-smart-search-examples-label">Próbálja:</span>
-            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('fáj a térdem Szombathelyen')">fáj a térdem Szombathelyen</button>
-            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('bőrgyógyász Debrecen')">bőrgyógyász Debrecen</button>
-            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('anyajegyszűrés')">anyajegyszűrés</button>
-            <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('migrén')">migrén</button>
+            <form class="hero-smart-search" id="heroSmartSearch" onsubmit="heroSmartSubmit(event)">
+              <div class="hero-smart-search-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="heroSmartInput"
+                class="hero-smart-search-input"
+                placeholder="Térdfájás Szombathelyen, anyajegy vizsgálat, bőrgyógyász…"
+                autocomplete="off"
+                maxlength="200"
+                spellcheck="false"
+                aria-label="Orvos keresés szabad szöveggel"
+                onkeydown="heroSmartKeydown(event)"
+                oninput="heroSmartSuggest()" />
+              <div class="hero-smart-suggest" id="heroSmartSuggest" role="listbox" aria-label="Javaslatok"></div>
+              <div class="hero-smart-search-status" id="heroSmartStatus" aria-live="polite"></div>
+              <button type="submit" class="hero-smart-search-btn" id="heroSmartBtn" aria-label="Keresés indítása">
+                <span class="hero-smart-search-btn-text">Keresés</span>
+                <svg class="hero-smart-search-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+            </form>
+            <div class="hero-smart-search-examples">
+              <span class="hero-smart-search-examples-label">Próbálja:</span>
+              <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('fáj a térdem Szombathelyen')">fáj a térdem Szombathelyen</button>
+              <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('bőrgyógyász Debrecen')">bőrgyógyász Debrecen</button>
+              <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('anyajegyszűrés')">anyajegyszűrés</button>
+              <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('migrén')">migrén</button>
+            </div>
           </div>
         </div>
-        <!-- ════ END okos kereső ════ -->
+        <!-- ════ END prémium okos kereső ════ -->
 
 
         <!-- Bizalmi box (kereső doboz alatt) -->
@@ -2569,7 +2741,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <div class="hero-quick-search-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <div class="hero-quick-search-title">Hagyományos kereső</div>
+            <div class="hero-quick-search-title">Klasszikus orvoskereső</div>
             <svg class="hero-quick-search-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polyline points="6 9 12 15 18 9"/>
             </svg>
@@ -2691,6 +2863,223 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         const el = document.getElementById('heroSmartStatus');
         if (el) el.innerHTML = html;
       }
+
+      // ══════════════════════════════════════════════════════════════════
+      // AUTOCOMPLETE — javaslatok gépelés közben
+      // ══════════════════════════════════════════════════════════════════
+      let _specialtyCache = null;
+      let _suggestTimer = null;
+      let _suggestActive = -1;  // jelenleg kiválasztott elem (keyboard nav)
+
+      // Hungarian normalize (lower + accent-strip light)
+      function _norm(s) {
+        return (s || '').toLowerCase()
+          .replace(/[áä]/g,'a').replace(/[éë]/g,'e').replace(/[íï]/g,'i')
+          .replace(/[óöő]/g,'o').replace(/[úüű]/g,'u');
+      }
+
+      // Tünet → szakterület közelítő map (egyszerű kulcsszó-alapú)
+      const _symptomToSpec = [
+        { kw: ['terd','vall','csipo','derek','hat','boka','konyok','rand','tores','sportser','izulet'], spec: 'Ortopéd', slug: 'ortoped-traumatologus' },
+        { kw: ['fej','migren','szedules','zsibbad','agy','idegi','epilep','stroke'], spec: 'Neurológus', slug: 'neurologus' },
+        { kw: ['anyajegy','kiutes','pattanas','akne','psoriasis','viszket','ekcema','hajhullas','bor'], spec: 'Bőrgyógyász', slug: 'borgyogyasz' },
+        { kw: ['szem','latas','homaly'], spec: 'Szemész', slug: 'szemeszet-szakorvos' },
+        { kw: ['fog','iny','plomba','foghuzas','szuvas'], spec: 'Fogorvos', slug: 'fogorvos' },
+        { kw: ['mellkas','szivdobog','vernyomas','vernyomas','infarktus','aritmia'], spec: 'Kardiológus', slug: 'kardiologus' },
+        { kw: ['torok','ful','orr','rekedt','horkol','tinnitus','hallas'], spec: 'Fül-orr-gégész', slug: 'ful-orr-gege-szakorvos' },
+        { kw: ['gyomor','reflux','puffadas','hasmenes','irritab','vastagbel'], spec: 'Gasztroenterológus', slug: 'gasztroenterologus' },
+        { kw: ['mehnyak','terhesseg','menstr','huvelyi','fogamzas','meddoseg'], spec: 'Nőgyógyász', slug: 'nogyogyasz' },
+        { kw: ['vizel','prostat','vesek','erekcios'], spec: 'Urológus', slug: 'urologus' },
+        { kw: ['depresszio','szorong','panik','alvas','bipolaris','figyelemz'], spec: 'Pszichiáter', slug: 'pszichiatrus' },
+        { kw: ['stressz','parkapcsola','gyasz'], spec: 'Pszichológus', slug: 'pszichologus' },
+        { kw: ['pajzsmirigy','hormonzav','sulyprobl','cukor'], spec: 'Endokrinológus', slug: 'endokrinologus' },
+        { kw: ['lab','podo'], spec: 'Lábgyógyász', slug: 'podologus' },
+        { kw: ['reuma','arthritis','koszveny'], spec: 'Reumatológus', slug: 'reumatologus' },
+        { kw: ['gyerek','gyermek','baba','csecsemo','vedooltas'], spec: 'Gyermekorvos', slug: 'gyermekorvos' },
+      ];
+
+      // Top város-lista (a leggyakoribb találatok)
+      const _topCities = ['Budapest','Debrecen','Szeged','Miskolc','Pécs','Győr','Nyíregyháza','Kecskemét','Székesfehérvár','Szombathely','Sopron','Eger','Veszprém','Zalaegerszeg','Tatabánya','Kaposvár','Békéscsaba','Salgótarján','Szolnok','Érd','Dunaújváros','Hódmezővásárhely'];
+
+      // Szakterület-szinonima → kanonikus név
+      const _specialtyAliases = [
+        { aliases: ['borgyogyasz','bor','dermat'], spec: 'Bőrgyógyász', slug: 'borgyogyasz' },
+        { aliases: ['kardiolog','kardiol'], spec: 'Kardiológus', slug: 'kardiologus' },
+        { aliases: ['neurolog'], spec: 'Neurológus', slug: 'neurologus' },
+        { aliases: ['ortope','traumat'], spec: 'Ortopéd', slug: 'ortoped-traumatologus' },
+        { aliases: ['fogorvos','fogasz'], spec: 'Fogorvos', slug: 'fogorvos' },
+        { aliases: ['szemes','okulist'], spec: 'Szemész', slug: 'szemeszet-szakorvos' },
+        { aliases: ['ful','orr','gege'], spec: 'Fül-orr-gégész', slug: 'ful-orr-gege-szakorvos' },
+        { aliases: ['nogyogyasz','noi','szuleszet'], spec: 'Nőgyógyász', slug: 'nogyogyasz' },
+        { aliases: ['urolog'], spec: 'Urológus', slug: 'urologus' },
+        { aliases: ['pszichiat','pszich'], spec: 'Pszichiáter', slug: 'pszichiatrus' },
+        { aliases: ['pszicholog'], spec: 'Pszichológus', slug: 'pszichologus' },
+        { aliases: ['belgyogyasz'], spec: 'Belgyógyász', slug: 'belgyogyasz' },
+        { aliases: ['gyermek','gyerek','pediatr'], spec: 'Gyermekorvos', slug: 'gyermekorvos' },
+        { aliases: ['endokrin'], spec: 'Endokrinológus', slug: 'endokrinologus' },
+        { aliases: ['reumat'], spec: 'Reumatológus', slug: 'reumatologus' },
+        { aliases: ['gasztro'], spec: 'Gasztroenterológus', slug: 'gasztroenterologus' },
+        { aliases: ['allergolo'], spec: 'Allergológus', slug: 'allergologus' },
+        { aliases: ['onkolog'], spec: 'Onkológus', slug: 'onkologus' },
+        { aliases: ['radiolog'], spec: 'Radiológus', slug: 'radiologus' },
+        { aliases: ['tudogyog'], spec: 'Tüdőgyógyász', slug: 'tudogyogyasz' },
+      ];
+
+      function _findSpecMatch(text) {
+        const n = _norm(text);
+        if (!n || n.length < 2) return null;
+        // Szakterület alias?
+        for (const s of _specialtyAliases) {
+          for (const a of s.aliases) {
+            if (n.includes(a)) return { spec: s.spec, slug: s.slug, kind: 'specialty' };
+          }
+        }
+        // Tünet?
+        for (const s of _symptomToSpec) {
+          for (const kw of s.kw) {
+            if (n.includes(kw)) return { spec: s.spec, slug: s.slug, kind: 'symptom' };
+          }
+        }
+        return null;
+      }
+
+      function _findCityMatch(text) {
+        const n = _norm(text);
+        if (!n) return null;
+        // Tokens szétbontása + ragozás-tűréssel
+        const words = n.split(/\s+/);
+        for (const w of words) {
+          if (w.length < 3) continue;
+          // Levágjuk a leggyakoribb ragokat (en/on/ön/ban/ben/i...)
+          const stems = [w, w.replace(/(ban|ben|nal|nel|nak|nek|val|vel|hoz|hez|rol|tol|en|on|ba|be|ra|re|ig|i)$/, '')];
+          for (const city of _topCities) {
+            const cityNorm = _norm(city);
+            for (const stem of stems) {
+              if (cityNorm === stem || cityNorm.startsWith(stem) && stem.length >= 3) {
+                return city;
+              }
+            }
+          }
+        }
+        return null;
+      }
+
+      window.heroSmartSuggest = function() {
+        clearTimeout(_suggestTimer);
+        _suggestTimer = setTimeout(() => {
+          const inp = document.getElementById('heroSmartInput');
+          const box = document.getElementById('heroSmartSuggest');
+          if (!inp || !box) return;
+          const q = inp.value.trim();
+          if (q.length < 2) { box.classList.remove('show'); box.innerHTML = ''; return; }
+
+          const suggestions = [];
+
+          // 1. Szakterület / tünet match
+          const specMatch = _findSpecMatch(q);
+          const cityMatch = _findCityMatch(q);
+
+          if (specMatch && cityMatch) {
+            suggestions.push({
+              icon: '🩺',
+              text: `${specMatch.spec} – ${cityMatch}`,
+              type: 'AJÁNLOTT',
+              action: `${specMatch.spec} ${cityMatch}`
+            });
+          } else if (specMatch) {
+            suggestions.push({
+              icon: '🩺',
+              text: specMatch.spec + (specMatch.kind === 'symptom' ? ' szakorvos' : ''),
+              type: specMatch.kind === 'symptom' ? 'JAVASLAT' : 'SZAKTERÜLET',
+              action: specMatch.spec
+            });
+            // város-kombinációk: top 3
+            for (const city of _topCities.slice(0,3)) {
+              suggestions.push({
+                icon: '📍',
+                text: `${specMatch.spec} – ${city}`,
+                type: 'VÁROS',
+                action: `${specMatch.spec} ${city}`
+              });
+            }
+          } else if (cityMatch) {
+            suggestions.push({
+              icon: '📍',
+              text: `Orvosok ${cityMatch}en`,
+              type: 'VÁROS',
+              action: cityMatch
+            });
+          }
+
+          if (suggestions.length === 0) { box.classList.remove('show'); box.innerHTML = ''; return; }
+
+          _suggestActive = -1;
+          box.innerHTML = suggestions.slice(0, 4).map((s, i) => `
+            <button type="button" class="hero-smart-suggest-item" data-idx="${i}" data-action="${s.action.replace(/"/g,'&quot;')}">
+              <span class="hero-smart-suggest-item-icon">${s.icon}</span>
+              <span class="hero-smart-suggest-item-text">${s.text}</span>
+              <span class="hero-smart-suggest-item-type">${s.type}</span>
+            </button>
+          `).join('');
+
+          // Kattintási handler
+          box.querySelectorAll('.hero-smart-suggest-item').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const action = btn.dataset.action;
+              inp.value = action;
+              box.classList.remove('show');
+              const form = document.getElementById('heroSmartSearch');
+              if (form) form.requestSubmit();
+            });
+          });
+
+          box.classList.add('show');
+        }, 180);
+      };
+
+      window.heroSmartKeydown = function(e) {
+        const box = document.getElementById('heroSmartSuggest');
+        const items = box ? box.querySelectorAll('.hero-smart-suggest-item') : [];
+
+        // Enter = submit (NEM új sor)
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          if (_suggestActive >= 0 && items[_suggestActive]) {
+            items[_suggestActive].click();
+          } else {
+            const form = document.getElementById('heroSmartSearch');
+            if (form) form.requestSubmit();
+          }
+          return;
+        }
+
+        // Escape = bezár
+        if (e.key === 'Escape') {
+          if (box) { box.classList.remove('show'); box.innerHTML = ''; }
+          _suggestActive = -1;
+          return;
+        }
+
+        // Le/Fel nyíl: navigálás a suggestek között
+        if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && items.length > 0) {
+          e.preventDefault();
+          items.forEach(i => i.classList.remove('active'));
+          if (e.key === 'ArrowDown') _suggestActive = (_suggestActive + 1) % items.length;
+          else _suggestActive = (_suggestActive - 1 + items.length) % items.length;
+          items[_suggestActive].classList.add('active');
+          items[_suggestActive].scrollIntoView({ block: 'nearest' });
+        }
+      };
+
+      // Click-outside zár
+      document.addEventListener('click', (e) => {
+        const box = document.getElementById('heroSmartSuggest');
+        const inp = document.getElementById('heroSmartInput');
+        if (!box || !inp) return;
+        if (e.target !== inp && !box.contains(e.target)) {
+          box.classList.remove('show');
+        }
+      });
 
       window.heroSmartFill = function(text) {
         const inp = document.getElementById('heroSmartInput');
