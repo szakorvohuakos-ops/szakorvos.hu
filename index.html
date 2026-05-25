@@ -2394,10 +2394,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
           const reply = data.reply;
           const specialty = data.specialty;
+          const city = data.city;
+          const clinics = Array.isArray(data.clinics) ? data.clinics : [];
           const isQuestion = data.isQuestion;
           const options = Array.isArray(data.options) ? data.options : [];
 
-          chatHistory.push({ role: 'assistant', content: reply + (specialty ? ` [SZAKTERÜLET: ${specialty}]` : '') });
+          chatHistory.push({ role: 'assistant', content: reply + (specialty ? ` [SZAKTERÜLET: ${specialty}]` : '') + (city ? ` [VÁROS: ${city}]` : '') });
 
           addMsg(reply, 'ai');
 
@@ -2406,9 +2408,14 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             renderAiOptions(options);
           }
 
-          // Ha van szakterület → orvosok megjelenítése
+          // Ha vannak klinikák → klinika-kártyák megjelenítése
+          if (clinics.length) {
+            await showClinicResults(clinics);
+          }
+
+          // Ha van szakterület → orvosok kártyája (városszűrővel ha van)
           if (specialty) {
-            await showDoctorResults(specialty);
+            await showDoctorResults(specialty, city);
           }
 
         } catch(e) {
@@ -2446,7 +2453,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         msgs.scrollTop = msgs.scrollHeight;
       }
 
-      async function showDoctorResults(specialty) {
+      async function showDoctorResults(specialty, city) {
         const icons = {
           'Kardiológia':'❤️','Neurológia':'🧠','Gasztroenterológia':'🫁',
           'Bőrgyógyászat':'🌿','Háziorvos':'⚕️','Ortopédia':'🦴',
@@ -2469,22 +2476,53 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
         const icon = icons[displayName] || '🏥';
         const safeSpec = escapeHtml(displayName);
+        const safeCity = city ? escapeHtml(city) : '';
+        const cityLabel = city ? ` ${safeCity}-ban/-ben` : '';
+        const cityParam = city ? `&city=${encodeURIComponent(city)}` : '';
         const html = `
           <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:16px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
               <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#113293,#264ACA);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${icon}</div>
               <div>
-                <div style="font-size:16px;font-weight:600;color:#113293;font-family:'Inter',sans-serif">${safeSpec}</div>
-                <div style="font-size:12px;color:#475569;margin-top:2px">Az Ön tünetei alapján ajánlott szakterület</div>
+                <div style="font-size:16px;font-weight:600;color:#113293;font-family:'Inter',sans-serif">${safeSpec}${city ? ' — ' + safeCity : ''}</div>
+                <div style="font-size:12px;color:#475569;margin-top:2px">${city ? 'A keresett szakorvosok' : 'Az Ön tünetei alapján ajánlott szakterület'}</div>
               </div>
             </div>
-            <a href="talalatok.html?specialty=${encodeURIComponent(displayName)}"
+            <a href="talalatok.html?specialty=${encodeURIComponent(displayName)}${cityParam}"
               style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#113293,#264ACA);border-radius:12px;padding:12px 16px;text-decoration:none;box-shadow:0 4px 14px rgba(17,50,147,0.3)">
-              <div style="font-size:13px;font-weight:600;color:#fff;font-family:'Inter',sans-serif">${safeSpec} szakorvosok keresése</div>
+              <div style="font-size:13px;font-weight:600;color:#fff;font-family:'Inter',sans-serif">${safeSpec} szakorvosok${city ? ' ' + safeCity + '-ben' : ''}</div>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>`;
 
+        addMsg(html, 'ai_html');
+      }
+
+      // Klinika-találatok megjelenítése
+      async function showClinicResults(clinics) {
+        if (!clinics || !clinics.length) return;
+        const items = clinics.map(c => {
+          const safeName = escapeHtml(c.name || 'Klinika');
+          const safeCity = c.city ? escapeHtml(c.city) : '';
+          const slug = c.slug ? encodeURIComponent(c.slug) : '';
+          const href = slug ? `klinika.html?slug=${slug}` : '#';
+          return `
+            <a href="${href}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fff;border:1px solid rgba(17,50,147,0.12);border-radius:10px;text-decoration:none;transition:all .15s">
+              <div style="min-width:0;flex:1">
+                <div style="font-size:13px;font-weight:600;color:#113293;font-family:'Inter',sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${safeName}</div>
+                ${safeCity ? `<div style="font-size:11px;color:#64748b;margin-top:2px">${safeCity}</div>` : ''}
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>`;
+        }).join('');
+        const html = `
+          <div style="background:linear-gradient(135deg,#eef2ff,#f0f4ff);border:1.5px solid #c7d2f5;border-radius:16px;padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+              <div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#113293,#264ACA);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏥</div>
+              <div style="font-size:14px;font-weight:600;color:#113293;font-family:'Inter',sans-serif">Talált klinikák</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">${items}</div>
+          </div>`;
         addMsg(html, 'ai_html');
       }
 
