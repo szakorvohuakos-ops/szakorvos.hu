@@ -265,13 +265,17 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-verified-badge svg{flex-shrink:0;width:12px;height:12px}
 .dh-source-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:#64748b;background:linear-gradient(135deg,rgba(248,250,252,.95) 0%,rgba(241,245,249,.85) 100%);border:1.5px solid rgba(148,163,184,.32);padding:5px 11px;border-radius:999px;letter-spacing:.01em;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
 .dh-source-badge svg{flex-shrink:0;width:12px;height:12px;opacity:.8}
-.dh-completeness{margin-top:.85rem;max-width:380px}
-.dh-completeness-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}
-.dh-completeness-title{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em}
-.dh-completeness-pct{font-family:'Inter',sans-serif;font-size:14px;font-weight:800;letter-spacing:-0.01em}
-.dh-completeness-track{height:7px;background:rgba(148,163,184,.18);border-radius:99px;overflow:hidden}
-.dh-completeness-fill{height:100%;width:0%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.dh-completeness-sub{font-size:11.5px;color:#64748b;margin-top:5px;font-weight:500}
+
+/* ── Prémium profil-kitöltöttség (orvos profil oldal) ── */
+.dh-prof{display:inline-flex;align-items:center;gap:14px;margin-top:1rem;padding:10px 18px 10px 12px;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(248,250,252,.7));border:1.5px solid rgba(220,227,234,.6);border-radius:99px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 3px rgba(17,50,147,.05),0 6px 18px rgba(17,50,147,.06);max-width:fit-content}
+.dh-prof-ring{position:relative;width:48px;height:48px;flex-shrink:0;transition:filter .3s}
+.dh-prof-ring svg{display:block}
+.dh-prof-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:14px;font-weight:800;letter-spacing:-0.02em}
+.dh-prof-ring-pct::after{content:'%';font-size:9px;font-weight:700;margin-left:1px;opacity:.85}
+.dh-prof-text{display:flex;flex-direction:column;line-height:1.25;min-width:0}
+.dh-prof-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.07em}
+.dh-prof-tier{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.01em;margin-top:2px}
+.dh-prof-sub{font-family:'Inter',sans-serif;font-size:11.5px;font-weight:500;color:#64748b;margin-top:2px}
 
 .dh-deg{font-size:14px;color:var(--sub);margin-bottom:10px;font-weight:500}
 .dh-deg strong{color:var(--text);font-weight:600}
@@ -918,15 +922,21 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
             <div class="dh-chips" id="dhChips"></div>
 
-            <div class="dh-completeness" id="dhCompleteness" style="display:none">
-              <div class="dh-completeness-label">
-                <span class="dh-completeness-title">Profil kitöltöttsége</span>
-                <span class="dh-completeness-pct" id="dhCompletenessPct">–%</span>
+            <div class="dh-prof" id="dhCompleteness" style="display:none">
+              <div class="dh-prof-ring" id="dhProfRing">
+                <svg width="48" height="48" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(148,163,184,.18)" stroke-width="4"/>
+                  <circle id="dhProfArc" cx="24" cy="24" r="18" fill="none" stroke="#94a3b8" stroke-width="4"
+                    stroke-linecap="round" transform="rotate(-90 24 24)"
+                    stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+                </svg>
+                <span class="dh-prof-ring-pct" id="dhProfRingPct">–</span>
               </div>
-              <div class="dh-completeness-track">
-                <div class="dh-completeness-fill" id="dhCompletenessFill"></div>
+              <div class="dh-prof-text">
+                <div class="dh-prof-label">Profil kitöltöttség</div>
+                <div class="dh-prof-tier" id="dhCompletenessTier">–</div>
+                <div class="dh-prof-sub" id="dhCompletenessSub"></div>
               </div>
-              <div class="dh-completeness-sub" id="dhCompletenessSub"></div>
             </div>
 
             <div class="dh-stats" id="dhStats"></div>
@@ -1200,17 +1210,6 @@ function calcDoctorCompleteness(d){
   if(Array.isArray(d.doctor_clinics) && d.doctor_clinics.length > 0) s += 6;
   return Math.min(s, 100);
 }
-function estimatePatientCount(d){
-  const reviews = parseInt(d.review_count) || 0;
-  if(reviews <= 0) return 0;
-  return Math.max(Math.round(reviews / 0.05 / 50) * 50, 100);
-}
-function formatPatientCount(n){
-  if(!n || n < 50) return '';
-  if(n < 1000) return Math.floor(n / 50) * 50 + '+';
-  if(n < 10000) return (Math.floor(n / 50) * 50).toLocaleString('hu-HU') + '+';
-  return Math.floor(n / 1000) + 'k+';
-}
 function slugToHu(slug){
   // Deprecated - csak doctor_name használatos
   return '';
@@ -1422,22 +1421,38 @@ function render(d){
     }
   }
 
-  // Profil teljesség
+  // Profil teljesség — prémium körkörös ring
   const pct = calcDoctorCompleteness(d);
   const compEl = document.getElementById('dhCompleteness');
   if(compEl){
     compEl.style.display = '';
-    let color, label;
-    if(pct >= 90){ color='#059669'; label='Teljes profil — minden lényeges adat kitöltve.'; }
-    else if(pct >= 70){ color='#65a30d'; label='Részletes profil.'; }
-    else if(pct >= 40){ color='#d97706'; label='Részben kitöltött profil.'; }
-    else { color='#94a3b8'; label='Az alapadatok elérhetők; további részletek hamarosan.'; }
-    const pctEl = document.getElementById('dhCompletenessPct');
-    const fillEl = document.getElementById('dhCompletenessFill');
+    let color, label, sub;
+    if(pct >= 90){ color='#059669'; label='Teljes profil'; sub='Minden lényeges adat kitöltve.'; }
+    else if(pct >= 70){ color='#65a30d'; label='Részletes profil'; sub='A profil legtöbb adata kitöltve.'; }
+    else if(pct >= 40){ color='#d97706'; label='Részben kitöltött'; sub='Az alapadatok mellett részletek is elérhetők.'; }
+    else { color='#94a3b8'; label='Alap adatok'; sub='Az alapadatok elérhetők; további részletek hamarosan.'; }
+
+    // Körkörös progress (sugár 18, kerület ~113.1)
+    const r = 18, c = 2 * Math.PI * r;
+    const off = c - (pct / 100) * c;
+    const arc = document.getElementById('dhProfArc');
+    if(arc){
+      arc.setAttribute('stroke', color);
+      arc.setAttribute('stroke-dasharray', c.toFixed(2));
+      arc.style.transition = 'stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)';
+      // kis késleltetés hogy az animáció lefusson
+      setTimeout(() => arc.setAttribute('stroke-dashoffset', off.toFixed(2)), 50);
+    }
+    const ringPct = document.getElementById('dhProfRingPct');
+    if(ringPct){ ringPct.textContent = pct; ringPct.style.color = color; }
+    const tierEl = document.getElementById('dhCompletenessTier');
+    if(tierEl){ tierEl.textContent = label; tierEl.style.color = color; }
     const subEl = document.getElementById('dhCompletenessSub');
-    if(pctEl){ pctEl.textContent = pct + '%'; pctEl.style.color = color; }
-    if(fillEl){ fillEl.style.width = pct + '%'; fillEl.style.background = color; }
-    if(subEl) subEl.textContent = label;
+    if(subEl) subEl.textContent = sub;
+    // Glow a ring köré a tier színével
+    const ringEl = document.getElementById('dhProfRing');
+    if(ringEl) ringEl.style.filter = `drop-shadow(0 0 10px ${color}30)`;
+    compEl.title = `Profil kitöltöttsége: ${pct}% — ${label}`;
   }
 
   // Title + PhD
@@ -1445,19 +1460,12 @@ function render(d){
   if(d.title) titleParts.push(`<span class="dh-phd">${escapeHtml(d.title)}</span>`);
   document.getElementById('dhDeg').innerHTML = titleParts.join(' ');
 
-  // Rating + páciensek sor
+  // Rating sor
   const rat = parseFloat(d.rating) || 0;
   const reviews = parseInt(d.review_count) || 0;
-  const patients = d.patient_count || estimatePatientCount(d);
   const ratingHtml = [];
   if(rat > 0){
     ratingHtml.push(`<span class="rating"><span class="star">★</span> <strong>${rat.toFixed(1)}</strong>${reviews ? ` <span class="review-count">(${reviews} értékelés)</span>` : ''}</span>`);
-  }
-  if(patients){
-    ratingHtml.push(`<span class="patients">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <strong>${formatPatientCount(patients)}</strong>&nbsp;páciens
-    </span>`);
   }
   document.getElementById('dhRatingRow').innerHTML = ratingHtml.join('');
 

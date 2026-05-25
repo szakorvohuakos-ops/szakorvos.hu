@@ -374,10 +374,15 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 .dc-loc svg{flex-shrink:0;color:var(--green)}
 .dc-loc-clinic{color:var(--text);font-weight:600}
 .dc-summary{grid-column:2 / -1;font-size:13px;color:var(--sub);line-height:1.5;margin-top:.2rem;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dc-completeness{display:flex;align-items:center;gap:8px;margin-top:.3rem;max-width:260px}
-.dc-completeness-track{flex:1;height:5px;border-radius:99px;overflow:hidden;min-width:80px}
-.dc-completeness-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
-.dc-completeness-pct{font-size:11px;font-weight:700;letter-spacing:.01em;min-width:30px;text-align:right}
+/* ── Prémium profil-kitöltöttség badge ── */
+.dc-prof{display:inline-flex;align-items:center;gap:9px;margin-top:.55rem;padding:6px 12px 6px 8px;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(248,250,252,.7));border:1px solid rgba(220,227,234,.55);border-radius:99px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 1px 2px rgba(17,50,147,.04);max-width:fit-content}
+.dc-prof-ring{position:relative;width:32px;height:32px;flex-shrink:0;filter:drop-shadow(0 0 6px var(--glow))}
+.dc-prof-ring svg{display:block}
+.dc-prof-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:10px;font-weight:800;color:var(--c);letter-spacing:-0.02em}
+.dc-prof-ring-pct::after{content:'%';font-size:7px;font-weight:700;margin-left:.5px;opacity:.85}
+.dc-prof-text{display:flex;flex-direction:column;line-height:1.2}
+.dc-prof-label{font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em}
+.dc-prof-tier{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:-0.005em;margin-top:1px}
 
 /* Hidden in new design (kept for compatibility) */
 .spec-pill,.dc-rat,.stars,.st,.rat-n,.rev-n,.verif,.dc-bio,.av-row,.av-lbl,.adays,.aday,.ins-row,.itag{display:none}
@@ -1374,28 +1379,6 @@ async function load(){
 /* ═════ FILTER ═════ */
 function fee(d){return d.doctor_clinics?.[0]?.consultation_fee||0}
 
-// Páciensek számának becslése (ha nincs explicit d.patient_count mező)
-// — a review_count alapján számolunk, mivel kb. 5%-a hagy értékelést.
-function estimatePatientCount(d) {
-  const reviews = parseInt(d.review_count) || 0;
-  if (reviews <= 0) return 0;
-  // ~5% recenziós arány, lefelé kerekítve 50-es lépésekre
-  const est = Math.round(reviews / 0.05 / 50) * 50;
-  return Math.max(est, 100);  // minimum 100, hogy ne nézzen ki triviálisan
-}
-
-// "2 450+ páciens" típusú formázás
-function formatPatientCount(n) {
-  if (!n || n < 50) return '';
-  if (n < 1000) return Math.floor(n / 50) * 50 + '+';
-  if (n < 10000) {
-    const rounded = Math.floor(n / 50) * 50;
-    return rounded.toLocaleString('hu-HU') + '+';
-  }
-  // 10000+
-  return Math.floor(n / 1000) + 'k+';
-}
-
 function applyF(){
   let docs=[...allDocs];
   // Exp
@@ -1624,11 +1607,10 @@ function cardH(d,i){
   const mainTags=tags.slice(0,3);
   const extraTagCount=Math.max(0, tags.length-3);
 
-  // Új: értékelés + páciensszám
+  // Új: értékelés
   const rat = parseFloat(d.rating || 0);
   const ratingFmt = rat > 0 ? rat.toFixed(1) : null;
   const reviewCount = parseInt(d.review_count) || 0;
-  const patientCount = d.patient_count || estimatePatientCount(d);
 
   // Nyelvek (max 2 a kártyán) — defenzív: tömb? string? null?
   const langsRaw = Array.isArray(d.languages) ? d.languages
@@ -1644,10 +1626,8 @@ function cardH(d,i){
       <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="dc-verified-badge" title="Ellenőrzött profil"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött profil</span>`:`<span class="dc-source-badge" title="A profil adatai több nyilvános forrásból származnak. Az adatok pontossága még nincs hivatalosan ellenőrizve."><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból</span>`}</div>
       <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}</div>
 
-      ${ratingFmt || patientCount ? `<div class="dc-meta dc-meta-rating">
-        ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span style="color:var(--muted);font-weight:500">(${reviewCount} értékelés)</span>` : ''}</span>` : ''}
-        ${ratingFmt && patientCount ? `<span class="dc-meta-dot"></span>` : ''}
-        ${patientCount ? `<span class="dc-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <strong>${formatPatientCount(patientCount)}</strong>&nbsp;páciens</span>` : ''}
+      ${ratingFmt ? `<div class="dc-meta dc-meta-rating">
+        <span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span style="color:var(--muted);font-weight:500">(${reviewCount} értékelés)</span>` : ''}</span>
       </div>` : ''}
 
       <div class="dc-meta">
@@ -1697,18 +1677,32 @@ function calcCompleteness(d){
   return Math.min(s, 100);
 }
 
-// Mini progress bar a kártyára: szöveg + színes csík + százalék
+// Prémium completeness chip — körkörös ring + felirat + tier label
 function renderCompletenessMini(pct){
-  let color, bgColor, label;
-  if(pct >= 90){ color='#059669'; bgColor='rgba(16,185,129,.15)'; label='Teljes profil'; }
-  else if(pct >= 70){ color='#65a30d'; bgColor='rgba(132,204,22,.15)'; label='Részletes profil'; }
-  else if(pct >= 40){ color='#d97706'; bgColor='rgba(245,158,11,.15)'; label='Részben kitöltött'; }
-  else { color='#94a3b8'; bgColor='rgba(148,163,184,.18)'; label='Alap adatok'; }
-  return `<div class="dc-completeness" title="Profil kitöltöttsége: ${pct}% — ${label}">
-    <div class="dc-completeness-track" style="background:${bgColor}">
-      <div class="dc-completeness-fill" style="width:${pct}%;background:${color}"></div>
+  let color, label, glow;
+  if(pct >= 90){ color='#059669'; label='Teljes profil'; glow='rgba(16,185,129,.18)'; }
+  else if(pct >= 70){ color='#65a30d'; label='Részletes profil'; glow='rgba(132,204,22,.18)'; }
+  else if(pct >= 40){ color='#d97706'; label='Részben kitöltött'; glow='rgba(245,158,11,.18)'; }
+  else { color='#94a3b8'; label='Alap adatok'; glow='rgba(148,163,184,.18)'; }
+
+  // SVG körkörös progress (28x28, sugár 11.5, kerület ~72.26)
+  const r = 11.5, c = 2 * Math.PI * r;
+  const off = c - (pct / 100) * c;
+
+  return `<div class="dc-prof" title="Profil kitöltöttsége: ${pct}% — ${label}">
+    <div class="dc-prof-ring" style="--c:${color};--glow:${glow}">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="${r}" fill="none" stroke="rgba(148,163,184,.18)" stroke-width="3"/>
+        <circle cx="16" cy="16" r="${r}" fill="none" stroke="${color}" stroke-width="3"
+          stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}"
+          stroke-linecap="round" transform="rotate(-90 16 16)"/>
+      </svg>
+      <span class="dc-prof-ring-pct">${pct}</span>
     </div>
-    <span class="dc-completeness-pct" style="color:${color}">${pct}%</span>
+    <div class="dc-prof-text">
+      <div class="dc-prof-label">Profil kitöltöttség</div>
+      <div class="dc-prof-tier" style="color:${color}">${label}</div>
+    </div>
   </div>`;
 }
 
@@ -1795,16 +1789,12 @@ function openPanel(id){
   document.getElementById('ppChips').innerHTML = chipHtml + overflowHtml;
   document.getElementById('ppChips').style.display = visibleSpecs.length ? 'flex' : 'none';
 
-  // Értékelés + páciensek sor: ⭐ 4.9 (128 értékelés)  |  👥 2 450+ páciens
+  // Értékelés sor: ⭐ 4.9 (128 értékelés)
   const ratingFmt = rat > 0 ? rat.toFixed(1) : null;
   const reviewCount = d.review_count || 0;
-  const patientCount = d.patient_count || estimatePatientCount(d);
   const metaParts = [];
   if (ratingFmt) {
     metaParts.push(`<span class="pp-meta-item"><span class="pp-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span class="pp-count-light">(${reviewCount} értékelés)</span>` : ''}</span>`);
-  }
-  if (patientCount) {
-    metaParts.push(`<span class="pp-meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><strong>${formatPatientCount(patientCount)}</strong>&nbsp;páciens</span>`);
   }
   const ppMeta = document.getElementById('ppMetaRow');
   ppMeta.innerHTML = metaParts.join('<span class="pp-meta-sep"></span>');
