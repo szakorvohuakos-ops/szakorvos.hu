@@ -247,6 +247,150 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-divider-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
 .hero-divider-line{height:1px;background:var(--border)}
 
+/* ════ AI HERO PANEL — prémium AI beszélgető a hagyományos kereső fölött ════ */
+.hero-ai-panel{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.78) 0%,rgba(250,251,255,.62) 100%);
+  backdrop-filter:blur(32px) saturate(200%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  border:1.5px solid rgba(255,255,255,.75);
+  border-radius:20px;
+  padding:1.1rem 1.25rem;
+  margin-bottom:1.1rem;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 2px 6px rgba(17,50,147,.05),
+    0 12px 32px rgba(17,50,147,.1),
+    0 32px 64px rgba(17,50,147,.12);
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;
+  z-index:3;
+}
+.hero-ai-panel::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 0%,rgba(99,102,241,.14) 0%,transparent 50%),
+    radial-gradient(ellipse 50% 60% at 100% 100%,rgba(196,181,253,.12) 0%,transparent 55%),
+    linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 40%);
+  opacity:1;pointer-events:none;z-index:0;
+}
+.hero-ai-panel > *{position:relative;z-index:1}
+.hero-ai-panel:hover{
+  border-color:rgba(125,108,240,.5);
+  transform:translateY(-3px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 4px 12px rgba(17,50,147,.08),
+    0 20px 42px rgba(99,102,241,.18),
+    0 40px 80px rgba(99,102,241,.16);
+}
+.hero-ai-panel:focus-within{
+  border-color:rgba(99,102,241,.7);
+  transform:translateY(-4px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 0 0 4px rgba(99,102,241,.1),
+    0 4px 12px rgba(99,102,241,.12),
+    0 24px 48px rgba(99,102,241,.22),
+    0 44px 88px rgba(99,102,241,.18);
+}
+
+/* Fejléc: AI ikon + cím + badge */
+.hero-ai-head{display:flex;align-items:center;gap:11px;margin-bottom:.85rem}
+.hero-ai-icon{
+  width:36px;height:36px;border-radius:11px;
+  background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#3b82f6 100%);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 4px 14px rgba(99,102,241,.4),0 1px 2px rgba(255,255,255,.4) inset;
+  position:relative;
+}
+.hero-ai-icon::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-ai-icon svg{width:20px;height:20px;color:#fff;position:relative;z-index:1}
+.hero-ai-title{
+  font-family:'Inter',sans-serif;font-size:14.5px;font-weight:700;
+  color:#1e1b4b;letter-spacing:-0.01em;line-height:1.2;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.hero-ai-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  padding:3px 8px;border-radius:6px;
+  background:linear-gradient(135deg,#eef2ff,#f5f3ff);
+  color:#6366f1;border:1px solid rgba(99,102,241,.2);
+}
+.hero-ai-subtitle{
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+  color:#64748b;line-height:1.4;margin-top:1px;letter-spacing:-0.005em;
+}
+
+/* Input mező */
+.hero-ai-input-wrap{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.9);
+  border:1.5px solid rgba(220,227,234,.7);
+  border-radius:14px;
+  padding:6px 6px 6px 16px;
+  transition:all .2s ease;
+  box-shadow:0 1px 3px rgba(17,50,147,.04);
+}
+.hero-ai-input-wrap:focus-within{
+  background:#fff;
+  border-color:#6366f1;
+  box-shadow:0 0 0 3px rgba(99,102,241,.12),0 2px 8px rgba(99,102,241,.08);
+}
+.hero-ai-input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:'Inter',sans-serif;font-size:14.5px;font-weight:500;color:var(--text);
+  padding:11px 0;letter-spacing:-0.005em;
+}
+.hero-ai-input::placeholder{color:#94a3b8;font-weight:500}
+.hero-ai-send{
+  flex-shrink:0;width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(99,102,241,.35),0 1px 2px rgba(255,255,255,.3) inset;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.hero-ai-send:hover{transform:translateY(-1px) scale(1.03);box-shadow:0 6px 16px rgba(99,102,241,.45),0 1px 2px rgba(255,255,255,.3) inset}
+.hero-ai-send:active{transform:scale(.97)}
+.hero-ai-send svg{width:16px;height:16px;color:#fff}
+
+/* Példa-chip-ek */
+.hero-ai-examples{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem;align-items:center;
+}
+.hero-ai-examples-label{
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+  color:#94a3b8;letter-spacing:.02em;margin-right:2px;
+  display:inline-flex;align-items:center;gap:4px;
+}
+.hero-ai-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;
+  color:#475569;
+  background:rgba(255,255,255,.7);border:1px solid rgba(99,102,241,.15);
+  padding:5px 10px;border-radius:14px;cursor:pointer;
+  transition:all .15s ease;text-decoration:none;
+}
+.hero-ai-chip:hover{
+  background:#fff;border-color:rgba(99,102,241,.4);color:#4338ca;
+  transform:translateY(-1px);
+  box-shadow:0 2px 8px rgba(99,102,241,.15);
+}
+.hero-ai-chip-icon{font-size:11px;opacity:.8}
+
+@media(max-width:640px){
+  .hero-ai-panel{padding:.95rem 1rem;border-radius:16px}
+  .hero-ai-title{font-size:13.5px}
+  .hero-ai-subtitle{font-size:11.5px}
+  .hero-ai-input{font-size:14px}
+  .hero-ai-examples-label{display:none}
+}
+
 /* ════ SEARCH BOX - DOMINÁNS, KIEMELT ════ */
 .hero-search-box{background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(253,254,255,.55) 100%);backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);border:1.5px solid rgba(255,255,255,.7);border-radius:18px;padding:1.1rem 1.2rem;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 2px 4px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08),0 28px 60px rgba(17,50,147,.1),0 1px 0 rgba(255,255,255,.6) inset;width:100%;max-width:none;position:relative;z-index:2;transform:none;transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;animation:none}
 .hero-search-box::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,transparent 35%,transparent 65%,rgba(199,210,254,.15) 100%);opacity:.85;pointer-events:none;z-index:0}
@@ -1871,6 +2015,44 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
         <p class="hero-subtitle-new">Keressen <strong id="subDoctors">–</strong> magánorvos, <strong id="subClinics">–</strong> klinika és <strong id="subProfessionals">–</strong> egészségügyi szakember között.</p>
 
+        <!-- ════ AI BESZÉLGETŐ PANEL — prémium ════ -->
+        <div class="hero-ai-panel" id="heroAiPanel">
+          <div class="hero-ai-head">
+            <div class="hero-ai-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/>
+                <path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/>
+              </svg>
+            </div>
+            <div style="min-width:0;flex:1">
+              <div class="hero-ai-title">
+                Kérdezzen az AI asszisztenstől
+                <span class="hero-ai-badge">✨ Új</span>
+              </div>
+              <div class="hero-ai-subtitle">Írja le tüneteit vagy mit keres — én megtalálom Önnek a megfelelő szakorvost vagy klinikát.</div>
+            </div>
+          </div>
+
+          <form class="hero-ai-input-wrap" onsubmit="heroAiSubmit(event)">
+            <input type="text" id="heroAiInput" class="hero-ai-input"
+              placeholder="Pl. „Fáj a hátam, melyik orvoshoz menjek?” vagy „Bőrgyógyász Debrecenben”"
+              autocomplete="off" maxlength="300" />
+            <button type="submit" class="hero-ai-send" aria-label="Küldés">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/>
+              </svg>
+            </button>
+          </form>
+
+          <div class="hero-ai-examples">
+            <span class="hero-ai-examples-label">💬 Példák:</span>
+            <a class="hero-ai-chip" onclick="heroAiAsk('Régóta fáj a hátam, mit tegyek?')">Régóta fáj a hátam</a>
+            <a class="hero-ai-chip" onclick="heroAiAsk('Bőrgyógyász Debrecenben')">Bőrgyógyász Debrecenben</a>
+            <a class="hero-ai-chip" onclick="heroAiAsk('Affidea klinikák')">Affidea klinikák</a>
+            <a class="hero-ai-chip" onclick="heroAiAsk('MRI vizsgálat ára')">MRI vizsgálat ára</a>
+          </div>
+        </div>
+
         <!-- Inline search box -->
         <div class="hero-search-box hero-search-box-premium">
           <!-- Prémium fülek -->
@@ -2953,6 +3135,36 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       // Régi nevek backward-compat (ha más kód hivatkozik rá)
       window.toggleAiChat = window.openAiChatModal;
       window.closeAiChat = window.closeAiChatModal;
+
+      // ═══ HERO AI PANEL — input → AI chat-be küldés ═══
+      window.heroAiAsk = function(text) {
+        const t = (text || '').trim();
+        if (!t) return;
+        const heroIn = document.getElementById('heroAiInput');
+        if (heroIn) heroIn.value = '';
+        // Nyissuk meg a chat-modálot
+        window.openAiChatModal();
+        // Várjunk amíg betöltődik, majd írjuk be a kérdést és küldjük el
+        setTimeout(() => {
+          const chatIn = document.querySelector('#aiChatWidget .ai-chat-input');
+          if (chatIn) {
+            chatIn.value = t;
+            // Eredeti sendChat() hívása
+            if (typeof sendChat === 'function') {
+              sendChat();
+            }
+          }
+        }, 250);
+      };
+
+      window.heroAiSubmit = function(e) {
+        if (e) e.preventDefault();
+        const inp = document.getElementById('heroAiInput');
+        if (!inp) return;
+        const t = inp.value.trim();
+        if (!t) return;
+        window.heroAiAsk(t);
+      };
 
       // Escape gombra zár
       document.addEventListener('keydown', e => {
