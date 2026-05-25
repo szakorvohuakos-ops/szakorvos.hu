@@ -49,6 +49,7 @@ window.addEventListener('pageshow', function(e) {
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 <script>
   const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
@@ -170,6 +171,37 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 
 .hero-title-new{font-family:'Inter',sans-serif;font-size:clamp(1.69rem,2.9vw,2.54rem);font-weight:500;color:var(--text);line-height:1.35;letter-spacing:-0.02em;margin-bottom:0;flex:0 1 auto;min-width:0;max-width:100%;font-feature-settings:'ss01' 1,'cv11' 1,'kern' 1}
 
+/* ── Eyebrow felirat a H1 fölé — prémium pill ── */
+.hero-eyebrow-title{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
+  color:#0f766e;letter-spacing:.02em;line-height:1.2;
+  padding:6px 14px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(236,253,245,.95) 0%,rgba(240,253,250,.85) 100%);
+  border:1px solid rgba(16,185,129,.22);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 1px 2px rgba(16,185,129,.06),
+    0 2px 6px rgba(15,23,42,.04);
+  margin-bottom:.75rem;
+  max-width:fit-content;
+  text-transform:uppercase;
+}
+.hero-eyebrow-dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#10b981,#059669);
+  box-shadow:0 0 0 3px rgba(16,185,129,.16);
+  animation:eyebrowDotPulse 2.2s ease-in-out infinite;
+}
+@keyframes eyebrowDotPulse{
+  0%,100%{box-shadow:0 0 0 3px rgba(16,185,129,.16)}
+  50%{box-shadow:0 0 0 5px rgba(16,185,129,.08)}
+}
+@media(max-width:640px){
+  .hero-eyebrow-title{font-size:10.5px;padding:5px 11px;letter-spacing:.015em}
+  .hero-eyebrow-dot{width:6px;height:6px}
+}
+
 /* Prémium alcím a címsor alá */
 .hero-subtitle-new{font-family:'Inter',sans-serif;font-size:clamp(0.95rem,1.4vw,1.05rem);font-weight:500;color:#64748b;line-height:1.55;letter-spacing:-0.005em;margin:.8rem 0 1.2rem}
 .hero-subtitle-new strong{color:#113293;font-weight:700;font-feature-settings:'tnum' 1}
@@ -205,7 +237,7 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 
 
 /* ── Hero cím + 4 stat box rács ── */
-.hero-headline-row{display:flex;align-items:flex-start;justify-content:space-between;gap:3rem;margin-bottom:2.25rem;flex-wrap:nowrap}
+.hero-headline-row{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin-bottom:2.25rem}
 .hero-stats-grid{display:flex;gap:.55rem;flex-shrink:0;margin-left:auto;padding-left:1.5rem;transform:translate(1.5cm,-1cm);margin-top:-1.5rem;align-self:flex-start}
 .hero-stat-box{aspect-ratio:1/1;width:75px;background:linear-gradient(180deg,rgba(255,255,255,.58) 0%,rgba(252,253,255,.42) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.55);border-radius:13px;padding:.5rem .45rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;cursor:pointer;text-align:center;position:relative;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 2px 8px rgba(17,50,147,.03),0 8px 20px rgba(17,50,147,.04);transition:transform .42s cubic-bezier(.34,1.56,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .35s ease}
 .hero-stat-box::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 50%);opacity:0;transition:opacity .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
@@ -247,148 +279,386 @@ nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px)
 .hero-divider-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem}
 .hero-divider-line{height:1px;background:var(--border)}
 
-/* ════ AI HERO PANEL — prémium AI beszélgető a hagyományos kereső fölött ════ */
+/* ════════════════════════════════════════════════════════════════
+   AI HERO PANEL — PRÉMIUM SHOWSTOPPER
+   Animált gradient háttér, sparkle effektek, élénk gradient text,
+   nagy küldés gomb, prémium chip-ek
+   ════════════════════════════════════════════════════════════════ */
 .hero-ai-panel{
   position:relative;
-  background:linear-gradient(180deg,rgba(255,255,255,.78) 0%,rgba(250,251,255,.62) 100%);
-  backdrop-filter:blur(32px) saturate(200%);
-  -webkit-backdrop-filter:blur(32px) saturate(200%);
-  border:1.5px solid rgba(255,255,255,.75);
+  background:
+    radial-gradient(ellipse 90% 100% at 0% 0%,rgba(38,74,202,.09) 0%,transparent 55%),
+    radial-gradient(ellipse 80% 100% at 100% 100%,rgba(59,90,216,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 80% at 50% 50%,rgba(59,90,216,.04) 0%,transparent 70%),
+    linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(248,252,250,.78) 100%);
+  backdrop-filter:blur(40px) saturate(220%);
+  -webkit-backdrop-filter:blur(40px) saturate(220%);
+  border:1.5px solid rgba(255,255,255,.85);
   border-radius:20px;
   padding:1.1rem 1.25rem;
   margin-bottom:1.1rem;
   box-shadow:
     0 1px 0 rgba(255,255,255,.9) inset,
-    0 2px 6px rgba(17,50,147,.05),
-    0 12px 32px rgba(17,50,147,.1),
-    0 32px 64px rgba(17,50,147,.12);
+    0 1px 2px rgba(15,23,42,.04),
+    0 4px 12px rgba(15,23,42,.05),
+    0 16px 32px rgba(15,23,42,.06);
   overflow:hidden;
-  transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;
+  transition:transform .4s cubic-bezier(.34,1.4,.64,1),box-shadow .4s cubic-bezier(.4,0,.2,1),border-color .3s ease;
   z-index:3;
 }
 .hero-ai-panel::before{
+  content:'';position:absolute;inset:-50%;border-radius:50%;
+  background:conic-gradient(from 0deg at 50% 50%,
+    transparent 0deg,rgba(38,74,202,.05) 60deg,transparent 120deg,
+    rgba(59,90,216,.04) 180deg,transparent 240deg,
+    rgba(59,90,216,.04) 300deg,transparent 360deg);
+  animation:aiPanelRotate 22s linear infinite;
+  pointer-events:none;z-index:0;opacity:.75;
+}
+@keyframes aiPanelRotate{to{transform:rotate(360deg)}}
+.hero-ai-panel::after{
   content:'';position:absolute;inset:0;border-radius:inherit;
   background:
-    radial-gradient(ellipse 60% 80% at 10% 0%,rgba(99,102,241,.14) 0%,transparent 50%),
-    radial-gradient(ellipse 50% 60% at 100% 100%,rgba(196,181,253,.12) 0%,transparent 55%),
-    linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 40%);
-  opacity:1;pointer-events:none;z-index:0;
+    radial-gradient(circle at 20% 30%,rgba(255,255,255,.6) 0.5px,transparent 1.5px),
+    radial-gradient(circle at 70% 60%,rgba(255,255,255,.5) 0.5px,transparent 1.5px),
+    radial-gradient(circle at 90% 20%,rgba(255,255,255,.7) 0.5px,transparent 1.5px),
+    radial-gradient(circle at 40% 80%,rgba(255,255,255,.4) 0.5px,transparent 1.5px);
+  background-size:120px 120px,180px 180px,150px 150px,200px 200px;
+  pointer-events:none;z-index:0;opacity:.4;
+  animation:aiSparkle 6s ease-in-out infinite alternate;
 }
-.hero-ai-panel > *{position:relative;z-index:1}
+@keyframes aiSparkle{0%{opacity:.3}100%{opacity:.55}}
+.hero-ai-panel > *{position:relative;z-index:2}
 .hero-ai-panel:hover{
-  border-color:rgba(125,108,240,.5);
-  transform:translateY(-3px);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.95) inset,
-    0 4px 12px rgba(17,50,147,.08),
-    0 20px 42px rgba(99,102,241,.18),
-    0 40px 80px rgba(99,102,241,.16);
+  border-color:rgba(59,90,216,.55);transform:translateY(-4px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 4px rgba(15,23,42,.05),0 8px 20px rgba(15,23,42,.07),0 24px 48px rgba(15,23,42,.08);
 }
 .hero-ai-panel:focus-within{
-  border-color:rgba(99,102,241,.7);
-  transform:translateY(-4px);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.95) inset,
-    0 0 0 4px rgba(99,102,241,.1),
-    0 4px 12px rgba(99,102,241,.12),
-    0 24px 48px rgba(99,102,241,.22),
-    0 44px 88px rgba(99,102,241,.18);
+  border-color:rgba(38,74,202,.75);transform:translateY(-5px);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 0 0 3px rgba(38,74,202,.12),0 4px 10px rgba(15,23,42,.06),0 16px 36px rgba(15,23,42,.08);
 }
 
-/* Fejléc: AI ikon + cím + badge */
 .hero-ai-head{display:flex;align-items:center;gap:11px;margin-bottom:.85rem}
 .hero-ai-icon{
-  width:36px;height:36px;border-radius:11px;
-  background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#3b82f6 100%);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 4px 14px rgba(99,102,241,.4),0 1px 2px rgba(255,255,255,.4) inset;
-  position:relative;
+  position:relative;width:36px;height:36px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,#264ACA 0%,#113293 50%,#0c2266 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 6px rgba(38,74,202,.22),0 6px 16px rgba(15,23,42,.08),
+    0 1px 1px rgba(255,255,255,.4) inset;
+  animation:aiIconFloat 4s ease-in-out infinite;
 }
+@keyframes aiIconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.hero-ai-icon::before{
+  content:'';position:absolute;inset:-4px;border-radius:14px;
+  background:radial-gradient(circle,rgba(38,74,202,.35) 0%,transparent 70%);
+  filter:blur(8px);opacity:.5;z-index:-1;
+  animation:aiIconGlow 3.5s ease-in-out infinite alternate;
+}
+@keyframes aiIconGlow{0%{opacity:.3}100%{opacity:.55}}
 .hero-ai-icon::after{
   content:'';position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 50%);
-  pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.45) 0%,transparent 50%);pointer-events:none;
 }
-.hero-ai-icon svg{width:20px;height:20px;color:#fff;position:relative;z-index:1}
+.hero-ai-icon svg{width:20px;height:20px;color:#fff;position:relative;z-index:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15))}
+
 .hero-ai-title{
-  font-family:'Inter',sans-serif;font-size:14.5px;font-weight:700;
-  color:#1e1b4b;letter-spacing:-0.01em;line-height:1.2;
+  font-family:'Inter',sans-serif;font-size:14.5px;font-weight:800;
+  letter-spacing:-0.02em;line-height:1.2;
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#08174a 0%,#0c2266 45%,#3b5ad8 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
 }
 .hero-ai-badge{
+  position:relative;
   display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
   padding:3px 8px;border-radius:6px;
-  background:linear-gradient(135deg,#eef2ff,#f5f3ff);
-  color:#6366f1;border:1px solid rgba(99,102,241,.2);
+  background:linear-gradient(135deg,#264ACA,#113293);
+  color:#fff;
+  box-shadow:0 1px 3px rgba(38,74,202,.25),0 1px 1px rgba(255,255,255,.3) inset;
+  -webkit-text-fill-color:#fff;
 }
+.hero-ai-badge::before{
+  content:'';width:5px;height:5px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.35);
+  animation:aiBadgePulse 1.8s ease-in-out infinite;
+}
+@keyframes aiBadgePulse{0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,.35)}50%{box-shadow:0 0 0 4px rgba(255,255,255,.15)}}
 .hero-ai-subtitle{
   font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
-  color:#64748b;line-height:1.4;margin-top:1px;letter-spacing:-0.005em;
+  color:#64748b;line-height:1.4;margin-top:2px;letter-spacing:-0.005em;
 }
 
-/* Input mező */
 .hero-ai-input-wrap{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.9);
-  border:1.5px solid rgba(220,227,234,.7);
-  border-radius:14px;
-  padding:6px 6px 6px 16px;
-  transition:all .2s ease;
-  box-shadow:0 1px 3px rgba(17,50,147,.04);
+  position:relative;display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.95);
+  border:1.5px solid rgba(220,227,234,.6);
+  border-radius:14px;padding:6px 6px 6px 16px;
+  transition:all .25s ease;
+  box-shadow:0 1px 2px rgba(15,23,42,.04);
+}
+.hero-ai-input-wrap::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;z-index:-1;
+  background:linear-gradient(135deg,#264ACA,#113293);
+  opacity:0;transition:opacity .3s ease;filter:blur(4px);
 }
 .hero-ai-input-wrap:focus-within{
-  background:#fff;
-  border-color:#6366f1;
-  box-shadow:0 0 0 3px rgba(99,102,241,.12),0 2px 8px rgba(99,102,241,.08);
+  background:#fff;border-color:rgba(38,74,202,.5);
+  box-shadow:0 0 0 3px rgba(38,74,202,.12),0 2px 6px rgba(15,23,42,.05);
 }
+.hero-ai-input-wrap:focus-within::before{opacity:.3}
 .hero-ai-input{
   flex:1;min-width:0;border:none;outline:none;background:transparent;
   font-family:'Inter',sans-serif;font-size:14.5px;font-weight:500;color:var(--text);
   padding:11px 0;letter-spacing:-0.005em;
 }
 .hero-ai-input::placeholder{color:#94a3b8;font-weight:500}
-.hero-ai-send{
-  flex-shrink:0;width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(99,102,241,.35),0 1px 2px rgba(255,255,255,.3) inset;
-  transition:transform .2s ease,box-shadow .2s ease;
-}
-.hero-ai-send:hover{transform:translateY(-1px) scale(1.03);box-shadow:0 6px 16px rgba(99,102,241,.45),0 1px 2px rgba(255,255,255,.3) inset}
-.hero-ai-send:active{transform:scale(.97)}
-.hero-ai-send svg{width:16px;height:16px;color:#fff}
 
-/* Példa-chip-ek */
-.hero-ai-examples{
-  display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem;align-items:center;
+.hero-ai-send{
+  position:relative;flex-shrink:0;width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#264ACA 0%,#113293 50%,#0c2266 100%);
+  background-size:200% 200%;background-position:0% 50%;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 6px rgba(38,74,202,.22),0 6px 14px rgba(15,23,42,.08),
+    0 1px 1px rgba(255,255,255,.3) inset;
+  transition:transform .2s ease,box-shadow .2s ease,background-position .4s ease;
+  overflow:hidden;
 }
+.hero-ai-send:hover{
+  transform:translateY(-1px) scale(1.04);background-position:100% 50%;
+  box-shadow:0 3px 8px rgba(38,74,202,.28),0 8px 20px rgba(15,23,42,.1),
+    0 1px 1px rgba(255,255,255,.3) inset;
+}
+.hero-ai-send:active{transform:scale(.96)}
+.hero-ai-send svg{width:16px;height:16px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.15));position:relative;z-index:1}
+.hero-ai-send::after{
+  content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+  transition:left .6s ease;
+}
+.hero-ai-send:hover::after{left:150%}
+
+.hero-ai-mic{
+  flex-shrink:0;width:38px;height:38px;border-radius:10px;border:1.5px solid rgba(220,227,234,.7);cursor:pointer;
+  background:rgba(255,255,255,.85);color:#94a3b8;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s ease;
+}
+.hero-ai-mic:hover{background:#fff;border-color:#264ACA;color:#264ACA;transform:translateY(-1px)}
+.hero-ai-mic.recording{background:#fee2e2;border-color:#ef4444;color:#ef4444;animation:micPulse 1.5s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+.hero-ai-mic svg{width:16px;height:16px}
+
+.hero-ai-reset{
+  flex-shrink:0;width:30px;height:30px;border-radius:8px;border:1.5px solid rgba(220,227,234,.7);cursor:pointer;
+  background:rgba(255,255,255,.85);color:#94a3b8;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s ease;
+}
+.hero-ai-reset:hover{background:#fff;border-color:#264ACA;color:#264ACA;transform:rotate(-90deg)}
+.hero-ai-reset svg{width:14px;height:14px}
+
+.hero-ai-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem;align-items:center}
 .hero-ai-examples-label{
-  font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
-  color:#94a3b8;letter-spacing:.02em;margin-right:2px;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:700;
+  color:#64748b;letter-spacing:.04em;margin-right:2px;text-transform:uppercase;
   display:inline-flex;align-items:center;gap:4px;
 }
 .hero-ai-chip{
+  position:relative;
   display:inline-flex;align-items:center;gap:5px;
-  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;
-  color:#475569;
-  background:rgba(255,255,255,.7);border:1px solid rgba(99,102,241,.15);
-  padding:5px 10px;border-radius:14px;cursor:pointer;
-  transition:all .15s ease;text-decoration:none;
+  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:#0c2266;
+  background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(248,250,255,.85));
+  border:1.5px solid rgba(38,74,202,.2);
+  padding:5px 11px;border-radius:14px;cursor:pointer;
+  transition:all .25s cubic-bezier(.34,1.4,.64,1);text-decoration:none;
+  box-shadow:0 1px 2px rgba(38,74,202,.06);
 }
 .hero-ai-chip:hover{
-  background:#fff;border-color:rgba(99,102,241,.4);color:#4338ca;
-  transform:translateY(-1px);
-  box-shadow:0 2px 8px rgba(99,102,241,.15);
+  background:linear-gradient(135deg,#264ACA,#113293);border-color:transparent;color:#fff;
+  transform:translateY(-1px) scale(1.03);
+  box-shadow:0 2px 6px rgba(38,74,202,.18),0 4px 10px rgba(15,23,42,.06);
 }
-.hero-ai-chip-icon{font-size:11px;opacity:.8}
+.hero-ai-chip-icon{font-size:11px;opacity:.85}
+
+.hero-ai-disclaimer{
+  display:flex;align-items:center;gap:6px;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:500;
+  color:#94a3b8;letter-spacing:.01em;
+  margin-top:.85rem;padding-top:.85rem;
+  border-top:1px solid rgba(220,227,234,.4);
+}
+
+.hero-ai-messages{
+  display:none;flex-direction:column;gap:.7rem;
+  max-height:min(440px,55vh);overflow-y:auto;
+  padding:1rem 2px;margin-bottom:.3rem;
+  border-top:1px solid rgba(220,227,234,.5);
+  scrollbar-width:thin;scrollbar-color:rgba(38,74,202,.3) transparent;
+}
+.hero-ai-messages.has-messages{display:flex;animation:msgAreaIn .4s cubic-bezier(.34,1.4,.64,1)}
+@keyframes msgAreaIn{from{opacity:0;max-height:0}to{opacity:1;max-height:440px}}
+.hero-ai-messages::-webkit-scrollbar{width:6px}
+.hero-ai-messages::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#264ACA,#113293);border-radius:3px}
+
+.ai-chat-msg{display:flex;gap:9px;align-items:flex-start;animation:msgIn .3s ease-out}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ai-chat-msg.user-msg{flex-direction:row-reverse}
+.ai-chat-msg-avatar{
+  flex-shrink:0;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#264ACA,#113293,#3b5ad8);
+  box-shadow:0 2px 5px rgba(38,74,202,.18),0 1px 1px rgba(255,255,255,.3) inset;
+}
+.ai-chat-msg-avatar svg{width:16px;height:16px;color:#fff}
+.user-msg .ai-chat-msg-avatar{display:none}
+.ai-chat-bubble{
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:500;line-height:1.5;
+  padding:10px 15px;border-radius:16px;max-width:85%;letter-spacing:-0.005em;
+  word-wrap:break-word;overflow-wrap:anywhere;
+}
+.ai-bubble{background:rgba(255,255,255,.95);color:var(--text);border:1px solid rgba(220,227,234,.6);border-top-left-radius:5px;box-shadow:0 2px 8px rgba(17,50,147,.04)}
+.user-bubble{background:linear-gradient(135deg,#264ACA,#113293);color:#fff;border-top-right-radius:5px;box-shadow:0 2px 6px rgba(38,74,202,.18),0 1px 1px rgba(255,255,255,.3) inset}
+
+.ai-typing{display:flex;align-items:center;gap:8px}
+.ai-dots{display:flex;gap:4px;padding:6px 0}
+.ai-dots span{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#264ACA,#113293);animation:dotBounce 1.4s infinite}
+.ai-dots span:nth-child(2){animation-delay:.2s}
+.ai-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dotBounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-5px);opacity:1}}
+
+.ai-chat-options{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 .2rem 41px}
+.ai-chat-option-chip{
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
+  color:#0c2266;background:linear-gradient(135deg,#eef2ff,#f0f4ff);
+  border:1.5px solid rgba(38,74,202,.25);
+  padding:7px 13px;border-radius:14px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.4,.64,1);
+}
+.ai-chat-option-chip:hover{
+  background:linear-gradient(135deg,#264ACA,#113293);color:#fff;border-color:transparent;
+  transform:translateY(-2px);box-shadow:0 3px 8px rgba(38,74,202,.2);
+}
 
 @media(max-width:640px){
   .hero-ai-panel{padding:.95rem 1rem;border-radius:16px}
-  .hero-ai-title{font-size:13.5px}
+  .hero-ai-icon{width:34px;height:34px;border-radius:10px}
+  .hero-ai-icon svg{width:18px;height:18px}
+  .hero-ai-title{font-size:13.5px;gap:6px}
   .hero-ai-subtitle{font-size:11.5px}
-  .hero-ai-input{font-size:14px}
+  .hero-ai-input{font-size:14px;padding:10px 0}
+  .hero-ai-send,.hero-ai-mic{width:36px;height:36px}
   .hero-ai-examples-label{display:none}
+}
+
+/* ════ HERO QUICK SEARCH — kompakt 2-soros gyorskereső a jobb oszlopban ════ */
+.hero-quick-search{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.78) 0%,rgba(250,251,255,.62) 100%);
+  backdrop-filter:blur(32px) saturate(200%);
+  -webkit-backdrop-filter:blur(32px) saturate(200%);
+  border:1.5px solid rgba(255,255,255,.75);
+  border-radius:20px;padding:1.1rem 1.2rem;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 2px 6px rgba(5,150,105,.05),
+    0 12px 32px rgba(5,150,105,.1),
+    0 32px 64px rgba(5,150,105,.12);
+  transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .3s ease;
+  z-index:3;
+}
+.hero-quick-search::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.4) 0%,transparent 40%);
+  pointer-events:none;z-index:0;
+}
+.hero-quick-search > *{position:relative;z-index:1}
+.hero-quick-search:hover{
+  transform:translateY(-2px);
+  border-color:rgba(125,150,240,.5);
+  box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 4px 12px rgba(5,150,105,.08),0 18px 38px rgba(5,150,105,.16),0 36px 72px rgba(5,150,105,.18);
+}
+
+.hero-quick-search-head{
+  display:flex;align-items:center;gap:9px;margin-bottom:.8rem;
+}
+.hero-quick-search-icon{
+  width:32px;height:32px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#059669,#10b981);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(5,150,105,.3);
+}
+.hero-quick-search-icon svg{width:16px;height:16px;color:#fff}
+.hero-quick-search-title{
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;
+  color:#059669;letter-spacing:-0.01em;line-height:1.2;
+}
+.hero-quick-search-sub{
+  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:500;
+  color:#64748b;line-height:1.3;margin-top:1px;
+}
+
+/* Felső sor — live search input */
+.hero-qs-row-top{position:relative;margin-bottom:.55rem}
+.hero-qs-input-wrap{
+  display:flex;align-items:center;gap:9px;
+  background:rgba(255,255,255,.9);
+  border:1.5px solid rgba(220,227,234,.7);
+  border-radius:12px;padding:9px 13px;
+  transition:all .2s ease;
+}
+.hero-qs-input-wrap:focus-within{
+  background:#fff;border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.12),inset 0 1px 2px rgba(5,150,105,.04);
+}
+.hero-qs-input-wrap svg{color:#9aa5c4;transition:color .2s,transform .2s;flex-shrink:0}
+.hero-qs-input-wrap:focus-within svg{color:#10b981;transform:scale(1.08)}
+.hero-qs-input{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:500;color:var(--text);
+  letter-spacing:-0.005em;
+}
+.hero-qs-input::placeholder{color:#a0aabd;font-weight:500}
+
+/* Alsó sor — város + gomb */
+.hero-qs-row-bottom{display:flex;gap:8px;align-items:center}
+.hero-qs-city-wrap{
+  flex:1;min-width:0;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.9);
+  border:1.5px solid rgba(220,227,234,.7);
+  border-radius:12px;padding:9px 13px;
+  transition:all .2s ease;
+}
+.hero-qs-city-wrap:focus-within{
+  background:#fff;border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.12),inset 0 1px 2px rgba(5,150,105,.04);
+}
+.hero-qs-city-wrap svg{color:#9aa5c4;flex-shrink:0;transition:color .2s,transform .2s}
+.hero-qs-city-wrap:focus-within svg{color:#10b981;transform:scale(1.08)}
+.hero-qs-city{
+  flex:1;min-width:0;border:none;outline:none;background:transparent;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--text);
+}
+.hero-qs-city::placeholder{color:#a0aabd;font-weight:500}
+.hero-qs-submit{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#059669,#10b981);
+  border:none;border-radius:11px;padding:11px 16px;
+  box-shadow:0 4px 12px rgba(5,150,105,.3),0 1px 2px rgba(255,255,255,.25) inset;
+  transition:transform .2s,box-shadow .2s;
+}
+.hero-qs-submit:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(5,150,105,.4),0 1px 2px rgba(255,255,255,.25) inset}
+.hero-qs-submit:active{transform:translateY(0)}
+.hero-qs-submit svg{width:14px;height:14px}
+
+/* Mobil */
+@media(max-width:640px){
+  .hero-quick-search{padding:.95rem 1rem;border-radius:16px}
+  .hero-qs-submit{padding:11px 14px;font-size:12.5px}
+  .hero-qs-submit span{display:none}
 }
 
 /* ════ SEARCH BOX - DOMINÁNS, KIEMELT ════ */
@@ -2008,35 +2278,53 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
         <!-- Cím -->
         <div class="hero-headline-row">
+          <div class="hero-eyebrow-title">
+            <span class="hero-eyebrow-dot"></span>
+            Országos szakorvoskereső
+          </div>
           <h1 class="hero-title-new">
-            <span class="hero-title-line"><span class="hero-title-blue">Országos</span> <span class="hero-title-accent">szakorvos</span></span>
-            <span class="hero-title-line"><span class="hero-title-blue">és egészségügyi szakellátás kereső</span></span>
+            <span class="hero-title-line"><span class="hero-title-blue">Írja le, mit keres</span> <span class="hero-title-accent">– segítünk</span></span>
           </h1>
         </div>
         <p class="hero-subtitle-new">Keressen <strong id="subDoctors">–</strong> magánorvos, <strong id="subClinics">–</strong> klinika és <strong id="subProfessionals">–</strong> egészségügyi szakember között.</p>
 
-        <!-- ════ AI BESZÉLGETŐ PANEL — prémium ════ -->
+        <!-- ════ AI BESZÉLGETŐ PANEL — prémium, inline chat ════ -->
         <div class="hero-ai-panel" id="heroAiPanel">
           <div class="hero-ai-head">
             <div class="hero-ai-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/>
-                <path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3 L13.5 8.5 L19 10 L13.5 11.5 L12 17 L10.5 11.5 L5 10 L10.5 8.5 Z"/>
+                <path d="M18 16 L18.7 18.3 L21 19 L18.7 19.7 L18 22 L17.3 19.7 L15 19 L17.3 18.3 Z"/>
               </svg>
             </div>
             <div style="min-width:0;flex:1">
               <div class="hero-ai-title">
-                Kérdezzen az AI asszisztenstől
-                <span class="hero-ai-badge">✨ Új</span>
+                AI orvosi asszisztens
+                <span class="hero-ai-badge">GPT-5 ALAPÚ</span>
               </div>
-              <div class="hero-ai-subtitle">Írja le tüneteit vagy mit keres — én megtalálom Önnek a megfelelő szakorvost vagy klinikát.</div>
+              <div class="hero-ai-subtitle" id="heroAiSubtitle">Írja le tüneteit vagy mit keres — pillanatok alatt megtalálom Önnek a megfelelő szakorvost vagy klinikát.</div>
             </div>
+            <button type="button" class="hero-ai-reset" id="heroAiReset" onclick="heroAiReset()" aria-label="Új beszélgetés" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/>
+              </svg>
+            </button>
           </div>
 
+          <!-- Beszélgetés terület (alapból rejtett, megjelenik az első üzenetnél) -->
+          <div class="hero-ai-messages" id="chatMessages"></div>
+
           <form class="hero-ai-input-wrap" onsubmit="heroAiSubmit(event)">
-            <input type="text" id="heroAiInput" class="hero-ai-input"
+            <input type="text" id="chatInput" class="hero-ai-input"
               placeholder="Pl. „Fáj a hátam, melyik orvoshoz menjek?” vagy „Bőrgyógyász Debrecenben”"
-              autocomplete="off" maxlength="300" />
+              autocomplete="off" maxlength="300"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();sendChat();}" />
+            <button type="button" class="hero-ai-mic" id="heroAiMic" onclick="toggleSpeechInput()" aria-label="Mikrofon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/>
+                <line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/>
+              </svg>
+            </button>
             <button type="submit" class="hero-ai-send" aria-label="Küldés">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/>
@@ -2044,87 +2332,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             </button>
           </form>
 
-          <div class="hero-ai-examples">
+          <div class="hero-ai-examples" id="heroAiExamples">
             <span class="hero-ai-examples-label">💬 Példák:</span>
             <a class="hero-ai-chip" onclick="heroAiAsk('Régóta fáj a hátam, mit tegyek?')">Régóta fáj a hátam</a>
             <a class="hero-ai-chip" onclick="heroAiAsk('Bőrgyógyász Debrecenben')">Bőrgyógyász Debrecenben</a>
             <a class="hero-ai-chip" onclick="heroAiAsk('Affidea klinikák')">Affidea klinikák</a>
             <a class="hero-ai-chip" onclick="heroAiAsk('MRI vizsgálat ára')">MRI vizsgálat ára</a>
           </div>
-        </div>
 
-        <!-- Inline search box -->
-        <div class="hero-search-box hero-search-box-premium">
-          <!-- Prémium fülek -->
-          <div class="hero-tabs">
-            <button class="hero-tab active" data-tab="doctor" onclick="setSearchTab('doctor')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span>Orvos</span>
-            </button>
-            <button class="hero-tab" data-tab="clinic" onclick="setSearchTab('clinic')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M12 11v4"/><path d="M10 13h4"/></svg>
-              <span>Klinika</span>
-            </button>
-            <button class="hero-tab" data-tab="professional" onclick="setSearchTab('professional')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span>Eü. szakember</span>
-            </button>
-            <button class="hero-tab" data-tab="treatment" onclick="setSearchTab('treatment')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H7a2 2 0 0 1-2-2V6h14v3a2 2 0 0 1-2 2h-2"/><path d="M9 11v8a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-8"/><path d="M5 6V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2"/></svg>
-              <span>Vizsgálat / Kezelés</span>
-            </button>
-            <button class="hero-tab" data-tab="diagnostics" onclick="setSearchTab('diagnostics')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-              <span>Diagnosztika</span>
-            </button>
-          </div>
-
-          <!-- TABOK: Szakorvos / Vizsgálat-Kezelés / Tudástár / Klinika -->
-          <div class="hero-search-row hero-search-row-single" style="position:relative;">
-            <div class="hero-search-field">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <input type="text" id="heroInlineSearch" placeholder="Keressen orvost, klinikát vagy szakterületet…" autocomplete="off"
-                oninput="smartSearch('heroInlineSearch','heroDropdown')"
-                onfocus="smartFocus('heroInlineSearch','heroDropdown')"
-                onblur="smartBlur('heroInlineSearch','heroDropdown')"
-                onkeydown="smartKeydown(event,'heroInlineSearch','heroDropdown')">
-              <button class="hero-voice-btn" id="heroVoiceBtn" type="button" onclick="toggleVoiceSearch()" title="Hangos keresés" aria-label="Hangos keresés">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-              </button>
-              <div class="hero-kbd" id="heroKbd"><span class="hero-kbd-key" id="heroKbdKey">⌘ K</span></div>
-            </div>
-            <div class="hero-search-location-box" id="heroSearchCityBox">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9aa5c4" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <input type="text" id="heroSearchCityInline" placeholder="Város, pl. Budapest…" onkeydown="if(event.key==='Enter') heroInlineSearch()">
-            </div>
-            <button class="hero-inline-search-btn" onclick="heroInlineSearch()">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              Keresés
-            </button>
-            <div class="freetext-dropdown" id="heroDropdown"></div>
-          </div>
-
-          <!-- Trending keresések - SEO barát, vegyes -->
-          <div class="hero-trending hero-trending-multi" id="heroTrending">
-            <div class="hero-trending-row">
-              <span class="hero-trending-label">
-                <span class="hero-trending-flame">🔥</span> Tipp:
-              </span>
-              <a class="hero-trending-chip" onclick="useTrending('Bőrgyógyász')">Bőrgyógyász<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Nőgyógyász')">Nőgyógyász<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Kardiológus')">Kardiológus<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Pszichológus')">Pszichológus<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Gyógytornász')">Gyógytornász<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-            </div>
-            <div class="hero-trending-row">
-              <a class="hero-trending-chip" onclick="useTrending('Ultrahang vizsgálat')">Ultrahang<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('MRI vizsgálat')">MRI vizsgálat<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Laborvizsgálat')">Laborvizsgálat<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Dr. Nagy Anna')">Dr. Nagy Anna<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-              <a class="hero-trending-chip" onclick="useTrending('Medi Egészségközpont')">Medi Egészségközpont<svg class="hero-trending-chip-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>
-            </div>
+          <div class="hero-ai-disclaimer">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Az AI nem helyettesíti az orvosi diagnózist
           </div>
         </div>
+
 
         <!-- Bizalmi box (kereső doboz alatt) -->
         <div class="hero-trust-box">
@@ -2193,40 +2414,50 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
       </div><!-- end hero-left -->
 
-      <!-- JOBB: AI CTA + partner gomb -->
+      <!-- JOBB: Gyorskereső + Térkép -->
       <div class="hero-right-search">
 
-        <!-- AI orvosi asszisztens CTA kártya -->
-        <button type="button" class="hero-ai-cta" id="aiCtaCard" onclick="openAiChatModal()">
-          <div class="hero-ai-cta-glow"></div>
-          <div class="hero-ai-cta-top">
-            <div class="hero-ai-cta-avatar">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="8" width="18" height="12" rx="3"/>
-                <path d="M12 8V4"/>
-                <circle cx="12" cy="3" r="1.2" fill="currentColor"/>
-                <circle cx="8.5" cy="14" r="1.3" fill="currentColor" stroke="none"/>
-                <circle cx="15.5" cy="14" r="1.3" fill="currentColor" stroke="none"/>
-                <path d="M9 17.5c1 .6 2 .9 3 .9s2-.3 3-.9"/>
-              </svg>
+        <!-- ════ GYORSKERESŐ — kompakt 2-soros ════ -->
+        <div class="hero-quick-search">
+          <div class="hero-quick-search-head">
+            <div class="hero-quick-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <div class="hero-ai-cta-status">
-              <span class="hero-ai-cta-dot"></span>
-              Online · AI
+            <div>
+              <div class="hero-quick-search-title">Gyorskereső</div>
+              <div class="hero-quick-search-sub">Orvos vagy klinika név szerint</div>
             </div>
           </div>
-          <div class="hero-ai-cta-title">
-            Nem tudja milyen orvost keres?
-            <span class="hero-title-accent">Megmondjuk!</span>
-          </div>
-          <div class="hero-ai-cta-sub">Használja a Szakorvos.hu okos (AI alapú) asszisztensét</div>
-          <div class="hero-ai-cta-action">
-            <span>Használja az AI keresőt</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </div>
-        </button>
 
-        <!-- Mini térkép kártya -->
+          <!-- 1. sor: live kereső -->
+          <div class="hero-qs-row-top">
+            <div class="hero-qs-input-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="heroQuickSearch" class="hero-qs-input" autocomplete="off"
+                placeholder="Orvos, klinika, szakterület…"
+                oninput="smartSearch('heroQuickSearch','heroQuickDropdown')"
+                onfocus="smartFocus('heroQuickSearch','heroQuickDropdown')"
+                onblur="smartBlur('heroQuickSearch','heroQuickDropdown')"
+                onkeydown="smartKeydown(event,'heroQuickSearch','heroQuickDropdown')">
+            </div>
+            <div class="freetext-dropdown" id="heroQuickDropdown"></div>
+          </div>
+
+          <!-- 2. sor: város + gomb -->
+          <div class="hero-qs-row-bottom">
+            <div class="hero-qs-city-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input type="text" id="heroQuickCity" class="hero-qs-city" placeholder="Város (pl. Budapest)…"
+                onkeydown="if(event.key==='Enter') heroQuickSearchSubmit()">
+            </div>
+            <button type="button" class="hero-qs-submit" onclick="heroQuickSearchSubmit()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <span>Keresés</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mini térkép kártya (gyorskereső ALATT) -->
         <a href="klinikak.html" class="hero-mini-map-card hero-mini-map-card-large" id="heroMiniMapCard">
           <div class="hero-mini-map-frame">
             <div id="heroMiniMapEl" style="width:100%;height:100%"></div>
@@ -2249,104 +2480,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             </div>
           </div>
         </a>
-
-        <!-- ─── AI CHAT MODAL (rejtett alapból, kattintásra nyílik) ─── -->
-        <div class="ai-chat-overlay" id="aiChatOverlay" onclick="closeAiChatModal(event)"></div>
-
-        <div class="ai-chat-widget" id="aiChatWidget">
-
-          <!-- Header - zöld -->
-          <div class="ai-chat-header">
-            <div class="ai-chat-avatar">
-              <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="20" r="18" fill="rgba(255,255,255,0.2)"/>
-                <rect x="10" y="14" width="20" height="14" rx="5" fill="white" opacity="0.95"/>
-                <circle cx="15" cy="21" r="2" fill="#166534"/>
-                <circle cx="25" cy="21" r="2" fill="#166534"/>
-                <path d="M15 25 Q20 28 25 25" stroke="#166534" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-                <line x1="20" y1="14" x2="20" y2="10" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.9"/>
-                <circle cx="20" cy="9" r="2" fill="white" opacity="0.9"/>
-              </svg>
-            </div>
-            <div>
-              <div class="ai-chat-name">AI orvosi asszisztens</div>
-              <div class="ai-chat-status">
-                <span class="ai-chat-dot"></span>
-                <span>Online</span>
-              </div>
-            </div>
-            <div class="ai-chat-secure">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Biztonságos és titkos</span>
-            </div>
-            <button class="ai-chat-close" id="aiChatClose" onclick="closeAiChatModal(event)" aria-label="Bezárás">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-
-          <!-- Messages -->
-          <div class="ai-chat-messages" id="chatMessages">
-            <div class="ai-chat-msg ai-msg" id="chatStartSection">
-              <div class="ai-chat-msg-avatar">
-                <svg width="20" height="20" viewBox="0 0 40 40" fill="none">
-                  <circle cx="20" cy="20" r="18" fill="#f0fdf4"/>
-                  <rect x="10" y="14" width="20" height="14" rx="5" fill="#FF8A00" opacity="0.9"/>
-                  <circle cx="15" cy="21" r="1.8" fill="white"/>
-                  <circle cx="25" cy="21" r="1.8" fill="white"/>
-                  <path d="M15 25 Q20 27.5 25 25" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-                  <line x1="20" y1="14" x2="20" y2="10" stroke="#FF8A00" stroke-width="2" stroke-linecap="round"/>
-                  <circle cx="20" cy="9" r="1.8" fill="#FF8A00"/>
-                </svg>
-              </div>
-              <div class="ai-chat-bubble ai-bubble">
-                Kérjük, írjon le bármilyen tünetet vagy panaszt, és megtalálom a megfelelő szakorvost az Ön számára.
-                <div class="ai-chat-examples" id="chatExamples">
-                  <div class="ai-chat-example-label">Például:</div>
-                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Fáj a térdem lépcsőzéskor</button>
-                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Mellkasi szorítást érzek terhelésre</button>
-                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Három napja fáj a fejem és szédülök</button>
-                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Bőrkiütés jelent meg a karomra</button>
-                  <button class="ai-chat-example-chip" onclick="useExample(this)">💬 Szívdobogásérzésem van éjszaka</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Input -->
-          <div class="ai-chat-input-row">
-            <div class="ai-chat-input-inner">
-              <div class="ai-chat-input-wrap">
-                <input class="ai-chat-input" type="text" id="chatInput"
-                  placeholder="Írja le a panaszát… pl. fáj a térdem lépcsőzéskor"
-                  onkeydown="if(event.key==='Enter') sendChat()" />
-              </div>
-              <button class="ai-chat-mic" id="aiChatMic" type="button" onclick="toggleSpeechInput()" aria-label="Mikrofon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="2" width="6" height="11" rx="3"/>
-                  <path d="M5 11a7 7 0 0 0 14 0"/>
-                  <line x1="12" y1="18" x2="12" y2="22"/>
-                  <line x1="8" y1="22" x2="16" y2="22"/>
-                </svg>
-              </button>
-              <button class="ai-chat-send" onclick="sendChat()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Footer -->
-          <div class="ai-chat-footer-area">
-            <div class="chat-legal-info">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Az AI nem helyettesíti az orvosi diagnózist!
-            </div>
-            <a href="#" class="chat-legal-more">További információ →</a>
-          </div>
-
-        </div><!-- end ai-chat-widget -->
 
     </div><!-- end hero-right-search -->
 
@@ -2430,27 +2563,55 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       }
       function addMsg(text, type) {
-        const wrap = document.createElement('div');
-        wrap.className = `ai-chat-msg ${type}-msg`;
-        if (type === 'ai_html') {
-          wrap.innerHTML = `<div class="ai-chat-msg-avatar" style="display:none"></div><div class="ai-chat-bubble ai-bubble" style="background:transparent;padding:0;border:none">${text}</div>`;
-          chatMessages.appendChild(wrap);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-          return;
+        // Első üzenetnél: jelenítsük meg a messages area-t és rejtsük az examples-t
+        const msgArea = document.getElementById('chatMessages');
+        if (msgArea && !msgArea.classList.contains('has-messages')) {
+          msgArea.classList.add('has-messages');
+          const ex = document.getElementById('heroAiExamples');
+          if (ex) ex.style.display = 'none';
+          const sub = document.getElementById('heroAiSubtitle');
+          if (sub) sub.style.display = 'none';
+          const reset = document.getElementById('heroAiReset');
+          if (reset) reset.style.display = 'flex';
         }
-        if (false) { // (régi avatar kód lent, nem fut)
-          wrap.innerHTML = `<div class="ai-chat-msg-avatar"><img src="data:image/png;base64,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" alt="AI" style="width:15px;height:15px;object-fit:contain;"></div><div class="ai-chat-bubble ai-bubble">${escapeHtml(text)}</div>`;
-        } else {
+
+        const wrap = document.createElement('div');
+        wrap.className = `ai-chat-msg ${type === 'user' ? 'user-msg' : 'ai-msg'}`;
+        if (type === 'ai_html') {
+          // Trusted HTML — orvos-/klinika-kártya
+          wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble" style="background:transparent;padding:0;border:none;max-width:100%;width:100%">${text}</div>`;
+        } else if (type === 'user') {
           wrap.innerHTML = `<div class="ai-chat-bubble user-bubble">${escapeHtml(text)}</div>`;
+        } else {
+          // 'ai' — sima szöveges AI válasz
+          wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble">${escapeHtml(text)}</div>`;
         }
         chatMessages.appendChild(wrap);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
 
+      // Reset: új beszélgetés
+      window.heroAiReset = function() {
+        const msgArea = document.getElementById('chatMessages');
+        if (msgArea) {
+          msgArea.innerHTML = '';
+          msgArea.classList.remove('has-messages');
+        }
+        const ex = document.getElementById('heroAiExamples');
+        if (ex) ex.style.display = '';
+        const sub = document.getElementById('heroAiSubtitle');
+        if (sub) sub.style.display = '';
+        const reset = document.getElementById('heroAiReset');
+        if (reset) reset.style.display = 'none';
+        if (typeof chatHistory !== 'undefined') chatHistory.length = 0;
+        const inp = document.getElementById('chatInput');
+        if (inp) inp.focus();
+      };
+
       function addTyping() {
         const wrap = document.createElement('div');
         wrap.className = 'ai-chat-msg ai-msg'; wrap.id = 'typingWrap';
-        wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M12 11V7"/><circle cx="12" cy="5" r="2"/></svg></div><div class="ai-chat-bubble ai-bubble"><div class="ai-dots"><span></span><span></span><span></span></div></div>`;
+        wrap.innerHTML = `<div class="ai-chat-msg-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/></svg></div><div class="ai-chat-bubble ai-bubble"><div class="ai-dots"><span></span><span></span><span></span></div></div>`;
         chatMessages.appendChild(wrap);
         chatMessages.scrollTop = chatMessages.scrollHeight;
       }
@@ -2465,7 +2626,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       let isRecording = false;
 
       window.toggleSpeechInput = function() {
-        const micBtn = document.getElementById('aiChatMic');
+        const micBtn = document.getElementById('heroAiMic');
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
         if (!SpeechRecognition) {
@@ -3108,62 +3269,42 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
 
       // ─── AI CHAT MODAL ───
+      // Régi modal-megnyitó — most az új inline chat-be focusol és scrollol
       window.openAiChatModal = function(e) {
-        const w = document.getElementById('aiChatWidget');
-        const o = document.getElementById('aiChatOverlay');
-        if (!w || !o) return;
-        w.classList.add('open');
-        o.classList.add('open');
-        document.body.classList.add('ai-modal-open');
-        document.body.style.overflow = 'hidden';
-        // Focus input
-        const inp = w.querySelector('.ai-chat-input');
-        if (inp) setTimeout(() => inp.focus(), 200);
+        const panel = document.getElementById('heroAiPanel');
+        const inp = document.getElementById('chatInput');
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (inp) setTimeout(() => inp.focus(), 350);
         if (e) e.stopPropagation();
       };
 
       window.closeAiChatModal = function(e) {
-        const w = document.getElementById('aiChatWidget');
-        const o = document.getElementById('aiChatOverlay');
-        if (w) w.classList.remove('open');
-        if (o) o.classList.remove('open');
-        document.body.classList.remove('ai-modal-open');
-        document.body.style.overflow = '';
+        // No-op (nincs többé modal)
         if (e) { e.stopPropagation(); e.preventDefault(); }
       };
 
-      // Régi nevek backward-compat (ha más kód hivatkozik rá)
       window.toggleAiChat = window.openAiChatModal;
       window.closeAiChat = window.closeAiChatModal;
 
-      // ═══ HERO AI PANEL — input → AI chat-be küldés ═══
+      // ═══ HERO AI PANEL — input → AI chat ═══
       window.heroAiAsk = function(text) {
         const t = (text || '').trim();
         if (!t) return;
-        const heroIn = document.getElementById('heroAiInput');
-        if (heroIn) heroIn.value = '';
-        // Nyissuk meg a chat-modálot
-        window.openAiChatModal();
-        // Várjunk amíg betöltődik, majd írjuk be a kérdést és küldjük el
-        setTimeout(() => {
-          const chatIn = document.querySelector('#aiChatWidget .ai-chat-input');
-          if (chatIn) {
-            chatIn.value = t;
-            // Eredeti sendChat() hívása
-            if (typeof sendChat === 'function') {
-              sendChat();
-            }
-          }
-        }, 250);
+        const inp = document.getElementById('chatInput');
+        if (inp) inp.value = t;
+        // Scroll a panelre + sendChat
+        const panel = document.getElementById('heroAiPanel');
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof sendChat === 'function') sendChat();
       };
 
       window.heroAiSubmit = function(e) {
         if (e) e.preventDefault();
-        const inp = document.getElementById('heroAiInput');
+        const inp = document.getElementById('chatInput');
         if (!inp) return;
         const t = inp.value.trim();
         if (!t) return;
-        window.heroAiAsk(t);
+        if (typeof sendChat === 'function') sendChat();
       };
 
       // Escape gombra zár
@@ -3759,6 +3900,18 @@ function useTrending(term){
   heroInlineSearch();
 }
 
+// ═══ Hero gyorskereső (jobb oldal) submit ═══
+function heroQuickSearchSubmit(){
+  const query = (document.getElementById('heroQuickSearch')?.value || '').trim();
+  const city = (document.getElementById('heroQuickCity')?.value || '').trim();
+  const params = new URLSearchParams();
+  // Alapértelmezett: doctor / specialty keresés
+  if(query) params.set('specialty', query);
+  if(city) params.set('city', city);
+  if(query) saveRecentSearch(query);
+  window.location.href = 'talalatok.html?' + params.toString();
+}
+
 // ═══ ⌘K / Ctrl+K shortcut ═══
 (function initSearchShortcut(){
   const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
@@ -4260,9 +4413,10 @@ function useExample(btn) {
 
         const bounds = new maps.LatLngBounds();
         const iw = new maps.InfoWindow();
+        const _mainMarkers = [];
         withCoords.forEach(c => {
           const pos = { lat: Number(c.lat), lng: Number(c.lng) };
-          const marker = new maps.Marker({ position: pos, map, title: c.name, icon: pinIcon });
+          const marker = new maps.Marker({ position: pos, title: c.name, icon: pinIcon });
           marker.addListener('click', () => {
             const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
             iw.setContent(`
@@ -4274,8 +4428,24 @@ function useExample(btn) {
             `);
             iw.open(map, marker);
           });
+          _mainMarkers.push(marker);
           bounds.extend(pos);
         });
+        // Cluster
+        if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+          new window.markerClusterer.MarkerClusterer({
+            map, markers: _mainMarkers,
+            renderer: {
+              render: ({ count, position }) => {
+                const size = count < 10 ? 40 : count < 50 ? 48 : count < 200 ? 56 : 64;
+                const svg = `data:image/svg+xml;utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2-1}" fill="rgba(38,74,202,.18)"/><circle cx="${size/2}" cy="${size/2}" r="${size/2-6}" fill="#113293" stroke="#fff" stroke-width="2.5"/><text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="${size*0.32}" font-weight="700">${count}</text></svg>`)}`;
+                return new maps.Marker({ position, icon: { url: svg, scaledSize: new maps.Size(size, size), anchor: new maps.Point(size/2, size/2) }, zIndex: 1000 + count });
+              }
+            }
+          });
+        } else {
+          _mainMarkers.forEach(m => m.setMap(map));
+        }
         map.fitBounds(bounds, 50);
       }
       if(loadingEl) loadingEl.style.display = 'none';
@@ -4292,13 +4462,28 @@ function useExample(btn) {
           clickableIcons: false,
           keyboardShortcuts: false
         });
+        const _heroMarkers = [];
         withCoords.forEach(c => {
           const pos = { lat: Number(c.lat), lng: Number(c.lng) };
-          new maps.Marker({
-            position: pos, map: heroMap, title: c.name,
+          _heroMarkers.push(new maps.Marker({
+            position: pos, title: c.name,
             icon: { ...pinIcon, scale: 0.7 }
-          });
+          }));
         });
+        if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+          new window.markerClusterer.MarkerClusterer({
+            map: heroMap, markers: _heroMarkers,
+            renderer: {
+              render: ({ count, position }) => {
+                const size = count < 10 ? 32 : count < 50 ? 38 : 46;
+                const svg = `data:image/svg+xml;utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2-1}" fill="rgba(38,74,202,.18)"/><circle cx="${size/2}" cy="${size/2}" r="${size/2-4}" fill="#113293" stroke="#fff" stroke-width="2"/><text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="${size*0.32}" font-weight="700">${count}</text></svg>`)}`;
+                return new maps.Marker({ position, icon: { url: svg, scaledSize: new maps.Size(size, size), anchor: new maps.Point(size/2, size/2) } });
+              }
+            }
+          });
+        } else {
+          _heroMarkers.forEach(m => m.setMap(heroMap));
+        }
       }
     } catch(e){
       if(loadingEl) loadingEl.style.display = 'none';
