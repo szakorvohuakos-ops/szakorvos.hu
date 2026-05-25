@@ -1082,6 +1082,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </a>
       </div>
 
+      <!-- ─── RENDELÉSI HELYSZÍNEK ───────────────────────────── -->
+      <div class="prof-section" id="pane-locations">
+        <div class="prof-section-h">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Rendelési helyszínek
+        </div>
+        <div class="loc-grid" id="locGrid"></div>
+      </div>
+
       <!-- ─── ÉRTÉKELÉSEK ──────────────────────────────────────── -->
       <!-- ─── TRUST BADGE-EK ────────────────────────────────────── -->
       <div class="trust-bar">
@@ -2177,8 +2186,10 @@ function renderArticles(el, articles) {
 /* ── Helyszínek tab ───────────────────────────────────────────────── */
 function renderLocationsTab(d){
   const clinics = (d.doctor_clinics || []).map(dc => dc.clinics).filter(Boolean);
+  const grid = document.getElementById('locGrid');
+  if(!grid) return;
   if(!clinics.length){
-    document.getElementById('locGrid').innerHTML = `<div style="padding:20px;color:var(--muted);font-size:13.5px">Nincs rendelőhelyszín adat.</div>`;
+    grid.innerHTML = `<div style="padding:20px;color:var(--muted);font-size:13.5px">Nincs rendelőhelyszín adat.</div>`;
     return;
   }
   const html = clinics.map((c, i) => {
@@ -2220,7 +2231,7 @@ function renderLocationsTab(d){
       </div>
     </div>`;
   }).join('');
-  document.getElementById('locGrid').innerHTML = html;
+  grid.innerHTML = html;
   // Delegált event listener az openMap-hez (biztonságos string-átadás)
   document.querySelectorAll('#locGrid [data-open-map]').forEach(btn => {
     btn.addEventListener('click', () => openMap(btn.getAttribute('data-open-map')));
