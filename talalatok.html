@@ -25,6 +25,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Szakorvos kereső – Találatok | Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -348,8 +349,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.75);backdrop-
 /* Middle column */
 .dc-mid{min-width:0;display:flex;flex-direction:column;gap:.5rem}
 .dc-nm{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.2;letter-spacing:-0.015em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.dc-nm-verified{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--grad-green);color:#fff;flex-shrink:0;box-shadow:0 2px 6px rgba(44,150,80,.25)}
-.dc-nm-verified svg{width:11px;height:11px}
+.dc-verified-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;color:#047857;background:linear-gradient(135deg,rgba(236,253,245,.95) 0%,rgba(240,253,250,.85) 100%);border:1px solid rgba(16,185,129,.28);padding:3px 9px;border-radius:999px;letter-spacing:.02em;text-transform:uppercase;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 2px rgba(16,185,129,.08)}
+.dc-verified-badge svg{flex-shrink:0}
+.dc-source-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;color:#64748b;background:linear-gradient(135deg,rgba(248,250,252,.95) 0%,rgba(241,245,249,.85) 100%);border:1px solid rgba(148,163,184,.3);padding:3px 9px;border-radius:999px;letter-spacing:.01em;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+.dc-source-badge svg{flex-shrink:0;opacity:.8}
 .dc-deg{font-size:14.5px;color:var(--sub);font-weight:500;line-height:1.4}
 .dc-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13.5px;color:var(--sub);margin-top:.15rem}
 .dc-meta-item{display:flex;align-items:center;gap:5px;font-weight:500}
@@ -1313,9 +1316,9 @@ async function load(){
   // hiányzik a specialties táblából, vagy más mező hiányzik), automatikusan
   // egy minimális query-re fallback-elünk, ami biztosan működik.
 
-  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+  const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,verified_at,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
-  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+  const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,verified_at,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
   const runQuery = async (selectClause) => {
     try {
@@ -1634,7 +1637,7 @@ function cardH(d,i){
   return `<div class="dc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
     ${avEl}
     <div class="dc-mid">
-      <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+      <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="dc-verified-badge" title="Ellenőrzött profil"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött profil</span>`:`<span class="dc-source-badge" title="A profil adatai több nyilvános forrásból származnak. Az adatok pontossága még nincs hivatalosan ellenőrizve."><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból</span>`}</div>
       <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}</div>
 
       ${ratingFmt || patientCount ? `<div class="dc-meta dc-meta-rating">
@@ -1727,7 +1730,7 @@ function openPanel(id){
   ppAv.style.background=`linear-gradient(135deg,${col},${col}bb)`;
 
   // Név + verified badge
-  document.getElementById('ppName').innerHTML = `${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}<span class="pp-name-verified" title="Ellenőrzött orvos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>`;
+  document.getElementById('ppName').innerHTML = `${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="dc-verified-badge" title="Ellenőrzött profil" style="vertical-align:middle;margin-left:8px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött profil</span>`:`<span class="dc-source-badge" title="A profil adatai több nyilvános forrásból származnak" style="vertical-align:middle;margin-left:8px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból</span>`}`;
 
   // Title sor: csak a fő szakterület
   const titleParts = [];
@@ -1971,11 +1974,28 @@ load();
         anchor: new maps.Point(12, 36)
       };
       const bounds = new maps.LatLngBounds();
+      const _markers = [];
       withCoords.forEach(c => {
         const pos = { lat: Number(c.lat), lng: Number(c.lng) };
-        new maps.Marker({ position: pos, map, icon: pinIcon });
+        const m = new maps.Marker({ position: pos, icon: pinIcon });
+        _markers.push(m);
         bounds.extend(pos);
       });
+      // Cluster ha van library, különben sima markerek
+      if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+        new window.markerClusterer.MarkerClusterer({
+          map, markers: _markers,
+          renderer: {
+            render: ({ count, position }) => {
+              const size = count < 10 ? 36 : count < 50 ? 44 : 52;
+              const svg = `data:image/svg+xml;utf-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2-1}" fill="rgba(38,74,202,.18)"/><circle cx="${size/2}" cy="${size/2}" r="${size/2-5}" fill="#113293" stroke="#fff" stroke-width="2"/><text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="${size*0.32}" font-weight="700">${count}</text></svg>`)}`;
+              return new maps.Marker({ position, icon: { url: svg, scaledSize: new maps.Size(size, size), anchor: new maps.Point(size/2, size/2) } });
+            }
+          }
+        });
+      } else {
+        _markers.forEach(m => m.setMap(map));
+      }
       if(withCoords.length) map.fitBounds(bounds, 20);
       if(loadingEl) loadingEl.style.display = 'none';
     } catch(e) {

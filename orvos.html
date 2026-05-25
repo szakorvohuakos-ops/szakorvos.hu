@@ -261,6 +261,10 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-name{font-size:26px;font-weight:600;color:var(--brand);line-height:1.2;letter-spacing:-0.02em;margin:0}
 .dh-verified{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--brand-2);color:#fff;flex-shrink:0}
 .dh-verified svg{width:13px;height:13px}
+.dh-verified-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:700;color:#047857;background:linear-gradient(135deg,rgba(236,253,245,.95) 0%,rgba(240,253,250,.85) 100%);border:1.5px solid rgba(16,185,129,.3);padding:5px 11px;border-radius:999px;letter-spacing:.02em;text-transform:uppercase;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 3px rgba(16,185,129,.1)}
+.dh-verified-badge svg{flex-shrink:0;width:12px;height:12px}
+.dh-source-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;color:#64748b;background:linear-gradient(135deg,rgba(248,250,252,.95) 0%,rgba(241,245,249,.85) 100%);border:1.5px solid rgba(148,163,184,.32);padding:5px 11px;border-radius:999px;letter-spacing:.01em;flex-shrink:0;box-shadow:0 1px 0 rgba(255,255,255,.6) inset}
+.dh-source-badge svg{flex-shrink:0;width:12px;height:12px;opacity:.8}
 
 .dh-deg{font-size:14px;color:var(--sub);margin-bottom:10px;font-weight:500}
 .dh-deg strong{color:var(--text);font-weight:600}
@@ -899,9 +903,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <div class="dh-info">
             <div class="dh-name-row">
               <h1 class="dh-name" id="dhName">–</h1>
-              <span class="dh-verified" title="Ellenőrzött orvos" aria-label="Ellenőrzött orvos">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              </span>
+              <span id="dhVerifiedBadge"></span>
             </div>
             <div class="dh-deg" id="dhDeg">–</div>
 
@@ -1369,6 +1371,20 @@ function render(d){
 
   // Név
   document.getElementById('dhName').textContent = fullName;
+
+  // Ellenőrzött / Több forrásból badge
+  const vbEl = document.getElementById('dhVerifiedBadge');
+  if(vbEl){
+    if(d.verified_at){
+      vbEl.className = 'dh-verified-badge';
+      vbEl.title = 'Ellenőrzött profil — Szakorvos.hu által hitelesítve';
+      vbEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött profil';
+    } else {
+      vbEl.className = 'dh-source-badge';
+      vbEl.title = 'A profil adatai több nyilvános forrásból származnak. Az adatok pontossága még nincs hivatalosan ellenőrizve.';
+      vbEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból';
+    }
+  }
 
   // Title + PhD
   const titleParts = [`<strong>${escapeHtml(specTitled)}</strong>`];

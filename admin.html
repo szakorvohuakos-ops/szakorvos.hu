@@ -480,7 +480,7 @@ select.td-select:focus{border-color:var(--brand)}
           <button class="doctor-tab-btn" data-doctab="professional" onclick="setDoctorTab('professional')" style="background:none;border:none;padding:10px 16px;font-size:13px;font-weight:500;color:#64748b;cursor:pointer;border-bottom:2px solid transparent">Eü. szakember <span class="dtb-count" id="doctorTabCountProf">–</span></button>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Orvos neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th>Státusz</th><th style="text-align:center;width:80px">Partner</th><th style="text-align:center;width:80px" title="Egészségügyi szakember (nem orvos)">Eü.</th><th>Műveletek</th></tr></thead>
+          <thead><tr><th>Orvos neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th>Szakterület</th><th>Klinika / Város</th><th>Tapasztalat</th><th>Értékelés</th><th style="width:110px" title="Profil teljesség">Teljesség</th><th>Státusz</th><th style="text-align:center;width:80px">Partner</th><th style="text-align:center;width:80px" title="Egészségügyi szakember (nem orvos)">Eü.</th><th style="text-align:center;width:96px" title="Ellenőrzött profil — Szakorvos.hu által hitelesítve">Ellenőrzött</th><th>Műveletek</th></tr></thead>
           <tbody id="doctorsBody">
             <tr class="skel-row"><td colspan="7"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
           </tbody>
@@ -852,7 +852,7 @@ async function loadDoctors(){
   let offset=0;
   while(true){
     const{data,error}=await db.from('doctors')
-      .select('id,name,title,is_active,is_partner,is_professional,rating,review_count,experience_years,on_foglaljorvost,foglaljorvost_url,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
+      .select('id,name,title,is_active,is_partner,is_professional,rating,review_count,experience_years,on_foglaljorvost,foglaljorvost_url,verified_at,photo_url,short_intro,bio,languages,phone,email,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties(specialties(name)),doctor_clinics(clinics(name,cities(name)))')
       .order('name',{ascending:true})
       .range(offset,offset+999);
     if(error||!data||!data.length) break;
@@ -878,9 +878,11 @@ function renderDoctors(docs,page=1){
     <td>${esc(d.doctor_clinics?.[0]?.clinics?.name||'–')} ${d.doctor_clinics?.[0]?.clinics?.cities?.name?`<span class="td-sub">· ${esc(d.doctor_clinics[0].clinics.cities.name)}</span>`:''}</td>
     <td><span style="font-weight:700">${esc(d.experience_years||'–')}</span> <span style="color:var(--muted);font-size:12px">év</span></td>
     <td><span style="color:#f59e0b;font-weight:700">★ ${d.rating?esc(parseFloat(d.rating).toFixed(1)):'–'}</span> <span style="color:var(--muted);font-size:12px">(${esc(d.review_count||0)})</span></td>
+    <td>${renderCompletenessBar(calcCompleteness(d))}</td>
     <td><span class="badge ${d.is_active?'badge-green':'badge-red'}">${d.is_active?'Aktív':'Inaktív'}</span></td>
     <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Partner orvos jelölése"><input type="checkbox" ${d.is_partner?'checked':''} onchange="togglePartner('${esc(d.id)}',this.checked)" style="width:18px;height:18px;cursor:pointer;accent-color:#7c3aed"></label></td>
     <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Egészségügyi szakember (nem orvos)"><input type="checkbox" ${d.is_professional?'checked':''} onchange="toggleProfessional('${esc(d.id)}',this.checked)" style="width:18px;height:18px;cursor:pointer;accent-color:#0891b2"></label></td>
+    <td style="text-align:center"><label style="display:inline-flex;align-items:center;cursor:pointer" title="Ellenőrzött profil — csak superadmin állíthatja"><input type="checkbox" ${d.verified_at?'checked':''} onchange="toggleVerified('${esc(d.id)}',this.checked,this)" style="width:18px;height:18px;cursor:pointer;accent-color:#10b981"></label></td>
     <td><div class="act-row">
       <button class="btn btn-ghost btn-sm" onclick="toggleDoctor('${esc(d.id)}',${d.is_active})">${d.is_active?'Deaktivál':'Aktivál'}</button>
     </div></td>
@@ -1593,8 +1595,64 @@ async function toggleProfessional(id,isProfessional){
   if(error){alert('Hiba: '+error.message);loadDoctors();return;}
   const d=allDoctors.find(x=>x.id===id);
   if(d) d.is_professional=isProfessional;
-  // Friss tab szerinti renderelés
   applyDoctorTab();
+}
+
+// ═══ Profil teljesség kalkuláció — ugyanaz a logika mint a DB-ben (calc_doctor_completeness) ═══
+function calcCompleteness(d){
+  let s = 0;
+  if(d.photo_url && d.photo_url.length > 5) s += 20;
+  if(d.short_intro && d.short_intro.length > 20) s += 15;
+  if(d.bio && d.bio.length > 50) s += 12;
+  if(d.experience_years && d.experience_years > 0) s += 8;
+  if(Array.isArray(d.languages) && d.languages.length > 0) s += 6;
+  if(d.phone && d.phone.length > 5) s += 6;
+  if(d.email && d.email.length > 5) s += 4;
+  if(d.university && d.university.length > 2) s += 3;
+  if(d.graduation_year) s += 3;
+  if(Array.isArray(d.board_certifications) && d.board_certifications.length > 0) s += 5;
+  if(d.has_online_consultation || d.has_eprescription || d.has_online_results || d.has_telemedicine) s += 5;
+  if(Array.isArray(d.doctor_specialties) && d.doctor_specialties.length > 0) s += 7;
+  if(Array.isArray(d.doctor_clinics) && d.doctor_clinics.length > 0) s += 6;
+  return Math.min(s, 100);
+}
+
+function renderCompletenessBar(pct){
+  // Szín: <40 piros, 40-69 narancs, 70-89 sárgazöld, 90+ zöld
+  let color, bgColor;
+  if(pct >= 90){ color='#059669'; bgColor='rgba(16,185,129,.15)'; }
+  else if(pct >= 70){ color='#65a30d'; bgColor='rgba(132,204,22,.15)'; }
+  else if(pct >= 40){ color='#d97706'; bgColor='rgba(245,158,11,.15)'; }
+  else { color='#dc2626'; bgColor='rgba(239,68,68,.12)'; }
+  return `<div title="Profil teljesség: ${pct}%" style="display:flex;align-items:center;gap:6px;min-width:90px">
+    <div style="flex:1;height:6px;background:${bgColor};border-radius:99px;overflow:hidden;min-width:40px">
+      <div style="width:${pct}%;height:100%;background:${color};border-radius:99px;transition:width .3s"></div>
+    </div>
+    <span style="font-size:11px;font-weight:700;color:${color};min-width:30px;text-align:right">${pct}%</span>
+  </div>`;
+}
+
+async function toggleVerified(id, isVerified, cb){
+  // RPC hívás — a verify_doctor függvény DB-szinten ellenőrzi a szuperadmin szerepet
+  const { data, error } = await db.rpc('verify_doctor', {
+    p_doctor_id: id,
+    p_verified: isVerified
+  });
+  if(error){
+    alert('Nem sikerült: ' + (error.message || 'Ismeretlen hiba'));
+    // Visszaállítjuk a checkbox-ot
+    if(cb) cb.checked = !isVerified;
+    return;
+  }
+  // Frissítjük a lokális cache-t
+  const d = allDoctors.find(x => x.id === id);
+  if(d) d.verified_at = isVerified ? (data?.verified_at || new Date().toISOString()) : null;
+  // Kis vizuális visszajelzés
+  if(cb && cb.parentElement){
+    const old = cb.parentElement.title;
+    cb.parentElement.title = isVerified ? '✓ Profil ellenőrizve' : 'Ellenőrzés visszavonva';
+    setTimeout(() => { if(cb.parentElement) cb.parentElement.title = old; }, 2500);
+  }
 }
 
 async function changeRole(id,role){
