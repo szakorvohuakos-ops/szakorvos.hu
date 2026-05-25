@@ -1,46 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Statikus sitemap fallback.
-  Normál üzemben a /sitemap.xml URL-t a Vercel rewrite a Supabase Edge
-  Function-re (seo-render/sitemap) routeolja, ami dinamikus tartalmat ad
-  vissza az adatbázisból. Ez a fájl csak akkor szolgálódik ki, ha:
-    - az Edge Function le van állítva
-    - vagy direkt /sitemap-static.xml-t kérnek
--->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.szakorvos.hu/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/talalatok</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/tudastar</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/vizsgalatok</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/login.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/register.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.szakorvos.hu/adatvedelem.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-</urlset>
+xml<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/sitemap</loc>
+    <lastmod>2026-05-25</lastmod>
+  </sitemap>
+</sitemapindex>
