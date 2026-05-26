@@ -2287,7 +2287,8 @@ function renderServicesTab(d, fee){
   const PREVIEW = 5;
   let list = [];
 
-  // 1) PRIORITÁS: orvos-specifikus override (doctor_services)
+  // CSAK orvos-specifikus szolgáltatások (doctor_services)
+  // A treatments tábla általános piaci átlagárakat tartalmaz, nem ennek az orvosnak az árait
   if((d._services || []).length){
     list = d._services.map(s => ({
       name:  s.name,
@@ -2295,22 +2296,11 @@ function renderServicesTab(d, fee){
       slug:  null
     }));
   }
-  // 2) Treatments tábla az orvos szakterületei alapján
-  else if((d._treatments || []).length){
-    list = d._treatments.map(t => ({
-      name:  t.title,
-      price: t.price_huf,
-      slug:  t.slug,
-      specialty: t.specialty
-    }));
-  }
-  // 3) Ha nincs sem treatments sem doctor_services — üres lista marad
-  // (Nincs mock fallback — csak ami DB-ben van)
 
   // Preview (max 5 sor a kártyán)
   const preview = list.slice(0, PREVIEW);
   if (preview.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;color:var(--muted);font-style:italic;padding:1rem 0">Nincs megadott szolgáltatás</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;color:var(--muted);font-style:italic;padding:1rem 0">Az orvos még nem adott meg szolgáltatás-listát</td></tr>`;
   } else {
     tbody.innerHTML = preview.map(s => `<tr>
       <td>${escapeHtml(s.name)}</td>
