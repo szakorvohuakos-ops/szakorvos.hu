@@ -23,8 +23,12 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="/css/design-system.css">
+<link rel="stylesheet" href="/css/components.css">
+
 <title>Klinikák és magánrendelők | Szakorvos.hu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -1285,6 +1289,7 @@ function loadMore(){
 let curView = 'list';
 let _gmap = null;
 let _gmarkers = [];
+let _gcluster = null;
 
 function setView(v){
   curView = v;
@@ -1344,7 +1349,8 @@ async function renderMap(){
       });
     }
 
-    // Régi markerek törlése
+    // Régi markerek + cluster törlése
+    if (_gcluster) { _gcluster.clearMarkers(); _gcluster = null; }
     _gmarkers.forEach(m => m.setMap(null));
     _gmarkers = [];
 
@@ -1355,9 +1361,9 @@ async function renderMap(){
       const pos = { lat: Number(c.lat), lng: Number(c.lng) };
       const marker = new maps.Marker({
         position: pos,
-        map: _gmap,
         title: c.name,
         icon: szkPinIcon(maps)
+        // FIGYELEM: NEM rendelünk hozzá map-et — a MarkerClusterer fogja
       });
       const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
       marker.addListener('click', () => {
@@ -1374,6 +1380,42 @@ async function renderMap(){
       _gmarkers.push(marker);
       bounds.extend(pos);
     });
+
+    // ═══ MarkerClusterer — közeli markerek összevonása ═══
+    if (window.markerClusterer && window.markerClusterer.MarkerClusterer) {
+      _gcluster = new window.markerClusterer.MarkerClusterer({
+        map: _gmap,
+        markers: _gmarkers,
+        renderer: {
+          render: ({ count, position }) => {
+            // Egyedi szakorvos.hu cluster ikon (kék gradient + szám)
+            const size = count < 10 ? 40 : count < 50 ? 48 : count < 200 ? 56 : 64;
+            const svg = `data:image/svg+xml;utf-8,${encodeURIComponent(`
+              <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+                <defs>
+                  <radialGradient id="g" cx="50%" cy="40%">
+                    <stop offset="0%" stop-color="#3b5ad8"/>
+                    <stop offset="100%" stop-color="#113293"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 1}" fill="rgba(38,74,202,.18)" />
+                <circle cx="${size/2}" cy="${size/2}" r="${size/2 - 6}" fill="url(#g)" stroke="#fff" stroke-width="2.5"/>
+                <text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="${size*0.32}" font-weight="700">${count}</text>
+              </svg>
+            `)}`;
+            return new maps.Marker({
+              position,
+              icon: { url: svg, scaledSize: new maps.Size(size, size), anchor: new maps.Point(size/2, size/2) },
+              label: { text: ' ', color: 'transparent' }, // hide default label
+              zIndex: 1000 + count
+            });
+          }
+        }
+      });
+    } else {
+      // Fallback: ha valami okból nincs cluster lib, sima markerek
+      _gmarkers.forEach(m => m.setMap(_gmap));
+    }
 
     if(withCoords.length === 1){
       _gmap.setCenter(bounds.getCenter());

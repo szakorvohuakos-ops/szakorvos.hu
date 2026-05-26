@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="stylesheet" href="/css/design-system.css">
+<link rel="stylesheet" href="/css/components.css">
+
 <meta name="theme-color" content="#113293">
 <title>Orvos profil – Szakorvos.hu</title>
 <meta name="description" id="metaDesc" content="Szakorvos részletes adatlapja: szakterület, rendelő, vélemények, időpont foglalás a Szakorvos.hu-n.">
@@ -2984,8 +2987,22 @@ window.submitClaimForm = async function(e){
   };
 
   try {
-    const { error } = await db.from('doctor_claim_requests').insert(payload);
+    const { data: inserted, error } = await db.from('doctor_claim_requests').insert(payload).select('id').single();
     if(error) throw error;
+
+    // E-mail értesítés a regisztracio@szakorvos.hu címre (best-effort, nem blokkol)
+    if(inserted && inserted.id){
+      try {
+        await fetch(`${SUPABASE_URL}/functions/v1/claim-notify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ request_id: inserted.id })
+        });
+      } catch(notifyErr) {
+        console.warn('Claim notify failed (non-blocking):', notifyErr);
+      }
+    }
+
     // Sikeres
     document.getElementById('claimFormWrap').style.display = 'none';
     document.getElementById('claimSuccessWrap').style.display = 'block';

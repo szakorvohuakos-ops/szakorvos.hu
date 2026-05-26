@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<link rel="stylesheet" href="/css/design-system.css">
+<link rel="stylesheet" href="/css/components.css">
+
 <title>Klinika profil | Szakorvos.hu</title>
 <meta name="description" content="Klinika részletes profilja a Szakorvos.hu-n.">
 <meta name="theme-color" content="#113293">
@@ -172,10 +175,6 @@ img{max-width:100%;display:block}
 .hero-rating-row .docs-cnt strong{font-weight:700}
 
 /* Chip-sor (szakterületek) */
-.hero-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.hero-chip{display:inline-flex;align-items:center;background:#fff;border:1px solid var(--border-soft, #DCE3EA);color:var(--text);border-radius:100px;font-size:12.5px;font-weight:500;padding:5px 12px;line-height:1.2;white-space:nowrap;text-decoration:none}
-.hero-chip:hover{border-color:var(--brand);color:var(--brand)}
-.hero-chip.more{background:transparent;border:none;color:var(--muted);font-weight:600;padding:5px 4px}
 
 /* ═══ CTA gombok a fejléc alatt ═══ */
 .hero-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:14px}
@@ -679,12 +678,22 @@ function showError(title='Klinika nem található', msg='Sajnos a keresett klini
     </div>`;
 }
 
-// ─ Render ─
+  // Render
 function render(c){
   const city = c.cities?.name || '';
   const docs = (c.doctor_clinics || [])
     .map(dc => ({ ...dc.doctors, _fee: dc.consultation_fee }))
-    .filter(d => d && d.is_active)
+    .filter(d => d && d.id && d.is_active)
+    // Deduplikáció: ha ugyanaz az orvos több doctor_clinics rekordban szerepel,
+    // csak egyszer jelenjen meg (a legalacsonyabb _fee-vel, ha van)
+    .reduce((acc, d) => {
+      const existing = acc.find(x => x.id === d.id);
+      if(!existing) acc.push(d);
+      else if(d._fee != null && (existing._fee == null || d._fee < existing._fee)){
+        Object.assign(existing, d);
+      }
+      return acc;
+    }, [])
     .sort((a, b) => {
       // Sortírozás vezetéknév szerint (Dr. eltávolítva)
       const cleanA = (a.name || '').replace(/^(Dr\.?|Prof\.?|med\.?\s*habil\.?)\s+/gi, '').replace(/\s+Dr\.?$/i, '').trim();
@@ -773,11 +782,6 @@ function render(c){
                 <strong>${docs.length}</strong> orvos
               </span>
             </div>
-
-            ${specs.length ? `<div class="hero-chips">
-              ${specs.slice(0, 6).map(s => `<a href="talalatok.html?specialty=${encodeURIComponent(s.name)}" class="hero-chip">${escapeHtml(s.name)}</a>`).join('')}
-              ${specs.length > 6 ? `<span class="hero-chip more">+${specs.length - 6} további</span>` : ''}
-            </div>` : ''}
 
             <div class="hero-actions">
               ${c.phone ? `<a href="tel:${escapeHtml(c.phone)}" class="btn btn-primary">
