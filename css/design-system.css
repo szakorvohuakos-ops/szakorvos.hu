@@ -248,17 +248,17 @@
 .szk-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 .szk-btn svg { flex-shrink: 0; }
 
-/* 1. ELSŐDLEGES — #113293 (mély kék, kitöltött + halvány árnyék) */
+/* 1. ELSŐDLEGES — #264ACA (világos kék, kitöltött + halvány árnyék) */
 .szk-btn-primary {
-  background: #113293;
+  background: #264ACA;
   color: #ffffff;
-  border-color: #113293;
-  box-shadow: 0 2px 8px rgba(17, 50, 147, 0.25);
+  border-color: #264ACA;
+  box-shadow: 0 2px 8px rgba(38, 74, 202, 0.25);
 }
 .szk-btn-primary:hover {
-  background: #0a1f6b;
-  border-color: #0a1f6b;
-  box-shadow: 0 4px 14px rgba(17, 50, 147, 0.35);
+  background: #1f3da8;
+  border-color: #1f3da8;
+  box-shadow: 0 4px 14px rgba(38, 74, 202, 0.35);
 }
 
 /* 2. MÁSODLAGOS — #264ACA (kék, kitöltött + halvány árnyék) */
@@ -274,15 +274,22 @@
   box-shadow: 0 4px 14px rgba(38, 74, 202, 0.35);
 }
 
-/* 3. POZITÍV MŰVELET — #2C9650 (zöld outline, fehér háttér) */
+/* 3. POZITÍV MŰVELET — sötét kék outline + ZÖLD szöveg (mellékes akció) */
 .szk-btn-success {
   background: #ffffff;
   color: #2C9650;
-  border-color: rgba(44, 150, 80, 0.35);
+  border-color: #113293;
+  border-width: 1.5px;
+  box-shadow: 0 1px 2px rgba(17, 50, 147, 0.05);
 }
 .szk-btn-success:hover {
-  background: rgba(44, 150, 80, 0.06);
-  border-color: #2C9650;
+  background: #fafbff;
+  color: #237540;
+  border-color: #0a1f6b;
+  box-shadow: 0 2px 8px rgba(17, 50, 147, 0.12);
+}
+.szk-btn-success svg {
+  color: #2C9650;
 }
 
 /* 4. CTA / FIGYELEMFELHÍVÓ — #FF8A00 (narancs, kitöltött + halvány árnyék) */
@@ -363,3 +370,470 @@
 html, body {
   background-color: #f4f7fb !important;
 }
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   SZK-CARD — Univerzális kártya rendszer
+   Használható mindenhol: orvos, klinika, vizsgálat, cikk, generikus
+   
+   STRUKTÚRA:
+     .szk-card                  → fő tároló (fehér, kerek, hover)
+       .szk-card-top            → felső blokk (avatár + szöveg)
+         .szk-card-avatar       → 64px kék gradient avatár
+           .szk-card-dot        → zöld "elérhető" pötty
+         .szk-card-body         → szöveg-blokk
+           .szk-card-title      → fő cím (világos kék #264ACA)
+             .szk-verified      → zöld pipa kör
+           .szk-card-subtitle   → alcím / szakterület (sötét kék #113293)
+           .szk-card-stack      → info-csoport
+             .szk-card-meta     → meta sor (★, év, nyelv)
+       .szk-card-foot           → alsó akció-sáv (világos háttér)
+         .szk-card-foot-info    → bal oldali szöveg/cím
+         .szk-card-foot-btns    → gombok
+   ════════════════════════════════════════════════════════════════════════ */
+
+.szk-card {
+  background: #ffffff;
+  border: 1px solid #e8edf5;
+  border-radius: 16px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.4, 0, .2, 1);
+  box-shadow: 0 1px 2px rgba(17, 50, 147, .03);
+  text-decoration: none;
+  color: inherit;
+}
+.szk-card:hover {
+  border-color: #264ACA;
+  box-shadow: 0 8px 24px rgba(17, 50, 147, .1);
+  transform: translateY(-2px);
+}
+
+/* Felső blokk */
+.szk-card-top {
+  padding: 26px 28px 22px;
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.szk-card-top-no-photo {
+  padding: 26px 28px 22px;
+  display: block;
+}
+
+/* Avatár */
+.szk-card-avatar {
+  width: 68px;
+  height: 68px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #0a1f6b 0%, #264ACA 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(17, 50, 147, .18);
+}
+.szk-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.szk-card-avatar-icon {
+  background: linear-gradient(135deg, rgba(17, 50, 147, .1), rgba(38, 74, 202, .05));
+  border: 1px solid rgba(17, 50, 147, .12);
+  color: #113293;
+  box-shadow: none;
+}
+.szk-card-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2C9650;
+  border: 2.5px solid #fff;
+  z-index: 2;
+}
+
+/* Szöveg-blokk */
+.szk-card-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Fő cím — VILÁGOS KÉK */
+.szk-card-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #264ACA;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+
+/* Alcím / szakterület — SÖTÉT KÉK */
+.szk-card-subtitle {
+  font-size: 14px;
+  color: #113293;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+/* Zöld pipa kör (verified) */
+.szk-verified {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2C9650;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 11px 11px;
+}
+
+/* Info-stack */
+.szk-card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Meta sor */
+.szk-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: #475569;
+  flex-wrap: wrap;
+}
+.szk-card-meta strong { color: #0f172a; font-weight: 700; }
+.szk-card-meta-soft { color: #94a3b8; font-weight: 500; }
+.szk-card-meta-star { color: #d97706; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+.szk-card-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; }
+.szk-card-meta-lang {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(17, 50, 147, .06);
+  color: #113293;
+  border: 1px solid rgba(17, 50, 147, .1);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Alsó akció-sáv */
+.szk-card-foot {
+  padding: 16px 28px;
+  background: #fafbff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.szk-card-foot-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #475569;
+  flex: 1;
+  min-width: 200px;
+}
+.szk-card-foot-info svg { color: #264ACA; flex-shrink: 0; }
+.szk-card-foot-link { color: #264ACA; font-weight: 600; }
+.szk-card-foot-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .szk-card-top { padding: 20px; grid-template-columns: 56px 1fr; gap: 14px; }
+  .szk-card-top-no-photo { padding: 20px; }
+  .szk-card-avatar { width: 56px; height: 56px; font-size: 17px; }
+  .szk-card-title { font-size: 17px; }
+  .szk-card-subtitle { font-size: 13.5px; }
+  .szk-card-foot { padding: 14px 20px; flex-direction: column; align-items: stretch; }
+  .szk-card-foot-info { min-width: 0; }
+  .szk-card-foot-btns { width: 100%; }
+  .szk-card-foot-btns .szk-btn { flex: 1; }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════
+   GLOBÁLIS SZÍN-ÖSSZHANG (FÁZIS C-A) — felülíró layer
+   Minden oldalon érvényes. HTML-t nem módosít, csak színeket egységesít.
+   
+   Hatás:
+   - Régi gomb-osztályok (.btn-call, .btn-prof-alt, stb.) hivatalos színeket kapnak
+   - Trust-bar / verified badge / chip-ek → hivatalos paletta
+   - Link szín → brand kék
+   - Form input fokuszálás → brand kék
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. LINK SZÍNEK ─────────────────────────────────────────────────── */
+a:not(.szk-btn):not(.btn):not([class*="btn-"]):not(.szk-card):not(.nav-logo):not(.footer-link):not(.dropdown a) {
+  color: #264ACA;
+  transition: color .15s;
+}
+a:not(.szk-btn):not(.btn):not([class*="btn-"]):not(.szk-card):not(.nav-logo):not(.footer-link):not(.dropdown a):hover {
+  color: #113293;
+}
+
+/* ─── 2. FORM INPUT FOKUSZÁLÁS — brand kék ─────────────────────────────── */
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border-color: #264ACA !important;
+  box-shadow: 0 0 0 4px rgba(38, 74, 202, .1) !important;
+}
+
+/* ─── 3. RÉGI GOMB-OSZTÁLYOK SZÍN-HARMONIZÁCIÓJA ──────────────────────── */
+
+/* .btn-call — telefonhívás (sárga/zöld pasztell volt) → SÖTÉT KÉK OUTLINE + ZÖLD szöveg */
+.btn-call {
+  background: #ffffff !important;
+  color: #2C9650 !important;
+  border: 1.5px solid #113293 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 2px rgba(17, 50, 147, .05) !important;
+  transition: all .2s !important;
+}
+.btn-call:hover {
+  background: #fafbff !important;
+  color: #237540 !important;
+  border-color: #0a1f6b !important;
+  box-shadow: 0 2px 8px rgba(17, 50, 147, .12) !important;
+}
+.btn-call svg { color: #2C9650 !important; }
+
+/* .btn-prof-alt — profil megtekintés → VILÁGOS KÉK KITÖLTÖTT */
+.btn-prof-alt {
+  background: #264ACA !important;
+  color: #ffffff !important;
+  border: 1.5px solid #264ACA !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(38, 74, 202, .25) !important;
+  transition: all .2s !important;
+}
+.btn-prof-alt:hover {
+  background: #1f3da8 !important;
+  border-color: #1f3da8 !important;
+  box-shadow: 0 4px 14px rgba(38, 74, 202, .35) !important;
+}
+
+/* .btn-primary — fő CTA → VILÁGOS KÉK KITÖLTÖTT */
+.btn-primary,
+button.btn-primary,
+.btn.btn-primary {
+  background: #264ACA !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(38, 74, 202, .25) !important;
+  transition: all .2s !important;
+}
+.btn-primary:hover,
+button.btn-primary:hover,
+.btn.btn-primary:hover {
+  background: #1f3da8 !important;
+  box-shadow: 0 4px 14px rgba(38, 74, 202, .35) !important;
+  transform: translateY(-1px);
+}
+
+/* .btn-outline — outline gomb → SÖTÉT KÉK OUTLINE */
+.btn-outline {
+  background: #ffffff !important;
+  color: #113293 !important;
+  border: 1.5px solid #113293 !important;
+  border-radius: 10px !important;
+  transition: all .2s !important;
+}
+.btn-outline:hover {
+  background: #113293 !important;
+  color: #ffffff !important;
+}
+
+/* .btn-cta — narancs CTA (figyelemfelhívó) → HIVATALOS NARANCS */
+.btn-cta,
+.cta-box {
+  background: linear-gradient(135deg, #FF8A00 0%, #ff6b35 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(255, 138, 0, .3) !important;
+}
+.btn-cta:hover,
+.cta-box:hover {
+  box-shadow: 0 6px 18px rgba(255, 138, 0, .4) !important;
+  transform: translateY(-1px);
+}
+
+/* .btn-nav-cta — partner gomb a navigációban (narancs) */
+.btn-nav-cta,
+.btn-nav-partner {
+  background: linear-gradient(135deg, #FF8A00 0%, #ff6b35 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(255, 138, 0, .3) !important;
+}
+.btn-nav-cta:hover,
+.btn-nav-partner:hover {
+  box-shadow: 0 6px 18px rgba(255, 138, 0, .4) !important;
+  transform: translateY(-1px);
+}
+
+/* .btn-nav-outline — másodlagos nav gomb (Bejelentkezés) → SÖTÉT KÉK OUTLINE */
+.btn-nav-outline {
+  background: #ffffff !important;
+  color: #113293 !important;
+  border: 1.5px solid #113293 !important;
+  box-shadow: none !important;
+}
+.btn-nav-outline:hover {
+  background: #113293 !important;
+  color: #ffffff !important;
+  border-color: #113293 !important;
+}
+
+/* .btn-submit — form beküldés (login/register) → VILÁGOS KÉK */
+.btn-submit {
+  background: #264ACA !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(38, 74, 202, .25) !important;
+  transition: all .2s !important;
+}
+.btn-submit:hover {
+  background: #1f3da8 !important;
+  box-shadow: 0 4px 14px rgba(38, 74, 202, .35) !important;
+}
+
+/* .btn-find — kereső gomb → VILÁGOS KÉK */
+.btn-find {
+  background: #264ACA !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(38, 74, 202, .25) !important;
+}
+.btn-find:hover {
+  background: #1f3da8 !important;
+  box-shadow: 0 4px 14px rgba(38, 74, 202, .35) !important;
+}
+
+/* .btn-plan — pricing gomb → VILÁGOS KÉK */
+.btn-plan {
+  background: #264ACA !important;
+  color: #ffffff !important;
+}
+.btn-plan:hover {
+  background: #1f3da8 !important;
+}
+
+/* .btn-claim — adatlap átvétel → ZÖLD szöveg + sötét kék outline */
+.btn-claim {
+  background: #ffffff !important;
+  color: #2C9650 !important;
+  border: 1.5px solid #113293 !important;
+}
+.btn-claim:hover {
+  background: #fafbff !important;
+  border-color: #0a1f6b !important;
+}
+.btn-claim svg { color: #2C9650 !important; }
+
+/* ─── 4. VERIFIED BADGE — minden helyen ugyanaz a zöld pipa-kör ──────── */
+.dc-verified-badge,
+.verified-badge {
+  background: #2C9650 !important;
+  color: #fff !important;
+  border-color: #2C9650 !important;
+}
+
+/* ─── 5. TRUST BAR (orvos profil) — színek konzisztens ──────────────── */
+.trust-item .trust-icon {
+  background: linear-gradient(135deg, rgba(17, 50, 147, .08), rgba(38, 74, 202, .04)) !important;
+  border: 1px solid rgba(17, 50, 147, .1) !important;
+  color: #113293 !important;
+}
+.trust-item .trust-icon svg {
+  color: #113293 !important;
+}
+
+/* ─── 6. CIKK / TUDÁSTÁR CARD hover ──────────────────────────────────── */
+.article-card:hover,
+.tudastar-card:hover {
+  border-color: #264ACA !important;
+}
+.article-card__spec {
+  color: #264ACA !important;
+}
+
+/* ─── 7. KLINIKA / VIZSGÁLAT KÁRTYÁK hover — konzisztens kék ─────────── */
+.cl-card:hover,
+.treatment-card:hover,
+.kart-klinika:hover {
+  border-color: #264ACA !important;
+}
+
+/* ─── 8. POPULAR SPEC (kezdőlap szakterület kártyák) színek ──────────── */
+.popular-spec:hover,
+.spec-card:hover {
+  border-color: #264ACA !important;
+}
+
+/* ─── 9. CHIP / TAG osztályok — egységes kék árnyalat ─────────────────── */
+.dc-lang-chip,
+.loc-tag:not(.gr),
+.chip:not([class*="chip-"]) {
+  background: rgba(17, 50, 147, .06) !important;
+  color: #113293 !important;
+  border-color: rgba(17, 50, 147, .12) !important;
+}
+.loc-tag.gr {
+  background: rgba(44, 150, 80, .08) !important;
+  color: #1a7a3e !important;
+  border-color: rgba(44, 150, 80, .18) !important;
+}
+
+/* ─── 10. AI KERESŐ — brand színek megerősítése ──────────────────────── */
+.ai-chat-bubble.user,
+.ai-bubble.user {
+  background: #264ACA !important;
+  color: #fff !important;
+}
+
+/* ─── 11. STAR (★ értékelés) — egységes narancs ─────────────────────── */
+.dc-star,
+.star-icon,
+.rating-star {
+  color: #d97706 !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   VÉGE — GLOBÁLIS SZÍN-ÖSSZHANG (FÁZIS C-A)
+   ════════════════════════════════════════════════════════════════════════ */
