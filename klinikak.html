@@ -1224,43 +1224,50 @@ function clinicCardHTML(c, i){
   const photo = c.photo_url || (c.clinic_photos && c.clinic_photos[0]);
   const initial = (c.name || '?').charAt(0).toUpperCase();
   const photoBlock = photo
-    ? `<div class="dc-photo-wrap" style="background:#eef2ff"><img src="${escapeHtml(photo)}" alt="${escapeHtml(c.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.clinic-init').style.display='flex'"><div class="av clinic-init" style="display:none;background:linear-gradient(135deg,#264ACA,#113293)">${escapeHtml(initial)}</div></div>`
-    : `<div class="dc-photo-wrap"><div class="av" style="background:linear-gradient(135deg,#264ACA,#113293)">${escapeHtml(initial)}</div></div>`;
+    ? `<div class="szk-card-avatar"><img src="${escapeHtml(photo)}" alt="${escapeHtml(c.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.clinic-init').style.display='flex'"><div class="clinic-init" style="display:none;width:100%;height:100%;align-items:center;justify-content:center">${escapeHtml(initial)}</div></div>`
+    : `<div class="szk-card-avatar">${escapeHtml(initial)}</div>`;
 
   const ratingFmt = c._avgRating > 0 ? c._avgRating.toFixed(1) : '';
-  const specsHtml = c._specs.slice(0, 4).map(s =>
-    `<span class="dc-lang-chip">${escapeHtml(s.name)}</span>`
-  ).join('') + (c._specs.length > 4 ? `<span class="dc-lang-chip" style="color:var(--muted)">+${c._specs.length - 4}</span>` : '');
+  const specsArr = (c._specs || []).slice(0, 3);
+  const extraSpecCount = Math.max(0, (c._specs || []).length - 3);
+  const specsDisplay = specsArr.map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
+
+  // Cím összerakása
+  const addressLine = [[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ') || c.address || '';
 
   const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
 
-  return `<div class="dc" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
-    ${photoBlock}
-    <div class="dc-mid">
-      <div class="dc-nm">${escapeHtml(c.name)}<span class="dc-nm-verified" title="Ellenőrzött"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span></div>
-      <div class="dc-deg">${escapeHtml([[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ') || c.address || 'Magyarország')}</div>
+  return `<div class="szk-card" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
+    <div class="szk-card-top">
+      ${photoBlock}
+      <div class="szk-card-body">
+        <div class="szk-card-title">${escapeHtml(c.name)}<span class="szk-verified" title="Ellenőrzött"></span></div>
+        <div class="szk-card-subtitle">${escapeHtml(specsDisplay)}${extraSpecCount > 0 ? ' · +' + extraSpecCount + ' szakterület' : ''}</div>
 
-      ${ratingFmt || c._totalReviews ? `<div class="dc-meta dc-meta-rating">
-        ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${c._totalReviews ? ` <span style="color:var(--muted);font-weight:500">(${c._totalReviews} értékelés)</span>` : ''}</span>` : ''}
-      </div>` : ''}
-
-      <div class="dc-meta">
-        <span class="dc-meta-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <strong>${c._docCount}</strong>&nbsp;orvos</span>
-        ${c.phone ? `<span class="dc-meta-dot"></span><span class="dc-meta-item">📞 ${escapeHtml(c.phone)}</span>` : ''}
+        ${(c._docCount || ratingFmt) ? `<div class="szk-card-stack">
+          <div class="szk-card-meta">
+            ${c._docCount ? `<span><strong>${c._docCount}</strong> szakorvos</span>` : ''}
+            ${c._docCount && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
+            ${ratingFmt ? `<span class="szk-card-meta-star">★ <strong>${ratingFmt}</strong>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews})</span>` : ''}</span>` : ''}
+          </div>
+        </div>` : ''}
       </div>
-
-      ${specsHtml ? `<div class="dc-meta" style="margin-top:.55rem;gap:6px">${specsHtml}</div>` : ''}
     </div>
 
-    <div class="dc-right" onclick="event.stopPropagation()">
-      <button class="btn-prof" onclick="event.stopPropagation();window.location.href='${target}'">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>
-        Klinika megtekintése
-      </button>
-      <button class="btn-prof-alt" onclick="event.stopPropagation();window.location.href='${target}'">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        ${c._docCount} szakorvos
-      </button>
+    <div class="szk-card-foot">
+      <div class="szk-card-foot-info">
+        ${addressLine ? `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>${escapeHtml(addressLine)}</span>
+        ` : '<span class="szk-card-meta-soft">Helyszín nincs megadva</span>'}
+      </div>
+      <div class="szk-card-foot-btns" onclick="event.stopPropagation()">
+        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+          Hívás
+        </a>` : ''}
+        <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();window.location.href='${target}'">Klinika megtekintése</button>
+      </div>
     </div>
   </div>`;
 }
