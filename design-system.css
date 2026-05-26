@@ -46,7 +46,7 @@
   --color-info-bg:           rgba(38, 74, 202, 0.05);
   
   /* === HÁTTÉR === */
-  --color-bg-page:           #F4F6F8;
+  --color-bg-page:           #f4f7fb;
   --color-bg:                #ffffff;
   --color-bg-soft:           #f8fafc;
   
@@ -356,3 +356,10 @@
 .szk-chip-success  { background: rgba(44, 150, 80, 0.1);   color: #2C9650; border: 1px solid rgba(44, 150, 80, 0.18); }
 .szk-chip-cta      { background: rgba(255, 138, 0, 0.12);  color: #e57700; border: 1px solid rgba(255, 138, 0, 0.25); }
 
+/* ════════════════════════════════════════════════════════════════════════
+   GLOBÁLIS HÁTTÉR — minden oldalra alkalmazva
+   Az oldal alap háttere: #f4f7fb (világoskék-szürke)
+   ════════════════════════════════════════════════════════════════════════ */
+html, body {
+  background-color: #f4f7fb !important;
+}
