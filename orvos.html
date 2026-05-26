@@ -2100,16 +2100,10 @@ function render(d){
   }
   document.getElementById('dhStats').innerHTML = statsHtml.join('');
 
-  // Összegző 2 sor a profil tetején
-  const sumCity = d.doctor_clinics?.[0]?.clinics?.cities?.name || '';
-  const sumClinicName = d.doctor_clinics?.[0]?.clinics?.name || '';
-  const expTxt = d.experience_years ? `${d.experience_years} éves tapasztalatával` : 'szakmai tapasztalatával';
-  const cityTxt = sumCity ? `${sumCity}ban` : 'magánrendelésen';
-  const clinicTxt = sumClinicName ? ` a ${sumClinicName} rendelőben` : '';
   // AI összefoglaló a találati kártyán jelenik meg
 
-  // Bio collapsed/expanded
-  const bio = d.bio || `${fullName} ${d.experience_years ? d.experience_years + ' éves' : 'több éves'} szakmai tapasztalattal rendelkező ${specRaw.toLowerCase() || 'szakorvos'}. Pácienseit empatikusan, alapos vizsgálat után látja el. Szakterületén a legkorszerűbb diagnosztikai és terápiás módszereket alkalmazza, különös figyelmet fordít a megelőzésre és arra, hogy minden páciens egyedi kezelési tervet kapjon.`;
+  // Bio collapsed/expanded — CSAK ha van DB-ben adat
+  const bio = d.bio || '';
   renderBio(bio);
 
   // Jobb sáv
@@ -2130,30 +2124,66 @@ function render(d){
   }
 
   // ─── About tab content ───────────────────────────────────────────
-  document.getElementById('aboutBio').textContent = bio;
-
-  // Végzettségek (heurisztika: title + PhD parser)
-  const edu = [];
-  if(d.title){
-    edu.push('SOTE ÁOK – Általános orvos');
-    if(specRaw) edu.push(`${specRaw} szakvizsga`);
-    if(/PhD/i.test(d.title)) edu.push(`PhD – ${specRaw || 'orvostudományi'} kutatások`);
-  } else {
-    edu.push('Általános orvosi diploma');
-    if(specRaw) edu.push(`${specRaw} szakvizsga`);
+  // About tab bio — üres ha nincs
+  const aboutBioEl = document.getElementById('aboutBio');
+  if (aboutBioEl) {
+    aboutBioEl.textContent = bio || '';
+    aboutBioEl.style.display = bio ? '' : 'none';
   }
-  document.getElementById('colEdu').innerHTML = edu.map(s => `<li>${escapeHtml(s)}</li>`).join('') || '<li>–</li>';
+
+  // Végzettségek — CSAK DB-ből (d.education vagy d.universities)
+  const eduArr = [];
+  if (Array.isArray(d.education) && d.education.length) {
+    d.education.forEach(e => {
+      if (typeof e === 'string') eduArr.push(e);
+      else if (e?.name) eduArr.push(e.name);
+      else if (e?.degree && e?.institution) eduArr.push(e.degree + ' – ' + e.institution);
+    });
+  }
+  if (d.university && !eduArr.length) eduArr.push(d.university + (d.graduation_year ? ' (' + d.graduation_year + ')' : ''));
+  const eduEl = document.getElementById('colEdu');
+  if (eduEl) {
+    if (eduArr.length) {
+      eduEl.innerHTML = eduArr.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    } else {
+      eduEl.innerHTML = '<li style="color:var(--muted);font-style:italic;list-style:none;margin-left:-1.2em">Nincs megadva</li>';
+    }
+  }
 
   // Szakterületek lista (törölve a UI-ról)
 
-  // Tagságok — placeholder, ha nincs DB-ben
-  const memberships = [`Magyar ${specRaw || 'Orvos'} Szakmai Kollégium`];
-  if(allSpecs.includes('Bőrgyógyászat') || /bőr/i.test(specRaw)) memberships.push('EADV (European Academy of Dermatology)');
-  document.getElementById('colMember').innerHTML = memberships.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  // Tagságok — CSAK DB-ből (d.board_certifications vagy d.memberships)
+  const memArr = [];
+  if (Array.isArray(d.board_certifications) && d.board_certifications.length) {
+    d.board_certifications.forEach(m => {
+      if (typeof m === 'string') memArr.push(m);
+      else if (m?.name) memArr.push(m.name);
+    });
+  }
+  if (Array.isArray(d.memberships) && d.memberships.length) {
+    d.memberships.forEach(m => {
+      if (typeof m === 'string') memArr.push(m);
+      else if (m?.name) memArr.push(m.name);
+    });
+  }
+  const memEl = document.getElementById('colMember');
+  if (memEl) {
+    if (memArr.length) {
+      memEl.innerHTML = memArr.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+    } else {
+      memEl.innerHTML = '<li style="color:var(--muted);font-style:italic;list-style:none;margin-left:-1.2em">Nincs megadva</li>';
+    }
+  }
 
-  // Beszélt nyelvek
-  const langList = langs.length ? langs : ['Magyar'];
-  document.getElementById('colLangs').innerHTML = langList.map(s => `<li>${escapeHtml(s)}</li>`).join('');
+  // Beszélt nyelvek — CSAK DB-ből (langs)
+  const colLangsEl = document.getElementById('colLangs');
+  if (colLangsEl) {
+    if (langs.length) {
+      colLangsEl.innerHTML = langs.map(s => `<li>${escapeHtml(s.charAt(0).toUpperCase() + s.slice(1))}</li>`).join('');
+    } else {
+      colLangsEl.innerHTML = '<li style="color:var(--muted);font-style:italic;list-style:none;margin-left:-1.2em">Nincs megadva</li>';
+    }
+  }
 
   // ─── Elérhetőségek (jobb sidebar contact-card) — törölve ────────
   // contactRows box removed from sidebar
@@ -2204,10 +2234,19 @@ function sideRow(iconKey, lbl, val){
   </div>`;
 }
 
-/* Bio render — a Bemutatkozás szekcióba tölti */
+/* Bio render — a Bemutatkozás szekcióba tölti, üres ha nincs DB-ben */
 function renderBio(bio){
   const el = document.getElementById('aboutBio');
-  if(el) el.textContent = bio;
+  if (!el) return;
+  if (bio && bio.trim()) {
+    el.textContent = bio;
+    el.style.display = '';
+  } else {
+    el.textContent = '';
+    el.style.color = 'var(--muted)';
+    el.style.fontStyle = 'italic';
+    el.textContent = 'Nincs bemutatkozás megadva';
+  }
 }
 function toggleBio(){
   const wrap = document.getElementById('dhBio');
@@ -2232,15 +2271,14 @@ function computeSoonest(d){
     const [h,m] = todayAv.start_time.split(':').map(Number);
     const startMin = h * 60 + (m||0);
     if(nowMin < startMin) return `Ma ${todayAv.start_time.slice(0,5)}`;
-    // Ma később
-    const remH = Math.min(now.getHours() + 1, 19);
-    return `Ma ${String(remH).padStart(2,'0')}:30`;
+    // Ma később — pontos slot nélkül nincs mit kitalálni
+    return 'Hívja a rendelőt';
   }
   // Holnap?
   const tomorrowDb = (todayDb % 7) + 1;
   const tomAv = (d.availability || []).find(a => a.day_of_week === tomorrowDb);
   if(tomAv && tomAv.start_time) return `Holnap ${tomAv.start_time.slice(0,5)}`;
-  return 'Hamarosan';
+  return 'Hívja a rendelőt';
 }
 
 /* ── Szolgáltatások tab ───────────────────────────────────────────── */
@@ -2266,24 +2304,19 @@ function renderServicesTab(d, fee){
       specialty: t.specialty
     }));
   }
-  // 3) Fallback heurisztikus lista, ha sem treatments sem doctor_services
-  else {
-    const specRaw = d.doctor_specialties?.[0]?.specialties?.name || 'Szakorvosi';
-    list = [
-      { name:`Első ${specRaw.toLowerCase()}i vizsgálat`, price: fee || 15000 },
-      { name:'Kontroll vizsgálat',                       price: Math.round((fee || 12000) * 0.67 / 1000) * 1000 },
-      { name:'Online konzultáció',                       price: Math.round((fee || 12000) * 0.85 / 1000) * 1000 },
-      { name:'Részletes anamnézis',                      price: fee || 15000 },
-      { name:'Záró konzultáció',                         price: Math.round((fee || 12000) * 0.5 / 1000) * 1000 }
-    ];
-  }
+  // 3) Ha nincs sem treatments sem doctor_services — üres lista marad
+  // (Nincs mock fallback — csak ami DB-ben van)
 
   // Preview (max 5 sor a kártyán)
   const preview = list.slice(0, PREVIEW);
-  tbody.innerHTML = preview.map(s => `<tr>
-    <td>${escapeHtml(s.name)}</td>
-    <td>${s.price ? fmtHuf(s.price) : 'Egyedi'}</td>
-  </tr>`).join('');
+  if (preview.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;color:var(--muted);font-style:italic;padding:1rem 0">Nincs megadott szolgáltatás</td></tr>`;
+  } else {
+    tbody.innerHTML = preview.map(s => `<tr>
+      <td>${escapeHtml(s.name)}</td>
+      <td>${s.price ? fmtHuf(s.price) : 'Egyedi'}</td>
+    </tr>`).join('');
+  }
 
   // Számláló
   const total = list.length;
@@ -2805,16 +2838,8 @@ function renderFaqTab(d){
   document.getElementById('faqTotal').textContent = faqs.length;
 
   if(!faqs.length){
-    // Default kérdések
-    const spec = d.doctor_specialties?.[0]?.specialties?.name || 'orvos';
-    const fallback = [
-      {q:'Mennyi idő alatt várható javulás a kezeléstől?', a:'A kezelés hatékonysága páciensenként változik. Az első konzultáció során egyéni kezelési tervet készít az orvos a várható időkeretről és a kezelés menetéről.'},
-      {q:'Fájdalmas a vizsgálat?', a:'A vizsgálatok többsége nem jár fájdalommal. Ha bármilyen invazív beavatkozás szükséges, az orvos előzetesen tájékoztatja Önt és megbeszéli a lehetőségeket.'},
-      {q:'Lehet online konzultációt kérni?', a:'Igen, az online konzultáció elérhető. A foglaláskor választhatja az "Online konzultáció" opciót.'},
-      {q:`Milyen biztosítókat fogad el a ${escapeHtml(spec.toLowerCase())}?`, a:'A pontos biztosítói lista a bemutatkozás oldalon és az árak között található.'},
-    ];
-    document.getElementById('faqList').innerHTML = fallback.map((f,i) => faqItem(f, i)).join('');
-    document.getElementById('faqTotal').textContent = fallback.length;
+    // Üres FAQ jelzés — nem mockoljuk
+    document.getElementById('faqList').innerHTML = '<div style="text-align:center;color:var(--muted);font-style:italic;padding:1.5rem 0">Még nincs gyakori kérdés ehhez az orvoshoz</div>';
     return;
   }
   document.getElementById('faqList').innerHTML = faqs.map((f,i) => faqItem({q:f.question, a:f.answer}, i)).join('');
