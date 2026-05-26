@@ -66,7 +66,9 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
   --grad-orange:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);
   --grad-hero:linear-gradient(135deg,#113293 0%,#2C9650 100%);
 }
-body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#f0f4ff 0%,#f6f8fb 40%,#f6f8fb 70%,#f0f7f3 100%);overflow-x:hidden;min-height:100vh;position:relative}
+body{font-family:'Inter',sans-serif;color:var(--text);background:linear-gradient(160deg,#e0e9ff 0%,#eef2ff 35%,#f0f7f3 70%,#e8f3ee 100%);overflow-x:hidden;min-height:100vh;position:relative}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 20% 20%, rgba(99,102,241,.22) 0%, transparent 40%),radial-gradient(circle at 80% 60%, rgba(44,150,80,.15) 0%, transparent 45%),radial-gradient(circle at 50% 90%, rgba(38,74,202,.18) 0%, transparent 50%)}
+body > *{position:relative;z-index:1}
 body::before{
   content:'';
   position:fixed;
@@ -871,6 +873,239 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .view-toggle-btn.active{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 8px rgba(17,50,147,.22),0 6px 18px rgba(17,50,147,.18)}
 .view-toggle-btn svg{flex-shrink:0}
 @media(max-width:520px){.view-toggle-btn{padding:9px 16px;font-size:13px}}
+
+/* ════════════════════════════════════════════════════════════════════════
+   E2 DIZÁJN — orvos kártyák (talalatok.html)
+   Verzió: 2026-05-26
+   Ezek a stílusok felülírják a meglévő .dc / .dc-* osztályokat hogy
+   az E2 prémium dizájnt kapják (csak kék, zöld nélkül).
+   ════════════════════════════════════════════════════════════════════════ */
+
+.dc{
+  background: linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(247,250,255,.42) 100%) !important;
+  backdrop-filter: blur(34px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(190%) !important;
+  border: 1px solid rgba(255,255,255,.65) !important;
+  border-radius: 18px !important;
+  padding: 22px !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,.85) inset,
+    0 1px 2px rgba(17,50,147,.04),
+    0 8px 24px rgba(17,50,147,.08),
+    0 16px 40px rgba(17,50,147,.07) !important;
+  transition: all .35s cubic-bezier(.4,0,.2,1) !important;
+  display: grid !important;
+  grid-template-columns: 64px 1fr auto !important;
+  gap: 16px !important;
+  align-items: start !important;
+}
+@media (max-width: 640px) {
+  .dc {
+    grid-template-columns: 56px 1fr !important;
+    padding: 18px !important;
+  }
+  .dc-right { grid-column: 1 / -1 !important; margin-top: 8px !important; }
+}
+.dc:hover{
+  border-color: rgba(38,74,202,.45) !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.72) 0%, rgba(247,250,255,.58) 100%) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 2px 4px rgba(17,50,147,.05),
+    0 16px 40px rgba(17,50,147,.18) !important;
+}
+
+/* Fotó / avatár — mélykék gradient, kicsit nagyobb */
+.dc .dc-photo-wrap{
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 14px !important;
+  flex-shrink: 0 !important;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(17,50,147,.22) !important;
+}
+.dc .dc-photo-wrap .av{
+  background: linear-gradient(135deg, #0a1f6b 0%, #264ACA 100%) !important;
+  color: #fff !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px !important;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dc .dc-photo-wrap img{ width: 100%; height: 100%; object-fit: cover; }
+.dc .av-dot{
+  position: absolute !important;
+  bottom: -2px !important;
+  right: -2px !important;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  background: #2C9650 !important;
+  border: 2.5px solid #fff !important;
+  z-index: 2;
+}
+
+/* Középső szöveg — átalakítás */
+.dc-mid{
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+/* Spec (kis kék uppercase) — új elem, beillesztve a .dc-deg-en keresztül */
+.dc-deg{
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #264ACA !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  margin: 0 !important;
+  order: -1 !important;
+}
+
+/* Orvos név — nagyobb, sötét kék */
+.dc-nm{
+  font-size: 16.5px !important;
+  font-weight: 700 !important;
+  color: #0a1f6b !important;
+  letter-spacing: -0.018em !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+/* Verified badge — arany pajzs */
+.dc-verified-badge{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #b45309 !important;
+  font-size: 0 !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+.dc-verified-badge::before{
+  content: '';
+  width: 14px; height: 14px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23d97706' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/><polyline points='9 12 11 14 15 10'/></svg>") no-repeat center;
+  background-size: contain;
+}
+.dc-verified-badge svg { display: none !important; }
+
+/* Source badge — szürkeebb, kisebb */
+.dc-source-badge{
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-size: 0 !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+.dc-source-badge::before{
+  content: '';
+  width: 14px; height: 14px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><circle cx='12' cy='12' r='10'/><line x1='12' y1='16' x2='12' y2='12'/><line x1='12' y1='8' x2='12.01' y2='8'/></svg>") no-repeat center;
+  background-size: contain;
+}
+.dc-source-badge svg { display: none !important; }
+
+/* Meta sor (értékelés, tapasztalat, nyelvek) */
+.dc-meta{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  margin-top: 4px !important;
+}
+.dc-meta-item { display: inline-flex; align-items: center; gap: 4px; }
+.dc-star { color: #d97706 !important; font-weight: 700; }
+.dc-meta strong { color: #0f172a !important; font-weight: 700; }
+.dc-meta-dot{
+  width: 3px; height: 3px; border-radius: 50%;
+  background: #cbd5e1; flex-shrink: 0;
+}
+
+/* Rating sor — átrendezés */
+.dc-meta-rating{
+  margin-top: 6px !important;
+  padding-top: 8px !important;
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+/* Nyelv chip — kicsi kék pill */
+.dc-lang-chip{
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, rgba(17,50,147,.06), rgba(38,74,202,.03)) !important;
+  color: #113293 !important;
+  border: 1px solid rgba(17,50,147,.12) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+/* Helyszín ikon + cím */
+.dc-loc{
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  margin-top: 6px !important;
+}
+.dc-loc svg { color: #94a3b8; flex-shrink: 0; }
+.dc-loc-clinic { color: #475569; }
+
+/* Bio summary */
+.dc-summary{
+  grid-column: 1 / -1 !important;
+  margin-top: 12px !important;
+  padding-top: 12px !important;
+  border-top: 1px solid #f1f5f9 !important;
+  font-size: 13px !important;
+  color: #64748b !important;
+  font-style: normal !important;
+  line-height: 1.5 !important;
+}
+
+/* Right panel — gombok (a szk-btn-* osztályokkal együtt működnek) */
+.dc-right{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  min-width: 140px !important;
+}
+.dc-right .szk-btn{
+  width: 100% !important;
+  white-space: nowrap !important;
+}
+
+/* Profil-teljesség mini meter — visszafogottabb */
+.dc-prof{
+  margin-top: 8px !important;
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+}
+
 </style>
 <div class="view-toggle">
   <div class="view-toggle-inner" role="tablist" aria-label="Találat típus">
@@ -1790,11 +2025,11 @@ function cardH(d,i){
       ${renderCompletenessMini(calcCompleteness(d))}
     </div>
     <div class="dc-right" onclick="event.stopPropagation()">
-      <a class="btn-call" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+      <a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
         Hívás
       </a>
-      <button class="btn-prof-alt" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
+      <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
     </div>
     ${(d.bio || d.short_intro) ? `<div class="dc-summary" id="sum-${d.id}">${escapeHtml(truncateWords(d.bio || d.short_intro, 7))}</div>` : ''}
   </div>`;
