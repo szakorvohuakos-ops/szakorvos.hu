@@ -494,9 +494,36 @@ tbody tr:hover td{background:#fafbff;transition:background .15s}
               <input class="form-input" id="pFee" type="number" min="0" placeholder="15000">
               <div class="form-hint">0 = egyedi / szabad ár</div>
             </div>
+            <div class="form-group">
+              <label class="form-label">Nem</label>
+              <select class="form-input" id="pGender">
+                <option value="">— Nincs megadva —</option>
+                <option value="male">👨 Férfi</option>
+                <option value="female">👩 Nő</option>
+              </select>
+              <div class="form-hint">A keresőben szűrhető (pl. „női nőgyógyász”)</div>
+            </div>
             <div class="form-group form-full">
               <label class="form-label">Nyelvek (vesszővel elválasztva)</label>
               <input class="form-input" id="pLang" placeholder="magyar, angol, német">
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label" style="margin-bottom:8px">Online / digitális szolgáltatások</label>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+                <label class="chk-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer">
+                  <input type="checkbox" id="pOnlineConsult"> 💻 Online konzultáció
+                </label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer">
+                  <input type="checkbox" id="pTelemedicine"> 📹 Telemedicina (videó)
+                </label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer">
+                  <input type="checkbox" id="pEprescription"> 💊 e-recept
+                </label>
+                <label class="chk-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer">
+                  <input type="checkbox" id="pOnlineResults"> 📄 Online leletek
+                </label>
+              </div>
+              <div class="form-hint" style="margin-top:6px">A profil teljesség pontszámát is növelik</div>
             </div>
           </div>
         </div>
@@ -743,13 +770,26 @@ async function loadDoctorProfile(userId) {
       'pEmail': data.email,
       'pPhone': data.phone,
       'pBio': data.bio,
-      'pLang': data.languages,
+      'pLang': Array.isArray(data.languages) ? data.languages.join(', ') : data.languages,
       'pExp': data.experience_years,
       'pFee': data.consultation_fee,
+      'pGender': data.gender || '',
     };
     Object.entries(fields).forEach(([id, val]) => {
       const el = document.getElementById(id);
       if (el && val != null) el.value = val;
+    });
+
+    // Online szolgáltatás checkbox-ok
+    const onlineFields = {
+      'pOnlineConsult': data.has_online_consultation,
+      'pTelemedicine':  data.has_telemedicine,
+      'pEprescription': data.has_eprescription,
+      'pOnlineResults': data.has_online_results,
+    };
+    Object.entries(onlineFields).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.checked = val === true;
     });
 
     // Sidebar név
@@ -871,6 +911,11 @@ async function saveProfile() {
   const lang  = document.getElementById('pLang')?.value?.trim();
   const exp   = parseInt(document.getElementById('pExp')?.value) || null;
   const fee   = parseInt(document.getElementById('pFee')?.value) || null;
+  const gender = document.getElementById('pGender')?.value || null;
+  const hasOnlineConsult = document.getElementById('pOnlineConsult')?.checked || false;
+  const hasTelemedicine  = document.getElementById('pTelemedicine')?.checked || false;
+  const hasEprescription = document.getElementById('pEprescription')?.checked || false;
+  const hasOnlineResults = document.getElementById('pOnlineResults')?.checked || false;
 
   if (!name) {
     alert('A név megadása kötelező!');
@@ -892,6 +937,11 @@ async function saveProfile() {
     languages: lang || null,
     experience_years: exp,
     consultation_fee: fee,
+    gender: (gender === 'male' || gender === 'female') ? gender : null,
+    has_online_consultation: hasOnlineConsult,
+    has_telemedicine: hasTelemedicine,
+    has_eprescription: hasEprescription,
+    has_online_results: hasOnlineResults,
     admin_user_id: currentUserId,
     is_active: true,
   };

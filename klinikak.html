@@ -1060,8 +1060,58 @@ function populateFilters(){
 
   const params = new URLSearchParams(window.location.search);
   if(params.get('city')) fCity.value = params.get('city');
-  if(params.get('specialty')) fSpec.value = params.get('specialty');
+  if(params.get('specialty')) {
+    // Lehet doctor_slug (pl. "ortoped-traumatologus") vagy név (pl. "Ortopédia és traumatológia")
+    // A fSpec select-ben név van — fordítsuk át slug → name, ha slug-szerű
+    const specVal = params.get('specialty');
+    const isSlugLike = /^[a-z][a-z0-9-]+$/.test(specVal);
+    if (isSlugLike) {
+      // Megpróbáljuk a klinikák specialty-jei közül kikeresni a hasonló nevet
+      // (egyszerű fallback — nem 100% pontos, de a legtöbb esetben működik)
+      const specOptions = Array.from(fSpec.options).map(o => o.value);
+      // a doctor_slug-ot tartalmazó nevet keressük
+      const specSlugMap = {
+        'ortoped-traumatologus': 'Ortopédia és traumatológia',
+        'borgyogyasz': 'Bőrgyógyászat',
+        'kardiologus': 'Kardiológia',
+        'neurologus': 'Neurológia',
+        'fogorvos': 'Általános fogászat',
+        'szemeszet-szakorvos': 'Szemészet',
+        'ful-orr-gege-szakorvos': 'Fül-orr-gégészet',
+        'nogyogyasz': 'Szülészet-nőgyógyászat',
+        'urologus': 'Urológia',
+        'pszichiatrus': 'Pszichiátria',
+        'pszichologus': 'Pszichológia',
+        'gyermekorvos': 'Csecsemő- és gyermekgyógyászat',
+        'belgyogyasz': 'Belgyógyászat',
+        'reumatologus': 'Reumatológia',
+        'gasztroenterologus': 'Gasztroenterológia',
+        'endokrinologus': 'Endokrinológia és anyagcsere-betegségek'
+      };
+      const mappedName = specSlugMap[specVal];
+      if (mappedName && specOptions.includes(mappedName)) {
+        fSpec.value = mappedName;
+      } else {
+        // Fallback: betesszük az fName input-ba mint plain szöveget
+        const fNameEl = document.getElementById('fName');
+        if (fNameEl && !fNameEl.value) fNameEl.value = specVal;
+      }
+    } else {
+      fSpec.value = specVal;
+    }
+  }
   if(params.get('q')) document.getElementById('fName').value = params.get('q');
+  // District szűrés (a fName input keresőjébe rakjuk be — magába foglalja)
+  if(params.get('district')) {
+    const d = params.get('district');
+    const fNameEl = document.getElementById('fName');
+    if(fNameEl) {
+      // Megőrizzük a meglévő q-t és hozzáadjuk a "XII. kerület"-et
+      const existing = fNameEl.value ? fNameEl.value + ' ' : '';
+      // Római számformátum is lehet jobb — de a fName már sima includes-ot csinál
+      fNameEl.value = existing + d + '. kerület';
+    }
+  }
 }
 
 // Az "Új keresés" topbar inputjába betesszük az URL paraméter értékét
@@ -1191,12 +1241,15 @@ function renderList(){
   if(!filtered.length){
     list.innerHTML = `
       <div class="empty-st">
+        <div id="emptyCrossSearch"></div>
         <div class="empty-icon">🔍</div>
         <div class="empty-title">Nincs találat</div>
         <div class="empty-sub">Próbáljon meg más szűrőkkel keresni.</div>
       </div>`;
     document.getElementById('loadMoreWrap').style.display = 'none';
     document.getElementById('pagDiv').style.display = 'none';
+    // Háttérben futtatjuk a doctor cross-search-t
+    setTimeout(crossSearchDoctors, 0);
     return;
   }
 
@@ -1218,6 +1271,60 @@ function renderList(){
 
   // Lapozó elrejtése (load more-t használunk)
   document.getElementById('pagDiv').style.display = 'none';
+}
+
+// ═══ Doctor cross-search ═══
+// Ha 0 klinika találat van, megnézzük hogy orvosokban van-e
+async function crossSearchDoctors(){
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const fNameVal = (document.getElementById('fName')?.value || '').trim();
+    const cityVal  = document.getElementById('fCity')?.value || '';
+    const specVal  = document.getElementById('fSpec')?.value || '';
+
+    // Először tudnunk kell milyen city_id és specialty_id tartozik az értékeinkhez
+    let specialtyId = null;
+    if(specVal){
+      const { data: sd } = await db.from('specialties').select('id').eq('name', specVal).maybeSingle();
+      if(sd?.id) specialtyId = sd.id;
+    }
+
+    // Lekérdezzük az orvosokat
+    let q = db.from('doctors').select('id', { count: 'exact', head: true }).eq('is_active', true);
+    if(fNameVal && fNameVal.length > 2){
+      // Név vagy szakmai cím alapján — egyszerű ilike
+      q = q.ilike('name', '%' + fNameVal + '%');
+    }
+    // City szűrés a doctors-on nem közvetlen; kihagyjuk most a count miatt
+    // Specialty szűrés viszont a doctor_specialties-en keresztül kéne — szintén bonyolult count-tal
+    // Ezért egyszerű count-ot csinálunk csak a free-text alapján
+
+    const { count, error } = await q;
+    if(error || !count || count === 0) return;
+
+    const wrap = document.getElementById('emptyCrossSearch');
+    if(!wrap) return;
+
+    // Doctor URL params
+    const docParams = new URLSearchParams();
+    if(fNameVal) docParams.set('q', fNameVal);
+    if(cityVal)  docParams.set('city', cityVal);
+    if(specVal)  docParams.set('specialty', specVal);
+    const docUrl = 'talalatok.html?' + docParams.toString();
+
+    wrap.innerHTML = `
+      <div style="background:linear-gradient(135deg,#eef2ff 0%,#dde4f9 100%);border:1px solid rgba(38,74,202,.22);border-radius:14px;padding:18px 22px;margin-bottom:1.5rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;text-align:left">
+        <div style="font-size:32px;flex-shrink:0">👨‍⚕️</div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:15px;font-weight:600;color:#1e3a8a;margin-bottom:2px">${count} orvos illik a kéréshez</div>
+          <div style="font-size:13px;color:#264ACA">Nem találtunk klinikát ezzel a névvel, de van orvos aki megfelel.</div>
+        </div>
+        <a href="${docUrl}" style="display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:linear-gradient(135deg,#264ACA 0%,#5b6ee0 100%);color:#fff;border-radius:100px;font-size:13.5px;font-weight:600;text-decoration:none;box-shadow:0 4px 12px rgba(38,74,202,.3);white-space:nowrap">
+          Orvosok megtekintése →
+        </a>
+      </div>
+    `;
+  } catch(e){ /* fail silent */ }
 }
 
 function clinicCardHTML(c, i){

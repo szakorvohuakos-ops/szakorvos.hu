@@ -525,6 +525,29 @@ nav#mainNav.scrolled{
 .hero-smart-search-btn svg{width:14px;height:14px;transition:transform .25s ease}
 .hero-smart-search-btn:hover svg{transform:translateX(3px)}
 
+.hero-smart-voice-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:40px;height:40px;flex-shrink:0;
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:11px;cursor:pointer;
+  color:var(--brand-2);
+  transition:transform .25s var(--ease-spring), background-color .25s ease, border-color .25s ease, box-shadow .25s ease;
+  margin-right:6px;
+}
+.hero-smart-voice-btn:hover{
+  background:#eef2ff;border-color:var(--brand-2);
+  transform:scale(1.05);
+}
+.hero-smart-voice-btn svg{width:18px;height:18px}
+.hero-smart-voice-btn.recording{
+  background:var(--orange);border-color:var(--orange);color:#fff;
+  animation:voicePulse 1.2s ease-in-out infinite;
+}
+@keyframes voicePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,138,0,.5)}
+  50%{box-shadow:0 0 0 8px rgba(255,138,0,0)}
+}
+
 .hero-smart-search-examples{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;align-items:center}
 .hero-smart-search-examples-label{font-size:12px;color:var(--muted);font-weight:500}
 .hero-smart-search-chip{
@@ -533,6 +556,22 @@ nav#mainNav.scrolled{
   cursor:pointer;transition:all .2s var(--ease-smooth);
 }
 .hero-smart-search-chip:hover{background:#eef2ff;border-color:var(--brand-2);color:var(--brand);transform:translateY(-1px)}
+.hero-near-me-chip{
+  background:linear-gradient(135deg, #e7f5ec 0%, #d4ecda 100%);
+  border-color:rgba(44,150,80,.3);
+  color:var(--green-dark);
+  font-weight:600;
+}
+.hero-near-me-chip:hover{
+  background:linear-gradient(135deg, #d4ecda 0%, #b8e0c4 100%);
+  border-color:var(--green);
+  color:var(--green-dark);
+}
+.hero-near-me-chip.loading{
+  opacity:.6;cursor:wait;pointer-events:none;
+}
+.hero-near-me-chip.loading svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* AI suggest dropdown — a Te JS-ed által vezérelt */
 .hero-smart-search{position:relative}
@@ -1421,6 +1460,14 @@ nav#mainNav.scrolled{
               oninput="heroSmartSuggest()">
             <div class="hero-smart-suggest" id="heroSmartSuggest" role="listbox" aria-label="Javaslatok"></div>
             <div class="hero-smart-search-status" id="heroSmartStatus" aria-live="polite"></div>
+            <button type="button" class="hero-smart-voice-btn" id="heroSmartVoiceBtn" onclick="toggleSmartVoiceSearch()" aria-label="Hangos keresés" title="Hangos keresés (Chrome ajánlott)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
             <button type="submit" class="hero-smart-search-btn" id="heroSmartBtn" aria-label="Keresés indítása">
               <span>Keresés</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1431,6 +1478,13 @@ nav#mainNav.scrolled{
 
           <div class="hero-smart-search-examples">
             <span class="hero-smart-search-examples-label">Próbálja:</span>
+            <button type="button" class="hero-smart-search-chip hero-near-me-chip" onclick="searchNearMe()" id="heroNearMeChip" title="GPS alapján a közelében lévő orvosokat keresi">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-right:5px;vertical-align:-2px">
+                <circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/>
+                <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+              </svg>📍 A közelemben
+            </button>
             <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('fáj a térdem Szombathelyen')">fáj a térdem Szombathelyen</button>
             <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('bőrgyógyász Debrecen')">bőrgyógyász Debrecen</button>
             <button type="button" class="hero-smart-search-chip" onclick="heroSmartFill('anyajegyszűrés')">anyajegyszűrés</button>
@@ -2263,6 +2317,23 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         if (btn) btn.disabled = false;
         setSmartStatus('');
 
+        // ─── ELÁGAZÁS: orvost vagy klinikát keresett az AI? ───
+        if (result && result.target === 'clinic') {
+          // → Klinikák oldalra irányítunk
+          const clinicParams = new URLSearchParams();
+          if (result.clinic_query) {
+            clinicParams.set('q', result.clinic_query);
+          } else {
+            clinicParams.set('q', query); // fallback a teljes kérdés
+          }
+          if (result.city) clinicParams.set('city', result.city);
+          if (result.district) clinicParams.set('district', result.district);
+          if (result.specialty_slug) clinicParams.set('specialty', result.specialty_slug);
+          window.location.href = 'klinikak.html?' + clinicParams.toString();
+          return;
+        }
+
+        // → Egyébként az orvos-találati oldalra (eredeti viselkedés)
         // Build talalatok URL params
         const params = new URLSearchParams();
         if (result && result.specialty_slug) {
@@ -2323,7 +2394,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       window.sendChat = function(){};              // no-op
       window.heroAiSubmit = window.heroSmartSubmit;
       window.heroAiReset = function(){};
-      window.toggleSpeechInput = function(){};
+      window.toggleSpeechInput = toggleSmartVoiceSearch;
 
     </script>
 
@@ -2592,15 +2663,15 @@ function heroQuickSubmit(ev){
   });
 })();
 
-// ═══ Voice search (Web Speech API) ═══
+// ═══ Voice search (Web Speech API) — az AI keresőre kötve ═══
 let voiceRecognition = null;
 let voiceRecording = false;
-function toggleVoiceSearch(){
+function toggleSmartVoiceSearch(){
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const btn = document.getElementById('heroVoiceBtn');
-  const input = document.getElementById('heroInlineSearch');
+  const btn = document.getElementById('heroSmartVoiceBtn');
+  const input = document.getElementById('heroSmartInput');
   if(!SpeechRec){
-    alert('Hangos keresés nem támogatott ebben a böngészőben. Próbálja Chrome-mal.');
+    alert('A hangos keresés nem támogatott ebben a böngészőben.\nPróbálja Google Chrome böngészővel.');
     return;
   }
   if(voiceRecording && voiceRecognition){
@@ -2611,26 +2682,78 @@ function toggleVoiceSearch(){
   voiceRecognition.lang = 'hu-HU';
   voiceRecognition.continuous = false;
   voiceRecognition.interimResults = true;
+  voiceRecognition.maxAlternatives = 1;
+
   voiceRecognition.onstart = () => {
     voiceRecording = true;
-    btn.classList.add('recording');
+    if(btn) btn.classList.add('recording');
+    if(input) input.placeholder = '🎤 Beszéljen most…';
   };
   voiceRecognition.onresult = e => {
     const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
     if(input){
       input.value = transcript;
-      input.dispatchEvent(new Event('input'));
+      // Suggest aktiválás
+      if(typeof heroSmartSuggest === 'function') heroSmartSuggest();
     }
   };
   voiceRecognition.onend = () => {
     voiceRecording = false;
-    btn.classList.remove('recording');
-    if(input && input.value.trim()) saveRecentSearch(input.value.trim());
+    if(btn) btn.classList.remove('recording');
+    if(input){
+      input.placeholder = 'Térdfájás Szombathelyen, anyajegy vizsgálat, bőrgyógyász…';
+      // Ha van szöveg, automatikusan keresünk
+      if(input.value.trim().length > 2){
+        if(typeof saveRecentSearch === 'function') saveRecentSearch(input.value.trim());
+        setTimeout(() => {
+          if(typeof heroSmartSubmit === 'function') heroSmartSubmit();
+        }, 500);
+      }
+    }
   };
   voiceRecognition.onerror = err => {
     voiceRecording = false;
-    btn.classList.remove('recording'); };
-  voiceRecognition.start();
+    if(btn) btn.classList.remove('recording');
+    if(input) input.placeholder = 'Térdfájás Szombathelyen, anyajegy vizsgálat, bőrgyógyász…';
+    if(err.error === 'not-allowed' || err.error === 'service-not-allowed'){
+      alert('A mikrofon hozzáférés letiltva. Engedélyezze a beállításokban.');
+    }
+  };
+  try { voiceRecognition.start(); } catch(e) { /* már fut */ }
+}
+// Backward-compat: a régi név is működjön
+window.toggleVoiceSearch = toggleSmartVoiceSearch;
+
+// ═══ "A közelemben" — Geolokáció alapú keresés ═══
+function searchNearMe(){
+  const chip = document.getElementById('heroNearMeChip');
+  if(!navigator.geolocation){
+    alert('A böngészője nem támogatja a helymeghatározást.');
+    return;
+  }
+  if(chip) chip.classList.add('loading');
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      const params = new URLSearchParams();
+      params.set('lat', lat);
+      params.set('lng', lng);
+      params.set('radius', '15');  // 15 km
+      params.set('sort', 'nearest');
+      window.location.href = 'talalatok.html?' + params.toString();
+    },
+    (err) => {
+      if(chip) chip.classList.remove('loading');
+      let msg = 'A helymeghatározás nem sikerült.';
+      if(err.code === 1) msg = 'A helymeghatározás letiltva. Engedélyezze a böngésző beállításaiban.';
+      else if(err.code === 2) msg = 'A helymeghatározás jelenleg nem elérhető.';
+      else if(err.code === 3) msg = 'A helymeghatározás túllépte az időkorlátot.';
+      alert(msg);
+    },
+    { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+  );
 }
 
 // ═══ Recent searches (localStorage) ═══
