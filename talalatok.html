@@ -1191,6 +1191,16 @@ const DS=['V','H','K','Sze','Cs','P','Szo'],DF=['Vasárnap','Hétfő','Kedd','Sz
 const PGS=8;
 const UP=new URLSearchParams(location.search);
 let specQ=UP.get('specialty')||UP.get('spec')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
+// ─── Új URL-paraméterek (AI keresőből és deep-linkekből) ───
+const daysQ      = (UP.get('days') || '').split(',').map(s=>parseInt(s,10)).filter(n=>!isNaN(n) && n>=0 && n<=6);
+const weekendQ   = UP.get('weekend') === '1' || UP.get('weekend') === 'true';
+const genderQ    = (UP.get('gender') || '').toLowerCase();   // 'male' | 'female' | ''
+const langQ      = (UP.get('lang') || '').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+const onlineQ    = UP.get('online') === '1' || UP.get('online') === 'true';
+const urgentQ    = UP.get('urgent') === '1' || UP.get('urgent') === 'true'; // ma vagy holnap
+const priceMaxQ  = parseInt(UP.get('price_max') || '0', 10);
+const expMinQ    = parseInt(UP.get('exp_min') || '0', 10);
+const insuranceQ = (UP.get('insurance') || '').split(',').map(s=>s.trim()).filter(Boolean);
 let allDocs=[],filtered=[],curPg=1,curView='list';
 
 // XSS-safe HTML escape for user-controlled values (URL params, free-text)
@@ -1353,7 +1363,7 @@ async function load(){ document.getElementById('resList').innerHTML='<div class=
       // Részletes adatok lekérése a megjelenítéshez (a ranked csak az alap mezőket adja)
       const ids = ranked.map(r => r.doctor_id);
       const { data: details } = await db.from('doctors')
-        .select(`id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
+        .select(`id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
           doctor_specialties(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),
           doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,cities(name))),
           doctor_insurances(insurance_types(name)),
@@ -1382,9 +1392,9 @@ async function load(){ document.getElementById('resList').innerHTML='<div class=
 
   // ═══ FALLBACK: a régi PostgREST query ═══
   if(!rankedSuccess) {
-    const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+    const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
-    const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
+    const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,cities(name))),availability(day_of_week)`;
 
     const runQuery = async (selectClause) => {
       try {
@@ -1423,7 +1433,68 @@ async function load(){ document.getElementById('resList').innerHTML='<div class=
   // Count badge
   document.getElementById('heroCnt').textContent = `${allDocs.length} találat`;
   curPg = 1;
+  applyUrlFilters();   // ← AI keresőből / deep-linkből érkező szűrők aktiválása
   applyF();
+}
+
+// ═══ URL paraméter → szűrő chip-ek aktiválása ═══
+// Ezt akkor hívjuk, amikor az allDocs már be van töltve, mielőtt applyF() futna.
+// Egyszer futó: vissza-vonáshoz a felhasználó kattintja le manuálisan.
+function applyUrlFilters(){
+  try {
+    // Napok: ?days=1,3,6 (0=V .. 6=Szo)
+    const _days = new Set(daysQ);
+    if(weekendQ){ _days.add(0); _days.add(6); }
+    _days.forEach(d => {
+      const chip = document.querySelector(`[data-day="${d}"]`);
+      if(chip) chip.classList.add('on');
+    });
+
+    // Nem: ?gender=male|female
+    if(genderQ === 'male' || genderQ === 'female'){
+      document.querySelectorAll('[data-gender]').forEach(c => c.classList.remove('on'));
+      const gChip = document.querySelector(`[data-gender="${genderQ}"]`);
+      if(gChip) gChip.classList.add('on');
+    }
+
+    // Nyelvek: ?lang=angol,nemet
+    langQ.forEach(l => {
+      const chip = document.querySelector(`[data-lang="${l}"]`);
+      if(chip) chip.classList.add('on');
+    });
+
+    // Online: ?online=1
+    if(onlineQ){
+      const chip = document.querySelector('[data-avail="online"]');
+      if(chip) chip.classList.add('on');
+    }
+
+    // Sürgős: ?urgent=1 → today + tomorrow
+    if(urgentQ){
+      const t = document.querySelector('[data-avail="today"]');
+      const m = document.querySelector('[data-avail="tomorrow"]');
+      if(t) t.classList.add('on');
+      if(m) m.classList.add('on');
+    }
+
+    // Ár max: ?price_max=15000
+    if(priceMaxQ > 0 && priceMaxQ < 80000){
+      const el = document.getElementById('priceMax');
+      if(el){ el.value = priceMaxQ; if(typeof updatePrice === 'function') updatePrice(); }
+    }
+
+    // Tapasztalat min: ?exp_min=10
+    if(expMinQ > 0){
+      const el = document.getElementById('expMin');
+      if(el){ el.value = expMinQ; if(typeof updateExp === 'function') updateExp(); }
+    }
+
+    // Biztosítók: ?insurance=Allianz,UNIQA
+    insuranceQ.forEach(name => {
+      const cb = document.querySelector(`#fs5 input[type=checkbox][value="${name}"]`);
+      if(cb) cb.checked = true;
+    });
+  } catch(e){ /* fail silent */ }
 }
 
 /* ═════ FILTER ═════ */
@@ -1467,6 +1538,27 @@ function applyF(){
     const dl = raw.map(l => (l || '').toString().trim().toLowerCase()).filter(Boolean);
     return langs.some(l => dl.includes(l));
   });
+  // Gender
+  const g = document.querySelector('[data-gender].on')?.dataset.gender;
+  if(g && g !== 'all') docs = docs.filter(d => (d.gender || '').toLowerCase() === g);
+  // Avail chips (online / today / tomorrow / week)
+  const avails = [...document.querySelectorAll('[data-avail].on')].map(c => c.dataset.avail);
+  if(avails.includes('online')){
+    docs = docs.filter(d => d.has_online_consultation === true || d.has_telemedicine === true);
+  }
+  if(avails.includes('today') || avails.includes('tomorrow') || avails.includes('week')){
+    const today = new Date().getDay(); // 0=V .. 6=Szo
+    const targetDays = new Set();
+    if(avails.includes('today'))    targetDays.add(today);
+    if(avails.includes('tomorrow')) targetDays.add((today + 1) % 7);
+    if(avails.includes('week')){
+      for(let i = 0; i < 7; i++) targetDays.add(i);
+    }
+    docs = docs.filter(d => {
+      const ad = (d.availability || []).map(a => a.day_of_week);
+      return [...targetDays].some(x => ad.includes(x));
+    });
+  }
   // Sort — default: relevance (a search_doctors_ranked által kalkulált total_score)
   const s=document.getElementById('sortSel')?.value||'relevance';
   if(s==='relevance' || s==='specialty') {
@@ -1495,6 +1587,9 @@ function updateBadge(){
   n+=document.querySelectorAll('[data-day].on').length;
   n+=document.querySelectorAll('#cityList input:checked').length;
   n+=document.querySelectorAll('[data-lang].on').length;
+  n+=document.querySelectorAll('[data-avail].on').length;
+  const ag = document.querySelector('[data-gender].on')?.dataset.gender;
+  if(ag && ag !== 'all') n++;
   const el=document.getElementById('fBadge');
   el.textContent=n;el.classList.toggle('on',n>0);
   const fab=document.getElementById('fabBadge');
@@ -1556,6 +1651,14 @@ function renderTags(){
   document.querySelectorAll('[data-day].on').forEach(x=>tags.push({l:x.title||x.textContent,c:()=>{x.classList.remove('on');applyF();}}));
   document.querySelectorAll('#cityList input:checked').forEach(x=>tags.push({l:'📍 '+x.value,c:()=>{x.checked=false;applyF();}}));
   document.querySelectorAll('[data-lang].on').forEach(x=>tags.push({l:x.textContent,c:()=>{x.classList.remove('on');applyF();}}));
+  document.querySelectorAll('[data-avail].on').forEach(x=>tags.push({l:x.textContent,c:()=>{x.classList.remove('on');applyF();}}));
+  const agEl = document.querySelector('[data-gender].on');
+  if(agEl && agEl.dataset.gender !== 'all'){
+    tags.push({l: agEl.textContent.trim(), c: () => {
+      document.querySelectorAll('[data-gender]').forEach((c,i)=>c.classList.toggle('on',i===0));
+      applyF();
+    }});
+  }
   window._tc=tags.map(t=>t.c);
   document.getElementById('fTags').innerHTML=tags.map((t,i)=>`<div class="atag">${escapeHtml(t.l)}<button onclick="window._tc[${i}]()">×</button></div>`).join('');
 }
