@@ -632,31 +632,10 @@ async function loadClinic(){
     return;
   }
 
-  // Klinika szakterületei alapján vizsgálatok lekérése a treatments táblából
-  const specNames = new Set();
-  (data.doctor_clinics || []).forEach(dc => {
-    const d = dc.doctors;
-    if(!d || !d.is_active) return;
-    (d.doctor_specialties || []).forEach(ds => {
-      if(ds.specialties?.name) specNames.add(ds.specialties.name);
-    });
-  });
-
-  if(specNames.size){
-    try {
-      const { data: treatments } = await db
-        .from('treatments')
-        .select('id, slug, title, specialty, price_huf')
-        .in('specialty', Array.from(specNames))
-        .order('price_huf', { ascending: false });
-      data._treatments = treatments || [];
-    } catch(e){
-      console.warn('Treatments load error:', e);
-      data._treatments = [];
-    }
-  } else {
-    data._treatments = [];
-  }
+  // Klinika-szintű szolgáltatás-lista NEM létezik a DB-ben (csak doctor_services egyedi orvosokhoz).
+  // A treatments tábla csak általános piaci átlagárakat tartalmaz — nem ennek a klinikának az árait.
+  // Ezért nem mutatjuk félrevezető adatokat.
+  data._treatments = [];
 
   render(data);
 }
