@@ -1096,6 +1096,261 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   color: #94a3b8 !important;
 }
 
+
+/* ════════════════════════════════════════════════════════════════════════
+   V4 KÁRTYA STÍLUS — felül info + alsó akció-sáv
+   Verzió: 2026-05-26 (cseréli az E2-t)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Kártya keret — fehér, 16px sarok, halvány keret, lebegő hover */
+.dc {
+  background: #ffffff !important;
+  border: 1px solid #e8edf5 !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  position: relative;
+  display: block !important;
+  grid-template-columns: none !important;
+  gap: 0 !important;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.4,0,.2,1) !important;
+  box-shadow: 0 1px 2px rgba(17,50,147,.03) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.dc::before, .dc::after { content: none !important; }
+.dc:hover {
+  border-color: #264ACA !important;
+  box-shadow: 0 8px 24px rgba(17,50,147,.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Felső blokk: fotó + adatok */
+.dc-top {
+  padding: 20px 22px 18px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* Fotó */
+.dc .dc-photo-wrap {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 14px !important;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(17,50,147,.18) !important;
+}
+.dc .dc-photo-wrap img,
+.dc .dc-photo-wrap .av {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.dc .dc-photo-wrap img { object-fit: cover; }
+.dc .av-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2C9650 !important;
+  border: 2.5px solid #fff !important;
+  z-index: 2;
+}
+
+/* Középső szövegblokk */
+.dc-mid {
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+.dc-spec {
+  font-size: 11px;
+  font-weight: 700;
+  color: #264ACA;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  line-height: 1.2;
+}
+.dc-nm {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0a1f6b !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Verified pajzs — zöld pipa kör (mint a Doktor24-en) */
+.dc-verified-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center;
+  background: #2C9650 !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 0 !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 11px 11px !important;
+}
+.dc-verified-badge svg { display: none !important; }
+
+.dc-deg {
+  font-size: 13.5px !important;
+  color: #475569 !important;
+  line-height: 1.45 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+/* Info stack — chip-ek + meta */
+.dc-info-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Tüneti chip-ek */
+.dc-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.dc-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11.5px;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+}
+.dc-tag-chip.dc-tag-more {
+  background: #fff;
+  color: #113293;
+  font-weight: 600;
+  border-color: rgba(17,50,147,.2);
+}
+
+/* Meta sor (értékelés + tapasztalat + nyelvek) */
+.dc-meta-flex {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: 12.5px !important;
+  color: #475569 !important;
+  flex-wrap: wrap;
+  margin: 0 !important;
+}
+.dc .dc-meta-item { display: inline-flex; align-items: center; gap: 4px; }
+.dc .dc-meta-item strong { color: #0f172a; font-weight: 700; }
+.dc .dc-star { color: #d97706 !important; font-weight: 700; }
+.dc .dc-meta-soft { color: #94a3b8; font-weight: 500; }
+.dc .dc-meta-dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: #cbd5e1; flex-shrink: 0;
+}
+.dc .dc-lang-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  background: rgba(17,50,147,.06) !important;
+  color: #113293 !important;
+  border: 1px solid rgba(17,50,147,.1) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
+/* Alsó akció-sáv */
+.dc-bot {
+  padding: 12px 22px;
+  background: #fafbff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.dc-bot-loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #475569;
+  flex: 1;
+  min-width: 200px;
+}
+.dc-bot-loc svg {
+  color: #264ACA;
+  flex-shrink: 0;
+}
+.dc .dc-loc-clinic {
+  color: #264ACA;
+  font-weight: 600;
+}
+.dc-bot-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Régi elemek elrejtése — már nem használjuk */
+.dc-right { display: none !important; }
+.dc-summary { display: none !important; }
+.dc-source-badge { display: none !important; }
+.dc-prof { display: none !important; }
+
+@media (max-width: 600px) {
+  .dc-top {
+    padding: 16px;
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+  }
+  .dc .dc-photo-wrap { width: 56px !important; height: 56px !important; }
+  .dc-nm { font-size: 16.5px !important; }
+  .dc-bot {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dc-bot-loc { min-width: 0; }
+  .dc-bot-btns { width: 100%; }
+  .dc-bot-btns .szk-btn { flex: 1; }
+}
+
 </style>
 <div class="view-toggle">
   <div class="view-toggle-inner" role="tablist" aria-label="Találat típus">
@@ -1995,33 +2250,49 @@ function cardH(d,i){
   const avEl=d.photo_url
     ?`<div class="dc-photo-wrap"><img loading="lazy" decoding="async" src="${d.photo_url}" alt="${d.name}">${avD.length?'<div class="av-dot"></div>':''}</div>`
     :`<div class="dc-photo-wrap"><div class="av" style="background:linear-gradient(135deg,${col},${col}bb)">${init}</div>${avD.length?'<div class="av-dot"></div>':''}</div>`;
+  // V4 struktúra: felül info, alul akció-sáv
   return `<div class="dc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
-    ${avEl}
-    <div class="dc-mid">
-      <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="dc-verified-badge" title="Ellenőrzött profil"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ellenőrzött profil</span>`:`<span class="dc-source-badge" title="A profil adatai több nyilvános forrásból származnak. Az adatok pontossága még nincs hivatalosan ellenőrizve."><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Adatok több nyilvános forrásból</span>`}</div>
-      <div class="dc-deg">${escapeHtml(spec||'Szakorvos')}</div>
+    <div class="dc-top">
+      ${avEl}
+      <div class="dc-mid">
+        <div class="dc-spec">${escapeHtml(spec||'Szakorvos').toUpperCase()}</div>
+        <div class="dc-nm">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="dc-verified-badge" title="Ellenőrzött profil"></span>`:''}</div>
+        ${d.short_intro ? `<div class="dc-deg">${escapeHtml(truncateWords(d.short_intro, 8))}</div>` : ''}
 
-      ${ratingFmt ? `<div class="dc-meta dc-meta-rating">
-        <span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span style="color:var(--muted);font-weight:500">(${reviewCount} értékelés)</span>` : ''}</span>
-      </div>` : ''}
+        ${(tags.length || ratingFmt || d.experience_years) ? `<div class="dc-info-stack">
 
-      <div class="dc-meta">
-        ${d.experience_years?`<span class="dc-meta-item"><strong>${d.experience_years} év</strong> tapasztalat</span>`:''}
-        ${d.experience_years && langs.length ? `<span class="dc-meta-dot"></span>` : ''}
-        ${langs.map(l => `<span class="dc-lang-chip">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`).join('')}
+          ${tags.length ? `<div class="dc-tags">
+            ${mainTags.map(t => `<span class="dc-tag-chip">${escapeHtml(t)}</span>`).join('')}
+            ${extraTagCount > 0 ? `<span class="dc-tag-chip dc-tag-more">+${extraTagCount}</span>` : ''}
+          </div>` : ''}
+
+          ${(ratingFmt || d.experience_years || langs.length) ? `<div class="dc-meta-flex">
+            ${ratingFmt ? `<span class="dc-meta-item"><span class="dc-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span class="dc-meta-soft">(${reviewCount} értékelés)</span>` : ''}</span>` : ''}
+            ${ratingFmt && d.experience_years ? `<span class="dc-meta-dot"></span>` : ''}
+            ${d.experience_years ? `<span class="dc-meta-item"><strong>${d.experience_years} év</strong> tapasztalat</span>` : ''}
+            ${(ratingFmt || d.experience_years) && langs.length ? `<span class="dc-meta-dot"></span>` : ''}
+            ${langs.map(l => `<span class="dc-lang-chip">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`).join('')}
+          </div>` : ''}
+
+        </div>` : ''}
       </div>
+    </div>
 
-      ${city||clinic?.name?`<div class="dc-loc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</div>`:''}
-      ${renderCompletenessMini(calcCompleteness(d))}
+    <div class="dc-bot">
+      <div class="dc-bot-loc">
+        ${city||clinic?.name ? `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>${city?escapeHtml(city)+(clinic?.name?' · ':''):''}${clinic?.name?`<span class="dc-loc-clinic">${escapeHtml(clinic.name)}</span>`:''}</span>
+        ` : '<span class="dc-meta-soft">Helyszín nincs megadva</span>'}
+      </div>
+      <div class="dc-bot-btns" onclick="event.stopPropagation()">
+        ${(d.phone||clinic?.phone) ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+          Hívás
+        </a>` : ''}
+        <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
+      </div>
     </div>
-    <div class="dc-right" onclick="event.stopPropagation()">
-      <a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${(d.phone||clinic?.phone||'').replace(/\s/g,'')}" onclick="event.stopPropagation()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
-        Hívás
-      </a>
-      <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();goToProfile('${d.id}')">Profil megtekintése</button>
-    </div>
-    ${(d.bio || d.short_intro) ? `<div class="dc-summary" id="sum-${d.id}">${escapeHtml(truncateWords(d.bio || d.short_intro, 7))}</div>` : ''}
   </div>`;
 }
 
