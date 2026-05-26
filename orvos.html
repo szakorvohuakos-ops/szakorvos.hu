@@ -1338,6 +1338,22 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 .claim-success h3{font-size:18px;font-weight:700;color:#1a7a3e;margin:0 0 8px}
 .claim-success p{font-size:14px;color:var(--text);line-height:1.55;margin:0}
 
+
+/* ─── ORVOS HERO CTA gombok (egyezzen a klinika hero-val) ─── */
+.dh-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:14px}
+@media(max-width:640px){.dh-actions{justify-content:center}}
+.dh-actions .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:11px;font-weight:600;font-size:14px;border:none;transition:all .25s cubic-bezier(.34,1.4,.64,1);text-decoration:none;letter-spacing:-0.005em;cursor:pointer}
+.dh-actions .btn-primary{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 2px 6px rgba(17,50,147,.18),0 8px 20px rgba(17,50,147,.22)}
+.dh-actions .btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(17,50,147,.22),0 14px 28px rgba(17,50,147,.3)}
+.dh-actions .btn-outline{background:rgba(255,255,255,.6);color:#113293;border:1px solid rgba(17,50,147,.15);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.04)}
+.dh-actions .btn-outline:hover{border-color:rgba(17,50,147,.35);background:rgba(238,242,255,.85);transform:translateY(-1px)}
+.dh-actions .btn-claim{background:#ffffff;color:#2C9650;border:1.5px solid #113293;padding:9.5px 20.5px;border-radius:11px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;text-decoration:none;letter-spacing:-0.005em;transition:all .2s}
+.dh-actions .btn-claim:hover{background:#fafbff;border-color:#0a1f6b;color:#237540;transform:translateY(-1px)}
+.dh-actions .btn-claim svg{color:#2C9650}
+
+/* dh-deg több sor — helyszín a 2. sorban */
+.dh-deg{line-height:1.5}
+
 </style>
 
 <nav id="mainNav">
@@ -1482,18 +1498,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- ═════ LEFT COLUMN ════════════════════════════════════════════ -->
     <div>
 
-      <!-- ─── DOCTOR HEAD CARD ──────────────────────────────────── -->
-      <div class="dcard">
+      <!-- ─── DOCTOR HERO CARD (klinika mintára egységesítve) ──── -->
+      <section class="dcard">
         <div class="dcard-row">
-          <div>
-            <div class="dh-photo-wrap" id="dhPhotoWrap">
-              <div class="dh-av" id="dhAvatar">KJ</div>
-              <div class="dh-online-dot" id="dhOnlineDot" style="display:none"></div>
-            </div>
-            <div id="aiBadge" class="ai-badge" style="display:none">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.91 8.84 3 9.27l5.46 4.73L6.82 21 12 17.27 17.18 21l-1.64-6.99L21 9.27l-6.91-.43z"/></svg>
-              AI ajánlja
-            </div>
+          <div class="dh-photo-wrap" id="dhPhotoWrap">
+            <div class="dh-av" id="dhAvatar">KJ</div>
+            <div class="dh-online-dot" id="dhOnlineDot" style="display:none"></div>
           </div>
 
           <div class="dh-info">
@@ -1505,42 +1515,28 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
             <div class="dh-rating-row" id="dhRatingRow"></div>
 
-            <div class="dh-chips" id="dhChips"></div>
-
-            <div class="dh-prof" id="dhCompleteness" style="display:none">
-              <div class="dh-prof-ring" id="dhProfRing">
-                <svg width="48" height="48" viewBox="0 0 48 48">
-                  <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(148,163,184,.18)" stroke-width="4"/>
-                  <circle id="dhProfArc" cx="24" cy="24" r="18" fill="none" stroke="#94a3b8" stroke-width="4"
-                    stroke-linecap="round" transform="rotate(-90 24 24)"
-                    stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
-                </svg>
-                <span class="dh-prof-ring-pct" id="dhProfRingPct">–</span>
-              </div>
-              <div class="dh-prof-text">
-                <div class="dh-prof-label">Profil kitöltöttség</div>
-                <div class="dh-prof-tier" id="dhCompletenessTier">–</div>
-                <div class="dh-prof-sub" id="dhCompletenessSub"></div>
-              </div>
-            </div>
-
-            <div class="dh-stats" id="dhStats"></div>
-
-            <!-- Adatlap átvétele gomb (csak ha admin_user_id IS NULL) -->
-            <div class="claim-btn-row" id="claimBtnRow" style="display:none">
-              <button class="btn-claim" type="button" onclick="openClaimModal()">
+            <!-- CTA gombok (mint a klinikánál) -->
+            <div class="dh-actions" id="dhActions">
+              <a href="javascript:void(0)" id="dhPhoneBtn" class="btn btn-primary" style="display:none">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
+                Telefon
+              </a>
+              <a href="javascript:void(0)" id="dhMapBtn" class="btn btn-outline" style="display:none">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                Útvonal
+              </a>
+              <!-- Adatlap átvétele gomb (csak ha admin_user_id IS NULL) -->
+              <button class="btn-claim" type="button" id="dhClaimBtn" onclick="openClaimModal()" style="display:none">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                   <polyline points="9 12 11 14 15 10"/>
                 </svg>
                 Ez az én adatlapom
               </button>
-              <span style="font-size:11.5px;color:var(--muted);font-weight:500">Igényelje a saját profilját</span>
             </div>
-
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- ─── TAB NAVIGÁCIÓ ───────────────────────────────────── -->
       <div class="prof-tabs" id="profTabs">
@@ -1968,9 +1964,9 @@ async function load(){
     // Adatlap átvétele gomb: csak ha még nincs admin_user_id
     try {
       window._currentDoctorId = data.id;
-      const claimBtnRow = document.getElementById('claimBtnRow');
-      if(claimBtnRow && !data.admin_user_id){
-        claimBtnRow.style.display = 'flex';
+      const dhClaimBtn = document.getElementById('dhClaimBtn');
+      if(dhClaimBtn && !data.admin_user_id){
+        dhClaimBtn.style.display = 'inline-flex';
       }
     } catch(_) {}
     render(data);
@@ -2003,10 +1999,8 @@ function render(d){
     document.getElementById('dhAvatar').textContent = init;
     if((d.availability||[]).length) document.getElementById('dhOnlineDot').style.display = 'block';
   }
-  // AI badge — látható ha rating >= 4.8 és reviews >= 20 (egyszerű heurisztika)
-  if((parseFloat(d.rating)||0) >= 4.8 && (parseInt(d.review_count)||0) >= 20){
-    document.getElementById('aiBadge').style.display = 'inline-flex';
-  }
+  // AI badge eltávolítva — hero egyszerűsítve a klinika mintára
+
 
   // Név
   document.getElementById('dhName').textContent = fullName;
@@ -2027,42 +2021,20 @@ function render(d){
 
   // Profil teljesség — prémium körkörös ring
   const pct = calcDoctorCompleteness(d);
-  const compEl = document.getElementById('dhCompleteness');
-  if(compEl){
-    compEl.style.display = '';
-    let color, label, sub;
-    if(pct >= 90){ color='#059669'; label='Teljes profil'; sub='Minden lényeges adat kitöltve.'; }
-    else if(pct >= 70){ color='#65a30d'; label='Részletes profil'; sub='A profil legtöbb adata kitöltve.'; }
-    else if(pct >= 40){ color='#d97706'; label='Részben kitöltött'; sub='Az alapadatok mellett részletek is elérhetők.'; }
-    else { color='#94a3b8'; label='Alap adatok'; sub='Az alapadatok elérhetők; további részletek hamarosan.'; }
+  // Profil-kitöltöttség ring eltávolítva — hero egyszerűsítve
 
-    // Körkörös progress (sugár 18, kerület ~113.1)
-    const r = 18, c = 2 * Math.PI * r;
-    const off = c - (pct / 100) * c;
-    const arc = document.getElementById('dhProfArc');
-    if(arc){
-      arc.setAttribute('stroke', color);
-      arc.setAttribute('stroke-dasharray', c.toFixed(2));
-      arc.style.transition = 'stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)';
-      // kis késleltetés hogy az animáció lefusson
-      setTimeout(() => arc.setAttribute('stroke-dashoffset', off.toFixed(2)), 50);
-    }
-    const ringPct = document.getElementById('dhProfRingPct');
-    if(ringPct){ ringPct.textContent = pct; ringPct.style.color = color; }
-    const tierEl = document.getElementById('dhCompletenessTier');
-    if(tierEl){ tierEl.textContent = label; tierEl.style.color = color; }
-    const subEl = document.getElementById('dhCompletenessSub');
-    if(subEl) subEl.textContent = sub;
-    // Glow a ring köré a tier színével
-    const ringEl = document.getElementById('dhProfRing');
-    if(ringEl) ringEl.style.filter = `drop-shadow(0 0 10px ${color}30)`;
-    compEl.title = `Profil kitöltöttsége: ${pct}% — ${label}`;
+
+  // Title (szakterület) + extra szakterületek + helyszín — mint a klinikánál a "cím" sor
+  const degParts = [`<strong>${escapeHtml(specTitled)}</strong>`];
+  // Extra szakterületek (max 2 még)
+  const otherSpecs = allSpecs.filter(s => s !== specRaw).slice(0, 2);
+  if (otherSpecs.length) {
+    degParts.push('· ' + otherSpecs.map(s => escapeHtml(s)).join(' · '));
   }
-
-  // Title + PhD
-  const titleParts = [`<strong>${escapeHtml(specTitled)}</strong>`];
-  if(d.title) titleParts.push(`<span class="dh-phd">${escapeHtml(d.title)}</span>`);
-  document.getElementById('dhDeg').innerHTML = titleParts.join(' ');
+  // Helyszín (klinika + város)
+  const locTxt = [clinic?.name, city].filter(Boolean).join(', ');
+  if (locTxt) degParts.push(`<br><span style="color:var(--muted);font-weight:500">📍 ${escapeHtml(locTxt)}</span>`);
+  document.getElementById('dhDeg').innerHTML = degParts.join(' ');
 
   // Rating sor
   const rat = parseFloat(d.rating) || 0;
@@ -2073,32 +2045,29 @@ function render(d){
   }
   document.getElementById('dhRatingRow').innerHTML = ratingHtml.join('');
 
-  // Chips (secondary specialties)
-  const secondarySpecs = allSpecs.filter(s => s !== specRaw);
-  const visibleChips = secondarySpecs.slice(0, 3);
-  const overflowCount = secondarySpecs.length - visibleChips.length;
-  const chipsHtml = visibleChips.map(s => `<span class="dh-chip">${escapeHtml(s)}</span>`).join('') +
-                    (overflowCount > 0 ? `<span class="dh-chip more">+${overflowCount}</span>` : '');
-  const chipsEl = document.getElementById('dhChips');
-  chipsEl.innerHTML = chipsHtml;
-  chipsEl.style.display = visibleChips.length ? 'flex' : 'none';
+  // Chips és stats sor eltávolítva — hero egyszerűsítve a klinika mintára.
+  // (A szakterületek a dh-deg-be kerülnek, az tapasztalat/nyelv az "Áttekintés" szekcióba.)
 
-  // 4-col stat row
-  const statsHtml = [];
-  if(d.experience_years){
-    statsHtml.push(`<div class="dh-stat">
-      <div class="dh-stat-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="dh-stat-info"><div class="dh-stat-v">${d.experience_years} év</div><div class="dh-stat-l">tapasztalat</div></div>
-    </div>`);
+  // ── CTA gombok: Telefon + Útvonal ───────────────────────────────
+  const dhPhoneBtn = document.getElementById('dhPhoneBtn');
+  const phoneNum = d.phone || clinic?.phone || '';
+  if (dhPhoneBtn && phoneNum) {
+    dhPhoneBtn.href = 'tel:' + phoneNum.replace(/\s/g,'');
+    dhPhoneBtn.style.display = 'inline-flex';
   }
-  if(langs.length){
-    const langStr = langs.slice(0,2).join(', ') + (langs.length > 2 ? ` +${langs.length - 2}` : '');
-    statsHtml.push(`<div class="dh-stat">
-      <div class="dh-stat-ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-      <div class="dh-stat-info"><div class="dh-stat-v">${escapeHtml(langs[0])}</div><div class="dh-stat-l">${escapeHtml(langs.slice(1).join(', ') || '–')}</div></div>
-    </div>`);
+  const dhMapBtn = document.getElementById('dhMapBtn');
+  if (dhMapBtn && clinic?.lat && clinic?.lng) {
+    dhMapBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${clinic.lat},${clinic.lng}`;
+    dhMapBtn.target = '_blank';
+    dhMapBtn.rel = 'noopener';
+    dhMapBtn.style.display = 'inline-flex';
+  } else if (dhMapBtn && clinic?.address) {
+    // Ha nincs koordináta de van cím, akkor cím-keresős térkép
+    dhMapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(clinic.address)}`;
+    dhMapBtn.target = '_blank';
+    dhMapBtn.rel = 'noopener';
+    dhMapBtn.style.display = 'inline-flex';
   }
-  document.getElementById('dhStats').innerHTML = statsHtml.join('');
 
   // AI összefoglaló a találati kártyán jelenik meg
 
