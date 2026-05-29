@@ -712,7 +712,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   }
   function sanitizeTimeFilters(result, query){
     if(!result) return;
-    var t=(query||'').toLowerCase();
+    var t=(query||'').toLowerCase().replace(/szombathely/g,' ');
     var dayWords=['hétfő','kedd','szerda','csütörtök','péntek','szombat','vasárnap','hétvég','hétközben','munkanap','weekend'];
     var hasDay=dayWords.some(function(w){return t.indexOf(w)!==-1;});
     if(!hasDay){ result.weekend=false; if(Array.isArray(result.days)) result.days=[]; }
