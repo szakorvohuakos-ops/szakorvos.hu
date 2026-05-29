@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Szakorvos.hu">
+  <defs>
+    <linearGradient id="sg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#113293"/>
+      <stop offset="1" stop-color="#2f5bdd"/>
+    </linearGradient>
+    <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2C9650"/>
+      <stop offset="1" stop-color="#35B26B"/>
+    </linearGradient>
+    <radialGradient id="rg" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0" stop-color="#264ACA" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#264ACA" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="16" fill="#ffffff" stroke="#dde5f6" stroke-width="1.5"/>
+  <circle cx="30" cy="29" r="27" fill="url(#rg)"/>
+  <g transform="translate(8.3,8.3) scale(0.74)">
+    <rect x="24" y="11" width="8" height="34" rx="4" fill="url(#sg)"/>
+    <rect x="11" y="24" width="34" height="8" rx="4" fill="url(#sg)"/>
+    <circle cx="46" cy="46" r="13.5" fill="#fff"/>
+    <circle cx="46" cy="46" r="12" fill="url(#gg)"/>
+    <polyline points="40.5,46 44,49.5 51.5,42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

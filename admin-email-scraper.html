@@ -46,6 +46,165 @@ input:focus{border-color:#264ACA;background:#fff;box-shadow:0 0 0 4px rgba(38,74
 </style>
 </head>
 <body>
+<!-- ══════════════════════════════════════════
+     EGYSÉGES MENÜ — minden oldalon ugyanez
+══════════════════════════════════════════ -->
+<style>
+nav#mainNav{position:sticky;top:0;z-index:400;background:transparent;border-bottom:1px solid transparent;box-shadow:none;font-family:'Inter',sans-serif;transition:background .35s cubic-bezier(.4,0,.2,1),border-color .35s,box-shadow .35s,backdrop-filter .35s}
+nav#mainNav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid rgba(220,227,234,.6);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 32px rgba(17,50,147,.08)}
+
+/* ── INDEX OLDAL: úszó, maximálisan átlátszó menü ── */
+body.is-index nav#mainNav{background:rgba(255,255,255,.35) !important;backdrop-filter:blur(10px) saturate(140%) !important;-webkit-backdrop-filter:blur(10px) saturate(140%) !important;border-bottom:1px solid rgba(220,227,234,.2) !important;box-shadow:none !important}
+body.is-index nav#mainNav.scrolled{background:rgba(255,255,255,.55) !important;backdrop-filter:blur(18px) saturate(160%) !important;-webkit-backdrop-filter:blur(18px) saturate(160%) !important;border-bottom:1px solid rgba(220,227,234,.35) !important;box-shadow:0 4px 18px rgba(17,50,147,.05) !important}
+/* Finom fehér text-shadow az átlátszó menü szövegeire az olvashatóságért */
+body.is-index nav#mainNav:not(.scrolled) .nav-links li>a,
+body.is-index nav#mainNav:not(.scrolled) .btn-nav-outline,
+body.is-index nav#mainNav:not(.scrolled) .nav-logo-text{text-shadow:0 1px 2px rgba(255,255,255,.55)}
+
+nav#mainNav *{box-sizing:border-box}
+nav#mainNav .nav-row-top{display:flex;align-items:center;min-height:58px;padding:8px 3.5%;gap:1.5rem;max-width:1600px;margin:0 auto}
+nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
+nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
+nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
+nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
+nav#mainNav .nav-link-tudastar{color:#113293 !important;font-weight:600}
+nav#mainNav .nav-link-tudastar:hover{background:#eef2ff !important;color:#113293 !important}
+nav#mainNav .nav-links li{position:relative}
+nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
+nav#mainNav .nav-links li>a:hover{background:#eef2ff}
+nav#mainNav .nav-link-vizsgalatok{color:#2C9650 !important;font-weight:700}
+nav#mainNav .nav-link-vizsgalatok:hover{background:rgba(44,150,80,.08) !important;color:#2C9650 !important}
+nav#mainNav .nav-dropdown-wide{min-width:260px}
+nav#mainNav .nav-links li>a svg{opacity:.6}
+nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
+nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+nav#mainNav .dropdown a{display:block;padding:9px 14px;font-size:13.5px;font-weight:500;color:#113293;border-radius:8px;transition:background .15s;text-decoration:none}
+nav#mainNav .dropdown a:hover{background:#eef2ff}
+nav#mainNav .nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
+nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.8) 0%,rgba(252,253,255,.65) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.18);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 2px rgba(17,50,147,.04),0 4px 12px rgba(17,50,147,.05);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
+nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
+nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
+nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;justify-content:flex-end;font-family:'Inter',sans-serif;font-size:14px;font-weight:400;color:#fff;background:linear-gradient(135deg,#1f43c0 0%,#2a52d6 100%);border:none;padding:9px 20px;border-radius:10px;box-shadow:0 2px 8px rgba(17,50,147,.25),0 6px 16px rgba(17,50,147,.2);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,filter .25s;text-decoration:none;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
+nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);filter:brightness(1.06);box-shadow:0 4px 12px rgba(17,50,147,.3),0 12px 28px rgba(17,50,147,.3)}
+
+nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
+nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
+.mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
+.mobile-drawer.open{visibility:visible;opacity:1;transform:translateY(0);transition:opacity .22s,transform .25s,visibility 0s;pointer-events:auto}
+.mobile-drawer-inner{padding:1rem 4%;display:flex;flex-direction:column;gap:2px}
+.mobile-nav-item{display:block;padding:13px 16px;font-size:15px;font-weight:600;color:#113293;border-radius:10px;transition:background .15s;text-decoration:none}
+.mobile-nav-item:hover{background:#eef2ff}
+.mobile-nav-cta{display:block;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);color:#fff !important;text-align:center;padding:13px 16px;border-radius:10px;font-weight:600;margin-top:.5rem;box-shadow:0 4px 14px rgba(255,138,0,.3);text-decoration:none}
+@media(max-width:900px){
+  nav#mainNav .nav-links{display:none}
+  nav#mainNav .nav-actions{display:none}
+  nav#mainNav .nav-mobile-toggle{display:flex}
+}
+</style>
+
+<nav id="mainNav">
+  <div class="nav-row-top">
+    <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+      <svg class="nav-logo-img" width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="navCrossG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#113293"/><stop offset="1" stop-color="#2f5bdd"/></linearGradient><linearGradient id="navCheckG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2C9650"/><stop offset="1" stop-color="#35B26B"/></linearGradient></defs><rect x="24" y="11" width="8" height="34" rx="4" fill="url(#navCrossG)"/><rect x="11" y="24" width="34" height="8" rx="4" fill="url(#navCrossG)"/><circle cx="46" cy="46" r="13.5" fill="#fff"/><circle cx="46" cy="46" r="12" fill="url(#navCheckG)"/><polyline points="40.5,46 44,49.5 51.5,42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/talalatok.html">Orvosok</a></li>
+      <li><a href="/klinikak.html">Klinikák</a></li>
+      <li><a href="/tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li>
+        <a href="/vizsgalatok.html" class="nav-link-vizsgalatok">Szakterületek, vizsgálatok
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="dropdown nav-dropdown-wide">
+          <a href="/talalatok.html?spec=kardiologia">Kardiológia</a>
+          <a href="/talalatok.html?spec=borgyogyaszat">Bőrgyógyászat</a>
+          <a href="/talalatok.html?spec=csecsemo-es-gyermekgyogyaszat">Gyermekgyógyászat</a>
+          <a href="/talalatok.html?spec=gasztroenterologia">Gasztroenterológia</a>
+          <a href="/talalatok.html?spec=neurologia">Neurológia</a>
+          <a href="/talalatok.html?spec=ortopedia-es-traumatologia">Ortopédia és traumatológia</a>
+          <a href="/talalatok.html?spec=altalanos-fogaszat">Általános fogászat</a>
+          <a href="/talalatok.html?spec=endokrinologia-es-anyagcsere">Endokrinológia</a>
+          <a href="/talalatok.html?spec=ful-orr-gegeszet">Fül-orr-gégészet</a>
+          <a href="/talalatok.html?spec=szemeszet">Szemészet</a>
+          <div style="height:1px;background:#e5e7eb;margin:6px 4px"></div>
+          <a href="/vizsgalatok.html" style="font-weight:600;color:#16a34a!important;display:flex;align-items:center;justify-content:space-between">
+            További szakterületek
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </li>
+      <li><a href="/kapcsolat.html">Kapcsolat</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://www.facebook.com/szakorvos.hu" target="_blank" rel="noopener" class="btn-nav-icon btn-nav-fb" aria-label="Facebook" title="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+      </a>
+      <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="/register.html" class="btn-nav-partner">Partner program</a>
+    </div>
+
+    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
+      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-inner">
+    <a href="/talalatok.html" class="mobile-nav-item">Orvosok</a>
+    <a href="/klinikak.html" class="mobile-nav-item">Klinikák</a>
+    <a href="/tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
+    <a href="/vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
+    <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
+    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
+    <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
+  </div>
+</div>
+
+<script>
+function toggleMobileMenu(){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle'),i=document.getElementById('hamburgerIcon');
+  if(!d||!t||!i)return;
+  const o=d.classList.contains('open');
+  if(o){d.classList.remove('open');t.setAttribute('aria-expanded','false');i.innerHTML='<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>';document.body.style.overflow='';}
+  else{d.classList.add('open');t.setAttribute('aria-expanded','true');i.innerHTML='<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';document.body.style.overflow='hidden';}
+}
+document.addEventListener('click',function(e){
+  const d=document.getElementById('mobileDrawer'),t=document.getElementById('mobileToggle');
+  if(!d||!t)return;
+  if(d.classList.contains('open')&&!d.contains(e.target)&&!t.contains(e.target))toggleMobileMenu();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=document.getElementById('mobileDrawer');if(d&&d.classList.contains('open'))toggleMobileMenu();}});
+</script>
+
+<script>
+// Görgetés-érzékeny menü
+(function(){
+  var nav = document.getElementById('mainNav');
+  if(!nav) return;
+  function update(){
+    if(window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+})();
+</script>
+<!-- ══════ MENÜ VÉGE ══════ -->
+
 <div class="wrap">
 
   <div class="head">
@@ -199,5 +358,79 @@ async function runScraper() {
   }
 }
 </script>
+<!-- ══════ EGYSÉGES LÁBLÉC — minden oldalon ugyanez ══════ -->
+<style id="site-footer-css">
+.site-footer{background:#1a1f36;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
+.footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
+.footer-brand{min-width:0}
+.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
+.footer-logo span{color:#7fe8a3}
+.footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
+.footer-social{display:flex;gap:8px}
+.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
+.footer-social-btn:hover{background:#FF8A00;border-color:#FF8A00;transform:translateY(-1px)}
+
+.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
+.footer-col{display:flex;flex-direction:column;gap:9px}
+.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
+.footer-col a:hover{color:#fff}
+
+.footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
+.footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
+@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}
+</style>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <p class="footer-tagline">Az okos orvoskeresés platform</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn">f</a>
+          <a href="#" class="footer-social-btn">in</a>
+          <a href="#" class="footer-social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="talalatok.html">Orvoskeresés</a>
+          <a href="index.html">AI asszisztens</a>
+          <a href="talalatok.html">Időpontfoglalás</a>
+          <a href="vizsgalatok.html">Vizsgálatok</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Partnereknek</div>
+          <a href="register.html">Orvosoknak</a>
+          <a href="register.html">Klinikáknak</a>
+          <a href="register.html">Árak</a>
+          <a href="register.html">Regisztráció</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Cég</div>
+          <a href="#">Rólunk</a>
+          <a href="kapcsolat.html">Kapcsolat</a>
+          <a href="tudastar.html">Blog</a>
+          <a href="#">Karrier</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Jogi</div>
+          <a href="adatvedelem.html">Adatvédelem</a>
+          <a href="#">ÁSZF</a>
+          <a href="#">Cookie</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
+      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
+    </div>
+  </div>
+</footer>
+<!-- ══════ LÁBLÉC VÉGE ══════ -->
 </body>
 </html>
