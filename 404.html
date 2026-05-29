@@ -17,65 +17,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;color:#113293;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
-a{color:#113293;text-decoration:none}
-a:hover{text-decoration:underline}
-nav{background:#fff;border-bottom:1px solid #DCE3EA;padding:14px 4%}
-.nav-logo{font-size:20px;font-weight:700;color:#113293}
-.nav-logo em{color:#FF8A00;font-style:normal}
-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 4%;text-align:center}
-.code{font-size:120px;font-weight:700;color:#264ACA;letter-spacing:-0.05em;line-height:1;margin-bottom:8px;background:linear-gradient(135deg,#113293,#264ACA);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.badge{display:inline-block;background:#eef2ff;color:#113293;padding:6px 16px;border-radius:100px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
-h1{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:600;color:#113293;letter-spacing:-0.02em;margin-bottom:14px;max-width:600px}
-.lead{font-size:16px;color:#475569;max-width:560px;margin-bottom:32px}
-.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;font-size:14px;transition:all .15s}
-.btn-primary{background:#FF8A00;color:#fff;box-shadow:0 4px 14px rgba(255,138,0,.3)}
-.btn-primary:hover{background:#e57a00;transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4);text-decoration:none}
-.btn-outline{background:#fff;color:#113293;border:1px solid rgba(17,50,147,.22)}
-.btn-outline:hover{border-color:#113293;background:#eef2ff;text-decoration:none}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:900px;width:100%;margin-bottom:24px}
-.card{background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:20px;text-align:left;transition:all .18s}
-.card:hover{border-color:#264ACA;box-shadow:0 8px 24px rgba(17,50,147,.08);transform:translateY(-2px);text-decoration:none}
-.card-title{font-size:15px;font-weight:600;color:#113293;margin-bottom:6px}
-.card-sub{font-size:13px;color:#475569}
-.footer{padding:20px 4%;background:#fff;border-top:1px solid #DCE3EA;text-align:center;font-size:12px;color:#94a3b8}
-.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
-.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
-.footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
-.footer-brand{min-width:0}
-.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
-.footer-logo span{color:var(--orange-2)}
-.footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
-.footer-social{display:flex;gap:8px}
-.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
-.footer-social-btn:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px)}
-
-.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
-.footer-col{display:flex;flex-direction:column;gap:9px}
-.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
-.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
-.footer-col a:hover{color:#fff}
-
-.footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
-.footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
-@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}.footer-links{grid-template-columns:repeat(2,1fr)}.footer-bottom{flex-direction:column;text-align:center}}
-/* === NAV PATCH (új menüpontok és gombok) === */
-nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none;white-space:nowrap}
-nav#mainNav .nav-link-tudastar{color:#113293 !important;font-weight:600}
-nav#mainNav .nav-link-tudastar:hover{background:#eef2ff !important;color:#113293 !important}
-nav#mainNav .nav-link-vizsgalatok{color:#16a34a !important;font-weight:700}
-nav#mainNav .nav-link-vizsgalatok:hover{background:rgba(22,163,74,.08) !important;color:#16a34a !important}
-nav#mainNav .nav-dropdown-wide{min-width:260px}
-nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#16a34a;background:linear-gradient(180deg,rgba(236,253,245,.85) 0%,rgba(220,252,231,.75) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(22,163,74,.32);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 1px 2px rgba(22,163,74,.06),0 4px 12px rgba(22,163,74,.08);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap}
-nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);border-color:rgba(22,163,74,.55);background:linear-gradient(180deg,rgba(236,253,245,1) 0%,rgba(187,247,208,.92) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(22,163,74,.1),0 8px 18px rgba(22,163,74,.15)}
-nav#mainNav .btn-nav-partner svg{flex-shrink:0;color:#16a34a}
-nav#mainNav .btn-nav-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;color:#113293;background:transparent;border:1px solid rgba(17,50,147,.15);border-radius:50%;transition:background .15s,border-color .15s,color .15s;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-icon:hover{background:#eef2ff;border-color:rgba(17,50,147,.35);color:#113293}
-nav#mainNav .btn-nav-fb{color:#1877F2}
-nav#mainNav .btn-nav-fb:hover{background:#e7f0fe;border-color:rgba(24,119,242,.4);color:#1877F2}
-
+body{font-family:'Inter',sans-serif;color:#1a1f36;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(ellipse 1100px 700px at 50% -250px,rgba(38,74,202,.08) 0%,transparent 65%),radial-gradient(ellipse 800px 500px at 100% 600px,rgba(44,150,80,.05) 0%,transparent 55%),radial-gradient(ellipse 700px 400px at 0% 1200px,rgba(255,138,0,.04) 0%,transparent 55%),linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);background-attachment:fixed}
+a{color:#264ACA;text-decoration:none}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 4% 64px;text-align:center;position:relative;z-index:1}
+.code{font-size:clamp(110px,18vw,176px);font-weight:800;letter-spacing:-0.05em;line-height:.9;margin-bottom:6px;background:linear-gradient(135deg,#113293 0%,#264ACA 55%,#3957d5 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.badge{display:inline-flex;align-items:center;gap:7px;background:rgba(38,74,202,.08);color:#264ACA;border:1px solid rgba(38,74,202,.16);padding:7px 16px;border-radius:100px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+h1{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:600;letter-spacing:-0.025em;margin-bottom:14px;max-width:620px;background:linear-gradient(135deg,#113293,#264ACA 60%,#3957d5);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.lead{font-size:16px;color:#52617a;max-width:560px;margin-bottom:34px;line-height:1.65}
+.actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:54px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:11px;font-weight:600;font-size:14px;transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s,background .25s;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,#113293 0%,#264ACA 100%);color:#fff;box-shadow:0 2px 8px rgba(17,50,147,.25),0 8px 22px rgba(17,50,147,.18)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(17,50,147,.3),0 14px 32px rgba(17,50,147,.26);text-decoration:none}
+.btn-outline{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(252,253,255,.7));backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);color:#113293;border:1px solid rgba(17,50,147,.18);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.05)}
+.btn-outline:hover{transform:translateY(-2px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(238,242,255,.85));text-decoration:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:920px;width:100%}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(252,253,255,.82));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.85);border-radius:18px;padding:22px;text-align:left;transition:transform .35s cubic-bezier(.34,1.4,.64,1),box-shadow .35s,border-color .3s;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 6px rgba(17,50,147,.04),0 12px 28px rgba(17,50,147,.07)}
+.card:hover{transform:translateY(-4px);border-color:rgba(38,74,202,.22);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 6px 14px rgba(17,50,147,.08),0 22px 46px rgba(17,50,147,.13);text-decoration:none}
+.card-title{font-size:15.5px;font-weight:700;color:#113293;margin-bottom:7px;letter-spacing:-0.01em}
+.card-sub{font-size:13px;color:#52617a;line-height:1.5}
 </style>
 </head>
 <body>
@@ -121,8 +80,12 @@ nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;fon
 nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
 nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;justify-content:flex-end;font-family:'Inter',sans-serif;font-size:14px;font-weight:400;color:#fff;background:linear-gradient(135deg,#1f43c0 0%,#2a52d6 100%);border:none;padding:9px 20px;border-radius:10px;box-shadow:0 2px 8px rgba(17,50,147,.25),0 6px 16px rgba(17,50,147,.2);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,filter .25s;text-decoration:none;cursor:pointer;letter-spacing:.01em;white-space:nowrap}
-nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);filter:brightness(1.06);box-shadow:0 4px 12px rgba(17,50,147,.3),0 12px 28px rgba(17,50,147,.3)}
+nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:12.2px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border:none;padding:8px 16px;border-radius:8px;box-shadow:0 2px 7px rgba(17,50,147,.24);transition:transform .2s cubic-bezier(.34,1.4,.64,1),box-shadow .2s;text-decoration:none;cursor:pointer;letter-spacing:.005em;white-space:nowrap}
+nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(17,50,147,.35)}
+nav#mainNav .btn-nav-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.16);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.06);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s,color .25s;text-decoration:none;cursor:pointer}
+nav#mainNav .btn-nav-icon:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.32);color:#264ACA;box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 6px 16px rgba(17,50,147,.13)}
+nav#mainNav .btn-nav-icon svg{width:18px;height:18px}
+nav#mainNav .btn-nav-fb:hover{color:#1877F2;border-color:rgba(24,119,242,.4)}
 
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
@@ -139,6 +102,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 }
 </style>
 
+<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}</style>
 <nav id="mainNav">
   <div class="nav-row-top">
     <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
@@ -150,35 +114,10 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <li><a href="/talalatok.html">Orvosok</a></li>
       <li><a href="/klinikak.html">Klinikák</a></li>
       <li><a href="/tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
-      <li>
-        <a href="/vizsgalatok.html" class="nav-link-vizsgalatok">Szakterületek, vizsgálatok
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </a>
-        <div class="dropdown nav-dropdown-wide">
-          <a href="/talalatok.html?spec=kardiologia">Kardiológia</a>
-          <a href="/talalatok.html?spec=borgyogyaszat">Bőrgyógyászat</a>
-          <a href="/talalatok.html?spec=csecsemo-es-gyermekgyogyaszat">Gyermekgyógyászat</a>
-          <a href="/talalatok.html?spec=gasztroenterologia">Gasztroenterológia</a>
-          <a href="/talalatok.html?spec=neurologia">Neurológia</a>
-          <a href="/talalatok.html?spec=ortopedia-es-traumatologia">Ortopédia és traumatológia</a>
-          <a href="/talalatok.html?spec=altalanos-fogaszat">Általános fogászat</a>
-          <a href="/talalatok.html?spec=endokrinologia-es-anyagcsere">Endokrinológia</a>
-          <a href="/talalatok.html?spec=ful-orr-gegeszet">Fül-orr-gégészet</a>
-          <a href="/talalatok.html?spec=szemeszet">Szemészet</a>
-          <div style="height:1px;background:#e5e7eb;margin:6px 4px"></div>
-          <a href="/vizsgalatok.html" style="font-weight:600;color:#16a34a!important;display:flex;align-items:center;justify-content:space-between">
-            További szakterületek
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-        </div>
-      </li>
       <li><a href="/kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
     <div class="nav-actions">
-      <a href="https://www.facebook.com/szakorvos.hu" target="_blank" rel="noopener" class="btn-nav-icon btn-nav-fb" aria-label="Facebook" title="Facebook">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
-      </a>
       <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
@@ -200,7 +139,6 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <a href="/talalatok.html" class="mobile-nav-item">Orvosok</a>
     <a href="/klinikak.html" class="mobile-nav-item">Klinikák</a>
     <a href="/tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
-    <a href="/vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
     <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
