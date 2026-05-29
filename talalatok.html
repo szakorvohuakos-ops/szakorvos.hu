@@ -2200,23 +2200,46 @@ function cardH(d,i){
     ? `<div class="szk-card-avatar"><img loading="lazy" decoding="async" src="${d.photo_url}" alt="${d.name}">${avD.length?'<span class="szk-card-dot"></span>':''}</div>`
     : `<div class="szk-card-avatar" style="background:linear-gradient(135deg,${col},${col}bb)">${init}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
 
-  return `<div class="szk-card" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
+  const chipTags = tags.slice(0,5);
+  const chipMore = Math.max(0, tags.length - 5);
+  const specChips = chipTags.map(t => `<span class="kc-chip">${escapeHtml(t)}</span>`).join('') + (chipMore ? `<span class="kc-chip more">+${chipMore} további</span>` : '');
+  const feeFmt = (f && f > 0) ? Number(f).toLocaleString('hu-HU') + ' Ft' : '';
+  const eduVal = d.university ? escapeHtml(d.university) + (d.graduation_year ? ` (${d.graduation_year})` : '') : '';
+  const langsAll = langsRaw.map(s => (s || '').toString().trim()).filter(Boolean);
+  const introTxt = truncateWords(d.short_intro || d.bio || '', 20);
+  const IPIN='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+  const IEXP='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
+  const ISTR='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  const IEDU='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>';
+  const IFEE='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+  const ILNG='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+  const gridItems = [];
+  gridItems.push(`<div class="kc-info">${IEXP}<div><div class="kc-info-l">Tapasztalat</div><div class="kc-info-v">${d.experience_years ? d.experience_years + ' év' : '—'}</div></div></div>`);
+  gridItems.push(`<div class="kc-info">${ISTR}<div><div class="kc-info-l">Értékelés</div><div class="kc-info-v">${ratingFmt ? ratingFmt + (reviewCount ? ` (${reviewCount})` : '') : 'Nincs még'}</div></div></div>`);
+  if(eduVal) gridItems.push(`<div class="kc-info">${IEDU}<div><div class="kc-info-l">Egyetem</div><div class="kc-info-v">${eduVal}</div></div></div>`);
+  if(feeFmt) gridItems.push(`<div class="kc-info">${IFEE}<div><div class="kc-info-l">Konzultáció</div><div class="kc-info-v">${feeFmt}</div></div></div>`);
+  if(langsAll.length) gridItems.push(`<div class="kc-info">${ILNG}<div><div class="kc-info-l">Nyelvek</div><div class="kc-info-v">${langsAll.map(l=>escapeHtml(l.charAt(0).toUpperCase()+l.slice(1))).join(', ')}</div></div></div>`);
+  if(city) gridItems.push(`<div class="kc-info">${IPIN}<div><div class="kc-info-l">Város</div><div class="kc-info-v">${escapeHtml(city)}</div></div></div>`);
+
+  return `<div class="szk-card kc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
     <div class="szk-card-top">
       ${avEl}
       <div class="szk-card-body">
         <div class="szk-card-title">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="szk-verified" title="Ellenőrzött profil"></span>`:''}</div>
         <div class="szk-card-subtitle">${escapeHtml(specsDisplay)}</div>
         ${featureBadges.length ? `<div class="szk-feature-badges">${featureBadges.join('')}</div>` : ''}
-
-        ${(d.experience_years || langs.length) ? `<div class="szk-card-stack">
-          <div class="szk-card-meta">
-            ${d.experience_years ? `<span><strong>${d.experience_years} év</strong> tapasztalat</span>` : ''}
-            ${d.experience_years && langs.length ? `<span class="szk-card-meta-dot"></span>` : ''}
-            ${langs.map(l => `<span class="szk-card-meta-lang">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`).join('')}
-          </div>
-        </div>` : ''}
+        <div class="kc-meta">
+          ${d.experience_years ? `<span><strong>${d.experience_years} év</strong> tapasztalat</span>` : ''}
+          ${d.experience_years && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
+          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${reviewCount ? ` <span class="szk-card-meta-soft">(${reviewCount} értékelés)</span>` : ''}` : ''}
+        </div>
+        ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
       </div>
     </div>
+
+    ${introTxt ? `<div class="kc-intro">${escapeHtml(introTxt)}</div>` : ''}
+
+    <div class="kc-grid">${gridItems.join('')}</div>
 
     <div class="szk-card-foot">
       <div class="szk-card-foot-info">
@@ -2234,6 +2257,7 @@ function cardH(d,i){
       </div>
     </div>
   </div>`;
+
 }
 
 // 6-7 szó után "…" — a kártya rövid summary-jéhez
@@ -2592,7 +2616,7 @@ load();
 
 /* 3-oszlopos elrendezés: szűrő | találatok | térkép */
 @media(min-width:1201px){
-  .pw{grid-template-columns:280px minmax(0,1fr) 380px !important}
+  .pw{grid-template-columns:280px minmax(0,1fr) 190px !important}
   #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
   #resultsMapCol .rmap-close{display:none}
   .pw .rgrid{grid-template-columns:1fr !important}
@@ -2756,5 +2780,23 @@ load();
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+<style id="orvos-card-skin">
+.pw main .szk-card.kc{display:block;padding:0;overflow:hidden}
+.kc .szk-card-top{padding:20px 22px 14px}
+.kc .szk-feature-badges{margin-top:10px}
+.kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
+.kc-meta .kc-m-star{color:#d97706;font-weight:700}
+.kc-meta strong{color:#113293}
+.kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
+.kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
+.kc-intro{padding:0 22px 4px;font-size:13px;line-height:1.55;color:#52617a;font-style:italic}
+.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 22px;border-top:1px solid rgba(220,227,234,.5);border-bottom:1px solid rgba(220,227,234,.5)}
+.kc-info{display:flex;align-items:flex-start;gap:9px;min-width:0}
+.kc-info svg{color:#264ACA;flex-shrink:0;margin-top:1px}
+.kc-info-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;margin-bottom:2px}
+.kc-info-v{font-size:13.5px;color:#1a1f36;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
+.kc .szk-card-foot{padding:14px 22px 18px;border-top:none}
+</style>
 </body>
 </html>
