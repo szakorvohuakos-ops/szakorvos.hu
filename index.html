@@ -132,6 +132,11 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .highlight-desc{font-size:11px;color:var(--muted);line-height:1.4}
 .highlight-arrow{flex-shrink:0;color:var(--muted);transition:transform .2s,color .2s}
 .highlight-card:hover .highlight-arrow{transform:translateX(2px);color:var(--brand-2)}
+a.highlight-card{text-decoration:none;color:inherit}
+.highlight-desc.g-rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.g-logo{flex-shrink:0}
+.g-stars{color:#fbbc05;font-size:12px;letter-spacing:1px;line-height:1}
+.g-label{font-size:11px;color:var(--sub);font-weight:600}
 
 .map-card{min-height:176px;background:linear-gradient(135deg,rgba(255,255,255,.88) 0%,rgba(230,238,255,.7) 100%);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:14px;padding:13px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);display:grid;grid-template-columns:1fr 150px;gap:14px;align-items:center;text-decoration:none;color:inherit;transition:all .25s;cursor:pointer}
 .map-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.2)}
@@ -338,12 +343,12 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 }
 </style>
 
-<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}</style>
+<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}.nav-dev-badge{display:inline-flex;align-items:center;margin-left:2px;padding:3px 10px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:#b45309;background:linear-gradient(135deg,rgba(255,179,71,.22),rgba(255,138,0,.16));border:1px solid rgba(255,138,0,.4);border-radius:100px;white-space:nowrap;line-height:1.5}@media(max-width:600px){.nav-dev-badge{display:none}}</style>
 <nav id="mainNav">
   <div class="nav-row-top">
     <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
       <svg class="nav-logo-img" width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="navCrossG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#113293"/><stop offset="1" stop-color="#2f5bdd"/></linearGradient><linearGradient id="navCheckG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2C9650"/><stop offset="1" stop-color="#35B26B"/></linearGradient></defs><rect x="24" y="11" width="8" height="34" rx="4" fill="url(#navCrossG)"/><rect x="11" y="24" width="34" height="8" rx="4" fill="url(#navCrossG)"/><circle cx="46" cy="46" r="13.5" fill="#fff"/><circle cx="46" cy="46" r="12" fill="url(#navCheckG)"/><polyline points="40.5,46 44,49.5 51.5,42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div><span class="nav-dev-badge">Fejlesztés alatt</span>
     </a>
 
     <ul class="nav-links">
@@ -484,16 +489,16 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
 
       <div class="highlight-list">
-        <div class="highlight-card">
+        <a class="highlight-card" href="klinikak.html" aria-label="Klinika találati oldal megnyitása">
           <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v15"/><path d="M9 21v-4h6v4"/><path d="M12 7v3M10.5 8.5h3"/></svg></div>
-          <div class="highlight-body"><div class="highlight-title">Részletes klinika-adatlapok</div><div class="highlight-desc">Google értékelések, orvoslista, elérhetőség</div></div>
+          <div class="highlight-body"><div class="highlight-title">Részletes klinika-adatlapok</div><div class="highlight-desc g-rate"><svg class="g-logo" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.2-4 1.2-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.3 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.4c-.2-.7-.4-1.4-.4-2.4s.1-1.7.4-2.4V6.5H1.4C.5 8.2 0 10 0 12s.5 3.8 1.4 5.5l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.4 6.5l4 3.1C6.3 6.8 8.9 4.8 12 4.8z"/></svg><span class="g-stars" aria-hidden="true">★★★★★</span><span class="g-label">Google értékelésekkel</span></div></div>
           <svg class="highlight-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </div>
-        <div class="highlight-card">
+        </a>
+        <a class="highlight-card" href="talalatok.html" aria-label="Orvos találati oldal megnyitása">
           <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
           <div class="highlight-body"><div class="highlight-title">Részletes orvosprofilok</div><div class="highlight-desc">Ellenőrzött adatok, szakvizsgák, vélemények</div></div>
           <svg class="highlight-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </div>
+        </a>
       </div>
 
       <a href="#" class="map-card" aria-label="Térképes nézet megnyitása">
@@ -850,14 +855,18 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   async function loadAcData(){
     if(!hasDB) return;
     if(_acSpecs && _acDocs && _acClinics) return;
-    try{
-      const [s,d,c] = await Promise.all([
-        db.from('specialties').select('name, slug').eq('is_active', true).order('doctor_count',{ascending:false}).limit(80),
-        db.from('doctors').select('id, name, slug, specialty_main').eq('is_active', true).order('rating',{ascending:false}).limit(200),
-        db.from('clinics').select('id, name, slug, city').order('name').limit(200),
-      ]);
-      _acSpecs=s.data||[]; _acDocs=d.data||[]; _acClinics=c.data||[];
-    }catch(e){ _acSpecs=[]; _acDocs=[]; _acClinics=[]; }
+    const [s,d,c] = await Promise.allSettled([
+      db.from('specialties').select('name, slug').eq('is_active', true).order('doctor_count',{ascending:false}).limit(80),
+      db.from('doctors').select('id, name, slug, doctor_specialties(is_primary, specialties(name))').eq('is_active', true).order('rating',{ascending:false}).limit(200),
+      db.from('clinics').select('id, name, slug, cities(name)').order('name').limit(200),
+    ]);
+    _acSpecs = (s.status==='fulfilled' && s.value && s.value.data) ? s.value.data : [];
+    _acDocs  = (d.status==='fulfilled' && d.value && d.value.data)
+      ? d.value.data.map(function(x){ var ds=x.doctor_specialties||[]; var pri=ds.find(function(z){return z.is_primary;})||ds[0]; return { id:x.id, name:x.name, slug:x.slug, specialty_main: (pri && pri.specialties && pri.specialties.name) ? pri.specialties.name : '' }; })
+      : [];
+    _acClinics = (c.status==='fulfilled' && c.value && c.value.data)
+      ? c.value.data.map(function(x){ return { id:x.id, name:x.name, slug:x.slug, city: (x.cities && x.cities.name) ? x.cities.name : '' }; })
+      : [];
   }
   function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.innerHTML=''; } _acActive=-1; }
   function moveAc(dir){
