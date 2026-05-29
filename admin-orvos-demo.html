@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Orvos Admin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
+
+<style>
+:root{
+  --brand:#113293; --brand-2:#264ACA; --navy:#0c2370;
+  --green:#2C9650; --green-2:#35B26B; --orange:#FF8A00; --orange-2:#FFA726;
+  --text:#113293; --sub:#475569; --muted:#94a3b8;
+  --border:#DCE3EA; --red:#dc2626;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-blue-text:linear-gradient(135deg,#113293,#264ACA 60%,#3957d5);
+  --ease-spring:cubic-bezier(.34,1.4,.64,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#fff}
+body{
+  font-family:'Inter',sans-serif;color:var(--text);margin:0;min-height:100vh;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse 1100px 700px at 50% -250px,rgba(38,74,202,.08) 0%,transparent 65%),
+    radial-gradient(ellipse 800px 500px at 100% 600px,rgba(44,150,80,.045) 0%,transparent 55%),
+    radial-gradient(ellipse 760px 440px at 0% 1200px,rgba(255,138,0,.035) 0%,transparent 55%),
+    linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);
+  background-attachment:fixed;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:300;
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:14px clamp(16px,4vw,40px);
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-bottom:1px solid rgba(38,74,202,.08);
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 12px rgba(17,50,147,.04);
+}
+.tb-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.tb-logo em{font-style:normal;color:var(--green)}
+.tb-badge{font-size:11px;font-weight:700;color:var(--brand-2);background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:3px 9px;border-radius:99px;letter-spacing:.02em}
+.tb-spacer{flex:1}
+.tb-user{font-size:13px;color:var(--sub);font-weight:600}
+.tb-link{font-size:13px;font-weight:600;color:var(--brand-2);display:inline-flex;align-items:center;gap:6px}
+.tb-link:hover{color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:11px;font-weight:600;font-size:14px;transition:transform .25s var(--ease-spring),box-shadow .25s,background .2s,border-color .2s}
+.btn-primary{color:#fff;background:var(--grad-blue);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 2px 6px rgba(17,50,147,.2),0 8px 20px rgba(17,50,147,.26)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 10px rgba(17,50,147,.25),0 16px 32px rgba(17,50,147,.34)}
+.btn-primary:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.btn-ghost{color:var(--sub);background:rgba(255,255,255,.6);border:1.5px solid rgba(220,227,234,.8)}
+.btn-ghost:hover{color:var(--brand);border-color:var(--brand-2);background:#fff}
+
+/* ── LAYOUT ── */
+.wrap{max-width:980px;margin:0 auto;padding:clamp(20px,4vw,36px) clamp(16px,4vw,40px) 120px}
+.page-h{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.03em;margin:0 0 4px;background:var(--grad-blue-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-sub{font-size:14px;color:var(--sub);margin:0 0 22px}
+
+/* ── CARD (glass) ── */
+.card{
+  position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(252,253,255,.82));
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.8);border-radius:20px;
+  box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 8px rgba(17,50,147,.05),0 16px 40px rgba(17,50,147,.08);
+  padding:22px 24px;margin-bottom:20px;
+}
+.card-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:-.015em;margin:0 0 4px}
+.card-title svg{stroke:var(--brand-2)}
+.card-desc{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+.badge-gray{font-size:11px;font-weight:600;color:var(--sub);background:#eef2f7;border:1px solid var(--border);padding:3px 9px;border-radius:99px}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fg.full{grid-column:1/-1}
+.lbl{font-size:12.5px;font-weight:600;color:var(--sub)}
+.inp{
+  width:100%;padding:11px 13px;font-family:inherit;font-size:14px;color:var(--text);
+  background:rgba(255,255,255,.75);border:1.5px solid rgba(220,227,234,.8);border-radius:11px;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.inp:hover{border-color:rgba(38,74,202,.4)}
+.inp:focus{outline:none;border-color:var(--brand-2);background:#fff;box-shadow:0 0 0 4px rgba(38,74,202,.1)}
+textarea.inp{resize:vertical;min-height:80px;line-height:1.55}
+.hint{font-size:11.5px;color:var(--muted)}
+.inp:disabled{background:#eef2f7;color:var(--sub);cursor:not-allowed}
+
+/* ── ONLINE / toggles ── */
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chk-row{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1.5px solid rgba(220,227,234,.8);border-radius:11px;cursor:pointer;font-size:13.5px;font-weight:500;background:rgba(255,255,255,.6);transition:border-color .2s,background .2s}
+.chk-row:hover{border-color:var(--brand-2);background:#fff}
+.chk-row input{width:18px;height:18px;accent-color:var(--brand-2)}
+
+/* ── PHOTO ── */
+.photo-row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.photo-prev{width:96px;height:96px;border-radius:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:28px;overflow:hidden;background:linear-gradient(135deg,#FF8A00,#ff8c5a);box-shadow:0 8px 20px rgba(17,50,147,.12)}
+.photo-prev img{width:100%;height:100%;object-fit:cover}
+.photo-side{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}
+.drop{position:relative;border:1.5px dashed rgba(38,74,202,.35);border-radius:12px;padding:14px;text-align:center;font-size:13px;color:var(--sub);background:rgba(38,74,202,.03);transition:border-color .2s,background .2s}
+.drop:hover{border-color:var(--brand-2);background:rgba(38,74,202,.06)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop span{color:var(--brand-2);font-weight:600}
+.photo-bar{display:none;height:8px;background:rgba(17,50,147,.08);border-radius:99px;overflow:hidden;margin-top:8px}
+.photo-bar>i{display:block;height:100%;width:0;background:var(--grad-blue);border-radius:99px;transition:width .25s}
+.photo-ok{display:none;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--green);margin-top:6px}
+
+/* ── COMPLETENESS ── */
+#completenessCard{display:none}
+
+/* ── SAVE BAR ── */
+.savebar{
+  position:fixed;left:0;right:0;bottom:0;z-index:300;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  padding:12px clamp(16px,4vw,40px);
+  background:rgba(255,255,255,.82);
+  backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+  border-top:1px solid rgba(38,74,202,.08);
+  box-shadow:0 -8px 28px rgba(17,50,147,.08);
+}
+.savebar .sb-note{font-size:12.5px;color:var(--muted)}
+.savebar .btn-primary{padding:12px 26px;font-size:15px}
+
+@media(max-width:760px){
+  .form-grid,.chk-grid{grid-template-columns:1fr}
+  body{background-attachment:scroll}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ AUTH LOADING ══ -->
+<div id="authLoading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Inter',sans-serif">
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+    <svg width="40" height="40" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
+    <div style="font-weight:800;font-size:18px;color:#113293">Szakorvos<span style="color:#2C9650">.hu</span></div>
+    <div style="color:#475569;font-size:14px">Hitelesítés folyamatban…</div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="appContent" style="display:none">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="tb-logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
+      Szakorvos<em>.hu</em>
+    </div>
+    <span class="tb-badge">Orvos Admin</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-user" id="sbUserName">Admin</span>
+    <a class="tb-link" id="viewPublicLink" href="#" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Nyilvános profil
+    </a>
+    <button class="btn btn-ghost" onclick="window.logoutAdmin && window.logoutAdmin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Kilépés
+    </button>
+    <button class="btn btn-primary" id="btnSaveTop" onclick="saveProfile()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Mentés
+    </button>
+  </div>
+
+  <div class="wrap">
+    <h1 class="page-h">Profilom szerkesztése</h1>
+    <p class="page-sub">Minden adat egy oldalon. A módosítások az „Összes módosítás mentése” gombbal lépnek életbe.</p>
+
+    <div id="profileInfoBanner" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:12px 16px;margin-bottom:18px;color:#1d4ed8;font-size:13px;font-weight:600"></div>
+
+    <!-- ═══ PROFIL TELJESSÉG ═══ -->
+    <div id="completenessCard" class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1">
+          <div id="completenessIcon" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#264ACA,#113293);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(17,50,147,.25)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div style="min-width:0">
+            <div style="font-size:15px;font-weight:700;letter-spacing:-.015em">Profil teljesség</div>
+            <div id="completenessSubtitle" style="font-size:12.5px;color:#64748b;margin-top:2px">Mennyire vannak kitöltve a profil mezői</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div id="completenessPctText" style="font-size:32px;font-weight:800;line-height:1;letter-spacing:-.03em">–%</div>
+          <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em;margin-top:3px">Kitöltöttség</div>
+        </div>
+      </div>
+      <div style="height:10px;background:rgba(17,50,147,.08);border-radius:99px;overflow:hidden;margin-bottom:14px">
+        <div id="completenessBar" style="height:100%;width:0%;background:linear-gradient(90deg,#264ACA,#3b5ad8);border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1),background .3s"></div>
+      </div>
+      <div id="completenessMissingWrap" style="display:none">
+        <div style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Hiányzó mezők (kattintva odaugorhat)</div>
+        <div id="completenessMissingList" style="display:flex;flex-wrap:wrap;gap:7px"></div>
+      </div>
+      <div id="completenessDone" style="display:none;font-size:13.5px;font-weight:600;color:#059669;align-items:center;gap:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>
+        Gratulálunk, a profil 100%-ig kitöltött!
+      </div>
+    </div>
+
+    <!-- ═══ FOTÓ ═══ -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Profilfotó</div>
+      <div class="photo-row">
+        <div class="photo-prev" id="photoPreview"><span id="photoInitials">–</span></div>
+        <div class="photo-side">
+          <div class="hint">JPG, PNG vagy WebP, max. 5 MB. Ajánlott négyzetes (400×400 px). A fotó feltöltéskor azonnal mentésre kerül.</div>
+          <div class="drop">
+            <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp" onchange="handlePhotoSelect(this)">
+            Húzza ide, vagy <span>tallózzon</span> a feltöltéshez
+          </div>
+          <div class="photo-bar" id="photoProgress"><i id="photoProgressFill"></i></div>
+          <div class="photo-ok" id="photoSuccess"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Fotó feltöltve és mentve!</div>
+          <button class="btn btn-ghost" id="photoRemoveBtn" style="display:none;align-self:flex-start;padding:7px 14px;font-size:12.5px" onclick="removePhoto()">Fotó eltávolítása</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ALAPADATOK ═══ -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg> Alapadatok</div>
+      <div class="form-grid">
+        <div class="fg"><label class="lbl">Teljes név *</label><input class="inp" id="pName" placeholder="Dr. Kovács János"></div>
+        <div class="fg"><label class="lbl">Titulus / Fokozat</label><input class="inp" id="pTitle" placeholder="PhD, Prof., dr. med."></div>
+        <div class="fg"><label class="lbl">Nem</label>
+          <select class="inp" id="pGender">
+            <option value="">— Nincs megadva —</option>
+            <option value="male">Férfi</option>
+            <option value="female">Nő</option>
+          </select>
+          <div class="hint">A keresőben szűrhető (pl. „női nőgyógyász”)</div>
+        </div>
+        <div class="fg"><label class="lbl">Tapasztalat (év)</label><input class="inp" id="pExp" type="number" min="0" max="70" placeholder="10"></div>
+        <div class="fg"><label class="lbl">Telefon</label><input class="inp" id="pPhone" type="tel" placeholder="+36 30 123 4567"></div>
+        <div class="fg"><label class="lbl">Email</label><input class="inp" id="pEmail" type="email" placeholder="doktor@email.hu"></div>
+        <div class="fg full"><label class="lbl">Beszélt nyelvek</label><input class="inp" id="pLang" placeholder="magyar, angol, német"><div class="hint">Vesszővel elválasztva</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ BEMUTATKOZÁS ═══ -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Bemutatkozás</div>
+      <div class="form-grid">
+        <div class="fg full"><label class="lbl">Rövid bemutatkozó</label><textarea class="inp" id="pIntro" rows="2" placeholder="Egy-két mondatos összefoglaló – ez jelenik meg a találati listában…"></textarea><div class="hint">Min. 20 karakter ajánlott</div></div>
+        <div class="fg full"><label class="lbl">Részletes szakmai bemutatkozás</label><textarea class="inp" id="pBio" rows="6" placeholder="Írjon magáról részletesebben – ez jelenik meg a nyilvános profilján…"></textarea><div class="hint">Min. 100 karakter ajánlott a jobb megjelenésért</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ SZAKMAI ÉLETÚT / NYILVÁNTARTÁS ═══ -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Szakmai életút &amp; nyilvántartás</div>
+      <div class="card-desc">Soronként egy tételt írjon a többsoros mezőkbe (pl. minden szakvizsga külön sorba).</div>
+      <div class="form-grid">
+        <div class="fg"><label class="lbl">Egyetem</label><input class="inp" id="pUniversity" placeholder="Semmelweis Egyetem"></div>
+        <div class="fg"><label class="lbl">Diploma éve</label><input class="inp" id="pGradYear" type="number" min="1950" max="2035" placeholder="2008"></div>
+        <div class="fg full"><label class="lbl">Szakvizsgák / képesítések</label><textarea class="inp" id="pCerts" rows="3" placeholder="Belgyógyászat szakvizsga (2012)&#10;Kardiológia szakvizsga (2015)"></textarea><div class="hint">Soronként egy</div></div>
+        <div class="fg full"><label class="lbl">Kamarai / szakmai tagságok</label><textarea class="inp" id="pMemberships" rows="2" placeholder="Magyar Orvosi Kamara&#10;Magyar Kardiológusok Társasága"></textarea><div class="hint">Soronként egy</div></div>
+        <div class="fg full"><label class="lbl">Továbbképzések</label><textarea class="inp" id="pContEdu" rows="2" placeholder="Soronként egy továbbképzés"></textarea></div>
+        <div class="fg full"><label class="lbl">Díjak, elismerések</label><textarea class="inp" id="pAwards" rows="2" placeholder="Soronként egy díj"></textarea></div>
+        <div class="fg full"><label class="lbl">Publikációk</label><textarea class="inp" id="pPublications" rows="3" placeholder="Soronként egy publikáció"></textarea></div>
+        <div class="fg full"><label class="lbl">Konferenciák, előadások</label><textarea class="inp" id="pConferences" rows="2" placeholder="Soronként egy konferencia / előadás"></textarea></div>
+        <div class="fg full"><label class="lbl">Kutatási területek</label><textarea class="inp" id="pResearch" rows="2" placeholder="Soronként egy kutatási terület"></textarea></div>
+        <div class="fg full"><label class="lbl">Média megjelenések</label><textarea class="inp" id="pMedia" rows="2" placeholder="Soronként egy megjelenés (cikk, interjú…)"></textarea></div>
+        <div class="fg full"><label class="lbl">Oktatási tevékenység</label><textarea class="inp" id="pTeaching" rows="2" placeholder="Pl. egyetemi adjunktus, rezidensképzés…"></textarea></div>
+      </div>
+    </div>
+
+    <!-- ═══ ONLINE SZOLGÁLTATÁSOK ═══ -->
+    <div class="card" id="pOnlineServices">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Online / digitális szolgáltatások</div>
+      <div class="chk-grid">
+        <label class="chk-row"><input type="checkbox" id="pOnlineConsult"> 💻 Online konzultáció</label>
+        <label class="chk-row"><input type="checkbox" id="pTelemedicine"> 📹 Telemedicina (videó)</label>
+        <label class="chk-row"><input type="checkbox" id="pEprescription"> 💊 e-recept</label>
+        <label class="chk-row"><input type="checkbox" id="pOnlineResults"> 📄 Online leletek</label>
+      </div>
+    </div>
+
+    <!-- ═══ SZAKTERÜLET + KLINIKA (csak megjelenítés) ═══ -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div class="card-title" style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Szakterület &amp; klinika</div>
+        <span class="badge-gray">Szuperadmin állítja be</span>
+      </div>
+      <div class="form-grid" style="margin-top:14px">
+        <div class="fg full" id="pSpecialty"><label class="lbl">Szakterületek</label><input class="inp" id="dSpecs" disabled placeholder="–"></div>
+        <div class="fg full" id="pClinic"><label class="lbl">Klinika / Rendelő</label><input class="inp" id="dClinics" disabled placeholder="–"></div>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <!-- SAVE BAR -->
+  <div class="savebar">
+    <div class="sb-note">A „Mentés” minden mezőt egyszerre ment. A fotó feltöltéskor automatikusan mentődik.</div>
+    <button class="btn btn-primary" id="btnSaveBottom" onclick="saveProfile()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Összes módosítás mentése
+    </button>
+  </div>
+
+</div><!-- /appContent -->
+
+<script>
+let doctorData=null;
+let currentUserId=null;
+
+/* ── tömb <-> szöveg segédek ── */
+function fromArr(a, sep){ return Array.isArray(a) ? a.join(sep) : (a || ''); }
+function toArr(str){
+  if(str==null) return null;
+  const arr = String(str).split(/[\n,]/).map(s=>s.trim()).filter(Boolean);
+  return arr.length ? arr : null;
+}
+function escapeAdminHtml(t){return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function slugify(t){return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 -]/g,'').replace(/[ -]+/g,'-').replace(/^-|-$/g,'').slice(0,80);}
+
+/* ── BETÖLTÉS ── */
+async function loadDoctorProfile(userId){
+  currentUserId = userId;
+  const { data } = await db
+    .from('doctors')
+    .select('*, doctor_specialties(specialties(id,name)), doctor_clinics(clinics(id,name))')
+    .eq('admin_user_id', userId)
+    .maybeSingle();
+
+  if(!data){
+    const info = document.getElementById('profileInfoBanner');
+    info.style.display='block';
+    info.innerHTML='⚠️ Még nincs kitöltött profilja. Töltse ki az adatokat és mentse el — ezután megjelenik a találati listában.';
+    document.getElementById('completenessCard').style.display='none';
+    return;
+  }
+
+  doctorData = data;
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=(v??'');};
+  set('pName', data.name);
+  set('pTitle', data.title);
+  set('pGender', data.gender||'');
+  set('pExp', data.experience_years);
+  set('pPhone', data.phone);
+  set('pEmail', data.email);
+  set('pLang', fromArr(data.languages, ', '));
+  set('pIntro', data.short_intro);
+  set('pBio', data.bio);
+  set('pUniversity', data.university);
+  set('pGradYear', data.graduation_year);
+  set('pCerts', fromArr(data.board_certifications, '\n'));
+  set('pMemberships', fromArr(data.memberships, '\n'));
+  set('pContEdu', fromArr(data.continuing_education, '\n'));
+  set('pAwards', fromArr(data.awards, '\n'));
+  set('pPublications', fromArr(data.publications, '\n'));
+  set('pConferences', fromArr(data.conferences, '\n'));
+  set('pResearch', fromArr(data.research_areas, '\n'));
+  set('pMedia', fromArr(data.media_appearances, '\n'));
+  set('pTeaching', data.teaching_activity);
+
+  const chk=(id,v)=>{const el=document.getElementById(id); if(el) el.checked=v===true;};
+  chk('pOnlineConsult', data.has_online_consultation);
+  chk('pTelemedicine', data.has_telemedicine);
+  chk('pEprescription', data.has_eprescription);
+  chk('pOnlineResults', data.has_online_results);
+
+  // szakterület + klinika (readonly)
+  const specs=(data.doctor_specialties||[]).map(x=>x.specialties?.name).filter(Boolean);
+  const clinics=(data.doctor_clinics||[]).map(x=>x.clinics?.name).filter(Boolean);
+  set('dSpecs', specs.join(', '));
+  set('dClinics', clinics.join(', '));
+
+  // fotó
+  updatePhotoPreview(data.photo_url, data.name);
+
+  // nyilvános profil link
+  const link=document.getElementById('viewPublicLink');
+  if(link) link.href = data.slug ? ('/orvos.html?slug='+encodeURIComponent(data.slug)) : '#';
+
+  renderCompleteness(data);
+}
+
+function initialsOf(name){return String(name||'–').split(/\s+/).filter(Boolean).slice(0,2).map(s=>s[0]).join('').toUpperCase()||'–';}
+
+function updatePhotoPreview(url, name){
+  const prev=document.getElementById('photoPreview');
+  const rm=document.getElementById('photoRemoveBtn');
+  if(url){
+    prev.innerHTML=`<img src="${escapeAdminHtml(url)}" alt="">`;
+    if(rm) rm.style.display='inline-flex';
+  } else {
+    prev.innerHTML=`<span id="photoInitials">${escapeAdminHtml(initialsOf(name||doctorData?.name))}</span>`;
+    if(rm) rm.style.display='none';
+  }
+}
+
+/* ── TELJESSÉG ── */
+function renderCompleteness(d){
+  const fields=[
+    {label:'Profilfotó',points:20,target:'photoPreview',has:()=>d.photo_url&&d.photo_url.length>5},
+    {label:'Rövid bemutatkozó',points:15,target:'pIntro',has:()=>d.short_intro&&d.short_intro.length>20},
+    {label:'Részletes bemutatkozó',points:12,target:'pBio',has:()=>d.bio&&d.bio.length>50},
+    {label:'Tapasztalat évek',points:8,target:'pExp',has:()=>d.experience_years>0},
+    {label:'Beszélt nyelvek',points:6,target:'pLang',has:()=>Array.isArray(d.languages)?d.languages.length>0:!!d.languages},
+    {label:'Telefonszám',points:6,target:'pPhone',has:()=>d.phone&&d.phone.length>5},
+    {label:'E-mail cím',points:4,target:'pEmail',has:()=>d.email&&d.email.length>5},
+    {label:'Egyetem',points:3,target:'pUniversity',has:()=>d.university&&d.university.length>2},
+    {label:'Diploma éve',points:3,target:'pGradYear',has:()=>!!d.graduation_year},
+    {label:'Szakvizsgák',points:5,target:'pCerts',has:()=>Array.isArray(d.board_certifications)&&d.board_certifications.length>0},
+    {label:'Online szolgáltatások',points:5,target:'pOnlineServices',has:()=>d.has_online_consultation||d.has_eprescription||d.has_online_results||d.has_telemedicine},
+    {label:'Szakterület',points:7,target:'pSpecialty',has:()=>Array.isArray(d.doctor_specialties)&&d.doctor_specialties.length>0},
+    {label:'Klinika',points:6,target:'pClinic',has:()=>Array.isArray(d.doctor_clinics)&&d.doctor_clinics.length>0},
+  ];
+  let total=0; const missing=[];
+  for(const f of fields){ if(f.has()) total+=f.points; else missing.push(f); }
+  total=Math.min(total,100);
+
+  const card=document.getElementById('completenessCard');
+  card.style.display='';
+  document.getElementById('completenessPctText').textContent=total+'%';
+  const bar=document.getElementById('completenessBar');
+  const icon=document.getElementById('completenessIcon');
+  const subtitle=document.getElementById('completenessSubtitle');
+  let c1,c2,sub,iconBg;
+  if(total>=90){c1='#059669';c2='#10b981';sub='Kiváló! A profilja szinte teljesen kész.';iconBg='linear-gradient(135deg,#059669,#10b981)';}
+  else if(total>=70){c1='#65a30d';c2='#84cc16';sub='Jó úton van. Még néhány mező és kész.';iconBg='linear-gradient(135deg,#65a30d,#84cc16)';}
+  else if(total>=40){c1='#d97706';c2='#f59e0b';sub='Egészítse ki a profilját a jobb találatokért.';iconBg='linear-gradient(135deg,#d97706,#f59e0b)';}
+  else {c1='#dc2626';c2='#ef4444';sub='A profil hiányos. Több adat = több páciens.';iconBg='linear-gradient(135deg,#dc2626,#ef4444)';}
+  bar.style.width=total+'%'; bar.style.background=`linear-gradient(90deg,${c1},${c2})`;
+  icon.style.background=iconBg; subtitle.textContent=sub;
+
+  const wrap=document.getElementById('completenessMissingWrap');
+  const done=document.getElementById('completenessDone');
+  const list=document.getElementById('completenessMissingList');
+  if(missing.length===0){wrap.style.display='none';done.style.display='flex';}
+  else{
+    done.style.display='none'; wrap.style.display='';
+    list.innerHTML=missing.map(f=>`<a href="#" onclick="scrollToField('${f.target}',event)" style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:#475569;background:rgba(248,250,252,.95);border:1.5px solid rgba(148,163,184,.3);padding:6px 11px;border-radius:14px">${escapeAdminHtml(f.label)} <span style="font-size:10.5px;color:#94a3b8;font-weight:700">+${f.points}%</span></a>`).join('');
+  }
+}
+
+function scrollToField(id,ev){
+  if(ev) ev.preventDefault();
+  const el=document.getElementById(id);
+  if(!el) return;
+  const y=el.getBoundingClientRect().top+window.scrollY-90;
+  window.scrollTo({top:y,behavior:'smooth'});
+  el.style.outline='2px solid #FF8A00'; el.style.outlineOffset='4px'; el.style.borderRadius='12px';
+  setTimeout(()=>{el.style.outline='';el.style.outlineOffset='';},2200);
+  try{ el.focus(); }catch(e){}
+}
+
+/* ── FOTÓ FELTÖLTÉS (doctor-photos bucket) ── */
+async function handlePhotoSelect(input){
+  const file=input.files?.[0];
+  if(!file) return;
+  if(!doctorData?.id){ alert('Először mentse el a profilt (név), utána tölthet fel fotót.'); input.value=''; return; }
+  if(file.size>5*1024*1024){ alert('A fájl túl nagy. Maximum 5 MB.'); input.value=''; return; }
+  const progress=document.getElementById('photoProgress');
+  const fill=document.getElementById('photoProgressFill');
+  const ok=document.getElementById('photoSuccess');
+  if(progress) progress.style.display='block'; if(ok) ok.style.display='none'; if(fill) fill.style.width='20%';
+  try{
+    const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+    const path=`${doctorData.id}/photo-${Date.now()}.${ext}`;
+    if(fill) fill.style.width='45%';
+    const { error:upErr }=await db.storage.from('doctor-photos').upload(path,file,{cacheControl:'3600',upsert:false});
+    if(upErr) throw upErr;
+    if(fill) fill.style.width='75%';
+    const { data:urlData }=db.storage.from('doctor-photos').getPublicUrl(path);
+    const publicUrl=urlData.publicUrl;
+    const oldUrl=doctorData.photo_url;
+    const { error:updErr }=await db.from('doctors').update({ photo_url:publicUrl }).eq('id',doctorData.id);
+    if(updErr) throw updErr;
+    if(fill) fill.style.width='100%';
+    doctorData.photo_url=publicUrl;
+    updatePhotoPreview(publicUrl, doctorData.name);
+    renderCompleteness(doctorData);
+    if(ok) ok.style.display='flex';
+    if(oldUrl){ const op=oldUrl.split('/doctor-photos/')[1]; if(op&&op!==path){ try{ await db.storage.from('doctor-photos').remove([op]); }catch(e){} } }
+    setTimeout(()=>{ if(progress) progress.style.display='none'; if(fill) fill.style.width='0%'; },1200);
+  }catch(e){
+    console.error('upload',e); alert('Feltöltési hiba: '+(e.message||'ismeretlen'));
+    if(progress) progress.style.display='none'; if(fill) fill.style.width='0%';
+  }finally{ input.value=''; }
+}
+
+async function removePhoto(){
+  if(!doctorData?.id||!doctorData.photo_url) return;
+  if(!confirm('Biztosan eltávolítja a profilfotót?')) return;
+  try{
+    const old=doctorData.photo_url;
+    const { error }=await db.from('doctors').update({ photo_url:null }).eq('id',doctorData.id);
+    if(error) throw error;
+    const op=old.split('/doctor-photos/')[1];
+    if(op){ try{ await db.storage.from('doctor-photos').remove([op]); }catch(e){} }
+    doctorData.photo_url=null;
+    updatePhotoPreview(null, doctorData.name);
+    renderCompleteness(doctorData);
+  }catch(e){ alert('Eltávolítás hiba: '+(e.message||'ismeretlen')); }
+}
+
+/* ── MENTÉS (globális) ── */
+async function saveProfile(){
+  const btns=[document.getElementById('btnSaveTop'),document.getElementById('btnSaveBottom')];
+  const v=id=>document.getElementById(id)?.value;
+  const name=(v('pName')||'').trim();
+  if(!name){ alert('A név megadása kötelező!'); scrollToField('pName'); return; }
+
+  const payload={
+    name,
+    title:(v('pTitle')||'').trim()||null,
+    gender:(['male','female'].includes(v('pGender')))?v('pGender'):null,
+    experience_years:parseInt(v('pExp'))||null,
+    phone:(v('pPhone')||'').trim()||null,
+    email:(v('pEmail')||'').trim()||null,
+    languages:toArr(v('pLang')),
+    short_intro:(v('pIntro')||'').trim()||null,
+    bio:(v('pBio')||'').trim()||null,
+    university:(v('pUniversity')||'').trim()||null,
+    graduation_year:parseInt(v('pGradYear'))||null,
+    board_certifications:toArr(v('pCerts')),
+    memberships:toArr(v('pMemberships')),
+    continuing_education:toArr(v('pContEdu')),
+    awards:toArr(v('pAwards')),
+    publications:toArr(v('pPublications')),
+    conferences:toArr(v('pConferences')),
+    research_areas:toArr(v('pResearch')),
+    media_appearances:toArr(v('pMedia')),
+    teaching_activity:(v('pTeaching')||'').trim()||null,
+    has_online_consultation:document.getElementById('pOnlineConsult')?.checked||false,
+    has_telemedicine:document.getElementById('pTelemedicine')?.checked||false,
+    has_eprescription:document.getElementById('pEprescription')?.checked||false,
+    has_online_results:document.getElementById('pOnlineResults')?.checked||false,
+    admin_user_id:currentUserId,
+    is_active:true,
+  };
+
+  btns.forEach(b=>{ if(b){ b.disabled=true; } });
+  const topHtml=btns[1]?.innerHTML;
+  if(btns[1]) btns[1].innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> Mentés…';
+
+  let error;
+  if(doctorData?.id){
+    ({ error }=await db.from('doctors').update(payload).eq('id',doctorData.id));
+    if(!error) Object.assign(doctorData,payload);
+  } else {
+    payload.slug=slugify(name)+'-'+Math.random().toString(36).slice(2,6);
+    const { data:newDoc, error:insErr }=await db.from('doctors').insert(payload).select('*, doctor_specialties(specialties(id,name)), doctor_clinics(clinics(id,name))').single();
+    error=insErr; if(newDoc) doctorData=newDoc;
+  }
+
+  btns.forEach(b=>{ if(b) b.disabled=false; });
+  if(btns[1]) btns[1].innerHTML=topHtml;
+
+  if(error){ alert('Mentési hiba: '+error.message); return; }
+
+  if(doctorData) renderCompleteness(doctorData);
+  document.getElementById('profileInfoBanner').style.display='none';
+  if(btns[1]){
+    const html=btns[1].innerHTML;
+    btns[1].innerHTML='✓ Elmentve!'; btns[1].style.background='#2C9650';
+    setTimeout(()=>{ btns[1].innerHTML=html; btns[1].style.background=''; },2000);
+  }
+}
+</script>
+
+<script>
+/* ════ DEMÓ MÓD — nincs bejelentkezés, nincs mentés ════ */
+(function(){
+  const app=document.getElementById('appContent'); if(app) app.style.display='';
+  const ld=document.getElementById('authLoading'); if(ld) ld.style.display='none';
+  const nm=document.getElementById('sbUserName'); if(nm) nm.textContent='Dr. Demó Anna (DEMÓ)';
+
+  const banner=document.createElement('div');
+  banner.style.cssText='position:sticky;top:0;z-index:400;background:linear-gradient(135deg,#FF8A00,#FFA726);color:#fff;font-size:13px;font-weight:600;text-align:center;padding:9px 16px;box-shadow:0 2px 10px rgba(255,138,0,.25)';
+  banner.innerHTML='👁️ DEMÓ NÉZET — így néz ki az orvos admin. A mentés és a fájlfeltöltés ki van kapcsolva. <a href="/login.html" style="color:#fff;text-decoration:underline;font-weight:700">Bejelentkezés →</a>';
+  if(app) app.insertBefore(banner, app.firstChild);
+
+  currentUserId='demo-user';
+  doctorData={ id:'demo', slug:'demo-orvos', photo_url:null,
+    doctor_specialties:[{specialties:{id:'1',name:'Belgyógyászat'}},{specialties:{id:'2',name:'Kardiológia'}}],
+    doctor_clinics:[{clinics:{id:'1',name:'Demó Egészségközpont'}}],
+    name:'Dr. Demó Anna', title:'PhD, belgyógyász, kardiológus', gender:'female',
+    experience_years:14, phone:'+36 30 123 4567', email:'demo@szakorvos.hu',
+    languages:['magyar','angol','német'],
+    short_intro:'Belgyógyász és kardiológus, 14 év tapasztalattal a szív- és érrendszeri betegségek kezelésében.',
+    bio:'Dr. Demó Anna a Semmelweis Egyetemen szerzett diplomát, majd belgyógyász és kardiológus szakvizsgát tett. Fő érdeklődési területe a megelőző kardiológia, a magas vérnyomás és a szívelégtelenség korszerű kezelése. Páciensközpontú szemlélettel, érthető magyarázatokkal dolgozik.',
+    university:'Semmelweis Egyetem', graduation_year:2008,
+    board_certifications:['Belgyógyászat szakvizsga (2012)','Kardiológia szakvizsga (2015)'],
+    memberships:['Magyar Orvosi Kamara','Magyar Kardiológusok Társasága'],
+    continuing_education:['Echokardiográfia mesterkurzus (2018)','Hipertónia kezelése – ESC kurzus (2021)'],
+    awards:['Az Év Fiatal Kardiológusa (2017)'],
+    publications:['A korai szűrés szerepe a szívelégtelenség megelőzésében – Orvosi Hetilap (2020)'],
+    conferences:['Magyar Kardiológus Kongresszus – előadó (2022)'],
+    research_areas:['Megelőző kardiológia','Hipertónia'],
+    media_appearances:['Egészségmagazin interjú a szívbetegségek megelőzéséről (2023)'],
+    teaching_activity:'Egyetemi adjunktus, rezidensképzésben oktató.',
+    has_online_consultation:true, has_telemedicine:true, has_eprescription:true, has_online_results:true
+  };
+
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value=(v==null?'':v);};
+  const J=(a,s)=>Array.isArray(a)?a.join(s):(a||'');
+  set('pName',doctorData.name); set('pTitle',doctorData.title); set('pGender',doctorData.gender);
+  set('pExp',doctorData.experience_years); set('pPhone',doctorData.phone); set('pEmail',doctorData.email);
+  set('pLang',J(doctorData.languages,', ')); set('pIntro',doctorData.short_intro); set('pBio',doctorData.bio);
+  set('pUniversity',doctorData.university); set('pGradYear',doctorData.graduation_year);
+  set('pCerts',J(doctorData.board_certifications,'\n')); set('pMemberships',J(doctorData.memberships,'\n'));
+  set('pContEdu',J(doctorData.continuing_education,'\n')); set('pAwards',J(doctorData.awards,'\n'));
+  set('pPublications',J(doctorData.publications,'\n')); set('pConferences',J(doctorData.conferences,'\n'));
+  set('pResearch',J(doctorData.research_areas,'\n')); set('pMedia',J(doctorData.media_appearances,'\n'));
+  set('pTeaching',doctorData.teaching_activity);
+  const chk=(id,v)=>{const el=document.getElementById(id); if(el) el.checked=v===true;};
+  chk('pOnlineConsult',true); chk('pTelemedicine',true); chk('pEprescription',true); chk('pOnlineResults',true);
+  set('dSpecs','Belgyógyászat, Kardiológia'); set('dClinics','Demó Egészségközpont');
+  if(typeof updatePhotoPreview==='function') updatePhotoPreview(null, doctorData.name);
+  if(typeof renderCompleteness==='function') renderCompleteness(doctorData);
+
+  function demoNotice(){ alert('Ez egy DEMÓ nézet — itt nem lehet menteni vagy fájlt feltölteni. A valódi szerkesztéshez jelentkezz be.'); }
+  window.saveProfile=demoNotice;
+  window.handlePhotoSelect=function(i){ demoNotice(); if(i) i.value=''; };
+  window.removePhoto=demoNotice;
+})();
+</script>
+
+</body>
+</html>

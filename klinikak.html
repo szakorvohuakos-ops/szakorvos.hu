@@ -553,7 +553,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
   .dc-nm{font-size:16px}.rgrid{grid-template-columns:1fr}
   .pp{width:100vw}.pp-stats{grid-template-columns:repeat(2,1fr)}
 }
-.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.site-footer{background:#1a1f36;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
 .footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
 .footer-brand{min-width:0}
@@ -938,6 +938,16 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <button class="pgb" id="pgNext" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
   </main>
+  <!-- ══ TÉRKÉP OSZLOP (jobb, csak desktop) ══ -->
+  <aside id="resultsMapCol">
+    <div class="rmap-card">
+      <div class="rmap-head">
+        <span class="rmap-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Klinikák a térképen</span>
+        <span class="rmap-count" id="rmapCount"></span>
+      </div>
+      <div id="resultsMap"><div class="rmap-empty" id="rmapEmpty">Térkép betöltése…</div></div>
+    </div>
+  </aside>
 </div>
 
 
@@ -1664,5 +1674,83 @@ document.addEventListener('DOMContentLoaded', loadClinics);
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+
+<style id="results-skin">
+.site-footer{background:#1a1f36 !important}
+.footer-logo span{color:#7fe8a3 !important}
+
+/* 3-oszlopos elrendezés: szűrő | találatok | térkép (csak desktop) */
+#resultsMapCol{display:none}
+@media(min-width:1201px){
+  .pw{grid-template-columns:300px minmax(0,1fr) 380px !important}
+  #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
+  .rtop .vtog{display:none !important}
+}
+.rmap-card{height:100%;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(252,253,255,.78));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.85);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 10px 28px rgba(17,50,147,.08)}
+.rmap-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid rgba(220,227,234,.5);background:rgba(255,255,255,.6)}
+.rmap-title{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#113293}
+.rmap-title svg{color:#2C9650;flex-shrink:0}
+.rmap-count{font-size:12px;color:#64748b;font-weight:600;margin-left:auto}
+#resultsMap{flex:1;min-height:0;position:relative;background:#e8eef7}
+.rmap-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;text-align:center;padding:1rem}
+</style>
+
+<script id="results-map-js">
+(function(){
+  const KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+  let mapsP=null;
+  function loadMaps(){
+    if(window.google&&window.google.maps) return Promise.resolve(window.google.maps);
+    if(mapsP) return mapsP;
+    mapsP=new Promise((res,rej)=>{
+      window._rmReady=()=>res(window.google.maps);
+      const s=document.createElement('script');
+      s.src='https://maps.googleapis.com/maps/api/js?key='+KEY+'&callback=_rmReady&language=hu&region=HU&loading=async';
+      s.async=true;s.defer=true;s.onerror=()=>rej(new Error('maps'));
+      document.head.appendChild(s);
+    });
+    return mapsP;
+  }
+  const STYLE=[{elementType:'geometry',stylers:[{color:'#e9eef5'}]},{elementType:'labels.text.fill',stylers:[{color:'#52617a'}]},{elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#bcd6f5'}]}];
+  let map=null,markers=[],cluster=null,info=null;
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+  window.renderResultsMap=async function(list){
+    if(!window.matchMedia||!window.matchMedia('(min-width:1201px)').matches) return; // csak desktop
+    list=list||[];
+    const pts=list.filter(function(c){return c&&c.lat&&c.lng;});
+    const cnt=document.getElementById('rmapCount'); if(cnt) cnt.textContent=pts.length?(pts.length+' a térképen'):'';
+    const empty=document.getElementById('rmapEmpty');
+    let maps; try{ maps=await loadMaps(); }catch(e){ if(empty){empty.style.display='flex';empty.textContent='Térkép nem tölthető be.';} return; }
+    const el=document.getElementById('resultsMap'); if(!el) return;
+    if(!map){ map=new maps.Map(el,{center:{lat:47.1625,lng:19.5033},zoom:7,styles:STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:true}); info=new maps.InfoWindow(); }
+    markers.forEach(function(m){m.setMap(null);}); markers=[];
+    if(cluster&&cluster.clearMarkers) cluster.clearMarkers();
+    if(!pts.length){ if(empty){empty.style.display='flex';empty.textContent='Nincs térképen megjeleníthető klinika a jelenlegi szűrőkkel.';} return; }
+    if(empty) empty.style.display='none';
+    const bounds=new maps.LatLngBounds();
+    pts.forEach(function(c){
+      const m=new maps.Marker({position:{lat:+c.lat,lng:+c.lng},title:c.name||'',
+        icon:{path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z',fillColor:'#113293',fillOpacity:1,strokeColor:'#fff',strokeWeight:2,scale:1.1,anchor:new maps.Point(12,36)}});
+      const target=c.slug?('/klinikak/'+encodeURIComponent(c.slug)):('/klinika.html?id='+c.id);
+      m.addListener('click',function(){
+        info.setContent('<div style="font-family:Inter,sans-serif;max-width:230px"><div style="font-weight:700;color:#113293;font-size:13.5px;margin-bottom:3px">'+esc(c.name)+'</div>'+(c.address?'<div style="font-size:12px;color:#475569;margin-bottom:7px">'+esc(c.address)+'</div>':'')+'<a href="'+target+'" style="font-size:12.5px;font-weight:600;color:#264ACA;text-decoration:none">Részletek →</a></div>');
+        info.open(map,m);
+      });
+      markers.push(m); bounds.extend(m.getPosition());
+    });
+    if(window.markerClusterer&&window.markerClusterer.MarkerClusterer){ cluster=new window.markerClusterer.MarkerClusterer({map:map,markers:markers}); }
+    else { markers.forEach(function(m){m.setMap(map);}); }
+    if(pts.length===1){ map.setCenter(markers[0].getPosition()); map.setZoom(14); } else { map.fitBounds(bounds,60); }
+  };
+  try{
+    if(typeof renderList==='function'){
+      var _o=renderList;
+      renderList=function(){ var r=_o.apply(this,arguments); try{ renderResultsMap(typeof filtered!=='undefined'?filtered:[]); }catch(e){} return r; };
+    }
+  }catch(e){}
+  setTimeout(function(){ try{ if(typeof filtered!=='undefined'&&filtered&&filtered.length) renderResultsMap(filtered); }catch(e){} },700);
+})();
+</script>
+
 </body>
 </html>

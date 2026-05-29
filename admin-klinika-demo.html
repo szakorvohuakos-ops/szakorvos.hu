@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Klinika Admin – Szakorvos.hu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc0';
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+</script>
+
+<style>
+:root{
+  --brand:#113293; --brand-2:#264ACA; --navy:#0c2370;
+  --green:#2C9650; --green-2:#35B26B; --orange:#FF8A00; --orange-2:#FFA726;
+  --text:#113293; --sub:#475569; --muted:#94a3b8;
+  --border:#DCE3EA; --red:#dc2626;
+  --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-blue-text:linear-gradient(135deg,#113293,#264ACA 60%,#3957d5);
+  --ease-spring:cubic-bezier(.34,1.4,.64,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#fff}
+body{
+  font-family:'Inter',sans-serif;color:var(--text);margin:0;min-height:100vh;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse 1100px 700px at 50% -250px,rgba(38,74,202,.08) 0%,transparent 65%),
+    radial-gradient(ellipse 800px 500px at 100% 600px,rgba(44,150,80,.045) 0%,transparent 55%),
+    radial-gradient(ellipse 760px 440px at 0% 1200px,rgba(255,138,0,.035) 0%,transparent 55%),
+    linear-gradient(180deg,#ffffff 0%,#fbfcfe 100%);
+  background-attachment:fixed;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px clamp(16px,4vw,40px);background:rgba(255,255,255,.78);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-bottom:1px solid rgba(38,74,202,.08);box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 12px rgba(17,50,147,.04)}
+.tb-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.02em}
+.tb-logo em{font-style:normal;color:var(--green)}
+.tb-badge{font-size:11px;font-weight:700;color:var(--brand-2);background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:3px 9px;border-radius:99px}
+.tb-spacer{flex:1}
+.tb-user{font-size:13px;color:var(--sub);font-weight:600}
+.tb-link{font-size:13px;font-weight:600;color:var(--brand-2);display:inline-flex;align-items:center;gap:6px}
+.tb-link:hover{color:var(--brand)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:11px;font-weight:600;font-size:14px;transition:transform .25s var(--ease-spring),box-shadow .25s,background .2s,border-color .2s}
+.btn-primary{color:#fff;background:var(--grad-blue);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 2px 6px rgba(17,50,147,.2),0 8px 20px rgba(17,50,147,.26)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 10px rgba(17,50,147,.25),0 16px 32px rgba(17,50,147,.34)}
+.btn-primary:disabled{opacity:.65;cursor:not-allowed;transform:none}
+.btn-ghost{color:var(--sub);background:rgba(255,255,255,.6);border:1.5px solid rgba(220,227,234,.8)}
+.btn-ghost:hover{color:var(--brand);border-color:var(--brand-2);background:#fff}
+
+/* LAYOUT */
+.wrap{max-width:980px;margin:0 auto;padding:clamp(20px,4vw,36px) clamp(16px,4vw,40px) 120px}
+.page-h{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;letter-spacing:-.03em;margin:0 0 4px;background:var(--grad-blue-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.page-sub{font-size:14px;color:var(--sub);margin:0 0 22px}
+
+/* CARD */
+.card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(252,253,255,.82));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.8);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 8px rgba(17,50,147,.05),0 16px 40px rgba(17,50,147,.08);padding:22px 24px;margin-bottom:20px}
+.card-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:-.015em;margin:0 0 4px}
+.card-title svg{stroke:var(--brand-2)}
+.card-desc{font-size:12.5px;color:var(--muted);margin:0 0 16px}
+.badge-gray{font-size:11px;font-weight:600;color:var(--sub);background:#eef2f7;border:1px solid var(--border);padding:3px 9px;border-radius:99px}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fg.full{grid-column:1/-1}
+.lbl{font-size:12.5px;font-weight:600;color:var(--sub)}
+.inp{width:100%;padding:11px 13px;font-family:inherit;font-size:14px;color:var(--text);background:rgba(255,255,255,.75);border:1.5px solid rgba(220,227,234,.8);border-radius:11px;transition:border-color .2s,background .2s,box-shadow .2s}
+.inp:hover{border-color:rgba(38,74,202,.4)}
+.inp:focus{outline:none;border-color:var(--brand-2);background:#fff;box-shadow:0 0 0 4px rgba(38,74,202,.1)}
+textarea.inp{resize:vertical;min-height:80px;line-height:1.55}
+.hint{font-size:11.5px;color:var(--muted)}
+.inp:disabled{background:#eef2f7;color:var(--sub);cursor:not-allowed}
+
+/* PHOTO */
+.ph-row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.logo-prev{width:96px;height:96px;border-radius:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:26px;overflow:hidden;background:var(--grad-blue);box-shadow:0 8px 20px rgba(17,50,147,.12)}
+.cover-prev{width:180px;height:96px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--sub);overflow:hidden;background:#eef2f7;border:1px solid var(--border)}
+.logo-prev img,.cover-prev img{width:100%;height:100%;object-fit:cover}
+.ph-side{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}
+.drop{position:relative;border:1.5px dashed rgba(38,74,202,.35);border-radius:12px;padding:14px;text-align:center;font-size:13px;color:var(--sub);background:rgba(38,74,202,.03);transition:border-color .2s,background .2s}
+.drop:hover{border-color:var(--brand-2);background:rgba(38,74,202,.06)}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop span{color:var(--brand-2);font-weight:600}
+.ph-bar{display:none;height:8px;background:rgba(17,50,147,.08);border-radius:99px;overflow:hidden;margin-top:8px}
+.ph-bar>i{display:block;height:100%;width:0;background:var(--grad-blue);border-radius:99px;transition:width .25s}
+.ph-ok{display:none;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--green);margin-top:6px}
+
+/* GALLERY */
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:12px}
+.gallery-mgr-item{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.gallery-mgr-item img{width:100%;height:100%;object-fit:cover}
+.gallery-mgr-remove{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:8px;background:rgba(220,38,38,.92);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.gallery-mgr-remove:hover{background:#dc2626}
+
+/* TOGGLE rows */
+.tg-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid rgba(220,227,234,.6)}
+.tg-row:last-child{border-bottom:none}
+.tg-label{font-size:14px;font-weight:600}
+.tg-sub{font-size:12px;color:var(--muted)}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .sl{position:absolute;inset:0;background:#cbd5e1;border-radius:99px;transition:.25s}
+.switch .sl:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .sl{background:var(--green)}
+.switch input:checked + .sl:before{transform:translateX(20px)}
+
+/* OPENING HOURS */
+.oh-grid{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;align-items:center}
+.oh-day{font-size:13px;font-weight:600;color:var(--sub)}
+
+/* MAP */
+#clinicMapEl{width:100%;height:300px;border-radius:14px;border:1px solid var(--border);overflow:hidden;background:#eef2ff;position:relative}
+
+/* PREVIEW */
+.prev-card{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.prof-preview-status-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(44,150,80,.12);color:#2C9650}
+.prof-preview-status-pill.s-inactive{background:#f1f5f9;color:#64748b}
+.prof-preview-status-pill.s-partner{background:rgba(255,138,0,.12);color:#FF8A00}
+
+/* SAVE BAR */
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:300;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px clamp(16px,4vw,40px);background:rgba(255,255,255,.82);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);border-top:1px solid rgba(38,74,202,.08);box-shadow:0 -8px 28px rgba(17,50,147,.08)}
+.savebar .sb-note{font-size:12.5px;color:var(--muted)}
+.savebar .btn-primary{padding:12px 26px;font-size:15px}
+
+@media(max-width:760px){
+  .form-grid{grid-template-columns:1fr}
+  .oh-grid{grid-template-columns:90px 1fr}
+  body{background-attachment:scroll}
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH LOADING -->
+<div id="authLoading" style="display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:'Inter',sans-serif">
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px">
+    <svg width="40" height="40" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
+    <div style="font-weight:800;font-size:18px;color:#113293">Szakorvos<span style="color:#2C9650">.hu</span></div>
+    <div style="color:#475569;font-size:14px">Hitelesítés folyamatban…</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appContent" style="display:none">
+
+  <div class="topbar">
+    <div class="tb-logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 2C9.58 2 6 5.58 6 10c0 5.5 8 16 8 16s8-10.5 8-16C22 5.58 18.42 2 14 2z" fill="#113293"/><rect x="12.2" y="7.2" width="3.6" height="5.6" rx="1.1" fill="#2C9650"/><rect x="10.7" y="8.7" width="6.6" height="2.6" rx="1.1" fill="#2C9650"/></svg>
+      Szakorvos<em>.hu</em>
+    </div>
+    <span class="tb-badge">Klinika Admin</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-user" id="sbUserName">Admin</span>
+    <a class="tb-link" id="prevViewLink" href="#" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Nyilvános profil
+    </a>
+    <button class="btn btn-ghost" onclick="window.logoutAdmin && window.logoutAdmin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Kilépés
+    </button>
+    <button class="btn btn-primary" id="btnSaveClinic" onclick="saveClinic()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Mentés
+    </button>
+  </div>
+
+  <div class="wrap">
+    <h1 class="page-h">Klinika szerkesztése</h1>
+    <p class="page-sub">Minden adat egy oldalon. A fotók/galéria feltöltéskor azonnal mentődnek; a többi mező az „Összes módosítás mentése” gombbal.</p>
+
+    <!-- ÉLŐ ELŐNÉZET -->
+    <div class="card">
+      <div class="prev-card">
+        <div class="logo-prev" id="prevLogo"><span id="prevInitials">K</span></div>
+        <div style="flex:1;min-width:200px">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div style="font-size:18px;font-weight:800;letter-spacing:-.02em" id="prevName">Klinika</div>
+            <span class="prof-preview-status-pill" id="prevStatus">Aktív</span>
+          </div>
+          <div style="font-size:13px;color:var(--sub);margin-top:3px" id="prevAddr">📍 –</div>
+          <div style="display:flex;gap:14px;margin-top:6px;font-size:12.5px;color:var(--muted)">
+            <span id="prevDocs">👥 0 orvos</span>
+            <span id="prevSpecs" style="display:none"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALAPADATOK -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg> Alapadatok</div>
+      <div class="form-grid">
+        <div class="fg full"><label class="lbl">Klinika neve *</label><input class="inp" id="cName" placeholder="Klinika neve"></div>
+        <div class="fg"><label class="lbl">Telefon</label><input class="inp" id="cPhone" type="tel" placeholder="+36 1 234 5678"></div>
+        <div class="fg"><label class="lbl">Email</label><input class="inp" id="cEmail" type="email" placeholder="info@klinika.hu"></div>
+        <div class="fg"><label class="lbl">Weboldal</label><input class="inp" id="cWebsite" placeholder="https://klinika.hu"></div>
+        <div class="fg"><label class="lbl">Adószám</label><input class="inp" id="cTax" placeholder="12345678-1-42"></div>
+        <div class="fg full"><label class="lbl">Bemutatkozás / leírás</label><textarea class="inp" id="cDesc" rows="4" placeholder="Néhány mondat a klinikáról – ez jelenik meg a nyilvános profilon…"></textarea></div>
+      </div>
+    </div>
+
+    <!-- CÍM -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Cím</div>
+      <div class="card-desc">A cím mentésekor a térkép-koordináta automatikusan frissül.</div>
+      <div class="form-grid">
+        <div class="fg"><label class="lbl">Város</label><input class="inp" id="cCity" disabled placeholder="–"><div class="hint">A várost a szuperadmin állítja be</div></div>
+        <div class="fg"><label class="lbl">Irányítószám</label><input class="inp" id="cPostalCode" inputmode="numeric" placeholder="1011" oninput="onPostalCodeChange(this.value)"></div>
+        <div class="fg" id="cDistrictWrap" style="display:none"><label class="lbl">Kerület (Budapest)</label>
+          <select class="inp" id="cDistrict">
+            <option value="">— Válasszon —</option>
+            <option>I</option><option>II</option><option>III</option><option>IV</option><option>V</option><option>VI</option><option>VII</option><option>VIII</option><option>IX</option><option>X</option><option>XI</option><option>XII</option><option>XIII</option><option>XIV</option><option>XV</option><option>XVI</option><option>XVII</option><option>XVIII</option><option>XIX</option><option>XX</option><option>XXI</option><option>XXII</option><option>XXIII</option>
+          </select>
+        </div>
+        <div class="fg full"><label class="lbl">Utca, házszám</label><input class="inp" id="cStreet" placeholder="Fő utca 1."></div>
+      </div>
+    </div>
+
+    <!-- TÉRKÉP -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg> Helyszín térképen</div>
+      <div id="clinicMapEl"><div id="clinicMapMsg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center;padding:1rem">Még nincs koordináta. Adja meg a címet és nyomja meg a Mentés gombot.</div></div>
+      <div style="margin-top:.5rem;font-size:12px;color:var(--muted)" id="clinicCoordInfo"></div>
+    </div>
+
+    <!-- MEGKÖZELÍTÉS / INFÓ -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Megközelítés &amp; szolgáltatások</div>
+      <div class="form-grid">
+        <div class="fg full"><label class="lbl">Parkolás</label><textarea class="inp" id="cParking" rows="2" placeholder="Pl. ingyenes parkoló a ház mögött, fizetős utcai parkolás…"></textarea></div>
+        <div class="fg full"><label class="lbl">Tömegközlekedés</label><textarea class="inp" id="cTransport" rows="2" placeholder="Pl. M2 metró Astoria, 7-es busz…"></textarea></div>
+        <div class="fg full"><label class="lbl">Akadálymentesség</label><textarea class="inp" id="cAccess" rows="2" placeholder="Pl. lift, rámpa, akadálymentes mosdó…"></textarea></div>
+      </div>
+    </div>
+
+    <!-- NYITVATARTÁS -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Nyitvatartás</div>
+      <div class="card-desc">Írja be pl. „8:00–20:00”, vagy „Zárva”. Üresen hagyva nem jelenik meg az adott nap.</div>
+      <div class="oh-grid">
+        <div class="oh-day">Hétfő</div>    <input class="inp" id="oh_hetfo"    placeholder="8:00–16:00">
+        <div class="oh-day">Kedd</div>     <input class="inp" id="oh_kedd"     placeholder="8:00–16:00">
+        <div class="oh-day">Szerda</div>   <input class="inp" id="oh_szerda"   placeholder="8:00–16:00">
+        <div class="oh-day">Csütörtök</div><input class="inp" id="oh_csutortok" placeholder="8:00–16:00">
+        <div class="oh-day">Péntek</div>   <input class="inp" id="oh_pentek"   placeholder="8:00–16:00">
+        <div class="oh-day">Szombat</div>  <input class="inp" id="oh_szombat"  placeholder="Zárva">
+        <div class="oh-day">Vasárnap</div> <input class="inp" id="oh_vasarnap" placeholder="Zárva">
+      </div>
+    </div>
+
+    <!-- FOTÓK -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Logó &amp; borítókép</div>
+      <div class="ph-row" style="margin-bottom:18px">
+        <div class="logo-prev" id="logoPreview"><span id="logoInitials">K</span></div>
+        <div class="ph-side">
+          <div class="lbl">Klinika logó</div>
+          <div class="drop"><input type="file" accept="image/*" onchange="handleClinicUpload(this,'logo')">Húzza ide, vagy <span>tallózzon</span></div>
+          <div class="ph-bar" id="logoProgress"><i id="logoProgressFill"></i></div>
+          <div class="ph-ok" id="logoSuccess"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Logó mentve!</div>
+          <button class="btn btn-ghost" id="logoRemoveBtn" style="display:none;align-self:flex-start;padding:7px 14px;font-size:12.5px" onclick="removeClinicPhoto('logo')">Logó eltávolítása</button>
+        </div>
+      </div>
+      <div class="ph-row">
+        <div class="cover-prev" id="coverPreview"><span style="font-size:13px;font-weight:500;opacity:.75">Borító</span></div>
+        <div class="ph-side">
+          <div class="lbl">Borítókép</div>
+          <div class="drop"><input type="file" accept="image/*" onchange="handleClinicUpload(this,'cover')">Húzza ide, vagy <span>tallózzon</span></div>
+          <div class="ph-bar" id="coverProgress"><i id="coverProgressFill"></i></div>
+          <div class="ph-ok" id="coverSuccess"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Borító mentve!</div>
+          <button class="btn btn-ghost" id="coverRemoveBtn" style="display:none;align-self:flex-start;padding:7px 14px;font-size:12.5px" onclick="removeClinicPhoto('cover')">Borító eltávolítása</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALÉRIA -->
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div class="card-title" style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Galéria</div>
+        <span class="badge-gray" id="galleryCount">0 kép</span>
+      </div>
+      <div class="drop" style="margin-top:14px"><input type="file" accept="image/*" multiple onchange="handleGalleryUpload(this)">Töltsön fel több képet egyszerre — <span>tallózzon</span> (max. 20)</div>
+      <div id="galleryProgress" style="display:none;font-size:12.5px;color:var(--sub);margin-top:8px;font-weight:600"></div>
+      <div id="galleryEmpty" style="display:none;text-align:center;color:var(--muted);font-size:13px;padding:1rem">Még nincs galéria-kép.</div>
+      <div class="gal-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- FOGLALÁSI INTEGRÁCIÓK -->
+    <div class="card">
+      <div class="card-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Foglalási integrációk</div>
+      <div class="card-desc">Külső foglalási oldalak linkjei. A kapcsolóval állítható, megjelenjen-e a profilon.</div>
+      <div class="tg-row">
+        <div><div class="tg-label">Foglaljorvost</div><div class="tg-sub">foglaljorvost.hu profil link</div></div>
+        <label class="switch"><input type="checkbox" id="cFjOn"><span class="sl"></span></label>
+      </div>
+      <div class="fg full" style="margin-bottom:14px"><input class="inp" id="cFjUrl" placeholder="https://foglaljorvost.hu/..."></div>
+      <div class="tg-row">
+        <div><div class="tg-label">oDoktor</div><div class="tg-sub">odoktor.hu profil link</div></div>
+        <label class="switch"><input type="checkbox" id="cOdOn"><span class="sl"></span></label>
+      </div>
+      <div class="fg full" style="margin-bottom:14px"><input class="inp" id="cOdUrl" placeholder="https://odoktor.hu/..."></div>
+      <div class="tg-row">
+        <div><div class="tg-label">Teladoc</div><div class="tg-sub">Teladoc link &amp; azonosító</div></div>
+        <label class="switch"><input type="checkbox" id="cTdOn"><span class="sl"></span></label>
+      </div>
+      <div class="form-grid" style="margin-top:8px">
+        <div class="fg"><input class="inp" id="cTdUrl" placeholder="https://teladoc.com/..."></div>
+        <div class="fg"><input class="inp" id="cTdId" placeholder="Teladoc azonosító (opcionális)"></div>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+
+  <div class="savebar">
+    <div class="sb-note">A „Mentés” minden mezőt egyszerre ment. A fotók/galéria feltöltéskor automatikusan mentődnek.</div>
+    <button class="btn btn-primary" onclick="saveClinic()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      Összes módosítás mentése
+    </button>
+  </div>
+
+</div><!-- /appContent -->
+
+<script>
+let clinicData=null;
+const OH_DAYS=['hetfo','kedd','szerda','csutortok','pentek','szombat','vasarnap'];
+
+/* ── BETÖLTÉS ── */
+async function loadClinicData(){
+  try{
+    const { data: { session } } = await db.auth.getSession();
+    if(!session?.user) return;
+    const { data: link } = await db.from('clinic_admins').select('clinic_id').eq('user_id', session.user.id).maybeSingle();
+    const clinicId = link?.clinic_id;
+    if(!clinicId){
+      document.querySelector('.wrap').innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)">Nincs hozzád rendelt klinika. Kérj segítséget a szuperadmintól.</div>';
+      return;
+    }
+    const { data } = await db.from('clinics').select('*, cities(name)').eq('id', clinicId).single();
+    clinicData = data;
+    fillClinicForm(data);
+    renderClinicMap();
+  }catch(e){ console.error('loadClinicData', e); }
+}
+
+function fillClinicForm(c){
+  if(!c) return;
+  const set=(id,v)=>{const el=document.getElementById(id); if(el) el.value = v ?? '';};
+  set('cName', c.name);
+  set('cCity', c.cities?.name || '');
+  set('cPostalCode', c.postal_code);
+  set('cStreet', c.street);
+  set('cDistrict', c.district || '');
+  set('cPhone', c.phone);
+  set('cEmail', c.email);
+  set('cWebsite', c.website);
+  set('cTax', c.tax_number);
+  set('cDesc', c.description);
+  set('cParking', c.parking_info);
+  set('cTransport', c.public_transport);
+  set('cAccess', c.accessibility);
+  // nyitvatartás
+  const oh=c.opening_hours||{};
+  OH_DAYS.forEach(d=>set('oh_'+d, oh[d]||''));
+  // foglalási integrációk
+  const chk=(id,v)=>{const el=document.getElementById(id); if(el) el.checked = v===true;};
+  chk('cFjOn', c.on_foglaljorvost); set('cFjUrl', c.foglaljorvost_url);
+  chk('cOdOn', c.on_odoktor);       set('cOdUrl', c.odoktor_url);
+  chk('cTdOn', c.on_teladoc);       set('cTdUrl', c.teladoc_url); set('cTdId', c.teladoc_id);
+
+  toggleDistrictVisibility(c.cities?.name || '');
+  updatePhotoPreview('logo', c.photo_url);
+  updatePhotoPreview('cover', c.cover_url);
+  renderGalleryManager(parseGallery(c.gallery));
+  updateProfilePreview();
+}
+
+function updateProfilePreview(){
+  const c=clinicData; if(!c) return;
+  const cityName=c.cities?.name||'';
+  const initials=(c.name||'K').split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase()||'K';
+  const logoEl=document.getElementById('prevLogo');
+  if(logoEl){ logoEl.innerHTML = c.photo_url ? `<img src="${c.photo_url}" alt="">` : `<span id="prevInitials">${initials}</span>`; }
+  const nameEl=document.getElementById('prevName'); if(nameEl) nameEl.textContent=c.name||'Névtelen klinika';
+  const loc=[c.postal_code,cityName].filter(Boolean).join(' ');
+  const addr=[loc,c.street].filter(Boolean).join(', ')||c.address||'–';
+  const addrEl=document.getElementById('prevAddr'); if(addrEl) addrEl.textContent='📍 '+addr;
+  const docsEl=document.getElementById('prevDocs');
+  const docCnt=window._docCount ?? (c.doctor_clinics?.length||0);
+  if(docsEl) docsEl.textContent=`👥 ${docCnt} orvos`;
+  const link=document.getElementById('prevViewLink');
+  if(link) link.href = c.slug ? `/klinikak/${c.slug}` : `klinika.html?id=${c.id}`;
+  const pill=document.getElementById('prevStatus');
+  if(pill){
+    const s=c.status||'active';
+    pill.className='prof-preview-status-pill'+(s==='inactive'?' s-inactive':s==='partner'?' s-partner':'');
+    pill.textContent=s==='inactive'?'Inaktív':s==='partner'?'Partner':'Aktív';
+  }
+}
+
+function toggleDistrictVisibility(cityName){
+  const wrap=document.getElementById('cDistrictWrap'); if(!wrap) return;
+  const isBp=(cityName||'').trim().toLowerCase()==='budapest';
+  wrap.style.display=isBp?'':'none';
+  if(!isBp){ const sel=document.getElementById('cDistrict'); if(sel) sel.value=''; }
+}
+function onPostalCodeChange(zip){
+  const cleaned=(zip||'').replace(/\D/g,'').slice(0,4);
+  if(cleaned.length!==4) return;
+  if(!/^1\d{3}$/.test(cleaned)) return;
+  const n=parseInt(cleaned.substring(1,3),10);
+  if(n<1||n>23) return;
+  const roman=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIII'];
+  const sel=document.getElementById('cDistrict');
+  if(sel && !sel.value) sel.value=roman[n-1];
+}
+function parseGallery(g){
+  if(!g) return [];
+  if(Array.isArray(g)) return g.map(x=>typeof x==='string'?{url:x}:x).filter(x=>x&&x.url);
+  return [];
+}
+function updatePhotoPreview(kind,url){
+  const previewEl=document.getElementById(kind==='logo'?'logoPreview':'coverPreview');
+  const removeBtn=document.getElementById(kind==='logo'?'logoRemoveBtn':'coverRemoveBtn');
+  if(!previewEl) return;
+  if(url){
+    previewEl.innerHTML=`<img src="${url}" alt="">`;
+    if(removeBtn) removeBtn.style.display='inline-flex';
+  } else {
+    if(kind==='logo'){
+      const initials=(clinicData?.name||'K').split(/\s+/).slice(0,2).map(s=>s[0]||'').join('').toUpperCase()||'K';
+      previewEl.innerHTML=`<span id="logoInitials">${initials}</span>`;
+    } else { previewEl.innerHTML='<span style="font-size:13px;font-weight:500;opacity:.75">Borító</span>'; }
+    if(removeBtn) removeBtn.style.display='none';
+  }
+}
+function renderGalleryManager(items){
+  const grid=document.getElementById('galleryGrid');
+  const empty=document.getElementById('galleryEmpty');
+  const counter=document.getElementById('galleryCount');
+  if(!grid) return;
+  if(counter) counter.textContent=`${items.length} kép`;
+  if(!items.length){ if(empty) empty.style.display=''; grid.innerHTML=''; return; }
+  if(empty) empty.style.display='none';
+  grid.innerHTML=items.map((g,i)=>`
+    <div class="gallery-mgr-item">
+      <img src="${g.url}" alt="" loading="lazy">
+      <button class="gallery-mgr-remove" onclick="removeGalleryItem(${i})" title="Eltávolítás">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+/* ── MENTÉS + GEOCODING ── */
+async function saveClinic(){
+  const btn=document.getElementById('btnSaveClinic');
+  if(!clinicData?.id){ alert('Nincs betöltött klinika.'); return; }
+  const v=id=>document.getElementById(id);
+  const old=btn.innerHTML; btn.disabled=true;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/></svg> Mentés…';
+
+  const newPostal=v('cPostalCode').value.trim()||null;
+  const newStreet=v('cStreet').value.trim()||null;
+  const newDistrict=v('cDistrict').value.trim()||null;
+  const addressChanged =
+    newPostal!==(clinicData.postal_code||null) ||
+    newStreet!==(clinicData.street||null) ||
+    newDistrict!==(clinicData.district||null);
+
+  // nyitvatartás összeállítása
+  const oh={};
+  OH_DAYS.forEach(d=>{ const val=v('oh_'+d).value.trim(); if(val) oh[d]=val; });
+
+  const payload={
+    name: v('cName').value.trim(),
+    postal_code: newPostal,
+    street: newStreet,
+    district: newDistrict,
+    phone: v('cPhone').value.trim()||null,
+    email: v('cEmail').value.trim()||null,
+    website: v('cWebsite').value.trim()||null,
+    tax_number: v('cTax').value.trim()||null,
+    description: v('cDesc').value.trim()||null,
+    parking_info: v('cParking').value.trim()||null,
+    public_transport: v('cTransport').value.trim()||null,
+    accessibility: v('cAccess').value.trim()||null,
+    opening_hours: Object.keys(oh).length?oh:null,
+    on_foglaljorvost: v('cFjOn').checked,
+    foglaljorvost_url: v('cFjUrl').value.trim()||null,
+    on_odoktor: v('cOdOn').checked,
+    odoktor_url: v('cOdUrl').value.trim()||null,
+    on_teladoc: v('cTdOn').checked,
+    teladoc_url: v('cTdUrl').value.trim()||null,
+    teladoc_id: v('cTdId').value.trim()||null,
+  };
+  if(!payload.name){ alert('A klinika neve kötelező!'); btn.disabled=false; btn.innerHTML=old; return; }
+
+  if(addressChanged){ payload.lat=null; payload.lng=null; }
+
+  const { error }=await db.from('clinics').update(payload).eq('id', clinicData.id);
+  if(error){ alert('Mentés hiba: '+error.message); btn.disabled=false; btn.innerHTML=old; return; }
+  Object.assign(clinicData, payload);
+  updateProfilePreview();
+
+  if(addressChanged && (newStreet||newPostal)){
+    btn.innerHTML='🌐 Geocoding…';
+    try{
+      const cityName=clinicData.cities?.name||'';
+      const { data: refreshed }=await db.from('clinics').select('address').eq('id', clinicData.id).single();
+      const fullAddr=refreshed?.address ? refreshed.address+', Hungary' : [newPostal,cityName,newStreet].filter(Boolean).join(', ')+', Hungary';
+      const { data: { session } }=await db.auth.getSession();
+      const token=session?.access_token;
+      const r=await fetch('https://asgnkjmwzhbczpvetprh.supabase.co/functions/v1/geocode',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':token?`Bearer ${token}`:`Bearer ${SUPABASE_KEY}`,'apikey':SUPABASE_KEY},
+        body:JSON.stringify({ address: fullAddr })
+      });
+      const data=await r.json();
+      if(data.lat&&data.lng){
+        await db.from('clinics').update({ lat:data.lat, lng:data.lng }).eq('id', clinicData.id);
+        clinicData.lat=data.lat; clinicData.lng=data.lng; renderClinicMap();
+      }
+      if(refreshed?.address) clinicData.address=refreshed.address;
+    }catch(e){ console.error('Geocoding hiba', e); }
+  } else if(clinicData.lat&&clinicData.lng){ renderClinicMap(); }
+
+  btn.disabled=false;
+  btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Mentve!';
+  setTimeout(()=>{ btn.innerHTML=old; },2000);
+}
+
+/* ── TÉRKÉP ── */
+const ADM_GMAPS_KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+let _admGmapsPromise=null;
+function admLoadGoogleMaps(){
+  if(_admGmapsPromise) return _admGmapsPromise;
+  _admGmapsPromise=new Promise((resolve,reject)=>{
+    if(window.google&&window.google.maps){ resolve(window.google.maps); return; }
+    window._onGMapsReady=()=>resolve(window.google.maps);
+    const s=document.createElement('script');
+    s.src=`https://maps.googleapis.com/maps/api/js?key=${ADM_GMAPS_KEY}&callback=_onGMapsReady&language=hu&region=HU&loading=async`;
+    s.async=true; s.defer=true;
+    s.onerror=()=>reject(new Error('Maps failed'));
+    document.head.appendChild(s);
+  });
+  return _admGmapsPromise;
+}
+const ADM_MAP_STYLE_K=[
+  { elementType:'geometry', stylers:[{color:'#e2e8f0'}] },
+  { elementType:'labels.text.fill', stylers:[{color:'#475569'}] },
+  { elementType:'labels.text.stroke', stylers:[{color:'#ffffff'}] },
+  { featureType:'poi', stylers:[{visibility:'off'}] },
+  { featureType:'road', elementType:'geometry', stylers:[{color:'#ffffff'}] },
+  { featureType:'water', elementType:'geometry', stylers:[{color:'#bfdbfe'}] }
+];
+async function renderClinicMap(){
+  if(!clinicData) return;
+  const msg=document.getElementById('clinicMapMsg');
+  const info=document.getElementById('clinicCoordInfo');
+  if(!clinicData.lat||!clinicData.lng){
+    if(msg){ msg.textContent='Még nincs koordináta. Adja meg a címet és nyomja meg a Mentés gombot.'; msg.style.display='flex'; }
+    if(info) info.textContent=''; return;
+  }
+  try{
+    const maps=await admLoadGoogleMaps();
+    const el=document.getElementById('clinicMapEl'); if(!el) return;
+    const pos={ lat:Number(clinicData.lat), lng:Number(clinicData.lng) };
+    const map=new maps.Map(el,{ center:pos, zoom:15, styles:ADM_MAP_STYLE_K, mapTypeControl:false, streetViewControl:false, fullscreenControl:true });
+    new maps.Marker({ position:pos, map, title:clinicData.name,
+      icon:{ path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12zm-2 7h4v3h3v4h-3v3h-4v-3H7v-4h3V7z', fillColor:'#113293', fillOpacity:1, strokeColor:'#ffffff', strokeWeight:2.5, scale:1.2, anchor:new maps.Point(12,36) } });
+    if(msg) msg.style.display='none';
+    if(info) info.textContent=`Koordináta: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`;
+  }catch(e){ console.error(e); if(msg) msg.textContent='Térkép nem tölthető be.'; }
+}
+
+/* ── FOTÓK (logo + cover) ── */
+async function handleClinicUpload(input,kind){
+  const file=input.files?.[0]; if(!file) return;
+  if(!clinicData?.id){ alert('Először töltse be a klinika adatait.'); input.value=''; return; }
+  if(file.size>5*1024*1024){ alert('A fájl túl nagy. Maximum 5 MB engedélyezett.'); input.value=''; return; }
+  const progress=document.getElementById(kind+'Progress');
+  const progressFill=document.getElementById(kind+'ProgressFill');
+  const success=document.getElementById(kind+'Success');
+  const dbField=kind==='logo'?'photo_url':'cover_url';
+  if(progress) progress.style.display='block';
+  if(success) success.style.display='none';
+  if(progressFill) progressFill.style.width='15%';
+  try{
+    const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+    const path=`${clinicData.id}/${kind}-${Date.now()}.${ext}`;
+    if(progressFill) progressFill.style.width='40%';
+    const { error:upErr }=await db.storage.from('clinic-photos').upload(path,file,{cacheControl:'3600',upsert:false});
+    if(upErr) throw upErr;
+    if(progressFill) progressFill.style.width='75%';
+    const { data:urlData }=db.storage.from('clinic-photos').getPublicUrl(path);
+    const publicUrl=urlData.publicUrl;
+    const oldUrl=clinicData[dbField];
+    const { error:updErr }=await db.from('clinics').update({ [dbField]:publicUrl }).eq('id', clinicData.id);
+    if(updErr) throw updErr;
+    if(progressFill) progressFill.style.width='90%';
+    if(oldUrl){ const op=oldUrl.split('/clinic-photos/')[1]; if(op&&op!==path){ try{ await db.storage.from('clinic-photos').remove([op]); }catch(e){} } }
+    if(progressFill) progressFill.style.width='100%';
+    clinicData[dbField]=publicUrl;
+    updatePhotoPreview(kind,publicUrl);
+    updateProfilePreview();
+    if(success) success.style.display='flex';
+    setTimeout(()=>{ if(progress) progress.style.display='none'; if(progressFill) progressFill.style.width='0%'; },1200);
+  }catch(e){
+    console.error('upload',e); alert('Feltöltési hiba: '+(e.message||'ismeretlen'));
+    if(progress) progress.style.display='none'; if(progressFill) progressFill.style.width='0%';
+  }finally{ input.value=''; }
+}
+async function removeClinicPhoto(kind){
+  if(!clinicData?.id) return;
+  const dbField=kind==='logo'?'photo_url':'cover_url';
+  const oldUrl=clinicData[dbField]; if(!oldUrl) return;
+  if(!confirm(kind==='logo'?'Biztosan eltávolítja a klinika logót?':'Biztosan eltávolítja a borítóképet?')) return;
+  try{
+    const { error }=await db.from('clinics').update({ [dbField]:null }).eq('id', clinicData.id);
+    if(error) throw error;
+    const op=oldUrl.split('/clinic-photos/')[1];
+    if(op){ try{ await db.storage.from('clinic-photos').remove([op]); }catch(e){} }
+    clinicData[dbField]=null;
+    updatePhotoPreview(kind,null); updateProfilePreview();
+  }catch(e){ alert('Eltávolítás hiba: '+(e.message||'ismeretlen')); }
+}
+
+/* ── GALÉRIA ── */
+async function handleGalleryUpload(input){
+  const files=Array.from(input.files||[]); if(!files.length) return;
+  if(!clinicData?.id){ alert('Először töltse be a klinika adatait.'); input.value=''; return; }
+  const current=parseGallery(clinicData.gallery);
+  if(current.length+files.length>20){ alert(`Maximum 20 kép tölthető fel.`); input.value=''; return; }
+  const oversized=files.find(f=>f.size>5*1024*1024);
+  if(oversized){ alert(`A "${oversized.name}" fájl túl nagy. Maximum 5 MB képenként.`); input.value=''; return; }
+  const progress=document.getElementById('galleryProgress');
+  if(progress) progress.style.display='block';
+  const uploaded=[];
+  try{
+    for(let i=0;i<files.length;i++){
+      const file=files[i];
+      if(progress) progress.textContent=`Feltöltés ${i+1} / ${files.length}…`;
+      const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+      const path=`${clinicData.id}/gallery-${Date.now()}-${i}.${ext}`;
+      const { error:upErr }=await db.storage.from('clinic-photos').upload(path,file,{cacheControl:'3600',upsert:false});
+      if(upErr) throw upErr;
+      const { data:urlData }=db.storage.from('clinic-photos').getPublicUrl(path);
+      uploaded.push({ url:urlData.publicUrl, path });
+    }
+    const newGallery=[...current, ...uploaded.map(u=>({url:u.url}))];
+    const { error:updErr }=await db.from('clinics').update({ gallery:newGallery }).eq('id', clinicData.id);
+    if(updErr) throw updErr;
+    clinicData.gallery=newGallery; renderGalleryManager(newGallery);
+    if(progress){ progress.textContent=`✓ ${files.length} kép feltöltve`; setTimeout(()=>{ progress.style.display='none'; },1500); }
+  }catch(e){
+    console.error('gallery upload',e); alert('Feltöltési hiba: '+(e.message||'ismeretlen'));
+    for(const u of uploaded){ try{ await db.storage.from('clinic-photos').remove([u.path]); }catch(_){} }
+    if(progress) progress.style.display='none';
+  }finally{ input.value=''; }
+}
+async function removeGalleryItem(idx){
+  if(!clinicData?.id) return;
+  const current=parseGallery(clinicData.gallery);
+  if(idx<0||idx>=current.length) return;
+  if(!confirm('Biztosan eltávolítja ezt a képet a galériából?')) return;
+  const removed=current[idx];
+  const newGallery=current.filter((_,i)=>i!==idx);
+  try{
+    const { error }=await db.from('clinics').update({ gallery:newGallery }).eq('id', clinicData.id);
+    if(error) throw error;
+    clinicData.gallery=newGallery; renderGalleryManager(newGallery);
+    if(removed?.url){ const op=removed.url.split('/clinic-photos/')[1]; if(op){ try{ await db.storage.from('clinic-photos').remove([op]); }catch(e){} } }
+  }catch(e){ alert('Eltávolítás hiba: '+(e.message||'ismeretlen')); }
+}
+</script>
+
+<script>
+/* ════ DEMÓ MÓD — nincs bejelentkezés, nincs mentés ════ */
+(function(){
+  const app=document.getElementById('appContent'); if(app) app.style.display='';
+  const ld=document.getElementById('authLoading'); if(ld) ld.style.display='none';
+  const nm=document.getElementById('sbUserName'); if(nm) nm.textContent='Demó Klinika Admin (DEMÓ)';
+
+  const banner=document.createElement('div');
+  banner.style.cssText='position:sticky;top:0;z-index:400;background:linear-gradient(135deg,#FF8A00,#FFA726);color:#fff;font-size:13px;font-weight:600;text-align:center;padding:9px 16px;box-shadow:0 2px 10px rgba(255,138,0,.25)';
+  banner.innerHTML='👁️ DEMÓ NÉZET — így néz ki a klinika admin. A mentés és a fájlfeltöltés ki van kapcsolva. <a href="/login.html" style="color:#fff;text-decoration:underline;font-weight:700">Bejelentkezés →</a>';
+  if(app) app.insertBefore(banner, app.firstChild);
+
+  window._docCount=8;
+  clinicData={ id:'demo', slug:'demo-egeszsegkozpont', status:'partner',
+    name:'Demó Egészségközpont', cities:{name:'Budapest'},
+    postal_code:'1011', street:'Fő utca 12.', district:'I', address:'1011 Budapest, Fő utca 12.',
+    phone:'+36 1 234 5678', email:'info@demo-egeszsegkozpont.hu', website:'https://demo-egeszsegkozpont.hu',
+    tax_number:'12345678-2-41',
+    description:'Modern, többszakmás magánrendelő a Budai Várnegyed tövében. Belgyógyászat, kardiológia, nőgyógyászat és képalkotó diagnosztika egy helyen, kényelmes online időpontfoglalással.',
+    parking_info:'Ingyenes parkoló a ház udvarában, valamint fizetős utcai parkolás a környéken.',
+    public_transport:'Batthyány tér (M2 metró) 6 perc séta, 16-os és 105-ös busz a közelben.',
+    accessibility:'Akadálymentes bejárat, lift és akadálymentes mosdó minden szinten.',
+    opening_hours:{ hetfo:'8:00–20:00', kedd:'8:00–20:00', szerda:'8:00–20:00', csutortok:'8:00–20:00', pentek:'8:00–18:00', szombat:'9:00–13:00', vasarnap:'Zárva' },
+    on_foglaljorvost:true, foglaljorvost_url:'https://foglaljorvost.hu/demo-egeszsegkozpont',
+    on_odoktor:false, odoktor_url:null,
+    on_teladoc:false, teladoc_url:null, teladoc_id:null,
+    lat:47.5062, lng:19.0390,
+    photo_url:null,
+    cover_url:'https://picsum.photos/seed/klinikacover/800/300',
+    gallery:[{url:'https://picsum.photos/seed/klinika1/400/300'},{url:'https://picsum.photos/seed/klinika2/400/300'},{url:'https://picsum.photos/seed/klinika3/400/300'},{url:'https://picsum.photos/seed/klinika4/400/300'}]
+  };
+
+  if(typeof fillClinicForm==='function') fillClinicForm(clinicData);
+  if(typeof renderClinicMap==='function') renderClinicMap();
+
+  function demoNotice(){ alert('Ez egy DEMÓ nézet — itt nem lehet menteni vagy fájlt feltölteni. A valódi szerkesztéshez jelentkezz be.'); }
+  window.loadClinicData=function(){};
+  window.saveClinic=demoNotice;
+  window.handleClinicUpload=function(i){ demoNotice(); if(i) i.value=''; };
+  window.removeClinicPhoto=demoNotice;
+  window.handleGalleryUpload=function(i){ demoNotice(); if(i) i.value=''; };
+  window.removeGalleryItem=demoNotice;
+})();
+</script>
+
+</body>
+</html>

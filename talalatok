@@ -608,7 +608,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
   .dc-nm{font-size:16px}.rgrid{grid-template-columns:1fr}
   .pp{width:100vw}.pp-stats{grid-template-columns:repeat(2,1fr)}
 }
-.site-footer{background:#0c2370;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
+.site-footer{background:#1a1f36;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
 .footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
 .footer-brand{min-width:0}
@@ -1122,6 +1122,21 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <button class="pgb" id="pgNext" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
   </main>
+  <!-- ══ TÉRKÉP OSZLOP (jobb) ══ -->
+  <button class="rmap-fab" type="button" onclick="toggleResultsMap()" aria-label="Térkép megnyitása">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+    Térkép
+  </button>
+  <aside id="resultsMapCol">
+    <div class="rmap-card">
+      <div class="rmap-head">
+        <span class="rmap-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Találatok a térképen</span>
+        <span class="rmap-count" id="rmapCount"></span>
+        <button class="rmap-close" type="button" onclick="toggleResultsMap()" aria-label="Bezárás">&times;</button>
+      </div>
+      <div id="resultsMap"><div class="rmap-empty" id="rmapEmpty">Térkép betöltése…</div></div>
+    </div>
+  </aside>
 </div>
 
 <!-- PROFILE PANEL -->
@@ -2634,6 +2649,103 @@ load();
   } else {
     initHbarMap();
   }
+})();
+</script>
+
+
+<style id="results-skin">
+.site-footer{background:#1a1f36 !important}
+.footer-logo span{color:#7fe8a3 !important}
+
+/* 3-oszlopos elrendezés: szűrő | találatok | térkép */
+@media(min-width:1201px){
+  .pw{grid-template-columns:280px minmax(0,1fr) 380px !important}
+  #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
+  #resultsMapCol .rmap-close{display:none}
+  .pw .rgrid{grid-template-columns:1fr !important}
+}
+.rmap-card{height:100%;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(252,253,255,.78));backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.85);border-radius:16px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 10px 28px rgba(17,50,147,.08)}
+.rmap-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid rgba(220,227,234,.5);background:rgba(255,255,255,.6)}
+.rmap-title{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:#113293}
+.rmap-title svg{color:#2C9650;flex-shrink:0}
+.rmap-count{font-size:12px;color:#64748b;font-weight:600}
+.rmap-close{margin-left:auto;width:32px;height:32px;border-radius:8px;border:1px solid rgba(0,0,0,.06);background:#fff;color:#64748b;font-size:20px;line-height:1;cursor:pointer}
+#resultsMap{flex:1;min-height:0;position:relative;background:#e8eef7}
+.rmap-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:13px;text-align:center;padding:1rem}
+
+/* térkép FAB + becsúszó panel ≤1200px */
+.rmap-fab{display:none}
+@media(max-width:1200px){
+  #resultsMapCol{position:fixed;top:0;right:-100%;width:92vw;max-width:540px;height:100vh;z-index:9000;padding:12px;transition:right .3s cubic-bezier(.4,0,.2,1)}
+  #resultsMapCol.open{right:0;box-shadow:-12px 0 44px rgba(17,50,147,.25)}
+  .rmap-fab{display:inline-flex;align-items:center;gap:8px;position:fixed;bottom:84px;right:20px;z-index:500;padding:13px 20px;background:linear-gradient(135deg,#2C9650,#35B26B);color:#fff;border:none;border-radius:100px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(44,150,80,.3),0 12px 28px rgba(44,150,80,.32);transition:transform .25s cubic-bezier(.34,1.4,.64,1)}
+  .rmap-fab:hover{transform:translateY(-2px)}
+}
+@media(min-width:1201px){ .rmap-fab{display:none !important} }
+</style>
+
+<script id="results-map-js">
+(function(){
+  const KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4';
+  let mapsP=null;
+  function loadMaps(){
+    if(window.google&&window.google.maps) return Promise.resolve(window.google.maps);
+    if(mapsP) return mapsP;
+    mapsP=new Promise((res,rej)=>{
+      window._rmReady=()=>res(window.google.maps);
+      const s=document.createElement('script');
+      s.src='https://maps.googleapis.com/maps/api/js?key='+KEY+'&callback=_rmReady&language=hu&region=HU&loading=async';
+      s.async=true;s.defer=true;s.onerror=()=>rej(new Error('maps'));
+      document.head.appendChild(s);
+    });
+    return mapsP;
+  }
+  const STYLE=[{elementType:'geometry',stylers:[{color:'#e9eef5'}]},{elementType:'labels.text.fill',stylers:[{color:'#52617a'}]},{elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#bcd6f5'}]}];
+  let map=null,markers=[],cluster=null,info=null;
+  function coordsOf(d){ const c=d&&d.doctor_clinics&&d.doctor_clinics[0]&&d.doctor_clinics[0].clinics; if(c&&c.lat&&c.lng) return {lat:+c.lat,lng:+c.lng,clinic:c}; return null; }
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+  window.renderResultsMap=async function(list){
+    list=list||[];
+    const pts=list.map(function(d){var c=coordsOf(d);return c?Object.assign({d:d},c):null;}).filter(Boolean);
+    const cnt=document.getElementById('rmapCount'); if(cnt) cnt.textContent=pts.length?(pts.length+' a térképen'):'';
+    const empty=document.getElementById('rmapEmpty');
+    let maps; try{ maps=await loadMaps(); }catch(e){ if(empty){empty.style.display='flex';empty.textContent='Térkép nem tölthető be.';} return; }
+    const el=document.getElementById('resultsMap'); if(!el) return;
+    if(!map){ map=new maps.Map(el,{center:{lat:47.4979,lng:19.0402},zoom:11,styles:STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:true}); info=new maps.InfoWindow(); }
+    markers.forEach(function(m){m.setMap(null);}); markers=[];
+    if(cluster&&cluster.clearMarkers) cluster.clearMarkers();
+    if(!pts.length){ if(empty){empty.style.display='flex';empty.textContent='Nincs térképen megjeleníthető találat.';} return; }
+    if(empty) empty.style.display='none';
+    const bounds=new maps.LatLngBounds();
+    pts.forEach(function(p){
+      const m=new maps.Marker({position:{lat:p.lat,lng:p.lng},title:p.d.name||'',
+        icon:{path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z',fillColor:'#113293',fillOpacity:1,strokeColor:'#fff',strokeWeight:2,scale:1.1,anchor:new maps.Point(12,36)}});
+      m.addListener('click',function(){
+        if(typeof openPanel==='function'&&p.d.id){ openPanel(p.d.id); }
+        else { info.setContent('<div style="font:600 13px Inter,sans-serif;color:#113293">'+esc(p.d.name)+'<br><span style="font-weight:500;color:#475569">'+esc(p.clinic&&p.clinic.name||'')+'</span></div>'); info.open(map,m); }
+      });
+      markers.push(m); bounds.extend(m.getPosition());
+    });
+    if(window.markerClusterer&&window.markerClusterer.MarkerClusterer){ cluster=new window.markerClusterer.MarkerClusterer({map:map,markers:markers}); }
+    else { markers.forEach(function(m){m.setMap(map);}); }
+    if(pts.length===1){ map.setCenter(markers[0].getPosition()); map.setZoom(14); } else { map.fitBounds(bounds,60); }
+  };
+  window.toggleResultsMap=function(){
+    const col=document.getElementById('resultsMapCol'); if(!col) return;
+    const open=col.classList.toggle('open');
+    if(open){
+      try{ renderResultsMap(typeof filtered!=='undefined'?filtered:[]); }catch(e){}
+      setTimeout(function(){ if(map&&window.google){ google.maps.event.trigger(map,'resize'); if(markers.length>1){var b=new google.maps.LatLngBounds();markers.forEach(function(m){b.extend(m.getPosition());});map.fitBounds(b,60);} else if(markers.length===1){map.setCenter(markers[0].getPosition());} } },320);
+    }
+  };
+  // renderList patch — a térkép a szűrt találatokkal frissül
+  try{
+    if(typeof renderList==='function'){
+      var _o=renderList;
+      renderList=function(){ var r=_o.apply(this,arguments); try{ renderResultsMap(typeof filtered!=='undefined'?filtered:[]); }catch(e){} return r; };
+    }
+  }catch(e){}
+  setTimeout(function(){ try{ if(typeof filtered!=='undefined'&&filtered&&filtered.length) renderResultsMap(filtered); }catch(e){} },700);
 })();
 </script>
 
