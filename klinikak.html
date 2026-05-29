@@ -965,7 +965,7 @@ async function loadClinics(){
   try {
     const clinicsRes = await db
       .from('clinics')
-      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, cities(name)')
+      .select('id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, on_foglaljorvost, foglaljorvost_url, on_odoktor, odoktor_url, on_teladoc, teladoc_url, cities(name)')
       .in('status', ['active', 'partner'])
       .order('name');
     if(clinicsRes.error){ showError(clinicsRes.error.message); return; }
@@ -1326,44 +1326,64 @@ function clinicCardHTML(c, i){
     : `<div class="szk-card-avatar">${escapeHtml(initial)}</div>`;
 
   const ratingFmt = c._avgRating > 0 ? c._avgRating.toFixed(1) : '';
-  const specsArr = (c._specs || []).slice(0, 3);
-  const extraSpecCount = Math.max(0, (c._specs || []).length - 3);
-  const specsDisplay = specsArr.map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
-
-  // Cím összerakása
+  const specsAll = (c._specs || []);
+  const specsDisplay = specsAll.slice(0,3).map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
+  const extraSpecCount = Math.max(0, specsAll.length - 3);
   const addressLine = [[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ') || c.address || '';
-
   const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
 
-  return `<div class="szk-card" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
+  const chipSpecs = specsAll.slice(0,5);
+  const chipMore = Math.max(0, specsAll.length - 5);
+  const specChips = chipSpecs.map(s => `<span class="kc-chip">${escapeHtml(s.name)}</span>`).join('')
+    + (chipMore ? `<span class="kc-chip more">+${chipMore} további</span>` : '');
+
+  const cityVal = c._cityName || '—';
+  const districtVal = c.district ? `${escapeHtml(String(c.district))}. kerület` : '';
+  const webHost = c.website ? c.website.replace(/^https?:\/\//,'').replace(/\/$/,'') : '';
+
+  const bookings = [];
+  if (c.on_foglaljorvost) bookings.push('Online foglalás');
+  if (c.on_odoktor) bookings.push('oDoktor');
+  if (c.on_teladoc) bookings.push('Teladoc');
+  const bookingHtml = bookings.length
+    ? `<div class="kc-badges">${bookings.map(b => `<span class="kc-badge book"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>${b}</span>`).join('')}</div>`
+    : '';
+
+  const PIN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+  const USR = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>';
+  const STR = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+  const WEB = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+
+  return `<div class="szk-card kc" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
     <div class="szk-card-top">
       ${photoBlock}
       <div class="szk-card-body">
         <div class="szk-card-title">${escapeHtml(c.name)}<span class="szk-verified" title="Ellenőrzött"></span></div>
         <div class="szk-card-subtitle">${escapeHtml(specsDisplay)}${extraSpecCount > 0 ? ' · +' + extraSpecCount + ' szakterület' : ''}</div>
-
-        ${(c._docCount || ratingFmt) ? `<div class="szk-card-stack">
-          <div class="szk-card-meta">
-            ${c._docCount ? `<span><strong>${c._docCount}</strong> szakorvos</span>` : ''}
-            ${c._docCount && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
-            ${ratingFmt ? `<span class="szk-card-meta-star">★ <strong>${ratingFmt}</strong>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews})</span>` : ''}</span>` : ''}
-          </div>
-        </div>` : ''}
+        <div class="kc-meta">
+          ${c._docCount ? `<span><strong>${c._docCount}</strong> szakorvos</span>` : ''}
+          ${c._docCount && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
+          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews} értékelés)</span>` : ''}` : ''}
+        </div>
+        ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
       </div>
     </div>
 
+    <div class="kc-grid">
+      <div class="kc-info">${PIN}<div><div class="kc-info-l">Város</div><div class="kc-info-v">${escapeHtml(cityVal)}${districtVal ? ` · ${districtVal}` : ''}</div></div></div>
+      <div class="kc-info">${USR}<div><div class="kc-info-l">Szakorvosok</div><div class="kc-info-v">${c._docCount || '—'}</div></div></div>
+      <div class="kc-info">${STR}<div><div class="kc-info-l">Értékelés</div><div class="kc-info-v">${ratingFmt ? `${ratingFmt}${c._totalReviews ? ` (${c._totalReviews})` : ''}` : 'Nincs még'}</div></div></div>
+      ${webHost ? `<div class="kc-info">${WEB}<div><div class="kc-info-l">Weboldal</div><div class="kc-info-v"><a href="${escapeHtml(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(webHost)}</a></div></div></div>` : ''}
+    </div>
+
+    ${bookingHtml}
+
     <div class="szk-card-foot">
       <div class="szk-card-foot-info">
-        ${addressLine ? `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>${escapeHtml(addressLine)}</span>
-        ` : '<span class="szk-card-meta-soft">Helyszín nincs megadva</span>'}
+        ${addressLine ? `${PIN}<span>${escapeHtml(addressLine)}</span>` : '<span class="szk-card-meta-soft">Helyszín nincs megadva</span>'}
       </div>
       <div class="szk-card-foot-btns" onclick="event.stopPropagation()">
-        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>
-          Hívás
-        </a>` : ''}
+        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>Hívás</a>` : ''}
         <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();window.location.href='${target}'">Klinika megtekintése</button>
       </div>
     </div>
@@ -1615,7 +1635,7 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 /* 3-oszlopos elrendezés: szűrő | találatok | térkép (csak desktop) */
 #resultsMapCol{display:none}
 @media(min-width:1201px){
-  .pw{grid-template-columns:300px minmax(0,1fr) 380px !important}
+  .pw{grid-template-columns:300px minmax(0,1fr) 228px !important}
   #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
   .rtop .vtog{display:none !important}
 }
@@ -1759,5 +1779,26 @@ document.addEventListener('DOMContentLoaded', loadClinics);
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+<style id="klinika-card-skin">
+.pw main .szk-card.kc{display:block;padding:0;overflow:hidden}
+.kc .szk-card-top{padding:20px 22px 14px}
+.kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
+.kc-meta .kc-m-star{color:#d97706;font-weight:700}
+.kc-meta strong{color:#113293}
+.kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
+.kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
+.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 22px;border-top:1px solid rgba(220,227,234,.5);border-bottom:1px solid rgba(220,227,234,.5)}
+.kc-info{display:flex;align-items:flex-start;gap:9px;min-width:0}
+.kc-info svg{color:#264ACA;flex-shrink:0;margin-top:1px}
+.kc-info-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;margin-bottom:2px}
+.kc-info-v{font-size:13.5px;color:#1a1f36;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
+.kc-info-v a{color:#264ACA;text-decoration:none}
+.kc-info-v a:hover{text-decoration:underline}
+.kc-badges{display:flex;flex-wrap:wrap;gap:7px;padding:14px 22px 0}
+.kc-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px}
+.kc-badge.book{color:#2C9650;background:rgba(44,150,80,.1);border:1px solid rgba(44,150,80,.2)}
+.kc .szk-card-foot{padding:14px 22px 18px;border-top:none}
+</style>
 </body>
 </html>
