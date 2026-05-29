@@ -133,7 +133,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .highlight-arrow{flex-shrink:0;color:var(--muted);transition:transform .2s,color .2s}
 .highlight-card:hover .highlight-arrow{transform:translateX(2px);color:var(--brand-2)}
 
-.map-card{min-height:140px;background:linear-gradient(135deg,rgba(255,255,255,.88) 0%,rgba(230,238,255,.7) 100%);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:14px;padding:13px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);display:grid;grid-template-columns:1fr 100px;gap:12px;align-items:center;text-decoration:none;color:inherit;transition:all .25s;cursor:pointer}
+.map-card{min-height:176px;background:linear-gradient(135deg,rgba(255,255,255,.88) 0%,rgba(230,238,255,.7) 100%);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:14px;padding:13px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);display:grid;grid-template-columns:1fr 150px;gap:14px;align-items:center;text-decoration:none;color:inherit;transition:all .25s;cursor:pointer}
 .map-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.2)}
 .map-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:3px;display:flex;align-items:center;gap:5px}
 .map-title svg{width:12px;height:12px;color:var(--brand-2)}
@@ -141,7 +141,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .map-cta{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--brand-2)}
 .map-cta svg{width:10px;height:10px;transition:transform .2s}
 .map-card:hover .map-cta svg{transform:translateX(2px)}
-.map-frame{position:relative;height:100px;border-radius:9px;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
+.map-frame{position:relative;height:150px;border-radius:11px;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
 .map-pin{position:absolute;width:12px;height:12px;background:var(--grad-blue);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(17,50,147,.3)}
 .map-pin::after{content:'';position:absolute;top:3px;left:3px;width:6px;height:6px;background:#fff;border-radius:50%}
 .map-pin:nth-child(1){top:25%;left:30%;animation:pulsePin 2.5s ease-in-out infinite}
@@ -668,11 +668,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
   /* ── Keresés indítása: AI → találati / klinika oldal ── */
   /* ── Kereső átmeneti réteg ── */
-  const _ov = document.getElementById('searchOverlay');
   const SO_DAYS = ['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
   function soEsc(s){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function soPretty(slug){ return slug ? slug.replace(/-/g,' ').replace(/^\w/, c=>c.toUpperCase()) : ''; }
   function showSearchOverlay(query){
+    const _ov = document.getElementById('searchOverlay');
     if(!_ov) return Date.now();
     const qs=_ov.querySelector('#soQuery'); if(qs) qs.textContent=query;
     _ov.querySelector('.so-phase-analyze').hidden=false;
@@ -706,6 +706,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     return out.join('');
   }
   async function finishSearch(url, result, query, t0){
+    const _ov = document.getElementById('searchOverlay');
     // szakterület szép neve (best effort, gyors)
     let specName='';
     try{
@@ -1099,9 +1100,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     const heroEl = document.getElementById('heroMiniMapEl');
     if(!heroEl) return;
     try{
-      const { data: clinics, error } = await db.from('clinics').select('id, slug, name, address, lat, lng').not('lat','is',null).not('lng','is',null);
-      if(error) throw error;
-      const withCoords = (clinics||[]).filter(c=>c.lat&&c.lng);
+      const withCoords = await getHeroClinics();
       if(!withCoords.length) return;
       const maps = await loadGoogleMaps();
       const pinIcon = { path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z', fillColor:'#113293', fillOpacity:1, strokeColor:'#ffffff', strokeWeight:2, scale:0.6, anchor:new maps.Point(12,36) };
@@ -1114,6 +1113,76 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       if(frame) frame.querySelectorAll('.map-pin').forEach(p=>{ p.style.display='none'; });
     }catch(e){}
   }
+
+  /* ── Klinika-adatok cache (mini + nagy térkép) ── */
+  let _heroClinics = null;
+  async function getHeroClinics(){
+    if(_heroClinics) return _heroClinics;
+    if(!hasDB) return (_heroClinics=[]);
+    try{
+      const { data, error } = await db.from('clinics').select('id, slug, name, address, lat, lng').not('lat','is',null).not('lng','is',null);
+      if(error) throw error;
+      _heroClinics = (data||[]).filter(c=>c.lat&&c.lng);
+    }catch(e){ _heroClinics=[]; }
+    return _heroClinics;
+  }
+
+  /* ── Nagy, felugró térkép ── */
+  let _bigMapInited = false;
+  function _clusterRenderer(maps){
+    return { render:function(o){ var count=o.count, position=o.position; var size=count<10?34:count<50?42:count<200?50:58; var svg='data:image/svg+xml;utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-1)+'" fill="rgba(38,74,202,.18)"/><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-4)+'" fill="#113293" stroke="#fff" stroke-width="2"/><text x="'+(size/2)+'" y="'+(size/2)+'" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="'+(size*0.32)+'" font-weight="700">'+count+'</text></svg>'); return new maps.Marker({ position:position, icon:{ url:svg, scaledSize:new maps.Size(size,size), anchor:new maps.Point(size/2,size/2) } }); } };
+  }
+  async function initBigMap(){
+    if(_bigMapInited) return;
+    _bigMapInited = true;
+    var el = document.getElementById('mapModalEl');
+    var loadingEl = document.getElementById('mapModalLoading');
+    if(!el) { _bigMapInited=false; return; }
+    try{
+      var withCoords = await getHeroClinics();
+      var maps = await loadGoogleMaps();
+      var pinIcon = { path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z', fillColor:'#113293', fillOpacity:1, strokeColor:'#ffffff', strokeWeight:2, scale:0.95, anchor:new maps.Point(12,36) };
+      var bigMap = new maps.Map(el, { center:{lat:47.1625,lng:19.5033}, zoom:7, styles:HOME_MAP_STYLE, gestureHandling:'greedy', clickableIcons:false, mapTypeControl:false, streetViewControl:false, fullscreenControl:true, zoomControl:true });
+      window._bigMapRef = bigMap;
+      var info = new maps.InfoWindow();
+      var esc = function(s){ return String(s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];}); };
+      var markers = withCoords.map(function(c){
+        var m = new maps.Marker({ position:{lat:Number(c.lat),lng:Number(c.lng)}, title:c.name, icon:pinIcon });
+        var target = c.slug ? ('/klinikak/'+encodeURIComponent(c.slug)) : ('/klinika.html?id='+c.id);
+        m.addListener('click', function(){ info.setContent('<div style="font-family:Inter,sans-serif;max-width:240px"><div style="font-weight:700;color:#113293;font-size:14px;margin-bottom:3px">'+esc(c.name)+'</div>'+(c.address?'<div style="font-size:12px;color:#475569;margin-bottom:8px">'+esc(c.address)+'</div>':'')+'<a href="'+target+'" style="font-size:12.5px;font-weight:600;color:#264ACA;text-decoration:none">Részletek →</a></div>'); info.open(bigMap, m); });
+        return m;
+      });
+      if(window.markerClusterer && window.markerClusterer.MarkerClusterer){
+        new window.markerClusterer.MarkerClusterer({ map:bigMap, markers:markers, renderer:_clusterRenderer(maps) });
+      } else { markers.forEach(function(m){ m.setMap(bigMap); }); }
+      if(loadingEl) loadingEl.style.display='none';
+      setTimeout(function(){ maps.event.trigger(bigMap,'resize'); }, 120);
+    }catch(e){ if(loadingEl) loadingEl.textContent='A térkép betöltése nem sikerült.'; }
+  }
+  function openMapModal(){
+    var m = document.getElementById('mapModal');
+    if(!m) return;
+    m.classList.add('open'); m.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    initBigMap();
+    setTimeout(function(){ if(window.google&&window.google.maps&&window._bigMapRef){ window.google.maps.event.trigger(window._bigMapRef,'resize'); window._bigMapRef.setCenter({lat:47.1625,lng:19.5033}); } }, 300);
+  }
+  function closeMapModal(){
+    var m = document.getElementById('mapModal');
+    if(!m) return;
+    m.classList.remove('open'); m.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  function wireMapModal(){
+    var card = document.querySelector('.map-card');
+    if(card) card.addEventListener('click', function(e){ e.preventDefault(); openMapModal(); });
+    var cl = document.getElementById('mapModalClose');
+    if(cl) cl.addEventListener('click', closeMapModal);
+    var m = document.getElementById('mapModal');
+    if(m) m.addEventListener('click', function(e){ if(e.target===m) closeMapModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var mm=document.getElementById('mapModal'); if(mm&&mm.classList.contains('open')) closeMapModal(); } });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wireMapModal); else wireMapModal();
 
   /* ── Indítás ── */
   loadHeroStats();
@@ -1260,6 +1329,43 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   </div>
 </div>
 <!-- ══════ KERESŐ RÉTEG VÉGE ══════ -->
+
+
+<!-- ══════ NAGY TÉRKÉP MODAL ══════ -->
+<style id="map-modal-css">
+#mapModal{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;background:rgba(17,50,147,.30);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);transition:opacity .3s cubic-bezier(.4,0,.2,1),visibility 0s linear .3s}
+#mapModal.open{opacity:1;visibility:visible;transition:opacity .3s cubic-bezier(.4,0,.2,1)}
+#mapModal .mapmodal-card{width:min(96vw,1100px);height:min(86vh,760px);background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(17,50,147,.32);transform:translateY(16px) scale(.97);transition:transform .42s cubic-bezier(.34,1.4,.64,1)}
+#mapModal.open .mapmodal-card{transform:none}
+.mapmodal-head{display:flex;align-items:center;gap:12px;padding:15px 18px;border-bottom:1px solid #e6eaf3;flex-shrink:0}
+.mapmodal-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:#113293;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.mapmodal-title svg{width:18px;height:18px;color:#2C9650}
+.mapmodal-spacer{flex:1}
+.mapmodal-open{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:#264ACA;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid rgba(38,74,202,.2);border-radius:10px;transition:background .2s,border-color .2s}
+.mapmodal-open svg{width:14px;height:14px}
+.mapmodal-open:hover{background:#eef2ff;border-color:rgba(38,74,202,.4)}
+.mapmodal-close{width:38px;height:38px;border:1px solid #e6eaf3;background:#fff;border-radius:10px;color:#64748b;font-size:24px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.mapmodal-close:hover{background:#f1f5f9;color:#113293}
+.mapmodal-body{flex:1;position:relative;min-height:0}
+#mapModalEl{position:absolute;inset:0}
+.mapmodal-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:'Inter',sans-serif;font-size:14px;background:#eef2ff;z-index:1}
+@media(max-width:560px){#mapModal{padding:0}.mapmodal-card{width:100vw;height:100vh;border-radius:0}.mapmodal-open span{display:none}}
+</style>
+<div id="mapModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Klinikák a térképen">
+  <div class="mapmodal-card">
+    <div class="mapmodal-head">
+      <div class="mapmodal-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Klinikák a térképen</div>
+      <div class="mapmodal-spacer"></div>
+      <a class="mapmodal-open" href="klinikak.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg><span>Teljes kereső</span></a>
+      <button class="mapmodal-close" id="mapModalClose" aria-label="Bezárás" type="button">&times;</button>
+    </div>
+    <div class="mapmodal-body">
+      <div id="mapModalEl"></div>
+      <div class="mapmodal-loading" id="mapModalLoading">Térkép betöltése…</div>
+    </div>
+  </div>
+</div>
+<!-- ══════ TÉRKÉP MODAL VÉGE ══════ -->
 
 </body>
 </html>
