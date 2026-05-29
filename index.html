@@ -710,6 +710,65 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(!out.length) out.push(C('„'+query+'"'));
     return out.join('');
   }
+  function sanitizeTimeFilters(result, query){
+    if(!result) return;
+    var t=(query||'').toLowerCase();
+    var dayWords=['hétfő','kedd','szerda','csütörtök','péntek','szombat','vasárnap','hétvég','hétközben','munkanap','weekend'];
+    var hasDay=dayWords.some(function(w){return t.indexOf(w)!==-1;});
+    if(!hasDay){ result.weekend=false; if(Array.isArray(result.days)) result.days=[]; }
+  }
+  async function countDoctors(result){
+    if(!hasDB || !result) return null;
+    var slug=result.specialty_slug, city=result.city;
+    if(!slug && !city) return null;
+    try{
+      var sel='id';
+      if(slug) sel+=', doctor_specialties!inner(specialties!inner(doctor_slug))';
+      if(city) sel+=', doctor_clinics!inner(clinics!inner(cities!inner(name)))';
+      var q=db.from('doctors').select(sel,{count:'exact',head:true}).eq('is_active',true);
+      if(slug) q=q.eq('doctor_specialties.specialties.doctor_slug', slug);
+      if(city) q=q.eq('doctor_clinics.clinics.cities.name', city);
+      var r=await Promise.race([q, new Promise(function(res){setTimeout(function(){res({count:null,_to:true});},2500);})]);
+      if(!r || r._to) return null;
+      return (typeof r.count==='number') ? r.count : null;
+    }catch(e){ return null; }
+  }
+  function closeSearchOverlay(){
+    var _ov=document.getElementById('searchOverlay');
+    if(!_ov) return;
+    _ov.classList.remove('open'); _ov.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+  function showEmptyPhase(_ov, result, query, originalUrl){
+    var eq=_ov.querySelector('#soEmptyQuery'); if(eq) eq.textContent=query;
+    var city=result&&result.city, slug=result&&result.specialty_slug;
+    var msg='', acts=[];
+    if(city && slug){
+      msg='Ezzel a szakterülettel jelenleg nincs orvos itt: <strong>'+soEsc(city)+'</strong>. Próbálja a város nélkül, vagy nézze meg a teljes listát.';
+      var np=new URLSearchParams(); np.set('specialty', slug); np.set('q', query);
+      acts.push({label:'Keresés „'+soEsc(city)+'" nélkül', url:'talalatok.html?'+np.toString(), primary:true});
+    } else if(city){
+      msg='Ebben a városban (<strong>'+soEsc(city)+'</strong>) nem találtunk pontos egyezést. Nézze meg a teljes listát, vagy módosítsa a keresést.';
+    } else if(slug){
+      msg='Erre a szakterületre most nincs elérhető orvos. Nézze meg a teljes listát, vagy módosítsa a keresést.';
+    } else {
+      msg='Nem találtunk pontos egyezést. Nézze meg a teljes listát, vagy módosítsa a keresést.';
+    }
+    acts.push({label:'Összes orvos böngészése', url:'talalatok.html', primary:!(city&&slug)});
+    var msgEl=_ov.querySelector('#soEmptyMsg'); if(msgEl) msgEl.innerHTML=msg;
+    var actEl=_ov.querySelector('#soEmptyActions');
+    if(actEl){
+      actEl.innerHTML = acts.map(function(a){return '<button type="button" class="so-act'+(a.primary?' primary':'')+'" data-url="'+a.url.replace(/"/g,'&quot;')+'">'+a.label+'</button>';}).join('')
+        + '<button type="button" class="so-act ghost" data-act="retry">Másik keresés</button>'
+        + '<button type="button" class="so-go-anyway" data-url="'+originalUrl.replace(/"/g,'&quot;')+'">Mégis megnézem a találatokat →</button>';
+      actEl.querySelectorAll('[data-url]').forEach(function(b){ b.addEventListener('click', function(){ window.location.href=b.getAttribute('data-url'); }); });
+      var rt=actEl.querySelector('[data-act="retry"]'); if(rt) rt.addEventListener('click', function(){ closeSearchOverlay(); try{ input.focus(); input.select(); }catch(e){} });
+    }
+    _ov.querySelector('.so-phase-analyze').hidden=true;
+    _ov.querySelector('.so-phase-result').hidden=true;
+    _ov.querySelector('.so-phase-empty').hidden=false;
+    if(submitBtn) submitBtn.disabled=false;
+  }
   async function finishSearch(url, result, query, t0){
     const _ov = document.getElementById('searchOverlay');
     // szakterület szép neve (best effort, gyors)
@@ -726,7 +785,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     }catch(e){}
     const elapsed = Date.now() - (t0||Date.now());
     if(elapsed < 800) await new Promise(r=>setTimeout(r, 800-elapsed));
+
+    let empty=false;
+    if(String(url).indexOf('talalatok.html')===0){
+      const cnt = await countDoctors(result);
+      if(cnt===0) empty=true;
+    }
+
     if(_ov && _ov.classList.contains('open')){
+      if(empty){ showEmptyPhase(_ov, result, query, url); return; }
       _ov.querySelectorAll('.so-step').forEach(s=>{ s.classList.remove('active'); s.classList.add('done'); });
       const ce=_ov.querySelector('#soChips'); if(ce) ce.innerHTML=soChips(result, query, specName);
       _ov.querySelector('.so-phase-analyze').hidden=true;
@@ -755,6 +822,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     }
 
     const result = await parseSearchQuery(query);
+    sanitizeTimeFilters(result, query);
 
     if(result && result.target === 'clinic'){
       const p = new URLSearchParams();
@@ -1190,6 +1258,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var m = document.getElementById('mapModal');
     if(m) m.addEventListener('click', function(e){ if(e.target===m) closeMapModal(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var mm=document.getElementById('mapModal'); if(mm&&mm.classList.contains('open')) closeMapModal(); } });
+    var so=document.getElementById('searchOverlay');
+    if(so) so.addEventListener('click', function(e){ if(e.target===so) closeSearchOverlay(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var s=document.getElementById('searchOverlay'); if(s&&s.classList.contains('open')) closeSearchOverlay(); } });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wireMapModal); else wireMapModal();
 
@@ -1311,6 +1382,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .so-go-dot{width:7px;height:7px;border-radius:50%;background:#264ACA;animation:soBlink 1s ease-in-out infinite}
 @keyframes soBlink{0%,100%{opacity:.25}50%{opacity:1}}
 @media(max-width:480px){#searchOverlay .so-card{padding:26px 20px}}
+.so-empty-ic{width:54px;height:54px;margin:0 auto 14px;border-radius:50%;background:rgba(255,138,0,.12);display:flex;align-items:center;justify-content:center}
+.so-empty-ic svg{width:26px;height:26px;color:#FF8A00}
+.so-empty-msg{font-size:13.5px;color:#52617a;line-height:1.55;max-width:340px;margin:6px auto 18px}
+.so-empty-msg strong{color:#113293}
+.so-empty-actions{display:flex;flex-direction:column;gap:9px;max-width:320px;margin:0 auto}
+.so-act{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;padding:11px 16px;border-radius:11px;cursor:pointer;border:1px solid rgba(17,50,147,.16);background:#fff;color:#113293;transition:background .2s,border-color .2s}
+.so-act:hover{border-color:rgba(38,74,202,.4);background:#eef2ff}
+.so-act.primary{background:linear-gradient(135deg,#113293,#264ACA);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(17,50,147,.22)}
+.so-act.primary:hover{background:linear-gradient(135deg,#0d2776,#1f3fb0)}
+.so-act.ghost{background:transparent;border-color:transparent;color:#64748b}
+.so-act.ghost:hover{background:#f1f5f9}
+.so-go-anyway{margin-top:4px;background:none;border:none;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;color:#94a3b8;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.so-go-anyway:hover{color:#264ACA}
 @media(prefers-reduced-motion:reduce){.so-orb,.so-step.active i,.so-go-dot{animation:none}}
 </style>
 <div id="searchOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-live="polite">
@@ -1334,6 +1418,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div class="so-h">Ezt találtam a kérésében</div>
       <div id="soChips" class="so-chips"></div>
       <div class="so-go"><span class="so-go-dot"></span> Megnyitom a találatokat…</div>
+    </div>
+    <div class="so-phase so-phase-empty" hidden>
+      <div class="so-empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="8.5" y1="11" x2="13.5" y2="11"/></svg></div>
+      <div class="so-h">Nincs pontos találat</div>
+      <div class="so-q">Erre: „<span id="soEmptyQuery"></span>”</div>
+      <div id="soEmptyMsg" class="so-empty-msg"></div>
+      <div id="soEmptyActions" class="so-empty-actions"></div>
     </div>
   </div>
 </div>
