@@ -1295,7 +1295,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       if(!withCoords.length) return;
       const maps = await loadGoogleMaps();
       const pinIcon = window.szkBrandPin(maps, 34);
-      const heroMap = new maps.Map(heroEl, { center:{lat:47.4979,lng:19.0402}, zoom:12, styles:HOME_MAP_STYLE, disableDefaultUI:true, gestureHandling:'none', clickableIcons:false, keyboardShortcuts:false });
+      const heroMap = new maps.Map(heroEl, { center:{lat:47.4979,lng:19.0402}, zoom:13, styles:HOME_MAP_STYLE, disableDefaultUI:true, gestureHandling:'none', clickableIcons:false, keyboardShortcuts:false });
       const markers = withCoords.map(c => new maps.Marker({ position:{lat:Number(c.lat),lng:Number(c.lng)}, title:c.name, icon:pinIcon }));
       if(window.markerClusterer && window.markerClusterer.MarkerClusterer){
         new window.markerClusterer.MarkerClusterer({ map:heroMap, markers:markers, renderer:{ render:function(o){ const count=o.count, position=o.position; const size=count<10?30:count<50?36:44; const svg='data:image/svg+xml;utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-1)+'" fill="rgba(38,74,202,.18)"/><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-4)+'" fill="#113293" stroke="#fff" stroke-width="2"/><text x="'+(size/2)+'" y="'+(size/2)+'" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="'+(size*0.32)+'" font-weight="700">'+count+'</text></svg>'); return new maps.Marker({ position:position, icon:{ url:svg, scaledSize:new maps.Size(size,size), anchor:new maps.Point(size/2,size/2) } }); } } });
