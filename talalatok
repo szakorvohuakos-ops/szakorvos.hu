@@ -8,7 +8,7 @@
   <meta property="og:site_name" content="Szakorvos.hu">
   <meta property="og:title" content="Szakorvos kereső – Találatok | Szakorvos.hu">
   <meta property="og:description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
-  <meta property="og:image" content="https://www.szakorvos.hu/social/og-image.png">
+  <meta property="og:image" content="https://www.szakorvos.hu/og?type=search&amp;q=Szakorvos+kereső">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://www.szakorvos.hu/talalatok">
@@ -16,7 +16,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Szakorvos kereső – Találatok | Szakorvos.hu">
   <meta name="twitter:description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
-  <meta name="twitter:image" content="https://www.szakorvos.hu/social/og-image.png">
+  <meta name="twitter:image" content="https://www.szakorvos.hu/og?type=search&amp;q=Szakorvos+kereső">
   <link rel="alternate" hreflang="hu" href="https://www.szakorvos.hu/talalatok">
   <link rel="alternate" hreflang="x-default" href="https://www.szakorvos.hu/talalatok">
   <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
@@ -28,13 +28,6 @@
 <link rel="stylesheet" href="/css/components.css?v=20260526c">
 
 <title>Szakorvos kereső – Találatok | Szakorvos.hu</title>
-<link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/favicon/favicon-16.png" sizes="16x16" type="image/png">
-<link rel="shortcut icon" href="/favicon/favicon.ico">
-<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -657,6 +650,7 @@ nav#mainNav .btn-nav-fb:hover{background:#e7f0fe;border-color:rgba(24,119,242,.4
 <script type="application/ld+json" id="schemaItemList"></script>
 </head>
 <body>
+
 <!-- ══════════════════════════════════════════
      EGYSÉGES MENÜ — minden oldalon ugyanez
 ══════════════════════════════════════════ -->
@@ -678,7 +672,7 @@ nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:n
 nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:#113293;letter-spacing:-0.025em;line-height:1.1}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
 nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
 nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
 nav#mainNav .nav-link-tudastar{color:#113293 !important;font-weight:600}
@@ -686,9 +680,6 @@ nav#mainNav .nav-link-tudastar:hover{background:#eef2ff !important;color:#113293
 nav#mainNav .nav-links li{position:relative}
 nav#mainNav .nav-links li>a{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#113293;padding:7px 12px;border-radius:9px;transition:background .15s;letter-spacing:-0.005em;text-decoration:none}
 nav#mainNav .nav-links li>a:hover{background:#eef2ff}
-nav#mainNav .nav-link-vizsgalatok{color:#2C9650 !important;font-weight:700}
-nav#mainNav .nav-link-vizsgalatok:hover{background:rgba(44,150,80,.08) !important;color:#2C9650 !important}
-nav#mainNav .nav-dropdown-wide{min-width:260px}
 nav#mainNav .nav-links li>a svg{opacity:.6}
 nav#mainNav .dropdown{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid #DCE3EA;border-radius:14px;padding:.5rem;min-width:200px;box-shadow:0 12px 32px rgba(17,50,147,.1),0 4px 12px rgba(17,50,147,.05);opacity:0;visibility:hidden;transform:translateY(-6px);transition:all .18s;z-index:300}
 nav#mainNav .nav-links li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0)}
@@ -699,13 +690,9 @@ nav#mainNav .btn-nav-outline{font-family:'Inter',sans-serif;font-size:13.5px;fon
 nav#mainNav .btn-nav-outline:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.4);background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,rgba(238,242,255,.85) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(17,50,147,.06),0 8px 20px rgba(17,50,147,.1)}
 nav#mainNav .btn-nav-cta{font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF8A00 0%,#FFA726 100%);border:none;padding:7px 18px;border-radius:9px;box-shadow:0 4px 14px rgba(255,138,0,.3);transition:all .15s;text-decoration:none;letter-spacing:-0.005em;cursor:pointer;display:inline-block}
 nav#mainNav .btn-nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.4)}
-nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:12.2px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border:none;padding:8px 16px;border-radius:8px;box-shadow:0 2px 7px rgba(17,50,147,.24);transition:transform .2s cubic-bezier(.34,1.4,.64,1),box-shadow .2s;text-decoration:none;cursor:pointer;letter-spacing:.005em;white-space:nowrap}
-nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(17,50,147,.35)}
-nav#mainNav .btn-nav-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;color:#113293;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.7) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(17,50,147,.16);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.06);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s,color .25s;text-decoration:none;cursor:pointer}
-nav#mainNav .btn-nav-icon:hover{transform:translateY(-1px);border-color:rgba(17,50,147,.32);color:#264ACA;box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 6px 16px rgba(17,50,147,.13)}
-nav#mainNav .btn-nav-icon svg{width:18px;height:18px}
-nav#mainNav .btn-nav-fb:hover{color:#1877F2;border-color:rgba(24,119,242,.4)}
-
+nav#mainNav .btn-nav-partner{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:#FF8A00;background:linear-gradient(180deg,rgba(255,247,237,.85) 0%,rgba(255,237,213,.75) 100%);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,138,0,.32);padding:7px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.85) inset,0 1px 2px rgba(255,138,0,.06),0 4px 12px rgba(255,138,0,.08);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s cubic-bezier(.4,0,.2,1),border-color .3s ease,background .3s ease;text-decoration:none;cursor:pointer;letter-spacing:-0.005em;white-space:nowrap}
+nav#mainNav .btn-nav-partner:hover{transform:translateY(-1px);border-color:rgba(255,138,0,.55);background:linear-gradient(180deg,rgba(255,247,237,1) 0%,rgba(255,231,200,.92) 100%);box-shadow:0 1px 0 rgba(255,255,255,1) inset,0 2px 4px rgba(255,138,0,.1),0 8px 18px rgba(255,138,0,.15)}
+nav#mainNav .btn-nav-partner svg{flex-shrink:0;color:#FF8A00}
 nav#mainNav .nav-mobile-toggle{display:none;background:transparent;border:none;padding:7px;border-radius:8px;cursor:pointer;margin-left:auto}
 nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 .mobile-drawer{visibility:hidden;opacity:0;position:fixed;top:72px;right:0;left:0;background:#fff;border-bottom:1px solid #DCE3EA;box-shadow:0 12px 32px rgba(17,50,147,.1);transform:translateY(-12px);transition:opacity .22s,transform .25s,visibility 0s linear .25s;z-index:399;max-height:calc(100vh - 72px);overflow-y:auto;font-family:'Inter',sans-serif;pointer-events:none}
@@ -721,45 +708,53 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 }
 </style>
 
-<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}.nav-dev-badge{display:inline-flex;align-items:center;margin-left:2px;padding:3px 10px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:#b45309;background:linear-gradient(135deg,rgba(255,179,71,.22),rgba(255,138,0,.16));border:1px solid rgba(255,138,0,.4);border-radius:100px;white-space:nowrap;line-height:1.5}@media(max-width:600px){.nav-dev-badge{display:none}}nav#mainNav .nav-logo-img-full{height:42px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-img-full{height:34px}}nav#mainNav .nav-logo-mark{height:34px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-mark{height:30px}nav#mainNav .nav-logo-text{font-size:20px}}</style>
 <nav id="mainNav">
   <div class="nav-row-top">
     <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="nav-logo-mark" aria-hidden="true">
-<defs>
- <linearGradient id="pin_ni" x1="0.15" y1="0" x2="0.5" y2="1">
-   <stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/>
- </linearGradient>
- <linearGradient id="field_ni" x1="0" y1="0" x2="0" y2="1">
-   <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#EAF0FA"/>
- </linearGradient>
- <linearGradient id="cr_ni" x1="0.2" y1="0" x2="0.5" y2="1">
-   <stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/>
- </linearGradient>
- <linearGradient id="sheen_ni" x1="0" y1="0" x2="0" y2="1">
-   <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
- </linearGradient>
- <radialGradient id="halo_ni" cx="0.5" cy="0.5" r="0.5">
-   <stop offset="60%" stop-color="#2C9650" stop-opacity="0.0"/><stop offset="100%" stop-color="#2C9650" stop-opacity="0.10"/>
- </radialGradient>
- <filter id="sh_ni" x="-80%" y="-80%" width="260%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.6"/></filter>
-</defs>
-<g transform="translate(2.5,-4) scale(0.5)"><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="#FFFFFF"/><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="none" stroke="url(#pin_ni)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M 54.40 34.60 Q 54.40 32.00 57.00 32.00 L 63.00 32.00 Q 65.60 32.00 65.60 34.60 L 65.60 40.80 Q 65.60 43.40 68.20 43.40 L 74.40 43.40 Q 77.00 43.40 77.00 46.00 L 77.00 52.00 Q 77.00 54.60 74.40 54.60 L 68.20 54.60 Q 65.60 54.60 65.60 57.20 L 65.60 63.40 Q 65.60 66.00 63.00 66.00 L 57.00 66.00 Q 54.40 66.00 54.40 63.40 L 54.40 57.20 Q 54.40 54.60 51.80 54.60 L 45.60 54.60 Q 43.00 54.60 43.00 52.00 L 43.00 46.00 Q 43.00 43.40 45.60 43.40 L 51.80 43.40 Q 54.40 43.40 54.40 40.80 Z" fill="url(#cr_ni)"/></g>
-</svg><span class="nav-logo-text">Szakorvos<em>.hu</em></span><span class="nav-dev-badge">Fejlesztés alatt</span>
+      <svg class="nav-logo-img" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="36" height="36" rx="8" fill="#113293"/><path d="M18 9 L18 27 M12 13 Q18 11 24 13 M12 23 Q18 25 24 23" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/><circle cx="18" cy="18" r="3" fill="#fff"/></svg>
+      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
     </a>
 
     <ul class="nav-links">
       <li><a href="/talalatok.html">Orvosok</a></li>
       <li><a href="/klinikak.html">Klinikák</a></li>
       <li><a href="/tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li>
+        <a href="/vizsgalatok.html" class="nav-link-vizsgalatok">Szakterületek, vizsgálatok
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="dropdown nav-dropdown-wide">
+          <a href="/talalatok.html?spec=kardiologia">Kardiológia</a>
+          <a href="/talalatok.html?spec=borgyogyaszat">Bőrgyógyászat</a>
+          <a href="/talalatok.html?spec=csecsemo-es-gyermekgyogyaszat">Gyermekgyógyászat</a>
+          <a href="/talalatok.html?spec=gasztroenterologia">Gasztroenterológia</a>
+          <a href="/talalatok.html?spec=neurologia">Neurológia</a>
+          <a href="/talalatok.html?spec=ortopedia-es-traumatologia">Ortopédia és traumatológia</a>
+          <a href="/talalatok.html?spec=altalanos-fogaszat">Általános fogászat</a>
+          <a href="/talalatok.html?spec=endokrinologia-es-anyagcsere">Endokrinológia</a>
+          <a href="/talalatok.html?spec=ful-orr-gegeszet">Fül-orr-gégészet</a>
+          <a href="/talalatok.html?spec=szemeszet">Szemészet</a>
+          <div style="height:1px;background:#e5e7eb;margin:6px 4px"></div>
+          <a href="/vizsgalatok.html" style="font-weight:600;color:#16a34a!important;display:flex;align-items:center;justify-content:space-between">
+            További szakterületek
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </li>
       <li><a href="/kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
     <div class="nav-actions">
+      <a href="/register.html" class="btn-nav-partner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Legyen Ön is partnerünk
+      </a>
+      <a href="https://www.facebook.com/szakorvos.hu" target="_blank" rel="noopener" class="btn-nav-icon btn-nav-fb" aria-label="Facebook" title="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+      </a>
       <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="/register.html" class="btn-nav-partner">Partner program</a>
     </div>
 
     <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
@@ -777,6 +772,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     <a href="/talalatok.html" class="mobile-nav-item">Orvosok</a>
     <a href="/klinikak.html" class="mobile-nav-item">Klinikák</a>
     <a href="/tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
+    <a href="/vizsgalatok.html" class="mobile-nav-item" style="color:#113293;font-weight:700;">Vizsgálatok</a>
     <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
@@ -813,9 +809,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 })();
 </script>
 <!-- ══════ MENÜ VÉGE ══════ -->
-
-
-
 
 
 
@@ -1231,8 +1224,8 @@ const PGS=8;
 const UP=new URLSearchParams(location.search);
 let specQ=UP.get('specialty')||UP.get('spec')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
 // ─── Új URL-paraméterek (AI keresőből és deep-linkekből) ───
-let daysQ        = (UP.get('days') || '').split(',').map(s=>parseInt(s,10)).filter(n=>!isNaN(n) && n>=0 && n<=6);
-let weekendQ     = UP.get('weekend') === '1' || UP.get('weekend') === 'true';
+const daysQ      = (UP.get('days') || '').split(',').map(s=>parseInt(s,10)).filter(n=>!isNaN(n) && n>=0 && n<=6);
+const weekendQ   = UP.get('weekend') === '1' || UP.get('weekend') === 'true';
 const genderQ    = (UP.get('gender') || '').toLowerCase();   // 'male' | 'female' | ''
 const langQ      = (UP.get('lang') || '').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
 const onlineQ    = UP.get('online') === '1' || UP.get('online') === 'true';
@@ -1240,15 +1233,6 @@ const urgentQ    = UP.get('urgent') === '1' || UP.get('urgent') === 'true'; // m
 const priceMaxQ  = parseInt(UP.get('price_max') || '0', 10);
 const expMinQ    = parseInt(UP.get('exp_min') || '0', 10);
 const insuranceQ = (UP.get('insurance') || '').split(',').map(s=>s.trim()).filter(Boolean);
-
-// ─── Nap-szűrő guard ───
-// Ha van szöveges keresés (q), de NINCS benne nap-/hétvége-szó, akkor a nap-szűrőt nem alkalmazzuk.
-// (A parse-search néha tévesen hozzáad weekend/days értéket, amit a felhasználó nem írt be.)
-(function(){
-  var t=(freeQ||'').toLowerCase().replace(/szombathely/g,' ');
-  var dayWords=['hétfő','kedd','szerda','csütörtök','péntek','szombat','vasárnap','hétvég','hétközben','munkanap','weekend'];
-  if(freeQ && !dayWords.some(function(w){return t.indexOf(w)!==-1;})){ daysQ=[]; weekendQ=false; }
-})();
 // Geolokáció: ?lat=47.5&lng=19.0&radius=15
 const latQ       = parseFloat(UP.get('lat') || '');
 const lngQ       = parseFloat(UP.get('lng') || '');
@@ -2235,46 +2219,23 @@ function cardH(d,i){
     ? `<div class="szk-card-avatar"><img loading="lazy" decoding="async" src="${d.photo_url}" alt="${d.name}">${avD.length?'<span class="szk-card-dot"></span>':''}</div>`
     : `<div class="szk-card-avatar" style="background:linear-gradient(135deg,${col},${col}bb)">${init}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
 
-  const chipTags = tags.slice(0,5);
-  const chipMore = Math.max(0, tags.length - 5);
-  const specChips = chipTags.map(t => `<span class="kc-chip">${escapeHtml(t)}</span>`).join('') + (chipMore ? `<span class="kc-chip more">+${chipMore} további</span>` : '');
-  const feeFmt = (f && f > 0) ? Number(f).toLocaleString('hu-HU') + ' Ft' : '';
-  const eduVal = d.university ? escapeHtml(d.university) + (d.graduation_year ? ` (${d.graduation_year})` : '') : '';
-  const langsAll = langsRaw.map(s => (s || '').toString().trim()).filter(Boolean);
-  const introTxt = truncateWords(d.short_intro || d.bio || '', 20);
-  const IPIN='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-  const IEXP='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
-  const ISTR='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-  const IEDU='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>';
-  const IFEE='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
-  const ILNG='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
-  const gridItems = [];
-  gridItems.push(`<div class="kc-info">${IEXP}<div><div class="kc-info-l">Tapasztalat</div><div class="kc-info-v">${d.experience_years ? d.experience_years + ' év' : '—'}</div></div></div>`);
-  gridItems.push(`<div class="kc-info">${ISTR}<div><div class="kc-info-l">Értékelés</div><div class="kc-info-v">${ratingFmt ? ratingFmt + (reviewCount ? ` (${reviewCount})` : '') : 'Nincs még'}</div></div></div>`);
-  if(eduVal) gridItems.push(`<div class="kc-info">${IEDU}<div><div class="kc-info-l">Egyetem</div><div class="kc-info-v">${eduVal}</div></div></div>`);
-  if(feeFmt) gridItems.push(`<div class="kc-info">${IFEE}<div><div class="kc-info-l">Konzultáció</div><div class="kc-info-v">${feeFmt}</div></div></div>`);
-  if(langsAll.length) gridItems.push(`<div class="kc-info">${ILNG}<div><div class="kc-info-l">Nyelvek</div><div class="kc-info-v">${langsAll.map(l=>escapeHtml(l.charAt(0).toUpperCase()+l.slice(1))).join(', ')}</div></div></div>`);
-  if(city) gridItems.push(`<div class="kc-info">${IPIN}<div><div class="kc-info-l">Város</div><div class="kc-info-v">${escapeHtml(city)}</div></div></div>`);
-
-  return `<div class="szk-card kc" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
+  return `<div class="szk-card" style="animation-delay:${(i%PGS)*.05}s" onclick="goToProfile('${d.id}')">
     <div class="szk-card-top">
       ${avEl}
       <div class="szk-card-body">
         <div class="szk-card-title">${d.title?escapeHtml(d.title)+' ':''}${escapeHtml(d.name)}${d.verified_at?`<span class="szk-verified" title="Ellenőrzött profil"></span>`:''}</div>
         <div class="szk-card-subtitle">${escapeHtml(specsDisplay)}</div>
         ${featureBadges.length ? `<div class="szk-feature-badges">${featureBadges.join('')}</div>` : ''}
-        <div class="kc-meta">
-          ${d.experience_years ? `<span><strong>${d.experience_years} év</strong> tapasztalat</span>` : ''}
-          ${d.experience_years && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
-          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${reviewCount ? ` <span class="szk-card-meta-soft">(${reviewCount} értékelés)</span>` : ''}` : ''}
-        </div>
-        ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
+
+        ${(d.experience_years || langs.length) ? `<div class="szk-card-stack">
+          <div class="szk-card-meta">
+            ${d.experience_years ? `<span><strong>${d.experience_years} év</strong> tapasztalat</span>` : ''}
+            ${d.experience_years && langs.length ? `<span class="szk-card-meta-dot"></span>` : ''}
+            ${langs.map(l => `<span class="szk-card-meta-lang">${escapeHtml(l.charAt(0).toUpperCase() + l.slice(1))}</span>`).join('')}
+          </div>
+        </div>` : ''}
       </div>
     </div>
-
-    ${introTxt ? `<div class="kc-intro">${escapeHtml(introTxt)}</div>` : ''}
-
-    <div class="kc-grid">${gridItems.join('')}</div>
 
     <div class="szk-card-foot">
       <div class="szk-card-foot-info">
@@ -2292,7 +2253,6 @@ function cardH(d,i){
       </div>
     </div>
   </div>`;
-
 }
 
 // 6-7 szó után "…" — a kártya rövid summary-jéhez
@@ -2544,9 +2504,57 @@ load();
 </script>
 
 
-
-
-
+<!-- ══════ LÁBLÉC KEZDETE ══════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <p class="footer-tagline">Az okos orvoskeresés platform</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn">f</a>
+          <a href="#" class="footer-social-btn">in</a>
+          <a href="#" class="footer-social-btn">ig</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="talalatok.html">Orvoskeresés</a>
+          <a href="index.html">AI asszisztens</a>
+          <a href="talalatok.html">Időpontfoglalás</a>
+          <a href="vizsgalatok.html">Vizsgálatok</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Partnereknek</div>
+          <a href="register.html">Orvosoknak</a>
+          <a href="register.html">Klinikáknak</a>
+          <a href="register.html">Árak</a>
+          <a href="register.html">Regisztráció</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Cég</div>
+          <a href="#">Rólunk</a>
+          <a href="kapcsolat.html">Kapcsolat</a>
+          <a href="tudastar.html">Blog</a>
+          <a href="#">Karrier</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Jogi</div>
+          <a href="adatvedelem.html">Adatvédelem</a>
+          <a href="#">ÁSZF</a>
+          <a href="#">Cookie</a>
+          <a href="#">GDPR</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
+      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
+    </div>
+  </div>
+</footer>
+<!-- ══════ LÁBLÉC VÉGE ══════ -->
 
 <script>
 /* ── ÉLŐ MINI-TÉRKÉP a fejlécben ─────────────────────────────────── */
@@ -2601,7 +2609,12 @@ load();
         clickableIcons: false,
         keyboardShortcuts: false
       });
-      const pinIcon = window.szkBrandPin(maps, 36);
+      const pinIcon = {
+        path: 'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z',
+        fillColor: '#113293', fillOpacity: 1,
+        strokeColor: '#ffffff', strokeWeight: 2, scale: .6,
+        anchor: new maps.Point(12, 36)
+      };
       const bounds = new maps.LatLngBounds();
       const _markers = [];
       withCoords.forEach(c => {
@@ -2646,7 +2659,7 @@ load();
 
 /* 3-oszlopos elrendezés: szűrő | találatok | térkép */
 @media(min-width:1201px){
-  .pw{grid-template-columns:280px minmax(0,1fr) 190px !important}
+  .pw{grid-template-columns:280px minmax(0,1fr) 380px !important}
   #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
   #resultsMapCol .rmap-close{display:none}
   .pw .rgrid{grid-template-columns:1fr !important}
@@ -2706,7 +2719,7 @@ load();
     const bounds=new maps.LatLngBounds();
     pts.forEach(function(p){
       const m=new maps.Marker({position:{lat:p.lat,lng:p.lng},title:p.d.name||'',
-        icon: window.szkBrandPin(maps, 40)});
+        icon:{path:'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z',fillColor:'#113293',fillOpacity:1,strokeColor:'#fff',strokeWeight:2,scale:1.1,anchor:new maps.Point(12,36)}});
       m.addListener('click',function(){
         if(typeof openPanel==='function'&&p.d.id){ openPanel(p.d.id); }
         else { info.setContent('<div style="font:600 13px Inter,sans-serif;color:#113293">'+esc(p.d.name)+'<br><span style="font-weight:500;color:#475569">'+esc(p.clinic&&p.clinic.name||'')+'</span></div>'); info.open(map,m); }
@@ -2736,120 +2749,5 @@ load();
 })();
 </script>
 
-<!-- ══════ EGYSÉGES LÁBLÉC — minden oldalon ugyanez ══════ -->
-<style id="site-footer-css">
-.site-footer{background:#1a1f36;color:rgba(255,255,255,.7);padding:4rem 0 1.5rem;width:100%;margin:0;display:block;box-sizing:border-box}
-.footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
-.footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
-.footer-brand{min-width:0}
-.footer-logo{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:#fff;letter-spacing:-0.025em;margin-bottom:.4rem;display:flex;align-items:center;gap:9px}
-.footer-logo-mark{height:30px;width:auto;display:block;flex-shrink:0}
-.footer-logo-text{color:#fff}
-.footer-logo-text .hu{color:#7fe8a3}
-.footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
-.footer-social{display:flex;gap:8px}
-.footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
-.footer-social-btn:hover{background:#FF8A00;border-color:#FF8A00;transform:translateY(-1px)}
-
-.footer-links{display:grid;grid-template-columns:repeat(4,1fr);gap:1.75rem}
-.footer-col{display:flex;flex-direction:column;gap:9px}
-.footer-col-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#fff;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
-.footer-col a{font-size:13.5px;color:rgba(255,255,255,.65);font-weight:500;transition:color .15s;text-decoration:none}
-.footer-col a:hover{color:#fff}
-
-.footer-bottom{padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.footer-copy{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
-.footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
-@media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}
-</style>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="footer-logo-mark" aria-hidden="true">
-<defs>
- <linearGradient id="pin_fi" x1="0.15" y1="0" x2="0.5" y2="1">
-   <stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/>
- </linearGradient>
- <linearGradient id="field_fi" x1="0" y1="0" x2="0" y2="1">
-   <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#EAF0FA"/>
- </linearGradient>
- <linearGradient id="cr_fi" x1="0.2" y1="0" x2="0.5" y2="1">
-   <stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/>
- </linearGradient>
- <linearGradient id="sheen_fi" x1="0" y1="0" x2="0" y2="1">
-   <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
- </linearGradient>
- <radialGradient id="halo_fi" cx="0.5" cy="0.5" r="0.5">
-   <stop offset="60%" stop-color="#2C9650" stop-opacity="0.0"/><stop offset="100%" stop-color="#2C9650" stop-opacity="0.10"/>
- </radialGradient>
- <filter id="sh_fi" x="-80%" y="-80%" width="260%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.6"/></filter>
-</defs>
-<g transform="translate(2.5,-4) scale(0.5)"><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="#FFFFFF"/><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="none" stroke="url(#pin_fi)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M 54.40 34.60 Q 54.40 32.00 57.00 32.00 L 63.00 32.00 Q 65.60 32.00 65.60 34.60 L 65.60 40.80 Q 65.60 43.40 68.20 43.40 L 74.40 43.40 Q 77.00 43.40 77.00 46.00 L 77.00 52.00 Q 77.00 54.60 74.40 54.60 L 68.20 54.60 Q 65.60 54.60 65.60 57.20 L 65.60 63.40 Q 65.60 66.00 63.00 66.00 L 57.00 66.00 Q 54.40 66.00 54.40 63.40 L 54.40 57.20 Q 54.40 54.60 51.80 54.60 L 45.60 54.60 Q 43.00 54.60 43.00 52.00 L 43.00 46.00 Q 43.00 43.40 45.60 43.40 L 51.80 43.40 Q 54.40 43.40 54.40 40.80 Z" fill="url(#cr_fi)"/></g>
-</svg><span class="footer-logo-text">Szakorvos<span class="hu">.hu</span></span></div>
-        <p class="footer-tagline">Az okos orvoskeresés platform</p>
-        <div class="footer-social">
-          <a href="#" class="footer-social-btn">f</a>
-          <a href="#" class="footer-social-btn">in</a>
-          <a href="#" class="footer-social-btn">ig</a>
-        </div>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <div class="footer-col-title">Platform</div>
-          <a href="talalatok.html">Orvoskeresés</a>
-          <a href="index.html">AI asszisztens</a>
-          <a href="talalatok.html">Időpontfoglalás</a>
-          <a href="vizsgalatok.html">Vizsgálatok</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Partnereknek</div>
-          <a href="register.html">Orvosoknak</a>
-          <a href="register.html">Klinikáknak</a>
-          <a href="register.html">Árak</a>
-          <a href="register.html">Regisztráció</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Cég</div>
-          <a href="#">Rólunk</a>
-          <a href="kapcsolat.html">Kapcsolat</a>
-          <a href="tudastar.html">Blog</a>
-          <a href="#">Karrier</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Jogi</div>
-          <a href="adatvedelem.html">Adatvédelem</a>
-          <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
-          <a href="#">GDPR</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
-      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
-    </div>
-  </div>
-</footer>
-<!-- ══════ LÁBLÉC VÉGE ══════ -->
-<style id="orvos-card-skin">
-.pw main .szk-card.kc{display:block;padding:0;overflow:hidden}
-.kc .szk-card-top{padding:20px 22px 14px}
-.kc .szk-feature-badges{margin-top:10px}
-.kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
-.kc-meta .kc-m-star{color:#d97706;font-weight:700}
-.kc-meta strong{color:#113293}
-.kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
-.kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
-.kc-intro{padding:0 22px 4px;font-size:13px;line-height:1.55;color:#52617a;font-style:italic}
-.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 22px;border-top:1px solid rgba(220,227,234,.5);border-bottom:1px solid rgba(220,227,234,.5)}
-.kc-info{display:flex;align-items:flex-start;gap:9px;min-width:0}
-.kc-info svg{color:#264ACA;flex-shrink:0;margin-top:1px}
-.kc-info-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;margin-bottom:2px}
-.kc-info-v{font-size:13.5px;color:#1a1f36;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
-.kc .szk-card-foot{padding:14px 22px 18px;border-top:none}
-</style>
-<script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
 </body>
 </html>

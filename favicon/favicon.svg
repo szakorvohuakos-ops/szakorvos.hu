@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+<defs>
+ <linearGradient id="pin" x1="0.15" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/>
+ </linearGradient>
+ <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#EAF0FA"/>
+ </linearGradient>
+ <linearGradient id="cr" x1="0.2" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/>
+ </linearGradient>
+ <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
+ </linearGradient>
+ <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+   <stop offset="60%" stop-color="#2C9650" stop-opacity="0.0"/><stop offset="100%" stop-color="#2C9650" stop-opacity="0.10"/>
+ </radialGradient>
+ <filter id="sh" x="-80%" y="-80%" width="260%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.6"/></filter>
+</defs>
+<g transform="translate(2.5,-4) scale(0.5)"><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="#FFFFFF"/><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="none" stroke="url(#pin)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M 54.40 34.60 Q 54.40 32.00 57.00 32.00 L 63.00 32.00 Q 65.60 32.00 65.60 34.60 L 65.60 40.80 Q 65.60 43.40 68.20 43.40 L 74.40 43.40 Q 77.00 43.40 77.00 46.00 L 77.00 52.00 Q 77.00 54.60 74.40 54.60 L 68.20 54.60 Q 65.60 54.60 65.60 57.20 L 65.60 63.40 Q 65.60 66.00 63.00 66.00 L 57.00 66.00 Q 54.40 66.00 54.40 63.40 L 54.40 57.20 Q 54.40 54.60 51.80 54.60 L 45.60 54.60 Q 43.00 54.60 43.00 52.00 L 43.00 46.00 Q 43.00 43.40 45.60 43.40 L 51.80 43.40 Q 54.40 43.40 54.40 40.80 Z" fill="url(#cr)"/></g>
+</svg>

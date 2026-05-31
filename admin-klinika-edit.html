@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>Klinika szerkesztése – Szakorvos.hu Admin</title>
+<link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/favicon/favicon.ico">
+<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#113293">
+<meta property="og:image" content="https://www.szakorvos.hu/social/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.szakorvos.hu/social/og-image.png">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
@@ -461,7 +474,7 @@ nav#mainNav .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:n
 nav#mainNav .nav-logo-img{height:40px;width:40px;object-fit:contain;display:block;flex-shrink:0}
 nav#mainNav .nav-logo-icon{width:42px;height:42px;background:linear-gradient(135deg,#113293 0%,#264ACA 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.25)}
 nav#mainNav .nav-logo-icon svg{width:24px;height:24px}
-nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#113293;letter-spacing:-0.02em;line-height:1.1}
+nav#mainNav .nav-logo-text{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:#113293;letter-spacing:-0.025em;line-height:1.1}
 nav#mainNav .nav-logo-text em{color:#2C9650;font-style:normal}
 nav#mainNav .nav-links{display:flex;list-style:none;gap:6px;align-items:center;margin:0 auto;padding:0}
 nav#mainNav .nav-link-tudastar{color:#113293 !important;font-weight:600}
@@ -504,12 +517,31 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 }
 </style>
 
-<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}</style>
+<style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}.nav-dev-badge{display:inline-flex;align-items:center;margin-left:2px;padding:3px 10px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:#b45309;background:linear-gradient(135deg,rgba(255,179,71,.22),rgba(255,138,0,.16));border:1px solid rgba(255,138,0,.4);border-radius:100px;white-space:nowrap;line-height:1.5}@media(max-width:600px){.nav-dev-badge{display:none}}nav#mainNav .nav-logo-img-full{height:42px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-img-full{height:34px}}nav#mainNav .nav-logo-mark{height:34px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-mark{height:30px}nav#mainNav .nav-logo-text{font-size:20px}}</style>
 <nav id="mainNav">
   <div class="nav-row-top">
     <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
-      <svg class="nav-logo-img" width="38" height="38" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="navCrossG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#113293"/><stop offset="1" stop-color="#2f5bdd"/></linearGradient><linearGradient id="navCheckG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2C9650"/><stop offset="1" stop-color="#35B26B"/></linearGradient></defs><rect x="24" y="11" width="8" height="34" rx="4" fill="url(#navCrossG)"/><rect x="11" y="24" width="34" height="8" rx="4" fill="url(#navCrossG)"/><circle cx="46" cy="46" r="13.5" fill="#fff"/><circle cx="46" cy="46" r="12" fill="url(#navCheckG)"/><polyline points="40.5,46 44,49.5 51.5,42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div class="nav-logo-text">Szakorvos<em>.hu</em></div>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="nav-logo-mark" aria-hidden="true">
+<defs>
+ <linearGradient id="pin_ni" x1="0.15" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/>
+ </linearGradient>
+ <linearGradient id="field_ni" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#EAF0FA"/>
+ </linearGradient>
+ <linearGradient id="cr_ni" x1="0.2" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/>
+ </linearGradient>
+ <linearGradient id="sheen_ni" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
+ </linearGradient>
+ <radialGradient id="halo_ni" cx="0.5" cy="0.5" r="0.5">
+   <stop offset="60%" stop-color="#2C9650" stop-opacity="0.0"/><stop offset="100%" stop-color="#2C9650" stop-opacity="0.10"/>
+ </radialGradient>
+ <filter id="sh_ni" x="-80%" y="-80%" width="260%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.6"/></filter>
+</defs>
+<g transform="translate(2.5,-4) scale(0.5)"><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="#FFFFFF"/><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="none" stroke="url(#pin_ni)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M 54.40 34.60 Q 54.40 32.00 57.00 32.00 L 63.00 32.00 Q 65.60 32.00 65.60 34.60 L 65.60 40.80 Q 65.60 43.40 68.20 43.40 L 74.40 43.40 Q 77.00 43.40 77.00 46.00 L 77.00 52.00 Q 77.00 54.60 74.40 54.60 L 68.20 54.60 Q 65.60 54.60 65.60 57.20 L 65.60 63.40 Q 65.60 66.00 63.00 66.00 L 57.00 66.00 Q 54.40 66.00 54.40 63.40 L 54.40 57.20 Q 54.40 54.60 51.80 54.60 L 45.60 54.60 Q 43.00 54.60 43.00 52.00 L 43.00 46.00 Q 43.00 43.40 45.60 43.40 L 51.80 43.40 Q 54.40 43.40 54.40 40.80 Z" fill="url(#cr_ni)"/></g>
+</svg><span class="nav-logo-text">Szakorvos<em>.hu</em></span><span class="nav-dev-badge">Fejlesztés alatt</span>
     </a>
 
     <ul class="nav-links">
@@ -606,8 +638,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .footer-inner{max-width:1400px;margin:0 auto;padding:0 3.5%;box-sizing:border-box}
 .footer-top{display:grid;grid-template-columns:1.2fr 3fr;gap:3.5rem;margin-bottom:3rem}
 .footer-brand{min-width:0}
-.footer-logo{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:.4rem}
-.footer-logo span{color:#7fe8a3}
+.footer-logo{font-family:'Inter',sans-serif;font-size:23px;font-weight:600;color:#fff;letter-spacing:-0.025em;margin-bottom:.4rem;display:flex;align-items:center;gap:9px}
+.footer-logo-mark{height:30px;width:auto;display:block;flex-shrink:0}
+.footer-logo-text{color:#fff}
+.footer-logo-text .hu{color:#7fe8a3}
 .footer-tagline{font-size:13.5px;line-height:1.6;margin-bottom:1.25rem;color:rgba(255,255,255,.6)}
 .footer-social{display:flex;gap:8px}
 .footer-social-btn{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.08);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:all .15s;text-decoration:none;border:1px solid rgba(255,255,255,.1)}
@@ -628,7 +662,27 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="footer-logo">Szakorvos<span>.hu</span></div>
+        <div class="footer-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" class="footer-logo-mark" aria-hidden="true">
+<defs>
+ <linearGradient id="pin_fi" x1="0.15" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/>
+ </linearGradient>
+ <linearGradient id="field_fi" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#EAF0FA"/>
+ </linearGradient>
+ <linearGradient id="cr_fi" x1="0.2" y1="0" x2="0.5" y2="1">
+   <stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/>
+ </linearGradient>
+ <linearGradient id="sheen_fi" x1="0" y1="0" x2="0" y2="1">
+   <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="45%" stop-color="#FFFFFF" stop-opacity="0"/>
+ </linearGradient>
+ <radialGradient id="halo_fi" cx="0.5" cy="0.5" r="0.5">
+   <stop offset="60%" stop-color="#2C9650" stop-opacity="0.0"/><stop offset="100%" stop-color="#2C9650" stop-opacity="0.10"/>
+ </radialGradient>
+ <filter id="sh_fi" x="-80%" y="-80%" width="260%" height="320%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.6"/></filter>
+</defs>
+<g transform="translate(2.5,-4) scale(0.5)"><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="#FFFFFF"/><path d="M 60.00 116.00 L 28.92 69.99 A 37.50 37.50 0 1 1 91.08 69.99 Z" fill="none" stroke="url(#pin_fi)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M 54.40 34.60 Q 54.40 32.00 57.00 32.00 L 63.00 32.00 Q 65.60 32.00 65.60 34.60 L 65.60 40.80 Q 65.60 43.40 68.20 43.40 L 74.40 43.40 Q 77.00 43.40 77.00 46.00 L 77.00 52.00 Q 77.00 54.60 74.40 54.60 L 68.20 54.60 Q 65.60 54.60 65.60 57.20 L 65.60 63.40 Q 65.60 66.00 63.00 66.00 L 57.00 66.00 Q 54.40 66.00 54.40 63.40 L 54.40 57.20 Q 54.40 54.60 51.80 54.60 L 45.60 54.60 Q 43.00 54.60 43.00 52.00 L 43.00 46.00 Q 43.00 43.40 45.60 43.40 L 51.80 43.40 Q 54.40 43.40 54.40 40.80 Z" fill="url(#cr_fi)"/></g>
+</svg><span class="footer-logo-text">Szakorvos<span class="hu">.hu</span></span></div>
         <p class="footer-tagline">Az okos orvoskeresés platform</p>
         <div class="footer-social">
           <a href="#" class="footer-social-btn">f</a>
