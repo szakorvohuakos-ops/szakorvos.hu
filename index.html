@@ -37,6 +37,7 @@
   --text:#1a1f36;--sub:#3c4564;--muted:#6b7494;
   --border:#e4e8f0;--border-soft:#eef0f5;
   --grad-blue:linear-gradient(135deg,#113293 0%,#264ACA 100%);
+  --grad-green:linear-gradient(135deg,#1f7e3e 0%,#2C9650 100%);
   --grad-blue-text:linear-gradient(135deg,#113293 0%,#264ACA 60%,#3957d5 100%);
   --grad-green-text:linear-gradient(135deg,#2C9650 0%,#3fb568 60%,#4cc97c 100%);
   --grad-orange-text:linear-gradient(135deg,#c2510c 0%,#e8732e 60%,#ff8a00 100%);
@@ -72,7 +73,11 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .hero-title-line{display:block;white-space:nowrap}
 .hero-title-line + .hero-title-line{margin-top:.18em}
 .hero-title-accent{background:var(--grad-green-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
-.hero-subtitle{font-size:15.5px;font-weight:500;color:var(--sub);line-height:1.65;max-width:560px;margin-top:-4px}
+.hero-title-accent-blue{background:var(--grad-blue-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+.hero-subtitle{font-size:15.5px;font-weight:500;color:var(--sub);line-height:1.65;max-width:640px;margin-top:-4px}
+.hero-sub-num{font-weight:700;white-space:nowrap}
+.hero-sub-num.doc{color:var(--brand)}
+.hero-sub-num.cli{color:var(--green)}
 .hero-subtitle b{color:var(--brand-2);font-weight:600}
 
 .smart-search{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.94) 0%,rgba(252,253,255,.84) 100%);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1.5px solid rgba(255,255,255,.85);border-radius:20px;padding:1.2rem 1.5rem 1.3rem;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.06),0 16px 40px rgba(17,50,147,.1),0 32px 64px rgba(17,50,147,.13);transition:transform .35s var(--ease-out),box-shadow .35s}
@@ -93,7 +98,8 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .online-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(44,150,80,.15);animation:dotPulse 2s ease-in-out infinite}
 @keyframes dotPulse{0%,100%{box-shadow:0 0 0 3px rgba(44,150,80,.15)}50%{box-shadow:0 0 0 5px rgba(44,150,80,.05)}}
 
-.search-input-wrap{position:relative;display:flex;align-items:center;background:#fff;border:1.5px solid #e6eaf3;border-radius:12px;transition:border-color .2s,box-shadow .2s}
+.search-input-wrap{position:relative;display:flex;align-items:center;background:#fff;border:1px solid #d7deec;border-radius:12px;transition:border-color .2s,box-shadow .2s}
+.search-input-wrap:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px rgba(17,50,147,.08)}
 .search-input-wrap:focus-within{border-color:var(--brand-2);box-shadow:0 0 0 4px rgba(38,74,202,.1)}
 .search-input-icon{position:absolute;left:14px;color:var(--muted);pointer-events:none;transition:color .2s}
 .search-input-wrap:focus-within .search-input-icon{color:var(--brand-2)}
@@ -105,9 +111,9 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .voice-btn.listening{background:rgba(255,138,0,.12);color:var(--orange);animation:listenPulse 1.5s ease-in-out infinite}
 @keyframes listenPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,138,0,.3)}50%{box-shadow:0 0 0 6px rgba(255,138,0,0)}}
 .voice-btn svg{width:15px;height:15px}
-.submit-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--grad-blue);color:#fff;font-family:inherit;font-size:13px;font-weight:600;border:none;border-radius:9px;cursor:pointer;box-shadow:0 2px 8px rgba(17,50,147,.25);transition:transform .2s var(--ease-spring),box-shadow .2s}
-.submit-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(17,50,147,.35)}
-.submit-btn svg{width:12px;height:12px}
+.submit-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 19px;background:var(--grad-green);color:#fff;font-family:inherit;font-size:13.5px;font-weight:600;border:none;border-radius:10px;cursor:pointer;box-shadow:0 2px 8px rgba(44,150,80,.28);transition:transform .2s var(--ease-spring),box-shadow .2s}
+.submit-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(44,150,80,.38)}
+.submit-btn svg{width:13px;height:13px}
 
 .tips-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:11px}
 .tips-label{font-size:11.5px;color:var(--muted);font-weight:500}
@@ -123,7 +129,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .trust-chip:nth-child(2) .trust-chip-icon{background:#fff;border:1px solid var(--border)}
 .trust-chip:nth-child(3) .trust-chip-icon{background:var(--brand-light);color:var(--brand-2)}
 
-.stats-card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.92) 0%,rgba(252,253,255,.82) 100%);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:16px;padding:18px 20px 14px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 12px 32px rgba(17,50,147,.08);overflow:hidden}
+.stats-card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.74) 0%,rgba(252,253,255,.60) 100%);backdrop-filter:blur(26px) saturate(135%);-webkit-backdrop-filter:blur(26px) saturate(135%);border:1px solid rgba(255,255,255,.7);border-radius:16px;padding:18px 20px 14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.06),0 10px 28px rgba(17,50,147,.10),0 26px 64px rgba(17,50,147,.18);overflow:hidden}
 .stats-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(38,74,202,.5),rgba(44,150,80,.5),rgba(255,138,0,.5));opacity:.7}
 .stats-grid{display:flex;align-items:center;justify-content:space-between}
 .stats-item{flex:1;text-align:center}
@@ -359,7 +365,7 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 <style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}.nav-dev-badge{display:inline-flex;align-items:center;margin-left:2px;padding:3px 10px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:#b45309;background:linear-gradient(135deg,rgba(255,179,71,.22),rgba(255,138,0,.16));border:1px solid rgba(255,138,0,.4);border-radius:100px;white-space:nowrap;line-height:1.5}@media(max-width:600px){.nav-dev-badge{display:none}}nav#mainNav .nav-logo-img-full{height:42px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-img-full{height:34px}}nav#mainNav .nav-logo-mark{height:34px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-mark{height:30px}nav#mainNav .nav-logo-text{font-size:20px}}</style>
 <nav id="mainNav">
   <div class="nav-row-top">
-    <a href="/index.html" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
+    <a href="/" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" class="nav-logo-mark" aria-hidden="true"><defs><linearGradient id="g_navmark" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#0c1f63"/><stop offset="55%" stop-color="#1c3aa8"/><stop offset="100%" stop-color="#3f6cff"/></linearGradient>
 <linearGradient id="sheen_navmark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.3"/><stop offset="40%" stop-color="#fff" stop-opacity="0"/></linearGradient>
 <radialGradient id="glow_navmark" cx="0.3" cy="0.16" r="0.9"><stop offset="0%" stop-color="#6f93ff" stop-opacity=".42"/><stop offset="48%" stop-color="#6f93ff" stop-opacity="0"/></radialGradient>
@@ -368,9 +374,9 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </a>
 
     <ul class="nav-links">
-      <li><a href="/talalatok.html">Orvosok</a></li>
-      <li><a href="/klinikak.html">Klinikák</a></li>
-      <li><a href="/tudastar.html" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li><a href="/talalatok">Orvosok</a></li>
+      <li><a href="/klinikak">Klinikák</a></li>
+      <li><a href="/tudastar" class="nav-link-tudastar">Tudástár A–Z</a></li>
       <li><a href="/kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
@@ -393,9 +399,9 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 
 <div class="mobile-drawer" id="mobileDrawer">
   <div class="mobile-drawer-inner">
-    <a href="/talalatok.html" class="mobile-nav-item">Orvosok</a>
-    <a href="/klinikak.html" class="mobile-nav-item">Klinikák</a>
-    <a href="/tudastar.html" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
+    <a href="/talalatok" class="mobile-nav-item">Orvosok</a>
+    <a href="/klinikak" class="mobile-nav-item">Klinikák</a>
+    <a href="/tudastar" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
     <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
@@ -440,10 +446,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   <div class="hero-two-col">
     <div class="hero-left">
       <h1 class="hero-title">
-        <span class="hero-title-line">Találja meg a megfelelő szakorvost</span>
-        <span class="hero-title-line">vagy magán <span class="hero-title-accent">szakellátást</span></span>
+        <span class="hero-title-line"><span class="hero-title-accent-blue">Országos szakorvos</span> <span class="hero-title-accent">kereső</span></span>
       </h1>
-      <p class="hero-subtitle">Írja le, mit keres – <b>intelligens keresőnk</b> segít megtalálni a megfelelő szakorvost, telefonszámokkal és elérhetőségekkel együtt.</p>
+      <p class="hero-subtitle"><b>Intelligens (AI-alapú) keresőnk</b> segít megtalálni a megfelelő szakorvost vagy klinikát. Keressen több mint <span class="hero-sub-num doc" id="heroSubDoctors">5&nbsp;389</span> szakorvos és <span class="hero-sub-num cli" id="heroSubClinics">2&nbsp;172</span> klinika között, telefonszámokkal, elérhetőségekkel, szakmai adatokkal és részletes profilokkal.</p>
 
       <div class="smart-search">
         <div class="target-row">
@@ -1071,6 +1076,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       if(cards[0] && docN>0) cards[0].dataset.count = docN;
       if(cards[1] && cliN>0) cards[1].dataset.count = cliN;
       if(cards[2] && profN>0) cards[2].dataset.count = profN;
+      // ── Élő számok az alcímben is ──
+      const fmt = n => n.toLocaleString('hu-HU').replace(/,/g,'\u00A0');
+      const subDoc = document.getElementById('heroSubDoctors');
+      const subCli = document.getElementById('heroSubClinics');
+      if(subDoc && docN>0) subDoc.textContent = fmt(docN);
+      if(subCli && cliN>0) subCli.textContent = fmt(cliN);
     }catch(e){}
     runStatAnims();
   }
