@@ -167,6 +167,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);displ
 .page-btn.active{background:var(--brand);border-color:var(--brand)}
 .page-btn:disabled{opacity:.4;cursor:not-allowed}
 </style>
+<style id="szk-nav-dd">
+.nav-links li.szk-dd{position:relative}
+.nav-links li.szk-dd>a{display:inline-flex;align-items:center;gap:5px}
+.szk-dd-caret{width:9px;height:9px;flex-shrink:0;opacity:.6;transition:transform .2s}
+.nav-links li.szk-dd:hover .szk-dd-caret,.szk-partner-wrap:hover .szk-dd-caret{transform:rotate(180deg)}
+.nav-links li.szk-dd::after,.szk-partner-wrap::after{content:"";position:absolute;left:0;right:0;top:100%;height:10px}
+.szk-dd-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:216px;background:#fff;border:1px solid #e6eaf3;border-radius:13px;box-shadow:0 14px 36px rgba(17,50,147,.15),0 2px 8px rgba(17,50,147,.07);padding:7px;margin:0;list-style:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s ease,transform .22s cubic-bezier(.34,1.4,.64,1),visibility 0s linear .2s;z-index:600}
+.nav-links li.szk-dd:hover .szk-dd-menu,.szk-partner-wrap:hover .szk-dd-menu{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .2s ease,transform .22s cubic-bezier(.34,1.4,.64,1),visibility 0s}
+.szk-dd-menu li{display:block}
+.szk-dd-menu a{display:block;padding:9px 13px;border-radius:9px;font-size:13px;font-weight:500;color:#52617a;white-space:nowrap;text-decoration:none;transition:background .15s,color .15s}
+.szk-dd-menu a:hover{background:#eef2ff;color:#113293}
+.szk-partner-wrap{position:relative;display:inline-flex}
+.szk-partner-wrap .szk-dd-menu{right:0;left:auto}
+.mobile-nav-sub{display:block;padding:8px 16px 8px 32px;font-size:13.5px;font-weight:500;color:#52617a;border-radius:10px;text-decoration:none;transition:background .15s}
+.mobile-nav-sub:hover{background:#eef2ff;color:#113293}
+</style>
 </head>
 <body style="display:none" id="appContent">
 <!-- ══════════════════════════════════════════
@@ -245,9 +261,28 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </a>
 
     <ul class="nav-links">
-      <li><a href="/talalatok">Orvosok</a></li>
-      <li><a href="/klinikak">Klinikák</a></li>
-      <li><a href="/tudastar" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li class="szk-dd"><a href="/talalatok">Orvosok <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/talalatok?all=1">Szakorvosok listája</a></li>
+          <li><a href="/talalatok">Szakterületek</a></li>
+          <li><a href="/talalatok">Városok szerint</a></li>
+        </ul>
+      </li>
+      <li class="szk-dd"><a href="/klinikak">Klinikák <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/klinikak">Magánklinikák</a></li>
+          <li><a href="/klinikak">Magánrendelők</a></li>
+          <li><a href="/klinikak">Diagnosztikai központok</a></li>
+        </ul>
+      </li>
+      <li class="szk-dd"><a href="/tudastar">Tudástár <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/tudastar">Betegségek</a></li>
+          <li><a href="/vizsgalatok">Vizsgálatok</a></li>
+          <li><a href="/tudastar">Kezelések</a></li>
+          <li><a href="/tudastar">Egészségügyi útmutatók</a></li>
+        </ul>
+      </li>
       <li><a href="/kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
@@ -255,7 +290,14 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="/register.html" class="btn-nav-partner">Partner program</a>
+      <div class="szk-partner-wrap">
+        <a href="/register.html" class="btn-nav-partner">Partnerprogram <svg class="szk-dd-caret" style="width:9px;height:9px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/register.html">Orvosoknak</a></li>
+          <li><a href="/register.html">Klinikáknak</a></li>
+          <li><a href="/register.html">Adatlap igénylése</a></li>
+        </ul>
+      </div>
     </div>
 
     <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
@@ -271,8 +313,22 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 <div class="mobile-drawer" id="mobileDrawer">
   <div class="mobile-drawer-inner">
     <a href="/talalatok" class="mobile-nav-item">Orvosok</a>
+    <a href="/talalatok?all=1" class="mobile-nav-sub">Szakorvosok listája</a>
+    <a href="/talalatok" class="mobile-nav-sub">Szakterületek</a>
+    <a href="/talalatok" class="mobile-nav-sub">Városok szerint</a>
     <a href="/klinikak" class="mobile-nav-item">Klinikák</a>
-    <a href="/tudastar" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
+    <a href="/klinikak" class="mobile-nav-sub">Magánklinikák</a>
+    <a href="/klinikak" class="mobile-nav-sub">Magánrendelők</a>
+    <a href="/klinikak" class="mobile-nav-sub">Diagnosztikai központok</a>
+    <a href="/tudastar" class="mobile-nav-item">Tudástár</a>
+    <a href="/tudastar" class="mobile-nav-sub">Betegségek</a>
+    <a href="/vizsgalatok" class="mobile-nav-sub">Vizsgálatok</a>
+    <a href="/tudastar" class="mobile-nav-sub">Kezelések</a>
+    <a href="/tudastar" class="mobile-nav-sub">Egészségügyi útmutatók</a>
+    <a href="/register.html" class="mobile-nav-item">Partnerprogram</a>
+    <a href="/register.html" class="mobile-nav-sub">Orvosoknak</a>
+    <a href="/register.html" class="mobile-nav-sub">Klinikáknak</a>
+    <a href="/register.html" class="mobile-nav-sub">Adatlap igénylése</a>
     <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>

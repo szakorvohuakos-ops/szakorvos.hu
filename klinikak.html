@@ -147,7 +147,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .hbar{background:transparent;padding:2rem 3.5% 1.25rem;position:relative;overflow:hidden}
 .hbar::before{content:'';position:absolute;top:-200px;right:-150px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(38,74,202,.06),transparent 60%);pointer-events:none}
 .hbar::after{display:none}
-.hbar-in{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 360px;gap:2rem;align-items:start;position:relative;z-index:1}
+.hbar-in{max-width:1400px;margin:0 auto;position:relative;z-index:1}
 .hbar-left{min-width:0;text-align:left;padding-top:.5rem}
 @media(max-width:880px){.hbar-in{grid-template-columns:1fr}.hbar-map{display:none}}
 
@@ -590,6 +590,22 @@ nav#mainNav .btn-nav-fb:hover{background:#e7f0fe;border-color:rgba(24,119,242,.4
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "CollectionPage", "name": "Szakorvos kereső", "url": "https://www.szakorvos.hu/klinikak", "description": "Találja meg a legjobb szakorvost az Ön közelében.", "inLanguage": "hu", "isPartOf": {"@type": "WebSite", "name": "Szakorvos.hu", "url": "https://www.szakorvos.hu"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Főoldal", "item": "https://www.szakorvos.hu"}, {"@type": "ListItem", "position": 2, "name": "Orvos kereső", "item": "https://www.szakorvos.hu/klinikak"}]}</script>
+<style id="szk-nav-dd">
+.nav-links li.szk-dd{position:relative}
+.nav-links li.szk-dd>a{display:inline-flex;align-items:center;gap:5px}
+.szk-dd-caret{width:9px;height:9px;flex-shrink:0;opacity:.6;transition:transform .2s}
+.nav-links li.szk-dd:hover .szk-dd-caret,.szk-partner-wrap:hover .szk-dd-caret{transform:rotate(180deg)}
+.nav-links li.szk-dd::after,.szk-partner-wrap::after{content:"";position:absolute;left:0;right:0;top:100%;height:10px}
+.szk-dd-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:216px;background:#fff;border:1px solid #e6eaf3;border-radius:13px;box-shadow:0 14px 36px rgba(17,50,147,.15),0 2px 8px rgba(17,50,147,.07);padding:7px;margin:0;list-style:none;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s ease,transform .22s cubic-bezier(.34,1.4,.64,1),visibility 0s linear .2s;z-index:600}
+.nav-links li.szk-dd:hover .szk-dd-menu,.szk-partner-wrap:hover .szk-dd-menu{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .2s ease,transform .22s cubic-bezier(.34,1.4,.64,1),visibility 0s}
+.szk-dd-menu li{display:block}
+.szk-dd-menu a{display:block;padding:9px 13px;border-radius:9px;font-size:13px;font-weight:500;color:#52617a;white-space:nowrap;text-decoration:none;transition:background .15s,color .15s}
+.szk-dd-menu a:hover{background:#eef2ff;color:#113293}
+.szk-partner-wrap{position:relative;display:inline-flex}
+.szk-partner-wrap .szk-dd-menu{right:0;left:auto}
+.mobile-nav-sub{display:block;padding:8px 16px 8px 32px;font-size:13.5px;font-weight:500;color:#52617a;border-radius:10px;text-decoration:none;transition:background .15s}
+.mobile-nav-sub:hover{background:#eef2ff;color:#113293}
+</style>
 </head>
 <body>
 <!-- ══════════════════════════════════════════
@@ -668,9 +684,28 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
     </a>
 
     <ul class="nav-links">
-      <li><a href="/talalatok">Orvosok</a></li>
-      <li><a href="/klinikak">Klinikák</a></li>
-      <li><a href="/tudastar" class="nav-link-tudastar">Tudástár A–Z</a></li>
+      <li class="szk-dd"><a href="/talalatok">Orvosok <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/talalatok?all=1">Szakorvosok listája</a></li>
+          <li><a href="/talalatok">Szakterületek</a></li>
+          <li><a href="/talalatok">Városok szerint</a></li>
+        </ul>
+      </li>
+      <li class="szk-dd"><a href="/klinikak">Klinikák <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/klinikak">Magánklinikák</a></li>
+          <li><a href="/klinikak">Magánrendelők</a></li>
+          <li><a href="/klinikak">Diagnosztikai központok</a></li>
+        </ul>
+      </li>
+      <li class="szk-dd"><a href="/tudastar">Tudástár <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/tudastar">Betegségek</a></li>
+          <li><a href="/vizsgalatok">Vizsgálatok</a></li>
+          <li><a href="/tudastar">Kezelések</a></li>
+          <li><a href="/tudastar">Egészségügyi útmutatók</a></li>
+        </ul>
+      </li>
       <li><a href="/kapcsolat.html">Kapcsolat</a></li>
     </ul>
 
@@ -678,7 +713,14 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
       <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       </a>
-      <a href="/register.html" class="btn-nav-partner">Partner program</a>
+      <div class="szk-partner-wrap">
+        <a href="/register.html" class="btn-nav-partner">Partnerprogram <svg class="szk-dd-caret" style="width:9px;height:9px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
+        <ul class="szk-dd-menu">
+          <li><a href="/register.html">Orvosoknak</a></li>
+          <li><a href="/register.html">Klinikáknak</a></li>
+          <li><a href="/register.html">Adatlap igénylése</a></li>
+        </ul>
+      </div>
     </div>
 
     <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
@@ -694,8 +736,22 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 <div class="mobile-drawer" id="mobileDrawer">
   <div class="mobile-drawer-inner">
     <a href="/talalatok" class="mobile-nav-item">Orvosok</a>
+    <a href="/talalatok?all=1" class="mobile-nav-sub">Szakorvosok listája</a>
+    <a href="/talalatok" class="mobile-nav-sub">Szakterületek</a>
+    <a href="/talalatok" class="mobile-nav-sub">Városok szerint</a>
     <a href="/klinikak" class="mobile-nav-item">Klinikák</a>
-    <a href="/tudastar" class="mobile-nav-item" style="color:#FF8A00;font-weight:700;">Tudástár A–Z</a>
+    <a href="/klinikak" class="mobile-nav-sub">Magánklinikák</a>
+    <a href="/klinikak" class="mobile-nav-sub">Magánrendelők</a>
+    <a href="/klinikak" class="mobile-nav-sub">Diagnosztikai központok</a>
+    <a href="/tudastar" class="mobile-nav-item">Tudástár</a>
+    <a href="/tudastar" class="mobile-nav-sub">Betegségek</a>
+    <a href="/vizsgalatok" class="mobile-nav-sub">Vizsgálatok</a>
+    <a href="/tudastar" class="mobile-nav-sub">Kezelések</a>
+    <a href="/tudastar" class="mobile-nav-sub">Egészségügyi útmutatók</a>
+    <a href="/register.html" class="mobile-nav-item">Partnerprogram</a>
+    <a href="/register.html" class="mobile-nav-sub">Orvosoknak</a>
+    <a href="/register.html" class="mobile-nav-sub">Klinikáknak</a>
+    <a href="/register.html" class="mobile-nav-sub">Adatlap igénylése</a>
     <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
     <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
     <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
@@ -761,23 +817,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <h1 class="htitle">Klinikák és <b>magánrendelők</b></h1>
       <div class="hsub" id="hsubText"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
     </div>
-    <a href="talalatok.html" class="hbar-map">
-      <div class="hbar-map-frame">
-        <div id="hbarMiniMap" style="width:100%;height:100%"></div>
-        <div class="hbar-map-frame-loading" id="hbarMiniMapLoading">Térkép betöltése…</div>
-      </div>
-      <div class="hbar-map-body">
-        <div class="hbar-map-title">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v10"/></svg>
-          Orvos keresés
-        </div>
-        <div class="hbar-map-sub">Szakorvosok és magánrendelők országosan.</div>
-        <span class="hbar-map-cta">
-          Orvosos nézet
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </span>
-      </div>
-    </a>
   </div>
 </div>
 <input type="hidden" id="navSpec">
@@ -1022,6 +1061,7 @@ async function loadClinics(){
       return {
         ...c,
         _docCount: docs.length,
+        _docIds: docs.map(d => d.id),
         _specs: Array.from(specMap.values()),
         _avgRating: avgRating,
         _totalReviews: totalReviews,
@@ -1166,6 +1206,13 @@ function applyFilters(){
   else renderList();
   renderTags();
   updateBadge();
+  // Találati visszajelzés (toast) — debounce a gépelés ellen
+  if(window._toastDeb) clearTimeout(window._toastDeb);
+  window._toastDeb = setTimeout(function(){
+    var ds = new Set();
+    filtered.forEach(function(c){ (c._docIds || []).forEach(function(id){ ds.add(id); }); });
+    if(typeof showResultsToast === 'function') showResultsToast(filtered.length, ds.size);
+  }, 450);
 }
 
 function resetAll(){
@@ -1696,9 +1743,18 @@ document.addEventListener('DOMContentLoaded', loadClinics);
       });
       markers.push(m); bounds.extend(m.getPosition());
     });
-    if(window.markerClusterer&&window.markerClusterer.MarkerClusterer){ cluster=new window.markerClusterer.MarkerClusterer({map:map,markers:markers}); }
+    if(window.markerClusterer&&window.markerClusterer.MarkerClusterer){ cluster=new window.markerClusterer.MarkerClusterer({map:map,markers:markers,renderer:{render:function(o){var count=o.count,position=o.position;var size=count<10?36:count<50?44:count<200?52:60;var svg='data:image/svg+xml;utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-1)+'" fill="rgba(38,74,202,.18)"/><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-5)+'" fill="#113293" stroke="#fff" stroke-width="2"/><text x="'+(size/2)+'" y="'+(size/2)+'" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="'+(size*0.32)+'" font-weight="700">'+count+'</text></svg>');return new maps.Marker({position:position,icon:{url:svg,scaledSize:new maps.Size(size,size),anchor:new maps.Point(size/2,size/2)}});}}}); }
     else { markers.forEach(function(m){m.setMap(map);}); }
-    if(pts.length===1){ map.setCenter(markers[0].getPosition()); map.setZoom(14); } else { map.fitBounds(bounds,60); }
+    var _city=(new URLSearchParams(location.search).get('city')||'').trim();
+    if(!_city){ var _ci=document.getElementById('fCity'); if(_ci&&_ci.value&&_ci.value.trim()) _city=_ci.value.trim(); }
+    if(_city){
+      // A felhasználó által keresett városra igazítunk (pl. Debrecen → Debrecen)
+      if(pts.length===1){ map.setCenter(markers[0].getPosition()); map.setZoom(14); }
+      else { map.fitBounds(bounds,60); }
+    } else {
+      // Nincs város megadva → Budapest és környéke
+      map.setCenter({lat:47.4979,lng:19.0402}); map.setZoom(10);
+    }
   };
   try{
     if(typeof renderList==='function'){
@@ -1812,5 +1868,31 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .kc .szk-card-foot{padding:14px 22px 18px;border-top:none}
 </style>
 <script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
+<!-- Találati toast -->
+<style>
+.szk-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(22px);z-index:3000;max-width:calc(100% - 32px);background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(244,248,255,.97));backdrop-filter:blur(16px) saturate(160%);-webkit-backdrop-filter:blur(16px) saturate(160%);border:1px solid rgba(38,74,202,.18);border-radius:14px;padding:13px 18px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 12px 34px rgba(17,50,147,.2),0 4px 12px rgba(17,50,147,.1);display:flex;align-items:center;gap:11px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;color:#1a1f36;line-height:1.4;opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s cubic-bezier(.34,1.4,.64,1)}
+.szk-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.szk-toast svg{flex-shrink:0;color:var(--brand,#113293)}
+.szk-toast b.tc-cli{color:#2C9650;font-weight:700}
+.szk-toast b.tc-doc{color:#113293;font-weight:700}
+@media(max-width:600px){.szk-toast{bottom:16px;font-size:13px;padding:11px 14px}}
+</style>
+<div class="szk-toast" id="resultsToast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var _tt=null;
+  window.showResultsToast=function(clinics, doctors){
+    var t=document.getElementById('resultsToast'); if(!t) return;
+    var c=(Number(clinics)||0).toLocaleString('hu-HU');
+    var d=(Number(doctors)||0).toLocaleString('hu-HU');
+    t.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="m8 11 2 2 4-4"/></svg>'
+      +'<span>A keresésére <b class="tc-cli">'+c+'</b> klinikát és <b class="tc-doc">'+d+'</b> szakorvost találtam.</span>';
+    t.classList.add('show');
+    if(_tt) clearTimeout(_tt);
+    _tt=setTimeout(function(){ t.classList.remove('show'); }, 4500);
+  };
+})();
+</script>
+
 </body>
 </html>
