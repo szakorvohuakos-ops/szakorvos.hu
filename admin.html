@@ -1161,8 +1161,17 @@ function filterDoctorsByStatus(v){
 async function loadClinics(){
   const groupsEl=document.getElementById('clinicGroups');
   if(groupsEl) groupsEl.innerHTML='<div style="grid-column:1/-1;color:var(--muted);font-size:13px">Betöltés…</div>';
-  const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)');
-  allClinics=data||[];
+  // Teljes lista lapozva (a Supabase max. 1000 sort ad vissza kérésenként)
+  const SELECT='id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)';
+  let all=[], offset=0;
+  for(let i=0;i<20;i++){
+    const{data,error}=await db.from('clinics').select(SELECT).order('name',{ascending:true}).range(offset,offset+999);
+    if(error||!data||!data.length) break;
+    all=all.concat(data);
+    if(data.length<1000) break;
+    offset+=1000;
+  }
+  allClinics=all;
   // Sortírozás:
   // 1. Budapest előre (kerület számszerűen)
   // 2. Aztán a többi: megye (ABC) → város (ABC) → klinika név (ABC)
