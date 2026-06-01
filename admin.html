@@ -709,16 +709,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <div class="tc-header">
           <div class="tc-title">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            Összes klinika
+            <span id="clinicTcTitle">Klinikák területenként</span>
           </div>
           <div class="tc-controls">
-            <div class="srch-sm">
+            <button id="clinicBackBtn" onclick="showClinicGroups()" style="display:none;align-items:center;gap:6px;padding:7px 13px;background:#fff;color:var(--brand,#113293);border:1.5px solid var(--border,#e6eaf3);border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Összes terület
+            </button>
+            <div class="srch-sm" id="clinicSearchWrap" style="display:none">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
               <input placeholder="Keresés…" oninput="filterTable('clinicsBody',this.value)">
             </div>
           </div>
         </div>
-        <div class="table-scroll"><table>
+
+        <!-- Megye / kerület böngésző -->
+        <div id="clinicGroups" style="padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem">
+          <div style="grid-column:1/-1;color:var(--muted);font-size:13px">Betöltés…</div>
+        </div>
+
+        <div class="table-scroll" id="clinicTableWrap" style="display:none"><table>
           <thead><tr><th style="min-width:320px">Klinika neve</th><th title="FoglaljOrvost.hu" style="text-align:center;width:36px">F</th><th title="Odoktor.hu" style="text-align:center;width:36px">O</th><th title="Email" style="text-align:center;width:50px">✉️</th><th>Cím</th><th>Orvosok</th><th>Értékelés</th><th>Státusz</th><th>Műveletek</th></tr></thead>
           <tbody id="clinicsBody">
             <tr class="skel-row"><td colspan="9"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>
@@ -1150,8 +1159,8 @@ function filterDoctorsByStatus(v){
 
 /* ═══ CLINICS ═══ */
 async function loadClinics(){
-  const tb=document.getElementById('clinicsBody');
-  tb.innerHTML='<tr class="skel-row"><td colspan="8"><div class="skel-cell" style="width:100%;height:14px"></div></td></tr>';
+  const groupsEl=document.getElementById('clinicGroups');
+  if(groupsEl) groupsEl.innerHTML='<div style="grid-column:1/-1;color:var(--muted);font-size:13px">Betöltés…</div>';
   const{data}=await db.from('clinics').select('id,slug,name,address,phone,email,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)');
   allClinics=data||[];
   // Sortírozás:
@@ -1179,8 +1188,83 @@ async function loadClinics(){
     if (cityA !== cityB) return cityA.toLowerCase().localeCompare(cityB.toLowerCase(), 'hu');
     return (a.name||'').localeCompare(b.name||'', 'hu');
   });
-  if(!allClinics.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek klinikák</td></tr>';return;}
-  tb.innerHTML=allClinics.map((c,i)=>{
+  if(!allClinics.length){
+    document.getElementById('clinicGroups').innerHTML='<div style="grid-column:1/-1;color:var(--muted);font-size:13px">Nincsenek klinikák</div>';
+    return;
+  }
+  showClinicGroups();
+}
+
+/* Csoport-kulcs egy klinikához: Budapest → "Budapest IV. ker.", egyébként → megye (vagy "Egyéb") */
+function clinicGroupKey(c){
+  const city = c.cities?.name || '';
+  if(city === 'Budapest'){
+    return c.district ? ('Budapest '+c.district+'. ker.') : 'Budapest';
+  }
+  return c.cities?.county || 'Egyéb';
+}
+
+/* Megye / kerület böngésző megjelenítése */
+function showClinicGroups(){
+  const wrap=document.getElementById('clinicGroups');
+  const tableWrap=document.getElementById('clinicTableWrap');
+  const backBtn=document.getElementById('clinicBackBtn');
+  const searchWrap=document.getElementById('clinicSearchWrap');
+  const title=document.getElementById('clinicTcTitle');
+  // Csoportok összeszámolása
+  const groups={};
+  allClinics.forEach(c=>{
+    const k=clinicGroupKey(c);
+    groups[k]=(groups[k]||0)+1;
+  });
+  // Rendezés: Budapest kerületek (szám szerint) előre, utána megyék ABC, "Egyéb" leghátul
+  const bpNum=k=>{ const m=String(k).match(/Budapest\s+(\d+)/); return m?parseInt(m[1]):(k==='Budapest'?0:null); };
+  const keys=Object.keys(groups).sort((a,b)=>{
+    const na=bpNum(a), nb=bpNum(b);
+    if(na!==null && nb!==null) return na-nb;     // két budapesti kerület → szám
+    if(na!==null) return -1;                      // budapesti előre
+    if(nb!==null) return 1;
+    if(a==='Egyéb') return 1;
+    if(b==='Egyéb') return -1;
+    return a.localeCompare(b,'hu');               // megyék ABC
+  });
+  wrap.innerHTML=keys.map(k=>{
+    const isBp=/^Budapest/.test(k);
+    return `<button onclick="showClinicGroup('${encodeURIComponent(k)}')" style="display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:14px 16px;background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.borderColor='${isBp?'#113293':'#2C9650'}';this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(17,50,147,.08)'" onmouseout="this.style.borderColor='var(--border,#e6eaf3)';this.style.transform='';this.style.boxShadow=''">
+      <span style="display:flex;align-items:center;gap:10px;min-width:0">
+        <span style="flex-shrink:0;width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:${isBp?'rgba(17,50,147,.1)':'rgba(44,150,80,.1)'};color:${isBp?'#113293':'#2C9650'}">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </span>
+        <span style="font-size:14px;font-weight:600;color:var(--text,#1a1f36);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(k)}</span>
+      </span>
+      <span style="flex-shrink:0;font-size:12.5px;font-weight:700;color:${isBp?'#113293':'#2C9650'};background:${isBp?'rgba(17,50,147,.08)':'rgba(44,150,80,.08)'};padding:3px 9px;border-radius:100px">${groups[k]}</span>
+    </button>`;
+  }).join('');
+  // Nézet-váltás: böngésző látszik, táblázat rejtve
+  wrap.style.display='grid';
+  tableWrap.style.display='none';
+  backBtn.style.display='none';
+  searchWrap.style.display='none';
+  title.textContent='Klinikák területenként';
+}
+
+/* Egy megye / Budapest klinikáinak megjelenítése a táblázatban */
+function showClinicGroup(encKey){
+  const key=decodeURIComponent(encKey);
+  const list=allClinics.filter(c=>clinicGroupKey(c)===key);
+  renderClinicRows(list);
+  document.getElementById('clinicGroups').style.display='none';
+  document.getElementById('clinicTableWrap').style.display='';
+  document.getElementById('clinicBackBtn').style.display='inline-flex';
+  document.getElementById('clinicSearchWrap').style.display='';
+  document.getElementById('clinicTcTitle').textContent=key+' — '+list.length+' klinika';
+}
+
+/* Klinika-sorok kirajzolása a táblázatba (adott lista) */
+function renderClinicRows(list){
+  const tb=document.getElementById('clinicsBody');
+  if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="9">Nincsenek klinikák</td></tr>';return;}
+  tb.innerHTML=list.map((c,i)=>{
     const hasCoord = c.lat && c.lng;
     const status = c.status || 'active';
     const cityName = c.cities?.name || '';
