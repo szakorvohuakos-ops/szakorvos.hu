@@ -723,7 +723,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         </div>
 
         <!-- Megye / kerület böngésző -->
-        <div id="clinicGroups" style="padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem">
+        <div id="clinicGroups" style="padding:1.25rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem">
           <div style="grid-column:1/-1;color:var(--muted);font-size:13px">Betöltés…</div>
         </div>
 
@@ -1195,11 +1195,32 @@ async function loadClinics(){
   showClinicGroups();
 }
 
+/* Kerület-érték egységesítése: bármilyen formából (4, IV, "IV.", "IV. kerület", "iv") → egységes római szám.
+   Így nem lesz ugyanabból a kerületből több külön csoport. */
+const _ROMAN=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','XXII','XXIII'];
+function normalizeDistrict(raw){
+  if(raw==null) return '';
+  let s=String(raw).trim().toUpperCase();
+  if(!s) return '';
+  // "IV. KERÜLET" / "IV." / "IV" → IV ; "4" / "04" → IV
+  s=s.replace(/KER(ÜLET)?\.?/g,'').replace(/\./g,'').replace(/\s+/g,'').trim();
+  // arab szám?
+  const arab=parseInt(s,10);
+  if(!isNaN(arab) && arab>=1 && arab<=23) return _ROMAN[arab];
+  // római szám? (csak ha valódi római karakterek)
+  if(/^[IVXLC]+$/.test(s)){
+    const idx=_ROMAN.indexOf(s);
+    if(idx>0) return s;            // pontos egyezés a táblában
+  }
+  return s; // ismeretlen forma → ahogy van (de legalább trimmelt/nagybetűs)
+}
+
 /* Csoport-kulcs egy klinikához: Budapest → "Budapest IV. ker.", egyébként → megye (vagy "Egyéb") */
 function clinicGroupKey(c){
   const city = c.cities?.name || '';
   if(city === 'Budapest'){
-    return c.district ? ('Budapest '+c.district+'. ker.') : 'Budapest';
+    const d=normalizeDistrict(c.district);
+    return d ? ('Budapest '+d+'. ker.') : 'Budapest';
   }
   return c.cities?.county || 'Egyéb';
 }
@@ -1218,7 +1239,8 @@ function showClinicGroups(){
     groups[k]=(groups[k]||0)+1;
   });
   // Rendezés: Budapest kerületek (szám szerint) előre, utána megyék ABC, "Egyéb" leghátul
-  const bpNum=k=>{ const m=String(k).match(/Budapest\s+(\d+)/); return m?parseInt(m[1]):(k==='Budapest'?0:null); };
+  const romanVal=r=>{ const i=_ROMAN.indexOf(String(r).toUpperCase()); return i>0?i:999; };
+  const bpNum=k=>{ const m=String(k).match(/^Budapest\s+([IVXLC]+)\.\s*ker/i); if(m) return romanVal(m[1]); return (k==='Budapest'?0:null); };
   const keys=Object.keys(groups).sort((a,b)=>{
     const na=bpNum(a), nb=bpNum(b);
     if(na!==null && nb!==null) return na-nb;     // két budapesti kerület → szám
@@ -1230,12 +1252,23 @@ function showClinicGroups(){
   });
   wrap.innerHTML=keys.map(k=>{
     const isBp=/^Budapest/.test(k);
-    return `<button onclick="showClinicGroup('${encodeURIComponent(k)}')" style="display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;padding:14px 16px;background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.borderColor='${isBp?'#113293':'#2C9650'}';this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(17,50,147,.08)'" onmouseout="this.style.borderColor='var(--border,#e6eaf3)';this.style.transform='';this.style.boxShadow=''">
-      <span style="display:flex;align-items:center;gap:10px;min-width:0">
-        <span style="flex-shrink:0;width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:${isBp?'rgba(17,50,147,.1)':'rgba(44,150,80,.1)'};color:${isBp?'#113293':'#2C9650'}">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    // Budapest kerületeknél a rövid címke a kerület (pl. "IV. ker."), fölötte halvány "Budapest"
+    const bpMatch=k.match(/^Budapest\s+(.+)$/);
+    let labelHtml;
+    if(bpMatch){
+      labelHtml='<span style="display:flex;flex-direction:column;line-height:1.2;min-width:0">'
+        +'<span style="font-size:10.5px;font-weight:600;color:var(--muted,#8a93a8);text-transform:uppercase;letter-spacing:.04em">Budapest</span>'
+        +'<span style="font-size:15px;font-weight:700;color:var(--text,#1a1f36);white-space:nowrap">'+esc(bpMatch[1])+'</span>'
+        +'</span>';
+    } else {
+      labelHtml='<span style="font-size:14px;font-weight:600;color:var(--text,#1a1f36);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(k)+'</span>';
+    }
+    return `<button onclick="showClinicGroup('${encodeURIComponent(k)}')" style="display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;padding:11px 13px;background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:11px;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.borderColor='${isBp?'#113293':'#2C9650'}';this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(17,50,147,.08)'" onmouseout="this.style.borderColor='var(--border,#e6eaf3)';this.style.transform='';this.style.boxShadow=''">
+      <span style="display:flex;align-items:center;gap:9px;min-width:0">
+        <span style="flex-shrink:0;width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:${isBp?'rgba(17,50,147,.1)':'rgba(44,150,80,.1)'};color:${isBp?'#113293':'#2C9650'}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </span>
-        <span style="font-size:14px;font-weight:600;color:var(--text,#1a1f36);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(k)}</span>
+        ${labelHtml}
       </span>
       <span style="flex-shrink:0;font-size:12.5px;font-weight:700;color:${isBp?'#113293':'#2C9650'};background:${isBp?'rgba(17,50,147,.08)':'rgba(44,150,80,.08)'};padding:3px 9px;border-radius:100px">${groups[k]}</span>
     </button>`;
@@ -1274,7 +1307,8 @@ function renderClinicRows(list){
     let cityLabel = '';
     if (cityName) {
       if (isBudapest) {
-        cityLabel = cityName + (c.district ? ' · ' + c.district + '. ker.' : '');
+        const nd=normalizeDistrict(c.district);
+        cityLabel = cityName + (nd ? ' · ' + nd + '. ker.' : '');
       } else {
         cityLabel = (county ? county + ' · ' : '') + cityName;
       }
