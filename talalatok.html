@@ -1456,7 +1456,44 @@ async function load(){
   // Az index.html parse-search-e már kinyerte a specialty_slug + city + district-et.
   // A `specQ` paraméter MOST már slug (vagy üres). Ha üres, használjuk a `freeQ`-t mint szabad-szöveg.
   let rankedSuccess = false;
+  // ═══ NÉV-KERESÉS: ha a keresőszöveg személynévnek tűnik, közvetlenül a doctors.name-re szűrünk ═══
+  // (a tüneti/szakterületi RPC névre nem keres, ezért adna vissza túl sok találatot)
+  const looksLikeName = (() => {
+    if(specQ || !freeQ) return false;
+    const t = freeQ.trim();
+    if(/^dr\.?\s/i.test(t)) return true;                 // "Dr. ..." előtag
+    // 2-3 szó, mind betű (ékezetes is), nincs szám/tünet-jel → valószínű név
+    const words = t.split(/\s+/);
+    if(words.length >= 2 && words.length <= 4 && /^[\p{L}\s.-]+$/u.test(t)) {
+      // ne tűnjön szakterületnek (pl. "fül orr gégész")
+      const specWords = /gyógyász|ológus|sebész|szakorvos|orvos|terapeuta|gégész|aszorvos|doktor/i;
+      if(!specWords.test(t)) return true;
+    }
+    return false;
+  })();
+
+  if(looksLikeName){
+    try{
+      const term = freeQ.trim().replace(/^dr\.?\s+/i, ''); // "Dr." levágása a kereséshez
+      const nameSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
+        doctor_specialties(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),
+        doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,lat,lng,cities(name))),
+        doctor_insurances(insurance_types(name)),
+        availability(day_of_week,start_time,end_time)`;
+      const { data: byName } = await db.from('doctors')
+        .select(nameSelect)
+        .eq('is_active', true)
+        .ilike('name', `%${term}%`)
+        .limit(50);
+      if(byName && byName.length){
+        allDocs = JSON.parse(JSON.stringify(byName));
+        rankedSuccess = true;
+      }
+    }catch(e){ /* ha hibázik, megy tovább a normál keresésre */ }
+  }
+
   try {
+    if(rankedSuccess) throw new Error('name-done'); // már megvan a név-találat
     // „Összes orvos" mód (?all=1) szűrő nélkül: kihagyjuk a relevancia-rangsorolást,
     // és a lenti tartalék (fallback) lekérdezés listázza ki az összes aktív orvost.
     if(allQ && !specQ && !cityQ && !freeQ){ throw new Error('show-all'); }

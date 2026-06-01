@@ -1715,6 +1715,8 @@ function showError(title, desc){
 
 /* ── Load ─────────────────────────────────────────────────────────── */
 async function load(){
+  // Biztonsági háló: ha bármiért megakadna a betöltés, 8 mp után a spinner mindenképp eltűnik
+  setTimeout(() => { document.getElementById('loadingOv')?.classList.add('hidden'); }, 8000);
   const params = new URLSearchParams(window.location.search);
   let id = params.get('id');
   let slug = params.get('slug');
@@ -1864,6 +1866,8 @@ async function load(){
 
 /* ── Render fő ────────────────────────────────────────────────────── */
 function render(d){
+  // A spinnert azonnal elrejtjük, hogy render közbeni hiba esetén se pörögjön örökké
+  try{ document.getElementById('loadingOv')?.classList.add('hidden'); }catch(_){}
   const fullName = (d.title ? d.title + ' ' : '') + (d.name || '');
   const specRaw = d.doctor_specialties?.[0]?.specialties?.name || '';
   const docSlug = d.doctor_specialties?.[0]?.specialties?.doctor_slug || '';
@@ -2736,7 +2740,65 @@ function updateSeoMeta(d){
   const canonical = (specSlug && d.slug)
     ? `https://www.szakorvos.hu/${specSlug}/${d.slug}`
     : `https://www.szakorvos.hu/orvos/${encodeURIComponent(slugOrId)}`;
-  const ogImage = `https://www.szakorvos.hu/social/og-image.png"claim-modal-overlay" id="claimModal" onclick="if(event.target===this)closeClaimModal()">
+  const ogImage = `https://www.szakorvos.hu/social/og-image.png`;
+  // Meta-tagek frissítése
+  try {
+    document.title = fullName + (spec ? ' – ' + spec : '') + ' | Szakorvos.hu';
+    const setAttr = (sel, attr, val) => { const el = document.querySelector(sel); if(el) el.setAttribute(attr, val); };
+    setAttr('link[rel="canonical"]', 'href', canonical);
+    setAttr('#ogImage', 'content', ogImage);
+    setAttr('meta[property="og:url"]', 'content', canonical);
+    setAttr('meta[property="og:title"]', 'content', fullName);
+    const metaDesc = `${fullName}${spec ? ' – ' + spec : ''}${city ? ', ' + city : ''}. Telefonszám, elérhetőségek és részletes profil a Szakorvos.hu oldalon.`;
+    setAttr('meta[name="description"]', 'content', metaDesc);
+    setAttr('meta[property="og:description"]', 'content', metaDesc);
+  } catch(e) { console.warn('[seo] meta update failed', e); }
+}
+
+/* ── Adatlap-átvétel modal ── */
+function openClaimModal(){ const m=document.getElementById('claimModal'); if(m){ m.classList.add('open'); document.body.style.overflow='hidden'; } }
+function closeClaimModal(){ const m=document.getElementById('claimModal'); if(m){ m.classList.remove('open'); document.body.style.overflow=''; } }
+function submitClaimForm(e){
+  e.preventDefault();
+  const wrap=document.getElementById('claimFormWrap');
+  const ok=document.getElementById('claimSuccess');
+  if(wrap) wrap.style.display='none';
+  if(ok) ok.style.display='';
+}
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeClaimModal(); });
+
+/* ── Indítás ── */
+load();
+</script>
+
+<style id="claim-modal-css">
+.claim-modal-overlay{position:fixed;inset:0;z-index:4000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(17,33,77,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.claim-modal-overlay.open{display:flex}
+.claim-modal{background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(17,50,147,.3);padding:26px 26px 28px;font-family:'Inter',sans-serif}
+.claim-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.claim-modal-title{font-size:20px;font-weight:700;color:var(--brand,#113293);margin:0 0 4px}
+.claim-modal-sub{font-size:13.5px;color:var(--sub,#52617a);margin:0;line-height:1.5}
+.claim-modal-close{flex-shrink:0;width:32px;height:32px;border-radius:9px;border:1px solid #e6eaf3;background:#fff;color:#52617a;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
+.claim-modal-close:hover{background:#f1f3f9;color:#113293}
+.claim-info{display:flex;gap:9px;align-items:flex-start;background:rgba(38,74,202,.06);border:1px solid rgba(38,74,202,.14);border-radius:11px;padding:11px 13px;font-size:12.5px;color:var(--sub,#52617a);line-height:1.5;margin-bottom:18px}
+.claim-info svg{flex-shrink:0;color:var(--brand-2,#264ACA);margin-top:1px}
+.claim-info b{color:var(--text,#1a1f36)}
+.claim-form{display:flex;flex-direction:column;gap:14px}
+.claim-row{display:flex;gap:14px}
+.claim-row .claim-field{flex:1;min-width:0}
+.claim-field{display:flex;flex-direction:column;gap:5px}
+.claim-field label{font-size:12.5px;font-weight:600;color:var(--text,#1a1f36)}
+.claim-field .req{color:#dc2626}
+.claim-field input,.claim-field textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:14px;color:var(--text,#1a1f36);background:#fff;border:1.5px solid #e6eaf3;border-radius:10px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s}
+.claim-field input:focus,.claim-field textarea:focus{border-color:var(--brand-2,#264ACA);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
+.claim-field textarea{resize:vertical;min-height:64px}
+.claim-submit{margin-top:4px;width:100%;font-family:inherit;font-size:14.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);border:none;border-radius:11px;padding:12px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.claim-submit:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(17,50,147,.28)}
+.claim-success{text-align:center;padding:20px 8px}
+@media(max-width:560px){.claim-row{flex-direction:column;gap:14px}}
+</style>
+
+<div class="claim-modal-overlay" id="claimModal" onclick="if(event.target===this)closeClaimModal()">
   <div class="claim-modal" role="dialog" aria-labelledby="claimModalTitle">
     <div class="claim-modal-head">
       <div>
