@@ -673,7 +673,7 @@ async function loadClinic(){
     )
   `;
 
-  let query = db.from('clinics').select(select);
+  let query = db.from('clinics_public').select(select);
   query = isUuid ? query.eq('id', slug) : query.eq('slug', slug);
   
   const { data, error } = await query.single();

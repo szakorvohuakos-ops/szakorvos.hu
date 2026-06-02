@@ -1751,7 +1751,7 @@ async function load(){
   if(!id && !slug){
     // Fallback: load first active doctor for demo
     try {
-      const { data: first } = await db.from('doctors').select('id').eq('is_active',true).limit(1).single();
+      const { data: first } = await db.from('doctors_public').select('id').limit(1).single();
       if(first) { id = String(first.id); }
       else { showError('Hiányzó orvos azonosító','Az URL-ben nincs orvos ID vagy slug megadva.'); return; }
     } catch(e) {
@@ -1764,15 +1764,15 @@ async function load(){
     // a DB-ben, automatikusan minimális query-re fallback-elünk.
     const fullSelect = `*,
         doctor_specialties(is_primary,specialties(name,doctor_slug,doctor_name)),
-        doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,email,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,lat,lng,cities(name))),
+        doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,lat,lng,cities(name))),
         doctor_insurances(insurance_types(name)),
         availability(day_of_week,start_time,end_time)`;
     const minimalSelect = `*,
         doctor_specialties(is_primary,specialties(name,doctor_slug,doctor_name)),
-        doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,email,lat,lng,cities(name))),
+        doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,lat,lng,cities(name))),
         availability(day_of_week,start_time,end_time)`;
 
-    const buildQuery = (selectClause) => db.from('doctors').select(selectClause);
+    const buildQuery = (selectClause) => db.from('doctors_public').select(selectClause);
 
     const isUuid = id || (slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug));
 

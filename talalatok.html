@@ -1475,12 +1475,12 @@ async function load(){
   if(looksLikeName){
     try{
       const term = freeQ.trim().replace(/^dr\.?\s+/i, ''); // "Dr." levágása a kereséshez
-      const nameSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
+      const nameSelect = `id,slug,name,title,bio,rating,review_count,experience_years,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
         doctor_specialties(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),
-        doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,lat,lng,cities(name))),
+        doctor_clinics(consultation_fee,clinics(name,address,phone,website,lat,lng,cities(name))),
         doctor_insurances(insurance_types(name)),
         availability(day_of_week,start_time,end_time)`;
-      const { data: byName } = await db.from('doctors')
+      const { data: byName } = await db.from('doctors_public')
         .select(nameSelect)
         .eq('is_active', true)
         .ilike('name', `%${term}%`)
@@ -1523,10 +1523,10 @@ async function load(){
     if(!rankedErr && ranked && ranked.length > 0){
       // Részletes adatok lekérése a megjelenítéshez (a ranked csak az alap mezőket adja)
       const ids = ranked.map(r => r.doctor_id);
-      const { data: details } = await db.from('doctors')
-        .select(`id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
+      const { data: details } = await db.from('doctors_public')
+        .select(`id,slug,name,title,bio,rating,review_count,experience_years,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,
           doctor_specialties(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),
-          doctor_clinics(consultation_fee,clinics(name,address,phone,email,website,lat,lng,cities(name))),
+          doctor_clinics(consultation_fee,clinics(name,address,phone,website,lat,lng,cities(name))),
           doctor_insurances(insurance_types(name)),
           availability(day_of_week,start_time,end_time)`)
         .in('id', ids);
@@ -1553,13 +1553,13 @@ async function load(){
 
   // ═══ FALLBACK: a régi PostgREST query ═══
   if(!rankedSuccess) {
-    const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,email,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,email,website,lat,lng,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
+    const fullSelect = `id,slug,name,title,bio,rating,review_count,experience_years,phone,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties!inner(name,doctor_slug,doctor_name)),doctor_clinics!inner(consultation_fee,clinics!inner(name,address,phone,website,lat,lng,cities!inner(name))),doctor_insurances(insurance_types(name)),availability(day_of_week,start_time,end_time)`;
 
     const minimalSelect = `id,slug,name,title,bio,rating,review_count,experience_years,languages,gender,photo_url,verified_at,short_intro,university,graduation_year,board_certifications,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,doctor_specialties!inner(specialty_id,is_primary,specialties(name,doctor_slug,doctor_name)),doctor_clinics(consultation_fee,clinics(name,lat,lng,cities(name))),availability(day_of_week)`;
 
     const runQuery = async (selectClause) => {
       try {
-        let q = db.from('doctors').select(selectClause).eq('is_active', true);
+        let q = db.from('doctors_public').select(selectClause).eq('is_active', true);
         if(specQ) q = q.ilike('doctor_specialties.specialties.name', `%${specQ}%`);
         if(cityQ) q = q.ilike('doctor_clinics.clinics.cities.name', `%${cityQ}%`);
         const res = await q;
@@ -2015,7 +2015,7 @@ function renderEmptyState(){
 async function crossSearchClinics(){
   try {
     // Csak a kompatibilis szűrőket adjuk át a klinika-keresésnek
-    let query = db.from('clinics').select('id', { count: 'exact', head: true });
+    let query = db.from('clinics_public').select('id', { count: 'exact', head: true });
 
     // City szűrés — a clinics-en a city_id-n keresztül
     if(cityQ){
@@ -2565,7 +2565,6 @@ function openPanel(id){
   // — Info —
   document.getElementById('ppContact').innerHTML=`
     <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg></div><div><div class="info-lbl">Telefon</div><div class="info-val">${escapeHtml(d.phone||clinic?.phone||'+36 1 234 5678')}</div></div></div>
-    <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="info-lbl">Email</div><div class="info-val">${escapeHtml(d.email||clinic?.email||'info@szakorvos.hu')}</div></div></div>
     <div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="info-lbl">Cím</div><div class="info-val">${escapeHtml(clinic?.address||((city||'Budapest')+', Magyarország'))}</div></div></div>
     ${clinic?.website?`<div class="info-row"><div class="info-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="info-lbl">Weboldal</div><div class="info-val"><a href="${escapeHtml(clinic.website)}" target="_blank" style="color:var(--brand)">${escapeHtml(clinic.website)}</a></div></div></div>`:''}`;
   document.getElementById('ppSched').innerHTML=DF.slice(1,7).map((day,i)=>{
@@ -2655,7 +2654,7 @@ load();
     if(!el) return;
     try {
       const { data: clinics } = await db
-        .from('clinics')
+        .from('clinics_public')
         .select('lat,lng')
         .in('status', ['active', 'partner'])
         .not('lat','is',null)

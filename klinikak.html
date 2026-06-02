@@ -1338,7 +1338,7 @@ async function crossSearchDoctors(){
     }
 
     // Lekérdezzük az orvosokat
-    let q = db.from('doctors').select('id', { count: 'exact', head: true }).eq('is_active', true);
+    let q = db.from('doctors_public').select('id', { count: 'exact', head: true }).eq('is_active', true);
     if(fNameVal && fNameVal.length > 2){
       // Név vagy szakmai cím alapján — egyszerű ilike
       q = q.ilike('name', '%' + fNameVal + '%');
@@ -1636,7 +1636,7 @@ document.addEventListener('DOMContentLoaded', loadClinics);
     (async () => {
       try {
         const { data: clinics } = await db
-          .from('clinics')
+          .from('clinics_public')
           .select('lat,lng')
           .in('status', ['active', 'partner'])
           .not('lat','is',null)
