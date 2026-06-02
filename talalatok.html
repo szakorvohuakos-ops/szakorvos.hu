@@ -883,7 +883,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <span class="crumb-sep">›</span>
         <a href="index.html">Orvos keresése</a>
         <span class="crumb-sep">›</span>
-        <span class="crumb-current">Találatok</span>
+        <span class="crumb-current" id="crumb2">Találatok</span>
       </div>
       <h1 class="htitle">Orvos keresési <b>találatok</b></h1>
       <div class="hsub" id="hsubText"><span id="hsubQuery">Keresés folyamatban</span> <span class="hcount" id="heroCnt"></span></div>
@@ -1296,8 +1296,10 @@ updateHero();
 async function updateHero(){
   const queryLabel = specQ ? `„${escapeHtml(specQ)}"` : (hasGeoQ ? 'Az Ön közelében' : 'Összes szakterület');
   const cityLabel = cityQ ? ` – ${escapeHtml(cityQ)}` : (hasGeoQ ? ` (${radiusQ} km sugarban)` : '');
-  document.getElementById('hsubQuery').innerHTML = queryLabel + cityLabel + ' keresésre';
-  document.getElementById('crumb2').textContent = specQ || (hasGeoQ ? 'A közelében' : 'Találatok');
+  const _hsub = document.getElementById('hsubQuery');
+  if(_hsub) _hsub.innerHTML = queryLabel + cityLabel + ' keresésre';
+  const _crumb2 = document.getElementById('crumb2');
+  if(_crumb2) _crumb2.textContent = specQ || (hasGeoQ ? 'A közelében' : 'Találatok');
 
   // ═══ Doctor name lekérdezése a szakterület alapján ═══
   let doctorName = '';
