@@ -1416,11 +1416,9 @@ function clinicCardHTML(c, i){
       ${photoBlock}
       <div class="szk-card-body">
         <div class="szk-card-title">${escapeHtml(c.name)}<span class="szk-verified" title="Ellenőrzött"></span></div>
-        <div class="szk-card-subtitle">${escapeHtml(specsDisplay)}${extraSpecCount > 0 ? ' · +' + extraSpecCount + ' szakterület' : ''}</div>
+        <div class="szk-card-subtitle">${specsAll.length ? (specsAll.length + ' szakterület') : 'Egészségügyi szolgáltató'}${c._docCount ? ' · ' + c._docCount + ' szakorvos' : ''}</div>
         <div class="kc-meta">
-          ${c._docCount ? `<span><strong>${c._docCount}</strong> szakorvos</span>` : ''}
-          ${c._docCount && ratingFmt ? `<span class="szk-card-meta-dot"></span>` : ''}
-          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews} értékelés)</span>` : ''}` : ''}
+          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews} értékelés)</span>` : ''}` : '<span class="szk-card-meta-soft">Nincs még értékelés</span>'}
         </div>
         ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
       </div>
@@ -1428,8 +1426,6 @@ function clinicCardHTML(c, i){
 
     <div class="kc-grid">
       <div class="kc-info">${PIN}<div><div class="kc-info-l">Város</div><div class="kc-info-v">${escapeHtml(cityVal)}${districtVal ? ` · ${districtVal}` : ''}</div></div></div>
-      <div class="kc-info">${USR}<div><div class="kc-info-l">Szakorvosok</div><div class="kc-info-v">${c._docCount || '—'}</div></div></div>
-      <div class="kc-info">${STR}<div><div class="kc-info-l">Értékelés</div><div class="kc-info-v">${ratingFmt ? `${ratingFmt}${c._totalReviews ? ` (${c._totalReviews})` : ''}` : 'Nincs még'}</div></div></div>
       ${webHost ? `<div class="kc-info">${WEB}<div><div class="kc-info-l">Weboldal</div><div class="kc-info-v"><a href="${escapeHtml(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(webHost)}</a></div></div></div>` : ''}
     </div>
 
