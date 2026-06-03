@@ -2219,7 +2219,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
               </select>
             </span>
             <span class="cedit-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ker.: <input id="ce_district" type="text" style="width:54px;border:none;background:transparent;font:inherit;color:var(--brand);outline:none" placeholder="—"></span>
+            <a id="ce_web_open" class="cedit-pill" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg> Weboldal megnyitása
+            </a>
           </div>
+          <div class="cedit-hero-specs" id="ce_hero_specs"></div>
           <div class="cedit-hero-addr">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7494" stroke-width="2" style="flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <input id="ce_address" type="text" placeholder="Cím">
@@ -2308,7 +2312,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 .cedit-sub{font-size:12.5px;color:var(--muted,#6b7494);margin:2px 0 0}
 .cedit-close{flex-shrink:0;width:34px;height:34px;border-radius:9px;border:1px solid rgba(199,210,254,.5);background:#fff;color:#52617a;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
 .cedit-close:hover{background:#f1f3f9;color:#113293}
-.cedit-body{padding:22px 26px 26px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:18px}
+.cedit-body{padding:24px 26px 26px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:18px}
 
 /* HERO-kártya (mint az éles oldalon) */
 .cedit-hero{position:relative;background:linear-gradient(135deg,#dde6ff 0%,#eef2ff 55%,#e6e0ff 100%);border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:24px;display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:start;box-shadow:0 8px 28px rgba(17,50,147,.1);overflow:hidden}
@@ -2325,6 +2329,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 .cedit-hero-addr{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--sub,#3c4564)}
 .cedit-hero-addr input{flex:1;border:none;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none}
 .cedit-hero-addr input:focus{box-shadow:0 0 0 2px rgba(38,74,202,.25)}
+.cedit-hero-specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.cedit-spec-chip{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;color:var(--brand,#113293);background:rgba(255,255,255,.7);border:1px solid rgba(17,50,147,.14);border-radius:100px;padding:3px 10px}
 
 /* Üveg-szekció (mint .section az élesben) */
 .cedit-sec{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(248,250,255,.62));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:18px;padding:18px 20px;box-shadow:0 4px 16px rgba(17,50,147,.06)}
@@ -2403,11 +2409,19 @@ function openClinicEdit(id){
   document.getElementById('ce_on_odoktor').checked = !!c.on_odoktor;
   document.getElementById('ceditSub').textContent = (c.cities?.name || '') + (c.district ? ' · ' + c.district + '. ker.' : '');
   const msg = document.getElementById('ce_msg'); msg.textContent=''; msg.className='cedit-msg';
+  // Weboldal "Megnyitás" link
+  const webLink = document.getElementById('ce_web_open');
+  const web = (c.website||'').trim();
+  if(web){ webLink.href = /^https?:\/\//.test(web) ? web : 'https://'+web; webLink.style.display=''; }
+  else { webLink.style.display='none'; }
+  document.getElementById('ce_hero_specs').innerHTML = '';
   ceSyncHeroPhoto();
   ceRenderHours(c.opening_hours || {});
   ceRenderGallery(Array.isArray(c.gallery) ? c.gallery : []);
   document.getElementById('clinicEditModal').classList.add('open');
   document.body.style.overflow='hidden';
+  const body = document.querySelector('#clinicEditModal .cedit-body');
+  if(body) body.scrollTop = 0;
   loadClinicDoctors(c.id);
 }
 
@@ -2510,6 +2524,15 @@ async function loadClinicDoctors(clinicId){
     if(error) throw error;
     const docs = (data||[]).map(r => r.doctors).filter(Boolean);
     cnt.textContent = docs.length;
+    // Szakterület-csempék a heróban (az orvosok szakterületeiből, egyedileg)
+    const specsSet = new Set();
+    docs.forEach(d => (d.doctor_specialties||[]).forEach(s => { const n = s.specialties?.name; if(n) specsSet.add(n); }));
+    const specWrap = document.getElementById('ce_hero_specs');
+    if(specWrap){
+      const specs = Array.from(specsSet);
+      specWrap.innerHTML = specs.slice(0,8).map(s => `<span class="cedit-spec-chip">${(''+s).replace(/</g,'&lt;')}</span>`).join('')
+        + (specs.length>8 ? `<span class="cedit-spec-chip">+${specs.length-8}</span>` : '');
+    }
     if(!docs.length){ wrap.innerHTML = '<div class="cedit-doc-empty">Nincs ehhez a klinikához rendelt orvos.</div>'; return; }
     wrap.innerHTML = docs.map(d => {
       const spec = d.doctor_specialties?.find(s=>s.is_primary)?.specialties?.name
