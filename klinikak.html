@@ -1021,13 +1021,13 @@ async function fetchAllRows(table, columns, tweak){
 
 async function loadClinics(){
   try {
-    const CLINIC_SELECT = 'id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, on_foglaljorvost, foglaljorvost_url, on_odoktor, odoktor_url, on_teladoc, teladoc_url, cities(name)';
+    const CLINIC_SELECT = 'id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, google_rating, google_review_count, on_foglaljorvost, foglaljorvost_url, on_odoktor, odoktor_url, on_teladoc, teladoc_url, cities(name)';
     // A négy tábla párhuzamos betöltése (mindegyik belül lapozva, az 1000-es limit megkerülésével)
     const [clinicsRes, dcRes, docRes, dsRes] = await Promise.all([
       fetchAllRows('clinics', CLINIC_SELECT, q => q.in('status', ['active', 'partner']).order('id')),
       fetchAllRows('doctor_clinics', 'clinic_id, doctor_id', q => q.order('clinic_id').order('doctor_id')),
-      fetchAllRows('doctors', 'id, name, slug, rating, review_count, is_active', q => q.eq('is_active', true).order('id')),
-      fetchAllRows('doctor_specialties', 'doctor_id, is_primary, specialties(name, doctor_slug)', q => q.order('doctor_id').order('specialty_id'))
+      fetchAllRows('doctors', 'id, name, title, slug, rating, review_count, is_active', q => q.eq('is_active', true).order('id')),
+      fetchAllRows('doctor_specialties', 'doctor_id, is_primary, specialties(name, doctor_name, doctor_slug)', q => q.order('doctor_id').order('specialty_id'))
     ]);
     for(const r of [clinicsRes, dcRes, docRes, dsRes]){ if(r.error){ showError(r.error.message); return; } }
     const clinics = clinicsRes.data || [];
@@ -1062,7 +1062,7 @@ async function loadClinics(){
         ...c,
         _docCount: docs.length,
         _docIds: docs.map(d => d.id),
-        _docs: docs.map(d => ({ id:d.id, name:d.name, slug:d.slug, rating:d.rating, specs:(specsByDoc.get(d.id)||[]).map(s=>s.name) })),
+        _docs: docs.map(d => ({ id:d.id, name:d.name, title:d.title, slug:d.slug, rating:d.rating, specs:(specsByDoc.get(d.id)||[]).map(s=>({ long:s.name, short:(s.doctor_name||s.name) })) })),
         _specs: Array.from(specMap.values()),
         _avgRating: avgRating,
         _totalReviews: totalReviews,
@@ -1412,9 +1412,9 @@ function clinicCardHTML(c, i){
   const activeQ = (window._activeSpecQuery || '').toLowerCase();
   let cardDocs = (c._docs || []);
   if(activeSpec){
-    cardDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s||'').toLowerCase() === activeSpec));
+    cardDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s.long||'').toLowerCase() === activeSpec));
   } else if(activeQ){
-    const qDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s||'').toLowerCase().includes(activeQ)));
+    const qDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s.long||'').toLowerCase().includes(activeQ) || (s.short||'').toLowerCase().includes(activeQ)));
     if(qDocs.length) cardDocs = qDocs; // csak ha a keresés szakterületre illeszkedett
   }
   const DOC_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
@@ -1422,11 +1422,14 @@ function clinicCardHTML(c, i){
   const docMore = Math.max(0, cardDocs.length - 3);
   const docsHtml = cardDocs.length ? `<div class="kc-docs">
       ${docTop.map(d => {
-        const dspec = (d.specs && d.specs[0]) ? d.specs[0] : '';
+        const dspec = (d.specs && d.specs[0]) ? (d.specs[0].short || d.specs[0].long || '') : '';
         const dtarget = d.slug ? `/orvosok/${encodeURIComponent(d.slug)}` : `/orvos.html?id=${d.id}`;
+        const rawName = d.name || '';
+        const hasTitle = /^(dr\.?|prof)/i.test(rawName.trim());
+        const dName = (!hasTitle && d.title) ? `${d.title} ${rawName}` : (!hasTitle ? `Dr. ${rawName}` : rawName);
         return `<a class="kc-doc" href="${dtarget}" onclick="event.stopPropagation()">
           <span class="kc-doc-ic">${DOC_ICON}</span>
-          <span class="kc-doc-main"><span class="kc-doc-name">${escapeHtml(d.name||'')}</span>${dspec ? `<span class="kc-doc-spec">${escapeHtml(dspec)}</span>` : ''}</span>
+          <span class="kc-doc-main"><span class="kc-doc-name">${escapeHtml(dName)}</span>${dspec ? `<span class="kc-doc-spec">${escapeHtml(dspec)}</span>` : ''}</span>
           ${d.rating ? `<span class="kc-doc-rating">★ ${Number(d.rating).toFixed(1)}</span>` : ''}
         </a>`;
       }).join('')}
@@ -1450,7 +1453,6 @@ function clinicCardHTML(c, i){
         <div class="kc-meta">
           ${ratingFmt ? `<span class="kc-rating-label">Google értékelés alapján</span> <span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${gReviews ? ` <span class="szk-card-meta-soft">(${gReviews} vélemény)</span>` : ''}` : '<span class="szk-card-meta-soft">Nincs még Google értékelés</span>'}
         </div>
-        ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
       </div>
     </div>
 
@@ -1894,9 +1896,9 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
 .kc-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;padding:14px 22px 4px}
 .kc-doc-more{grid-column:1/-1}
-.kc-doc{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(220,227,234,.7);border-radius:11px;text-decoration:none;color:inherit;background:#fbfcfe;transition:border-color .15s,background .15s}
-.kc-doc:hover{border-color:#264ACA;background:#f3f6ff}
-.kc-doc-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#dde6ff);color:#264ACA;display:flex;align-items:center;justify-content:center}
+.kc-doc{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(44,150,80,.18);border-radius:11px;text-decoration:none;color:inherit;background:rgba(44,150,80,.06);transition:border-color .15s,background .15s}
+.kc-doc:hover{border-color:#2C9650;background:rgba(44,150,80,.12)}
+.kc-doc-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#dcf3e4,#c3e9d0);color:#2C9650;display:flex;align-items:center;justify-content:center}
 .kc-doc-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .kc-doc-name{font-size:13.5px;font-weight:600;color:#1a1f36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kc-doc-spec{font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
