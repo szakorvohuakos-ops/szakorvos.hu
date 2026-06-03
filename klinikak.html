@@ -1197,8 +1197,8 @@ function applyFilters(){
 
   filtered.sort((a,b) => {
     switch(sort){
-      case 'rating':  return b._avgRating - a._avgRating;
-      case 'reviews': return b._totalReviews - a._totalReviews;
+      case 'rating':  return (Number(b.google_rating)||0) - (Number(a.google_rating)||0);
+      case 'reviews': return (Number(b.google_review_count)||0) - (Number(a.google_review_count)||0);
       case 'name':    return (a.name||'').localeCompare(b.name||'', 'hu');
       case 'doctors':
       default:        return b._docCount - a._docCount;
@@ -1386,7 +1386,9 @@ function clinicCardHTML(c, i){
     ? `<div class="szk-card-avatar"><img src="${escapeHtml(photo)}" alt="${escapeHtml(c.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.clinic-init').style.display='flex'"><div class="clinic-init" style="display:none;width:100%;height:100%;align-items:center;justify-content:center">${escapeHtml(initial)}</div></div>`
     : `<div class="szk-card-avatar">${escapeHtml(initial)}</div>`;
 
-  const ratingFmt = c._avgRating > 0 ? c._avgRating.toFixed(1) : '';
+  const gRating = c.google_rating ? Number(c.google_rating) : 0;
+  const gReviews = c.google_review_count ? Number(c.google_review_count) : 0;
+  const ratingFmt = gRating > 0 ? gRating.toFixed(1).replace('.', ',') : '';
   const specsAll = (c._specs || []);
   const specsDisplay = specsAll.slice(0,3).map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
   const extraSpecCount = Math.max(0, specsAll.length - 3);
@@ -1439,21 +1441,20 @@ function clinicCardHTML(c, i){
     <div class="szk-card-top">
       ${photoBlock}
       <div class="szk-card-body">
-        <div class="szk-card-title">${escapeHtml(c.name)}<span class="szk-verified" title="Ellenőrzött"></span></div>
+        <div class="szk-card-title">${escapeHtml(c.name)}</div>
+        <div class="kc-address">
+          <span class="kc-address-ic">${PIN}</span>
+          <span class="kc-address-txt">${fullAddress ? escapeHtml(fullAddress) : 'Helyszín nincs megadva'}</span>
+        </div>
         <div class="szk-card-subtitle">${specsAll.length ? (specsAll.length + ' szakterület') : 'Egészségügyi szolgáltató'}${c._docCount ? ' · ' + c._docCount + ' szakorvos' : ''}</div>
         <div class="kc-meta">
-          ${ratingFmt ? `<span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${c._totalReviews ? ` <span class="szk-card-meta-soft">(${c._totalReviews} értékelés)</span>` : ''}` : '<span class="szk-card-meta-soft">Nincs még értékelés</span>'}
+          ${ratingFmt ? `<span class="kc-rating-label">Google értékelés alapján</span> <span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${gReviews ? ` <span class="szk-card-meta-soft">(${gReviews} vélemény)</span>` : ''}` : '<span class="szk-card-meta-soft">Nincs még Google értékelés</span>'}
         </div>
         ${specChips ? `<div class="kc-chips">${specChips}</div>` : ''}
       </div>
     </div>
 
     ${docsHtml}
-
-    <div class="kc-address">
-      <span class="kc-address-ic">${PIN}</span>
-      <span class="kc-address-txt">${fullAddress ? escapeHtml(fullAddress) : 'Helyszín nincs megadva'}</span>
-    </div>
 
     <div class="szk-card-foot">
       <div class="szk-card-foot-btns" onclick="event.stopPropagation()" style="width:100%;display:flex;gap:10px">
@@ -1616,9 +1617,19 @@ async function renderMap(){
       _gmarkers.forEach(m => m.setMap(_gmap));
     }
 
+    // Van-e aktív szűrő (város, szakterület, vagy szöveges keresés)?
+    const cityActive = !!(document.getElementById('fCity') && document.getElementById('fCity').value);
+    const specActive = !!(window._activeSpecName);
+    const queryActive = !!(window._activeSpecQuery);
+    const anyFilter = cityActive || specActive || queryActive;
+
     if(withCoords.length === 1){
       _gmap.setCenter(bounds.getCenter());
       _gmap.setZoom(14);
+    } else if(!anyFilter){
+      // Nincs szűrő → Közép-Magyarország fix nézet (ne az egész országra/Európára illesszen)
+      _gmap.setCenter({ lat: 47.45, lng: 19.05 });
+      _gmap.setZoom(10);
     } else {
       _gmap.fitBounds(bounds, 60);
     }
@@ -1871,13 +1882,18 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .pw main .szk-card.kc.kc-premium:hover{box-shadow:0 14px 34px rgba(184,134,11,.22),0 30px 60px rgba(184,134,11,.16);border-color:#d4a017}
 .kc-prem-badge{display:inline-flex;align-items:center;gap:5px;position:absolute;top:14px;right:14px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#b8860b,#d4a017);padding:5px 10px;border-radius:100px;box-shadow:0 2px 8px rgba(184,134,11,.35)}
 .kc .szk-card-top{padding:20px 22px 14px}
+/* Kép 20%-kal nagyobb (64→77px, mobil 56→67px) */
+.kc .szk-card-avatar{width:77px;height:77px;font-size:23px}
+@media(max-width:520px){.kc .szk-card-avatar{width:67px;height:67px;font-size:20px}}
 .kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
 .kc-meta .kc-m-star{color:#d97706;font-weight:700}
+.kc-rating-label{font-size:12px;color:#64748b;font-weight:500}
 .kc-meta strong{color:#113293}
 .kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
 .kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
-.kc-docs{display:flex;flex-direction:column;gap:6px;padding:14px 22px 4px}
+.kc-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;padding:14px 22px 4px}
+.kc-doc-more{grid-column:1/-1}
 .kc-doc{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(220,227,234,.7);border-radius:11px;text-decoration:none;color:inherit;background:#fbfcfe;transition:border-color .15s,background .15s}
 .kc-doc:hover{border-color:#264ACA;background:#f3f6ff}
 .kc-doc-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#dde6ff);color:#264ACA;display:flex;align-items:center;justify-content:center}
@@ -1888,9 +1904,9 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .kc-doc-more{display:block;text-align:center;padding:8px;font-size:12.5px;font-weight:600;color:#264ACA;text-decoration:none;border:1px dashed rgba(38,74,202,.3);border-radius:10px;background:rgba(38,74,202,.04)}
 .kc-doc-more:hover{background:rgba(38,74,202,.1)}
 /* Teljes cím sor */
-.kc-address{display:flex;align-items:flex-start;gap:9px;margin:14px 22px 0;padding:12px 14px;background:linear-gradient(135deg,rgba(17,50,147,.04),rgba(38,74,202,.03));border:1px solid rgba(38,74,202,.1);border-radius:12px}
+.kc-address{display:flex;align-items:flex-start;gap:8px;margin:6px 0 10px;padding:8px 11px;background:linear-gradient(135deg,rgba(17,50,147,.04),rgba(38,74,202,.03));border:1px solid rgba(38,74,202,.1);border-radius:10px}
 .kc-address-ic{flex-shrink:0;color:#264ACA;margin-top:1px}
-.kc-address-txt{font-size:13.5px;font-weight:600;color:#1a1f36;line-height:1.4}
+.kc-address-txt{font-size:13px;font-weight:600;color:#1a1f36;line-height:1.4}
 .kc-badges{display:none}
 .kc-badge{display:none}
 .kc .szk-card-foot{padding:16px 22px 18px;border-top:none}
