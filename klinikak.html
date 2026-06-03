@@ -1062,6 +1062,7 @@ async function loadClinics(){
         ...c,
         _docCount: docs.length,
         _docIds: docs.map(d => d.id),
+        _docs: docs.map(d => ({ id:d.id, name:d.name, slug:d.slug, rating:d.rating, specs:(specsByDoc.get(d.id)||[]).map(s=>s.name) })),
         _specs: Array.from(specMap.values()),
         _avgRating: avgRating,
         _totalReviews: totalReviews,
@@ -1173,6 +1174,9 @@ function applyFilters(){
   const city = document.getElementById('fCity').value;
   const spec = document.getElementById('fSpec').value;
   const sort = document.getElementById('sortSel').value;
+  // Aktív szakterület-szűrő a kártyához (dropdown vagy szövegkeresés)
+  window._activeSpecName = spec || '';
+  window._activeSpecQuery = q || '';
 
   filtered = allClinics.filter(c => {
     if(q){
@@ -1386,7 +1390,9 @@ function clinicCardHTML(c, i){
   const specsAll = (c._specs || []);
   const specsDisplay = specsAll.slice(0,3).map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
   const extraSpecCount = Math.max(0, specsAll.length - 3);
-  const addressLine = [[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ') || c.address || '';
+  const fullAddress = c.address
+    || [[c.postal_code, c._cityName].filter(Boolean).join(' '), c.street].filter(Boolean).join(', ')
+    || '';
   const target = c.slug ? `/klinikak/${encodeURIComponent(c.slug)}` : `/klinika.html?id=${c.id}`;
 
   const chipSpecs = specsAll.slice(0,5);
@@ -1398,20 +1404,38 @@ function clinicCardHTML(c, i){
   const districtVal = c.district ? `${escapeHtml(String(c.district))}. kerület` : '';
   const webHost = c.website ? c.website.replace(/^https?:\/\//,'').replace(/\/$/,'') : '';
 
-  const bookings = [];
-  if (c.on_foglaljorvost) bookings.push('Online foglalás');
-  if (c.on_odoktor) bookings.push('oDoktor');
-  if (c.on_teladoc) bookings.push('Teladoc');
-  const bookingHtml = bookings.length
-    ? `<div class="kc-badges">${bookings.map(b => `<span class="kc-badge book"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>${b}</span>`).join('')}</div>`
-    : '';
+  // ── Orvosok a kártyán ──
+  // Ha szakterületre szűrt a felhasználó, csak az adott szakterület orvosait mutatjuk.
+  const activeSpec = (window._activeSpecName || '').toLowerCase();
+  const activeQ = (window._activeSpecQuery || '').toLowerCase();
+  let cardDocs = (c._docs || []);
+  if(activeSpec){
+    cardDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s||'').toLowerCase() === activeSpec));
+  } else if(activeQ){
+    const qDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s||'').toLowerCase().includes(activeQ)));
+    if(qDocs.length) cardDocs = qDocs; // csak ha a keresés szakterületre illeszkedett
+  }
+  const DOC_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
+  const docTop = cardDocs.slice(0,3);
+  const docMore = Math.max(0, cardDocs.length - 3);
+  const docsHtml = cardDocs.length ? `<div class="kc-docs">
+      ${docTop.map(d => {
+        const dspec = (d.specs && d.specs[0]) ? d.specs[0] : '';
+        const dtarget = d.slug ? `/orvosok/${encodeURIComponent(d.slug)}` : `/orvos.html?id=${d.id}`;
+        return `<a class="kc-doc" href="${dtarget}" onclick="event.stopPropagation()">
+          <span class="kc-doc-ic">${DOC_ICON}</span>
+          <span class="kc-doc-main"><span class="kc-doc-name">${escapeHtml(d.name||'')}</span>${dspec ? `<span class="kc-doc-spec">${escapeHtml(dspec)}</span>` : ''}</span>
+          ${d.rating ? `<span class="kc-doc-rating">★ ${Number(d.rating).toFixed(1)}</span>` : ''}
+        </a>`;
+      }).join('')}
+      ${docMore ? `<a class="kc-doc-more" href="${target}" onclick="event.stopPropagation()">+ még ${docMore} szakorvos</a>` : ''}
+    </div>` : '';
 
   const PIN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-  const USR = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>';
-  const STR = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-  const WEB = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+  const isPremium = (c.status === 'partner') || c.is_premium === true;
 
-  return `<div class="szk-card kc" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
+  return `<div class="szk-card kc${isPremium ? ' kc-premium' : ''}" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
+    ${isPremium ? '<div class="kc-prem-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg>Kiemelt partner</div>' : ''}
     <div class="szk-card-top">
       ${photoBlock}
       <div class="szk-card-body">
@@ -1424,20 +1448,17 @@ function clinicCardHTML(c, i){
       </div>
     </div>
 
-    <div class="kc-grid">
-      <div class="kc-info">${PIN}<div><div class="kc-info-l">Város</div><div class="kc-info-v">${escapeHtml(cityVal)}${districtVal ? ` · ${districtVal}` : ''}</div></div></div>
-      ${webHost ? `<div class="kc-info">${WEB}<div><div class="kc-info-l">Weboldal</div><div class="kc-info-v"><a href="${escapeHtml(c.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${escapeHtml(webHost)}</a></div></div></div>` : ''}
+    ${docsHtml}
+
+    <div class="kc-address">
+      <span class="kc-address-ic">${PIN}</span>
+      <span class="kc-address-txt">${fullAddress ? escapeHtml(fullAddress) : 'Helyszín nincs megadva'}</span>
     </div>
 
-    ${bookingHtml}
-
     <div class="szk-card-foot">
-      <div class="szk-card-foot-info">
-        ${addressLine ? `${PIN}<span>${escapeHtml(addressLine)}</span>` : '<span class="szk-card-meta-soft">Helyszín nincs megadva</span>'}
-      </div>
-      <div class="szk-card-foot-btns" onclick="event.stopPropagation()">
+      <div class="szk-card-foot-btns" onclick="event.stopPropagation()" style="width:100%;display:flex;gap:10px">
         ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>Hívás</a>` : ''}
-        <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();window.location.href='${target}'">Klinika megtekintése</button>
+        <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();window.location.href='${target}'" style="flex:1">Klinika megtekintése</button>
       </div>
     </div>
   </div>`;
@@ -1843,7 +1864,12 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
 <style id="klinika-card-skin">
-.pw main .szk-card.kc{display:block;padding:0;overflow:hidden}
+.pw main .szk-card.kc{display:block;padding:0;overflow:hidden;position:relative;border-radius:20px;border:1px solid rgba(199,210,254,.45);background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);box-shadow:0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s,border-color .3s}
+.pw main .szk-card.kc:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(17,50,147,.12),0 28px 56px rgba(17,50,147,.1);border-color:rgba(38,74,202,.35)}
+/* Prémium kártya */
+.pw main .szk-card.kc.kc-premium{border-color:#e3c66b;background:linear-gradient(180deg,#fffdf6 0%,#ffffff 38%);box-shadow:0 2px 4px rgba(184,134,11,.08),0 10px 30px rgba(184,134,11,.14)}
+.pw main .szk-card.kc.kc-premium:hover{box-shadow:0 14px 34px rgba(184,134,11,.22),0 30px 60px rgba(184,134,11,.16);border-color:#d4a017}
+.kc-prem-badge{display:inline-flex;align-items:center;gap:5px;position:absolute;top:14px;right:14px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#b8860b,#d4a017);padding:5px 10px;border-radius:100px;box-shadow:0 2px 8px rgba(184,134,11,.35)}
 .kc .szk-card-top{padding:20px 22px 14px}
 .kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
 .kc-meta .kc-m-star{color:#d97706;font-weight:700}
@@ -1851,17 +1877,23 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
 .kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
-.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 22px;border-top:1px solid rgba(220,227,234,.5);border-bottom:1px solid rgba(220,227,234,.5)}
-.kc-info{display:flex;align-items:flex-start;gap:9px;min-width:0}
-.kc-info svg{color:#264ACA;flex-shrink:0;margin-top:1px}
-.kc-info-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;margin-bottom:2px}
-.kc-info-v{font-size:13.5px;color:#1a1f36;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
-.kc-info-v a{color:#264ACA;text-decoration:none}
-.kc-info-v a:hover{text-decoration:underline}
-.kc-badges{display:flex;flex-wrap:wrap;gap:7px;padding:14px 22px 0}
-.kc-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px}
-.kc-badge.book{color:#2C9650;background:rgba(44,150,80,.1);border:1px solid rgba(44,150,80,.2)}
-.kc .szk-card-foot{padding:14px 22px 18px;border-top:none}
+.kc-docs{display:flex;flex-direction:column;gap:6px;padding:14px 22px 4px}
+.kc-doc{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(220,227,234,.7);border-radius:11px;text-decoration:none;color:inherit;background:#fbfcfe;transition:border-color .15s,background .15s}
+.kc-doc:hover{border-color:#264ACA;background:#f3f6ff}
+.kc-doc-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#dde6ff);color:#264ACA;display:flex;align-items:center;justify-content:center}
+.kc-doc-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.kc-doc-name{font-size:13.5px;font-weight:600;color:#1a1f36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-doc-spec{font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-doc-rating{flex-shrink:0;font-size:12.5px;font-weight:700;color:#1a1f36}
+.kc-doc-more{display:block;text-align:center;padding:8px;font-size:12.5px;font-weight:600;color:#264ACA;text-decoration:none;border:1px dashed rgba(38,74,202,.3);border-radius:10px;background:rgba(38,74,202,.04)}
+.kc-doc-more:hover{background:rgba(38,74,202,.1)}
+/* Teljes cím sor */
+.kc-address{display:flex;align-items:flex-start;gap:9px;margin:14px 22px 0;padding:12px 14px;background:linear-gradient(135deg,rgba(17,50,147,.04),rgba(38,74,202,.03));border:1px solid rgba(38,74,202,.1);border-radius:12px}
+.kc-address-ic{flex-shrink:0;color:#264ACA;margin-top:1px}
+.kc-address-txt{font-size:13.5px;font-weight:600;color:#1a1f36;line-height:1.4}
+.kc-badges{display:none}
+.kc-badge{display:none}
+.kc .szk-card-foot{padding:16px 22px 18px;border-top:none}
 </style>
 <script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
 <!-- Találati toast -->
