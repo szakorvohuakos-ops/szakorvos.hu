@@ -2200,6 +2200,8 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
     </div>
     <div class="cedit-body">
       <input type="hidden" id="ce_id">
+
+      <div class="cedit-section">Alapadatok</div>
       <div class="cedit-grid">
         <div class="cedit-field cedit-full"><label>Név</label><input id="ce_name" type="text"></div>
         <div class="cedit-field"><label>Státusz</label>
@@ -2209,22 +2211,55 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
             <option value="partner">Partner</option>
           </select>
         </div>
-        <div class="cedit-field"><label>Kerület (Budapest, pl. XIII)</label><input id="ce_district" type="text"></div>
+        <div class="cedit-field"><label>Slug (URL)</label><input id="ce_slug" type="text"></div>
+        <div class="cedit-field cedit-full"><label>Leírás</label><textarea id="ce_description" rows="3"></textarea></div>
+      </div>
+
+      <div class="cedit-section">Cím &amp; elhelyezkedés</div>
+      <div class="cedit-grid">
         <div class="cedit-field cedit-full"><label>Cím</label><input id="ce_address" type="text"></div>
         <div class="cedit-field"><label>Irányítószám</label><input id="ce_postal" type="text"></div>
         <div class="cedit-field"><label>Utca</label><input id="ce_street" type="text"></div>
+        <div class="cedit-field"><label>Kerület (Budapest, pl. XIII)</label><input id="ce_district" type="text"></div>
+        <div class="cedit-field"><label>Város ID</label><input id="ce_city_id" type="text"></div>
+        <div class="cedit-field"><label>Szélesség (lat)</label><input id="ce_lat" type="text"></div>
+        <div class="cedit-field"><label>Hosszúság (lng)</label><input id="ce_lng" type="text"></div>
+      </div>
+
+      <div class="cedit-section">Elérhetőség</div>
+      <div class="cedit-grid">
         <div class="cedit-field"><label>Telefon</label><input id="ce_phone" type="text"></div>
         <div class="cedit-field"><label>E-mail (csak belső)</label><input id="ce_email" type="email"></div>
         <div class="cedit-field cedit-full"><label>Weboldal</label><input id="ce_website" type="url"></div>
-        <div class="cedit-field cedit-full"><label>Leírás</label><textarea id="ce_description" rows="3"></textarea></div>
+      </div>
+
+      <div class="cedit-section">Szolgáltatások &amp; jellemzők</div>
+      <div class="cedit-grid">
         <div class="cedit-field"><label>Parkolás</label><input id="ce_parking" type="text"></div>
         <div class="cedit-field"><label>Megközelítés</label><input id="ce_transport" type="text"></div>
         <div class="cedit-field cedit-full"><label>Akadálymentesség</label><input id="ce_accessibility" type="text"></div>
       </div>
+
+      <div class="cedit-section">Külső felületek</div>
+      <div class="cedit-grid">
+        <div class="cedit-field"><label>Google Place ID</label><input id="ce_google_place_id" type="text"></div>
+        <div class="cedit-field"><label>Fotó URL</label><input id="ce_photo_url" type="url"></div>
+        <div class="cedit-field"><label>Borító URL</label><input id="ce_cover_url" type="url"></div>
+        <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_foglaljorvost"> Foglaljorvost.hu-n elérhető</label></div>
+        <div class="cedit-field"><label>Foglaljorvost URL</label><input id="ce_foglaljorvost_url" type="url"></div>
+        <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_odoktor"> oDoktor-on elérhető</label></div>
+        <div class="cedit-field"><label>oDoktor URL</label><input id="ce_odoktor_url" type="url"></div>
+      </div>
+
+      <div class="cedit-section">Itt rendelő orvosok (<span id="ce_doc_count">0</span>)</div>
+      <div id="ce_doctors" class="cedit-doctors">
+        <div class="cedit-doc-empty">Betöltés…</div>
+      </div>
+
       <div class="cedit-msg" id="ce_msg"></div>
     </div>
     <div class="cedit-foot">
-      <a id="ce_fulllink" href="#" class="cedit-btn-ghost">Részletes szerkesztő megnyitása →</a>
+      <a id="ce_fulllink" href="#" class="cedit-btn-ghost">Részletes szerkesztő →</a>
       <div style="flex:1"></div>
       <button class="cedit-btn-ghost" onclick="closeClinicEdit()">Mégse</button>
       <button class="cedit-btn-save" id="ce_save" onclick="saveClinicEdit()">Mentés</button>
@@ -2235,30 +2270,43 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 <style id="clinic-edit-css">
 .cedit-overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(17,33,77,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .cedit-overlay.open{display:flex}
-.cedit-modal{background:#fff;border-radius:18px;width:100%;max-width:720px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(17,50,147,.3);font-family:inherit;overflow:hidden}
-.cedit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 24px;border-bottom:1px solid var(--border,#e6eaf3)}
-.cedit-title{font-size:18px;font-weight:700;color:var(--brand,#113293);margin:0}
+.cedit-modal{background:#fff;border-radius:18px;width:100%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(17,50,147,.3);font-family:inherit;overflow:hidden}
+.cedit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 26px;border-bottom:1px solid var(--border,#e6eaf3)}
+.cedit-title{font-size:19px;font-weight:700;color:var(--brand,#113293);margin:0}
 .cedit-sub{font-size:13px;color:var(--muted,#6b7494);margin:3px 0 0}
 .cedit-close{flex-shrink:0;width:34px;height:34px;border-radius:9px;border:1px solid var(--border,#e6eaf3);background:#fff;color:#52617a;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
 .cedit-close:hover{background:#f1f3f9;color:#113293}
-.cedit-body{padding:20px 24px;overflow-y:auto;flex:1}
+.cedit-body{padding:8px 26px 22px;overflow-y:auto;flex:1}
+.cedit-section{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-2,#264ACA);margin:22px 0 12px;padding-bottom:7px;border-bottom:1px solid #eef1f8}
 .cedit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cedit-field{display:flex;flex-direction:column;gap:5px;min-width:0}
 .cedit-field.cedit-full{grid-column:1/-1}
+.cedit-field.cedit-checkrow{justify-content:flex-end}
 .cedit-field label{font-size:12.5px;font-weight:600;color:var(--text,#1a1f36)}
+.cedit-check{flex-direction:row;align-items:center;gap:8px;font-weight:500;cursor:pointer}
+.cedit-check input{width:auto}
 .cedit-field input,.cedit-field select,.cedit-field textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:14px;color:var(--text,#1a1f36);background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:9px;padding:9px 11px;outline:none;transition:border-color .15s,box-shadow .15s}
 .cedit-field input:focus,.cedit-field select:focus,.cedit-field textarea:focus{border-color:var(--brand-2,#264ACA);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
 .cedit-field textarea{resize:vertical;min-height:60px}
-.cedit-msg{margin-top:14px;font-size:13px;font-weight:600;min-height:18px}
+.cedit-doctors{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cedit-doc{display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--border,#e6eaf3);border-radius:10px;background:#fbfcfe}
+.cedit-doc-av{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#113293,#264ACA);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background-size:cover;background-position:center}
+.cedit-doc-main{flex:1;min-width:0}
+.cedit-doc-name{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cedit-doc-spec{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cedit-doc a.cedit-doc-edit{flex-shrink:0;font-size:12px;font-weight:600;color:var(--brand);text-decoration:none;padding:5px 9px;border:1px solid var(--border);border-radius:7px;background:#fff}
+.cedit-doc a.cedit-doc-edit:hover{border-color:var(--brand-2);background:var(--brand-light)}
+.cedit-doc-empty{grid-column:1/-1;color:var(--muted);font-size:13px;padding:6px 2px}
+.cedit-msg{margin-top:16px;font-size:13px;font-weight:600;min-height:18px}
 .cedit-msg.ok{color:var(--green,#2C9650)}
 .cedit-msg.err{color:#dc2626}
-.cedit-foot{display:flex;align-items:center;gap:10px;padding:16px 24px;border-top:1px solid var(--border,#e6eaf3);background:#fbfcfe;flex-wrap:wrap}
+.cedit-foot{display:flex;align-items:center;gap:10px;padding:16px 26px;border-top:1px solid var(--border,#e6eaf3);background:#fbfcfe;flex-wrap:wrap}
 .cedit-btn-ghost{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--brand,#113293);background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:all .15s}
 .cedit-btn-ghost:hover{border-color:var(--brand-2,#264ACA);background:var(--brand-light,#eef2ff)}
-.cedit-btn-save{font-family:inherit;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);border:none;border-radius:9px;padding:10px 22px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.cedit-btn-save{font-family:inherit;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);border:none;border-radius:9px;padding:10px 24px;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .cedit-btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(17,50,147,.28)}
 .cedit-btn-save:disabled{opacity:.6;cursor:default;transform:none}
-@media(max-width:560px){.cedit-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.cedit-grid,.cedit-doctors{grid-template-columns:1fr}}
 </style>
 
 <script>
@@ -2266,27 +2314,56 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 function openClinicEdit(id){
   const c = (allClinics||[]).find(x => x.id === id);
   if(!c){ return; }
-  const g = (k) => (c[k] == null ? '' : c[k]);
-  document.getElementById('ce_id').value = c.id;
-  document.getElementById('ce_name').value = g('name');
-  document.getElementById('ce_status').value = g('status') || 'active';
-  document.getElementById('ce_district').value = g('district');
-  document.getElementById('ce_address').value = g('address');
-  document.getElementById('ce_postal').value = g('postal_code');
-  document.getElementById('ce_street').value = g('street');
-  document.getElementById('ce_phone').value = g('phone');
-  document.getElementById('ce_email').value = g('email');
-  document.getElementById('ce_website').value = g('website');
-  document.getElementById('ce_description').value = g('description');
-  document.getElementById('ce_parking').value = g('parking_info');
-  document.getElementById('ce_transport').value = g('public_transport');
-  document.getElementById('ce_accessibility').value = g('accessibility');
+  const set = (el,k) => { const e=document.getElementById(el); if(e) e.value = (c[k]==null?'':c[k]); };
+  set('ce_id','id'); set('ce_name','name'); set('ce_slug','slug');
+  document.getElementById('ce_status').value = c.status || 'active';
+  set('ce_description','description');
+  set('ce_address','address'); set('ce_postal','postal_code'); set('ce_street','street');
+  set('ce_district','district'); set('ce_city_id','city_id'); set('ce_lat','lat'); set('ce_lng','lng');
+  set('ce_phone','phone'); set('ce_email','email'); set('ce_website','website');
+  set('ce_parking','parking_info'); set('ce_transport','public_transport'); set('ce_accessibility','accessibility');
+  set('ce_google_place_id','google_place_id'); set('ce_photo_url','photo_url'); set('ce_cover_url','cover_url');
+  set('ce_foglaljorvost_url','foglaljorvost_url'); set('ce_odoktor_url','odoktor_url');
+  document.getElementById('ce_on_foglaljorvost').checked = !!c.on_foglaljorvost;
+  document.getElementById('ce_on_odoktor').checked = !!c.on_odoktor;
   document.getElementById('ceditSub').textContent = (c.cities?.name || '') + (c.district ? ' · ' + c.district + '. ker.' : '');
   document.getElementById('ce_fulllink').href = 'admin-klinika-edit.html?id=' + c.id;
   document.getElementById('ce_fulllink').onclick = () => sessionStorage.setItem('lastEditedClinic', c.id);
   const msg = document.getElementById('ce_msg'); msg.textContent=''; msg.className='cedit-msg';
   document.getElementById('clinicEditModal').classList.add('open');
   document.body.style.overflow='hidden';
+  loadClinicDoctors(c.id);
+}
+async function loadClinicDoctors(clinicId){
+  const wrap = document.getElementById('ce_doctors');
+  const cnt = document.getElementById('ce_doc_count');
+  wrap.innerHTML = '<div class="cedit-doc-empty">Betöltés…</div>';
+  try{
+    const { data, error } = await db.from('doctor_clinics')
+      .select('doctors(id,name,title,photo_url,slug,is_active,doctor_specialties(is_primary,specialties(name)))')
+      .eq('clinic_id', clinicId);
+    if(error) throw error;
+    const docs = (data||[]).map(r => r.doctors).filter(Boolean);
+    cnt.textContent = docs.length;
+    if(!docs.length){ wrap.innerHTML = '<div class="cedit-doc-empty">Nincs ehhez a klinikához rendelt orvos.</div>'; return; }
+    wrap.innerHTML = docs.map(d => {
+      const spec = d.doctor_specialties?.find(s=>s.is_primary)?.specialties?.name
+                || d.doctor_specialties?.[0]?.specialties?.name || '';
+      const initials = (d.name||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+      const av = d.photo_url ? `style="background-image:url('${d.photo_url}')"` : '';
+      const dim = d.is_active ? '' : 'opacity:.5';
+      return `<div class="cedit-doc" style="${dim}">
+        <div class="cedit-doc-av" ${av}>${d.photo_url?'':initials}</div>
+        <div class="cedit-doc-main">
+          <div class="cedit-doc-name">${(d.title?d.title+' ':'')+(d.name||'')}</div>
+          <div class="cedit-doc-spec">${spec || (d.is_active?'':'inaktív')}</div>
+        </div>
+        <a class="cedit-doc-edit" href="admin-orvos.html?id=${d.id}" target="_blank">Szerk.</a>
+      </div>`;
+    }).join('');
+  }catch(e){
+    wrap.innerHTML = '<div class="cedit-doc-empty">Az orvosok betöltése nem sikerült.</div>';
+  }
 }
 function closeClinicEdit(){
   document.getElementById('clinicEditModal').classList.remove('open');
@@ -2297,36 +2374,45 @@ async function saveClinicEdit(){
   const msg = document.getElementById('ce_msg');
   const btn = document.getElementById('ce_save');
   const v = (el) => { const x=document.getElementById(el).value.trim(); return x===''?null:x; };
+  const num = (el) => { const x=document.getElementById(el).value.trim(); return x===''?null:parseFloat(x); };
   const updates = {
     name: document.getElementById('ce_name').value.trim(),
+    slug: v('ce_slug'),
     status: document.getElementById('ce_status').value || 'active',
-    district: v('ce_district'),
+    description: v('ce_description'),
     address: v('ce_address'),
     postal_code: v('ce_postal'),
     street: v('ce_street'),
+    district: v('ce_district'),
+    city_id: v('ce_city_id'),
+    lat: num('ce_lat'),
+    lng: num('ce_lng'),
     phone: v('ce_phone'),
     email: v('ce_email'),
     website: v('ce_website'),
-    description: v('ce_description'),
     parking_info: v('ce_parking'),
     public_transport: v('ce_transport'),
-    accessibility: v('ce_accessibility')
+    accessibility: v('ce_accessibility'),
+    google_place_id: v('ce_google_place_id'),
+    photo_url: v('ce_photo_url'),
+    cover_url: v('ce_cover_url'),
+    foglaljorvost_url: v('ce_foglaljorvost_url'),
+    odoktor_url: v('ce_odoktor_url'),
+    on_foglaljorvost: document.getElementById('ce_on_foglaljorvost').checked,
+    on_odoktor: document.getElementById('ce_on_odoktor').checked
   };
   if(!updates.name){ msg.textContent='A név megadása kötelező.'; msg.className='cedit-msg err'; return; }
   btn.disabled = true; msg.textContent='Mentés…'; msg.className='cedit-msg';
   try{
     const { error } = await db.from('clinics').update(updates).eq('id', id);
     if(error) throw error;
-    // Helyi lista frissítése, hogy azonnal látszódjon
     const c = (allClinics||[]).find(x => x.id === id);
     if(c){ Object.assign(c, updates); }
     msg.textContent='Mentve ✓'; msg.className='cedit-msg ok';
-    // A látható nézet frissítése
     const tableWrap = document.getElementById('clinicTableWrap');
     const tableVisible = tableWrap && tableWrap.style.display !== 'none';
     if(tableVisible && window._currentClinicGroup != null && typeof renderClinicRows==='function' && typeof clinicGroupKey==='function'){
-      // Ha a státusz/kerület változott, a sor más csoportba kerülhet → az aktuális csoport újraszűrése
-      const list = allClinics.filter(c => clinicGroupKey(c) === window._currentClinicGroup);
+      const list = allClinics.filter(x => clinicGroupKey(x) === window._currentClinicGroup);
       renderClinicRows(list);
       const t = document.getElementById('clinicTcTitle');
       if(t) t.textContent = window._currentClinicGroup + ' — ' + list.length + ' klinika';
