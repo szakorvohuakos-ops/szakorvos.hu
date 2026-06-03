@@ -1162,7 +1162,7 @@ async function loadClinics(){
   const groupsEl=document.getElementById('clinicGroups');
   if(groupsEl) groupsEl.innerHTML='<div style="grid-column:1/-1;color:var(--muted);font-size:13px">Betöltés…</div>';
   // Teljes lista lapozva (a Supabase max. 1000 sort ad vissza kérésenként)
-  const SELECT='id,slug,name,address,phone,email,website,description,postal_code,street,parking_info,public_transport,accessibility,lat,lng,status,district,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)';
+  const SELECT='id,slug,name,address,phone,email,website,description,postal_code,street,parking_info,public_transport,accessibility,gallery,opening_hours,photo_url,cover_url,google_place_id,lat,lng,status,district,city_id,google_rating,google_review_count,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,cities(name,county),doctor_clinics(doctor_id)';
   let all=[], offset=0;
   for(let i=0;i<20;i++){
     const{data,error}=await db.from('clinics').select(SELECT).order('name',{ascending:true}).range(offset,offset+999);
@@ -2201,65 +2201,94 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
     <div class="cedit-body">
       <input type="hidden" id="ce_id">
 
-      <div class="cedit-section">Alapadatok</div>
-      <div class="cedit-grid">
-        <div class="cedit-field cedit-full"><label>Név</label><input id="ce_name" type="text"></div>
-        <div class="cedit-field"><label>Státusz</label>
-          <select id="ce_status">
-            <option value="active">Aktív</option>
-            <option value="inactive">Inaktív</option>
-            <option value="partner">Partner</option>
-          </select>
+      <!-- HERO-kártya, mint az éles oldalon -->
+      <div class="cedit-hero">
+        <div class="cedit-hero-photo" id="ce_hero_photo">
+          <span class="ph-fallback" id="ce_hero_initials">?</span>
+          <button type="button" class="ph-edit" onclick="ceEditPhoto()">Fotó</button>
         </div>
-        <div class="cedit-field"><label>Slug (URL)</label><input id="ce_slug" type="text"></div>
-        <div class="cedit-field cedit-full"><label>Leírás</label><textarea id="ce_description" rows="3"></textarea></div>
+        <div class="cedit-hero-info">
+          <input class="cedit-in-name" id="ce_name" type="text" placeholder="Klinika neve" oninput="ceSyncHeroPhoto()">
+          <div class="cedit-hero-meta">
+            <span class="cedit-pill">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <select id="ce_status">
+                <option value="active">Aktív</option>
+                <option value="inactive">Inaktív</option>
+                <option value="partner">Partner</option>
+              </select>
+            </span>
+            <span class="cedit-pill"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ker.: <input id="ce_district" type="text" style="width:54px;border:none;background:transparent;font:inherit;color:var(--brand);outline:none" placeholder="—"></span>
+          </div>
+          <div class="cedit-hero-addr">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7494" stroke-width="2" style="flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <input id="ce_address" type="text" placeholder="Cím">
+          </div>
+        </div>
       </div>
 
-      <div class="cedit-section">Cím &amp; elhelyezkedés</div>
-      <div class="cedit-grid">
-        <div class="cedit-field cedit-full"><label>Cím</label><input id="ce_address" type="text"></div>
-        <div class="cedit-field"><label>Irányítószám</label><input id="ce_postal" type="text"></div>
-        <div class="cedit-field"><label>Utca</label><input id="ce_street" type="text"></div>
-        <div class="cedit-field"><label>Kerület (Budapest, pl. XIII)</label><input id="ce_district" type="text"></div>
-        <div class="cedit-field"><label>Város ID</label><input id="ce_city_id" type="text"></div>
-        <div class="cedit-field"><label>Szélesség (lat)</label><input id="ce_lat" type="text"></div>
-        <div class="cedit-field"><label>Hosszúság (lng)</label><input id="ce_lng" type="text"></div>
+      <!-- Bemutatkozás -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Bemutatkozás</h3>
+        <div class="cedit-grid"><div class="cedit-field cedit-full"><textarea id="ce_description" rows="3" placeholder="A klinika leírása…"></textarea></div></div>
       </div>
 
-      <div class="cedit-section">Elérhetőség</div>
-      <div class="cedit-grid">
-        <div class="cedit-field"><label>Telefon</label><input id="ce_phone" type="text"></div>
-        <div class="cedit-field"><label>E-mail (csak belső)</label><input id="ce_email" type="email"></div>
-        <div class="cedit-field cedit-full"><label>Weboldal</label><input id="ce_website" type="url"></div>
+      <!-- Elérhetőség & megközelítés -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 17.91z"/></svg> Elérhetőség &amp; megközelítés</h3>
+        <div class="cedit-grid">
+          <div class="cedit-field"><label>Telefon</label><input id="ce_phone" type="text"></div>
+          <div class="cedit-field"><label>E-mail (csak belső)</label><input id="ce_email" type="email"></div>
+          <div class="cedit-field cedit-full"><label>Weboldal</label><input id="ce_website" type="url"></div>
+          <div class="cedit-field"><label>Parkolás</label><input id="ce_parking" type="text"></div>
+          <div class="cedit-field"><label>Tömegközlekedés</label><input id="ce_transport" type="text"></div>
+          <div class="cedit-field cedit-full"><label>Akadálymentesség</label><input id="ce_accessibility" type="text"></div>
+        </div>
       </div>
 
-      <div class="cedit-section">Szolgáltatások &amp; jellemzők</div>
-      <div class="cedit-grid">
-        <div class="cedit-field"><label>Parkolás</label><input id="ce_parking" type="text"></div>
-        <div class="cedit-field"><label>Megközelítés</label><input id="ce_transport" type="text"></div>
-        <div class="cedit-field cedit-full"><label>Akadálymentesség</label><input id="ce_accessibility" type="text"></div>
+      <!-- Nyitvatartás -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Nyitvatartás</h3>
+        <div id="ce_hours" class="cedit-hours"></div>
       </div>
 
-      <div class="cedit-section">Külső felületek</div>
-      <div class="cedit-grid">
-        <div class="cedit-field"><label>Google Place ID</label><input id="ce_google_place_id" type="text"></div>
-        <div class="cedit-field"><label>Fotó URL</label><input id="ce_photo_url" type="url"></div>
-        <div class="cedit-field"><label>Borító URL</label><input id="ce_cover_url" type="url"></div>
-        <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_foglaljorvost"> Foglaljorvost.hu-n elérhető</label></div>
-        <div class="cedit-field"><label>Foglaljorvost URL</label><input id="ce_foglaljorvost_url" type="url"></div>
-        <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_odoktor"> oDoktor-on elérhető</label></div>
-        <div class="cedit-field"><label>oDoktor URL</label><input id="ce_odoktor_url" type="url"></div>
+      <!-- Galéria -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></svg> Képgaléria</h3>
+        <div id="ce_gallery" class="cedit-gallery"></div>
       </div>
 
-      <div class="cedit-section">Itt rendelő orvosok (<span id="ce_doc_count">0</span>)</div>
-      <div id="ce_doctors" class="cedit-doctors">
-        <div class="cedit-doc-empty">Betöltés…</div>
+      <!-- Helyszín & külső felületek -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> Helyszín &amp; külső felületek</h3>
+        <div class="cedit-grid">
+          <div class="cedit-field"><label>Slug (URL)</label><input id="ce_slug" type="text"></div>
+          <div class="cedit-field"><label>Irányítószám</label><input id="ce_postal" type="text"></div>
+          <div class="cedit-field"><label>Utca</label><input id="ce_street" type="text"></div>
+          <div class="cedit-field"><label>Város ID</label><input id="ce_city_id" type="text"></div>
+          <div class="cedit-field"><label>Szélesség (lat)</label><input id="ce_lat" type="text"></div>
+          <div class="cedit-field"><label>Hosszúság (lng)</label><input id="ce_lng" type="text"></div>
+          <div class="cedit-field"><label>Google Place ID</label><input id="ce_google_place_id" type="text"></div>
+          <div class="cedit-field"><label>Fotó URL</label><input id="ce_photo_url" type="url" oninput="ceSyncHeroPhoto()"></div>
+          <div class="cedit-field cedit-full"><label>Borító URL</label><input id="ce_cover_url" type="url"></div>
+          <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_foglaljorvost"> Foglaljorvost.hu</label></div>
+          <div class="cedit-field"><label>Foglaljorvost URL</label><input id="ce_foglaljorvost_url" type="url"></div>
+          <div class="cedit-field cedit-checkrow"><label class="cedit-check"><input type="checkbox" id="ce_on_odoktor"> oDoktor</label></div>
+          <div class="cedit-field"><label>oDoktor URL</label><input id="ce_odoktor_url" type="url"></div>
+        </div>
+      </div>
+
+      <!-- Itt rendelő orvosok -->
+      <div class="cedit-sec">
+        <h3 class="cedit-sec-h"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg> Itt rendelő orvosok (<span id="ce_doc_count">0</span>)</h3>
+        <div id="ce_doctors" class="cedit-doctors">
+          <div class="cedit-doc-empty">Betöltés…</div>
+        </div>
       </div>
 
       <div class="cedit-msg" id="ce_msg"></div>
     </div>
     <div class="cedit-foot">
-      <a id="ce_fulllink" href="#" class="cedit-btn-ghost">Részletes szerkesztő →</a>
       <div style="flex:1"></div>
       <button class="cedit-btn-ghost" onclick="closeClinicEdit()">Mégse</button>
       <button class="cedit-btn-save" id="ce_save" onclick="saveClinicEdit()">Mentés</button>
@@ -2270,43 +2299,89 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 <style id="clinic-edit-css">
 .cedit-overlay{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(17,33,77,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .cedit-overlay.open{display:flex}
-.cedit-modal{background:#fff;border-radius:18px;width:100%;max-width:920px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(17,50,147,.3);font-family:inherit;overflow:hidden}
-.cedit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 26px;border-bottom:1px solid var(--border,#e6eaf3)}
-.cedit-title{font-size:19px;font-weight:700;color:var(--brand,#113293);margin:0}
-.cedit-sub{font-size:13px;color:var(--muted,#6b7494);margin:3px 0 0}
-.cedit-close{flex-shrink:0;width:34px;height:34px;border-radius:9px;border:1px solid var(--border,#e6eaf3);background:#fff;color:#52617a;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
+/* A modal az éles klinika-oldal vizuális nyelvét tükrözi */
+.cedit-modal{position:relative;width:100%;max-width:840px;max-height:92vh;display:flex;flex-direction:column;border-radius:24px;font-family:'Inter',sans-serif;overflow:hidden;
+  background:radial-gradient(ellipse 900px 500px at 50% -200px,rgba(38,74,202,.10),transparent 60%),linear-gradient(180deg,#f6f8ff 0%,#eef2fb 100%);
+  box-shadow:0 30px 80px rgba(17,50,147,.4)}
+.cedit-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 26px;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(199,210,254,.4)}
+.cedit-title{font-size:16px;font-weight:700;color:var(--brand,#113293);margin:0}
+.cedit-sub{font-size:12.5px;color:var(--muted,#6b7494);margin:2px 0 0}
+.cedit-close{flex-shrink:0;width:34px;height:34px;border-radius:9px;border:1px solid rgba(199,210,254,.5);background:#fff;color:#52617a;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
 .cedit-close:hover{background:#f1f3f9;color:#113293}
-.cedit-body{padding:8px 26px 22px;overflow-y:auto;flex:1}
-.cedit-section{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-2,#264ACA);margin:22px 0 12px;padding-bottom:7px;border-bottom:1px solid #eef1f8}
-.cedit-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cedit-body{padding:22px 26px 26px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:18px}
+
+/* HERO-kártya (mint az éles oldalon) */
+.cedit-hero{position:relative;background:linear-gradient(135deg,#dde6ff 0%,#eef2ff 55%,#e6e0ff 100%);border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:24px;display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:start;box-shadow:0 8px 28px rgba(17,50,147,.1);overflow:hidden}
+.cedit-hero-photo{position:relative;width:120px;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--brand,#113293),#264ACA);display:flex;align-items:center;justify-content:center}
+.cedit-hero-photo img{width:100%;height:100%;object-fit:cover}
+.cedit-hero-photo .ph-fallback{color:#fff;font-size:40px;font-weight:600}
+.cedit-hero-photo .ph-edit{position:absolute;bottom:6px;right:6px;background:rgba(255,255,255,.92);border:none;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--brand);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.cedit-hero-info{min-width:0;display:flex;flex-direction:column;gap:8px}
+.cedit-in-name{font-size:23px;font-weight:700;color:var(--brand,#113293);letter-spacing:-.02em;background:transparent;border:none;border-bottom:2px dashed transparent;padding:2px 0;outline:none;width:100%;font-family:inherit}
+.cedit-in-name:hover,.cedit-in-name:focus{border-bottom-color:rgba(38,74,202,.45)}
+.cedit-hero-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cedit-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.7);border:1px solid rgba(17,50,147,.12);border-radius:100px;padding:5px 12px;font-size:12.5px;font-weight:600;color:var(--brand)}
+.cedit-pill select{border:none;background:transparent;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--brand);outline:none;cursor:pointer}
+.cedit-hero-addr{display:flex;align-items:center;gap:7px;font-size:13.5px;color:var(--sub,#3c4564)}
+.cedit-hero-addr input{flex:1;border:none;background:rgba(255,255,255,.6);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13.5px;color:var(--text);outline:none}
+.cedit-hero-addr input:focus{box-shadow:0 0 0 2px rgba(38,74,202,.25)}
+
+/* Üveg-szekció (mint .section az élesben) */
+.cedit-sec{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(248,250,255,.62));backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:18px;padding:18px 20px;box-shadow:0 4px 16px rgba(17,50,147,.06)}
+.cedit-sec-h{font-size:13.5px;font-weight:700;color:var(--text,#1a1f36);margin:0 0 14px;display:flex;align-items:center;gap:9px;padding-bottom:11px;border-bottom:1px solid rgba(199,210,254,.35);letter-spacing:-.01em}
+.cedit-sec-h svg{color:var(--brand,#113293)}
+.cedit-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .cedit-field{display:flex;flex-direction:column;gap:5px;min-width:0}
 .cedit-field.cedit-full{grid-column:1/-1}
-.cedit-field.cedit-checkrow{justify-content:flex-end}
-.cedit-field label{font-size:12.5px;font-weight:600;color:var(--text,#1a1f36)}
-.cedit-check{flex-direction:row;align-items:center;gap:8px;font-weight:500;cursor:pointer}
+.cedit-field.cedit-checkrow{justify-content:center}
+.cedit-field label{font-size:12px;font-weight:600;color:var(--muted,#6b7494)}
+.cedit-check{flex-direction:row;align-items:center;gap:8px;font-weight:600;color:var(--text);cursor:pointer;font-size:13px}
 .cedit-check input{width:auto}
-.cedit-field input,.cedit-field select,.cedit-field textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:14px;color:var(--text,#1a1f36);background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:9px;padding:9px 11px;outline:none;transition:border-color .15s,box-shadow .15s}
+.cedit-field input,.cedit-field select,.cedit-field textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:14px;color:var(--text,#1a1f36);background:rgba(255,255,255,.85);border:1.5px solid rgba(199,210,254,.5);border-radius:10px;padding:9px 12px;outline:none;transition:border-color .15s,box-shadow .15s}
 .cedit-field input:focus,.cedit-field select:focus,.cedit-field textarea:focus{border-color:var(--brand-2,#264ACA);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
-.cedit-field textarea{resize:vertical;min-height:60px}
-.cedit-doctors{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cedit-doc{display:flex;align-items:center;gap:11px;padding:10px 12px;border:1px solid var(--border,#e6eaf3);border-radius:10px;background:#fbfcfe}
-.cedit-doc-av{flex-shrink:0;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#113293,#264ACA);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background-size:cover;background-position:center}
+.cedit-field textarea{resize:vertical;min-height:62px}
+
+/* Nyitvatartás — éles "hours" stílus */
+.cedit-hours{display:flex;flex-direction:column;gap:4px}
+.cedit-hour-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(199,210,254,.3);flex-wrap:wrap}
+.cedit-hour-row:last-child{border-bottom:none}
+.cedit-hour-day{width:46px;font-size:13px;font-weight:600;color:var(--muted)}
+.cedit-hour-row input[type=time]{width:auto;flex:0 0 auto;padding:6px 9px;background:rgba(255,255,255,.85);border:1.5px solid rgba(199,210,254,.5);border-radius:8px;font-family:inherit}
+.cedit-hour-sep{color:var(--muted)}
+.cedit-hour-closed{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer;margin-left:auto}
+.cedit-hour-closed input{width:auto}
+
+/* Galéria — éles rács stílus */
+.cedit-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.cedit-gal-item{position:relative;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#eef2ff;border:1px solid rgba(199,210,254,.5)}
+.cedit-gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.cedit-gal-item .ce-gal-url{position:absolute;left:0;right:0;bottom:0;width:100%;box-sizing:border-box;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:10px;padding:4px 6px;font-family:inherit;outline:none}
+.cedit-gal-item .ce-gal-url::placeholder{color:rgba(255,255,255,.7)}
+.cedit-gal-del{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:7px;border:none;background:rgba(220,38,38,.92);color:#fff;cursor:pointer;font-weight:700;font-size:13px;line-height:1}
+.cedit-gal-add{aspect-ratio:1/1;border-radius:12px;border:1.5px dashed rgba(38,74,202,.4);background:rgba(238,242,255,.5);color:var(--brand);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cedit-gal-add:hover{background:rgba(238,242,255,.9)}
+
+/* Orvosok — éles doc-card rács */
+.cedit-doctors{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.cedit-doc{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid rgba(199,210,254,.5);border-radius:14px;background:rgba(255,255,255,.7)}
+.cedit-doc-av{flex-shrink:0;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#eef2ff,#dde6ff);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;background-size:cover;background-position:center}
 .cedit-doc-main{flex:1;min-width:0}
-.cedit-doc-name{font-size:13.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cedit-doc-spec{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cedit-doc a.cedit-doc-edit{flex-shrink:0;font-size:12px;font-weight:600;color:var(--brand);text-decoration:none;padding:5px 9px;border:1px solid var(--border);border-radius:7px;background:#fff}
+.cedit-doc-name{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cedit-doc-spec{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.cedit-doc a.cedit-doc-edit{flex-shrink:0;font-size:12px;font-weight:600;color:var(--brand);text-decoration:none;padding:6px 10px;border:1px solid rgba(199,210,254,.6);border-radius:8px;background:#fff}
 .cedit-doc a.cedit-doc-edit:hover{border-color:var(--brand-2);background:var(--brand-light)}
 .cedit-doc-empty{grid-column:1/-1;color:var(--muted);font-size:13px;padding:6px 2px}
-.cedit-msg{margin-top:16px;font-size:13px;font-weight:600;min-height:18px}
+
+.cedit-msg{font-size:13px;font-weight:600;min-height:18px}
 .cedit-msg.ok{color:var(--green,#2C9650)}
 .cedit-msg.err{color:#dc2626}
-.cedit-foot{display:flex;align-items:center;gap:10px;padding:16px 26px;border-top:1px solid var(--border,#e6eaf3);background:#fbfcfe;flex-wrap:wrap}
-.cedit-btn-ghost{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--brand,#113293);background:#fff;border:1.5px solid var(--border,#e6eaf3);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:all .15s}
-.cedit-btn-ghost:hover{border-color:var(--brand-2,#264ACA);background:var(--brand-light,#eef2ff)}
-.cedit-btn-save{font-family:inherit;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);border:none;border-radius:9px;padding:10px 24px;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.cedit-btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(17,50,147,.28)}
+.cedit-foot{display:flex;align-items:center;gap:10px;padding:14px 26px;background:rgba(255,255,255,.7);backdrop-filter:blur(20px);border-top:1px solid rgba(199,210,254,.4);flex-wrap:wrap}
+.cedit-btn-ghost{font-family:inherit;font-size:13.5px;font-weight:600;color:var(--brand,#113293);background:rgba(255,255,255,.7);border:1px solid rgba(17,50,147,.15);border-radius:11px;padding:10px 18px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;transition:all .15s}
+.cedit-btn-ghost:hover{border-color:rgba(17,50,147,.35);background:rgba(238,242,255,.85)}
+.cedit-btn-save{font-family:inherit;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);border:none;border-radius:11px;padding:11px 26px;cursor:pointer;box-shadow:0 2px 6px rgba(17,50,147,.18),0 8px 20px rgba(17,50,147,.22);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s}
+.cedit-btn-save:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(17,50,147,.22),0 14px 28px rgba(17,50,147,.3)}
 .cedit-btn-save:disabled{opacity:.6;cursor:default;transform:none}
-@media(max-width:620px){.cedit-grid,.cedit-doctors{grid-template-columns:1fr}}
+@media(max-width:620px){.cedit-hero{grid-template-columns:1fr;text-align:center}.cedit-hero-photo{margin:0 auto}.cedit-grid{grid-template-columns:1fr}.cedit-gallery{grid-template-columns:repeat(3,1fr)}}
 </style>
 
 <script>
@@ -2327,12 +2402,102 @@ function openClinicEdit(id){
   document.getElementById('ce_on_foglaljorvost').checked = !!c.on_foglaljorvost;
   document.getElementById('ce_on_odoktor').checked = !!c.on_odoktor;
   document.getElementById('ceditSub').textContent = (c.cities?.name || '') + (c.district ? ' · ' + c.district + '. ker.' : '');
-  document.getElementById('ce_fulllink').href = 'admin-klinika-edit.html?id=' + c.id;
-  document.getElementById('ce_fulllink').onclick = () => sessionStorage.setItem('lastEditedClinic', c.id);
   const msg = document.getElementById('ce_msg'); msg.textContent=''; msg.className='cedit-msg';
+  ceSyncHeroPhoto();
+  ceRenderHours(c.opening_hours || {});
+  ceRenderGallery(Array.isArray(c.gallery) ? c.gallery : []);
   document.getElementById('clinicEditModal').classList.add('open');
   document.body.style.overflow='hidden';
   loadClinicDoctors(c.id);
+}
+
+/* ── Hero-fotó szinkron ── */
+function ceSyncHeroPhoto(){
+  const url = document.getElementById('ce_photo_url').value.trim();
+  const name = document.getElementById('ce_name').value.trim();
+  const box = document.getElementById('ce_hero_photo');
+  const initials = document.getElementById('ce_hero_initials');
+  box.querySelectorAll('img').forEach(i=>i.remove());
+  if(url){
+    const img = document.createElement('img'); img.src = url;
+    img.onerror = ()=>{ img.remove(); initials.style.display=''; };
+    initials.style.display='none';
+    box.insertBefore(img, box.firstChild);
+  } else {
+    initials.style.display='';
+    initials.textContent = (name||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase() || '?';
+  }
+}
+function ceEditPhoto(){
+  const cur = document.getElementById('ce_photo_url').value.trim();
+  const url = prompt('Klinika fotó URL-je:', cur);
+  if(url !== null){ document.getElementById('ce_photo_url').value = url.trim(); ceSyncHeroPhoto(); }
+}
+
+/* ── Nyitvatartás szerkesztő ── */
+const CE_DAYS = [['mon','Hét'],['tue','Kedd'],['wed','Szer'],['thu','Csüt'],['fri','Pén'],['sat','Szo'],['sun','Vas']];
+function ceRenderHours(oh){
+  const wrap = document.getElementById('ce_hours');
+  wrap.innerHTML = CE_DAYS.map(([d,lbl])=>{
+    const v = oh[d] || {};
+    const closed = !!v.closed;
+    return `<div class="cedit-hour-row" data-day="${d}">
+      <span class="cedit-hour-day">${lbl}</span>
+      <input type="time" class="ce-oh-open" value="${closed?'':(v.open||'')}" ${closed?'disabled':''}>
+      <span class="cedit-hour-sep">–</span>
+      <input type="time" class="ce-oh-close" value="${closed?'':(v.close||'')}" ${closed?'disabled':''}>
+      <label class="cedit-hour-closed"><input type="checkbox" class="ce-oh-closed" ${closed?'checked':''} onchange="ceToggleClosed(this)"> Zárva</label>
+    </div>`;
+  }).join('');
+}
+function ceToggleClosed(cb){
+  const row = cb.closest('.cedit-hour-row');
+  const o = row.querySelector('.ce-oh-open'), c = row.querySelector('.ce-oh-close');
+  o.disabled = c.disabled = cb.checked;
+  if(cb.checked){ o.value=''; c.value=''; }
+}
+function ceBuildHours(){
+  const result = {};
+  document.querySelectorAll('#ce_hours .cedit-hour-row').forEach(row=>{
+    const d = row.dataset.day;
+    const closed = row.querySelector('.ce-oh-closed').checked;
+    const open = row.querySelector('.ce-oh-open').value;
+    const close = row.querySelector('.ce-oh-close').value;
+    if(closed) result[d] = { closed: true };
+    else if(open || close) result[d] = { open: open||'08:00', close: close||'16:00' };
+  });
+  return Object.keys(result).length ? result : null;
+}
+
+/* ── Galéria szerkesztő ── */
+function ceRenderGallery(list){
+  const wrap = document.getElementById('ce_gallery');
+  wrap.innerHTML = '';
+  (list||[]).forEach(url => ceAddGalleryItem(url));
+  ceEnsureAddTile();
+}
+function ceEnsureAddTile(){
+  const wrap = document.getElementById('ce_gallery');
+  const old = wrap.querySelector('.cedit-gal-add'); if(old) old.remove();
+  const btn = document.createElement('button');
+  btn.type='button'; btn.className='cedit-gal-add'; btn.textContent='+ Kép';
+  btn.onclick = ()=>{ ceAddGalleryItem(''); };
+  wrap.appendChild(btn);
+}
+function ceAddGalleryItem(url){
+  const wrap = document.getElementById('ce_gallery');
+  const add = wrap.querySelector('.cedit-gal-add');
+  const div = document.createElement('div');
+  div.className = 'cedit-gal-item';
+  div.innerHTML = `<img src="${url||''}" onerror="this.style.visibility='hidden'">
+    <button type="button" class="cedit-gal-del" onclick="this.parentNode.remove()">×</button>
+    <input type="url" class="ce-gal-url" value="${(url||'').replace(/"/g,'&quot;')}" placeholder="URL" oninput="const i=this.parentNode.querySelector('img'); i.src=this.value; i.style.visibility='';">`;
+  if(add) wrap.insertBefore(div, add); else wrap.appendChild(div);
+}
+function ceBuildGallery(){
+  const list = [];
+  document.querySelectorAll('#ce_gallery .ce-gal-url').forEach(inp=>{ const v=inp.value.trim(); if(v) list.push(v); });
+  return list.length ? list : null;
 }
 async function loadClinicDoctors(clinicId){
   const wrap = document.getElementById('ce_doctors');
@@ -2399,7 +2564,9 @@ async function saveClinicEdit(){
     foglaljorvost_url: v('ce_foglaljorvost_url'),
     odoktor_url: v('ce_odoktor_url'),
     on_foglaljorvost: document.getElementById('ce_on_foglaljorvost').checked,
-    on_odoktor: document.getElementById('ce_on_odoktor').checked
+    on_odoktor: document.getElementById('ce_on_odoktor').checked,
+    opening_hours: ceBuildHours(),
+    gallery: ceBuildGallery()
   };
   if(!updates.name){ msg.textContent='A név megadása kötelező.'; msg.className='cedit-msg err'; return; }
   btn.disabled = true; msg.textContent='Mentés…'; msg.className='cedit-msg';
