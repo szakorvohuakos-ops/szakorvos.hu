@@ -818,7 +818,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       var sel='id';
       if(slug) sel+=', doctor_specialties!inner(specialties!inner(doctor_slug))';
       if(city) sel+=', doctor_clinics!inner(clinics!inner(cities!inner(name)))';
-      var q=db.from('doctors_public').select(sel,{count:'exact',head:true}).eq('is_active',true);
+      var q=db.from('doctors').select(sel,{count:'exact',head:true}).eq('is_active',true);
       if(slug) q=q.eq('doctor_specialties.specialties.doctor_slug', slug);
       if(city) q=q.eq('doctor_clinics.clinics.cities.name', city);
       var r=await Promise.race([q, new Promise(function(res){setTimeout(function(){res({count:null,_to:true});},2500);})]);
@@ -832,7 +832,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     // Szabad-szöveges keresést nem tudunk megbízhatóan számolni; kell legalább város vagy kerület
     if(!city && !district) return null;
     try{
-      var q=db.from('clinics_public').select('id',{count:'exact',head:true}).neq('status','inactive');
+      var q=db.from('clinics').select('id',{count:'exact',head:true}).neq('status','inactive');
       if(city){
         var cd=await db.from('cities').select('id').ilike('name',city).maybeSingle();
         if(cd && cd.data && cd.data.id) q=q.eq('city_id', cd.data.id); else return null;
@@ -1049,8 +1049,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(_acSpecs && _acDocs && _acClinics) return;
     const [s,d,c] = await Promise.allSettled([
       db.from('specialties').select('name, slug').eq('is_active', true).order('doctor_count',{ascending:false}).limit(80),
-      db.from('doctors_public').select('id, name, slug, doctor_specialties(is_primary, specialties(name))').eq('is_active', true).order('rating',{ascending:false}).limit(200),
-      db.from('clinics_public').select('id, name, slug, cities(name)').order('name').limit(200),
+      db.from('doctors').select('id, name, slug, doctor_specialties(is_primary, specialties(name))').eq('is_active', true).order('rating',{ascending:false}).limit(200),
+      db.from('clinics').select('id, name, slug, cities(name)').order('name').limit(200),
     ]);
     _acSpecs = (s.status==='fulfilled' && s.value && s.value.data) ? s.value.data : [];
     _acDocs  = (d.status==='fulfilled' && d.value && d.value.data)
@@ -1168,9 +1168,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(!hasDB){ runStatAnims(); return; }
     try{
       const [profCount, totalDoctors, clinicCount] = await Promise.all([
-        db.from('doctors_public').select('id',{count:'exact',head:true}).eq('is_professional',true).eq('is_active',true),
-        db.from('doctors_public').select('id',{count:'exact',head:true}).eq('is_active',true),
-        db.from('clinics_public').select('id',{count:'exact',head:true}).neq('status','inactive'),
+        db.from('doctors').select('id',{count:'exact',head:true}).eq('is_professional',true).eq('is_active',true),
+        db.from('doctors').select('id',{count:'exact',head:true}).eq('is_active',true),
+        db.from('clinics').select('id',{count:'exact',head:true}).neq('status','inactive'),
       ]);
       const profN = profCount.count || 0;
       const docN  = (totalDoctors.count || 0) - profN;
@@ -1329,7 +1329,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(_heroClinics) return _heroClinics;
     if(!hasDB) return (_heroClinics=[]);
     try{
-      const { data, error } = await db.from('clinics_public').select('id, slug, name, address, lat, lng').not('lat','is',null).not('lng','is',null);
+      const { data, error } = await db.from('clinics').select('id, slug, name, address, lat, lng').not('lat','is',null).not('lng','is',null);
       if(error) throw error;
       _heroClinics = (data||[]).filter(c=>c.lat&&c.lng);
     }catch(e){ _heroClinics=[]; }

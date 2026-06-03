@@ -686,7 +686,7 @@ async function loadDoctors(specialty, treatmentTitle){
   if(!specialty) return;
   try{
     const{data}=await db
-      .from('doctors_public')
+      .from('doctors')
       .select('id,name,slug,photo_url,doctor_specialties!inner(specialties!inner(name))')
       .eq('is_active',true)
       .eq('doctor_specialties.specialties.name',specialty)

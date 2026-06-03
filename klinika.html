@@ -659,7 +659,7 @@ async function loadClinic(){
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
 
   const select = `
-    *,
+    id,name,address,city_id,lat,lng,phone,website,photo_url,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,slug,google_place_id,google_rating,google_review_count,google_attribution,last_google_sync,cover_url,gallery,postal_code,street,district,status,description,on_foglaljorvost,foglaljorvost_url,on_odoktor,odoktor_url,on_teladoc,teladoc_url,teladoc_id,created_at,
     cities(name),
     doctor_clinics(
       consultation_fee,
@@ -673,7 +673,7 @@ async function loadClinic(){
     )
   `;
 
-  let query = db.from('clinics_public').select(select);
+  let query = db.from('clinics').select(select);
   query = isUuid ? query.eq('id', slug) : query.eq('slug', slug);
   
   const { data, error } = await query.single();
