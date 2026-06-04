@@ -625,11 +625,22 @@ document.getElementById('contactForm').addEventListener('submit', async function
   btnText.textContent = 'Küldés…';
 
   try {
-    // 1) Mentés az adatbázisba — returning:'minimal' → nincs visszaolvasás (anon nem olvashat)
-    const { error: insErr } = await db
-      .from('contact_messages')
-      .insert({ name, email, topic, message, consent, user_agent: navigator.userAgent }, { returning: 'minimal' });
-    if (insErr) throw insErr;
+    // 1) Mentés az adatbázisba — közvetlen REST hívás, Prefer: return=minimal
+    //    (így a PostgREST NEM olvassa vissza a sort, nem kell SELECT-jog)
+    const insRes = await fetch(`${SUPABASE_URL}/rest/v1/contact_messages`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ name, email, topic, message, consent, user_agent: navigator.userAgent })
+    });
+    if (!insRes.ok) {
+      const errTxt = await insRes.text();
+      throw new Error('Beszúrás hiba: ' + insRes.status + ' ' + errTxt);
+    }
 
     // 2) E-mail értesítés a kapcsolat@-ra (edge function, Resend) — ha hibázik, az üzenet akkor is mentve van
     try {
