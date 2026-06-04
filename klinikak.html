@@ -187,7 +187,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .topbar-btn:active{transform:translateY(0)}
 
 /* ───── PAGE LAYOUT ───── */
-.pw{max-width:1600px;margin:0 auto;padding:1.5rem 3.5%;display:grid;grid-template-columns:264px 1fr;gap:1.5rem;align-items:start}
+.pw{max-width:1600px;margin:0 auto;padding:1.5rem 3.5%;display:grid;grid-template-columns:255px 1fr;gap:1.5rem;align-items:start}
 
 /* ══════════════════════════════════════════
    FILTER SIDEBAR – PREMIUM DETAILED
@@ -1415,6 +1415,18 @@ function clinicCardHTML(c, i){
   const gRating = c.google_rating ? Number(c.google_rating) : 0;
   const gReviews = c.google_review_count ? Number(c.google_review_count) : 0;
   const ratingFmt = gRating > 0 ? gRating.toFixed(1).replace('.', ',') : '';
+  // Csillagok a rátinghez (teli / fél / üres)
+  let starsHtml = '';
+  if(gRating > 0){
+    const full = Math.floor(gRating);
+    const half = (gRating - full) >= 0.25 && (gRating - full) < 0.75;
+    const fullCount = (gRating - full) >= 0.75 ? full + 1 : full;
+    for(let s=1; s<=5; s++){
+      if(s <= fullCount) starsHtml += '<span class="kc-star full">★</span>';
+      else if(s === fullCount + 1 && half) starsHtml += '<span class="kc-star half">★</span>';
+      else starsHtml += '<span class="kc-star empty">★</span>';
+    }
+  }
   const specsAll = (c._specs || []);
   const specsDisplay = specsAll.slice(0,3).map(s => s.name).join(' · ') || 'Egészségügyi szolgáltató';
   const extraSpecCount = Math.max(0, specsAll.length - 3);
@@ -1446,7 +1458,6 @@ function clinicCardHTML(c, i){
   const docTop = cardDocs.slice(0,3);
   const docMore = Math.max(0, cardDocs.length - 3);
   const docsHtml = cardDocs.length ? `<div class="kc-docs-wrap">
-      <div class="kc-docs-label">${activeSpec || activeQ ? 'Keresett szakorvosok itt' : 'Itt rendelő orvosok'}</div>
       <div class="kc-docs">
       ${docTop.map(d => {
         const dspec = (d.specs && d.specs[0]) ? (d.specs[0].short || d.specs[0].long || '') : '';
@@ -1468,6 +1479,11 @@ function clinicCardHTML(c, i){
   const PIN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   const isPremium = (c.status === 'partner') || c.is_premium === true;
 
+  const btnsHtml = `<div class="kc-actions" onclick="event.stopPropagation()">
+        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm kc-act-btn" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>Hívás</a>` : ''}
+        <button class="szk-btn szk-btn-primary szk-btn-sm kc-act-btn" onclick="event.stopPropagation();window.location.href='${target}'">Megtekintés</button>
+      </div>`;
+
   return `<div class="szk-card kc${isPremium ? ' kc-premium' : ''}" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
     ${isPremium ? '<div class="kc-prem-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg>Kiemelt partner</div>' : ''}
     <div class="szk-card-top">
@@ -1478,21 +1494,12 @@ function clinicCardHTML(c, i){
           <span class="kc-address-ic">${PIN}</span>
           <span class="kc-address-txt">${fullAddress ? escapeHtml(fullAddress) : 'Helyszín nincs megadva'}</span>
         </div>
-        <div class="szk-card-subtitle">${specsAll.length ? (specsAll.length + ' szakterület') : 'Egészségügyi szolgáltató'}${c._docCount ? ' · ' + c._docCount + ' szakorvos' : ''}</div>
-        <div class="kc-meta">
-          ${ratingFmt ? `<span class="kc-rating-label">Google értékelés alapján</span> <span class="kc-m-star">★ <strong>${ratingFmt}</strong></span>${gReviews ? ` <span class="szk-card-meta-soft">(${gReviews} vélemény)</span>` : ''}` : '<span class="szk-card-meta-soft">Nincs még Google értékelés</span>'}
-        </div>
+        <div class="szk-card-subtitle">${specsAll.length ? (specsAll.length + ' szakterület') : 'Egészségügyi szolgáltató'}${c._docCount ? ' · ' + c._docCount + ' szakorvos' : ''}${ratingFmt ? ` · <span class="kc-stars">${starsHtml}</span> <strong class="kc-rating-num">${ratingFmt}</strong>${gReviews ? ` <span class="szk-card-meta-soft">(${gReviews})</span>` : ''}` : ''}</div>
       </div>
+      ${btnsHtml}
     </div>
 
     ${docsHtml}
-
-    <div class="szk-card-foot">
-      <div class="szk-card-foot-btns" onclick="event.stopPropagation()" style="width:100%;display:flex;gap:10px">
-        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>Hívás</a>` : ''}
-        <button class="szk-btn szk-btn-primary szk-btn-sm" onclick="event.stopPropagation();window.location.href='${target}'" style="flex:1">Klinika megtekintése</button>
-      </div>
-    </div>
   </div>`;
 }
 
@@ -1746,7 +1753,7 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 /* 3-oszlopos elrendezés: szűrő | találatok | térkép (csak desktop) */
 #resultsMapCol{display:none}
 @media(min-width:1201px){
-  .pw{grid-template-columns:300px minmax(0,1fr) 228px !important}
+  .pw{grid-template-columns:255px minmax(0,1fr) 194px !important}
   #resultsMapCol{display:block;position:sticky;top:88px;align-self:start;height:calc(100vh - 108px)}
   .rtop .vtog{display:none !important}
 }
@@ -1913,11 +1920,21 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .pw main .szk-card.kc.kc-premium:hover{box-shadow:0 14px 34px rgba(184,134,11,.22),0 30px 60px rgba(184,134,11,.16);border-color:#d4a017}
 .kc-prem-badge{display:inline-flex;align-items:center;gap:5px;position:absolute;top:14px;right:14px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#b8860b,#d4a017);padding:5px 10px;border-radius:100px;box-shadow:0 2px 8px rgba(184,134,11,.35)}
 .kc .szk-card-top{padding:28px 28px 18px;display:flex;gap:18px;align-items:flex-start}
+.kc-actions{flex-shrink:0;display:flex;flex-direction:column;gap:9px;align-self:center;min-width:150px}
+.kc-act-btn{width:100%;justify-content:center}
+@media(max-width:560px){.kc .szk-card-top{flex-direction:column}.kc-actions{min-width:0;width:100%;flex-direction:row}.kc-act-btn{flex:1}}
 .kc .szk-card-avatar{width:88px;height:88px;font-size:26px;border-radius:16px;flex-shrink:0}
 @media(max-width:520px){.kc .szk-card-avatar{width:72px;height:72px;font-size:22px}}
 .kc .szk-card-body{flex:1;min-width:0}
 .kc .szk-card-title{font-size:17px;font-weight:700;color:#113293;letter-spacing:-.01em;line-height:1.25;margin-bottom:7px}
-.kc .szk-card-subtitle{font-size:13px;color:#52617a;font-weight:500;margin-top:8px}
+.kc .szk-card-subtitle{font-size:13px;color:#52617a;font-weight:500;margin-top:8px;display:flex;align-items:center;flex-wrap:wrap;gap:0}
+.kc-stars{display:inline-flex;letter-spacing:1px;margin-left:2px;vertical-align:middle}
+.kc-star{font-size:13px;line-height:1}
+.kc-star.full{color:#f5a623}
+.kc-star.half{position:relative;color:#e2e8f0}
+.kc-star.half::before{content:'★';position:absolute;left:0;top:0;width:50%;overflow:hidden;color:#f5a623}
+.kc-star.empty{color:#e2e8f0}
+.kc-rating-num{color:#1a1f36;font-weight:700;margin-left:5px}
 .kc-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#475569}
 .kc-meta .kc-m-star{color:#d97706;font-weight:700}
 .kc-rating-label{font-size:12px;color:#64748b;font-weight:500}
