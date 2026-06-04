@@ -1007,15 +1007,33 @@ function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;',
 
 // ── TOPBAR ÚJ KERESÉS gombja ──
 function doSearch(){
-  const name = document.getElementById('navSpec')?.value.trim() || '';
+  const term = document.getElementById('navSpec')?.value.trim() || '';
   const city = document.getElementById('navCity')?.value.trim() || '';
-  document.getElementById('fName').value = name;
-  if(city){
-    // Próbáljuk a city select-be illeszteni (case-insensitive)
-    const sel = document.getElementById('fCity');
-    const match = Array.from(sel.options).find(o => o.value.toLowerCase() === city.toLowerCase());
-    sel.value = match ? match.value : '';
+
+  // A keresett kifejezés: ha szakterület, a Szakterület szűrőbe; egyébként Klinika név mezőbe
+  document.getElementById('fName').value = '';
+  document.getElementById('fSpec').value = '';
+  if(term){
+    const fSpec = document.getElementById('fSpec');
+    const specMatch = Array.from(fSpec.options).find(o =>
+      o.value && (o.value.toLowerCase() === term.toLowerCase() || o.value.toLowerCase().includes(term.toLowerCase()))
+    );
+    if(specMatch){
+      fSpec.value = specMatch.value;          // szakterület-találat
+    } else {
+      document.getElementById('fName').value = term;  // különben klinika-névként
+    }
   }
+
+  // Város: az új autocomplete kiválasztottjai közé
+  window._selectedCities = [];
+  if(city){
+    const opt = (window._cityOptions||[]).find(o => o.toLowerCase() === city.toLowerCase())
+      || (window._cityOptions||[]).find(o => o.toLowerCase().includes(city.toLowerCase()));
+    window._selectedCities = [opt || city];
+  }
+  if(typeof cityAcRender === 'function') cityAcRender();
+
   applyFilters();
 }
 
@@ -1179,17 +1197,22 @@ function populateFilters(){
       fSpec.value = specVal;
     }
   }
-  if(params.get('q')) document.getElementById('fName').value = params.get('q');
-  // District szűrés (a fName input keresőjébe rakjuk be — magába foglalja)
+  if(params.get('q')){
+    const qv = params.get('q');
+    // Ha szakterület-szerű, a Szakterület szűrőbe; egyébként klinika-névbe
+    const specMatch = Array.from(fSpec.options).find(o =>
+      o.value && (o.value.toLowerCase() === qv.toLowerCase() || o.value.toLowerCase().includes(qv.toLowerCase()))
+    );
+    if(specMatch && !fSpec.value){ fSpec.value = specMatch.value; }
+    else if(!document.getElementById('fName').value){ document.getElementById('fName').value = qv; }
+  }
+  // District szűrés → a város-autocomplete kiválasztottjai közé "Budapest N. kerület"
   if(params.get('district')) {
-    const d = params.get('district');
-    const fNameEl = document.getElementById('fName');
-    if(fNameEl) {
-      // Megőrizzük a meglévő q-t és hozzáadjuk a "XII. kerület"-et
-      const existing = fNameEl.value ? fNameEl.value + ' ' : '';
-      // Római számformátum is lehet jobb — de a fName már sima includes-ot csinál
-      fNameEl.value = existing + d + '. kerület';
-    }
+    const d = String(params.get('district')).trim();
+    const label = 'Budapest ' + d + '. kerület';
+    if(!window._selectedCities) window._selectedCities = [];
+    if(!window._selectedCities.includes(label)) window._selectedCities.push(label);
+    if(typeof cityAcRender === 'function') cityAcRender();
   }
 }
 
