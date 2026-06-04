@@ -625,10 +625,10 @@ document.getElementById('contactForm').addEventListener('submit', async function
   btnText.textContent = 'Küldés…';
 
   try {
-    // 1) Mentés az adatbázisba (mindig megtörténik — így nem vész el üzenet)
+    // 1) Mentés az adatbázisba — returning:'minimal' → nincs visszaolvasás (anon nem olvashat)
     const { error: insErr } = await db
       .from('contact_messages')
-      .insert({ name, email, topic, message, consent, user_agent: navigator.userAgent });
+      .insert({ name, email, topic, message, consent, user_agent: navigator.userAgent }, { returning: 'minimal' });
     if (insErr) throw insErr;
 
     // 2) E-mail értesítés a kapcsolat@-ra (edge function, Resend) — ha hibázik, az üzenet akkor is mentve van
