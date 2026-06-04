@@ -528,7 +528,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </span>
       <span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Utolsó módosítás: 2026. május 10.
+        Utolsó módosítás: 2026. június 4.
       </span>
       <span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -563,11 +563,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div class="section-body">
         <table class="data-table">
           <tbody>
-            <tr><td><strong>Adatkezelő neve</strong></td><td>[cégnév / egyéni vállalkozó neve]</td></tr>
-            <tr><td><strong>Székhely</strong></td><td>[cím]</td></tr>
-            <tr><td><strong>Adószám</strong></td><td>[adószám]</td></tr>
-            <tr><td><strong>Cégjegyzékszám</strong></td><td>[adat]</td></tr>
-            <tr><td><strong>Email</strong></td><td><a href="mailto:info@szakorvos.hu" style="color:#113293">info@szakorvos.hu</a></td></tr>
+            <tr><td><strong>Adatkezelő neve</strong></td><td>Sági Ákos egyéni vállalkozó</td></tr>
+            <tr><td><strong>Székhely</strong></td><td>1021 Budapest, Budakeszi út 77.</td></tr>
+            <tr><td><strong>Adószám</strong></td><td>56596751-1-41</td></tr>
+            <tr><td><strong>Nyilvántartási szám</strong></td><td>[egyéni vállalkozói nyilvántartási szám — kitöltendő]</td></tr>
+            <tr><td><strong>Email</strong></td><td><a href="mailto:kapcsolat@szakorvos.hu" style="color:#113293">kapcsolat@szakorvos.hu</a></td></tr>
             <tr><td><strong>Weboldal</strong></td><td><a href="https://szakorvos.hu" style="color:#113293">szakorvos.hu</a></td></tr>
           </tbody>
         </table>
@@ -605,23 +605,23 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div class="section-body">
 
         <h3>3.1 Látogatói adatok (regisztráció nélkül)</h3>
-        <p>Amikor Ön meglátogatja az oldalt, automatikusan naplózzuk az alábbi adatokat:</p>
+        <p>Amikor Ön meglátogatja az oldalt, a következő adatok kezelése történhet:</p>
         <ul>
-          <li>IP-cím (anonimizált formában)</li>
-          <li>Látogatás időpontja, megtekintett oldalak</li>
-          <li>Keresési lekérdezések (pl. szakterület, város)</li>
-          <li>Böngésző típusa és operációs rendszer</li>
+          <li>Keresési lekérdezések (pl. szakterület, város) — személyhez nem kötve, statisztikai céllal</li>
+          <li>Az Ön hozzájárulása esetén: anonimizált látogatottsági statisztika a Google Analytics szolgáltatáson keresztül (megtekintett oldalak, hozzávetőleges földrajzi régió, eszköz/böngésző típusa)</li>
         </ul>
+        <p>Saját szerveroldali IP-cím-naplózást nem végzünk. A Google Analytics statisztika kizárólag akkor töltődik be, ha Ön a süti-tájékoztatóban ehhez hozzájárult; a hozzájárulását bármikor visszavonhatja a süti-beállításokban.</p>
         <div class="meta-row">
-          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: jogos érdek (GDPR 6. cikk f)</span>
-          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: 12 hónap</span>
+          <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: hozzájárulás (GDPR 6. cikk a) — statisztika; jogos érdek (6. cikk f) — anonim keresési naplók</span>
+          <span class="meta-tag orange"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Megőrzés: 14 hónap (Google Analytics)</span>
         </div>
 
         <h3>3.2 Regisztrált páciensek adatai</h3>
         <ul>
           <li>Email cím, teljes név (opcionális)</li>
           <li>Jelszó (titkosított, nem olvasható)</li>
-          <li>Regisztráció időpontja, foglalási előzmények</li>
+          <li>Regisztráció időpontja</li>
+          <li>Foglalási előzmények (tervezett funkció — bevezetésekor lép életbe)</li>
         </ul>
         <div class="meta-row">
           <span class="meta-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Jogalap: szerződés teljesítése (GDPR 6. cikk b)</span>
@@ -692,8 +692,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <thead><tr><th>Szolgáltató</th><th>Szerepe</th><th>Székhely</th></tr></thead>
           <tbody>
             <tr><td><strong>Supabase Inc.</strong></td><td>Adatbázis és autentikáció</td><td>USA (EU szerveren tárolt)</td></tr>
-            <tr><td><strong>OpenAI LLC</strong></td><td>AI szövegelemzés</td><td>USA</td></tr>
-            <tr><td><strong>Silicium.eu</strong></td><td>Email küldés (SMTP)</td><td>Magyarország</td></tr>
+            <tr><td><strong>Vercel Inc.</strong></td><td>Tárhely és weboldal-kiszolgálás</td><td>USA</td></tr>
+            <tr><td><strong>Resend (Plus Five Five, Inc.)</strong></td><td>E-mail küldés (értesítések, visszaigazolások)</td><td>USA</td></tr>
+            <tr><td><strong>OpenAI LLC</strong></td><td>AI szövegelemzés (kereső, összefoglalók)</td><td>USA</td></tr>
+            <tr><td><strong>Google LLC</strong></td><td>Térképszolgáltatás (Google Maps)</td><td>USA</td></tr>
           </tbody>
         </table>
         <p>Minden külső szolgáltatóval adatfeldolgozói szerződést kötünk. Az USA-ban székhellyel rendelkező cégek esetén az EU–USA adatvédelmi keretrendszer (Data Privacy Framework) vagy standard szerződéses klauzulák alapján történik az adattovábbítás.</p>
@@ -716,12 +718,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <thead><tr><th>Süti neve</th><th>Típusa</th><th>Célja</th><th>Lejárat</th></tr></thead>
           <tbody>
             <tr><td><code>sb-*</code> (Supabase)</td><td>Szükséges</td><td>Bejelentkezési munkamenet fenntartása</td><td>Munkamenet / 7 nap</td></tr>
-            <tr><td>Névtelen analitika</td><td>Statisztikai</td><td>Látogatói statisztikák</td><td>12 hónap</td></tr>
+            <tr><td><code>szk_cookie_consent</code></td><td>Szükséges</td><td>Az Ön süti-választásának megjegyzése</td><td>12 hónap</td></tr>
+            <tr><td><code>_ga</code>, <code>_ga_*</code> (Google Analytics)</td><td>Statisztikai (hozzájáruláshoz kötött)</td><td>Anonimizált látogatottsági statisztika</td><td>14 hónap</td></tr>
           </tbody>
         </table>
         <div class="info-box">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Harmadik féltől származó reklám- vagy követési sütit <strong>nem</strong> használunk. Amennyiben a jövőben nem szükséges sütik (pl. analitikai vagy marketing sütik) kerülnek alkalmazásra, a weboldal előzetes hozzájárulást kér azok használatához.
+          A szükséges sütik a weboldal működéséhez kellenek, ezekhez nem szükséges hozzájárulás. A <strong>Google Analytics</strong> statisztikai sütik <strong>kizárólag az Ön kifejezett hozzájárulása után</strong> töltődnek be. A hozzájárulását bármikor visszavonhatja vagy módosíthatja a lábléc <strong>„Süti beállítások"</strong> hivatkozására kattintva. Harmadik féltől származó reklám- vagy hirdetési sütit nem használunk.
         </div>
       </div>
     </section>
@@ -764,7 +767,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             <div class="right-card-desc">Kérheti az adatkezelés korlátozását vitás esetekben.</div>
           </div>
         </div>
-        <p>Jogai gyakorlásához írjon az <a href="mailto:info@szakorvos.hu" style="color:#113293;font-weight:600">info@szakorvos.hu</a> email-címre. Kérelmére <strong>30 napon belül</strong> válaszolunk.</p>
+        <p>Jogai gyakorlásához írjon az <a href="mailto:kapcsolat@szakorvos.hu" style="color:#113293;font-weight:600">kapcsolat@szakorvos.hu</a> email-címre. Kérelmére <strong>30 napon belül</strong> válaszolunk.</p>
         <div class="info-box" style="margin-top:1rem">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Ha úgy érzi, jogait megsértettük, panaszt tehet a <strong>Nemzeti Adatvédelmi és Információszabadság Hatóságnál (NAIH)</strong>: <a href="https://naih.hu" target="_blank" style="color:#1d4ed8">naih.hu</a> · 1055 Budapest, Falk Miksa utca 9-11.
@@ -853,9 +856,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <h3>Adatvédelmi kérdése van?</h3>
         <p>Írjon nekünk és 30 napon belül válaszolunk.</p>
       </div>
-      <a href="mailto:info@szakorvos.hu">
+      <a href="mailto:kapcsolat@szakorvos.hu">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        info@szakorvos.hu
+        kapcsolat@szakorvos.hu
       </a>
     </div>
 
@@ -967,7 +970,7 @@ document.querySelectorAll('.toc-list a').forEach(a => {
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -979,5 +982,6 @@ document.querySelectorAll('.toc-list a').forEach(a => {
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>

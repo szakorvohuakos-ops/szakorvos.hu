@@ -1477,7 +1477,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -1612,5 +1612,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 <!-- ══════ TÉRKÉP MODAL VÉGE ══════ -->
 
 <script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>
