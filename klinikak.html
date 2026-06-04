@@ -1063,7 +1063,7 @@ async function fetchAllRows(table, columns, tweak){
 
 async function loadClinics(){
   try {
-    const CLINIC_SELECT = 'id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, google_rating, google_review_count, on_foglaljorvost, foglaljorvost_url, on_odoktor, odoktor_url, on_teladoc, teladoc_url, cities(name)';
+    const CLINIC_SELECT = 'id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, google_rating, google_review_count, cities(name)';
     // A négy tábla párhuzamos betöltése (mindegyik belül lapozva, az 1000-es limit megkerülésével)
     const [clinicsRes, dcRes, docRes, dsRes, trRes] = await Promise.all([
       fetchAllRows('clinics', CLINIC_SELECT, q => q.in('status', ['active', 'partner']).order('id')),
@@ -1194,7 +1194,20 @@ function populateFilters(){
         if (fNameEl && !fNameEl.value) fNameEl.value = specVal;
       }
     } else {
-      fSpec.value = specVal;
+      // Név érkezett (pl. „Neurológia"): pontos egyezés, vagy legközelebbi (tartalmazó) option
+      const opts = Array.from(fSpec.options);
+      const exact = opts.find(o => o.value && o.value.toLowerCase() === specVal.toLowerCase());
+      if(exact){
+        fSpec.value = exact.value;
+      } else {
+        // részleges egyezés mindkét irányban (pl. „Neurológia" ↔ „Neurológia és ...")
+        const partial = opts.find(o => o.value && (
+          o.value.toLowerCase().includes(specVal.toLowerCase()) ||
+          specVal.toLowerCase().includes(o.value.toLowerCase())
+        ));
+        if(partial) fSpec.value = partial.value;
+        else fSpec.value = specVal;
+      }
     }
   }
   if(params.get('q')){

@@ -1604,6 +1604,55 @@ async function load(){
     allDocs.forEach(function(d){ (d.doctor_clinics || []).forEach(function(dc){ var cn = dc.clinics && dc.clinics.name; if(cn) _cliSet.add(cn); }); });
     if(typeof showResultsToast === 'function') showResultsToast(_cliSet.size, allDocs.length);
   } catch(e){}
+
+  // ═══ Klinika-váltó link: tüneti/szabad-szavas keresésnél a FELISMERT szakterületre
+  // szűrjön a klinika-oldalon, ne a nyers szövegre (pl. „fáj a fejem" → Neurológia) ═══
+  try { updateClinicsToggleLink(); } catch(e){}
+}
+
+// A találatokból kiolvassa a domináns (leggyakoribb elsődleges) szakterületet,
+// és a „Klinikák" váltógombot úgy állítja be, hogy arra szűrjön — a nyers tünet helyett.
+function updateClinicsToggleLink(){
+  const link = document.getElementById('toggleToClinics');
+  if(!link) return;
+
+  // Ha már van konkrét szakterület az URL-ben, azt visszük tovább változatlanul.
+  if(specQ){
+    link.setAttribute('onclick', "event.preventDefault();window.location.href='klinikak.html'+window.location.search;");
+    return;
+  }
+
+  // Tüneti / szabad-szavas keresés: nézzük meg, milyen szakterület jött ki a találatokból.
+  if(!freeQ || !allDocs.length){
+    link.setAttribute('onclick', "event.preventDefault();window.location.href='klinikak.html'+window.location.search;");
+    return;
+  }
+
+  // Domináns szakterület megszámolása (elsődleges szakterület súlyozva)
+  const counts = {};
+  allDocs.forEach(function(d){
+    (d.doctor_specialties || []).forEach(function(ds){
+      const sp = ds.specialties; if(!sp || !sp.name) return;
+      const w = ds.is_primary ? 2 : 1;
+      const key = sp.name;
+      counts[key] = (counts[key] || 0) + w;
+    });
+  });
+  let topSpec = null, topCount = 0;
+  Object.keys(counts).forEach(function(k){ if(counts[k] > topCount){ topCount = counts[k]; topSpec = k; } });
+
+  if(topSpec){
+    // A klinika-oldal a ?specialty=<szakterület neve> paramétert érti (city/district megtartva)
+    const params = new URLSearchParams();
+    params.set('specialty', topSpec);
+    if(cityQ) params.set('city', cityQ);
+    if(districtQ) params.set('district', districtQ);
+    const url = 'klinikak.html?' + params.toString();
+    link.setAttribute('onclick', "event.preventDefault();window.location.href='" + url.replace(/'/g,"\\'") + "';");
+    link.setAttribute('href', url);
+  } else {
+    link.setAttribute('onclick', "event.preventDefault();window.location.href='klinikak.html'+window.location.search;");
+  }
 }
 
 // ═══ URL paraméter → szűrő chip-ek aktiválása ═══
