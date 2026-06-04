@@ -626,17 +626,15 @@ document.getElementById('contactForm').addEventListener('submit', async function
 
   try {
     // 1) Mentés az adatbázisba (mindig megtörténik — így nem vész el üzenet)
-    const { data: inserted, error: insErr } = await db
+    const { error: insErr } = await db
       .from('contact_messages')
-      .insert({ name, email, topic, message, consent, user_agent: navigator.userAgent })
-      .select('id')
-      .single();
+      .insert({ name, email, topic, message, consent, user_agent: navigator.userAgent });
     if (insErr) throw insErr;
 
     // 2) E-mail értesítés a kapcsolat@-ra (edge function, Resend) — ha hibázik, az üzenet akkor is mentve van
     try {
       await db.functions.invoke('bright-responder', {
-        body: { id: inserted?.id, name, email, topic, message }
+        body: { name, email, topic, message }
       });
     } catch (mailErr) {
       console.warn('E-mail értesítés nem ment el, de az üzenet mentve:', mailErr);
