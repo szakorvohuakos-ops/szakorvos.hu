@@ -877,28 +877,33 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
     <div class="fsb-tags" id="fTags"></div>
 
+    <!-- Város (autocomplete, többszörös) -->
+    <div class="fss open" id="fsCity">
+      <button class="fss-tog" onclick="toggleSec('fsCity')">
+        <span class="fss-lbl">📍 Város / kerület</span><span class="fss-arr">▼</span>
+      </button>
+      <div class="fss-body">
+        <div class="city-ac" id="cityAc">
+          <div class="city-chips" id="cityChips"></div>
+          <input type="text" id="cityInput" placeholder="Kezdd el gépelni: pl. Buda…" autocomplete="off"
+            oninput="cityAcInput()" onfocus="cityAcInput()" onkeydown="cityAcKey(event)">
+          <div class="city-suggest" id="citySuggest"></div>
+        </div>
+        <!-- A tényleges szűrőérték(ek) – kompatibilitás miatt megtartjuk a régi rejtett selectet is -->
+        <select id="fCity" style="display:none"><option value="">Minden város</option></select>
+      </div>
+    </div>
+
     <!-- Klinika név -->
     <div class="fss open" id="fsName">
       <button class="fss-tog" onclick="toggleSec('fsName')">
-        <span class="fss-lbl">🔍 Klinika neve / cím</span><span class="fss-arr">▼</span>
+        <span class="fss-lbl">🔍 Klinika neve</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
         <input type="text" id="fName" placeholder="pl. Budai Egészségközpont" autocomplete="off"
           style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;transition:border-color .15s,box-shadow .15s"
           onfocus="this.style.borderColor='var(--brand)';this.style.boxShadow='0 0 0 3px rgba(38,74,202,.1)'"
           onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      </div>
-    </div>
-
-    <!-- Város -->
-    <div class="fss open" id="fsCity">
-      <button class="fss-tog" onclick="toggleSec('fsCity')">
-        <span class="fss-lbl">📍 Város</span><span class="fss-arr">▼</span>
-      </button>
-      <div class="fss-body">
-        <select id="fCity" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;background:#fff;cursor:pointer">
-          <option value="">Minden város</option>
-        </select>
       </div>
     </div>
 
@@ -911,6 +916,21 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <select id="fSpec" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;background:#fff;cursor:pointer">
           <option value="">Minden szakterület</option>
         </select>
+      </div>
+    </div>
+
+    <!-- Vizsgálat / kezelés -->
+    <div class="fss open" id="fsTreat">
+      <button class="fss-tog" onclick="toggleSec('fsTreat')">
+        <span class="fss-lbl">🩺 Vizsgálat / kezelés</span><span class="fss-arr">▼</span>
+      </button>
+      <div class="fss-body">
+        <div class="city-ac" id="treatAc">
+          <input type="text" id="treatInput" placeholder="pl. ultrahang, gasztroszkópia…" autocomplete="off"
+            oninput="treatAcInput()" onfocus="treatAcInput()" onkeydown="treatAcKey(event)">
+          <div class="city-suggest" id="treatSuggest"></div>
+        </div>
+        <div class="city-chips" id="treatChips" style="margin-top:7px"></div>
       </div>
     </div>
 
@@ -1027,13 +1047,15 @@ async function loadClinics(){
   try {
     const CLINIC_SELECT = 'id, slug, name, address, postal_code, street, district, phone, email, website, photo_url, cover_url, gallery, city_id, lat, lng, status, google_rating, google_review_count, on_foglaljorvost, foglaljorvost_url, on_odoktor, odoktor_url, on_teladoc, teladoc_url, cities(name)';
     // A négy tábla párhuzamos betöltése (mindegyik belül lapozva, az 1000-es limit megkerülésével)
-    const [clinicsRes, dcRes, docRes, dsRes] = await Promise.all([
+    const [clinicsRes, dcRes, docRes, dsRes, trRes] = await Promise.all([
       fetchAllRows('clinics', CLINIC_SELECT, q => q.in('status', ['active', 'partner']).order('id')),
       fetchAllRows('doctor_clinics', 'clinic_id, doctor_id', q => q.order('clinic_id').order('doctor_id')),
       fetchAllRows('doctors', 'id, name, title, slug, rating, review_count, is_active', q => q.eq('is_active', true).order('id')),
-      fetchAllRows('doctor_specialties', 'doctor_id, is_primary, specialties(name, doctor_name, doctor_slug)', q => q.order('doctor_id').order('specialty_id'))
+      fetchAllRows('doctor_specialties', 'doctor_id, is_primary, specialties(name, doctor_name, doctor_slug)', q => q.order('doctor_id').order('specialty_id')),
+      fetchAllRows('treatments', 'id, title, slug, specialty', q => q.order('title'))
     ]);
     for(const r of [clinicsRes, dcRes, docRes, dsRes]){ if(r.error){ showError(r.error.message); return; } }
+    window._treatments = (trRes && trRes.data) ? trRes.data.filter(t => t.title && t.specialty) : [];
     const clinics = clinicsRes.data || [];
     const links = dcRes.data || [];
     const docsById = new Map((docRes.data || []).map(d => [d.id, d]));
@@ -1097,6 +1119,16 @@ function populateFilters(){
   fCity.innerHTML = '<option value="">Minden város</option>' +
     cities.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
 
+  // Választható helyek az autocomplete-hez: városok + Budapest kerületei
+  const placeSet = new Set(cities);
+  allClinics.forEach(c => {
+    if((c._cityName === 'Budapest' || /budapest/i.test(c._cityName||'')) && c.district){
+      placeSet.add('Budapest ' + String(c.district).trim() + '. kerület');
+    }
+  });
+  window._cityOptions = Array.from(placeSet).sort((a,b)=>a.localeCompare(b,'hu'));
+  if(!window._selectedCities) window._selectedCities = [];
+
   const specSet = new Set();
   allClinics.forEach(c => c._specs.forEach(s => specSet.add(s.name)));
   const specs = Array.from(specSet).sort();
@@ -1105,7 +1137,8 @@ function populateFilters(){
     specs.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
 
   const params = new URLSearchParams(window.location.search);
-  if(params.get('city')) fCity.value = params.get('city');
+  if(params.get('city')){ window._selectedCities = [params.get('city')]; }
+  cityAcRender();
   if(params.get('specialty')) {
     // Lehet doctor_slug (pl. "ortoped-traumatologus") vagy név (pl. "Ortopédia és traumatológia")
     // A fSpec select-ben név van — fordítsuk át slug → name, ha slug-szerű
@@ -1175,27 +1208,46 @@ function populateFilters(){
 
 function applyFilters(){
   const q = (document.getElementById('fName').value || '').trim().toLowerCase();
-  const city = document.getElementById('fCity').value;
+  const cities = window._selectedCities || [];
   const spec = document.getElementById('fSpec').value;
   const sort = document.getElementById('sortSel').value;
-  // Aktív szakterület-szűrő a kártyához (dropdown vagy szövegkeresés)
+  // Aktív szakterület-szűrő a kártyához (csak a dropdown — a név-mező már nem szakterületre szűr)
   window._activeSpecName = spec || '';
-  window._activeSpecQuery = q || '';
+  window._activeSpecQuery = '';
+  // Kompatibilitás: a rejtett fCity selectbe az első kiválasztott város kerül (térkép/cross-search ezt olvassa)
+  const _fc = document.getElementById('fCity');
+  if(_fc){
+    const first = cities[0] || '';
+    if(![..._fc.options].some(o=>o.value===first)){ const o=document.createElement('option'); o.value=first; o.textContent=first; _fc.appendChild(o); }
+    _fc.value = first;
+  }
+  const cityMatch = (c) => {
+    if(!cities.length) return true;
+    return cities.some(sel => {
+      const m = sel.match(/^Budapest\s+([IVXLC]+|\d+)\.\s*kerület$/i);
+      if(m){
+        // Budapest adott kerülete
+        return (/budapest/i.test(c._cityName||'')) && (String(c.district||'').trim().toUpperCase() === m[1].toUpperCase());
+      }
+      // Sima városnév (pontos egyezés)
+      return c._cityName === sel;
+    });
+  };
 
   filtered = allClinics.filter(c => {
     if(q){
       const inName = (c.name||'').toLowerCase().includes(q);
-      const inAddr = (c.address||'').toLowerCase().includes(q);
-      const inPostal = (c.postal_code||'').toLowerCase().includes(q);
-      const inDistrict = (c.district||'').toLowerCase() === q.toLowerCase() ||
-                        ((c.district||'') + '. kerület').toLowerCase().includes(q) ||
-                        ((c.district||'') + '. ker').toLowerCase().includes(q);
-      const inStreet = (c.street||'').toLowerCase().includes(q);
-      const inSpec = c._specs.some(s => (s.name||'').toLowerCase().includes(q));
-      if(!inName && !inAddr && !inPostal && !inDistrict && !inStreet && !inSpec) return false;
+      if(!inName) return false;
     }
-    if(city && c._cityName !== city) return false;
+    if(!cityMatch(c)) return false;
     if(spec && !c._specs.some(s => s.name === spec)) return false;
+    // Vizsgálat/kezelés szűrő: a kezelés szakterülete legyen a klinikán
+    const treats = window._selectedTreatments || [];
+    if(treats.length){
+      const treatSpecs = treats.map(t => (t.specialty||'').toLowerCase());
+      const has = c._specs.some(s => treatSpecs.includes((s.name||'').toLowerCase()));
+      if(!has) return false;
+    }
     return true;
   });
 
@@ -1225,29 +1277,132 @@ function applyFilters(){
 
 function resetAll(){
   document.getElementById('fName').value = '';
-  document.getElementById('fCity').value = '';
+  window._selectedCities = [];
+  const ci = document.getElementById('cityInput'); if(ci) ci.value = '';
+  cityAcRender();
   document.getElementById('fSpec').value = '';
+  window._selectedTreatments = [];
+  const ti = document.getElementById('treatInput'); if(ti) ti.value = '';
+  treatAcRender();
   document.getElementById('sortSel').value = 'doctors';
   applyFilters();
 }
+
+// ── Város autocomplete (többszörös választás) ──
+function cityAcInput(){
+  const inp = document.getElementById('cityInput');
+  const box = document.getElementById('citySuggest');
+  const term = (inp.value||'').trim().toLowerCase();
+  const opts = (window._cityOptions||[]).filter(o =>
+    !(window._selectedCities||[]).includes(o) &&
+    (term === '' ? true : o.toLowerCase().includes(term))
+  ).slice(0, 8);
+  if(!opts.length || (term === '' && document.activeElement !== inp)){ box.innerHTML=''; box.classList.remove('open'); return; }
+  box.innerHTML = opts.map((o,i) => `<div class="city-sug-item${i===0?' active':''}" onmousedown="event.preventDefault();cityAcPick('${o.replace(/'/g,"\\'")}')">${escapeHtml(o)}</div>`).join('');
+  box.classList.add('open');
+}
+function cityAcPick(name){
+  if(!window._selectedCities) window._selectedCities = [];
+  if(!window._selectedCities.includes(name)) window._selectedCities.push(name);
+  const inp = document.getElementById('cityInput'); inp.value = '';
+  document.getElementById('citySuggest').innerHTML = '';
+  document.getElementById('citySuggest').classList.remove('open');
+  cityAcRender();
+  applyFilters();
+  inp.focus();
+}
+function cityAcRemove(name){
+  window._selectedCities = (window._selectedCities||[]).filter(c => c !== name);
+  cityAcRender();
+  applyFilters();
+}
+function cityAcRender(){
+  const wrap = document.getElementById('cityChips');
+  if(!wrap) return;
+  const sel = window._selectedCities || [];
+  wrap.innerHTML = sel.map(c => `<span class="city-chip">${escapeHtml(c)}<button type="button" onclick="cityAcRemove('${c.replace(/'/g,"\\'")}')" aria-label="Törlés">×</button></span>`).join('');
+}
+function cityAcKey(e){
+  const box = document.getElementById('citySuggest');
+  if(e.key === 'Enter'){
+    const first = box.querySelector('.city-sug-item');
+    if(first){ e.preventDefault(); first.dispatchEvent(new MouseEvent('mousedown')); }
+  } else if(e.key === 'Backspace' && !e.target.value && (window._selectedCities||[]).length){
+    window._selectedCities.pop(); cityAcRender(); applyFilters();
+  } else if(e.key === 'Escape'){
+    box.innerHTML=''; box.classList.remove('open');
+  }
+}
+document.addEventListener('click', (e) => {
+  const ac = document.getElementById('cityAc');
+  if(ac && !ac.contains(e.target)){ const b=document.getElementById('citySuggest'); if(b){ b.innerHTML=''; b.classList.remove('open'); } }
+});
+
+// ── Vizsgálat / kezelés autocomplete ──
+function treatAcInput(){
+  const inp = document.getElementById('treatInput');
+  const box = document.getElementById('treatSuggest');
+  const term = (inp.value||'').trim().toLowerCase();
+  if(term.length < 2){ box.innerHTML=''; box.classList.remove('open'); return; }
+  const sel = (window._selectedTreatments||[]).map(t=>t.title);
+  const opts = (window._treatments||[])
+    .filter(t => !sel.includes(t.title) && t.title.toLowerCase().includes(term))
+    .slice(0, 8);
+  if(!opts.length){ box.innerHTML='<div class="city-sug-item" style="color:#94a3b8;cursor:default">Nincs találat</div>'; box.classList.add('open'); return; }
+  box.innerHTML = opts.map((t,i) => `<div class="city-sug-item${i===0?' active':''}" onmousedown="event.preventDefault();treatAcPick(${t.id})"><strong>${escapeHtml(t.title)}</strong><br><span style="font-size:11.5px;color:#64748b">${escapeHtml(t.specialty)}</span></div>`).join('');
+  box.classList.add('open');
+}
+function treatAcPick(id){
+  const t = (window._treatments||[]).find(x => x.id === id);
+  if(!t) return;
+  if(!window._selectedTreatments) window._selectedTreatments = [];
+  if(!window._selectedTreatments.some(x => x.id === id)) window._selectedTreatments.push(t);
+  document.getElementById('treatInput').value = '';
+  document.getElementById('treatSuggest').innerHTML = '';
+  document.getElementById('treatSuggest').classList.remove('open');
+  treatAcRender();
+  applyFilters();
+}
+function treatAcRemove(id){
+  window._selectedTreatments = (window._selectedTreatments||[]).filter(t => t.id !== id);
+  treatAcRender();
+  applyFilters();
+}
+function treatAcRender(){
+  const wrap = document.getElementById('treatChips');
+  if(!wrap) return;
+  const sel = window._selectedTreatments || [];
+  wrap.innerHTML = sel.map(t => `<span class="city-chip">${escapeHtml(t.title)}<button type="button" onclick="treatAcRemove(${t.id})" aria-label="Törlés">×</button></span>`).join('');
+}
+function treatAcKey(e){
+  const box = document.getElementById('treatSuggest');
+  if(e.key === 'Enter'){
+    const first = box.querySelector('.city-sug-item[onmousedown]');
+    if(first){ e.preventDefault(); first.dispatchEvent(new MouseEvent('mousedown')); }
+  } else if(e.key === 'Escape'){ box.innerHTML=''; box.classList.remove('open'); }
+}
+document.addEventListener('click', (e) => {
+  const ac = document.getElementById('treatAc');
+  if(ac && !ac.contains(e.target)){ const b=document.getElementById('treatSuggest'); if(b){ b.innerHTML=''; b.classList.remove('open'); } }
+});
 
 // Élő keresés
 document.getElementById('fName').addEventListener('input', () => {
   clearTimeout(window._fNameTimer);
   window._fNameTimer = setTimeout(applyFilters, 250);
 });
-document.getElementById('fCity').addEventListener('change', applyFilters);
 document.getElementById('fSpec').addEventListener('change', applyFilters);
 
 // ── Aktív szűrő tag-ek ──
 function renderTags(){
   const tags = [];
   const name = document.getElementById('fName').value.trim();
-  const city = document.getElementById('fCity').value;
+  const cities = window._selectedCities || [];
   const spec = document.getElementById('fSpec').value;
   if(name) tags.push({label: `"${name}"`, clear: () => { document.getElementById('fName').value = ''; applyFilters(); }});
-  if(city) tags.push({label: `📍 ${city}`, clear: () => { document.getElementById('fCity').value = ''; applyFilters(); }});
+  cities.forEach(ci => tags.push({label: `📍 ${ci}`, clear: () => { cityAcRemove(ci); }}));
   if(spec) tags.push({label: `⚕️ ${spec}`, clear: () => { document.getElementById('fSpec').value = ''; applyFilters(); }});
+  (window._selectedTreatments||[]).forEach(t => tags.push({label: `🩺 ${t.title}`, clear: () => { treatAcRemove(t.id); }}));
 
   const wrap = document.getElementById('fTags');
   if(!tags.length){ wrap.innerHTML = ''; return; }
@@ -1261,9 +1416,9 @@ function renderTags(){
 
 function updateBadge(){
   const name = document.getElementById('fName').value.trim();
-  const city = document.getElementById('fCity').value;
+  const cities = (window._selectedCities || []).length;
   const spec = document.getElementById('fSpec').value;
-  const count = [name, city, spec].filter(Boolean).length;
+  const count = (name?1:0) + cities + (spec?1:0) + (window._selectedTreatments||[]).length;
   const b = document.getElementById('fBadge');
   b.textContent = count;
   b.classList.toggle('on', count > 0);
@@ -1913,6 +2068,17 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
 <style id="klinika-card-skin">
+.city-ac{position:relative}
+.city-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}
+.city-chip{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;color:var(--brand,#113293);border:1px solid rgba(38,74,202,.18);border-radius:100px;padding:4px 8px 4px 11px;font-size:12.5px;font-weight:600}
+.city-chip button{background:none;border:none;color:var(--brand,#113293);cursor:pointer;font-size:15px;line-height:1;padding:0;opacity:.7}
+.city-chip button:hover{opacity:1}
+#cityInput,#treatInput{width:100%;box-sizing:border-box;border:1px solid var(--border,#e4e8f0);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;transition:border-color .15s,box-shadow .15s}
+#cityInput:focus,#treatInput:focus{border-color:var(--brand-2,#264ACA);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
+.city-suggest{display:none;position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:50;background:#fff;border:1px solid rgba(199,210,254,.7);border-radius:12px;box-shadow:0 12px 28px rgba(17,50,147,.16);overflow:hidden;max-height:280px;overflow-y:auto}
+.city-suggest.open{display:block}
+.city-sug-item{padding:10px 13px;font-size:13.5px;color:#1a1f36;cursor:pointer;transition:background .12s}
+.city-sug-item:hover,.city-sug-item.active{background:#eef2ff;color:var(--brand,#113293);font-weight:600}
 .pw main .szk-card.kc{display:block;padding:0;overflow:hidden;position:relative;border-radius:20px;border:1px solid rgba(199,210,254,.45);background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);box-shadow:0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s,border-color .3s}
 .pw main .szk-card.kc:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(17,50,147,.12),0 28px 56px rgba(17,50,147,.1);border-color:rgba(38,74,202,.35)}
 /* Prémium kártya */
