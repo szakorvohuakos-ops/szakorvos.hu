@@ -329,40 +329,42 @@ footer{background:#1a1f36;color:#a3acc7;padding:2.5rem 5.5% 1.5rem;margin-top:2r
 .near-me.loading{opacity:.6;pointer-events:none}
 /* ── Élő mini-térkép a kártyában ── */
 .map-frame .live-mini-map{position:absolute;inset:0;width:100%;height:100%;z-index:1}
-/* ══ TÜNET-SEGÉD overlay (prémium) ══ */
+/* ══ TÜNET-SEGÉD overlay (prémium, hero-stílus) ══ */
 #symHelper{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px}
 #symHelper.open{display:flex}
-.sym-backdrop{position:absolute;inset:0;background:rgba(12,23,48,.55);backdrop-filter:blur(6px);animation:symFade .3s ease}
-.sym-modal{position:relative;z-index:1;width:100%;max-width:470px;max-height:88vh;overflow-y:auto;background:linear-gradient(180deg,#ffffff,#fbfcff);border:1px solid rgba(255,255,255,.9);border-radius:24px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 30px 80px rgba(12,23,48,.4),0 8px 24px rgba(17,50,147,.18);padding:1.7rem 1.6rem 1.35rem;animation:symPop .42s cubic-bezier(.34,1.4,.5,1);overflow:hidden}
-.sym-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--brand),var(--brand-2) 45%,var(--green) 100%)}
+.sym-backdrop{position:absolute;inset:0;background:rgba(12,23,48,.5);backdrop-filter:blur(8px);animation:symFade .35s ease}
+.sym-modal{position:relative;z-index:1;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;background:#fff;border:1px solid rgba(38,74,202,.1);border-radius:24px;box-shadow:0 30px 80px rgba(12,23,48,.32),0 10px 28px rgba(17,50,147,.14);padding:1.9rem 1.7rem 1.5rem;animation:symPop .45s cubic-bezier(.34,1.35,.5,1)}
+.sym-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,var(--brand),var(--brand-2) 45%,var(--green) 100%)}
 @keyframes symFade{from{opacity:0}to{opacity:1}}
 @keyframes symPop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
-.sym-close{position:absolute;top:14px;right:15px;width:32px;height:32px;border:none;background:rgba(17,50,147,.06);border-radius:10px;font-size:19px;line-height:1;color:var(--muted);cursor:pointer;transition:all .2s;z-index:2}
-.sym-close:hover{background:rgba(17,50,147,.12);color:var(--text);transform:rotate(90deg)}
-.sym-head{margin-bottom:15px}
-.sym-ai-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#6d4ae6,#4F46E5);border-radius:100px;padding:6px 14px 6px 11px;box-shadow:0 4px 12px rgba(79,70,229,.32)}
+.sym-close{position:absolute;top:15px;right:16px;width:32px;height:32px;border:none;background:rgba(17,50,147,.05);border-radius:10px;font-size:19px;line-height:1;color:var(--muted);cursor:pointer;transition:all .25s var(--ease-spring);z-index:2}
+.sym-close:hover{background:rgba(17,50,147,.11);color:var(--text);transform:rotate(90deg)}
+.sym-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sym-ai-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#6d4ae6,#4F46E5);border-radius:100px;padding:6px 14px 6px 11px;box-shadow:0 4px 14px rgba(79,70,229,.3)}
 .sym-ai-badge svg{width:13px;height:13px;animation:symSpark 3s ease-in-out infinite}
 @keyframes symSpark{0%,100%{transform:scale(1) rotate(0);opacity:.85}50%{transform:scale(1.2) rotate(15deg);opacity:1}}
-.sym-msg{font-size:16px;font-weight:500;color:var(--text);line-height:1.5;margin-bottom:16px}
-.sym-msg b{font-weight:700;color:var(--brand)}
+.sym-msg{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:400;color:var(--text);line-height:1.4;letter-spacing:-0.01em;margin-bottom:18px}
+.sym-msg b{font-weight:600;color:var(--brand)}
 .sym-opts{display:flex;flex-direction:column;gap:9px}
-.sym-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:#fff;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;box-shadow:0 1px 2px rgba(17,50,147,.04);transition:transform .25s var(--ease-spring),box-shadow .25s,border-color .25s,background .25s}
-.sym-opt:hover{border-color:var(--brand-2);background:linear-gradient(180deg,#fff,var(--brand-light));transform:translateY(-2px);box-shadow:0 8px 20px rgba(17,50,147,.12)}
-.sym-opt-ic{font-size:20px;flex-shrink:0;line-height:1;width:28px;text-align:center}
-.sym-spec.primary{border-color:transparent;background:linear-gradient(135deg,#2C9650,#23824a);color:#fff;box-shadow:0 6px 18px rgba(44,150,80,.34)}
-.sym-spec.primary .sym-go{color:rgba(255,255,255,.85)}
-.sym-spec.primary:hover{background:linear-gradient(135deg,#33a85c,#27894f);transform:translateY(-2px);box-shadow:0 10px 26px rgba(44,150,80,.45)}
+.sym-opt{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:#fff;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;box-shadow:0 1px 2px rgba(17,50,147,.03);transition:transform .25s var(--ease-spring),box-shadow .25s,border-color .25s,background .25s}
+.sym-opt:hover{border-color:var(--brand-2);background:linear-gradient(180deg,#fff,var(--brand-light));transform:translateY(-2px);box-shadow:0 10px 24px rgba(17,50,147,.12)}
+.sym-opt-ic{font-size:20px;flex-shrink:0;line-height:1;width:26px;text-align:center}
+.sym-spec.primary{border-color:transparent;background:linear-gradient(135deg,#37bd6a,#2C9650 60%,#23824a);color:#fff;box-shadow:0 8px 22px rgba(44,150,80,.34)}
+.sym-spec.primary .sym-go{color:rgba(255,255,255,.9)}
+.sym-spec.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(44,150,80,.46)}
 .sym-spec-name{flex:1}
 .sym-go{width:16px;height:16px;color:var(--muted);flex-shrink:0;transition:transform .25s,color .25s}
 .sym-spec:hover .sym-go{transform:translateX(4px)}
 .sym-spec:not(.primary):hover .sym-go{color:var(--green)}
-.sym-back{margin-top:14px;background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;padding:5px 0;transition:color .2s}
+.sym-back{margin-top:15px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;padding:5px 0;transition:color .2s}
 .sym-back:hover{color:var(--brand)}
-.sym-urgent{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.04));border:1px solid rgba(220,38,38,.28);border-radius:13px;padding:12px 14px;font-size:13px;font-weight:500;color:#b91c1c;line-height:1.5;margin-bottom:14px}
+.sym-urgent{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.035));border:1px solid rgba(220,38,38,.25);border-radius:14px;padding:13px 15px;font-size:13px;font-weight:500;color:#b91c1c;line-height:1.55;margin-bottom:14px}
 .sym-urgent svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
-.sym-disclaimer{display:flex;align-items:flex-start;gap:9px;margin-top:18px;padding-top:15px;border-top:1px solid var(--border-soft);font-size:12px;font-weight:500;color:var(--muted);line-height:1.5}
-.sym-disclaimer svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;color:var(--sub)}
-.sym-disclaimer b{font-weight:700;color:var(--sub)}
+/* Disclaimer — külön dobozban, nem flex-törve, levegősen */
+.sym-disclaimer{margin-top:20px;background:var(--brand-tint,#f4f7ff);background:#f5f8ff;border:1px solid rgba(38,74,202,.1);border-radius:14px;padding:13px 15px;font-size:12.5px;font-weight:500;color:var(--sub);line-height:1.6}
+.sym-disclaimer .sym-disc-head{display:flex;align-items:center;gap:7px;font-weight:700;color:var(--brand);margin-bottom:4px}
+.sym-disclaimer .sym-disc-head svg{width:15px;height:15px;flex-shrink:0}
+.sym-disclaimer b{font-weight:700;color:var(--text)}
 </style>
 <style id="szk-nav-dd">
 .nav-links li.szk-dd{position:relative}
@@ -1087,7 +1089,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             '<span class="sym-ai-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>AI segéd</span>'+
           '</div>'+
           '<div class="sym-body" id="symBody"></div>'+
-          '<div class="sym-disclaimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Pontos kivizsgáláshoz forduljon orvoshoz; sürgős, súlyos panasz esetén hívja a <b>112</b>-t.</div>'+
+          '<div class="sym-disclaimer"><div class="sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Pontos kivizsgáláshoz forduljon orvoshoz; sürgős, súlyos panasz esetén hívja a <b>112-t</b>.</div>'+
         '</div>';
       document.body.appendChild(ov);
       ov.querySelector('.sym-close').addEventListener('click', closeSymptomHelper);
