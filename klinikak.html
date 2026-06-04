@@ -187,7 +187,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .topbar-btn:active{transform:translateY(0)}
 
 /* ───── PAGE LAYOUT ───── */
-.pw{max-width:1600px;margin:0 auto;padding:1.5rem 3.5%;display:grid;grid-template-columns:310px 1fr;gap:1.5rem;align-items:start}
+.pw{max-width:1600px;margin:0 auto;padding:1.5rem 3.5%;display:grid;grid-template-columns:264px 1fr;gap:1.5rem;align-items:start}
 
 /* ══════════════════════════════════════════
    FILTER SIDEBAR – PREMIUM DETAILED
@@ -824,21 +824,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
 <!-- ── ORVOS / KLINIKA TOGGLE ── -->
 <style>
-.view-toggle{max-width:1400px;margin:0 auto;padding:0 3.5% 1.25rem;display:flex;justify-content:center}
-.view-toggle-inner{display:inline-flex;background:#fff;border:1px solid var(--border);border-radius:14px;padding:5px;gap:3px;box-shadow:0 2px 8px rgba(17,50,147,.05)}
-.view-toggle-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;border:none;background:transparent;color:var(--muted, #6b7a9a);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;text-decoration:none;white-space:nowrap}
-.view-toggle-btn:hover{color:var(--brand)}
-.view-toggle-btn.active{background:var(--brand, #113293);color:#fff;box-shadow:0 2px 8px rgba(17,50,147,.18)}
-.view-toggle-btn svg{flex-shrink:0}
-@media(max-width:520px){.view-toggle-btn{padding:9px 16px;font-size:13px}}
+.view-toggle{max-width:1400px;margin:0 auto;padding:0 3.5% 1.5rem;display:flex;justify-content:center}
+.view-toggle-inner{display:inline-flex;background:#fff;border:1px solid rgba(199,210,254,.6);border-radius:18px;padding:7px;gap:5px;box-shadow:0 2px 6px rgba(17,50,147,.08),0 14px 36px rgba(17,50,147,.16)}
+.view-toggle-btn{display:flex;align-items:center;gap:9px;padding:14px 34px;border:none;background:transparent;color:#52617a;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;border-radius:13px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.4,.64,1);text-decoration:none;white-space:nowrap;letter-spacing:-.01em}
+.view-toggle-btn svg{flex-shrink:0;width:18px;height:18px}
+/* Orvosok = zöld */
+.view-toggle-btn.tg-doctors:hover{color:#2C9650;background:rgba(44,150,80,.08)}
+.view-toggle-btn.tg-doctors.active{background:linear-gradient(135deg,#2C9650,#41b86c);color:#fff;box-shadow:0 3px 10px rgba(44,150,80,.35)}
+/* Klinikák = kék */
+.view-toggle-btn.tg-clinics:hover{color:var(--brand);background:rgba(38,74,202,.08)}
+.view-toggle-btn.tg-clinics.active{background:linear-gradient(135deg,#113293,#264ACA);color:#fff;box-shadow:0 3px 10px rgba(17,50,147,.35)}
+@media(max-width:520px){.view-toggle-btn{padding:12px 22px;font-size:14.5px}}
 </style>
 <div class="view-toggle">
   <div class="view-toggle-inner" role="tablist" aria-label="Találat típus">
-    <a href="/talalatok" class="view-toggle-btn" role="tab" aria-selected="false">
+    <a href="/talalatok" class="view-toggle-btn tg-doctors" role="tab" aria-selected="false">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Orvosok
     </a>
-    <button class="view-toggle-btn active" role="tab" aria-selected="true" disabled>
+    <button class="view-toggle-btn tg-clinics active" role="tab" aria-selected="true" disabled>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
       Klinikák
     </button>
@@ -938,7 +942,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
     <div id="resList"><div class="skel"></div><div class="skel" style="animation-delay:.15s"></div><div class="skel" style="animation-delay:.3s"></div></div>
 
-    <div id="resMap" style="display:none;width:100%;height:620px;border-radius:18px;border:1px solid var(--border, #DCE3EA);overflow:hidden;background:#eef2ff;position:relative">
+    <div id="resMap" style="display:none;width:100%;height:527px;border-radius:18px;border:1px solid var(--border, #DCE3EA);overflow:hidden;background:#eef2ff;position:relative">
       <div id="mapEl" style="width:100%;height:100%"></div>
       <div id="mapLoadingMsg" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;background:#eef2ff;z-index:1">Térkép betöltése…</div>
     </div>
@@ -946,7 +950,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
       <div>
         <div class="load-more-info" id="loadMoreInfo"></div>
-        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()">
+        <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" style="display:none">
           További klinikák betöltése
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
@@ -1311,18 +1315,40 @@ function renderList(){
 
   list.innerHTML = visible.map((c, i) => clinicCardHTML(c, i)).join('');
 
-  // Load more
+  // Automatikus betöltés (infinite scroll) — a gomb helyett egy figyelő elem
   const loadMoreWrap = document.getElementById('loadMoreWrap');
   const loadMoreInfo = document.getElementById('loadMoreInfo');
   if(end < total){
     loadMoreWrap.style.display = 'flex';
-    loadMoreInfo.innerHTML = `<strong>${end}</strong> / ${total} klinika megjelenítve · még ${total - end} hátra`;
+    loadMoreInfo.innerHTML = `<strong>${end}</strong> / ${total} klinika · görgess a továbbiakért…`;
+    _ensureAutoLoadObserver();
   } else {
     loadMoreWrap.style.display = 'none';
   }
 
-  // Lapozó elrejtése (load more-t használunk)
+  // Lapozó elrejtése (auto-load-ot használunk)
   document.getElementById('pagDiv').style.display = 'none';
+}
+
+// Automatikus betöltés figyelő
+let _autoLoadObserver = null;
+let _autoLoadBusy = false;
+function _ensureAutoLoadObserver(){
+  const sentinel = document.getElementById('loadMoreWrap');
+  if(!sentinel) return;
+  if(_autoLoadObserver){ _autoLoadObserver.disconnect(); }
+  _autoLoadObserver = new IntersectionObserver((entries) => {
+    if(entries[0].isIntersecting && !_autoLoadBusy){
+      _autoLoadBusy = true;
+      const total = filtered.length;
+      if(curPg * PER_PAGE < total){
+        curPg++;
+        renderList();
+      }
+      setTimeout(() => { _autoLoadBusy = false; }, 120);
+    }
+  }, { rootMargin: '400px 0px' });
+  _autoLoadObserver.observe(sentinel);
 }
 
 // ═══ Doctor cross-search ═══
@@ -1417,24 +1443,27 @@ function clinicCardHTML(c, i){
     const qDocs = cardDocs.filter(d => (d.specs||[]).some(s => (s.long||'').toLowerCase().includes(activeQ) || (s.short||'').toLowerCase().includes(activeQ)));
     if(qDocs.length) cardDocs = qDocs; // csak ha a keresés szakterületre illeszkedett
   }
-  const DOC_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>';
   const docTop = cardDocs.slice(0,3);
   const docMore = Math.max(0, cardDocs.length - 3);
-  const docsHtml = cardDocs.length ? `<div class="kc-docs">
+  const docsHtml = cardDocs.length ? `<div class="kc-docs-wrap">
+      <div class="kc-docs-label">${activeSpec || activeQ ? 'Keresett szakorvosok itt' : 'Itt rendelő orvosok'}</div>
+      <div class="kc-docs">
       ${docTop.map(d => {
         const dspec = (d.specs && d.specs[0]) ? (d.specs[0].short || d.specs[0].long || '') : '';
         const dtarget = d.slug ? `/orvosok/${encodeURIComponent(d.slug)}` : `/orvos.html?id=${d.id}`;
         const rawName = d.name || '';
         const hasTitle = /^(dr\.?|prof)/i.test(rawName.trim());
         const dName = (!hasTitle && d.title) ? `${d.title} ${rawName}` : (!hasTitle ? `Dr. ${rawName}` : rawName);
+        const cleanName = rawName.replace(/^(prof\.?\s*)?dr\.?\s*/i,'').trim();
+        const initials = (cleanName || rawName || '?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
         return `<a class="kc-doc" href="${dtarget}" onclick="event.stopPropagation()">
-          <span class="kc-doc-ic">${DOC_ICON}</span>
+          <span class="kc-doc-av">${escapeHtml(initials)}</span>
           <span class="kc-doc-main"><span class="kc-doc-name">${escapeHtml(dName)}</span>${dspec ? `<span class="kc-doc-spec">${escapeHtml(dspec)}</span>` : ''}</span>
-          ${d.rating ? `<span class="kc-doc-rating">★ ${Number(d.rating).toFixed(1)}</span>` : ''}
+          ${d.rating ? `<span class="kc-doc-rating"><span class="kc-doc-star">★</span> ${Number(d.rating).toFixed(1).replace('.', ',')}</span>` : ''}
         </a>`;
       }).join('')}
-      ${docMore ? `<a class="kc-doc-more" href="${target}" onclick="event.stopPropagation()">+ még ${docMore} szakorvos</a>` : ''}
-    </div>` : '';
+      ${docMore ? `<a class="kc-doc-more" href="${target}" onclick="event.stopPropagation()">+ még ${docMore} szakorvos ezen a helyen</a>` : ''}
+    </div></div>` : '';
 
   const PIN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   const isPremium = (c.status === 'partner') || c.is_premium === true;
@@ -1883,35 +1912,40 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .pw main .szk-card.kc.kc-premium{border-color:#e3c66b;background:linear-gradient(180deg,#fffdf6 0%,#ffffff 38%);box-shadow:0 2px 4px rgba(184,134,11,.08),0 10px 30px rgba(184,134,11,.14)}
 .pw main .szk-card.kc.kc-premium:hover{box-shadow:0 14px 34px rgba(184,134,11,.22),0 30px 60px rgba(184,134,11,.16);border-color:#d4a017}
 .kc-prem-badge{display:inline-flex;align-items:center;gap:5px;position:absolute;top:14px;right:14px;z-index:3;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#b8860b,#d4a017);padding:5px 10px;border-radius:100px;box-shadow:0 2px 8px rgba(184,134,11,.35)}
-.kc .szk-card-top{padding:20px 22px 14px}
-/* Kép 20%-kal nagyobb (64→77px, mobil 56→67px) */
-.kc .szk-card-avatar{width:77px;height:77px;font-size:23px}
-@media(max-width:520px){.kc .szk-card-avatar{width:67px;height:67px;font-size:20px}}
-.kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
+.kc .szk-card-top{padding:28px 28px 18px;display:flex;gap:18px;align-items:flex-start}
+.kc .szk-card-avatar{width:88px;height:88px;font-size:26px;border-radius:16px;flex-shrink:0}
+@media(max-width:520px){.kc .szk-card-avatar{width:72px;height:72px;font-size:22px}}
+.kc .szk-card-body{flex:1;min-width:0}
+.kc .szk-card-title{font-size:17px;font-weight:700;color:#113293;letter-spacing:-.01em;line-height:1.25;margin-bottom:7px}
+.kc .szk-card-subtitle{font-size:13px;color:#52617a;font-weight:500;margin-top:8px}
+.kc-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:#475569}
 .kc-meta .kc-m-star{color:#d97706;font-weight:700}
 .kc-rating-label{font-size:12px;color:#64748b;font-weight:500}
 .kc-meta strong{color:#113293}
 .kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
 .kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
-.kc-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;padding:14px 22px 4px}
+.kc-docs-wrap{padding:20px 28px 8px}
+.kc-docs-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2C9650;margin-bottom:13px}
+.kc-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:11px}
 .kc-doc-more{grid-column:1/-1}
-.kc-doc{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid rgba(44,150,80,.18);border-radius:11px;text-decoration:none;color:inherit;background:rgba(44,150,80,.06);transition:border-color .15s,background .15s}
-.kc-doc:hover{border-color:#2C9650;background:rgba(44,150,80,.12)}
-.kc-doc-ic{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#dcf3e4,#c3e9d0);color:#2C9650;display:flex;align-items:center;justify-content:center}
-.kc-doc-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.kc-doc-name{font-size:13.5px;font-weight:600;color:#1a1f36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kc-doc-spec{font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kc-doc-rating{flex-shrink:0;font-size:12.5px;font-weight:700;color:#1a1f36}
-.kc-doc-more{display:block;text-align:center;padding:8px;font-size:12.5px;font-weight:600;color:#264ACA;text-decoration:none;border:1px dashed rgba(38,74,202,.3);border-radius:10px;background:rgba(38,74,202,.04)}
-.kc-doc-more:hover{background:rgba(38,74,202,.1)}
+.kc-doc{display:flex;align-items:center;gap:12px;padding:11px 13px;border:1px solid rgba(44,150,80,.2);border-radius:13px;text-decoration:none;color:inherit;background:rgba(44,150,80,.06);transition:border-color .15s,background .15s,transform .15s}
+.kc-doc:hover{border-color:#2C9650;background:rgba(44,150,80,.13);transform:translateY(-1px)}
+.kc-doc-av{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#2C9650,#41b86c);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14.5px;letter-spacing:.02em;box-shadow:0 2px 6px rgba(44,150,80,.3)}
+.kc-doc-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.kc-doc-name{font-size:14px;font-weight:600;color:#1a1f36;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-doc-spec{font-size:12px;color:#52617a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kc-doc-rating{flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:700;color:#1a1f36}
+.kc-doc-star{color:#d97706}
+.kc-doc-more{display:block;text-align:center;padding:10px;font-size:12.5px;font-weight:600;color:#2C9650;text-decoration:none;border:1px dashed rgba(44,150,80,.35);border-radius:11px;background:rgba(44,150,80,.04)}
+.kc-doc-more:hover{background:rgba(44,150,80,.1)}
 /* Teljes cím sor */
-.kc-address{display:flex;align-items:flex-start;gap:8px;margin:6px 0 10px;padding:8px 11px;background:linear-gradient(135deg,rgba(17,50,147,.04),rgba(38,74,202,.03));border:1px solid rgba(38,74,202,.1);border-radius:10px}
-.kc-address-ic{flex-shrink:0;color:#264ACA;margin-top:1px}
-.kc-address-txt{font-size:13px;font-weight:600;color:#1a1f36;line-height:1.4}
+.kc-address{display:flex;align-items:flex-start;gap:7px;margin:0 0 4px;padding:0}
+.kc-address-ic{flex-shrink:0;color:#264ACA;margin-top:1px;opacity:.8}
+.kc-address-txt{font-size:12.5px;font-weight:500;color:#52617a;line-height:1.4}
 .kc-badges{display:none}
 .kc-badge{display:none}
-.kc .szk-card-foot{padding:16px 22px 18px;border-top:none}
+.kc .szk-card-foot{padding:20px 28px 24px;border-top:none}
 </style>
 <script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
 <!-- Találati toast -->
