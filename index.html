@@ -548,7 +548,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   <div class="hero-two-col">
     <div class="hero-left">
       <h1 class="hero-title">
-        <span class="hero-title-line"><span class="hero-title-accent-blue">Országos</span></span>
+        <span class="hero-title-line"><span class="hero-title-accent-blue">Országos</span> <span class="hero-title-sub">(AI alapú)</span></span>
         <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span></span>
       </h1>
 
@@ -1179,6 +1179,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(!specName && f.specialty_slug){
       try{ const rr=await Promise.race([ db.from('specialties').select('name').eq('doctor_slug',f.specialty_slug).limit(1).maybeSingle(), new Promise(res=>setTimeout(()=>res({data:null}),1500)) ]); if(rr&&rr.data&&rr.data.name) specName=rr.data.name; }catch(e){}
     }
+    // Ha csak a NEVET ismerjük (pl. testtáj-javaslatból), oldjuk fel slug-ra is —
+    // így a találati oldal biztosan megtalálja (a név alapú szűrés szóközöknél hibázhat).
+    if(!f.specialty_slug && specName){
+      try{ const sr=await Promise.race([ db.from('specialties').select('doctor_slug').eq('name',specName).limit(1).maybeSingle(), new Promise(res=>setTimeout(()=>res({data:null}),1500)) ]); if(sr&&sr.data&&sr.data.doctor_slug){ f.specialty_slug=sr.data.doctor_slug; _chat.filters.specialty_slug=sr.data.doctor_slug; } }catch(e){}
+    }
     const hasSpec = !!(f.specialty_slug || specName);
     const city = f.city || '';
     // Mellkas-sürgősség figyelmeztetés
@@ -1323,7 +1328,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     items[_acActive].scrollIntoView({block:'nearest'});
   }
   function renderItems(items){
-    return; // legördülő kikapcsolva
     if(!acBox) return;
     if(!items.length){ closeAc(); return; }
     _acActive=-1;
@@ -1339,17 +1343,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   async function onAcInput(){
     const q = _norm((input.value||'').trim());
     if(q.length < 1){ renderRecentOrClose(); return; }
-    await loadAcData();
+    const raw = (input.value||'').trim();
     const items=[];
     if(window.heroSearchTarget === 'clinic'){
-      (_acClinics||[]).forEach(c => {
-        if(_norm(c.name).includes(q) || _norm(c.city||'').includes(q)){
-          items.push({ label:c.name, meta:c.city?('Klinika \u00B7 '+c.city):'Klinika',
+      try{
+        const { data } = await db.from('clinics').select('id, name, slug').ilike('name','%'+raw+'%').neq('status','inactive').limit(8);
+        (data||[]).forEach(c => {
+          items.push({ label:c.name, meta:'Klinika',
             href: c.slug?('klinika.html?slug='+encodeURIComponent(c.slug)):('klinikak.html?q='+encodeURIComponent(c.name)),
             icon:'\uD83C\uDFE5', bg:'#eef2ff', color:'#264ACA' });
-        }
-      });
+        });
+      }catch(e){}
     } else {
+      await loadAcData();
       (_acSpecs||[]).forEach(s => {
         if(_norm(s.name).includes(q)){
           items.push({ label:s.name, meta:'Szakterület',
@@ -1357,13 +1363,16 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             icon:'\uD83E\uDE7A', bg:'#e7f5ec', color:'#16a34a' });
         }
       });
-      (_acDocs||[]).forEach(d => {
-        if(_norm(d.name).includes(q)){
-          items.push({ label:d.name, meta:d.specialty_main?('Orvos \u00B7 '+d.specialty_main):'Orvos',
-            href:'talalatok.html?q='+encodeURIComponent(d.name),
+      try{
+        const { data } = await db.from('doctors')
+          .select('id, name, slug')
+          .ilike('name','%'+raw+'%').eq('is_active', true).limit(8);
+        (data||[]).forEach(x => {
+          items.push({ label:x.name, meta:'Orvos',
+            href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)),
             icon:'\uD83D\uDC68\u200D\u2695\uFE0F', bg:'#fff1e8', color:'#c2510c' });
-        }
-      });
+        });
+      }catch(e){}
     }
     renderItems(items.slice(0,8));
   }
@@ -1388,7 +1397,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   }
   function renderRecentOrClose(){ if(!input.value.trim()) renderRecent(); else closeAc(); }
 
-  input.addEventListener('input', () => { clearTimeout(_acDebounce); _acDebounce = setTimeout(onAcInput, 120); });
+  input.addEventListener('input', () => { clearTimeout(_acDebounce); _acDebounce = setTimeout(onAcInput, 220); });
   input.addEventListener('focus', () => { if(input.value.trim()) onAcInput(); else renderRecent(); });
   document.addEventListener('mousedown', e => { if(acBox && e.target!==input && !acBox.contains(e.target)) closeAc(); });
 
