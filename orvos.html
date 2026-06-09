@@ -1762,7 +1762,7 @@ async function load(){
   try{
     // Részletes query — minden lehetséges mező. Ha valamelyik nem létezik
     // a DB-ben, automatikusan minimális query-re fallback-elünk.
-    const PUBLIC_DOC_COLS = `id,name,title,bio,photo_url,phone,experience_years,languages,rating,review_count,is_active,gender,short_intro,university,graduation_year,board_certifications,continuing_education,publications,conferences,memberships,awards,teaching_activity,research_areas,media_appearances,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,slug,foglaljorvost_url,on_foglaljorvost,is_partner,is_professional,on_teladoc,teladoc_id,verified_at,created_at,updated_at`;
+    const PUBLIC_DOC_COLS = `id,name,title,bio,photo_url,phone,experience_years,languages,rating,review_count,is_active,gender,short_intro,university,graduation_year,board_certifications,continuing_education,publications,conferences,memberships,awards,teaching_activity,research_areas,media_appearances,has_online_consultation,has_eprescription,has_online_results,has_telemedicine,slug,is_partner,is_professional,verified_at,created_at,updated_at`;
     const fullSelect = `${PUBLIC_DOC_COLS},
         doctor_specialties(is_primary,specialties(name,doctor_slug,doctor_name)),
         doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,website,parking_info,public_transport,accessibility,opening_hours,clinic_photos,waiting_room_photos,lat,lng,cities(name))),
@@ -1773,31 +1773,18 @@ async function load(){
         doctor_clinics(consultation_fee,clinics(id,slug,name,address,phone,lat,lng,cities(name))),
         availability(day_of_week,start_time,end_time)`;
 
-    const buildQuery = (selectClause) => db.from('doctors').select(selectClause);
+    // Az orvos-profilt egy biztonságos SECURITY DEFINER RPC-vel kérjük le
+    // (get_doctor_profile), ami slug VAGY id alapján működik, és csak a publikus
+    // mezőket adja vissza. Ez megkerüli a doctors tábla közvetlen-jogosultsági gondját.
+    const profileKey = (id || slug || '').toString();
+    let data = null, error = null;
+    try {
+      const rpc = await db.rpc('get_doctor_profile', { p_key: profileKey });
+      if(rpc.error){ error = rpc.error; }
+      else if(!rpc.data){ error = { message: 'not found' }; }
+      else { data = rpc.data; }
+    } catch(e){ error = e; }
 
-    const isUuid = id || (slug && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug));
-
-    // Lekérdezés helper
-    const tryQuery = async (selectClause) => {
-      if(isUuid){
-        return await buildQuery(selectClause).eq('id', id || slug).single();
-      } else {
-        // Slug alapú próba elsőként
-        const r1 = await buildQuery(selectClause).eq('slug', slug).single();
-        if(!r1.error) return r1;
-        // Ha slug hibázik, ID-ként is megpróbáljuk (régebbi URL-ek miatt)
-        console.warn('[load] slug query failed, trying ID:', r1.error.message);
-        return await buildQuery(selectClause).eq('id', slug).single();
-      }
-    };
-
-    let { data, error } = await tryQuery(fullSelect);
-
-    // Ha a részletes query hibázik (pl. hiányzó oszlop), fallback minimális query-re
-    if(error){
-      console.warn('[load] full query failed, falling back to minimal:', error.message);
-      ({ data, error } = await tryQuery(minimalSelect));
-    }
 
     if(error || !data){ showError(); return; }
 
@@ -3038,7 +3025,7 @@ footer.site-footer{background:#1a1f36 !important}
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -3050,5 +3037,6 @@ footer.site-footer{background:#1a1f36 !important}
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>
