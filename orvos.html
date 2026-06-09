@@ -199,6 +199,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 /* ── Page Wrap ──────────────────────────────────────────────────────── */
 .pw{max-width:1200px;margin:0 auto;padding:18px 4% 60px;animation:fadeIn .4s ease-out}
 .pw-grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+.pw-grid-pre{margin-bottom:20px}
 @media (max-width:980px){.pw-grid{grid-template-columns:1fr}}
 
 /* ═════════ HERO ROW: doctor card + booking widget ═══════════════════ */
@@ -1382,10 +1383,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 <!-- ─── PAGE WRAP ───────────────────────────────────────────────────── -->
 <div class="pw" id="pageWrap" style="display:none">
 
-  <div class="pw-grid">
-
-    <!-- ═════ LEFT COLUMN ════════════════════════════════════════════ -->
-    <div>
+  <div class="pw-grid-pre">
 
       <!-- ─── DOCTOR HERO CARD (klinika mintára egységesítve) ──── -->
       <section class="dcard">
@@ -1426,6 +1424,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           </div>
         </div>
       </section>
+
+  </div>
+  <div class="pw-grid">
+
+    <!-- ═════ LEFT COLUMN ════════════════════════════════════════════ -->
+    <div>
 
       <!-- ─── TAB NAVIGÁCIÓ ───────────────────────────────────── -->
       <div class="prof-tabs" id="profTabs">
