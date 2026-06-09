@@ -1075,6 +1075,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   // ── TÜNET-PÁRBESZÉD a keresés-overlay-en belül ──
   // openSearchSymptom: megnyitja az overlay-t és a tünet-fázist mutatja.
   // Ha van directRegion → egyből javaslat; különben testtáj-kérdés.
+  // ═══ VALÓDI CHAT a keresés-overlay-ben ═══
+  // A felhasználó szabadon ír; minden üzenetnél a parse-search AI újraértelmezi az
+  // EDDIGI beszélgetést, és az asszisztens vagy rákérdez a hiányzóra, vagy felkínálja
+  // az Orvosok/Klinikák gombokat.
+  let _chat = null;
   function openSearchSymptom(query, directRegion){
     closeAc();
     const _ov = document.getElementById('searchOverlay');
@@ -1082,66 +1087,131 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     setPhase(_ov, 'symptom');
     _ov.classList.add('open'); _ov.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
-    if(directRegion){ symRenderSuggest(directRegion.id, query, true); }
-    else { symRenderRegions(query); }
+    // chat-állapot
+    _chat = { userTexts: [], filters: null, region: directRegion || null };
+    const thread = document.getElementById('soChatThread');
+    if(thread) thread.innerHTML = '';
+    bindChatInput();
+    // Nyitó üzenet
+    if(directRegion){
+      // van testtáj-tipp → javaslat + kérdezzük a helyet
+      chatAddAI('Értem. A panasza alapján a <b>'+soEsc(directRegion.specs[0])+'</b> lehet megfelelő. Melyik városban keressek, és mikorra? Írhatja egyben is, pl. „holnap Debrecenben”.');
+      _chat.filters = { specialty_slug: null, specialtyName: directRegion.specs[0], region: directRegion };
+      chatRenderChips(['Bárhol megfelel','Debrecen','Budapest','Szeged']);
+      // a query-t is dolgozzuk fel, hátha van benne város
+      if(query) chatHandleUser(query, true);
+    } else if(query && _VAGUE_PAIN.test(query)){
+      chatAddAI('Segítek megtalálni a megfelelő szakembert. Hol jelentkezik a panasz, vagy milyen orvosra van szüksége? Írhatja szabadon, pl. „bőrgyógyász holnap Debrecenben”.');
+      chatRenderChips(['Fej / migrén','Has / gyomor','Ízület / térd','Bőr','Mellkas / szív']);
+    } else {
+      chatAddAI('Pontosítsuk a keresést! Mit keres? Írhatja szabadon, pl. „kardiológus jövő héten Szegeden”.');
+      if(query) chatHandleUser(query, true);
+    }
+    setTimeout(()=>{ const i=document.getElementById('soChatInput'); if(i) i.focus(); }, 350);
   }
-  function symRenderRegions(query){
-    const box=document.getElementById('soSymBody'); if(!box) return;
-    box.innerHTML =
-      '<div class="so-sym-msg">Segítek megtalálni a megfelelő szakembert. <b>Hol jelentkezik a panasz?</b></div>'+
-      '<div class="so-sym-opts">'+
-        _REGION_MAP.map(r => '<button class="so-sym-opt" data-region="'+r.id+'"><span class="so-sym-ic">'+r.icon+'</span>'+soEsc(r.label)+'</button>').join('')+
+  function bindChatInput(){
+    const inp=document.getElementById('soChatInput');
+    const snd=document.getElementById('soChatSend');
+    if(snd && !snd._bound){ snd._bound=true; snd.addEventListener('click', ()=>{ const v=inp.value.trim(); if(v){ inp.value=''; chatHandleUser(v,false);} }); }
+    if(inp && !inp._bound){ inp._bound=true; inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const v=inp.value.trim(); if(v){ inp.value=''; chatHandleUser(v,false);} } }); }
+  }
+  function chatAddAI(html){
+    const t=document.getElementById('soChatThread'); if(!t) return;
+    const d=document.createElement('div'); d.className='so-msg so-msg-ai';
+    d.innerHTML='<span class="so-msg-av"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg></span><div class="so-msg-bubble">'+html+'</div>';
+    t.appendChild(d); t.scrollTop=t.scrollHeight;
+  }
+  function chatAddUser(text){
+    const t=document.getElementById('soChatThread'); if(!t) return;
+    const d=document.createElement('div'); d.className='so-msg so-msg-user';
+    d.innerHTML='<div class="so-msg-bubble">'+soEsc(text)+'</div>';
+    t.appendChild(d); t.scrollTop=t.scrollHeight;
+  }
+  function chatTyping(on){
+    const t=document.getElementById('soChatThread'); if(!t) return;
+    let el=t.querySelector('.so-typing');
+    if(on){ if(!el){ el=document.createElement('div'); el.className='so-msg so-msg-ai so-typing'; el.innerHTML='<span class="so-msg-av"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg></span><div class="so-msg-bubble"><span class="so-dots"><i></i><i></i><i></i></span></div>'; t.appendChild(el); t.scrollTop=t.scrollHeight; } }
+    else if(el){ el.remove(); }
+  }
+  function chatRenderChips(arr){
+    const c=document.getElementById('soChatChips'); if(!c) return;
+    if(!arr || !arr.length){ c.innerHTML=''; return; }
+    c.innerHTML = arr.map(x=>'<button type="button" class="so-chat-chip">'+soEsc(x)+'</button>').join('');
+    c.querySelectorAll('.so-chat-chip').forEach(b=>{ b.addEventListener('click', ()=>{ chatHandleUser(b.textContent, false); }); });
+  }
+  async function chatHandleUser(text, silent){
+    if(!silent) chatAddUser(text);
+    chatRenderChips([]);
+    _chat.userTexts.push(text);
+    chatTyping(true);
+    // Az EDDIGI beszélgetés együtt → parse-search AI értelmezi
+    const combined = _chat.userTexts.join(' ');
+    let r = null;
+    try { r = await parseSearchQuery(combined); } catch(e){}
+    sanitizeTimeFilters(r, combined);
+    chatTyping(false);
+    // állapot frissítése (a már ismert testtáj-javaslatot megtartjuk, ha az AI nem adott szakterületet)
+    const prev = _chat.filters || {};
+    const f = r || {};
+    if(!f.specialty_slug && prev.region && !f.specialtyName){ f.specialtyName = prev.region.specs[0]; }
+    _chat.filters = Object.assign({}, prev, f);
+    chatRespond();
+  }
+  async function chatRespond(){
+    const f = _chat.filters || {};
+    // szakterület szép neve
+    let specName = f.specialtyName || '';
+    if(!specName && f.specialty_slug){
+      try{ const rr=await Promise.race([ db.from('specialties').select('name').eq('doctor_slug',f.specialty_slug).limit(1).maybeSingle(), new Promise(res=>setTimeout(()=>res({data:null}),1500)) ]); if(rr&&rr.data&&rr.data.name) specName=rr.data.name; }catch(e){}
+    }
+    const hasSpec = !!(f.specialty_slug || specName);
+    const city = f.city || '';
+    // Mellkas-sürgősség figyelmeztetés
+    if(f.region && f.region.urgent){
+      chatAddAI('<span class="so-chat-urgent">⚠️ Erős vagy hirtelen mellkasi panasz, nehézlégzés esetén <b>azonnal hívja a 112-t</b>.</span>');
+    }
+    if(hasSpec){
+      // van javaslat → összegzés + gombok
+      let summary = 'Rendben! Ezt találtam: <b>'+soEsc(specName || soPretty(f.specialty_slug))+'</b>';
+      if(city) summary += ', <b>'+soEsc(city)+'</b>';
+      if(f.weekend) summary += ' (hétvégén)';
+      else if(Array.isArray(f.days) && f.days.length) summary += ' ('+f.days.map(d=>SO_DAYS[d]||'').filter(Boolean).join(', ')+')';
+      summary += '. Megnézi az orvosokat vagy a klinikákat?';
+      chatAddAI(summary);
+      chatAddActions(f, specName);
+      // ha nincs város, finoman felajánljuk a pontosítást chipekkel
+      if(!city) chatRenderChips(['Budapest','Debrecen','Szeged','Mindegy, hol']);
+    } else if(f.region){
+      chatAddAI('Megvan a terület. Pontosítsuk: melyik városban keressek? Vagy írja: „mindegy, hol”.');
+      chatRenderChips(['Budapest','Debrecen','Szeged','Mindegy, hol']);
+    } else {
+      // nem értette → kérjük újra / testtáj-chipek
+      chatAddAI('Még nem egyértelmű. Megpróbálná másképp? Pl. írja be a szakterületet vagy a panaszt — „bőrgyógyász”, „fáj a fejem”, „kardiológus Szegeden”.');
+      chatRenderChips(['Fej / migrén','Has / gyomor','Ízület / térd','Bőr','Mellkas / szív']);
+    }
+  }
+  function chatAddActions(f, specName){
+    const t=document.getElementById('soChatThread'); if(!t) return;
+    // URL-ek a felismert szűrőkkel
+    function buildUrl(base){
+      const p=new URLSearchParams();
+      if(f.specialty_slug) p.set('specialty', f.specialty_slug);
+      else if(specName) p.set('specialty', specName);
+      if(f.city) p.set('city', f.city);
+      if(f.district) p.set('district', String(f.district));
+      if(Array.isArray(f.days) && f.days.length) p.set('days', f.days.join(','));
+      if(f.weekend===true) p.set('weekend','1');
+      if(![...p.keys()].length) p.set('q', _chat.userTexts.join(' '));
+      return base+'?'+p.toString();
+    }
+    const docUrl=buildUrl('talalatok.html'), cliUrl=buildUrl('klinikak.html');
+    const d=document.createElement('div'); d.className='so-msg so-msg-ai';
+    d.innerHTML='<span class="so-msg-av"></span><div class="so-msg-bubble so-msg-actions">'+
+      '<button type="button" class="so-act primary" data-url="'+docUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Orvosok</button>'+
+      '<button type="button" class="so-act" data-url="'+cliUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>Klinikák</button>'+
       '</div>';
-    box.querySelectorAll('.so-sym-opt').forEach(b => {
-      b.addEventListener('click', () => symRenderSuggest(b.dataset.region, query, false));
-    });
-  }
-  function symRenderSuggest(regionId, query, isDirect){
-    const box=document.getElementById('soSymBody');
-    const r=_REGION_MAP.find(x=>x.id===regionId);
-    if(!box || !r) return;
-    const urgentHtml = r.urgent
-      ? '<div class="so-sym-urgent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erős vagy hirtelen mellkasi fájdalom, nehézlégzés esetén <b>azonnal hívja a 112-t</b> — ne várjon az időpontfoglalással.</div>'
-      : '';
-    const lead = isDirect
-      ? 'A panasza alapján ezt a szakterületet javasoljuk:'
-      : 'Köszönöm! Ezek alapján a következő szakterület(ek) lehetnek megfelelőek:';
-    box.innerHTML =
-      '<div class="so-sym-msg">'+lead+'</div>'+
-      urgentHtml+
-      '<div class="so-sym-opts">'+
-        r.specs.map((s,i) => '<button class="so-sym-opt so-sym-spec'+(i===0?' primary':'')+'" data-spec="'+encodeURIComponent(s)+'"><span class="so-sym-ic">'+(i===0?'⭐':'🩺')+'</span><span class="so-sym-name">'+soEsc(s)+'</span><svg class="so-sym-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>').join('')+
-      '</div>'+
-      '<button class="so-sym-back" type="button">'+(isDirect ? '‹ Másik testtáj kiválasztása' : '‹ Vissza')+'</button>';
-    box.querySelectorAll('.so-sym-spec').forEach(b => {
-      b.addEventListener('click', () => {
-        const spec=decodeURIComponent(b.dataset.spec);
-        symShowSpecChoice(spec, query, regionId, isDirect);
-      });
-    });
-    const back=box.querySelector('.so-sym-back');
-    if(back) back.addEventListener('click', () => symRenderRegions(query));
-  }
-  // A javasolt szakterület megerősítése + Orvosok / Klinikák választás
-  function symShowSpecChoice(spec, query, regionId, isDirect){
-    const box=document.getElementById('soSymBody'); if(!box) return;
-    const dp=new URLSearchParams(); dp.set('specialty', spec);
-    const cp=new URLSearchParams(); cp.set('specialty', spec);
-    const docUrl='talalatok.html?'+dp.toString();
-    const cliUrl='klinikak.html?'+cp.toString();
-    box.innerHTML =
-      '<div class="so-sym-msg">Javasolt szakterület:</div>'+
-      '<div class="so-sym-spec-badge">'+soEsc(spec)+'</div>'+
-      '<div class="so-result-actions">'+
-        '<button type="button" class="so-act primary" data-url="'+docUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Orvosok megtekintése</button>'+
-        '<button type="button" class="so-act" data-url="'+cliUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>Klinikák megtekintése</button>'+
-      '</div>'+
-      '<button class="so-sym-back" type="button">‹ Vissza a szakterületekhez</button>';
-    box.querySelectorAll('[data-url]').forEach(b=>{
-      b.addEventListener('click', ()=>{ window.location.href=b.getAttribute('data-url'); });
-    });
-    const back=box.querySelector('.so-sym-back');
-    if(back) back.addEventListener('click', ()=> symRenderSuggest(regionId, query, isDirect));
+    t.appendChild(d); t.scrollTop=t.scrollHeight;
+    d.querySelectorAll('[data-url]').forEach(b=>{ b.addEventListener('click', ()=>{ window.location.href=b.getAttribute('data-url'); }); });
   }
 
   if(submitBtn) submitBtn.addEventListener('click', doSearch);
@@ -1711,34 +1781,45 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .so-go-anyway:hover{color:#264ACA}
 @media(prefers-reduced-motion:reduce){.so-orb,.so-step.active i,.so-go-dot{animation:none}}
 /* ── tünet-párbeszéd fázis (a keresés-overlay-en belül) ── */
-.so-phase-symptom{text-align:left}
-.so-sym-msg{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:400;color:#1e293b;line-height:1.45;letter-spacing:-.01em;margin-bottom:16px;text-align:center}
-.so-sym-msg b{font-weight:600;color:#264ACA}
-.so-sym-opts{display:flex;flex-direction:column;gap:9px;max-width:360px;margin:0 auto}
-.so-sym-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;border:1px solid rgba(17,50,147,.12);border-radius:13px;background:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#1e293b;cursor:pointer;box-shadow:0 1px 2px rgba(17,50,147,.03);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s,background .25s}
-.so-sym-opt:hover{border-color:#264ACA;background:linear-gradient(180deg,#fff,#eef2ff);transform:translateY(-2px);box-shadow:0 8px 20px rgba(17,50,147,.12)}
-.so-sym-ic{font-size:19px;flex-shrink:0;line-height:1;width:24px;text-align:center}
-.so-sym-spec.primary{border-color:transparent;background:linear-gradient(135deg,#37bd6a,#2C9650 60%,#247e44);color:#fff;box-shadow:0 8px 22px rgba(44,150,80,.34)}
-.so-sym-spec.primary .so-sym-arrow{color:rgba(255,255,255,.9)}
-.so-sym-spec.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(44,150,80,.46)}
-.so-sym-name{flex:1}
-.so-sym-arrow{width:16px;height:16px;color:#94a3b8;flex-shrink:0;transition:transform .25s,color .25s}
-.so-sym-spec:hover .so-sym-arrow{transform:translateX(4px)}
-.so-sym-spec:not(.primary):hover .so-sym-arrow{color:#2C9650}
-.so-sym-back{display:inline-flex;align-items:center;gap:6px;margin:14px auto 0;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;padding:5px 0;transition:color .2s}
-.so-sym-back:hover{color:#264ACA}
-.so-sym-urgent{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.035));border:1px solid rgba(220,38,38,.25);border-radius:13px;padding:12px 14px;font-size:12.5px;font-weight:500;color:#b91c1c;line-height:1.55;margin-bottom:13px;max-width:360px;margin-left:auto;margin-right:auto}
-.so-sym-urgent svg{width:17px;height:17px;flex-shrink:0;margin-top:1px}
-.so-sym-disclaimer{max-width:360px;margin:18px auto 0;background:#f5f8ff;border:1px solid rgba(38,74,202,.1);border-radius:13px;padding:12px 14px;font-size:12px;font-weight:500;color:#64748b;line-height:1.55;text-align:left}
+.so-phase-symptom{text-align:left;display:flex;flex-direction:column}
+.so-chat-head{display:flex;justify-content:center;margin-bottom:12px}
+.so-chat-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#6d4ae6,#4F46E5);border-radius:100px;padding:6px 14px 6px 11px;box-shadow:0 4px 14px rgba(79,70,229,.3)}
+.so-chat-badge svg{width:13px;height:13px}
+.so-chat-thread{display:flex;flex-direction:column;gap:10px;max-height:46vh;overflow-y:auto;padding:4px 2px;margin-bottom:10px}
+.so-msg{display:flex;gap:8px;align-items:flex-end;max-width:100%}
+.so-msg-ai{justify-content:flex-start}
+.so-msg-user{justify-content:flex-end}
+.so-msg-av{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#6d4ae6,#4F46E5);display:flex;align-items:center;justify-content:center;color:#fff}
+.so-msg-av svg{width:14px;height:14px}
+.so-msg-user .so-msg-av{display:none}
+.so-msg-bubble{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;line-height:1.5;padding:10px 14px;border-radius:16px;max-width:80%;word-wrap:break-word}
+.so-msg-ai .so-msg-bubble{background:#f1f5fb;color:#1e293b;border-bottom-left-radius:5px;text-align:left}
+.so-msg-ai .so-msg-bubble b{font-weight:700;color:#264ACA}
+.so-msg-user .so-msg-bubble{background:linear-gradient(135deg,#264ACA,#113293);color:#fff;border-bottom-right-radius:5px}
+.so-msg-actions{display:flex;gap:8px;background:none!important;padding:0!important}
+.so-msg-actions .so-act{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:600}
+.so-msg-actions .so-act svg{width:16px;height:16px;flex-shrink:0}
+.so-chat-urgent{color:#b91c1c;font-weight:600}
+.so-dots{display:inline-flex;gap:4px;padding:3px 0}
+.so-dots i{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:soDot 1.2s ease-in-out infinite}
+.so-dots i:nth-child(2){animation-delay:.2s}.so-dots i:nth-child(3){animation-delay:.4s}
+@keyframes soDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.so-chat-chips{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:10px}
+.so-chat-chip{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:#264ACA;background:#eef2ff;border:1px solid rgba(38,74,202,.18);padding:7px 13px;border-radius:100px;cursor:pointer;transition:background .2s,transform .2s}
+.so-chat-chip:hover{background:#e0e7ff;transform:translateY(-1px)}
+.so-chat-inputbar{display:flex;gap:8px;align-items:center}
+.so-chat-input{flex:1;font-family:'Space Grotesk',sans-serif;font-size:14.5px;color:#1e293b;background:#fff;border:1.5px solid #d4ddf5;border-radius:13px;padding:12px 15px;outline:none;transition:border-color .2s,box-shadow .2s}
+.so-chat-input:focus{border-color:#264ACA;box-shadow:0 0 0 4px rgba(38,74,202,.12)}
+.so-chat-send{flex-shrink:0;width:46px;height:46px;border:none;border-radius:13px;background:linear-gradient(135deg,#264ACA,#113293);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(17,50,147,.28);transition:transform .2s,box-shadow .2s}
+.so-chat-send:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(17,50,147,.4)}
+.so-chat-send svg{width:19px;height:19px}
+.so-sym-disclaimer{margin:12px auto 0;background:#f5f8ff;border:1px solid rgba(38,74,202,.1);border-radius:13px;padding:11px 14px;font-size:11.5px;font-weight:500;color:#64748b;line-height:1.5;text-align:left}
 .so-sym-disc-head{display:flex;align-items:center;gap:7px;font-weight:700;color:#264ACA;margin-bottom:3px}
 .so-sym-disc-head svg{width:14px;height:14px;flex-shrink:0}
 .so-sym-disclaimer b{font-weight:700;color:#1e293b}
-/* javaslat-fázis Orvosok/Klinikák gombok */
 .so-result-actions{display:flex;flex-direction:column;gap:9px;max-width:320px;margin:20px auto 0}
 .so-result-actions .so-act{display:flex;align-items:center;justify-content:center;gap:9px}
 .so-result-actions .so-act svg{width:17px;height:17px;flex-shrink:0}
-.so-sym-spec-badge{display:inline-block;margin:0 auto;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);padding:10px 22px;border-radius:100px;box-shadow:0 6px 18px rgba(17,50,147,.28);text-align:center}
-.so-phase-symptom .so-sym-spec-badge{display:block;width:fit-content}
 </style>
 <div id="searchOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-live="polite">
   <div class="so-card">
@@ -1770,10 +1851,18 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div id="soEmptyActions" class="so-empty-actions"></div>
     </div>
     <div class="so-phase so-phase-symptom" hidden>
-      <div id="soSymBody" class="so-sym-body"></div>
+      <div class="so-chat-head">
+        <span class="so-chat-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>AI asszisztens</span>
+      </div>
+      <div id="soChatThread" class="so-chat-thread"></div>
+      <div id="soChatChips" class="so-chat-chips"></div>
+      <div class="so-chat-inputbar">
+        <input type="text" id="soChatInput" class="so-chat-input" placeholder="Írjon ide… pl. „bőrgyógyász holnap Debrecenben”" autocomplete="off">
+        <button type="button" id="soChatSend" class="so-chat-send" aria-label="Küldés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      </div>
       <div class="so-sym-disclaimer">
         <div class="so-sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>
-        Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Pontos kivizsgáláshoz forduljon orvoshoz; sürgős, súlyos panasz esetén hívja a <b>112-t</b>.
+        Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Sürgős, súlyos panasz esetén hívja a <b>112-t</b>.
       </div>
     </div>
   </div>
