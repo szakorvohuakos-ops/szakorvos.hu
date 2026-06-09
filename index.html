@@ -66,19 +66,22 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .nav-login svg{width:18px;height:18px}
 
 .hero{position:relative;padding:1.7rem 5.5% 3rem;max-width:1400px;margin:0 auto}
-.hero-two-col{display:grid;grid-template-columns:2.25fr 1fr;gap:2.25rem;align-items:stretch}
+.hero-two-col{display:grid;grid-template-columns:2.6fr 1fr;gap:2.25rem;align-items:stretch}
 .hero-left{display:flex;flex-direction:column;gap:0;min-width:0}
 .hero-right{display:flex;flex-direction:column;gap:18px;min-width:0}
-.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.16rem,3.5vw,2.97rem);font-weight:400;line-height:1.08;letter-spacing:-0.03em;color:var(--text);margin:0 0 .7rem;text-wrap:balance;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-feature-settings:"kern" 1,"liga" 1,"calt" 1;text-rendering:optimizeLegibility}
-.hero-title-line{display:block;white-space:nowrap}
-.hero-title-line2{font-size:.56em;font-weight:400;white-space:normal;margin-top:.55em;line-height:1.3;letter-spacing:-0.01em}
+.hero-right .highlight-list{grid-template-columns:1fr}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.16rem,3.5vw,2.97rem);font-weight:500;line-height:1.08;letter-spacing:-0.025em;color:var(--text);margin:0 0 .7rem;text-wrap:balance;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-feature-settings:"kern" 1,"liga" 1,"calt" 1;text-rendering:optimizeLegibility}
+.hero-title-line{display:block;white-space:nowrap}.hero-title-line2{font-size:.56em;font-weight:400;white-space:normal;margin-top:.55em;line-height:1.3;letter-spacing:-0.01em}
 .hero-title-line + .hero-title-line{margin-top:.12em}
+.hero-title-sub{font-size:.62em;font-weight:500;color:var(--muted)}
 .hero-title-accent{background:var(--grad-green-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;padding-bottom:.06em}
 .hero-title-accent-blue{background:var(--grad-blue-text);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block;padding-bottom:.06em}
-.hero-title-ai{font-size:.62em;font-weight:400;color:var(--muted);letter-spacing:-0.01em;vertical-align:middle}
 .hero-subtitle{font-size:15.5px;font-weight:500;color:var(--sub);line-height:1.65;max-width:560px;margin:0 0 .55rem}
+.hero-counts{font-size:16px;font-weight:400;color:var(--text);margin:0 0 .4rem;max-width:660px;line-height:1.6}
+.hero-counts .hc-num{font-weight:700;color:#113293}
+.hero-counts .hc-blue{color:var(--brand);font-weight:600}
+.hero-counts .hc-green{color:var(--green);font-weight:600}
 .hero-search-lead{font-size:16px;font-weight:400;color:var(--text);margin:0 0 1.6rem;max-width:660px;line-height:1.65}
-.lead-line2{display:block;margin-top:.35rem}
 .hero-subtitle-wide{max-width:none;white-space:nowrap}
 @media(max-width:720px){.hero-subtitle-wide{white-space:normal}}
 .hero-sub-num{font-weight:600;white-space:nowrap}
@@ -120,6 +123,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .search-ai-badge{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;font-size:11.5px;font-weight:600;color:#4F46E5;background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.18);border-radius:100px;padding:4px 11px 4px 9px;letter-spacing:.01em}
 .search-ai-badge svg{width:12px;height:12px;color:#4F46E5}
 .search-head-desc{font-size:14px;font-weight:500;color:var(--sub);line-height:1.55;margin:8px 0 0}
+.desc-ai{font-weight:700;background:linear-gradient(90deg,#264ACA 0%,#2C9650 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .search-input-wrap:focus-within{border-color:var(--brand-2);background:#fff;box-shadow:0 0 0 4px rgba(38,74,202,.14),0 10px 28px rgba(17,50,147,.16)}
 .search-input-icon{position:absolute;left:16px;color:var(--muted);pointer-events:none;transition:color .2s}
 .search-input-wrap:focus-within .search-input-icon{color:var(--brand-2)}
@@ -164,15 +168,17 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .stats-foot{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:11px;padding-top:10px;border-top:1px solid rgba(38,74,202,.08);font-size:10.5px;font-weight:500;color:var(--muted)}
 .stats-foot svg{width:12px;height:12px;color:var(--brand-2)}
 
-.highlight-list{display:flex;flex-direction:column;gap:9px}
-.highlight-card{display:flex;align-items:center;gap:12px;padding:13px 15px;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.72) 100%);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:13px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.04),0 6px 18px rgba(17,50,147,.06);transition:all .25s;cursor:pointer}
+.highlight-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+.highlight-list .highlight-card{min-width:0}
+@media(max-width:560px){.highlight-list{grid-template-columns:1fr}}
+.highlight-card{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.72) 100%);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.04),0 6px 18px rgba(17,50,147,.06);transition:all .25s;cursor:pointer}
 .highlight-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.18)}
-.highlight-icon{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#eef2ff,#dbe4ff);color:var(--brand-2);display:flex;align-items:center;justify-content:center}
-.highlight-icon svg{width:16px;height:16px}
+.highlight-icon{flex-shrink:0;width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#eef2ff,#dbe4ff);color:var(--brand-2);display:flex;align-items:center;justify-content:center}
+.highlight-icon svg{width:17px;height:17px}
 .highlight-body{flex:1;min-width:0}
-.highlight-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:2px}
+.highlight-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:4px;line-height:1.25}
 .highlight-desc{font-size:11px;color:var(--muted);line-height:1.4}
-.highlight-arrow{flex-shrink:0;color:var(--muted);transition:transform .2s,color .2s}
+.highlight-arrow{flex-shrink:0;color:var(--muted);transition:transform .2s,color .2s;margin-top:11px}
 .highlight-card:hover .highlight-arrow{transform:translateX(2px);color:var(--brand-2)}
 a.highlight-card{text-decoration:none;color:inherit}
 .highlight-desc.g-rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -180,7 +186,7 @@ a.highlight-card{text-decoration:none;color:inherit}
 .g-stars{color:#fbbc05;font-size:12px;letter-spacing:1px;line-height:1}
 .g-label{font-size:11px;color:var(--sub);font-weight:600}
 
-.map-card{min-height:176px;background:linear-gradient(135deg,rgba(255,255,255,.88) 0%,rgba(230,238,255,.7) 100%);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);border-radius:14px;padding:13px;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);display:grid;grid-template-columns:1fr 150px;gap:14px;align-items:center;text-decoration:none;color:inherit;transition:all .25s;cursor:pointer}
+.map-card{position:relative;min-height:200px;border:1px solid rgba(255,255,255,.85);border-radius:14px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);text-decoration:none;color:inherit;transition:all .25s;cursor:pointer;display:block}
 .map-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.2)}
 .map-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:3px;display:flex;align-items:center;gap:5px}
 .map-title svg{width:12px;height:12px;color:var(--brand-2)}
@@ -188,7 +194,10 @@ a.highlight-card{text-decoration:none;color:inherit}
 .map-cta{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--brand-2)}
 .map-cta svg{width:10px;height:10px;transition:transform .2s}
 .map-card:hover .map-cta svg{transform:translateX(2px)}
-.map-frame{position:relative;height:150px;border-radius:11px;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
+.map-frame{position:absolute;inset:0;height:100%;border-radius:0;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
+.map-overlay{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(0deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.82) 70%,rgba(255,255,255,0) 100%);backdrop-filter:blur(4px)}
+.map-overlay .map-title{margin:0}
+.map-overlay .map-cta{flex-shrink:0}
 .map-pin{position:absolute;width:12px;height:12px;background:var(--grad-blue);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(17,50,147,.3)}
 .map-pin::after{content:'';position:absolute;top:3px;left:3px;width:6px;height:6px;background:#fff;border-radius:50%}
 .map-pin:nth-child(1){top:25%;left:30%;animation:pulsePin 2.5s ease-in-out infinite}
@@ -536,24 +545,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   <div class="hero-two-col">
     <div class="hero-left">
       <h1 class="hero-title">
-        <span class="hero-title-line"><span class="hero-title-accent-blue">Országos</span> <span class="hero-title-ai">(AI alapú)</span></span>
-        <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span></span>
+        <span class="hero-title-line"><span class="hero-title-accent-blue">Országos</span></span>
+        <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span> <span class="hero-title-sub">(AI asszisztenssel)</span></span>
       </h1>
 
-      <p class="hero-subtitle hero-search-lead"><span class="sub-blue">Telefonszámokkal</span>, részletes adatokkal és <span class="sub-green">elérhetőségekkel</span>.<span class="lead-line2">Keressen több mint <span class="hero-sub-num doc" id="heroSubDoctors">5&nbsp;389</span> <span class="sub-blue">szakorvos</span>, <span class="hero-sub-num cli" id="heroSubClinics">1&nbsp;929</span> <span class="sub-green">rendelő</span> és <span class="hero-sub-num" id="heroSubProfs">360</span> egészségügyi szakember között.</span></p>
+      <p class="hero-counts">Keressen több mint <span class="hc-num">5&nbsp;961</span> <span class="hc-blue">szakorvos</span>, <span class="hc-num">1&nbsp;929</span> <span class="hc-green">rendelő</span> és <span class="hc-num">360</span> egészségügyi szakember között.</p>
+
+      <p class="hero-subtitle hero-search-lead"><span class="sub-blue">Telefonszámokkal</span>, részletes adatokkal és <span class="sub-green">elérhetőségekkel</span>.</p>
 
       <div class="smart-search">
         <div class="search-head">
           <div class="search-head-row">
             <span class="search-head-title">Írja le, mire van szüksége…</span>
-            <span class="search-ai-badge"><svg class="badge-spark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>Szakorvos.hu AI asszisztens</span>
             <button class="near-me" id="nearMeBtn" type="button" role="switch" aria-checked="false" aria-label="Keresés a közelemben helymeghatározással">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
               A közelemben
               <span class="near-me-switch" aria-hidden="true"><span class="near-me-knob"></span></span>
             </button>
           </div>
-          <p class="search-head-desc">Bármit beírhat természetes nyelven, mi segítünk megtalálni a megfelelő szakembert vagy klinikát.</p>
+          <p class="search-head-desc">Bármit beírhat természetes nyelven, a <span class="desc-ai">szakorvos.hu AI asszisztense</span> segít megtalálni a megfelelő szakembert vagy klinikát.</p>
         </div>
 
         <div class="search-input-wrap">
@@ -605,13 +615,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
 
       <a href="#" class="map-card" aria-label="Térképes nézet megnyitása">
-        <div>
+        <div class="map-frame" aria-hidden="true"><div id="heroMiniMapEl" class="live-mini-map"></div><div class="map-pin"></div><div class="map-pin"></div><div class="map-pin"></div></div>
+        <div class="map-overlay">
           <div class="map-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>A térképen</div>
-          <div class="map-sub">Találja meg a legjobb szakembereket a közelében.</div>
           <span class="map-cta">Térkép megnyitása <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </div>
-        <div class="map-frame" aria-hidden="true"><div id="heroMiniMapEl" class="live-mini-map"></div><div class="map-pin"></div><div class="map-pin"></div><div class="map-pin"></div></div>
       </a>
+
     </div>
   </div>
 </section>
@@ -1555,7 +1565,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       if(!withCoords.length) return;
       const maps = await loadGoogleMaps();
       const pinIcon = window.szkBrandPin(maps, 34);
-      const heroMap = new maps.Map(heroEl, { center:{lat:47.4979,lng:19.0402}, zoom:13, styles:HOME_MAP_STYLE, disableDefaultUI:true, gestureHandling:'none', clickableIcons:false, keyboardShortcuts:false });
+      const heroMap = new maps.Map(heroEl, { center:{lat:47.4979,lng:19.0402}, zoom:12, styles:HOME_MAP_STYLE, disableDefaultUI:true, gestureHandling:'none', clickableIcons:false, keyboardShortcuts:false });
       const markers = withCoords.map(c => new maps.Marker({ position:{lat:Number(c.lat),lng:Number(c.lng)}, title:c.name, icon:pinIcon }));
       if(window.markerClusterer && window.markerClusterer.MarkerClusterer){
         new window.markerClusterer.MarkerClusterer({ map:heroMap, markers:markers, renderer:{ render:function(o){ const count=o.count, position=o.position; const size=count<10?30:count<50?36:44; const svg='data:image/svg+xml;utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'"><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-1)+'" fill="rgba(38,74,202,.18)"/><circle cx="'+(size/2)+'" cy="'+(size/2)+'" r="'+(size/2-4)+'" fill="#113293" stroke="#fff" stroke-width="2"/><text x="'+(size/2)+'" y="'+(size/2)+'" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="'+(size*0.32)+'" font-weight="700">'+count+'</text></svg>'); return new maps.Marker({ position:position, icon:{ url:svg, scaledSize:new maps.Size(size,size), anchor:new maps.Point(size/2,size/2) } }); } } });
