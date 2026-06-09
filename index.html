@@ -81,15 +81,15 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .hero-counts .hc-num{font-weight:700;color:#113293}
 .hero-counts .hc-blue{color:var(--brand);font-weight:600}
 .hero-counts .hc-green{color:var(--green);font-weight:600}
-.hero-search-lead{font-size:16px;font-weight:400;color:var(--text);margin:0 0 1.6rem;max-width:660px;line-height:1.65}
+.hero-search-lead{font-size:16px;font-weight:400;color:var(--text);margin:0 0 1.6rem;max-width:660px;line-height:1.65;text-shadow:0 0 8px rgba(255,255,255,.95),0 0 16px rgba(255,255,255,.85),0 0 24px rgba(255,255,255,.7)}
 .hero-subtitle-wide{max-width:none;white-space:nowrap}
 @media(max-width:720px){.hero-subtitle-wide{white-space:normal}}
 .hero-sub-num{font-weight:600;white-space:nowrap}
 .hero-sub-num.doc{color:var(--brand)}
 .hero-sub-num.cli{color:var(--green)}
 .hero-sub-num.prof{color:#2D9CDB}
-.hero-subtitle .sub-blue{color:var(--brand);font-weight:500}
-.hero-subtitle .sub-green{color:var(--green);font-weight:500}
+.hero-subtitle .sub-blue{color:var(--brand);font-weight:700}
+.hero-subtitle .sub-green{color:var(--green);font-weight:700}
 .hero-subtitle .sub-orange{color:#E0670D;font-weight:600}
 .hero-subtitle .sub-ltblue{color:#2D9CDB;font-weight:600}
 .hero-subtitle b{color:var(--brand-2);font-weight:600}
@@ -123,11 +123,11 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .search-ai-badge{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;font-size:11.5px;font-weight:600;color:#4F46E5;background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.18);border-radius:100px;padding:4px 11px 4px 9px;letter-spacing:.01em}
 .search-ai-badge svg{width:12px;height:12px;color:#4F46E5}
 .search-head-desc{font-size:14px;font-weight:500;color:var(--sub);line-height:1.55;margin:8px 0 0}
-.desc-ai{font-weight:700;background:linear-gradient(90deg,#264ACA 0%,#2C9650 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.desc-ai{font-weight:800;background:linear-gradient(90deg,#264ACA 0%,#2C9650 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .search-input-wrap:focus-within{border-color:var(--brand-2);background:#fff;box-shadow:0 0 0 4px rgba(38,74,202,.14),0 10px 28px rgba(17,50,147,.16)}
 .search-input-icon{position:absolute;left:16px;color:var(--muted);pointer-events:none;transition:color .2s}
 .search-input-wrap:focus-within .search-input-icon{color:var(--brand-2)}
-.search-input{width:100%;height:52px;padding:0 116px 0 46px;border:none;outline:none;background:transparent;font-family:inherit;font-size:15.5px;line-height:52px;color:var(--text);font-weight:500;resize:none;overflow:hidden;white-space:nowrap;display:block}
+.search-input{width:100%;height:52px;padding:0 132px 0 46px;border:none;outline:none;background:transparent;font-family:inherit;font-size:15.5px;line-height:52px;color:var(--text);font-weight:500;resize:none;overflow:hidden;white-space:nowrap;display:block}
 .search-input::placeholder{color:#9aa3bc}
 .search-actions{position:absolute;right:7px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:5px}
 .voice-btn{width:34px;height:34px;border-radius:8px;background:transparent;border:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
@@ -135,7 +135,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .voice-btn.listening{background:rgba(255,138,0,.12);color:var(--orange);animation:listenPulse 1.5s ease-in-out infinite}
 @keyframes listenPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,138,0,.3)}50%{box-shadow:0 0 0 6px rgba(255,138,0,0)}}
 .voice-btn svg{width:15px;height:15px}
-.submit-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:7px;padding:11px 22px;background:linear-gradient(135deg,#37bd6a 0%,#2C9650 60%,#247e44 100%);color:#fff;font-family:inherit;font-size:13.5px;font-weight:600;letter-spacing:-0.005em;border:none;border-radius:11px;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 2px 6px rgba(36,126,68,.3),0 8px 20px rgba(44,150,80,.32);transition:transform .25s var(--ease-spring),box-shadow .25s ease}
+.submit-btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:linear-gradient(135deg,#37bd6a 0%,#2C9650 60%,#247e44 100%);color:#fff;font-family:inherit;font-size:15px;font-weight:600;letter-spacing:-0.005em;border:none;border-radius:12px;cursor:pointer;box-shadow:0 1px 0 rgba(255,255,255,.28) inset,0 2px 6px rgba(36,126,68,.3),0 8px 20px rgba(44,150,80,.32);transition:transform .25s var(--ease-spring),box-shadow .25s ease}
 .submit-btn::before{content:'';position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-18deg);transition:left .6s ease;pointer-events:none}
 .submit-btn:hover::before{left:140%}
 .submit-btn:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 4px 10px rgba(36,126,68,.34),0 12px 28px rgba(44,150,80,.45)}
@@ -156,7 +156,7 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .trust-chip:nth-child(2) .trust-chip-icon{background:#fff;border:1px solid var(--border)}
 .trust-chip:nth-child(3) .trust-chip-icon{background:var(--brand-light);color:var(--brand-2)}
 
-.stats-card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.74) 0%,rgba(252,253,255,.60) 100%);backdrop-filter:blur(26px) saturate(135%);-webkit-backdrop-filter:blur(26px) saturate(135%);border:1px solid rgba(255,255,255,.7);border-radius:16px;padding:18px 20px 14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.06),0 10px 28px rgba(17,50,147,.10),0 26px 64px rgba(17,50,147,.18);overflow:hidden}
+.stats-card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.9) 0%,rgba(252,253,255,.84) 100%);backdrop-filter:blur(26px) saturate(135%);-webkit-backdrop-filter:blur(26px) saturate(135%);border:1px solid rgba(255,255,255,.7);border-radius:16px;padding:18px 20px 14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px rgba(17,50,147,.06),0 10px 28px rgba(17,50,147,.10),0 26px 64px rgba(17,50,147,.18);overflow:hidden}
 .stats-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(38,74,202,.5),rgba(44,150,80,.5),rgba(255,138,0,.5));opacity:.7}
 .stats-grid{display:flex;align-items:center;justify-content:space-between}
 .stats-item{flex:1;text-align:center}
@@ -171,22 +171,25 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .highlight-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
 .highlight-list .highlight-card{min-width:0}
 @media(max-width:560px){.highlight-list{grid-template-columns:1fr}}
-.highlight-card{display:flex;align-items:flex-start;gap:11px;padding:15px 16px;background:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(252,253,255,.72) 100%);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.04),0 6px 18px rgba(17,50,147,.06);transition:all .25s;cursor:pointer}
+.highlight-card{display:flex;align-items:center;gap:10px;padding:11px 13px;background:linear-gradient(180deg,rgba(255,255,255,.93) 0%,rgba(252,253,255,.88) 100%);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:14px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(17,50,147,.04),0 6px 18px rgba(17,50,147,.06);transition:all .25s;cursor:pointer}
 .highlight-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.18)}
-.highlight-icon{flex-shrink:0;width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#eef2ff,#dbe4ff);color:var(--brand-2);display:flex;align-items:center;justify-content:center}
+.highlight-icon{flex-shrink:0;width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#eef2ff,#dbe4ff);color:var(--brand-2);display:flex;align-items:center;justify-content:center}
 .highlight-icon svg{width:17px;height:17px}
 .highlight-body{flex:1;min-width:0}
-.highlight-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:4px;line-height:1.25}
+.highlight-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:2px;line-height:1.2}
 .highlight-desc{font-size:11px;color:var(--muted);line-height:1.4}
-.highlight-arrow{flex-shrink:0;color:var(--muted);transition:transform .2s,color .2s;margin-top:11px}
-.highlight-card:hover .highlight-arrow{transform:translateX(2px);color:var(--brand-2)}
+.highlight-more{flex-shrink:0;display:inline-flex;align-items:center;gap:4px;font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:600;color:var(--brand-2);background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);border-radius:100px;padding:5px 10px;white-space:nowrap;align-self:center;transition:background .2s,transform .2s}
+.highlight-more svg{width:11px;height:11px}
+.highlight-more svg{flex-shrink:0}
+.highlight-card:hover .highlight-more{background:rgba(38,74,202,.14);transform:translateX(2px)}
 a.highlight-card{text-decoration:none;color:inherit}
 .highlight-desc.g-rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .g-logo{flex-shrink:0}
 .g-stars{color:#fbbc05;font-size:12px;letter-spacing:1px;line-height:1}
 .g-label{font-size:11px;color:var(--sub);font-weight:600}
 
-.map-card{position:relative;min-height:200px;border:1px solid rgba(255,255,255,.85);border-radius:14px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.95) inset,0 2px 8px rgba(17,50,147,.05),0 10px 28px rgba(17,50,147,.08);text-decoration:none;color:inherit;transition:all .25s;cursor:pointer;display:block}
+.map-card{position:relative;min-height:150px;border:4px solid #fff;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(38,74,202,.15),0 8px 20px rgba(17,50,147,.16),0 20px 48px rgba(17,50,147,.22);text-decoration:none;color:inherit;transition:all .25s;cursor:pointer;display:block}
+.map-card:hover{box-shadow:0 0 0 1px rgba(38,74,202,.2),0 12px 28px rgba(17,50,147,.22),0 28px 60px rgba(17,50,147,.28)}
 .map-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.2)}
 .map-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:3px;display:flex;align-items:center;gap:5px}
 .map-title svg{width:12px;height:12px;color:var(--brand-2)}
@@ -195,7 +198,7 @@ a.highlight-card{text-decoration:none;color:inherit}
 .map-cta svg{width:10px;height:10px;transition:transform .2s}
 .map-card:hover .map-cta svg{transform:translateX(2px)}
 .map-frame{position:absolute;inset:0;height:100%;border-radius:0;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
-.map-overlay{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(0deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.82) 70%,rgba(255,255,255,0) 100%);backdrop-filter:blur(4px)}
+.map-overlay{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.82) 70%,rgba(255,255,255,0) 100%);backdrop-filter:blur(4px)}
 .map-overlay .map-title{margin:0}
 .map-overlay .map-cta{flex-shrink:0}
 .map-pin{position:absolute;width:12px;height:12px;background:var(--grad-blue);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(17,50,147,.3)}
@@ -546,10 +549,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <div class="hero-left">
       <h1 class="hero-title">
         <span class="hero-title-line"><span class="hero-title-accent-blue">Országos</span></span>
-        <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span> <span class="hero-title-sub">(AI asszisztenssel)</span></span>
+        <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span></span>
       </h1>
 
-      <p class="hero-counts">Keressen több mint <span class="hc-num">5&nbsp;961</span> <span class="hc-blue">szakorvos</span>, <span class="hc-num">1&nbsp;929</span> <span class="hc-green">rendelő</span> és <span class="hc-num">360</span> egészségügyi szakember között.</p>
+      <p class="hero-counts">Keressen több mint <span class="hc-num">5&nbsp;961</span> <span class="hc-blue">szakorvos</span> és <span class="hc-num">1&nbsp;929</span> <span class="hc-green">rendelő</span> között.</p>
 
       <p class="hero-subtitle hero-search-lead"><span class="sub-blue">Telefonszámokkal</span>, részletes adatokkal és <span class="sub-green">elérhetőségekkel</span>.</p>
 
@@ -563,7 +566,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
               <span class="near-me-switch" aria-hidden="true"><span class="near-me-knob"></span></span>
             </button>
           </div>
-          <p class="search-head-desc">Bármit beírhat természetes nyelven, a <span class="desc-ai">szakorvos.hu AI asszisztense</span> segít megtalálni a megfelelő szakembert vagy klinikát.</p>
+          <p class="search-head-desc">Bármit beírhat természetes nyelven, a <span class="desc-ai">szakorvos.hu AI asszisztense</span> segít.</p>
         </div>
 
         <div class="search-input-wrap">
@@ -605,12 +608,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <a class="highlight-card" href="klinikak.html" aria-label="Klinika találati oldal megnyitása">
           <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v15"/><path d="M9 21v-4h6v4"/><path d="M12 7v3M10.5 8.5h3"/></svg></div>
           <div class="highlight-body"><div class="highlight-title">Részletes klinika-adatlapok</div><div class="highlight-desc g-rate"><svg class="g-logo" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.2-4 1.2-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.3 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.4c-.2-.7-.4-1.4-.4-2.4s.1-1.7.4-2.4V6.5H1.4C.5 8.2 0 10 0 12s.5 3.8 1.4 5.5l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.4 6.5l4 3.1C6.3 6.8 8.9 4.8 12 4.8z"/></svg><span class="g-stars" aria-hidden="true">★★★★★</span><span class="g-label">Google értékelésekkel</span></div></div>
-          <svg class="highlight-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <span class="highlight-more">Tovább <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
         <a class="highlight-card" href="/talalatok?all=1" aria-label="Összes orvos megtekintése a találati oldalon">
           <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
           <div class="highlight-body"><div class="highlight-title">Részletes orvosprofilok</div><div class="highlight-desc">Ellenőrzött adatok, szakvizsgák, vélemények</div></div>
-          <svg class="highlight-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <span class="highlight-more">Tovább <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
       </div>
 
