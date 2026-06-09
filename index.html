@@ -997,10 +997,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
     if(result && result.target === 'clinic'){
       const p = new URLSearchParams();
-      p.set('q', result.clinic_query || query);
       if(result.city) p.set('city', result.city);
       if(result.district) p.set('district', result.district);
       if(result.specialty_slug) p.set('specialty', result.specialty_slug);
+      // A nyers szöveget CSAK akkor visszük át, ha nincs strukturált szűrő —
+      // különben a klinika-oldal a teljes „bőrgyógyász Debrecen" szöveget névként keresné (0 találat).
+      if(![...p.keys()].length) p.set('q', result.clinic_query || query);
       await finishSearch('klinikak.html?' + p.toString(), result, query, t0);
       return;
     }

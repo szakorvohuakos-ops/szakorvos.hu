@@ -1212,12 +1212,16 @@ function populateFilters(){
   }
   if(params.get('q')){
     const qv = params.get('q');
-    // Ha szakterület-szerű, a Szakterület szűrőbe; egyébként klinika-névbe
-    const specMatch = Array.from(fSpec.options).find(o =>
-      o.value && (o.value.toLowerCase() === qv.toLowerCase() || o.value.toLowerCase().includes(qv.toLowerCase()))
-    );
-    if(specMatch && !fSpec.value){ fSpec.value = specMatch.value; }
-    else if(!document.getElementById('fName').value){ document.getElementById('fName').value = qv; }
+    // Ha már van strukturált szűrő (szakterület vagy város), a nyers szöveget IGNORÁLJUK —
+    // különben a teljes „bőrgyógyász Debrecen" klinika-névként szűrne és kinullázná a találatot.
+    const hasStructured = params.get('specialty') || params.get('city') || params.get('district');
+    if(!hasStructured){
+      const specMatch = Array.from(fSpec.options).find(o =>
+        o.value && (o.value.toLowerCase() === qv.toLowerCase() || o.value.toLowerCase().includes(qv.toLowerCase()))
+      );
+      if(specMatch && !fSpec.value){ fSpec.value = specMatch.value; }
+      else if(!document.getElementById('fName').value){ document.getElementById('fName').value = qv; }
+    }
   }
   // District szűrés → a város-autocomplete kiválasztottjai közé "Budapest N. kerület"
   if(params.get('district')) {
