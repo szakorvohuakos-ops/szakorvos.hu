@@ -905,11 +905,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 <style>
 .view-toggle{max-width:1400px;margin:0 auto;padding:0 3.5% 1.25rem;display:flex;justify-content:center}
 .view-toggle-inner{display:inline-flex;background:rgba(255,255,255,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.65);border-radius:14px;padding:5px;gap:3px;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 8px rgba(17,50,147,.05)}
-.view-toggle-btn{display:flex;align-items:center;gap:7px;padding:10px 22px;border:none;background:transparent;color:var(--muted, #6b7a9a);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;text-decoration:none;white-space:nowrap}
-.view-toggle-btn:hover{color:var(--green)}
-.view-toggle-btn.active{background:linear-gradient(135deg,#2C9650 0%,#35B26B 100%);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 2px 8px rgba(44,150,80,.22),0 6px 18px rgba(44,150,80,.18)}
-.view-toggle-btn svg{flex-shrink:0}
-@media(max-width:520px){.view-toggle-btn{padding:9px 16px;font-size:13px}}
+.view-toggle-btn{display:flex;align-items:center;gap:9px;padding:14px 34px;border:none;background:transparent;color:#52617a;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;border-radius:13px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.4,.64,1);text-decoration:none;white-space:nowrap;letter-spacing:-.01em}
+.view-toggle-btn svg{flex-shrink:0;width:18px;height:18px}
+.view-toggle-btn.tg-doctors:hover{color:#2C9650;background:rgba(44,150,80,.08)}
+.view-toggle-btn.tg-doctors.active{background:linear-gradient(135deg,#2C9650,#41b86c);color:#fff;box-shadow:0 3px 10px rgba(44,150,80,.35)}
+.view-toggle-btn.tg-clinics:hover{color:var(--brand);background:rgba(38,74,202,.08)}
+.view-toggle-btn.tg-clinics.active{background:linear-gradient(135deg,#113293,#264ACA);color:#fff;box-shadow:0 3px 10px rgba(17,50,147,.35)}
+@media(max-width:520px){.view-toggle-btn{padding:12px 22px;font-size:14.5px}}
 
 
 
@@ -917,11 +919,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 </style>
 <div class="view-toggle">
   <div class="view-toggle-inner" role="tablist" aria-label="Találat típus">
-    <button class="view-toggle-btn active" role="tab" aria-selected="true" disabled>
+    <button class="view-toggle-btn tg-doctors active" role="tab" aria-selected="true" disabled>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Orvosok
     </button>
-    <a href="klinikak.html" class="view-toggle-btn" role="tab" aria-selected="false" id="toggleToClinics" onclick="event.preventDefault();window.location.href='klinikak.html'+window.location.search;">
+    <a href="klinikak.html" class="view-toggle-btn tg-clinics" role="tab" aria-selected="false" id="toggleToClinics" onclick="event.preventDefault();window.location.href='klinikak.html'+window.location.search;">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9h.01M9 12h.01M9 15h.01M9 18h.01"/></svg>
       Klinikák
     </a>
@@ -2350,7 +2352,7 @@ function cardH(d,i){
   // Avatár HTML
   const avEl = d.photo_url
     ? `<div class="szk-card-avatar"><img loading="lazy" decoding="async" src="${d.photo_url}" alt="${d.name}">${avD.length?'<span class="szk-card-dot"></span>':''}</div>`
-    : `<div class="szk-card-avatar" style="background:linear-gradient(135deg,#2C9650,#35B26B)">${init}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
+    : `<div class="szk-card-avatar" style="background:linear-gradient(135deg,#264ACA,#113293)">${init}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
 
   const chipTags = tags.slice(0,5);
   const chipMore = Math.max(0, tags.length - 5);
@@ -2944,10 +2946,10 @@ load();
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
 <style id="orvos-card-skin">
 /* ───── Orvos-találati kártya: prémium, zöldes hangsúllyal ───── */
-.pw main .szk-card.kc{display:block;padding:0;overflow:hidden;position:relative;border-radius:20px;border:1px solid rgba(44,150,80,.22);background:linear-gradient(180deg,#ffffff 0%,#fafdfb 100%);box-shadow:0 1px 2px rgba(31,110,58,.04),0 8px 24px rgba(31,110,58,.07);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s,border-color .3s}
-.pw main .szk-card.kc:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(31,110,58,.14),0 28px 56px rgba(31,110,58,.1);border-color:rgba(44,150,80,.45)}
+.pw main .szk-card.kc{display:block;padding:0;overflow:hidden;position:relative;border-radius:20px;border:1px solid rgba(199,210,254,.45);background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);box-shadow:0 1px 2px rgba(17,50,147,.04),0 8px 24px rgba(17,50,147,.06);transition:transform .3s cubic-bezier(.34,1.4,.64,1),box-shadow .3s,border-color .3s}
+.pw main .szk-card.kc:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(17,50,147,.12),0 28px 56px rgba(17,50,147,.1);border-color:rgba(38,74,202,.35)}
 /* Bal oldali zöld accent-sáv */
-.pw main .szk-card.kc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#41B86C,#2C9650 55%,#1f6e3a);opacity:0;transition:opacity .3s}
+.pw main .szk-card.kc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#3f6cff,#264ACA 55%,#113293);opacity:0;transition:opacity .3s}
 .pw main .szk-card.kc:hover::before{opacity:1}
 
 /* Prémium (partner) kártya — arany */
@@ -2959,29 +2961,29 @@ load();
 .kc .szk-card-top{padding:24px 26px 16px}
 .kc .szk-feature-badges{margin-top:10px}
 /* Avatár — nagyobb, zöld gradiens placeholder, lekerekített */
-.kc .szk-card-avatar{width:74px;height:74px;font-size:23px;border-radius:16px;flex-shrink:0;box-shadow:0 4px 12px rgba(31,110,58,.18)}
+.kc .szk-card-avatar{width:74px;height:74px;font-size:23px;border-radius:16px;flex-shrink:0;box-shadow:0 4px 12px rgba(17,50,147,.16)}
 .kc .szk-card-avatar img{border-radius:16px}
 @media(max-width:520px){.kc .szk-card-avatar{width:64px;height:64px;font-size:20px}}
 .kc .szk-card-dot,.kc .szk-card-avatar .av-dot{background:var(--green)}
-.kc .szk-card-title{font-size:17px;font-weight:700;color:#1f6e3a;letter-spacing:-.01em;line-height:1.25}
+.kc .szk-card-title{font-size:17px;font-weight:700;color:#113293;letter-spacing:-.01em;line-height:1.25}
 .kc .szk-card-subtitle{font-size:13px;color:#52617a;font-weight:500;margin-top:6px}
 .kc-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px;font-size:13px;color:#475569}
 .kc-meta .kc-m-star{color:#d97706;font-weight:700}
-.kc-meta strong{color:#1f6e3a}
+.kc-meta strong{color:#113293}
 .kc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
-.kc-chip{font-size:11.5px;font-weight:600;color:#1f6e3a;background:rgba(44,150,80,.09);border:1px solid rgba(44,150,80,.2);padding:4px 10px;border-radius:100px;white-space:nowrap}
+.kc-chip{font-size:11.5px;font-weight:600;color:#264ACA;background:rgba(38,74,202,.08);border:1px solid rgba(38,74,202,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
 .kc-chip.more{color:#64748b;background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.18)}
 .kc-intro{padding:0 26px 4px;font-size:13px;line-height:1.55;color:#52617a;font-style:italic}
-.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 26px;border-top:1px solid rgba(44,150,80,.12);border-bottom:1px solid rgba(44,150,80,.12);background:rgba(44,150,80,.025)}
+.kc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px 18px;padding:16px 26px;border-top:1px solid rgba(38,74,202,.1);border-bottom:1px solid rgba(38,74,202,.1);background:rgba(38,74,202,.02)}
 .kc-info{display:flex;align-items:flex-start;gap:9px;min-width:0}
-.kc-info svg{color:#2C9650;flex-shrink:0;margin-top:1px}
+.kc-info svg{color:#264ACA;flex-shrink:0;margin-top:1px}
 .kc-info-l{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;margin-bottom:2px}
 .kc-info-v{font-size:13.5px;color:#1a1f36;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis}
 .kc .szk-card-foot{padding:16px 26px 20px;border-top:none}
-.kc .szk-card-foot-link{color:#1f6e3a;font-weight:600}
+.kc .szk-card-foot-link{color:#264ACA;font-weight:600}
 /* Profil gomb zöld gradienssel (prémium CTA) */
-.kc .szk-btn-primary{background:linear-gradient(135deg,#2C9650 0%,#35B26B 100%);border:none;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(44,150,80,.3)}
-.kc .szk-btn-primary:hover{box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 18px rgba(44,150,80,.42);transform:translateY(-1px)}
+.kc .szk-btn-primary{background:linear-gradient(135deg,#264ACA 0%,#113293 100%);border:none;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 4px 14px rgba(17,50,147,.3)}
+.kc .szk-btn-primary:hover{box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 6px 18px rgba(17,50,147,.42);transform:translateY(-1px)}
 </style>
 <script>window.szkBrandPin=function(maps,h){h=h||44;var w=Math.round(h*0.8);var s='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="16 6 88 110">'+'<defs><linearGradient id="szp" x1="0.15" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#274FB0"/><stop offset="55%" stop-color="#113293"/><stop offset="100%" stop-color="#0B2470"/></linearGradient>'+'<linearGradient id="szc" x1="0.2" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="60%" stop-color="#2C9650"/><stop offset="100%" stop-color="#1E7B41"/></linearGradient></defs>'+'<path d="M 60 116 L 28.92 69.99 A 37.5 37.5 0 1 1 91.08 69.99 Z" fill="#ffffff" stroke="url(#szp)" stroke-width="6.4" stroke-linejoin="round" stroke-linecap="round"/>'+'<path d="M 54.4 34.6 Q 54.4 32 57 32 L 63 32 Q 65.6 32 65.6 34.6 L 65.6 40.8 Q 65.6 43.4 68.2 43.4 L 74.4 43.4 Q 77 43.4 77 46 L 77 52 Q 77 54.6 74.4 54.6 L 68.2 54.6 Q 65.6 54.6 65.6 57.2 L 65.6 63.4 Q 65.6 66 63 66 L 57 66 Q 54.4 66 54.4 63.4 L 54.4 57.2 Q 54.4 54.6 51.8 54.6 L 45.6 54.6 Q 43 54.6 43 52 L 43 46 Q 43 43.4 45.6 43.4 L 51.8 43.4 Q 54.4 43.4 54.4 40.8 Z" fill="url(#szc)"/></svg>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(s),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};};</script>
 <!-- Találati toast -->
