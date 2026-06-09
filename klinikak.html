@@ -1246,11 +1246,32 @@ function populateFilters(){
   }
 })();
 
+// Az „Orvosok" váltógomb (tg-doctors) linkjét felépíti a klinika-oldal aktív
+// szűrőiből (szakterület + város/kerület), hogy a váltás megtartsa a keresést.
+function updateDoctorsToggleLink(spec, cities){
+  try{
+    const btn = document.querySelector('.view-toggle-btn.tg-doctors');
+    if(!btn) return;
+    const p = new URLSearchParams();
+    if(spec) p.set('specialty', spec);
+    (cities || []).forEach(c=>{
+      const m = /^(.*?)\s+(\d+)\.\s*kerület$/i.exec(c||'');
+      if(m){ if(!p.get('city')) p.set('city', m[1].trim()); p.set('district', m[2]); }
+      else if(c && !p.get('city')){ p.set('city', c); }
+    });
+    const qs = p.toString();
+    btn.setAttribute('href', '/talalatok' + (qs ? ('?'+qs) : ''));
+  }catch(e){}
+}
+
 function applyFilters(){
   const q = (document.getElementById('fName').value || '').trim().toLowerCase();
   const cities = window._selectedCities || [];
   const spec = document.getElementById('fSpec').value;
   const sort = document.getElementById('sortSel').value;
+  // Az „Orvosok" váltógomb linkjét a jelenlegi szűrőkkel frissítjük,
+  // hogy a klinika→orvos váltás megtartsa a szakterület+város keresést.
+  updateDoctorsToggleLink(spec, cities);
   // Aktív szakterület-szűrő a kártyához (csak a dropdown — a név-mező már nem szakterületre szűr)
   window._activeSpecName = spec || '';
   window._activeSpecQuery = '';
