@@ -271,17 +271,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   </div>
 
   <div class="note">
-    <strong>Figyelem:</strong> A SERVICE_ROLE_KEY-t bizalmasan kezeld, ez teljes hozzáférést ad a DB-hez. A böngésződ lokálisan tárolja, hogy ne kelljen újra beírnod, de senki másnak ne add meg.
+    <strong>Biztonságos mód:</strong> Az import a bejelentkezett admin-munkameneteddel fut. Titkos kulcsot <strong>nem</strong> kell (és nem is szabad) ide beírni — a szerveroldali edge function intézi, superadmin jogosultság ellenőrzésével.
   </div>
 
-  <!-- 1. SERVICE ROLE KEY -->
+  <!-- 1. JOGOSULTSÁG -->
   <div class="card">
-    <h2><span class="num">1</span> Supabase Service Role Key</h2>
+    <h2><span class="num">1</span> Jogosultság</h2>
     <div class="row full">
       <div>
-        <label>Service role key</label>
-        <input type="password" id="srk" placeholder="eyJhbGciOi..." autocomplete="off">
-        <div class="help">Megtalálható: <strong>Supabase Dashboard → Project Settings → API → service_role secret</strong>. Egyszer kell megadnod, utána a böngésződ megjegyzi (localStorage).</div>
+        <div class="help" id="authStatus">Bejelentkezés ellenőrzése…</div>
       </div>
     </div>
   </div>
@@ -352,13 +350,25 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 <script>
 const SUPABASE_URL = 'https://asgnkjmwzhbczpvetprh.supabase.co';
 const FN_URL = SUPABASE_URL + '/functions/v1/google-clinics-import';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZ25ram13emhiY3pwdmV0cHJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzk1NDMsImV4cCI6MjA5MjgxNTU0M30.WCprcmT4oFq1iPfYeQvwGyDv5Vox6YZdn5efouN_Nc';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// SRK persisted in localStorage
-const SRK_KEY = 'szakorvos_admin_srk';
-const srkInput = document.getElementById('srk');
-const saved = localStorage.getItem(SRK_KEY);
-if (saved) srkInput.value = saved;
-srkInput.addEventListener('change', () => localStorage.setItem(SRK_KEY, srkInput.value.trim()));
+// ══ AUTH GUARD: csak bejelentkezett superadmin használhatja ══
+let _session = null;
+document.addEventListener('DOMContentLoaded', async () => {
+  const statusEl = document.getElementById('authStatus');
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) { window.location.replace('/login.html?redirect=admin-import'); return; }
+  const { data: profile } = await db.from('user_profiles').select('role').eq('id', session.user.id).single();
+  if (!profile || profile.role !== 'superadmin') {
+    if (statusEl) statusEl.innerHTML = '❌ Nincs jogosultság (superadmin szükséges).';
+    const rb = document.getElementById('runBtn'); if (rb) rb.disabled = true;
+    return;
+  }
+  _session = session;
+  if (statusEl) statusEl.innerHTML = '✅ Bejelentkezve mint superadmin: ' + escapeHtml(session.user.email || session.user.id);
+});
+function escapeHtml(s){if(s==null)return '';return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 // Költségbecslés
 function updateCost() {
@@ -405,12 +415,10 @@ function log(msg, cls = '') {
 function clearLog() { logEl.innerHTML = ''; document.getElementById('stats').style.display = 'none'; }
 
 async function runImport() {
-  const srk = srkInput.value.trim();
-  if (!srk) {
-    log('❌ Service role key kötelező!', 'err');
+  if (!_session) {
+    log('❌ Nincs érvényes superadmin munkamenet.', 'err');
     return;
   }
-  localStorage.setItem(SRK_KEY, srk);
 
   const queriesRaw = document.getElementById('queries').value.trim();
   const queries = queriesRaw ? queriesRaw.split('\n').map(s => s.trim()).filter(Boolean) : [];
@@ -441,7 +449,7 @@ async function runImport() {
     const res = await fetch(FN_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${srk}`,
+        'Authorization': `Bearer ${_session.access_token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
@@ -563,7 +571,7 @@ async function runImport() {
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -575,5 +583,6 @@ async function runImport() {
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>
