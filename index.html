@@ -329,42 +329,6 @@ footer{background:#1a1f36;color:#a3acc7;padding:2.5rem 5.5% 1.5rem;margin-top:2r
 .near-me.loading{opacity:.6;pointer-events:none}
 /* ── Élő mini-térkép a kártyában ── */
 .map-frame .live-mini-map{position:absolute;inset:0;width:100%;height:100%;z-index:1}
-/* ══ TÜNET-SEGÉD overlay (prémium, hero-stílus) ══ */
-#symHelper{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:20px}
-#symHelper.open{display:flex}
-.sym-backdrop{position:absolute;inset:0;background:rgba(12,23,48,.5);backdrop-filter:blur(8px);animation:symFade .35s ease}
-.sym-modal{position:relative;z-index:1;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;background:#fff;border:1px solid rgba(38,74,202,.1);border-radius:24px;box-shadow:0 30px 80px rgba(12,23,48,.32),0 10px 28px rgba(17,50,147,.14);padding:1.9rem 1.7rem 1.5rem;animation:symPop .45s cubic-bezier(.34,1.35,.5,1)}
-.sym-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,var(--brand),var(--brand-2) 45%,var(--green) 100%)}
-@keyframes symFade{from{opacity:0}to{opacity:1}}
-@keyframes symPop{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
-.sym-close{position:absolute;top:15px;right:16px;width:32px;height:32px;border:none;background:rgba(17,50,147,.05);border-radius:10px;font-size:19px;line-height:1;color:var(--muted);cursor:pointer;transition:all .25s var(--ease-spring);z-index:2}
-.sym-close:hover{background:rgba(17,50,147,.11);color:var(--text);transform:rotate(90deg)}
-.sym-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.sym-ai-badge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#6d4ae6,#4F46E5);border-radius:100px;padding:6px 14px 6px 11px;box-shadow:0 4px 14px rgba(79,70,229,.3)}
-.sym-ai-badge svg{width:13px;height:13px;animation:symSpark 3s ease-in-out infinite}
-@keyframes symSpark{0%,100%{transform:scale(1) rotate(0);opacity:.85}50%{transform:scale(1.2) rotate(15deg);opacity:1}}
-.sym-msg{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:400;color:var(--text);line-height:1.4;letter-spacing:-0.01em;margin-bottom:18px}
-.sym-msg b{font-weight:600;color:var(--brand)}
-.sym-opts{display:flex;flex-direction:column;gap:9px}
-.sym-opt{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:14px 16px;border:1px solid var(--border);border-radius:14px;background:#fff;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--text);cursor:pointer;box-shadow:0 1px 2px rgba(17,50,147,.03);transition:transform .25s var(--ease-spring),box-shadow .25s,border-color .25s,background .25s}
-.sym-opt:hover{border-color:var(--brand-2);background:linear-gradient(180deg,#fff,var(--brand-light));transform:translateY(-2px);box-shadow:0 10px 24px rgba(17,50,147,.12)}
-.sym-opt-ic{font-size:20px;flex-shrink:0;line-height:1;width:26px;text-align:center}
-.sym-spec.primary{border-color:transparent;background:linear-gradient(135deg,#37bd6a,#2C9650 60%,#23824a);color:#fff;box-shadow:0 8px 22px rgba(44,150,80,.34)}
-.sym-spec.primary .sym-go{color:rgba(255,255,255,.9)}
-.sym-spec.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(44,150,80,.46)}
-.sym-spec-name{flex:1}
-.sym-go{width:16px;height:16px;color:var(--muted);flex-shrink:0;transition:transform .25s,color .25s}
-.sym-spec:hover .sym-go{transform:translateX(4px)}
-.sym-spec:not(.primary):hover .sym-go{color:var(--green)}
-.sym-back{margin-top:15px;display:inline-flex;align-items:center;gap:6px;background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;padding:5px 0;transition:color .2s}
-.sym-back:hover{color:var(--brand)}
-.sym-urgent{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.035));border:1px solid rgba(220,38,38,.25);border-radius:14px;padding:13px 15px;font-size:13px;font-weight:500;color:#b91c1c;line-height:1.55;margin-bottom:14px}
-.sym-urgent svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
-/* Disclaimer — külön dobozban, nem flex-törve, levegősen */
-.sym-disclaimer{margin-top:20px;background:var(--brand-tint,#f4f7ff);background:#f5f8ff;border:1px solid rgba(38,74,202,.1);border-radius:14px;padding:13px 15px;font-size:12.5px;font-weight:500;color:var(--sub);line-height:1.6}
-.sym-disclaimer .sym-disc-head{display:flex;align-items:center;gap:7px;font-weight:700;color:var(--brand);margin-bottom:4px}
-.sym-disclaimer .sym-disc-head svg{width:15px;height:15px;flex-shrink:0}
-.sym-disclaimer b{font-weight:700;color:var(--text)}
 </style>
 <style id="szk-nav-dd">
 .nav-links li.szk-dd{position:relative}
@@ -816,12 +780,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   const SO_DAYS = ['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
   function soEsc(s){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function soPretty(slug){ return slug ? slug.replace(/-/g,' ').replace(/^\w/, c=>c.toUpperCase()) : ''; }
+  // Pontosan EGY fázist mutat (garantáltan nincs két látszó panel egyszerre).
+  function setPhase(_ov, name){
+    if(!_ov) return;
+    ['analyze','result','empty','symptom'].forEach(function(p){
+      var el=_ov.querySelector('.so-phase-'+p);
+      if(el) el.hidden = (p!==name);
+    });
+  }
   function showSearchOverlay(query){
     const _ov = document.getElementById('searchOverlay');
     if(!_ov) return Date.now();
     const qs=_ov.querySelector('#soQuery'); if(qs) qs.textContent=query;
-    _ov.querySelector('.so-phase-analyze').hidden=false;
-    _ov.querySelector('.so-phase-result').hidden=true;
+    setPhase(_ov, 'analyze');
     const steps=_ov.querySelectorAll('.so-step');
     steps.forEach((s)=>s.classList.remove('active','done'));
     steps.forEach((s,i)=>setTimeout(()=>{ if(_ov.classList.contains('open')) s.classList.add('active'); }, 200 + i*450));
@@ -894,7 +865,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var _ov=document.getElementById('searchOverlay');
     if(!_ov) return;
     _ov.classList.remove('open'); _ov.setAttribute('aria-hidden','true');
+    var sp=_ov.querySelector('.so-phase-symptom'); if(sp) sp.hidden=true;
     document.body.style.overflow='';
+    if(submitBtn) submitBtn.disabled=false;
   }
   function showEmptyPhase(_ov, result, query, originalUrl){
     var eq=_ov.querySelector('#soEmptyQuery'); if(eq) eq.textContent=query;
@@ -927,9 +900,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       actEl.querySelectorAll('[data-url]').forEach(function(b){ b.addEventListener('click', function(){ window.location.href=b.getAttribute('data-url'); }); });
       var rt=actEl.querySelector('[data-act="retry"]'); if(rt) rt.addEventListener('click', function(){ closeSearchOverlay(); try{ input.focus(); input.select(); }catch(e){} });
     }
-    _ov.querySelector('.so-phase-analyze').hidden=true;
-    _ov.querySelector('.so-phase-result').hidden=true;
-    _ov.querySelector('.so-phase-empty').hidden=false;
+    setPhase(_ov, 'empty');
     if(submitBtn) submitBtn.disabled=false;
   }
   async function finishSearch(url, result, query, t0){
@@ -962,26 +933,52 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       if(empty){ showEmptyPhase(_ov, result, query, url); return; }
       _ov.querySelectorAll('.so-step').forEach(s=>{ s.classList.remove('active'); s.classList.add('done'); });
       const ce=_ov.querySelector('#soChips'); if(ce) ce.innerHTML=soChips(result, query, specName);
-      _ov.querySelector('.so-phase-analyze').hidden=true;
-      _ov.querySelector('.so-phase-result').hidden=false;
+      // Orvosok / Klinikák gombok felépítése (a felismert szűrőkkel)
+      buildResultActions(_ov, result, query, specName, url);
+      setPhase(_ov, 'result');
       if(submitBtn) submitBtn.disabled=false;
-      setTimeout(()=>{ window.location.href=url; }, 1150);
     } else {
       if(submitBtn) submitBtn.disabled=false;
       window.location.href=url;
     }
   }
+  // A javaslat-fázis Orvosok/Klinikák gombjai. A felismert szakterület + város/kerület
+  // megy mind az orvos-, mind a klinika-oldalra.
+  function buildResultActions(_ov, result, query, specName, doctorUrl){
+    var actEl=_ov.querySelector('#soResultActions');
+    if(!actEl) return;
+    // Klinika-URL összeállítása ugyanazokból a szűrőkből
+    var cp=new URLSearchParams();
+    if(result){
+      if(specName) cp.set('specialty', specName);
+      else if(result.specialty_slug) cp.set('specialty', result.specialty_slug);
+      if(result.city) cp.set('city', result.city);
+      if(result.district) cp.set('district', String(result.district));
+    }
+    if(![...cp.keys()].length) cp.set('q', query);
+    var clinicUrl='klinikak.html?'+cp.toString();
+    actEl.innerHTML =
+      '<button type="button" class="so-act primary" data-url="'+String(doctorUrl).replace(/"/g,'&quot;')+'">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>'+
+        'Orvosok megtekintése</button>'+
+      '<button type="button" class="so-act" data-url="'+clinicUrl.replace(/"/g,'&quot;')+'">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>'+
+        'Klinikák megtekintése</button>';
+    actEl.querySelectorAll('[data-url]').forEach(function(b){
+      b.addEventListener('click', function(){ window.location.href=b.getAttribute('data-url'); });
+    });
+  }
 
   async function doSearch(){
     const query = (input.value||'').trim();
     if(!query){ input.focus(); return; }
-    // Homályos tünet (pl. „fáj") testtáj nélkül → terelő kérdés.
+    // Homályos tünet (pl. „fáj") → a keresés-overlay TÜNET-fázisa nyílik.
     // Ha van fájdalom-szó ÉS felismerhető a testtáj (pl. „fáj a fejem") →
-    // egyből a javaslat-lépés nyílik (átugorva a kérdést), de így is megjelenik a javaslat + disclaimer.
+    // egyből a javaslat-lépés; ha nincs testtáj → az overlay kérdez.
     if(_VAGUE_PAIN.test(query)){
       const reg = detectRegion(query);
-      if(reg){ openSymptomHelper(query, reg); return; }
-      if(isVagueSymptom(query)){ openSymptomHelper(query); return; }
+      if(reg){ openSearchSymptom(query, reg); return; }
+      if(isVagueSymptom(query)){ openSearchSymptom(query, null); return; }
     }
     saveRecent(query);
     closeAc();
@@ -1075,76 +1072,76 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     return null;
   }
 
-  function openSymptomHelper(query, directRegion){
+  // ── TÜNET-PÁRBESZÉD a keresés-overlay-en belül ──
+  // openSearchSymptom: megnyitja az overlay-t és a tünet-fázist mutatja.
+  // Ha van directRegion → egyből javaslat; különben testtáj-kérdés.
+  function openSearchSymptom(query, directRegion){
     closeAc();
-    let ov = document.getElementById('symHelper');
-    if(!ov){
-      ov = document.createElement('div');
-      ov.id = 'symHelper';
-      ov.innerHTML =
-        '<div class="sym-backdrop"></div>'+
-        '<div class="sym-modal" role="dialog" aria-label="Tünet-segéd">'+
-          '<button class="sym-close" aria-label="Bezárás">&times;</button>'+
-          '<div class="sym-head">'+
-            '<span class="sym-ai-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>AI segéd</span>'+
-          '</div>'+
-          '<div class="sym-body" id="symBody"></div>'+
-          '<div class="sym-disclaimer"><div class="sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Pontos kivizsgáláshoz forduljon orvoshoz; sürgős, súlyos panasz esetén hívja a <b>112-t</b>.</div>'+
-        '</div>';
-      document.body.appendChild(ov);
-      ov.querySelector('.sym-close').addEventListener('click', closeSymptomHelper);
-      ov.querySelector('.sym-backdrop').addEventListener('click', closeSymptomHelper);
-    }
+    const _ov = document.getElementById('searchOverlay');
+    if(!_ov) return;
+    setPhase(_ov, 'symptom');
+    _ov.classList.add('open'); _ov.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
-    ov.classList.add('open');
-    if(directRegion){ symStep2(directRegion.id, query, true); }
-    else { symStep1(query); }
+    if(directRegion){ symRenderSuggest(directRegion.id, query, true); }
+    else { symRenderRegions(query); }
   }
-  function closeSymptomHelper(){
-    const ov = document.getElementById('symHelper');
-    if(ov) ov.classList.remove('open');
-    document.body.style.overflow='';
-    if(submitBtn) submitBtn.disabled=false;
-  }
-  function symStep1(query){
-    const body = document.getElementById('symBody');
-    if(!body) return;
-    body.innerHTML =
-      '<div class="sym-msg">Segítek megtalálni a megfelelő szakembert. <b>Hol jelentkezik a panasz?</b></div>'+
-      '<div class="sym-opts">'+
-        _REGION_MAP.map(r => '<button class="sym-opt" data-region="'+r.id+'"><span class="sym-opt-ic">'+r.icon+'</span>'+r.label+'</button>').join('')+
+  function symRenderRegions(query){
+    const box=document.getElementById('soSymBody'); if(!box) return;
+    box.innerHTML =
+      '<div class="so-sym-msg">Segítek megtalálni a megfelelő szakembert. <b>Hol jelentkezik a panasz?</b></div>'+
+      '<div class="so-sym-opts">'+
+        _REGION_MAP.map(r => '<button class="so-sym-opt" data-region="'+r.id+'"><span class="so-sym-ic">'+r.icon+'</span>'+soEsc(r.label)+'</button>').join('')+
       '</div>';
-    body.querySelectorAll('.sym-opt').forEach(b => {
-      b.addEventListener('click', () => symStep2(b.dataset.region, query));
+    box.querySelectorAll('.so-sym-opt').forEach(b => {
+      b.addEventListener('click', () => symRenderSuggest(b.dataset.region, query, false));
     });
   }
-  function symStep2(regionId, query, isDirect){
-    const body = document.getElementById('symBody');
-    const r = _REGION_MAP.find(x => x.id === regionId);
-    if(!body || !r) return;
+  function symRenderSuggest(regionId, query, isDirect){
+    const box=document.getElementById('soSymBody');
+    const r=_REGION_MAP.find(x=>x.id===regionId);
+    if(!box || !r) return;
     const urgentHtml = r.urgent
-      ? '<div class="sym-urgent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erős vagy hirtelen mellkasi fájdalom, nehézlégzés esetén <b>azonnal hívja a 112-t</b> — ne várjon az időpontfoglalással.</div>'
+      ? '<div class="so-sym-urgent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erős vagy hirtelen mellkasi fájdalom, nehézlégzés esetén <b>azonnal hívja a 112-t</b> — ne várjon az időpontfoglalással.</div>'
       : '';
     const lead = isDirect
       ? 'A panasza alapján ezt a szakterületet javasoljuk:'
-      : 'Köszönöm! Ezek alapján a következő szakterület(ek) lehetnek a leginkább megfelelőek:';
-    body.innerHTML =
-      '<div class="sym-msg">'+lead+'</div>'+
+      : 'Köszönöm! Ezek alapján a következő szakterület(ek) lehetnek megfelelőek:';
+    box.innerHTML =
+      '<div class="so-sym-msg">'+lead+'</div>'+
       urgentHtml+
-      '<div class="sym-opts">'+
-        r.specs.map((s,i) => '<button class="sym-opt sym-spec'+(i===0?' primary':'')+'" data-spec="'+encodeURIComponent(s)+'"><span class="sym-opt-ic">'+(i===0?'⭐':'🩺')+'</span><span class="sym-spec-name">'+s+'</span><svg class="sym-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>').join('')+
+      '<div class="so-sym-opts">'+
+        r.specs.map((s,i) => '<button class="so-sym-opt so-sym-spec'+(i===0?' primary':'')+'" data-spec="'+encodeURIComponent(s)+'"><span class="so-sym-ic">'+(i===0?'⭐':'🩺')+'</span><span class="so-sym-name">'+soEsc(s)+'</span><svg class="so-sym-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>').join('')+
       '</div>'+
-      '<button class="sym-back" type="button">'+(isDirect ? 'Másik testtáj kiválasztása' : '‹ Vissza')+'</button>';
-    body.querySelectorAll('.sym-spec').forEach(b => {
+      '<button class="so-sym-back" type="button">'+(isDirect ? '‹ Másik testtáj kiválasztása' : '‹ Vissza')+'</button>';
+    box.querySelectorAll('.so-sym-spec').forEach(b => {
       b.addEventListener('click', () => {
-        const spec = decodeURIComponent(b.dataset.spec);
-        const p = new URLSearchParams();
-        p.set('specialty', spec);
-        window.location.href = 'talalatok.html?' + p.toString();
+        const spec=decodeURIComponent(b.dataset.spec);
+        symShowSpecChoice(spec, query, regionId, isDirect);
       });
     });
-    const back = body.querySelector('.sym-back');
-    if(back) back.addEventListener('click', () => symStep1(query));
+    const back=box.querySelector('.so-sym-back');
+    if(back) back.addEventListener('click', () => symRenderRegions(query));
+  }
+  // A javasolt szakterület megerősítése + Orvosok / Klinikák választás
+  function symShowSpecChoice(spec, query, regionId, isDirect){
+    const box=document.getElementById('soSymBody'); if(!box) return;
+    const dp=new URLSearchParams(); dp.set('specialty', spec);
+    const cp=new URLSearchParams(); cp.set('specialty', spec);
+    const docUrl='talalatok.html?'+dp.toString();
+    const cliUrl='klinikak.html?'+cp.toString();
+    box.innerHTML =
+      '<div class="so-sym-msg">Javasolt szakterület:</div>'+
+      '<div class="so-sym-spec-badge">'+soEsc(spec)+'</div>'+
+      '<div class="so-result-actions">'+
+        '<button type="button" class="so-act primary" data-url="'+docUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Orvosok megtekintése</button>'+
+        '<button type="button" class="so-act" data-url="'+cliUrl.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>Klinikák megtekintése</button>'+
+      '</div>'+
+      '<button class="so-sym-back" type="button">‹ Vissza a szakterületekhez</button>';
+    box.querySelectorAll('[data-url]').forEach(b=>{
+      b.addEventListener('click', ()=>{ window.location.href=b.getAttribute('data-url'); });
+    });
+    const back=box.querySelector('.so-sym-back');
+    if(back) back.addEventListener('click', ()=> symRenderSuggest(regionId, query, isDirect));
   }
 
   if(submitBtn) submitBtn.addEventListener('click', doSearch);
@@ -1713,6 +1710,35 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .so-go-anyway{margin-top:4px;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:#94a3b8;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .so-go-anyway:hover{color:#264ACA}
 @media(prefers-reduced-motion:reduce){.so-orb,.so-step.active i,.so-go-dot{animation:none}}
+/* ── tünet-párbeszéd fázis (a keresés-overlay-en belül) ── */
+.so-phase-symptom{text-align:left}
+.so-sym-msg{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:400;color:#1e293b;line-height:1.45;letter-spacing:-.01em;margin-bottom:16px;text-align:center}
+.so-sym-msg b{font-weight:600;color:#264ACA}
+.so-sym-opts{display:flex;flex-direction:column;gap:9px;max-width:360px;margin:0 auto}
+.so-sym-opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 15px;border:1px solid rgba(17,50,147,.12);border-radius:13px;background:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#1e293b;cursor:pointer;box-shadow:0 1px 2px rgba(17,50,147,.03);transition:transform .25s cubic-bezier(.34,1.4,.64,1),box-shadow .25s,border-color .25s,background .25s}
+.so-sym-opt:hover{border-color:#264ACA;background:linear-gradient(180deg,#fff,#eef2ff);transform:translateY(-2px);box-shadow:0 8px 20px rgba(17,50,147,.12)}
+.so-sym-ic{font-size:19px;flex-shrink:0;line-height:1;width:24px;text-align:center}
+.so-sym-spec.primary{border-color:transparent;background:linear-gradient(135deg,#37bd6a,#2C9650 60%,#247e44);color:#fff;box-shadow:0 8px 22px rgba(44,150,80,.34)}
+.so-sym-spec.primary .so-sym-arrow{color:rgba(255,255,255,.9)}
+.so-sym-spec.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(44,150,80,.46)}
+.so-sym-name{flex:1}
+.so-sym-arrow{width:16px;height:16px;color:#94a3b8;flex-shrink:0;transition:transform .25s,color .25s}
+.so-sym-spec:hover .so-sym-arrow{transform:translateX(4px)}
+.so-sym-spec:not(.primary):hover .so-sym-arrow{color:#2C9650}
+.so-sym-back{display:inline-flex;align-items:center;gap:6px;margin:14px auto 0;background:none;border:none;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;padding:5px 0;transition:color .2s}
+.so-sym-back:hover{color:#264ACA}
+.so-sym-urgent{display:flex;align-items:flex-start;gap:10px;background:linear-gradient(135deg,rgba(220,38,38,.07),rgba(220,38,38,.035));border:1px solid rgba(220,38,38,.25);border-radius:13px;padding:12px 14px;font-size:12.5px;font-weight:500;color:#b91c1c;line-height:1.55;margin-bottom:13px;max-width:360px;margin-left:auto;margin-right:auto}
+.so-sym-urgent svg{width:17px;height:17px;flex-shrink:0;margin-top:1px}
+.so-sym-disclaimer{max-width:360px;margin:18px auto 0;background:#f5f8ff;border:1px solid rgba(38,74,202,.1);border-radius:13px;padding:12px 14px;font-size:12px;font-weight:500;color:#64748b;line-height:1.55;text-align:left}
+.so-sym-disc-head{display:flex;align-items:center;gap:7px;font-weight:700;color:#264ACA;margin-bottom:3px}
+.so-sym-disc-head svg{width:14px;height:14px;flex-shrink:0}
+.so-sym-disclaimer b{font-weight:700;color:#1e293b}
+/* javaslat-fázis Orvosok/Klinikák gombok */
+.so-result-actions{display:flex;flex-direction:column;gap:9px;max-width:320px;margin:20px auto 0}
+.so-result-actions .so-act{display:flex;align-items:center;justify-content:center;gap:9px}
+.so-result-actions .so-act svg{width:17px;height:17px;flex-shrink:0}
+.so-sym-spec-badge{display:inline-block;margin:0 auto;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(135deg,#113293,#264ACA);padding:10px 22px;border-radius:100px;box-shadow:0 6px 18px rgba(17,50,147,.28);text-align:center}
+.so-phase-symptom .so-sym-spec-badge{display:block;width:fit-content}
 </style>
 <div id="searchOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-live="polite">
   <div class="so-card">
@@ -1734,7 +1760,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div class="so-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div class="so-h">Ezt találtam a kérésében</div>
       <div id="soChips" class="so-chips"></div>
-      <div class="so-go"><span class="so-go-dot"></span> Megnyitom a találatokat…</div>
+      <div id="soResultActions" class="so-result-actions"></div>
     </div>
     <div class="so-phase so-phase-empty" hidden>
       <div class="so-empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="8.5" y1="11" x2="13.5" y2="11"/></svg></div>
@@ -1742,6 +1768,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       <div class="so-q">Erre: „<span id="soEmptyQuery"></span>”</div>
       <div id="soEmptyMsg" class="so-empty-msg"></div>
       <div id="soEmptyActions" class="so-empty-actions"></div>
+    </div>
+    <div class="so-phase so-phase-symptom" hidden>
+      <div id="soSymBody" class="so-sym-body"></div>
+      <div class="so-sym-disclaimer">
+        <div class="so-sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>
+        Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Pontos kivizsgáláshoz forduljon orvoshoz; sürgős, súlyos panasz esetén hívja a <b>112-t</b>.
+      </div>
     </div>
   </div>
 </div>
