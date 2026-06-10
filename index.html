@@ -328,6 +328,7 @@ footer{background:#1a1f36;color:#a3acc7;padding:2.5rem 5.5% 1.5rem;margin-top:2r
 /* ── Autocomplete legördülő (átemelt funkció) ── */
 .ac-dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(17,50,147,.16),0 2px 8px rgba(17,50,147,.06);overflow-y:auto;max-height:344px;z-index:60;display:none}
 .ac-dropdown.open{display:block}
+.ac-dropdown.up{top:auto;bottom:calc(100% + 6px)}
 .ac-item{display:flex;align-items:center;gap:10px;padding:9px 12px;width:100%;border:none;background:transparent;text-align:left;cursor:pointer;font-family:inherit;transition:background .15s}
 .ac-item:hover,.ac-item.active{background:var(--brand-light)}
 .ac-item-ic{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;font-size:12px;flex-shrink:0}
@@ -552,7 +553,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <span class="hero-title-line"><span class="hero-title-accent">szakorvoskereső</span></span>
       </h1>
 
-      <p class="hero-counts">Keressen több mint <span class="hc-num">5&nbsp;961</span> <span class="hc-blue">szakorvos</span> és <span class="hc-num">1&nbsp;929</span> <span class="hc-green">rendelő</span> között.</p>
+      <p class="hero-counts">Keressen több mint <span class="hc-num" id="heroSubDoctors">7&nbsp;079</span> <span class="hc-blue">szakorvos</span> és <span class="hc-num" id="heroSubClinics">1&nbsp;929</span> <span class="hc-green">rendelő</span> között.</p>
 
       <p class="hero-subtitle hero-search-lead"><span class="sub-blue">Telefonszámokkal</span>, részletes adatokkal és <span class="sub-green">elérhetőségekkel</span>.</p>
 
@@ -595,7 +596,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <div class="hero-right">
       <div class="stats-card">
         <div class="stats-grid">
-          <div class="stats-item"><div class="stats-value"><span data-count="5389">0</span><span class="stats-plus">+</span></div><div class="stats-label">szakorvos</div></div>
+          <div class="stats-item"><div class="stats-value"><span data-count="7079">0</span><span class="stats-plus">+</span></div><div class="stats-label">szakorvos</div></div>
           <div class="stats-divider" aria-hidden="true"></div>
           <div class="stats-item"><div class="stats-value green"><span data-count="1929">0</span><span class="stats-plus">+</span></div><div class="stats-label">klinika</div></div>
           <div class="stats-divider" aria-hidden="true"></div>
@@ -1318,7 +1319,20 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       ? c.value.data.map(function(x){ return { id:x.id, name:x.name, slug:x.slug, city: (x.cities && x.cities.name) ? x.cities.name : '' }; })
       : [];
   }
-  function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.innerHTML=''; } _acActive=-1; }
+  function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.classList.remove('up'); acBox.innerHTML=''; } _acActive=-1; }
+  function placeAc(){
+    if(!acBox) return;
+    try{
+      const anchor = acBox.offsetParent || acBox.parentElement;
+      const rect = (anchor || acBox).getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const spaceBelow = vh - rect.bottom;
+      const spaceAbove = rect.top;
+      const needed = Math.min(acBox.scrollHeight || 320, 344) + 12;
+      if(spaceBelow < needed && spaceAbove > spaceBelow){ acBox.classList.add('up'); }
+      else { acBox.classList.remove('up'); }
+    }catch(e){ acBox.classList.remove('up'); }
+  }
   function moveAc(dir){
     const items = acBox.querySelectorAll('.ac-item');
     if(!items.length) return;
@@ -1332,10 +1346,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(!items.length){ closeAc(); return; }
     _acActive=-1;
     acBox.innerHTML = items.map(it => '<button type="button" class="ac-item" role="option" data-href="'+(it.href||'').replace(/"/g,'&quot;')+'">'
-      + '<span class="ac-item-ic" style="background:'+it.bg+';color:'+it.color+'">'+it.icon+'</span>'
-      + '<span class="ac-item-main"><span class="ac-item-label">'+it.label+'</span><span class="ac-item-meta">'+it.meta+'</span></span>'
+      + '<span class="ac-item-main"><span class="ac-item-label">'+it.label+'</span></span>'
       + '</button>').join('');
     acBox.classList.add('open');
+    placeAc();
     acBox.querySelectorAll('.ac-item').forEach(el => {
       el.addEventListener('mousedown', ev => { ev.preventDefault(); const h=el.dataset.href; if(h) window.location.href=h; });
     });
@@ -1345,36 +1359,52 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     if(q.length < 1){ renderRecentOrClose(); return; }
     const raw = (input.value||'').trim();
     const items=[];
-    if(window.heroSearchTarget === 'clinic'){
-      try{
-        const { data } = await db.from('clinics').select('id, name, slug').ilike('name','%'+raw+'%').neq('status','inactive').limit(8);
-        (data||[]).forEach(c => {
-          items.push({ label:c.name, meta:'Klinika',
-            href: c.slug?('klinika.html?slug='+encodeURIComponent(c.slug)):('klinikak.html?q='+encodeURIComponent(c.name)),
-            icon:'\uD83C\uDFE5', bg:'#eef2ff', color:'#264ACA' });
-        });
-      }catch(e){}
-    } else {
-      await loadAcData();
-      (_acSpecs||[]).forEach(s => {
-        if(_norm(s.name).includes(q)){
-          items.push({ label:s.name, meta:'Szakterület',
-            href:'talalatok.html?specialty='+encodeURIComponent(s.slug||s.name),
-            icon:'\uD83E\uDE7A', bg:'#e7f5ec', color:'#16a34a' });
-        }
+
+    // 1) Google-szerű javaslatok: "Bőrgyógyászat · Budapest", "Bőrgyógyászat · Szeged" ...
+    try{
+      const { data } = await db.rpc('get_search_suggestions', { p_query: raw, p_limit: 6 });
+      (data||[]).forEach(s => {
+        items.push({
+          label: s.specialty_name + ' \u00B7 ' + s.city_name,
+          meta: s.doctor_count + ' orvos',
+          href: 'talalatok.html?specialty=' + encodeURIComponent(s.doctor_slug || s.specialty_name) + '&city=' + encodeURIComponent(s.city_name),
+          icon:'\uD83D\uDD0D', bg:'#e7f5ec', color:'#16a34a' });
       });
-      try{
-        const { data } = await db.from('doctors')
-          .select('id, name, slug')
-          .ilike('name','%'+raw+'%').eq('is_active', true).limit(8);
-        (data||[]).forEach(x => {
-          items.push({ label:x.name, meta:'Orvos',
-            href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)),
-            icon:'\uD83D\uDC68\u200D\u2695\uFE0F', bg:'#fff1e8', color:'#c2510c' });
-        });
-      }catch(e){}
-    }
-    renderItems(items.slice(0,8));
+    }catch(e){}
+
+    // 2) Szakterület önmagában (ha még nem szerepel a javaslatok közt)
+    await loadAcData();
+    (_acSpecs||[]).forEach(s => {
+      if(_norm(s.name).includes(q) && !items.some(it => it.label.indexOf(s.name) === 0)){
+        items.push({ label:s.name, meta:'Szakterület',
+          href:'talalatok.html?specialty='+encodeURIComponent(s.slug||s.name),
+          icon:'\uD83E\uDE7A', bg:'#e7f5ec', color:'#16a34a' });
+      }
+    });
+
+    // 3) Konkrét orvos név szerint
+    try{
+      const { data } = await db.from('doctors')
+        .select('id, name, slug')
+        .ilike('name','%'+raw+'%').eq('is_active', true).limit(4);
+      (data||[]).forEach(x => {
+        items.push({ label:x.name, meta:'Orvos',
+          href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)),
+          icon:'\uD83D\uDC68\u200D\u2695\uFE0F', bg:'#fff1e8', color:'#c2510c' });
+      });
+    }catch(e){}
+
+    // 4) Klinika név szerint
+    try{
+      const { data } = await db.from('clinics').select('id, name, slug').ilike('name','%'+raw+'%').neq('status','inactive').limit(4);
+      (data||[]).forEach(c => {
+        items.push({ label:c.name, meta:'Klinika',
+          href: c.slug?('klinika.html?slug='+encodeURIComponent(c.slug)):('klinikak.html?q='+encodeURIComponent(c.name)),
+          icon:'\uD83C\uDFE5', bg:'#eef2ff', color:'#264ACA' });
+      });
+    }catch(e){}
+
+    renderItems(items.slice(0,10));
   }
   function renderRecent(){
     return; // legördülő kikapcsolva
@@ -1388,6 +1418,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         + '<span class="ac-rm" onmousedown="window._acRemoveRecent(\'' + t.replace(/'/g,"\\'") + '\', event)" title="Eltávolítás"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>'
         + '</button>').join('');
     acBox.classList.add('open');
+    placeAc();
     acBox.querySelectorAll('.ac-item[data-recent]').forEach(el => {
       el.addEventListener('mousedown', ev => {
         if(ev.target.closest('.ac-rm')) return;
@@ -1431,26 +1462,21 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   async function loadHeroStats(){
     if(!hasDB){ runStatAnims(); return; }
     try{
-      const [profCount, totalDoctors, clinicCount] = await Promise.all([
-        db.from('doctors').select('id',{count:'exact',head:true}).eq('is_professional',true).eq('is_active',true),
-        db.from('doctors').select('id',{count:'exact',head:true}).eq('is_active',true),
-        db.from('clinics').select('id',{count:'exact',head:true}).neq('status','inactive'),
-      ]);
-      const profN = profCount.count || 0;
-      const docN  = (totalDoctors.count || 0) - profN;
-      const cliN  = clinicCount.count || 0;
+      const { data, error } = await db.rpc('get_hero_stats');
+      if(error) throw error;
+      const docN = (data && data.doctors) || 0;
+      const cliN = (data && data.clinics) || 0;
+      const profN = (data && data.professionals) || 0;
       const cards = document.querySelectorAll('[data-count]'); // sorrend: szakorvos, klinika, eü. szakember
       if(cards[0] && docN>0) cards[0].dataset.count = docN;
       if(cards[1] && cliN>0) cards[1].dataset.count = cliN;
       if(cards[2] && profN>0) cards[2].dataset.count = profN;
-      // ── Élő számok az alcímben is ──
+      // ── Élő számok a counts-mondatban is ──
       const fmt = n => n.toLocaleString('hu-HU').replace(/,/g,'\u00A0');
       const subDoc = document.getElementById('heroSubDoctors');
       const subCli = document.getElementById('heroSubClinics');
-      const subPrf = document.getElementById('heroSubProfs');
       if(subDoc && docN>0) subDoc.textContent = fmt(docN);
       if(subCli && cliN>0) subCli.textContent = fmt(cliN);
-      if(subPrf && profN>0) subPrf.textContent = fmt(profN);
     }catch(e){}
     runStatAnims();
   }
