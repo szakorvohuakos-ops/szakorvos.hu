@@ -589,6 +589,24 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <button class="tip-chip" type="button">online pszichológus</button>
           <button class="tip-chip" type="button">gyermek fül-orr-gégész hétvégén</button>
         </div>
+
+        <!-- ── INLINE AI PÁRBESZÉD-PANEL (a kereső átalakul, ha nem egyértelmű) ── -->
+        <div class="smart-chat" id="smartChat" aria-live="polite" hidden>
+          <div class="sc-head">
+            <span class="sc-badge"><span class="sc-badge-orb"></span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg><span class="sc-badge-tx">szakorvos.hu <em>AI asszisztens</em></span></span>
+            <button type="button" class="sc-close" id="scClose" aria-label="Vissza a kereséshez"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          </div>
+          <div id="soChatThread" class="so-chat-thread"></div>
+          <div id="soChatChips" class="so-chat-chips"></div>
+          <div class="so-chat-inputbar">
+            <input type="text" id="soChatInput" class="so-chat-input" placeholder="Írjon ide… pl. „bőrgyógyász holnap Debrecenben”" autocomplete="off">
+            <button type="button" id="soChatSend" class="so-chat-send" aria-label="Küldés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+          <div class="so-sym-disclaimer">
+            <div class="so-sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>
+            Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Sürgős, súlyos panasz esetén hívja a <b>112-t</b>.
+          </div>
+        </div>
       </div>
 
     </div>
@@ -986,63 +1004,56 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   async function doSearch(){
     const query = (input.value||'').trim();
     if(!query){ input.focus(); return; }
-    // Homályos tünet (pl. „fáj") → a keresés-overlay TÜNET-fázisa nyílik.
-    // Ha van fájdalom-szó ÉS felismerhető a testtáj (pl. „fáj a fejem") →
-    // egyből a javaslat-lépés; ha nincs testtáj → az overlay kérdez.
+    // Homályos panasz (pl. „fáj") → inline AI párbeszéd nyílik a kereső helyén.
     if(_VAGUE_PAIN.test(query)){
       const reg = detectRegion(query);
-      if(reg){ openSearchSymptom(query, reg); return; }
-      if(isVagueSymptom(query)){ openSearchSymptom(query, null); return; }
+      if(reg){ openInlineChat(query, reg); return; }
+      if(isVagueSymptom(query)){ openInlineChat(query, null); return; }
     }
     saveRecent(query);
     closeAc();
-    const target = 'doctor'; // Fülek megszűntek: a szövegelemzés (result.target) dönti el az irányt
     if(submitBtn) submitBtn.disabled = true;
-    const t0 = showSearchOverlay(query);
-
-    if(target === 'clinic'){
-      const p = new URLSearchParams(); p.set('q', query);
-      await finishSearch('klinikak.html?' + p.toString(), { target:'clinic' }, query, t0);
-      return;
-    }
-
-    const result = await parseSearchQuery(query);
+    let result = null;
+    try { result = await parseSearchQuery(query); } catch(e){}
     sanitizeTimeFilters(result, query);
+    if(submitBtn) submitBtn.disabled = false;
 
-    if(result && result.target === 'clinic'){
+    // Egyértelmű-e a keresés? (van szakterület / város / kerület / klinika-cél)
+    const clear = !!(result && (result.specialty_slug || result.city || result.district || result.target==='clinic'));
+    // Ha NEM egyértelmű → a kereső átalakul párbeszéd-panellé
+    if(!clear){ openInlineChat(query, null); return; }
+
+    // ── Egyértelmű → közvetlen navigáció a találati oldalra ──
+    if(result.target === 'clinic'){
       const p = new URLSearchParams();
       if(result.city) p.set('city', result.city);
       if(result.district) p.set('district', result.district);
       if(result.specialty_slug) p.set('specialty', result.specialty_slug);
-      // A nyers szöveget CSAK akkor visszük át, ha nincs strukturált szűrő —
-      // különben a klinika-oldal a teljes „bőrgyógyász Debrecen" szöveget névként keresné (0 találat).
       if(![...p.keys()].length) p.set('q', result.clinic_query || query);
-      await finishSearch('klinikak.html?' + p.toString(), result, query, t0);
+      window.location.href = 'klinikak.html?' + p.toString();
       return;
     }
-
     const p = new URLSearchParams();
-    if(result && result.specialty_slug) p.set('specialty', result.specialty_slug);
-    if(result && result.city)     p.set('city', result.city);
-    if(result && result.district) p.set('district', result.district);
-    if(result && Array.isArray(result.days) && result.days.length) p.set('days', result.days.join(','));
-    if(result && result.weekend === true) p.set('weekend','1');
-    if(result && (result.gender==='male'||result.gender==='female')) p.set('gender', result.gender);
-    if(result && Array.isArray(result.lang) && result.lang.length) p.set('lang', result.lang.join(','));
-    else if(result && typeof result.lang==='string' && result.lang) p.set('lang', result.lang);
-    if(result && result.online === true) p.set('online','1');
-    if(result && result.urgent === true) p.set('urgent','1');
-    if(result && typeof result.price_max==='number' && result.price_max>0) p.set('price_max', String(result.price_max));
-    if(result && typeof result.exp_min==='number' && result.exp_min>0) p.set('exp_min', String(result.exp_min));
-    if(result && Array.isArray(result.insurance) && result.insurance.length) p.set('insurance', result.insurance.join(','));
-    // „A közelemben" kapcsoló: helyzet + legközelebbi rendezés
+    if(result.specialty_slug) p.set('specialty', result.specialty_slug);
+    if(result.city)     p.set('city', result.city);
+    if(result.district) p.set('district', result.district);
+    if(Array.isArray(result.days) && result.days.length) p.set('days', result.days.join(','));
+    if(result.weekend === true) p.set('weekend','1');
+    if(result.gender==='male'||result.gender==='female') p.set('gender', result.gender);
+    if(Array.isArray(result.lang) && result.lang.length) p.set('lang', result.lang.join(','));
+    else if(typeof result.lang==='string' && result.lang) p.set('lang', result.lang);
+    if(result.online === true) p.set('online','1');
+    if(result.urgent === true) p.set('urgent','1');
+    if(typeof result.price_max==='number' && result.price_max>0) p.set('price_max', String(result.price_max));
+    if(typeof result.exp_min==='number' && result.exp_min>0) p.set('exp_min', String(result.exp_min));
+    if(Array.isArray(result.insurance) && result.insurance.length) p.set('insurance', result.insurance.join(','));
     if(window.heroNearMe && window.heroNearMe.on && window.heroNearMe.lat != null){
       p.set('lat', window.heroNearMe.lat.toFixed(6));
       p.set('lng', window.heroNearMe.lng.toFixed(6));
       p.set('radius','15'); p.set('sort','nearest');
     }
     p.set('q', query);
-    await finishSearch('talalatok.html?' + p.toString(), result, query, t0);
+    window.location.href = 'talalatok.html?' + p.toString();
   }
   /* ══ TÜNET-SEGÉD: homályos panasz → terelő javaslat (nem diagnózis) ══ */
   // Akkor lép működésbe, ha a beírt szöveg lényegében csak fájdalom/panasz-szó,
@@ -1096,13 +1107,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   // EDDIGI beszélgetést, és az asszisztens vagy rákérdez a hiányzóra, vagy felkínálja
   // az Orvosok/Klinikák gombokat.
   let _chat = null;
-  function openSearchSymptom(query, directRegion){
+  function openInlineChat(query, directRegion){
     closeAc();
-    const _ov = document.getElementById('searchOverlay');
-    if(!_ov) return;
-    setPhase(_ov, 'symptom');
-    _ov.classList.add('open'); _ov.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
+    const card = document.querySelector('.smart-search');
+    const panel = document.getElementById('smartChat');
+    if(!card || !panel) return;
+    card.classList.add('chat-mode');
+    panel.hidden = false;
     // chat-állapot
     _chat = { userTexts: [], filters: null, region: directRegion || null };
     const thread = document.getElementById('soChatThread');
@@ -1110,11 +1121,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     bindChatInput();
     // Nyitó üzenet
     if(directRegion){
-      // van testtáj-tipp → javaslat + kérdezzük a helyet
       chatAddAI('Értem. A panasza alapján a <b>'+soEsc(directRegion.specs[0])+'</b> lehet megfelelő. Melyik városban keressek, és mikorra? Írhatja egyben is, pl. „holnap Debrecenben”.');
       _chat.filters = { specialty_slug: null, specialtyName: directRegion.specs[0], region: directRegion };
       chatRenderChips(['Bárhol megfelel','Debrecen','Budapest','Szeged']);
-      // a query-t is dolgozzuk fel, hátha van benne város
       if(query) chatHandleUser(query, true);
     } else if(query && _VAGUE_PAIN.test(query)){
       chatAddAI('Segítek megtalálni a megfelelő szakembert. Hol jelentkezik a panasz, vagy milyen orvosra van szüksége? Írhatja szabadon, pl. „bőrgyógyász holnap Debrecenben”.');
@@ -1123,7 +1132,15 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       chatAddAI('Pontosítsuk a keresést! Mit keres? Írhatja szabadon, pl. „kardiológus jövő héten Szegeden”.');
       if(query) chatHandleUser(query, true);
     }
-    setTimeout(()=>{ const i=document.getElementById('soChatInput'); if(i) i.focus(); }, 350);
+    setTimeout(()=>{ const i=document.getElementById('soChatInput'); if(i) i.focus(); }, 250);
+  }
+  function closeInlineChat(){
+    const card = document.querySelector('.smart-search');
+    const panel = document.getElementById('smartChat');
+    if(card) card.classList.remove('chat-mode');
+    if(panel) panel.hidden = true;
+    if(submitBtn) submitBtn.disabled = false;
+    try{ input.focus(); input.select(); }catch(e){}
   }
   function bindChatInput(){
     const inp=document.getElementById('soChatInput');
@@ -1237,6 +1254,14 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
   if(submitBtn) submitBtn.addEventListener('click', doSearch);
   input.addEventListener('keydown', e => {
+    // Inline-kiegészítés elfogadása: Tab vagy jobbra nyíl, ha van kijelölt (auto-completed) rész
+    const hasGhost = input.selectionEnd > input.selectionStart && input.selectionEnd === input.value.length;
+    if((e.key === 'Tab' || e.key === 'ArrowRight') && hasGhost){
+      e.preventDefault();
+      input.setSelectionRange(input.value.length, input.value.length);
+      _acPrevLen = input.value.length;
+      return;
+    }
     if(e.key === 'Enter'){
       const act = acBox && acBox.querySelector('.ac-item.active');
       if(act){ e.preventDefault(); act.dispatchEvent(new MouseEvent('mousedown')); return; }
@@ -1320,6 +1345,22 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       : [];
   }
   function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.classList.remove('up'); acBox.innerHTML=''; } _acActive=-1; }
+  let _acPrevLen = 0;
+  function applyInlineCompletion(items, raw){
+    try{
+      if(!raw) { _acPrevLen = 0; return; }
+      const deleting = raw.length < _acPrevLen;
+      _acPrevLen = raw.length;
+      if(deleting) return;
+      if(input.selectionStart !== input.value.length || input.selectionStart !== input.selectionEnd) return;
+      const lc = raw.toLowerCase();
+      const cand = (items||[]).map(it => it.complete).filter(Boolean)
+        .find(c => c.toLowerCase().startsWith(lc) && c.length > raw.length);
+      if(!cand) return;
+      input.value = raw + cand.slice(raw.length);
+      input.setSelectionRange(raw.length, cand.length);
+    }catch(e){}
+  }
   function placeAc(){
     if(!acBox) return;
     try{
@@ -1351,7 +1392,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     acBox.classList.add('open');
     placeAc();
     acBox.querySelectorAll('.ac-item').forEach(el => {
-      el.addEventListener('mousedown', ev => { ev.preventDefault(); const h=el.dataset.href; if(h) window.location.href=h; });
+      const go = ev => { ev.preventDefault(); ev.stopPropagation(); const h=el.dataset.href; if(h) window.location.href=h; };
+      el.addEventListener('mousedown', go);
+      el.addEventListener('click', go);
     });
   }
   async function onAcInput(){
@@ -1364,8 +1407,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     try{
       const { data } = await db.rpc('get_search_suggestions', { p_query: raw, p_limit: 6 });
       (data||[]).forEach(s => {
+        const word = (s.doctor_name && s.doctor_name.trim()) ? s.doctor_name.trim() : s.specialty_name;
         items.push({
           label: s.specialty_name + ' \u00B7 ' + s.city_name,
+          complete: word + ' ' + s.city_name,
           meta: s.doctor_count + ' orvos',
           href: 'talalatok.html?specialty=' + encodeURIComponent(s.doctor_slug || s.specialty_name) + '&city=' + encodeURIComponent(s.city_name),
           icon:'\uD83D\uDD0D', bg:'#e7f5ec', color:'#16a34a' });
@@ -1385,10 +1430,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     // 3) Konkrét orvos név szerint
     try{
       const { data } = await db.from('doctors')
-        .select('id, name, slug')
+        .select('id, name, slug, title')
         .ilike('name','%'+raw+'%').eq('is_active', true).limit(4);
       (data||[]).forEach(x => {
-        items.push({ label:x.name, meta:'Orvos',
+        const disp = (x.title && x.title.trim()) ? (x.title.trim() + ' ' + x.name) : x.name;
+        items.push({ label:disp, meta:'Orvos',
           href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)),
           icon:'\uD83D\uDC68\u200D\u2695\uFE0F', bg:'#fff1e8', color:'#c2510c' });
       });
@@ -1405,6 +1451,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     }catch(e){}
 
     renderItems(items.slice(0,10));
+    applyInlineCompletion(items, raw);
   }
   function renderRecent(){
     return; // legördülő kikapcsolva
@@ -1430,7 +1477,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
   input.addEventListener('input', () => { clearTimeout(_acDebounce); _acDebounce = setTimeout(onAcInput, 220); });
   input.addEventListener('focus', () => { if(input.value.trim()) onAcInput(); else renderRecent(); });
-  document.addEventListener('mousedown', e => { if(acBox && e.target!==input && !acBox.contains(e.target)) closeAc(); });
+  document.addEventListener('mousedown', e => {
+    if(!acBox) return;
+    // Ha a kattintás a legördülőn vagy a kereső mezőn belül van, ne zárjuk be
+    if(e.target===input || e.target.closest('.ac-dropdown') || e.target.closest('.search-input-wrap') || acBox.contains(e.target)) return;
+    closeAc();
+  });
 
   /* ── Gépelő placeholder (megtartva) ── */
   const placeholders = ['fáj a térdem Szombathelyen','bőrgyógyász Debrecenben','sürgős fogorvos hétvégén','gyermekorvos angolul beszél','kardiológus magánrendelés'];
@@ -1686,9 +1738,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var m = document.getElementById('mapModal');
     if(m) m.addEventListener('click', function(e){ if(e.target===m) closeMapModal(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var mm=document.getElementById('mapModal'); if(mm&&mm.classList.contains('open')) closeMapModal(); } });
-    var so=document.getElementById('searchOverlay');
-    if(so) so.addEventListener('click', function(e){ if(e.target===so) closeSearchOverlay(); });
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var s=document.getElementById('searchOverlay'); if(s&&s.classList.contains('open')) closeSearchOverlay(); } });
+    var scC=document.getElementById('scClose');
+    if(scC) scC.addEventListener('click', function(){ closeInlineChat(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var card=document.querySelector('.smart-search'); if(card&&card.classList.contains('chat-mode')) closeInlineChat(); } });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wireMapModal); else wireMapModal();
 
@@ -1870,53 +1922,27 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 .so-result-actions{display:flex;flex-direction:column;gap:9px;max-width:320px;margin:20px auto 0}
 .so-result-actions .so-act{display:flex;align-items:center;justify-content:center;gap:9px}
 .so-result-actions .so-act svg{width:17px;height:17px;flex-shrink:0}
+
+/* ══ INLINE AI PÁRBESZÉD-PANEL (prémium) ══ */
+.smart-chat{animation:scReveal .42s cubic-bezier(.34,1.3,.64,1) both}
+.smart-search.chat-mode{border-color:rgba(38,74,202,.35);box-shadow:0 2px 8px rgba(17,50,147,.1),0 20px 50px rgba(17,50,147,.2),0 50px 100px rgba(17,50,147,.22)}
+.smart-search.chat-mode .search-head,
+.smart-search.chat-mode .search-input-wrap,
+.smart-search.chat-mode .tips-row{display:none}
+@keyframes scReveal{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}
+.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:13px;border-bottom:1px solid rgba(38,74,202,.1)}
+.sc-badge{display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:#475569}
+.sc-badge>svg{width:16px;height:16px;color:#264ACA}
+.sc-badge-tx em{font-style:normal;font-weight:800;background:linear-gradient(90deg,#264ACA,#2C9650);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sc-badge-orb{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4cc97c,#2C9650);box-shadow:0 0 0 0 rgba(44,150,80,.5);animation:scPulse 2s ease-in-out infinite}
+@keyframes scPulse{0%,100%{box-shadow:0 0 0 0 rgba(44,150,80,.45)}50%{box-shadow:0 0 0 6px rgba(44,150,80,0)}}
+.sc-close{width:34px;height:34px;flex-shrink:0;border:1px solid rgba(17,50,147,.12);background:#fff;border-radius:10px;color:#64748b;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,border-color .2s}
+.sc-close svg{width:16px;height:16px}
+.sc-close:hover{background:#f1f5f9;color:#113293;border-color:rgba(17,50,147,.25)}
+.smart-chat .so-chat-thread{max-height:300px}
+.smart-chat .so-chat-chips{justify-content:flex-start}
+@media(max-width:560px){.smart-chat .so-chat-thread{max-height:50vh}}
 </style>
-<div id="searchOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-live="polite">
-  <div class="so-card">
-    <div class="so-brand">
-      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="soSg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#113293"/><stop offset="1" stop-color="#2f5bdd"/></linearGradient><linearGradient id="soGg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2C9650"/><stop offset="1" stop-color="#35B26B"/></linearGradient></defs><rect x="24" y="11" width="8" height="34" rx="4" fill="url(#soSg)"/><rect x="11" y="24" width="34" height="8" rx="4" fill="url(#soSg)"/><circle cx="46" cy="46" r="13.5" fill="#fff"/><circle cx="46" cy="46" r="12" fill="url(#soGg)"/><polyline points="40.5,46 44,49.5 51.5,42" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Szakorvos<em>.hu</em></span>
-    </div>
-    <div class="so-phase so-phase-analyze">
-      <div class="so-orb"></div>
-      <div class="so-h">Elemzem a keresését…</div>
-      <div class="so-q">„<span id="soQuery"></span>"</div>
-      <ul class="so-steps">
-        <li class="so-step"><i></i>Kulcsszavak értelmezése</li>
-        <li class="so-step"><i></i>Szakterület és helyszín felismerése</li>
-        <li class="so-step"><i></i>A legjobb találatok összeállítása</li>
-      </ul>
-    </div>
-    <div class="so-phase so-phase-result" hidden>
-      <div class="so-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="so-h">Ezt találtam a kérésében</div>
-      <div id="soChips" class="so-chips"></div>
-      <div id="soResultActions" class="so-result-actions"></div>
-    </div>
-    <div class="so-phase so-phase-empty" hidden>
-      <div class="so-empty-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="8.5" y1="11" x2="13.5" y2="11"/></svg></div>
-      <div class="so-h">Nincs pontos találat 🤔</div>
-      <div class="so-q">Erre: „<span id="soEmptyQuery"></span>”</div>
-      <div id="soEmptyMsg" class="so-empty-msg"></div>
-      <div id="soEmptyActions" class="so-empty-actions"></div>
-    </div>
-    <div class="so-phase so-phase-symptom" hidden>
-      <div class="so-chat-head">
-        <span class="so-chat-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>AI asszisztens</span>
-      </div>
-      <div id="soChatThread" class="so-chat-thread"></div>
-      <div id="soChatChips" class="so-chat-chips"></div>
-      <div class="so-chat-inputbar">
-        <input type="text" id="soChatInput" class="so-chat-input" placeholder="Írjon ide… pl. „bőrgyógyász holnap Debrecenben”" autocomplete="off">
-        <button type="button" id="soChatSend" class="so-chat-send" aria-label="Küldés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
-      </div>
-      <div class="so-sym-disclaimer">
-        <div class="so-sym-disc-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Fontos tudnivaló</div>
-        Ez tájékoztató <b>javaslat, nem orvosi diagnózis</b>. Sürgős, súlyos panasz esetén hívja a <b>112-t</b>.
-      </div>
-    </div>
-  </div>
-</div>
 <!-- ══════ KERESŐ RÉTEG VÉGE ══════ -->
 
 

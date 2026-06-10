@@ -135,7 +135,9 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .crumb .crumb-current{color:var(--text);font-weight:600}
 .htitle{font-family:'Inter',sans-serif;font-size:clamp(1.7rem,2.6vw,2.35rem);font-weight:500;color:var(--text);line-height:1.18;letter-spacing:-0.025em;margin-bottom:.55rem}
 .htitle b{background:linear-gradient(135deg,#2C9650 0%,#3fb568 60%,#4cc97c 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:500}
-.hsub{font-size:14.5px;color:var(--sub);font-weight:500;margin-bottom:0;line-height:1.55;letter-spacing:0}
+.hsub{font-size:16px;color:var(--sub);font-weight:500;margin-bottom:0;line-height:1.55;letter-spacing:0}
+.hsub .rh-num{font-weight:800;font-size:1.08em;color:#2C9650;letter-spacing:-0.01em}
+.hsub .rh-num-blue{color:#264ACA}
 .hsub .hcount{color:var(--green-dark);font-weight:700}
 .hpills{display:none}
 .cnt-pill{display:none}
@@ -885,8 +887,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <span class="crumb-sep">›</span>
         <span class="crumb-current" id="crumb2">Találatok</span>
       </div>
-      <h1 class="htitle">Orvos keresési <b>találatok</b></h1>
-      <div class="hsub" id="hsubText"><span id="hsubQuery">Keresés folyamatban</span> <span class="hcount" id="heroCnt"></span></div>
+      <h1 class="htitle" id="resultHeadTitle">Keresési <b>találatok</b></h1>
+      <div class="hsub" id="hsubText"><span id="resultHeadSub">Keresés folyamatban…</span></div>
     </div>
   </div>
 </div>
@@ -1291,8 +1293,6 @@ updateHero();
 async function updateHero(){
   const queryLabel = specQ ? `„${escapeHtml(specQ)}"` : (hasGeoQ ? 'Az Ön közelében' : 'Összes szakterület');
   const cityLabel = cityQ ? ` – ${escapeHtml(cityQ)}` : (hasGeoQ ? ` (${radiusQ} km sugarban)` : '');
-  const _hsub = document.getElementById('hsubQuery');
-  if(_hsub) _hsub.innerHTML = queryLabel + cityLabel + ' keresésre';
   const _crumb2 = document.getElementById('crumb2');
   if(_crumb2) _crumb2.textContent = specQ || (hasGeoQ ? 'A közelében' : 'Találatok');
 
@@ -1347,6 +1347,30 @@ async function updateHero(){
     } else if(cityQ){
       metaDesc.setAttribute('content', `Szakorvosok ${toLocativeHu(cityQ)}. Találja meg a legjobb orvosokat, értékelések és online időpontfoglalás.`);
     }
+  }
+
+  // ═══ Prémium dinamikus felirat: "5 bőrgyógyászt és 4 szakrendelőt találtunk Debrecenben" ═══
+  buildResultHeadCounts(doctorName, cityQ);
+}
+
+// Közös felirat-építő (orvos + szakrendelő szám) — mindkét oldalon azonos
+async function buildResultHeadCounts(doctorName, city){
+  const subEl = document.getElementById('resultHeadSub');
+  if(!subEl) return;
+  try{
+    const { data } = await db.rpc('get_result_counts', {
+      p_specialty: (typeof specQ!=='undefined' && specQ) ? specQ : null,
+      p_city: city || null
+    });
+    const docN = (data && data.doctors) || 0;
+    const cliN = (data && data.clinics) || 0;
+    const docWord = doctorName ? doctorName.toLowerCase() : 'orvos';
+    const cityPart = city ? (' ' + toLocativeHu(city)) : '';
+    const docPart = `<b class="rh-num">${docN.toLocaleString('hu-HU')}</b> ${escapeHtml(docWord)}${docN===1?'t':'t'}`;
+    const cliPart = `<b class="rh-num rh-num-blue">${cliN.toLocaleString('hu-HU')}</b> szakrendelőt`;
+    subEl.innerHTML = `${docPart} és ${cliPart} találtunk${cityPart}.`;
+  }catch(e){
+    subEl.textContent = '';
   }
 }
 
@@ -1441,7 +1465,7 @@ async function load(){
     `;
     document.getElementById('pagDiv').style.display='none';
     document.getElementById('loadMoreWrap').style.display='none';
-    document.getElementById('heroCnt').textContent = '';
+    { const _hc=document.getElementById('heroCnt'); if(_hc) _hc.textContent=''; }
     if(typeof updateBadge === 'function') updateBadge();
     return;
   }
@@ -1589,7 +1613,7 @@ async function load(){
     }).then(()=>{}).catch(()=>{});
   }
   // Count badge
-  document.getElementById('heroCnt').textContent = `${allDocs.length} találat`;
+  { const _hc=document.getElementById('heroCnt'); if(_hc) _hc.textContent=`${allDocs.length} találat`; }
   curPg = 1;
   applyUrlFilters();   // ← AI keresőből / deep-linkből érkező szűrők aktiválása
   applyF();
@@ -2344,9 +2368,10 @@ function cardH(d,i){
   const clinicAddress = clinic?.address || '';
 
   // Avatár HTML
+  const docPlaceholder = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:54%;height:54%"><circle cx="24" cy="17" r="8" fill="#264ACA"/><path d="M8 42c0-8.837 7.163-15 16-15s16 6.163 16 15" fill="#264ACA"/><g transform="translate(31,29)"><circle cx="7" cy="7" r="7.5" fill="#fff"/><path d="M7 3.2v7.6M3.2 7h7.6" stroke="#2C9650" stroke-width="2.2" stroke-linecap="round"/></g></svg>`;
   const avEl = d.photo_url
     ? `<div class="szk-card-avatar"><img loading="lazy" decoding="async" src="${d.photo_url}" alt="${d.name}">${avD.length?'<span class="szk-card-dot"></span>':''}</div>`
-    : `<div class="szk-card-avatar" style="background:linear-gradient(135deg,#264ACA,#113293)">${init}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
+    : `<div class="szk-card-avatar szk-card-avatar-ph">${docPlaceholder}${avD.length?'<span class="szk-card-dot"></span>':''}</div>`;
 
   const chipTags = tags.slice(0,5);
   const chipMore = Math.max(0, tags.length - 5);
@@ -2956,6 +2981,7 @@ load();
 .kc .szk-feature-badges{margin-top:10px}
 /* Avatár — nagyobb, zöld gradiens placeholder, lekerekített */
 .kc .szk-card-avatar{width:74px;height:74px;font-size:23px;border-radius:16px;flex-shrink:0;box-shadow:0 4px 12px rgba(17,50,147,.16)}
+.szk-card-avatar-ph{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#eef2ff,#dbe4ff)}
 .kc .szk-card-avatar img{border-radius:16px}
 @media(max-width:520px){.kc .szk-card-avatar{width:64px;height:64px;font-size:20px}}
 .kc .szk-card-dot,.kc .szk-card-avatar .av-dot{background:var(--green)}

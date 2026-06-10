@@ -255,6 +255,7 @@ nav.topnav{background:#fff;border-bottom:1px solid var(--border);padding:0;posit
 .dh-photo-wrap{position:relative;width:160px;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#dbeafe);flex-shrink:0;margin:0 auto}
 .dh-photo-wrap img{width:100%;height:100%;object-fit:cover}
 .dh-photo-wrap .dh-av{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:54px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+.dh-photo-wrap .dh-av.dh-avatar-ph{background:linear-gradient(135deg,#eef2ff,#dbe4ff)}
 .dh-online-dot{position:absolute;bottom:8px;right:8px;width:16px;height:16px;background:var(--green);border:3px solid #fff;border-radius:50%}
 .ai-badge{display:inline-flex;align-items:center;gap:4px;background:#fffbeb;color:#b45309;border:1px solid #fde68a;border-radius:100px;font-size:10.5px;font-weight:700;padding:4px 10px;text-transform:uppercase;letter-spacing:.06em;margin-top:10px;justify-content:center}
 .ai-badge svg{flex-shrink:0}
@@ -1877,7 +1878,9 @@ function render(d){
   if(d.photo_url){
     photoWrap.innerHTML = `<img src="${escapeHtml(d.photo_url)}" alt="${escapeHtml(fullName)}">${(d.availability||[]).length?'<div class="dh-online-dot"></div>':''}`;
   } else {
-    document.getElementById('dhAvatar').textContent = init;
+    const avEl2 = document.getElementById('dhAvatar');
+    avEl2.classList.add('dh-avatar-ph');
+    avEl2.innerHTML = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:54%;height:54%"><circle cx="24" cy="17" r="8" fill="#264ACA"/><path d="M8 42c0-8.837 7.163-15 16-15s16 6.163 16 15" fill="#264ACA"/><g transform="translate(31,29)"><circle cx="7" cy="7" r="7.5" fill="#fff"/><path d="M7 3.2v7.6M3.2 7h7.6" stroke="#2C9650" stroke-width="2.2" stroke-linecap="round"/></g></svg>`;
     if((d.availability||[]).length) document.getElementById('dhOnlineDot').style.display = 'block';
   }
   // AI badge eltávolítva — hero egyszerűsítve a klinika mintára

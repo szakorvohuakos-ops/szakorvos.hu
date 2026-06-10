@@ -168,8 +168,10 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-
 .crumb .crumb-current{color:var(--text);font-weight:600}
 .htitle{font-family:'Inter',sans-serif;font-size:clamp(1.85rem,2.8vw,2.6rem);font-weight:600;color:var(--text);line-height:1.1;letter-spacing:-0.025em;margin-bottom:.5rem}
 .htitle b{background:var(--grad-blue);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:600}
-.hsub{font-size:15px;color:var(--sub);font-weight:500;margin-bottom:0}
+.hsub{font-size:16px;color:var(--sub);font-weight:500;margin-bottom:0}
 .hsub .hcount{color:var(--green);font-weight:600}
+.hsub .rh-num{font-weight:800;font-size:1.08em;color:#2C9650;letter-spacing:-0.01em}
+.hsub .rh-num-blue{color:#264ACA}
 .hpills{display:none}
 .cnt-pill{display:none}
 
@@ -815,7 +817,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         <span class="crumb-current" id="crumb2">Találatok</span>
       </div>
       <h1 class="htitle">Klinikák és <b>magánrendelők</b></h1>
-      <div class="hsub" id="hsubText"><span id="hsubQuery">Klinikák, magánrendelők és szakrendelők országosan</span> <span class="hcount" id="heroCnt"></span></div>
+      <div class="hsub" id="hsubText"><span id="resultHeadSub">Keresés folyamatban…</span></div>
     </div>
   </div>
 </div>
@@ -1327,6 +1329,8 @@ function applyFilters(){
   else renderList();
   renderTags();
   updateBadge();
+  // Prémium dinamikus felirat: "5 bőrgyógyászt és 4 szakrendelőt találtunk Debrecenben"
+  buildClinicResultHead(spec, cities);
   // Találati visszajelzés (toast) — debounce a gépelés ellen
   if(window._toastDeb) clearTimeout(window._toastDeb);
   window._toastDeb = setTimeout(function(){
@@ -1334,6 +1338,52 @@ function applyFilters(){
     filtered.forEach(function(c){ (c._docIds || []).forEach(function(id){ ds.add(id); }); });
     if(typeof showResultsToast === 'function') showResultsToast(filtered.length, ds.size);
   }, 450);
+}
+
+async function buildClinicResultHead(spec, cities){
+  const subEl = document.getElementById('resultHeadSub');
+  if(!subEl) return;
+  const city = (cities && cities.length === 1) ? cities[0] : '';
+  // klinika-szám: a szűrt lista hossza; orvos-szám: egyedi orvosok a szűrt klinikákban
+  const cliN = (typeof filtered !== 'undefined' && filtered) ? filtered.length : 0;
+  const dset = new Set();
+  if(typeof filtered !== 'undefined' && filtered) filtered.forEach(c => (c._docIds||[]).forEach(id => dset.add(id)));
+  let docN = dset.size;
+  // köznyelvi szakterület-név
+  let docWord = 'orvos';
+  if(spec){
+    try{
+      const { data } = await db.from('specialties').select('doctor_name').eq('name', spec).maybeSingle();
+      if(data && data.doctor_name) docWord = data.doctor_name.toLowerCase();
+    }catch(e){}
+  }
+  // ha az orvos-szám nem elérhető a kliens adatból, kérjük RPC-vel
+  if(!docN && (spec || city)){
+    try{
+      const { data } = await db.rpc('get_result_counts', { p_specialty: spec || null, p_city: city || null });
+      if(data){ docN = data.doctors || 0; }
+    }catch(e){}
+  }
+  const cityPart = city ? (' ' + cl_toLocative(city)) : '';
+  const docPart = `<b class="rh-num">${docN.toLocaleString('hu-HU')}</b> ${docWord}t`;
+  const cliPart = `<b class="rh-num rh-num-blue">${cliN.toLocaleString('hu-HU')}</b> szakrendelőt`;
+  subEl.innerHTML = `${docPart} és ${cliPart} találtunk${cityPart}.`;
+}
+
+// Helyhatározós városnév (egyszerű heurisztika)
+function cl_toLocative(city){
+  if(!city) return '';
+  const c = city.trim();
+  const special = {'Győr':'Győrben','Pécs':'Pécsen','Szeged':'Szegeden','Debrecen':'Debrecenben','Miskolc':'Miskolcon','Sopron':'Sopronban','Budapest':'Budapesten','Eger':'Egerben','Vác':'Vácon'};
+  if(special[c]) return special[c];
+  const low = c.toLowerCase();
+  const backVowels = 'aáoóuú';
+  let isBack=false;
+  for(let i=low.length-1;i>=0;i--){ if('aáeéiíoóöőuúüű'.includes(low[i])){ isBack = backVowels.includes(low[i]); break; } }
+  const last = low[low.length-1];
+  const suffix = isBack ? 'ban' : 'ben';
+  if('aeiou áéíóőúű'.includes(last)) return c + 'ban'; // ritka, durva fallback
+  return c + (isBack?'on':'en'); // legtöbb városnál -on/-en jobb, de a special lista fedi a gyakoriakat
 }
 
 function resetAll(){
