@@ -2174,7 +2174,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -2243,7 +2243,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
         <div class="cedit-grid">
           <div class="cedit-field"><label>Telefon</label><input id="ce_phone" type="text"></div>
           <div class="cedit-field"><label>E-mail (csak belső)</label><input id="ce_email" type="email"></div>
-          <div class="cedit-field cedit-full"><label>Weboldal</label><input id="ce_website" type="url"></div>
+          <div class="cedit-field cedit-full"><label>Weboldal</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input id="ce_website" type="url" style="flex:1" oninput="ceSyncWebOpen()">
+              <button type="button" id="ce_web_btn" class="cedit-btn-ghost" onclick="ceOpenWebsite()" style="flex-shrink:0;padding:9px 14px">Megnyit ↗</button>
+            </div>
+          </div>
           <div class="cedit-field"><label>Parkolás</label><input id="ce_parking" type="text"></div>
           <div class="cedit-field"><label>Tömegközlekedés</label><input id="ce_transport" type="text"></div>
           <div class="cedit-field cedit-full"><label>Akadálymentesség</label><input id="ce_accessibility" type="text"></div>
@@ -2315,10 +2320,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeS
 .cedit-body{padding:24px 26px 26px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:18px}
 
 /* HERO-kártya (mint az éles oldalon) */
-.cedit-hero{position:relative;background:linear-gradient(135deg,#dde6ff 0%,#eef2ff 55%,#e6e0ff 100%);border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:24px;display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:start;box-shadow:0 8px 28px rgba(17,50,147,.1);overflow:hidden}
-.cedit-hero-photo{position:relative;width:120px;aspect-ratio:1/1;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,var(--brand,#113293),#264ACA);display:flex;align-items:center;justify-content:center}
+.cedit-hero{position:relative;background:linear-gradient(135deg,#dde6ff 0%,#eef2ff 55%,#e6e0ff 100%);border:1px solid rgba(255,255,255,.8);border-radius:22px;padding:20px;display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:center;box-shadow:0 8px 28px rgba(17,50,147,.1)}
+.cedit-hero-photo{position:relative;width:96px;aspect-ratio:1/1;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,var(--brand,#113293),#264ACA);display:flex;align-items:center;justify-content:center}
 .cedit-hero-photo img{width:100%;height:100%;object-fit:cover}
-.cedit-hero-photo .ph-fallback{color:#fff;font-size:40px;font-weight:600}
+.cedit-hero-photo .ph-fallback{color:#fff;font-size:32px;font-weight:600}
 .cedit-hero-photo .ph-edit{position:absolute;bottom:6px;right:6px;background:rgba(255,255,255,.92);border:none;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--brand);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .cedit-hero-info{min-width:0;display:flex;flex-direction:column;gap:8px}
 .cedit-in-name{font-size:23px;font-weight:700;color:var(--brand,#113293);letter-spacing:-.02em;background:transparent;border:none;border-bottom:2px dashed transparent;padding:2px 0;outline:none;width:100%;font-family:inherit}
@@ -2409,11 +2414,7 @@ function openClinicEdit(id){
   document.getElementById('ce_on_odoktor').checked = !!c.on_odoktor;
   document.getElementById('ceditSub').textContent = (c.cities?.name || '') + (c.district ? ' · ' + c.district + '. ker.' : '');
   const msg = document.getElementById('ce_msg'); msg.textContent=''; msg.className='cedit-msg';
-  // Weboldal "Megnyitás" link
-  const webLink = document.getElementById('ce_web_open');
-  const web = (c.website||'').trim();
-  if(web){ webLink.href = /^https?:\/\//.test(web) ? web : 'https://'+web; webLink.style.display=''; }
-  else { webLink.style.display='none'; }
+  ceSyncWebOpen();
   document.getElementById('ce_hero_specs').innerHTML = '';
   ceSyncHeroPhoto();
   ceRenderHours(c.opening_hours || {});
@@ -2446,6 +2447,26 @@ function ceEditPhoto(){
   const cur = document.getElementById('ce_photo_url').value.trim();
   const url = prompt('Klinika fotó URL-je:', cur);
   if(url !== null){ document.getElementById('ce_photo_url').value = url.trim(); ceSyncHeroPhoto(); }
+}
+
+/* ── Weboldal megnyitás ── */
+function ceWebUrl(){
+  const w = document.getElementById('ce_website').value.trim();
+  if(!w) return '';
+  return /^https?:\/\//.test(w) ? w : 'https://'+w;
+}
+function ceOpenWebsite(){
+  const u = ceWebUrl();
+  if(u) window.open(u, '_blank', 'noopener');
+  else alert('Nincs megadva weboldal.');
+}
+function ceSyncWebOpen(){
+  // a hero "Weboldal megnyitása" pill + a gomb állapotának szinkronja
+  const u = ceWebUrl();
+  const link = document.getElementById('ce_web_open');
+  if(link){ if(u){ link.href=u; link.style.display=''; } else { link.style.display='none'; } }
+  const btn = document.getElementById('ce_web_btn');
+  if(btn){ btn.style.opacity = u ? '1' : '.5'; }
 }
 
 /* ── Nyitvatartás szerkesztő ── */
@@ -2619,5 +2640,6 @@ async function saveClinicEdit(){
 document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeClinicEdit(); });
 </script>
 
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>

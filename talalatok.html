@@ -1300,12 +1300,15 @@ async function updateHero(){
   let doctorName = '';
   if(specQ){
     try {
-      const { data } = await db
-        .from('specialties')
-        .select('doctor_name')
-        .eq('name', specQ)
-        .maybeSingle();
-      if(data && data.doctor_name) doctorName = data.doctor_name;
+      const isSlug = /^[a-z][a-z0-9-]+$/.test(specQ); // slug (pl. "borgyogyasz") vs név ("Bőrgyógyászat")
+      let q = db.from('specialties').select('doctor_name, name');
+      q = isSlug ? q.or(`doctor_slug.eq.${specQ},slug.eq.${specQ}`) : q.eq('name', specQ);
+      const { data } = await q.limit(1).maybeSingle();
+      if(data){
+        doctorName = data.doctor_name || data.name || '';
+        // ha a specQ slug volt, a szép nevet is frissítjük a felirathoz
+        if(isSlug && data.name) specQ = data.name;
+      }
     } catch(e) { }
   }
   // Pluralizált doctor_name (pl. "Kardiológus" → "Kardiológusok")

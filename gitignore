@@ -1,0 +1,23 @@
+# Környezeti változók, titkok — SOHA ne kerüljön a repóba
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+**/service_role*
+
+# OS / szerkesztő szemét
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Függőségek / build (ha később lenne)
+node_modules/
+dist/
+.cache/
+
+# Munka-/biztonsági fájlok
+*.bak
+_dedup_*

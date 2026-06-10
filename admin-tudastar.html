@@ -953,7 +953,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="footer-col-title">Jogi</div>
           <a href="adatvedelem.html">Adatvédelem</a>
           <a href="#">ÁSZF</a>
-          <a href="#">Cookie</a>
+          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
           <a href="#">GDPR</a>
         </div>
       </div>
@@ -965,5 +965,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
+  <script src="/js/cookie-consent.js" defer></script>
 </body>
 </html>

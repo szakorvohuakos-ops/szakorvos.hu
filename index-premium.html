@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Szakorvos.hu – Találja meg a megfelelő szakorvost</title>
+<link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="/favicon/favicon.ico">
+<link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+<meta name="theme-color" content="#16203f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Modern, könnyű sans (Space Grotesk display + Inter body) -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F8F6FC;--paper-2:#EFEAF8;--card:#FFFFFF;--card-warm:#FBF9FE;
+  --ink:#2a1758;--ink-2:#3d2778;
+  --text:#3f3460;--sub:#6b6190;--muted:#a098bd;
+  --emerald:#6d3bd4;--emerald-2:#8254e6;--emerald-deep:#4a228f;
+  --gold:#1f9d6b;--gold-soft:#5fc999;
+  --line:#e7e0f3;--line-2:#f0ebf8;--line-cool:#e7e0f3;
+  --grad-emerald:linear-gradient(135deg,#6d3bd4,#1f9d6b);
+  --shadow-sm:0 1px 3px rgba(42,23,88,.05),0 4px 14px rgba(42,23,88,.07);
+  --shadow-md:0 2px 10px rgba(42,23,88,.07),0 18px 44px rgba(42,23,88,.12);
+  --shadow-lg:0 4px 18px rgba(42,23,88,.08),0 34px 80px rgba(42,23,88,.16);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --r-lg:22px;--r-md:16px;--r-sm:11px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;
+  overflow-x:clip;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  background:
+    radial-gradient(900px 560px at 28% -240px,rgba(109,59,212,.11),transparent 60%),
+    radial-gradient(820px 540px at 92% 20px,rgba(31,157,107,.1),transparent 58%),
+    var(--paper);
+  background-attachment:fixed;
+}
+.wrap{position:relative;z-index:1}
+::selection{background:rgba(109,59,212,.18)}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:400;background:rgba(250,248,243,.82);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border-bottom:1px solid var(--line)}
+.ni{display:flex;align-items:center;height:64px;padding:0 6%;gap:1.25rem;max-width:1280px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0;transition:opacity .3s var(--ease)}
+.nav-logo:hover{opacity:.78}
+.nav-logo-mark{width:36px;height:36px;flex-shrink:0;filter:drop-shadow(0 3px 9px rgba(21,32,63,.18))}
+.nav-logo-title{font-family:'Space Grotesk',sans-serif;font-size:23px;font-weight:500;letter-spacing:-0.02em;color:var(--ink);letter-spacing:-0.01em;line-height:1}
+.nav-logo-title em{font-style:normal;font-weight:600;color:var(--emerald)}
+.nav-links{display:flex;align-items:center;gap:6px;list-style:none;margin-left:auto}
+.nav-links a{display:inline-flex;padding:9px 16px;border-radius:9px;color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:600;letter-spacing:-0.005em;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--emerald)}
+.nav-cta{margin-left:10px;padding:11px 22px;background:var(--ink);color:var(--paper);border-radius:10px;font-size:13.5px;font-weight:600;text-decoration:none;transition:all .3s var(--ease);box-shadow:0 4px 16px rgba(21,32,63,.22)}
+.nav-cta:hover{background:var(--emerald-deep);transform:translateY(-1px);box-shadow:0 8px 22px rgba(10,77,54,.3)}
+@media(max-width:880px){.nav-links li:not(:last-child){display:none}}
+
+/* ── HERO ── */
+.hero{position:relative;padding:2.4rem 6% 2.4rem;max-width:1280px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--emerald);margin-bottom:1.1rem;opacity:0;animation:rise .8s var(--ease) .05s forwards}
+.hero-eyebrow::before{content:'';width:26px;height:1px;background:var(--gold-soft)}
+.hero-eyebrow .dot{display:none}
+
+.hero-two-col{display:grid;grid-template-columns:1.7fr 1fr;gap:2.6rem;align-items:start}
+.hero-left{display:flex;flex-direction:column;min-width:0}
+.hero-right{display:flex;flex-direction:column;gap:13px;min-width:0;padding-top:.4rem}
+
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,4.2vw,3.7rem);font-weight:300;line-height:1.08;letter-spacing:-0.03em;color:var(--ink);margin:0 0 1.1rem;opacity:0;animation:rise .9s var(--ease) .12s forwards}
+.hero-title .l1{display:block}
+.hero-title em{font-style:normal;font-weight:500;color:var(--emerald)}
+.hero-title .thin{color:var(--ink-2)}
+
+.hero-subtitle{font-size:15.5px;font-weight:500;color:var(--sub);line-height:1.6;max-width:520px;margin:0 0 1.5rem;opacity:0;animation:rise .9s var(--ease) .2s forwards}
+.hero-subtitle .n{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.08em;color:var(--ink)}
+.hero-subtitle .n.cli{color:var(--emerald)}
+
+/* AI kereső — letisztult fehér kártya, arany hajszálvonal tetején */
+.smart-search{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:1.4rem 1.5rem 1.5rem;box-shadow:var(--shadow-lg);opacity:0;animation:rise 1s var(--ease) .3s forwards;overflow:hidden}
+.smart-search::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold-soft) 30%,var(--emerald) 70%,transparent)}
+.search-head{margin-bottom:13px}
+.search-head-row{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.search-head-title{font-family:'Space Grotesk',sans-serif;font-size:21px;font-weight:400;color:var(--ink);letter-spacing:-0.01em;line-height:1.2}
+.search-ai-badge{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);background:rgba(31,157,107,.08);border:1px solid rgba(31,157,107,.18);border-radius:100px;padding:5px 12px 5px 9px}
+.search-ai-badge svg{width:12px;height:12px;animation:spark 3.4s ease-in-out infinite}
+@keyframes spark{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.16)}}
+.near-me{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--sub);background:var(--paper);border:1px solid var(--line);border-radius:100px;padding:7px 14px;cursor:pointer;transition:all .25s var(--ease)}
+.near-me:hover{border-color:var(--emerald);color:var(--emerald)}
+.near-me svg{width:14px;height:14px}
+.search-head-desc{font-size:14px;font-weight:500;color:var(--sub);line-height:1.5;margin:8px 0 0}
+
+.search-input-wrap{position:relative;display:flex;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:13px;transition:border-color .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.search-input-wrap:focus-within{background:var(--card);border-color:var(--emerald);box-shadow:0 0 0 4px rgba(15,115,80,.1)}
+.search-input-icon{position:absolute;left:17px;color:var(--muted);pointer-events:none;transition:color .25s}
+.search-input-wrap:focus-within .search-input-icon{color:var(--emerald)}
+.search-input{width:100%;height:52px;padding:0 134px 0 47px;border:none;outline:none;background:transparent;font-family:inherit;font-size:15px;color:var(--ink);font-weight:500}
+.search-input::placeholder{color:#a6adbf;font-weight:500}
+.search-actions{position:absolute;right:9px;display:flex;align-items:center;gap:7px}
+.voice-btn{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:var(--card);color:var(--ink-2);cursor:pointer;transition:all .25s var(--ease)}
+.voice-btn:hover{border-color:var(--emerald);color:var(--emerald)}
+.voice-btn svg{width:17px;height:17px}
+.submit-btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border-radius:11px;border:none;background:var(--ink);color:var(--paper);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(21,32,63,.22);transition:all .3s var(--ease)}
+.submit-btn:hover{background:var(--emerald-deep);transform:translateY(-1px);box-shadow:0 8px 20px rgba(10,77,54,.3)}
+.submit-btn svg{width:16px;height:16px}
+
+.tips-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:13px}
+.tips-label{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.tip-chip{font-family:inherit;font-size:13px;font-weight:500;color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:100px;padding:7px 15px;cursor:pointer;transition:all .25s var(--ease)}
+.tip-chip:hover{border-color:var(--emerald);color:var(--emerald);background:rgba(15,115,80,.04)}
+
+/* ── HERO JOBB: tinta-kártya szerif számokkal ── */
+.stats-card{position:relative;background:linear-gradient(165deg,#3a1f7a 0%,#251050 100%);border-radius:var(--r-lg);padding:20px 24px 18px;overflow:hidden;box-shadow:var(--shadow-lg);opacity:0;animation:rise .9s var(--ease) .4s forwards}
+.stats-card::before{content:'';position:absolute;top:0;left:26px;right:26px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);opacity:.5}
+.stats-card::after{content:'';position:absolute;bottom:-70px;right:-50px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(52,201,138,.28),transparent 70%)}
+.stats-grid{display:flex;align-items:stretch;justify-content:space-between;gap:0;position:relative;z-index:1}
+.stats-item{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 6px}
+.stats-item+.stats-item{border-left:1px solid rgba(255,255,255,.1)}
+.stats-value{font-family:'Space Grotesk',sans-serif;font-size:27px;font-weight:400;letter-spacing:-0.02em;color:#fff;line-height:1;display:flex;align-items:baseline;justify-content:center}
+.stats-value .stats-plus{font-size:15px;color:var(--gold-soft);margin-left:1px}
+.stats-value.em{color:#5fe0a8}
+.stats-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.6);letter-spacing:.02em;text-align:center;margin-top:7px;line-height:1.3}
+.stats-foot{display:flex;align-items:center;gap:9px;margin-top:13px;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);position:relative;z-index:1}
+.stats-foot svg{width:15px;height:15px;color:#5fe0a8;flex-shrink:0}
+
+.mini-card{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;text-decoration:none;box-shadow:var(--shadow-sm);transition:all .35s var(--ease);opacity:0;animation:rise .9s var(--ease) forwards}
+.mini-card:nth-of-type(2){animation-delay:.48s}
+.mini-card:nth-of-type(3){animation-delay:.56s}
+.mini-card:hover{transform:translateY(-2px);border-color:var(--line);box-shadow:var(--shadow-md)}
+.mini-ic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;flex-shrink:0;background:var(--paper);border:1px solid var(--line);color:var(--emerald)}
+.mini-card:nth-of-type(3) .mini-ic{color:var(--gold)}
+.mini-card:nth-of-type(3):hover{border-color:rgba(31,157,107,.3)}
+.mini-ic svg{width:20px;height:20px;stroke-width:1.6}
+.mini-body{flex:1;min-width:0}
+.mini-title{font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+.mini-desc{font-size:12.5px;font-weight:500;color:var(--sub);margin-top:2px}
+.mini-desc .g-stars{color:var(--gold);letter-spacing:1px;font-size:11px}
+.mini-arrow{width:16px;height:16px;color:var(--muted);flex-shrink:0;transition:transform .3s var(--ease),color .3s}
+.mini-card:hover .mini-arrow{transform:translateX(4px);color:var(--emerald)}
+
+/* Térkép-kártya */
+.map-card{position:relative;display:flex;gap:14px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;text-decoration:none;box-shadow:var(--shadow-sm);overflow:hidden;transition:all .35s var(--ease);opacity:0;animation:rise .9s var(--ease) .64s forwards}
+.map-card:hover{transform:translateY(-2px);border-color:rgba(31,157,107,.3);box-shadow:var(--shadow-md)}
+.map-cardbody{min-width:0;display:flex;flex-direction:column}
+.map-title{display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+.map-title svg{width:16px;height:16px;color:var(--gold);stroke-width:1.7}
+.map-sub{display:block;font-size:12.5px;font-weight:500;color:var(--sub);margin:5px 0 9px;line-height:1.5}
+.map-cta{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--gold)}
+.map-cta svg{width:13px;height:13px;stroke-width:2}
+.map-frame{position:relative;width:84px;height:84px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,#ece3f7,#e6f5ee);overflow:hidden;border:1px solid var(--line)}
+.map-frame::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(31,157,107,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(31,157,107,.1) 1px,transparent 1px);background-size:13px 13px}
+.map-pin{position:absolute;width:11px;height:11px;border-radius:50% 50% 50% 0;background:var(--emerald);transform:rotate(-45deg);box-shadow:0 2px 6px rgba(109,59,212,.45)}
+.map-pin:nth-child(1){top:22px;left:26px}
+.map-pin:nth-child(2){top:44px;left:52px;background:var(--gold);box-shadow:0 2px 6px rgba(31,157,107,.45)}
+.map-pin:nth-child(3){top:54px;left:20px;width:9px;height:9px;background:var(--gold)}
+
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+/* elegáns elválasztó */
+.divider{max-width:1280px;margin:.3rem auto 0;padding:0 6%}
+.divider hr{border:none;border-top:1px solid var(--line)}
+
+/* ── SZEKCIÓK ── */
+.section{max-width:1280px;margin:0 auto;padding:4rem 6% 1rem}
+.section-head{max-width:680px;margin:0 0 2.4rem}
+.section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.section-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--emerald);margin-bottom:1rem}
+.section-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold-soft)}
+.section-head.center .section-eyebrow::before{display:none}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,3vw,2.5rem);font-weight:300;letter-spacing:-0.02em;color:var(--ink);line-height:1.08}
+.section-title em{font-style:normal;font-weight:500;color:var(--emerald)}
+.section-sub{font-size:16px;font-weight:500;color:var(--sub);line-height:1.6;margin-top:1rem}
+
+/* Szakterület-rács — letisztult, hajszálvonalas kártyák */
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.spec-card{display:flex;align-items:center;gap:15px;background:var(--card);padding:22px 22px;text-decoration:none;transition:background .3s var(--ease)}
+.spec-card:hover{background:var(--card-warm)}
+.spec-ic{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;flex-shrink:0;background:var(--paper);border:1px solid var(--line);color:var(--ink);transition:all .35s var(--ease)}
+.spec-card:hover .spec-ic{color:var(--emerald);border-color:var(--emerald);transform:scale(1.06)}
+.spec-card:nth-child(even):hover .spec-ic{color:var(--gold);border-color:var(--gold)}
+.spec-ic svg{width:21px;height:21px;stroke-width:1.5}
+.spec-body{min-width:0}
+.spec-name{font-size:15px;font-weight:700;color:var(--ink);letter-spacing:-0.01em}
+.spec-count{font-size:12.5px;font-weight:500;color:var(--muted);margin-top:2px}
+
+/* Hogyan működik */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.step{position:relative;background:var(--card);padding:30px 26px}
+.step-num{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:500;color:var(--emerald);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);background:var(--paper);margin-bottom:18px}
+.step:nth-child(2) .step-num{color:var(--gold)}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:500;letter-spacing:-0.01em;color:var(--ink);letter-spacing:-0.01em;margin-bottom:9px}
+.step-desc{font-size:14px;font-weight:500;color:var(--sub);line-height:1.6}
+@media(max-width:760px){.steps{grid-template-columns:1fr}}
+
+/* CTA */
+.cta-band{max-width:1280px;margin:3rem auto 4.5rem;padding:0 6%}
+.cta-inner{position:relative;overflow:hidden;background:linear-gradient(160deg,#3a1f7a 0%,#251050 100%);border-radius:var(--r-lg);padding:3.4rem 2.6rem;text-align:center;box-shadow:var(--shadow-lg)}
+.cta-inner::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);opacity:.6}
+.cta-inner::after{content:'';position:absolute;bottom:-120px;right:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(52,201,138,.24),transparent 70%)}
+.cta-title{position:relative;z-index:1;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.6rem,2.8vw,2.3rem);font-weight:300;color:#fff;letter-spacing:-0.02em;line-height:1.12}
+.cta-title em{font-style:normal;font-weight:500;color:#5fe0a8}
+.cta-sub{position:relative;z-index:1;font-size:15.5px;font-weight:500;color:rgba(255,255,255,.78);margin:1rem auto 2rem;max-width:520px;line-height:1.6}
+.cta-btns{position:relative;z-index:1;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:11px;font-size:14.5px;font-weight:600;text-decoration:none;transition:all .3s var(--ease)}
+.cta-btn.primary{background:#fff;color:var(--ink)}
+.cta-btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.22)}
+.cta-btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28)}
+.cta-btn.ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:920px){.hero-two-col{grid-template-columns:1fr;gap:2rem}.hero{padding-top:2.6rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div class="ni">
+    <a href="/" class="nav-logo">
+      <svg class="nav-logo-mark" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#2a1758"/><stop offset="50%" stop-color="#6d3bd4"/><stop offset="100%" stop-color="#1f9d6b"/></linearGradient><linearGradient id="cg" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#34c98a"/><stop offset="100%" stop-color="#1f9d6b"/></linearGradient></defs><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#lg)"/><g fill="url(#cg)"><rect x="48" y="27" width="24" height="66" rx="6"/><rect x="27" y="48" width="66" height="24" rx="6"/></g><g fill="#fff"><rect x="50" y="29" width="20" height="62" rx="4"/><rect x="29" y="50" width="62" height="20" rx="4"/></g></svg>
+      <span class="nav-logo-title">Szakorvos<em>.hu</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/talalatok">Orvosok</a></li>
+      <li><a href="/klinikak.html">Klinikák</a></li>
+      <li><a href="/kapcsolat.html">Kapcsolat</a></li>
+      <li><a href="/register.html" class="nav-cta">Orvosoknak</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">Magyarország vezető szakorvoskeresője</div>
+  <div class="hero-two-col">
+
+    <div class="hero-left">
+      <h1 class="hero-title">
+        <span class="l1">Országos</span>
+        <span class="l1"><em>szakorvoskereső</em></span>
+      </h1>
+      <p class="hero-subtitle">Keressen több mint <span class="n">6&nbsp;277</span> szakorvos, <span class="n cli">1&nbsp;929</span> rendelő és <span class="n">360</span> egészségügyi szakember között — telefonszámok, elérhetőségek és részletes profilok egy helyen.</p>
+
+      <div class="smart-search">
+        <div class="search-head">
+          <div class="search-head-row">
+            <span class="search-head-title">Írja le, mire van szüksége</span>
+            <span class="search-ai-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c.3 3.4 1.6 4.7 5 5-3.4.3-4.7 1.6-5 5-.3-3.4-1.6-4.7-5-5 3.4-.3 4.7-1.6 5-5Z"/></svg>AI</span>
+            <button class="near-me" id="nearMeBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>A közelemben</button>
+          </div>
+          <p class="search-head-desc">Bármit beírhat természetes nyelven — segítünk megtalálni a megfelelő szakembert vagy klinikát.</p>
+        </div>
+        <div class="search-input-wrap">
+          <svg class="search-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="smartInput" class="search-input" placeholder="pl. „bőrgyógyászt keresek Budapesten”" autocomplete="off">
+          <div class="search-actions">
+            <button class="voice-btn" id="voiceBtn" type="button" title="Hangos keresés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></button>
+            <button class="submit-btn" id="submitBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Keresés</button>
+          </div>
+        </div>
+        <div class="tips-row">
+          <span class="tips-label">Tippek</span>
+          <button class="tip-chip" type="button">bőrgyógyász Debrecen</button>
+          <button class="tip-chip" type="button">anyajegyszűrés</button>
+          <button class="tip-chip" type="button">migrén</button>
+          <button class="tip-chip" type="button">online pszichológus</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="stats-card">
+        <div class="stats-grid">
+          <div class="stats-item"><span class="stats-value"><span data-count="6277">0</span><span class="stats-plus">+</span></span><span class="stats-label">szakorvos</span></div>
+          <div class="stats-item"><span class="stats-value em"><span data-count="1929">0</span><span class="stats-plus">+</span></span><span class="stats-label">rendelő, klinika</span></div>
+          <div class="stats-item"><span class="stats-value"><span data-count="360">0</span><span class="stats-plus">+</span></span><span class="stats-label">szakember</span></div>
+        </div>
+        <div class="stats-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 L4 5 v7 c0 5.5 4 9 8 10 4-1 8-4.5 8-10 V5 z"/><path d="m9 12 2 2 4-4"/></svg>Naponta frissített, ellenőrzött adatbázis</div>
+      </div>
+
+      <a class="mini-card" href="/klinikak.html">
+        <span class="mini-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v15"/><path d="M9 21v-4h6v4"/><path d="M12 7v3M10.5 8.5h3"/></svg></span>
+        <span class="mini-body"><span class="mini-title">Klinika-adatlapok</span><span class="mini-desc"><span class="g-stars">★★★★★</span> Google-értékelésekkel</span></span>
+        <svg class="mini-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a class="mini-card" href="/talalatok?all=1">
+        <span class="mini-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></span>
+        <span class="mini-body"><span class="mini-title">Orvosprofilok</span><span class="mini-desc">Szakvizsgák, tapasztalat, vélemények</span></span>
+        <svg class="mini-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+
+      <a class="map-card" href="/klinikak.html">
+        <span class="map-cardbody">
+          <span class="map-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>A térképen</span>
+          <span class="map-sub">Találja meg a szakembereket a közelében.</span>
+          <span class="map-cta">Térkép megnyitása <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </span>
+        <span class="map-frame"><span class="map-pin"></span><span class="map-pin"></span><span class="map-pin"></span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<!-- SZAKTERÜLETEK -->
+<section class="section reveal">
+  <div class="section-head">
+    <span class="section-eyebrow">Böngésszen szakterület szerint</span>
+    <h2 class="section-title">Népszerű <em>szakterületek</em></h2>
+    <p class="section-sub">Válassza ki, milyen szakorvost keres — azonnal megmutatjuk az elérhető szakembereket.</p>
+  </div>
+  <div class="spec-grid">
+    <a class="spec-card" href="/talalatok?q=b%C5%91rgy%C3%B3gy%C3%A1sz"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></span><span class="spec-body"><span class="spec-name">Bőrgyógyász</span><span class="spec-count">412 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=fogorvos"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5c-2-1.5-5-1.5-6 .5-1.2 2.4.5 5 1 8 .3 2 .5 5 2 5s1.5-3 3-3 1.5 3 3 3 1.7-3 2-5c.5-3 2.2-5.6 1-8-1-2-4-2-6-.5z"/></svg></span><span class="spec-body"><span class="spec-name">Fogorvos</span><span class="spec-count">680 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=n%C5%91gy%C3%B3gy%C3%A1sz"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v8M9 18h6"/></svg></span><span class="spec-body"><span class="spec-name">Nőgyógyász</span><span class="spec-count">534 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=kardiol%C3%B3gus"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 22l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><path d="M3.5 12h4l1.5-3 2 5 1.5-2h5.5"/></svg></span><span class="spec-body"><span class="spec-name">Kardiológus</span><span class="spec-count">298 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=szem%C3%A9sz"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="spec-body"><span class="spec-name">Szemész</span><span class="spec-count">241 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=ortop%C3%A9d"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10c1.5 0 3-1.3 3-3s-1-3-2.5-3S15 5 14 6l-8 8c-1 1-2 1.5-2 3s1.3 3 3 3 2-1 3-2l8-8z"/></svg></span><span class="spec-body"><span class="spec-name">Ortopéd</span><span class="spec-count">276 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?q=pszichi%C3%A1ter"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 2 1 3.5 1 5v3a2 2 0 0 0 2 2h2M12 2a7 7 0 0 1 7 7c0 2-1 3.5-1 5v3a2 2 0 0 1-2 2h-2M12 2v17"/></svg></span><span class="spec-body"><span class="spec-name">Pszichiáter</span><span class="spec-count">187 szakorvos</span></span></a>
+    <a class="spec-card" href="/talalatok?all=1"><span class="spec-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="1.5"/><circle cx="5" cy="12" r="1.5"/><circle cx="5" cy="18" r="1.5"/><path d="M10 6h10M10 12h10M10 18h10"/></svg></span><span class="spec-body"><span class="spec-name">Összes szakterület</span><span class="spec-count">50+ kategória</span></span></a>
+  </div>
+</section>
+
+<!-- HOGYAN MŰKÖDIK -->
+<section class="section reveal">
+  <div class="section-head center">
+    <span class="section-eyebrow">Egyszerű folyamat</span>
+    <h2 class="section-title">Hogyan <em>működik</em>?</h2>
+    <p class="section-sub">Másodpercek alatt megtalálja a megfelelő szakembert — regisztráció nélkül, ingyenesen.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">I</div>
+      <div class="step-title">Keressen természetes nyelven</div>
+      <div class="step-desc">Írja be, mire van szüksége — például „bőrgyógyász Debrecenben”. Az asszisztens a hétköznapi megfogalmazást is érti.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">II</div>
+      <div class="step-title">Hasonlítson össze</div>
+      <div class="step-desc">Részletes profilok: szakvizsgák, tapasztalat, rendelési helyek, Google-értékelések és elérhetőségek egy helyen.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">III</div>
+      <div class="step-title">Vegye fel a kapcsolatot</div>
+      <div class="step-desc">A telefonszámok azonnal láthatók. Hívja fel közvetlenül a rendelőt, és foglaljon időpontot.</div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band reveal">
+  <div class="cta-inner">
+    <h2 class="cta-title">Orvos vagy egészségügyi <em>szakember</em>?</h2>
+    <p class="cta-sub">Csatlakozzon Magyarország vezető szakorvoskeresőjéhez. Hozzon létre ellenőrzött profilt, és érjen el több ezer pácienst — ingyenesen.</p>
+    <div class="cta-btns">
+      <a class="cta-btn primary" href="/register.html">Regisztráció orvosoknak <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+      <a class="cta-btn ghost" href="/kapcsolat.html">Kapcsolatfelvétel</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  function ac(el){var t=parseInt(el.dataset.count,10)||0,d=1500,s=performance.now();
+    function step(n){var p=Math.min((n-s)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString('hu-HU');if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
+  document.querySelectorAll('.stats-value [data-count]').forEach(function(el){setTimeout(function(){ac(el);},500);});
+})();
+(function(){
+  var input=document.getElementById('smartInput'),btn=document.getElementById('submitBtn');
+  function go(){var q=(input.value||'').trim();window.location.href='/talalatok'+(q?('?q='+encodeURIComponent(q)):'');}
+  if(btn)btn.addEventListener('click',go);
+  if(input)input.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go();}});
+  document.querySelectorAll('.tip-chip').forEach(function(c){c.addEventListener('click',function(){input.value=c.textContent;go();});});
+  var near=document.getElementById('nearMeBtn');if(near)near.addEventListener('click',function(){window.location.href='/talalatok?near=1';});
+})();
+(function(){
+  if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(e){io.observe(e);});
+})();
+</script>
+</body>
+</html>
