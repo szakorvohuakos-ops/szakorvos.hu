@@ -339,6 +339,31 @@ footer{background:#1a1f36;color:#a3acc7;padding:2.5rem 5.5% 1.5rem;margin-top:2r
 .ac-recent-clear{border:none;background:transparent;color:var(--brand-2);font-size:10.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .ac-rm{margin-left:auto;border:none;background:transparent;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;padding:3px;border-radius:6px;flex-shrink:0}
 .ac-rm:hover{background:rgba(0,0,0,.06);color:var(--text)}
+/* ── Legördülő – minimalista, 4 oszlop ── */
+.ac-dropdown.mega{left:0;right:auto;width:min(960px,94vw);max-height:none;border-radius:14px;padding:0;box-shadow:0 10px 30px -8px rgba(17,50,147,.16),0 2px 8px rgba(17,50,147,.05)}
+.acm-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.acm-col{padding:14px 14px 12px;position:relative;min-width:0}
+.acm-col + .acm-col::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:1px;background:var(--border-soft)}
+.acm-h{font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;padding:0 8px}
+.acm-sub{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#aeb4c9;margin:9px 8px 3px}
+.acm-opt{display:block;width:100%;text-align:left;border:none;background:transparent;cursor:pointer;font-family:inherit;padding:6px 8px;border-radius:7px;text-decoration:none;transition:background .12s,color .12s}
+.acm-opt:hover,.acm-opt.active{background:var(--brand-light)}
+.acm-t{display:block;font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acm-opt:hover .acm-t,.acm-opt.active .acm-t{color:var(--brand)}
+.acm-s{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.acm-empty{padding:6px 8px;font-size:12.5px;color:var(--muted)}
+.acm-ai{display:flex;align-items:center;gap:11px;padding:11px 16px;border-bottom:1px solid var(--border-soft);background:linear-gradient(180deg,rgba(38,74,202,.055),rgba(38,74,202,.02));text-decoration:none;cursor:pointer;transition:background .15s}
+.acm-ai:hover,.acm-ai.active{background:rgba(38,74,202,.09)}
+.acm-ai.loading{cursor:default}
+.acm-ai-ic{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--brand);color:#fff;font-size:12px;flex-shrink:0}
+.acm-ai.loading .acm-ai-ic{animation:acmPulse 1s ease-in-out infinite}
+@keyframes acmPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.acm-ai-b{flex:1;min-width:0;display:flex;flex-direction:column}
+.acm-ai-k{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.acm-ai-v{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--brand);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acm-ai-go{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--brand-2);flex-shrink:0}
+@media(max-width:880px){.ac-dropdown.mega{width:min(640px,94vw)}.acm-grid{grid-template-columns:1fr 1fr}.acm-col:nth-child(3)::before,.acm-col:nth-child(4)::before{display:none}}
+@media(max-width:560px){.acm-grid{grid-template-columns:1fr}.acm-col + .acm-col::before{display:none}.acm-col + .acm-col{border-top:1px solid var(--border-soft)}}
 .near-me.loading{opacity:.6;pointer-events:none}
 /* ── Élő mini-térkép a kártyában ── */
 .map-frame .live-mini-map{position:absolute;inset:0;width:100%;height:100%;z-index:1}
@@ -1263,7 +1288,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       return;
     }
     if(e.key === 'Enter'){
-      const act = acBox && acBox.querySelector('.ac-item.active');
+      const act = acBox && acBox.querySelector('.acm-opt.active');
       if(act){ e.preventDefault(); act.dispatchEvent(new MouseEvent('mousedown')); return; }
       e.preventDefault(); doSearch();
     } else if(e.key === 'Escape'){ closeAc(); }
@@ -1326,13 +1351,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   } else if(voiceBtn){ voiceBtn.style.display='none'; }
 
   /* ── Autocomplete (élő DB javaslatok) ── */
-  let _acSpecs=null,_acDocs=null,_acClinics=null,_acDebounce=null,_acActive=-1;
+  let _acSpecs=null,_acDocs=null,_acClinics=null,_acDebounce=null,_acActive=-1,_acSeq=0;
   function _norm(s){ return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
   async function loadAcData(){
     if(!hasDB) return;
     if(_acSpecs && _acDocs && _acClinics) return;
     const [s,d,c] = await Promise.allSettled([
-      db.from('specialties').select('name, slug').eq('is_active', true).order('doctor_count',{ascending:false}).limit(80),
+      db.from('specialties').select('name, slug, doctor_slug').eq('is_active', true).order('doctor_count',{ascending:false}).limit(80),
       db.from('doctors').select('id, name, slug, doctor_specialties(is_primary, specialties(name))').eq('is_active', true).order('rating',{ascending:false}).limit(200),
       db.from('clinics').select('id, name, slug, cities(name)').order('name').limit(200),
     ]);
@@ -1344,7 +1369,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       ? c.value.data.map(function(x){ return { id:x.id, name:x.name, slug:x.slug, city: (x.cities && x.cities.name) ? x.cities.name : '' }; })
       : [];
   }
-  function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.classList.remove('up'); acBox.innerHTML=''; } _acActive=-1; }
+  function closeAc(){ if(acBox){ acBox.classList.remove('open'); acBox.classList.remove('up'); acBox.classList.remove('mega'); acBox.innerHTML=''; } _acActive=-1; }
   let _acPrevLen = 0;
   function applyInlineCompletion(items, raw){
     try{
@@ -1352,6 +1377,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       const deleting = raw.length < _acPrevLen;
       _acPrevLen = raw.length;
       if(deleting) return;
+      // Mondat-szerű (van szóköz) vagy túl rövid beírásnál NINCS ghost-kiegészítés –
+      // különben a mezőbe „beleugrik” egy szakterület-név és tönkreteszi a gépelést.
+      if(/\s/.test(raw) || raw.length < 2) return;
       if(input.selectionStart !== input.value.length || input.selectionStart !== input.selectionEnd) return;
       const lc = raw.toLowerCase();
       const cand = (items||[]).map(it => it.complete).filter(Boolean)
@@ -1363,6 +1391,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
   }
   function placeAc(){
     if(!acBox) return;
+    if(acBox.classList.contains('mega')){ acBox.classList.remove('up'); return; }
     try{
       const anchor = acBox.offsetParent || acBox.parentElement;
       const rect = (anchor || acBox).getBoundingClientRect();
@@ -1375,24 +1404,46 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     }catch(e){ acBox.classList.remove('up'); }
   }
   function moveAc(dir){
-    const items = acBox.querySelectorAll('.ac-item');
+    const items = acBox.querySelectorAll('.acm-opt');
     if(!items.length) return;
     items.forEach(i=>i.classList.remove('active'));
     _acActive = (_acActive + dir + items.length) % items.length;
     items[_acActive].classList.add('active');
     items[_acActive].scrollIntoView({block:'nearest'});
   }
-  function renderItems(items){
+  function _acEsc(s){ return (s||'').toString().replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function _acOpt(it){ return '<a class="acm-opt" data-href="'+(it.href||'').replace(/"/g,'&quot;')+'"><span class="acm-t">'+_acEsc(it.name)+'</span>'+(it.sub?'<span class="acm-s">'+_acEsc(it.sub)+'</span>':'')+'</a>'; }
+  function renderMega(c){
     if(!acBox) return;
-    if(!items.length){ closeAc(); return; }
+    var kw=c.specs.length+c.beav.length+c.panasz.length+c.docs.length+c.clinics.length;
+    if(!kw && !c.ai){ closeAc(); return; }
     _acActive=-1;
-    acBox.innerHTML = items.map(it => '<button type="button" class="ac-item" role="option" data-href="'+(it.href||'').replace(/"/g,'&quot;')+'">'
-      + '<span class="ac-item-main"><span class="ac-item-label">'+it.label+'</span></span>'
-      + '</button>').join('');
+    // AI-javaslat sáv (opcionális)
+    var ai='';
+    if(c.ai && c.ai.state==='loading'){
+      ai='<div class="acm-ai loading"><span class="acm-ai-ic">\u2726</span><span class="acm-ai-b"><span class="acm-ai-k">AI értelmezi a panaszt\u2026</span></span></div>';
+    } else if(c.ai && c.ai.state==='done'){
+      ai='<a class="acm-opt acm-ai" data-href="'+(c.ai.href||'').replace(/"/g,'&quot;')+'"><span class="acm-ai-ic">\u2726</span><span class="acm-ai-b"><span class="acm-ai-k">Javasolt szakorvos a panasz alapján</span><span class="acm-ai-v">'+_acEsc(c.ai.name)+'</span></span><span class="acm-ai-go">Találatok \u2192</span></a>';
+    }
+    var grid='';
+    if(kw){
+      var h1='<div class="acm-col"><div class="acm-h">Szakterületek</div>'+(c.specs.length?c.specs.map(_acOpt).join(''):'<div class="acm-empty">\u2014</div>')+'</div>';
+      var h2='<div class="acm-col"><div class="acm-h">Panaszok és beavatkozások</div>';
+      var any2=false;
+      if(c.beav.length){ h2+='<div class="acm-sub">Beavatkozások</div>'+c.beav.map(_acOpt).join(''); any2=true; }
+      if(c.panasz.length){ h2+='<div class="acm-sub">Panaszok</div>'+c.panasz.map(_acOpt).join(''); any2=true; }
+      if(!any2) h2+='<div class="acm-empty">\u2014</div>';
+      h2+='</div>';
+      var h3='<div class="acm-col"><div class="acm-h">Szakorvosok</div>'+(c.docs.length?c.docs.map(_acOpt).join(''):'<div class="acm-empty">\u2014</div>')+'</div>';
+      var h4='<div class="acm-col"><div class="acm-h">Klinikák</div>'+(c.clinics.length?c.clinics.map(_acOpt).join(''):'<div class="acm-empty">\u2014</div>')+'</div>';
+      grid='<div class="acm-grid">'+h1+h2+h3+h4+'</div>';
+    }
+    acBox.classList.add('mega');
+    acBox.innerHTML = ai + grid;
     acBox.classList.add('open');
     placeAc();
-    acBox.querySelectorAll('.ac-item').forEach(el => {
-      const go = ev => { ev.preventDefault(); ev.stopPropagation(); const h=el.dataset.href; if(h) window.location.href=h; };
+    acBox.querySelectorAll('[data-href]').forEach(function(el){
+      var go = function(ev){ ev.preventDefault(); ev.stopPropagation(); var hh=el.dataset.href; if(hh) window.location.href=hh; };
       el.addEventListener('mousedown', go);
       el.addEventListener('click', go);
     });
@@ -1401,57 +1452,84 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     const q = _norm((input.value||'').trim());
     if(q.length < 1){ renderRecentOrClose(); return; }
     const raw = (input.value||'').trim();
-    const items=[];
-
-    // 1) Google-szerű javaslatok: "Bőrgyógyászat · Budapest", "Bőrgyógyászat · Szeged" ...
-    try{
-      const { data } = await db.rpc('get_search_suggestions', { p_query: raw, p_limit: 6 });
-      (data||[]).forEach(s => {
-        const word = (s.doctor_name && s.doctor_name.trim()) ? s.doctor_name.trim() : s.specialty_name;
-        items.push({
-          label: s.specialty_name + ' \u00B7 ' + s.city_name,
-          complete: word + ' ' + s.city_name,
-          meta: s.doctor_count + ' orvos',
-          href: 'talalatok.html?specialty=' + encodeURIComponent(s.doctor_slug || s.specialty_name) + '&city=' + encodeURIComponent(s.city_name),
-          icon:'\uD83D\uDD0D', bg:'#e7f5ec', color:'#16a34a' });
-      });
-    }catch(e){}
-
-    // 2) Szakterület önmagában (ha még nem szerepel a javaslatok közt)
     await loadAcData();
-    (_acSpecs||[]).forEach(s => {
-      if(_norm(s.name).includes(q) && !items.some(it => it.label.indexOf(s.name) === 0)){
-        items.push({ label:s.name, meta:'Szakterület',
-          href:'talalatok.html?specialty='+encodeURIComponent(s.slug||s.name),
-          icon:'\uD83E\uDE7A', bg:'#e7f5ec', color:'#16a34a' });
-      }
-    });
 
-    // 3) Konkrét orvos név szerint
+    // 1) Szakterületek
+    var specs=[];
+    (_acSpecs||[]).forEach(function(s){ if(_norm(s.name).includes(q)) specs.push({ name:s.name, href:'talalatok.html?specialty='+encodeURIComponent(s.slug||s.name) }); });
+    specs = specs.slice(0,6);
+
+    // 2a) Beavatkozások (treatments)
+    var beav=[];
     try{
-      const { data } = await db.from('doctors')
-        .select('id, name, slug, title')
-        .ilike('name','%'+raw+'%').eq('is_active', true).limit(4);
-      (data||[]).forEach(x => {
-        const disp = (x.title && x.title.trim()) ? (x.title.trim() + ' ' + x.name) : x.name;
-        items.push({ label:disp, meta:'Orvos',
-          href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)),
-          icon:'\uD83D\uDC68\u200D\u2695\uFE0F', bg:'#fff1e8', color:'#c2510c' });
+      const { data } = await db.from('treatments').select('title, slug').ilike('title','%'+raw+'%').limit(5);
+      (data||[]).forEach(function(t){ if(t.title) beav.push({ name:t.title, href:'talalatok.html?q='+encodeURIComponent(t.title) }); });
+    }catch(e){}
+
+    // 2b) Panaszok (specialty_symptoms)
+    var panasz=[];
+    try{
+      const { data } = await db.from('specialty_symptoms')
+        .select('symptom, specialties(name, slug, doctor_slug)')
+        .ilike('symptom_normalized','%'+q+'%').order('weight',{ascending:false}).limit(8);
+      var seenSym={};
+      (data||[]).forEach(function(s){
+        var k=_norm(s.symptom); if(!s.symptom || seenSym[k] || Object.keys(seenSym).length>=6) return; seenSym[k]=1;
+        var sp=s.specialties||{}; var slug=sp.doctor_slug||sp.slug||'';
+        panasz.push({ name:s.symptom, href: slug ? ('talalatok.html?specialty='+encodeURIComponent(slug)) : ('talalatok.html?q='+encodeURIComponent(s.symptom)) });
       });
     }catch(e){}
 
-    // 4) Klinika név szerint
+    // 3) Szakorvosok – a vezető cím (Dr./Prof./doktor) leszedve, mert a névben csak a személynév van
+    var isNameSearch=/^\s*(prof\.?\s+)?(dr\.?|doktor)\s+/i.test(raw);
+    var nameQ=(raw.replace(/^\s*((prof\.?|dr\.?|doktor)\s+)+/i,'').trim()) || raw;
+    var docs=[];
+    if(nameQ.length>=2){
+      try{
+        const { data } = await db.from('doctors')
+          .select('id, name, slug, title, doctor_specialties(is_primary, specialties(name))')
+          .ilike('name','%'+nameQ+'%').eq('is_active', true).limit(6);
+        (data||[]).forEach(function(x){
+          var ds=x.doctor_specialties||[]; var pri=ds.find(function(z){return z.is_primary;})||ds[0];
+          var spec=(pri&&pri.specialties&&pri.specialties.name)?pri.specialties.name:'';
+          var disp=(x.title&&x.title.trim())?(x.title.trim()+' '+x.name):x.name;
+          docs.push({ name:disp, sub:spec,
+            href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?q='+encodeURIComponent(x.name)) });
+        });
+      }catch(e){}
+    }
+
+    // 4) Klinikák – élő keresés a teljes listából (nem csak a betöltött 200-ból)
+    var clinics=[];
     try{
-      const { data } = await db.from('clinics').select('id, name, slug').ilike('name','%'+raw+'%').neq('status','inactive').limit(4);
-      (data||[]).forEach(c => {
-        items.push({ label:c.name, meta:'Klinika',
-          href: c.slug?('klinika.html?slug='+encodeURIComponent(c.slug)):('klinikak.html?q='+encodeURIComponent(c.name)),
-          icon:'\uD83C\uDFE5', bg:'#eef2ff', color:'#264ACA' });
-      });
+      const { data } = await db.from('clinics').select('id, name, slug, cities(name)')
+        .ilike('name','%'+raw+'%').neq('status','inactive').limit(6);
+      (data||[]).forEach(function(cl){ clinics.push({ name:cl.name, sub:(cl.cities&&cl.cities.name)?cl.cities.name:'',
+        href: cl.slug?('klinika.html?slug='+encodeURIComponent(cl.slug)):('klinikak.html?q='+encodeURIComponent(cl.name)) }); });
     }catch(e){}
 
-    renderItems(items.slice(0,10));
-    applyInlineCompletion(items, raw);
+    var flat=[].concat(specs,beav,panasz).map(function(it){ return { complete:it.name }; });
+    applyInlineCompletion(flat, raw);
+
+    // AI-javaslat – mondat-szerű beírásnál (2+ szó), vagy ha nincs kulcsszó-találat
+    var kwTotal=specs.length+beav.length+panasz.length+docs.length+clinics.length;
+    var words=raw.split(/\s+/).filter(Boolean);
+    var wantAI=!isNameSearch && ((words.length>=2 && raw.length>=6) || (kwTotal===0 && raw.length>=4));
+    var seq=(++_acSeq); // minden gépelés érvényteleníti a korábbi AI-választ
+    var cols={ specs:specs, beav:beav, panasz:panasz, docs:docs, clinics:clinics, raw:raw, ai: wantAI?{state:'loading'}:null };
+    renderMega(cols);
+    if(!wantAI) return;
+    var aiRes=null;
+    try{ aiRes = await parseSearchQuery(raw); }catch(e){}
+    if(seq!==_acSeq) return; // közben új gépelés történt
+    if(aiRes && aiRes.specialty_slug){
+      var nm='';
+      (_acSpecs||[]).some(function(s){ if(s.doctor_slug===aiRes.specialty_slug){ nm=s.name; return true; } return false; });
+      if(!nm) nm=soPretty(aiRes.specialty_slug);
+      cols.ai={ state:'done', name:nm,
+        href:'talalatok.html?specialty='+encodeURIComponent(aiRes.specialty_slug)+(aiRes.city?('&city='+encodeURIComponent(aiRes.city)):'') };
+    } else { cols.ai=null; }
+    renderMega(cols);
   }
   function renderRecent(){
     return; // legördülő kikapcsolva
