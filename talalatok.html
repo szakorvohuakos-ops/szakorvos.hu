@@ -1250,6 +1250,7 @@ const DS=['V','H','K','Sze','Cs','P','Szo'],DF=['Vasárnap','Hétfő','Kedd','Sz
 const PGS=8;
 const UP=new URLSearchParams(location.search);
 let specQ=UP.get('specialty')||UP.get('spec')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
+const nameQ=UP.get('name')||''; if(nameQ){ freeQ=nameQ; specQ=''; }
 const allQ = UP.get('all') === '1';   // „Összes orvos" mód (a főoldali kártyáról)
 // ─── Új URL-paraméterek (AI keresőből és deep-linkekből) ───
 let daysQ        = (UP.get('days') || '').split(',').map(s=>parseInt(s,10)).filter(n=>!isNaN(n) && n>=0 && n<=6);
@@ -1483,6 +1484,7 @@ async function load(){
   // ═══ NÉV-KERESÉS: ha a keresőszöveg személynévnek tűnik, közvetlenül a doctors.name-re szűrünk ═══
   // (a tüneti/szakterületi RPC névre nem keres, ezért adna vissza túl sok találatot)
   const looksLikeName = (() => {
+    if(nameQ) return true;
     if(specQ || !freeQ) return false;
     const t = freeQ.trim();
     if(/^dr\.?\s/i.test(t)) return true;                 // "Dr. ..." előtag
