@@ -1346,9 +1346,6 @@ async function buildClinicResultHead(spec, cities){
   const city = (cities && cities.length === 1) ? cities[0] : '';
   // klinika-szám: a szűrt lista hossza; orvos-szám: egyedi orvosok a szűrt klinikákban
   const cliN = (typeof filtered !== 'undefined' && filtered) ? filtered.length : 0;
-  const dset = new Set();
-  if(typeof filtered !== 'undefined' && filtered) filtered.forEach(c => (c._docIds||[]).forEach(id => dset.add(id)));
-  let docN = dset.size;
   // köznyelvi szakterület-név
   let docWord = 'orvos';
   if(spec){
@@ -1357,12 +1354,20 @@ async function buildClinicResultHead(spec, cities){
       if(data && data.doctor_name) docWord = data.doctor_name.toLowerCase();
     }catch(e){}
   }
-  // ha az orvos-szám nem elérhető a kliens adatból, kérjük RPC-vel
-  if(!docN && (spec || city)){
+  // orvos-szám: a klinikák _docIds halmaza a klinika ÖSSZES orvosát tartalmazza (nem csak az
+  // adott szakterületűeket), ezért szakterület-szűrésnél a szakterület-érzékeny RPC-t használjuk.
+  let docN = 0;
+  if(spec){
+    let ok=false;
     try{
-      const { data } = await db.rpc('get_result_counts', { p_specialty: spec || null, p_city: city || null });
-      if(data){ docN = data.doctors || 0; }
+      const { data } = await db.rpc('get_result_counts', { p_specialty: spec, p_city: city || null });
+      if(data){ docN = data.doctors || 0; ok=true; }
     }catch(e){}
+    if(!ok){ const dset=new Set(); if(typeof filtered!=='undefined'&&filtered) filtered.forEach(c=>(c._docIds||[]).forEach(id=>dset.add(id))); docN=dset.size; }
+  } else {
+    const dset=new Set();
+    if(typeof filtered!=='undefined'&&filtered) filtered.forEach(c=>(c._docIds||[]).forEach(id=>dset.add(id)));
+    docN=dset.size;
   }
   const cityPart = city ? (' ' + cl_toLocative(city)) : '';
   const docPart = `<b class="rh-num">${docN.toLocaleString('hu-HU')}</b> ${docWord}t`;

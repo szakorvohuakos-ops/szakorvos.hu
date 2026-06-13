@@ -1726,20 +1726,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var cityRow='';
     var grid='';
     if(kw){
-      var hasCities=!!(c.cities && c.cities.list && c.cities.list.length);
-      var h1items='';
-      c.specs.forEach(function(s, idx){
-        if(idx===0 && hasCities && c.cities.sval===s.dslug){
-          var base='talalatok.html?specialty='+encodeURIComponent(s.dslug);
-          h1items+='<a class="acm-opt acm-opt-nat" data-fill="'+_acEsc(s.name)+'" data-target="'+base.replace(/"/g,'&quot;')+'"><span class="acm-t">'+_acEsc(s.name)+' országosan</span>'+(c.cities.total?'<span class="acm-cnt">'+c.cities.total+'</span>':'')+'</a>';
-          c.cities.list.forEach(function(x){
-            h1items+='<a class="acm-opt acm-opt-city" data-fill="'+_acEsc(s.name)+'" data-fillcity="'+_acEsc(x.city)+'" data-target="'+base.replace(/"/g,'&quot;')+'"><span class="acm-t">'+_acEsc(s.name)+' '+_acEsc(x.city)+'</span><span class="acm-cnt">'+x.cnt+'</span></a>';
-          });
-        } else {
-          h1items+=_acOpt(s);
-        }
-      });
-      var h1='<div class="acm-col"><div class="acm-h">Szakterületek</div>'+(h1items||'<div class="acm-empty">\u2014</div>')+'</div>';
+      var h1='<div class="acm-col"><div class="acm-h">Szakterületek</div>'+(c.specs.length?c.specs.map(_acOpt).join(''):'<div class="acm-empty">\u2014</div>')+'</div>';
       var h2='<div class="acm-col"><div class="acm-h">Vizsgálatok, kezelések</div>';
       var any2=false;
       if(c.beav.length){ h2+='<div class="acm-sub">Beavatkozások</div>'+c.beav.map(_acOpt).join(''); any2=true; }
@@ -1894,23 +1881,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
         href: cl.slug?('klinika.html?slug='+encodeURIComponent(cl.slug)):('klinikak.html?q='+encodeURIComponent(cl.name)) }); });
     }catch(e){}
 
-    // 4b) Városok az első konkrét szakterület-találathoz (top 4, orvosszám szerint) + országos összeg
+    // (Város-ajánlat a felugróból eltávolítva – csak szakterület + vizsgálatok.)
     var cityBlock=null;
-    if(specs.length && specs[0].dslug){
-      var ds=specs[0].dslug;
-      var cached=_acCityCache[ds];
-      if(cached){ if(cached.list && cached.list.length) cityBlock={ specName:specs[0].name, sval:ds, list:cached.list, total:cached.total }; }
-      else{
-        try{
-          const { data } = await db.rpc('get_specialty_cities', { p_slug:ds, p_limit:4 });
-          var rows=data||[];
-          var list=rows.map(function(r){ return { city:r.city, cnt:r.cnt }; });
-          var total=rows.length?rows[0].total:0;
-          _acCityCache[ds]={ list:list, total:total };
-          if(list.length) cityBlock={ specName:specs[0].name, sval:ds, list:list, total:total };
-        }catch(e){}
-      }
-    }
 
     // AI-javaslat – mondat-szerű beírásnál (2+ szó), vagy ha nincs kulcsszó-találat
     var kwTotal=specs.length+beav.length+panasz.length+docs.length+clinics.length;
@@ -1924,7 +1896,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var aiRes=null;
     try{ aiRes = await parseSearchQuery(raw); }catch(e){}
     if(seq!==_acSeq) return; // közben új gépelés történt (az újabb hívás birtokolja a jelzőt)
-    if(aiRes && (aiRes.specialty_slug || aiRes.city || aiRes.district || aiRes.target==='clinic')){
+    if(aiRes && (aiRes.specialty_slug || (aiRes.specialty_slugs && aiRes.specialty_slugs.length) || aiRes.city || aiRes.district || aiRes.target==='clinic')){
       // szakterület neve
       var nm='';
       if(aiRes.specialty_slug){
@@ -1933,37 +1905,55 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       }
       // Az AI által felismert szakterület + kezelései a felugró oszlopaiba
       // (pl. "fáj a fejem" → Neurológia + vizsgálatok), ha a kulcsszó-keresés nem találta meg
-      if(aiRes.specialty_slug && nm){
-        var haveSpecAi={}; specs.forEach(function(s){ haveSpecAi[s.dslug||s.name]=1; });
-        if(!haveSpecAi[aiRes.specialty_slug] && !haveSpecAi[nm]){
-          specs.unshift({ name:nm, dslug:aiRes.specialty_slug, href:'talalatok.html?specialty='+encodeURIComponent(aiRes.specialty_slug) });
-          cols.specs = specs = specs.slice(0,6);
-        }
+      // Az AI által felismert szakterület(ek) a felugró oszlopaiba, rangsorolva
+      // (pl. „fáj a seggem" → Sebészet, Urológia, Gasztroenterológia).
+      var aiSlugs = (Array.isArray(aiRes.specialty_slugs) && aiRes.specialty_slugs.length)
+        ? aiRes.specialty_slugs.slice(0,3)
+        : (aiRes.specialty_slug ? [aiRes.specialty_slug] : []);
+      if(aiSlugs.length){
+        var aiSpecs = aiSlugs.map(function(sl){
+          var snm=''; (_acSpecs||[]).some(function(s){ if(s.doctor_slug===sl){ snm=s.name; return true; } return false; });
+          if(!snm) snm=soPretty(sl);
+          return { name:snm, dslug:sl, href:'talalatok.html?specialty='+encodeURIComponent(sl) };
+        });
+        if(!nm) nm=aiSpecs[0].name;
+        // rangsorban előre, a meglévő (kulcsszavas) találatokkal deduplikálva
+        var _seenS={}, _merged=[];
+        aiSpecs.concat(specs).forEach(function(s){ var k=s.dslug||s.name; if(_seenS[k]) return; _seenS[k]=1; _merged.push(s); });
+        cols.specs = specs = _merged.slice(0,6);
+        // a legjobb (első) szakterület kezelései, a panaszra relevancia-szűrve
         try{
-          const { data: tdataAi } = await db.from('treatments').select('title, slug, specialty').eq('specialty', nm).limit(6);
+          const { data: tdataAi } = await db.from('treatments').select('title, slug, specialty').eq('specialty', nm).limit(40);
+          var allT = (tdataAi||[]).filter(function(t){ return t.title; });
+          var STOPW = {faj:1,fajdalom:1,fajdalmam:1,fajdalma:1,fajdalmai:1,fajdalmaim:1,fajdalmas:1,van:1,vannak:1,nekem:1,kell:1,szeretnek:1,keresek:1,keresem:1,egy:1,orvos:1,orvost:1,doktor:1,panasz:1,panaszom:1,panaszaim:1,tunet:1,tunetem:1,tunetek:1,rossz:1,rosszul:1,beteg:1,erzem:1,magam:1,nagyon:1};
+          var cityN = aiRes.city ? _norm(aiRes.city).slice(0,5) : '';
+          var rawToks = _norm(raw).split(/\s+/).filter(function(tok){
+            if(tok.length<4 || STOPW[tok]) return false;
+            if(cityN && tok.indexOf(cityN)===0) return false;
+            return true;
+          });
+          // Szó-prefix illesztés: a panasz töve a CÍM egy szavának ELEJÉRE illeszkedjen,
+          // hogy ne legyen ál-találat (pl. „seg" ne fogja meg a „rendellenesség" szót).
+          function _twords(nt){ return nt.split(/[^a-z0-9]+/).filter(Boolean); }
+          var titleWordsArr = allT.map(function(t){ return _twords(_norm(t.title)); });
+          var stems = rawToks.map(function(tok){
+            var s4=tok.slice(0,4);
+            var hit4 = titleWordsArr.some(function(ws){ return ws.some(function(w){ return w.indexOf(s4)===0; }); });
+            return hit4 ? s4 : tok.slice(0,3);
+          }).filter(Boolean);
+          function _isRelWords(ws){
+            if(ws.some(function(w){ return w.indexOf('szakorvosi')===0; })) return true; // általános szakorvosi vizsgálat mindig releváns
+            return stems.some(function(st){ return st && ws.some(function(w){ return w.indexOf(st)===0; }); });
+          }
+          var relT = allT.filter(function(t,i){ return _isRelWords(titleWordsArr[i]); });
+          var useT = (stems.length && relT.length) ? relT : allT;
           var haveBeavAi={}; beav.forEach(function(b){ haveBeavAi[_norm(b.name)]=1; });
-          (tdataAi||[]).forEach(function(t){
+          useT.forEach(function(t){
             if(!t.title) return; var bk=_norm(t.title); if(haveBeavAi[bk] || beav.length>=6) return; haveBeavAi[bk]=1;
             beav.push({ name:t.title, href:'talalatok.html?q='+encodeURIComponent(t.title) });
           });
           cols.beav = beav;
         }catch(e){}
-        // városjavaslat az AI-szakterülethez, ha még nincs
-        if(!cols.cities && specs[0] && specs[0].dslug){
-          var dsAi=specs[0].dslug;
-          var cachedAi=_acCityCache[dsAi];
-          if(cachedAi){ if(cachedAi.list && cachedAi.list.length) cols.cities={ specName:specs[0].name, sval:dsAi, list:cachedAi.list, total:cachedAi.total }; }
-          else{
-            try{
-              const { data: cdata } = await db.rpc('get_specialty_cities', { p_slug:dsAi, p_limit:4 });
-              var crows=cdata||[];
-              var clist=crows.map(function(r){ return { city:r.city, cnt:r.cnt }; });
-              var ctotal=crows.length?crows[0].total:0;
-              _acCityCache[dsAi]={ list:clist, total:ctotal };
-              if(clist.length) cols.cities={ specName:specs[0].name, sval:dsAi, list:clist, total:ctotal };
-            }catch(e){}
-          }
-        }
         if(seq!==_acSeq) return; // közben új gépelés történt
       }
       // szűrők → URL + felirat
