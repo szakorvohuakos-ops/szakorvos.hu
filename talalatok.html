@@ -1438,7 +1438,7 @@ async function load(){
   // NOTE: a `freeQ` (?q=...) önmagában NEM számít értelmes szűrőnek, mert az AI mindig
   // elmenti a nyers query-t fallback-ként. Ha csak az érkezik specialty nélkül, valószínűleg
   // az AI nem értette a kérést — ne listázzunk minden orvost.
-  const hasMeaningfulFilter = !!(specQ || cityQ || districtQ || hasGeoQ ||
+  const hasMeaningfulFilter = !!(nameQ || specQ || cityQ || districtQ || hasGeoQ ||
     urgentQ || onlineQ || weekendQ ||
     (genderQ && genderQ !== 'all') ||
     (langQ && langQ.length) ||

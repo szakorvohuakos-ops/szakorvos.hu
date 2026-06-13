@@ -88,8 +88,16 @@ nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.78);backdrop-
 .hero-title-accent.is-shine{background:linear-gradient(100deg,#1f7e3e 0%,#2C9650 28%,#7fe0a3 49%,#2C9650 70%,#1f7e3e 100%);background-size:230% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;animation:heroShine 6.5s ease-in-out infinite}
 .hero-title-rule{width:90px;height:4px;border-radius:4px;background:linear-gradient(100deg,#113293 0%,#264ACA 26%,#2C9650 60%,#E0670D 100%);box-shadow:0 2px 10px rgba(224,103,13,.28);margin:0 0 1.7rem}
 .name-search-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
-.ns-field{display:inline-flex;align-items:center;gap:8px;flex:1 1 240px;min-width:200px;background:rgba(255,255,255,.72);border:1px solid rgba(38,74,202,.18);border-radius:12px;padding:6px 6px 6px 13px;transition:border-color .18s,box-shadow .18s;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.ns-field:focus-within{border-color:rgba(38,74,202,.45);box-shadow:0 0 0 3px rgba(38,74,202,.1)}
+.ns-field{position:relative;display:inline-flex;align-items:center;gap:8px;flex:1 1 240px;min-width:200px;background:rgba(255,255,255,.72);border:1px solid rgba(38,74,202,.18);border-radius:12px;padding:6px 6px 6px 13px;transition:border-color .18s,box-shadow .18s;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ns-field:focus-within{border-color:rgba(38,74,202,.45);box-shadow:0 0 0 3px rgba(38,74,202,.1);z-index:40}
+.ns-ac{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(17,50,147,.16),0 2px 8px rgba(17,50,147,.06);overflow-y:auto;max-height:300px;z-index:60;display:none;padding:4px}
+.ns-ac.up{top:auto;bottom:calc(100% + 6px)}
+.ns-ac.open{display:block}
+.ns-ac-opt{display:flex;flex-direction:column;gap:1px;padding:8px 10px;border-radius:8px;cursor:pointer;text-decoration:none}
+.ns-ac-opt:hover,.ns-ac-opt.active{background:var(--brand-light)}
+.ns-ac-t{font-size:13.5px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ns-ac-s{font-size:11.5px;color:var(--muted)}
+.ns-ac-empty{padding:10px;font-size:12.5px;color:var(--muted)}
 .ns-field>svg{width:17px;height:17px;color:var(--brand-2);flex-shrink:0}
 .ns-field input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:13.5px;color:var(--text);padding:5px 0}
 .ns-field input::placeholder{color:#9aa3bd}
@@ -748,11 +756,13 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>
           <input id="nsDoctor" type="text" placeholder="Orvos keresése név szerint…" autocomplete="off" aria-label="Orvos keresése név szerint">
           <button type="button" class="ns-go" id="nsDoctorGo" aria-label="Orvos keresése"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          <div class="ns-ac" id="nsDoctorAc" role="listbox"></div>
         </div>
         <div class="ns-field">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
           <input id="nsClinic" type="text" placeholder="Klinika keresése név szerint…" autocomplete="off" aria-label="Klinika keresése név szerint">
           <button type="button" class="ns-go" id="nsClinicGo" aria-label="Klinika keresése"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          <div class="ns-ac" id="nsClinicAc" role="listbox"></div>
         </div>
       </div>
       <script>
@@ -764,12 +774,87 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             ? ('talalatok.html?name='+encodeURIComponent(v))
             : ('klinikak.html?q='+encodeURIComponent(v));
         }
+        function esc(s){ return (s||'').toString().replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+        function setupAc(input, acEl, kind){
+          if(!input || !acEl) return;
+          var timer=null, items=[], active=-1;
+          function close(){ acEl.classList.remove('open','up'); acEl.style.maxHeight=''; acEl.innerHTML=''; active=-1; }
+          function place(){
+            try{
+              var r=input.closest('.ns-field').getBoundingClientRect();
+              var vh=window.innerHeight||document.documentElement.clientHeight;
+              var nav=document.querySelector('#mainNav');
+              var navB=nav?nav.getBoundingClientRect().bottom:0;
+              var below=vh-r.bottom-12, above=r.top-navB-12;
+              var want=Math.min(acEl.scrollHeight||260,300);
+              if(below<want && above>below && above>140){ acEl.classList.add('up'); acEl.style.maxHeight=Math.min(300,above)+'px'; }
+              else { acEl.classList.remove('up'); acEl.style.maxHeight=Math.min(300,Math.max(160,below))+'px'; }
+            }catch(e){}
+          }
+          function move(d){
+            var opts=acEl.querySelectorAll('.ns-ac-opt'); if(!opts.length) return;
+            opts.forEach(function(o){o.classList.remove('active');});
+            active=(active+d+opts.length)%opts.length; opts[active].classList.add('active'); opts[active].scrollIntoView({block:'nearest'});
+          }
+          function render(){
+            if(!items.length){ acEl.innerHTML='<div class="ns-ac-empty">Nincs találat…</div>'; acEl.classList.add('open'); place(); return; }
+            acEl.innerHTML=items.map(function(it){
+              return '<a class="ns-ac-opt" data-href="'+esc(it.href)+'"><span class="ns-ac-t">'+esc(it.name)+'</span>'+(it.sub?'<span class="ns-ac-s">'+esc(it.sub)+'</span>':'')+'</a>';
+            }).join('');
+            acEl.classList.add('open'); active=-1; place();
+            acEl.querySelectorAll('[data-href]').forEach(function(a){
+              a.addEventListener('mousedown', function(ev){ ev.preventDefault(); window.location.href=a.getAttribute('data-href'); });
+            });
+          }
+          function query(q){
+            if(typeof db==='undefined' || !db){ return; }
+            if(kind==='doctor'){
+              db.from('doctors').select('name,slug,title,doctor_specialties(is_primary,specialties(name))').ilike('name','%'+q+'%').eq('is_active',true).order('name').limit(8)
+                .then(function(res){
+                  var rows=(res&&res.data)||[];
+                  items=rows.map(function(x){
+                    var ds=x.doctor_specialties||[]; var pri=ds.find(function(z){return z.is_primary;})||ds[0];
+                    var sp=(pri&&pri.specialties&&pri.specialties.name)||'';
+                    var disp=(x.title&&x.title.trim())?(x.title.trim()+' '+x.name):x.name;
+                    return { name:disp, sub:sp, href: x.slug?('orvos.html?slug='+encodeURIComponent(x.slug)):('talalatok.html?name='+encodeURIComponent(x.name)) };
+                  });
+                  render();
+                }, function(){});
+            } else {
+              db.from('clinics').select('name,slug,cities(name)').ilike('name','%'+q+'%').neq('status','inactive').limit(8)
+                .then(function(res){
+                  var rows=(res&&res.data)||[];
+                  items=rows.map(function(x){
+                    return { name:x.name, sub:(x.cities&&x.cities.name)||'', href: x.slug?('klinika.html?slug='+encodeURIComponent(x.slug)):('klinikak.html?q='+encodeURIComponent(x.name)) };
+                  });
+                  render();
+                }, function(){});
+            }
+          }
+          input.addEventListener('input', function(){
+            var q=(input.value||'').trim();
+            if(timer) clearTimeout(timer);
+            if(q.length<2){ close(); return; }
+            timer=setTimeout(function(){ query(q); }, 180);
+          });
+          input.addEventListener('keydown', function(e){
+            if(e.key==='ArrowDown'){ e.preventDefault(); move(1); }
+            else if(e.key==='ArrowUp'){ e.preventDefault(); move(-1); }
+            else if(e.key==='Enter'){
+              var opts=acEl.querySelectorAll('.ns-ac-opt');
+              if(active>=0 && opts[active]){ e.preventDefault(); window.location.href=opts[active].getAttribute('data-href'); }
+              else { e.preventDefault(); go(kind); }
+            } else if(e.key==='Escape'){ close(); }
+          });
+          input.addEventListener('blur', function(){ setTimeout(close, 150); });
+          window.addEventListener('scroll', function(){ if(acEl.classList.contains('open')) place(); }, {passive:true});
+          window.addEventListener('resize', function(){ if(acEl.classList.contains('open')) place(); });
+        }
         var dG=document.getElementById('nsDoctorGo'), cG=document.getElementById('nsClinicGo');
-        var dI=document.getElementById('nsDoctor'), cI=document.getElementById('nsClinic');
         if(dG) dG.addEventListener('click',function(){go('doctor');});
         if(cG) cG.addEventListener('click',function(){go('clinic');});
-        if(dI) dI.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go('doctor'); }});
-        if(cI) cI.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); go('clinic'); }});
+        setupAc(document.getElementById('nsDoctor'), document.getElementById('nsDoctorAc'), 'doctor');
+        setupAc(document.getElementById('nsClinic'), document.getElementById('nsClinicAc'), 'clinic');
       })();
       </script>
 
