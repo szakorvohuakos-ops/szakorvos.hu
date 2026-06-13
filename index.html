@@ -188,19 +188,17 @@ a.highlight-card{text-decoration:none;color:inherit}
 .g-stars{color:#fbbc05;font-size:12px;letter-spacing:1px;line-height:1}
 .g-label{font-size:11px;color:var(--sub);font-weight:600}
 
-.map-card{position:relative;min-height:150px;border:4px solid #fff;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px rgba(38,74,202,.15),0 8px 20px rgba(17,50,147,.16),0 20px 48px rgba(17,50,147,.22);text-decoration:none;color:inherit;transition:all .25s;cursor:pointer;display:block}
-.map-card:hover{box-shadow:0 0 0 1px rgba(38,74,202,.2),0 12px 28px rgba(17,50,147,.22),0 28px 60px rgba(17,50,147,.28)}
-.map-card:hover{transform:translateY(-2px);border-color:rgba(38,74,202,.2)}
-.map-title{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:-0.012em;margin-bottom:3px;display:flex;align-items:center;gap:5px}
-.map-title svg{width:12px;height:12px;color:var(--brand-2)}
+.map-card{position:relative;min-height:180px;border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 6px rgba(17,50,147,.05),0 22px 50px -22px rgba(17,50,147,.26);text-decoration:none;color:inherit;transition:transform .25s var(--ease-spring),box-shadow .3s var(--ease-smooth);cursor:pointer;display:block}
+.map-card:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 30px 64px -24px rgba(17,50,147,.34)}
+.map-card::after{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;background:linear-gradient(135deg,rgba(38,74,202,.5),rgba(44,150,80,.35) 60%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55;pointer-events:none;z-index:4}
+.map-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--text);letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:6px}
+.map-title svg{width:14px;height:14px;color:var(--brand-2)}
 .map-sub{font-size:10.5px;color:var(--sub);line-height:1.4;margin-bottom:8px}
-.map-cta{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--brand-2)}
-.map-cta svg{width:10px;height:10px;transition:transform .2s}
-.map-card:hover .map-cta svg{transform:translateX(2px)}
+.map-cta{display:inline-flex;align-items:center;gap:4px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--brand-2);flex-shrink:0}
+.map-cta svg{width:13px;height:13px;transition:transform .2s}
+.map-card:hover .map-cta svg{transform:translateX(3px)}
 .map-frame{position:absolute;inset:0;height:100%;border-radius:0;overflow:hidden;background:linear-gradient(135deg,#eef2ff,#e2e8f0)}
-.map-overlay{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.82) 70%,rgba(255,255,255,0) 100%);backdrop-filter:blur(4px)}
-.map-overlay .map-title{margin:0}
-.map-overlay .map-cta{flex-shrink:0}
+.map-overlay{position:absolute;left:10px;right:10px;top:10px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:rgba(255,255,255,.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.65);border-radius:13px;box-shadow:0 6px 18px -8px rgba(17,50,147,.25)}
 .map-pin{position:absolute;width:12px;height:12px;background:var(--grad-blue);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(17,50,147,.3)}
 .map-pin::after{content:'';position:absolute;top:3px;left:3px;width:6px;height:6px;background:#fff;border-radius:50%}
 .map-pin:nth-child(1){top:25%;left:30%;animation:pulsePin 2.5s ease-in-out infinite}
@@ -339,6 +337,52 @@ footer{background:#1a1f36;color:#a3acc7;padding:2.5rem 5.5% 1.5rem;margin-top:2r
 .ac-recent-clear{border:none;background:transparent;color:var(--brand-2);font-size:10.5px;font-weight:600;cursor:pointer;font-family:inherit}
 .ac-rm{margin-left:auto;border:none;background:transparent;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;padding:3px;border-radius:6px;flex-shrink:0}
 .ac-rm:hover{background:rgba(0,0,0,.06);color:var(--text)}
+/* ── AI asszisztens box ── */
+.aibox{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#fbfcff 100%);border:1px solid var(--border);box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 2px 6px rgba(17,50,147,.05),0 22px 50px -22px rgba(17,50,147,.26);transition:box-shadow .4s var(--ease-smooth);cursor:pointer}
+.aibox::before{content:"";position:absolute;inset:0;border-radius:22px;padding:1px;background:linear-gradient(135deg,rgba(38,74,202,.5),rgba(44,150,80,.35) 60%,transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.6;pointer-events:none}
+.aibox.open{cursor:default;box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 30px 70px -26px rgba(17,50,147,.4)}
+.ai-head{display:flex;align-items:center;gap:12px;padding:18px 20px 14px}
+.orb{position:relative;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex-shrink:0;background:var(--grad-blue);box-shadow:0 6px 16px -4px rgba(38,74,202,.5)}
+.orb svg{width:20px;height:20px;color:#fff}
+.orb::after{content:"";position:absolute;right:-3px;bottom:-3px;width:12px;height:12px;border-radius:50%;background:var(--green);border:2.5px solid #fff;animation:aiPulse 2s infinite}
+@keyframes aiPulse{0%{box-shadow:0 0 0 0 rgba(44,150,80,.45)}70%{box-shadow:0 0 0 8px rgba(44,150,80,0)}100%{box-shadow:0 0 0 0 rgba(44,150,80,0)}}
+.ai-head-t{flex:1;min-width:0}
+.ai-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--grad-blue-text);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ai-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.01em;margin-top:1px}
+.ai-x{margin-left:auto;width:30px;height:30px;border:none;background:var(--brand-light);border-radius:9px;color:var(--muted);cursor:pointer;display:none;place-items:center;transition:.2s}
+.aibox.open .ai-x{display:grid}
+.ai-x:hover{background:#e2e8fb;color:var(--text)}
+.ai-x svg{width:15px;height:15px}
+.ai-pitch{padding:0 20px 6px}
+.ai-pitch h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;line-height:1.25;letter-spacing:-.02em;margin:0 0 6px;color:var(--text)}
+.ai-pitch p{font-size:13.5px;color:var(--sub);line-height:1.5;margin:0}
+.aibox.open .ai-pitch{display:none}
+.ai-chat{display:none;flex-direction:column;gap:12px;padding:6px 18px 8px;max-height:300px;overflow-y:auto}
+.aibox.open .ai-chat{display:flex;animation:aiFade .4s var(--ease-smooth)}
+@keyframes aiFade{from{opacity:0}to{opacity:1}}
+.aibox .msg{max-width:88%;font-size:13.5px;line-height:1.5}
+.aibox .msg.ai{align-self:flex-start;background:var(--brand-light);color:var(--text);padding:11px 14px;border-radius:4px 16px 16px 16px}
+.aibox .msg.me{align-self:flex-end;background:var(--grad-blue);color:#fff;padding:11px 14px;border-radius:16px 16px 4px 16px;box-shadow:0 6px 16px -6px rgba(38,74,202,.5)}
+.aibox .typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:var(--brand-light);border-radius:4px 16px 16px 16px}
+.aibox .typing span{width:6px;height:6px;border-radius:50%;background:var(--brand-2);opacity:.5;animation:aiBlink 1.2s infinite}
+.aibox .typing span:nth-child(2){animation-delay:.2s}.aibox .typing span:nth-child(3){animation-delay:.4s}
+@keyframes aiBlink{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.sugg-card{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:13px;background:#fff;cursor:pointer;text-decoration:none;transition:.18s var(--ease-spring)}
+.sugg-card:hover{border-color:rgba(38,74,202,.35);transform:translateX(2px);box-shadow:0 8px 18px -8px rgba(17,50,147,.25)}
+.sugg-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;background:rgba(44,150,80,.1);color:var(--green)}
+.sugg-ic svg{width:16px;height:16px}
+.sugg-tx{flex:1;min-width:0}
+.sugg-n{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;color:var(--text);display:block}
+.sugg-s{font-size:11.5px;color:var(--muted);display:block}
+.sugg-go{color:var(--brand-2);flex-shrink:0}.sugg-go svg{width:16px;height:16px}
+.ai-input{display:flex;align-items:center;gap:9px;margin:8px 16px 16px;padding:6px 6px 6px 16px;background:#fff;border:1.5px solid var(--border);border-radius:14px;transition:border-color .25s,box-shadow .25s}
+.ai-input:focus-within{border-color:rgba(38,74,202,.4);box-shadow:0 0 0 4px rgba(38,74,202,.08)}
+.ai-input input{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:14px;color:var(--text);padding:8px 0}
+.ai-input input::placeholder{color:#9aa3bd}
+.ai-send{width:38px;height:38px;border:none;border-radius:10px;background:var(--grad-green);color:#fff;cursor:pointer;display:grid;place-items:center;flex-shrink:0;box-shadow:0 6px 14px -4px rgba(44,150,80,.5);transition:transform .2s var(--ease-spring)}
+.ai-send:hover{transform:translateY(-1px)}.ai-send svg{width:17px;height:17px}
+.ai-hint{padding:0 20px 16px;font-size:11.5px;color:var(--muted)}
+.aibox.open .ai-hint{display:none}
 /* ── Legördülő – minimalista, 4 oszlop ── */
 .ac-dropdown.mega{left:0;right:auto;width:min(960px,94vw);max-height:none;border-radius:14px;padding:0;box-shadow:0 10px 30px -8px rgba(17,50,147,.16),0 2px 8px rgba(17,50,147,.05)}
 .acm-grid{display:grid;grid-template-columns:repeat(4,1fr)}
@@ -638,6 +682,35 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     </div>
 
     <div class="hero-right">
+      <!-- AI asszisztens box -->
+      <div class="aibox" id="aiBox">
+        <div class="ai-head">
+          <div class="orb"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.4 4 1.9 5.6 6 6-4.1.4-5.6 2-6 6-.4-4-1.9-5.6-6-6 4.1-.4 5.6-2 6-6Z"/></svg></div>
+          <div class="ai-head-t"><span class="ai-badge">Szakorvos.hu AI</span><div class="ai-title">AI asszisztens</div></div>
+          <button class="ai-x" id="aiBoxX" type="button" aria-label="Bezárás"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="ai-pitch">
+          <h3>Nem tudja, milyen orvost keres?</h3>
+          <p>Írja le a panaszát természetes nyelven, és a szakorvos.hu AI asszisztense megmondja, melyik szakorvoshoz forduljon.</p>
+        </div>
+        <div class="ai-chat" id="aiBoxChat">
+          <div class="msg ai">Üdv! 👋 Mondja el, mi a panasza, és segítek megtalálni a megfelelő szakorvost.</div>
+        </div>
+        <div class="ai-input" id="aiBoxInput">
+          <input id="aiBoxField" type="text" placeholder="Pl. fáj a térdem futás után…" autocomplete="off" aria-label="Írja le a panaszát">
+          <button class="ai-send" id="aiBoxSend" type="button" aria-label="Küldés"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg></button>
+        </div>
+        <div class="ai-hint">Pl. „bőrkiütésem van", „melyik orvoshoz menjek fejfájással?"</div>
+      </div>
+
+      <a href="#" class="map-card" aria-label="Térképes keresés megnyitása">
+        <div class="map-frame" aria-hidden="true"><div id="heroMiniMapEl" class="live-mini-map"></div><div class="map-pin"></div><div class="map-pin"></div><div class="map-pin"></div></div>
+        <div class="map-overlay">
+          <div class="map-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Keresés térképen</div>
+          <span class="map-cta">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+        </div>
+      </a>
+
       <div class="stats-card">
         <div class="stats-grid">
           <div class="stats-item"><div class="stats-value"><span data-count="7079">0</span><span class="stats-plus">+</span></div><div class="stats-label">szakorvos</div></div>
@@ -661,14 +734,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           <span class="highlight-more">Tovább <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
         </a>
       </div>
-
-      <a href="#" class="map-card" aria-label="Térképes nézet megnyitása">
-        <div class="map-frame" aria-hidden="true"><div id="heroMiniMapEl" class="live-mini-map"></div><div class="map-pin"></div><div class="map-pin"></div><div class="map-pin"></div></div>
-        <div class="map-overlay">
-          <div class="map-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>A térképen</div>
-          <span class="map-cta">Térkép megnyitása <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
-        </div>
-      </a>
 
     </div>
   </div>
@@ -1459,12 +1524,18 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     var isNameSearch=/^\s*(prof\.?\s+)?(dr\.?|doktor)\s+/i.test(raw);
     var nameQ=(raw.replace(/^\s*((prof\.?|dr\.?|doktor)\s+)+/i,'').trim()) || raw;
     var docs=[];
-    if(nameQ.length>=2){
+    var nameToks=nameQ.split(/\s+/).filter(Boolean);
+    var t0=(nameToks[0]||'').replace(/[%_,()*]/g,'').trim();
+    if(t0.length>=2){
       try{
         const { data } = await db.from('doctors')
           .select('id, name, slug, title, doctor_specialties(is_primary, specialties(name))')
-          .ilike('name','%'+nameQ+'%').eq('is_active', true).limit(6);
-        (data||[]).forEach(function(x){
+          .ilike('name', t0+'%').eq('is_active', true).order('name').limit(12);
+        var rows=data||[];
+        if(nameToks.length>1){
+          rows=rows.filter(function(x){ var n=_norm(x.name); return nameToks.every(function(t){ return n.indexOf(_norm(t))>=0; }); });
+        }
+        rows.slice(0,6).forEach(function(x){
           var ds=x.doctor_specialties||[]; var pri=ds.find(function(z){return z.is_primary;})||ds[0];
           var spec=(pri&&pri.specialties&&pri.specialties.name)?pri.specialties.name:'';
           var disp=(x.title&&x.title.trim())?(x.title.trim()+' '+x.name):x.name;
@@ -1813,6 +1884,60 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var card=document.querySelector('.smart-search'); if(card&&card.classList.contains('chat-mode')) closeInlineChat(); } });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wireMapModal); else wireMapModal();
+
+  /* ── AI asszisztens box ── */
+  function wireAiBox(){
+    var box=document.getElementById('aiBox'); if(!box) return;
+    var field=document.getElementById('aiBoxField');
+    var sendBtn=document.getElementById('aiBoxSend');
+    var xBtn=document.getElementById('aiBoxX');
+    var chat=document.getElementById('aiBoxChat');
+    function openBox(){ if(box.classList.contains('open')) return; box.classList.add('open'); setTimeout(function(){ if(field) field.focus(); },220); }
+    function closeBox(){ box.classList.remove('open'); }
+    box.addEventListener('click', function(e){ if(!box.classList.contains('open') && xBtn && !xBtn.contains(e.target)) openBox(); });
+    if(field) field.addEventListener('focus', openBox);
+    if(xBtn) xBtn.addEventListener('click', function(e){ e.stopPropagation(); closeBox(); });
+    function esc(s){ return (s||'').toString().replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+    function bubble(cls, html){ var d=document.createElement('div'); d.className='msg '+cls; d.innerHTML=html; chat.appendChild(d); chat.scrollTop=chat.scrollHeight; return d; }
+    var SUGG_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M6 3H4M18 3h2"/></svg>';
+    var GO_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+    var busy=false;
+    async function send(){
+      if(busy) return;
+      var q=(field.value||'').trim(); if(!q) return;
+      busy=true; openBox();
+      bubble('me', esc(q)); field.value='';
+      var typing=document.createElement('div'); typing.className='typing'; typing.innerHTML='<span></span><span></span><span></span>'; chat.appendChild(typing); chat.scrollTop=chat.scrollHeight;
+      var res=null; try{ await loadAcData(); res=await parseSearchQuery(q); }catch(e){}
+      typing.remove();
+      if(res && (res.specialty_slug || res.city || res.district)){
+        var nm=''; if(res.specialty_slug){ (_acSpecs||[]).some(function(s){ if(s.doctor_slug===res.specialty_slug){nm=s.name;return true;} return false; }); if(!nm) nm=soPretty(res.specialty_slug); }
+        var p=new URLSearchParams();
+        if(res.specialty_slug)p.set('specialty',res.specialty_slug);
+        if(res.city)p.set('city',res.city);
+        if(res.district)p.set('district',String(res.district));
+        if(Array.isArray(res.days)&&res.days.length)p.set('days',res.days.join(','));
+        if(res.weekend===true)p.set('weekend','1');
+        if(res.online===true)p.set('online','1');
+        if(res.gender==='male'||res.gender==='female')p.set('gender',res.gender);
+        var bits=[]; if(res.city)bits.push(res.city); if(res.district)bits.push(res.district+'. kerület');
+        if(Array.isArray(res.days)&&res.days.length)bits.push(res.days.map(function(d){return SO_DAYS[d]||'';}).filter(Boolean).join(', '));
+        if(res.weekend===true)bits.push('hétvégén'); if(res.online===true)bits.push('online');
+        var base=(res.target==='clinic')?'klinikak.html':'talalatok.html';
+        var href=base+(p.toString()?('?'+p.toString()):'');
+        bubble('ai', nm ? ('A leírás alapján ezt javaslom:') : ('Ezt találtam a megadott szempontokra:'));
+        var card=document.createElement('a'); card.className='sugg-card'; card.href=href;
+        card.innerHTML='<span class="sugg-ic">'+SUGG_IC+'</span><span class="sugg-tx"><span class="sugg-n">'+esc(nm||'Találatok')+'</span>'+(bits.length?('<span class="sugg-s">'+esc(bits.join(' \u00B7 '))+'</span>'):'')+'</span><span class="sugg-go">'+GO_IC+'</span>';
+        chat.appendChild(card); chat.scrollTop=chat.scrollHeight;
+      } else {
+        bubble('ai','Pontosítana? Írja le a fő panaszt vagy a testtájékot — pl. „fáj a térdem futás után", „bőrkiütésem van".');
+      }
+      busy=false;
+    }
+    if(sendBtn) sendBtn.addEventListener('click', function(e){ e.stopPropagation(); send(); });
+    if(field) field.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); send(); } });
+  }
+  wireAiBox();
 
   /* ── Indítás ── */
   loadHeroStats();
