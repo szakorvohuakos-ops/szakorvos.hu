@@ -125,9 +125,9 @@ button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 
 /* ───── NAV ───── */
-nav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05)}
+nav#mainNav{position:sticky;top:0;z-index:400;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(220,227,234,.9);box-shadow:0 2px 20px rgba(17,50,147,.05)}
 .ni{display:flex;align-items:center;height:68px;padding:0 3.5%;gap:1.25rem;max-width:1600px;margin:0 auto}
-.logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+#mainNav .logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .logo-txt{font-family:'Inter',sans-serif;font-size:22px;font-weight:600;color:var(--brand);letter-spacing:-0.01em}
 .logo-txt em{color:var(--green);font-style:normal}
 .nav-srch{flex:1;max-width:560px;display:flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:100px;padding:6px 7px 6px 18px;box-shadow:0 2px 8px rgba(17,50,147,.04);transition:border-color .15s,box-shadow .15s}
@@ -675,90 +675,45 @@ nav#mainNav .nav-mobile-toggle:hover{background:#f4f6fb}
 </style>
 
 <style>nav#mainNav .nav-links{margin-left:auto;margin-right:0}nav#mainNav .nav-actions{margin-left:18px}nav#mainNav .nav-links li>a{font-weight:400}.nav-dev-badge{display:inline-flex;align-items:center;margin-left:2px;padding:3px 10px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:#b45309;background:linear-gradient(135deg,rgba(255,179,71,.22),rgba(255,138,0,.16));border:1px solid rgba(255,138,0,.4);border-radius:100px;white-space:nowrap;line-height:1.5}@media(max-width:600px){.nav-dev-badge{display:none}}nav#mainNav .nav-logo-img-full{height:42px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-img-full{height:34px}}nav#mainNav .nav-logo-mark{height:34px;width:auto;display:block;flex-shrink:0}@media(max-width:600px){nav#mainNav .nav-logo-mark{height:30px}nav#mainNav .nav-logo-text{font-size:20px}}</style>
-<nav id="mainNav">
-  <div class="nav-row-top">
-    <a href="/" class="nav-logo" aria-label="Szakorvos.hu kezdőlap">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" class="nav-logo-mark" aria-hidden="true"><defs><linearGradient id="g_navmark" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#0c1f63"/><stop offset="55%" stop-color="#1c3aa8"/><stop offset="100%" stop-color="#3f6cff"/></linearGradient>
-<linearGradient id="sheen_navmark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.3"/><stop offset="40%" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<radialGradient id="glow_navmark" cx="0.3" cy="0.16" r="0.9"><stop offset="0%" stop-color="#6f93ff" stop-opacity=".42"/><stop offset="48%" stop-color="#6f93ff" stop-opacity="0"/></radialGradient>
-<linearGradient id="cr_navmark" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="100%" stop-color="#2C9650"/></linearGradient>
-<filter id="drop_navmark" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.0" stdDeviation="1.8" flood-color="#0b1f63" flood-opacity=".42"/></filter></defs><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#g_navmark)"/><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#glow_navmark)"/><path d="M26.4 5.6 L93.60000000000001 5.6 Q114.4 5.6 114.4 26.4 L114.4 93.60000000000001 Q114.4 114.4 93.60000000000001 114.4 L26.4 114.4 Q5.6 114.4 5.6 93.60000000000001 L5.6 26.4 Q5.6 5.6 26.4 5.6 Z" fill="none" stroke="#0a1c63" stroke-width="1.6" stroke-opacity=".9"/><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="none" stroke="#081a55" stroke-width="1" stroke-opacity=".5"/><g fill="url(#cr_navmark)" filter="url(#drop_navmark)"><rect x="48.0" y="27" width="24" height="66" rx="6"/><rect x="27" y="48.0" width="66" height="24" rx="6"/></g><g fill="#ffffff" ><rect x="50.0" y="29" width="20" height="62" rx="4"/><rect x="29" y="50.0" width="62" height="20" rx="4"/></g><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#sheen_navmark)"/></svg><span class="nav-logo-text">Szakorvos<em>.hu</em></span><span class="nav-dev-badge">Fejlesztés alatt</span>
+<nav id="sknav">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E5BD9"></stop><stop offset=".55" stop-color="#183AA5"></stop><stop offset="1" stop-color="#12308F"></stop></linearGradient><linearGradient id="lh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#lg)"></rect><rect width="64" height="64" rx="14" fill="url(#lh)"></rect><path d="M24.5 11h15v13.5H53v15H39.5V53h-15V39.5H11v-15h13.5z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"></path></svg></span>
+      <span class="wm">Szakorvos<em>.hu</em></span>
     </a>
-
-    <ul class="nav-links">
-      <li class="szk-dd"><a href="/talalatok">Orvosok <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-        <ul class="szk-dd-menu">
-          <li><a href="/talalatok?all=1">Szakorvosok listája</a></li>
-          <li><a href="/talalatok">Szakterületek</a></li>
-          <li><a href="/talalatok">Városok szerint</a></li>
-        </ul>
-      </li>
-      <li class="szk-dd"><a href="/klinikak">Klinikák <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-        <ul class="szk-dd-menu">
-          <li><a href="/klinikak">Magánklinikák</a></li>
-          <li><a href="/klinikak">Magánrendelők</a></li>
-          <li><a href="/klinikak">Diagnosztikai központok</a></li>
-        </ul>
-      </li>
-      <li class="szk-dd"><a href="/tudastar">Tudástár <svg class="szk-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-        <ul class="szk-dd-menu">
-          <li><a href="/tudastar">Betegségek</a></li>
-          <li><a href="/vizsgalatok">Vizsgálatok</a></li>
-          <li><a href="/tudastar">Kezelések</a></li>
-          <li><a href="/tudastar">Egészségügyi útmutatók</a></li>
-        </ul>
-      </li>
-      <li><a href="/kapcsolat.html">Kapcsolat</a></li>
-    </ul>
-
-    <div class="nav-actions">
-      <a href="/login.html" class="btn-nav-icon" aria-label="Bejelentkezés" title="Bejelentkezés">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </a>
-      <div class="szk-partner-wrap">
-        <a href="/register.html" class="btn-nav-partner">Partnerprogram <svg class="szk-dd-caret" style="width:9px;height:9px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></a>
-        <ul class="szk-dd-menu">
-          <li><a href="/register.html">Orvosoknak</a></li>
-          <li><a href="/register.html">Klinikáknak</a></li>
-          <li><a href="/register.html">Adatlap igénylése</a></li>
-        </ul>
-      </div>
+    <div class="links">
+      <div class="dd wide"><a href="/#kereso2" aria-haspopup="true">Szakorvosok<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <div class="menu cols">
+          <div><h5>Keresés</h5><a href="/#kereso2">Orvoskereső</a><a href="/#kereso2" class="js-sym">Panasz alapú keresés</a><a href="/talalatok">Összes szakorvos</a></div>
+          <div><h5>Szakterületek</h5><a href="/talalatok?q=Bőrgyógyász">Bőrgyógyász</a><a href="/talalatok?q=Nőgyógyász">Nőgyógyász</a><a href="/talalatok?q=Fogorvos">Fogorvos</a><a href="/talalatok?q=Gyermekorvos">Gyermekorvos</a><a href="/talalatok?all=1" class="all">Mind a 86 szakterület ›</a></div>
+          <div><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=Győr">Győr</a><a href="/#varosok" class="all">Összes város ›</a></div>
+        </div></div>
+      <div class="dd"><a href="/klinikak" aria-haspopup="true">Klinikák<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <div class="menu"><a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a><a href="/klinikak?magan=1">Magánklinikák</a><a href="/klinikak">Ügyeletek</a></div></div>
+      <div class="dd"><a href="/#tudastar" aria-haspopup="true">Tudástár<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <div class="menu"><a href="/#tudastar">Cikkek és útmutatók</a><a href="/tudastar">Tünetek A–Z</a><a href="/tudastar">Beutaló-tudnivalók</a><a href="/#gyik">Gyakori kérdések</a></div></div>
+      <div class="dd"><a href="/register.html" aria-haspopup="true">Orvosoknak<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
+        <div class="menu"><a href="/register.html">Miért érdemes regisztrálni</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/register.html#gyik">Partner GYIK</a><a href="mailto:info@szakorvos.hu">Kapcsolat</a></div></div>
     </div>
-
-    <button class="nav-mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Menü" aria-expanded="false">
-      <svg id="hamburgerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#113293" stroke-width="2.2" stroke-linecap="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-      </svg>
-    </button>
+    <div class="navr">
+      <a class="user" href="/login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Bejelentkezés</span></a>
+      <a class="cta sm" href="/register.html">Partnerprogram</a>
+      <button class="burger" id="burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobnav" id="mobnav">
+    <h5>Szakorvosok</h5>
+    <a href="/#kereso2">Orvoskereső</a><a href="/#kereso2" class="js-sym">Panasz alapú keresés</a><a href="/talalatok?all=1">Szakterületek</a><a href="/#varosok">Városok</a>
+    <h5>Klinikák</h5>
+    <a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a>
+    <h5>Tudástár</h5>
+    <a href="/tudastar">Cikkek</a><a href="/tudastar">Tünetek A–Z</a><a href="/#gyik">GYIK</a>
+    <h5>Orvosoknak</h5>
+    <a href="/register.html" class="acc">Partnerprogram – csomagok és árak</a><a href="/login.html">Bejelentkezés</a><a href="mailto:info@szakorvos.hu">Kapcsolat</a>
   </div>
 </nav>
 
-<div class="mobile-drawer" id="mobileDrawer">
-  <div class="mobile-drawer-inner">
-    <a href="/talalatok" class="mobile-nav-item">Orvosok</a>
-    <a href="/talalatok?all=1" class="mobile-nav-sub">Szakorvosok listája</a>
-    <a href="/talalatok" class="mobile-nav-sub">Szakterületek</a>
-    <a href="/talalatok" class="mobile-nav-sub">Városok szerint</a>
-    <a href="/klinikak" class="mobile-nav-item">Klinikák</a>
-    <a href="/klinikak" class="mobile-nav-sub">Magánklinikák</a>
-    <a href="/klinikak" class="mobile-nav-sub">Magánrendelők</a>
-    <a href="/klinikak" class="mobile-nav-sub">Diagnosztikai központok</a>
-    <a href="/tudastar" class="mobile-nav-item">Tudástár</a>
-    <a href="/tudastar" class="mobile-nav-sub">Betegségek</a>
-    <a href="/vizsgalatok" class="mobile-nav-sub">Vizsgálatok</a>
-    <a href="/tudastar" class="mobile-nav-sub">Kezelések</a>
-    <a href="/tudastar" class="mobile-nav-sub">Egészségügyi útmutatók</a>
-    <a href="/register.html" class="mobile-nav-item">Partnerprogram</a>
-    <a href="/register.html" class="mobile-nav-sub">Orvosoknak</a>
-    <a href="/register.html" class="mobile-nav-sub">Klinikáknak</a>
-    <a href="/register.html" class="mobile-nav-sub">Adatlap igénylése</a>
-    <a href="/kapcsolat.html" class="mobile-nav-item">Kapcsolat</a>
-    <div style="height:1px;background:#eef1f8;margin:8px 0;"></div>
-    <a href="/login.html" class="mobile-nav-item">Bejelentkezés</a>
-  </div>
-</div>
+
 
 <script>
 function toggleMobileMenu(){
@@ -882,7 +837,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- Város (autocomplete, többszörös) -->
     <div class="fss open" id="fsCity">
       <button class="fss-tog" onclick="toggleSec('fsCity')">
-        <span class="fss-lbl">📍 Város / kerület</span><span class="fss-arr">▼</span>
+        <span class="fss-lbl">Város / kerület</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
         <div class="city-ac" id="cityAc">
@@ -899,7 +854,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- Klinika név -->
     <div class="fss open" id="fsName">
       <button class="fss-tog" onclick="toggleSec('fsName')">
-        <span class="fss-lbl">🔍 Klinika neve</span><span class="fss-arr">▼</span>
+        <span class="fss-lbl">Klinika neve</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
         <input type="text" id="fName" placeholder="pl. Budai Egészségközpont" autocomplete="off"
@@ -912,7 +867,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- Szakterület -->
     <div class="fss open" id="fsSpec">
       <button class="fss-tog" onclick="toggleSec('fsSpec')">
-        <span class="fss-lbl">⚕️ Szakterület</span><span class="fss-arr">▼</span>
+        <span class="fss-lbl">Szakterület</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
         <select id="fSpec" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;background:#fff;cursor:pointer">
@@ -924,7 +879,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     <!-- Vizsgálat / kezelés -->
     <div class="fss open" id="fsTreat">
       <button class="fss-tog" onclick="toggleSec('fsTreat')">
-        <span class="fss-lbl">🩺 Vizsgálat / kezelés</span><span class="fss-arr">▼</span>
+        <span class="fss-lbl">Vizsgálat / kezelés</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
         <div class="city-ac" id="treatAc">
@@ -954,10 +909,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
           </button>
         </div>
         <select class="sort-sel" id="sortSel" onchange="applyFilters()">
-          <option value="doctors">👨‍⚕️ Legtöbb orvos</option>
-          <option value="rating">⭐ Legjobb értékelés</option>
-          <option value="reviews">💬 Legtöbb vélemény</option>
-          <option value="name">🔤 Név szerint A–Z</option>
+          <option value="doctors">Legtöbb orvos</option>
+          <option value="rating">Legjobb értékelés</option>
+          <option value="reviews">Legtöbb vélemény</option>
+          <option value="name">Név szerint A–Z</option>
         </select>
       </div>
     </div>
@@ -1516,9 +1471,9 @@ function renderTags(){
   const cities = window._selectedCities || [];
   const spec = document.getElementById('fSpec').value;
   if(name) tags.push({label: `"${name}"`, clear: () => { document.getElementById('fName').value = ''; applyFilters(); }});
-  cities.forEach(ci => tags.push({label: `📍 ${ci}`, clear: () => { cityAcRemove(ci); }}));
-  if(spec) tags.push({label: `⚕️ ${spec}`, clear: () => { document.getElementById('fSpec').value = ''; applyFilters(); }});
-  (window._selectedTreatments||[]).forEach(t => tags.push({label: `🩺 ${t.title}`, clear: () => { treatAcRemove(t.id); }}));
+  cities.forEach(ci => tags.push({label: `${ci}`, clear: () => { cityAcRemove(ci); }}));
+  if(spec) tags.push({label: `${spec}`, clear: () => { document.getElementById('fSpec').value = ''; applyFilters(); }});
+  (window._selectedTreatments||[]).forEach(t => tags.push({label: `${t.title}`, clear: () => { treatAcRemove(t.id); }}));
 
   const wrap = document.getElementById('fTags');
   if(!tags.length){ wrap.innerHTML = ''; return; }
@@ -1747,31 +1702,48 @@ function clinicCardHTML(c, i){
       ${docMore ? `<a class="kc-doc-more" href="${target}" onclick="event.stopPropagation()">+ még ${docMore} szakorvos ezen a helyen</a>` : ''}
     </div></div>` : '';
 
-  const PIN = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+  const I=(p,w)=>`<svg width="${w||14}" height="${w||14}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const P={pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+    phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12 19.79 19.79 0 0 1 1.27 3.33 2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 17.91z"/>',
+    arr:'<path d="M5 12h14M13 6l6 6-6 6"/>',docs:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    grid:'<path d="M4.5 12.5a7.5 7.5 0 0 0 15 0V5a1 1 0 0 0-1-1h-2M4.5 12.5V5a1 1 0 0 1 1-1h2M12 20v2"/>',globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>'};
   const isPremium = (c.status === 'partner') || c.is_premium === true;
-
-  const btnsHtml = `<div class="kc-actions" onclick="event.stopPropagation()">
-        ${c.phone ? `<a class="szk-btn szk-btn-success szk-btn-sm kc-act-btn" href="tel:${escapeHtml(c.phone).replace(/\s/g,'')}" onclick="event.stopPropagation()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.34 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.26 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.4a16 16 0 0 0 7.69 7.69l.76-.76a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.91z"/></svg>Hívás</a>` : ''}
-        <button class="szk-btn szk-btn-primary szk-btn-sm kc-act-btn" onclick="event.stopPropagation();window.location.href='${target}'">Megtekintés</button>
-      </div>`;
-
-  return `<div class="szk-card kc${isPremium ? ' kc-premium' : ''}" style="animation-delay:${(i % 12) * .05}s" onclick="window.location.href='${target}'">
-    ${isPremium ? '<div class="kc-prem-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg>Kiemelt partner</div>' : ''}
-    <div class="szk-card-top">
-      ${photoBlock}
-      <div class="szk-card-body">
-        <div class="szk-card-title">${escapeHtml(c.name)}</div>
-        <div class="kc-address">
-          <span class="kc-address-ic">${PIN}</span>
-          <span class="kc-address-txt">${fullAddress ? escapeHtml(fullAddress) : 'Helyszín nincs megadva'}</span>
-        </div>
-        <div class="szk-card-subtitle">${specsAll.length ? (specsAll.length + ' szakterület') : 'Egészségügyi szolgáltató'}${c._docCount ? ' · ' + c._docCount + ' szakorvos' : ''}${ratingFmt ? ` · <span class="kc-stars">${starsHtml}</span> <strong class="kc-rating-num">${ratingFmt}</strong>${gReviews ? ` <span class="szk-card-meta-soft">(${gReviews})</span>` : ''}` : ''}</div>
+  const tel = (c.phone||'').replace(/\s/g,'');
+  const ini = (c.name||'?').replace(/^(dr\.?\s+)/i,'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  const av = photo ? `<img loading="lazy" decoding="async" src="${escapeHtml(photo)}" alt="${escapeHtml(c.name)}" onerror="this.remove()"><span class="skc-ini">${escapeHtml(ini)}</span>` : `<span class="skc-ini">${escapeHtml(ini)}</span>`;
+  const facts=[];
+  if(ratingFmt) facts.push(`<span class="skc-f skc-rate"><span class="kc-stars">${starsHtml}</span><b>${ratingFmt}</b>${gReviews?` <i>(${gReviews.toLocaleString('hu-HU')} Google-vélemény)</i>`:''}</span>`);
+  if(c._docCount) facts.push(`<span class="skc-f">${I(P.docs,13)}<b>${c._docCount}</b> szakorvos</span>`);
+  if(specsAll.length) facts.push(`<span class="skc-f">${I(P.grid,13)}<b>${specsAll.length}</b> szakterület</span>`);
+  const chips = specsAll.length ? `<div class="skc-chips">${specsAll.slice(0,5).map(x=>`<span class="skc-chip">${escapeHtml(x.name)}</span>`).join('')}${specsAll.length>5?`<span class="skc-chip more">+${specsAll.length-5}</span>`:''}</div>` : '';
+  const docList = docTop.length ? `<div class="skc-docs">${docTop.map(d=>{
+      const dspec=(d.specs&&d.specs[0])?(d.specs[0].short||d.specs[0].long||''):'';
+      const dtarget=d.slug?`/orvosok/${encodeURIComponent(d.slug)}`:`/orvos.html?id=${d.id}`;
+      const raw=d.name||''; const hasT=/^(dr\.?|prof)/i.test(raw.trim());
+      const dName=(!hasT&&d.title)?`${d.title} ${raw}`:(!hasT?`Dr. ${raw}`:raw);
+      const clean=raw.replace(/^(prof\.?\s*)?dr\.?\s*/i,'').trim();
+      const di=(clean||raw||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+      return `<a class="skc-doc" href="${dtarget}" onclick="event.stopPropagation()"><span class="skc-doc-av">${escapeHtml(di)}</span><span class="skc-doc-t"><b>${escapeHtml(dName)}</b>${dspec?`<small>${escapeHtml(dspec)}</small>`:''}</span>${d.rating?`<span class="skc-doc-r">★ ${Number(d.rating).toFixed(1).replace('.',',')}</span>`:''}</a>`;
+    }).join('')}${docMore?`<a class="skc-doc-more" href="${target}" onclick="event.stopPropagation()">+ még ${docMore} szakorvos</a>`:''}</div>` : '';
+  return `<article class="skc kcl${isPremium?' skc-prem':''}" style="animation-delay:${(i%12)*.04}s" onclick="window.location.href='${target}'">
+    <div class="skc-main">
+      <div class="skc-av cl">${av}</div>
+      <div class="skc-body">
+        <div class="skc-head"><h3 class="skc-name">${escapeHtml(c.name)}</h3>${isPremium?'<span class="skc-prem-b"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21l2.3-7.4-6-4.6h7.6z"/></svg>Kiemelt partner</span>':''}</div>
+        <div class="skc-addr">${I(P.pin,14)}<span>${fullAddress?escapeHtml(fullAddress):'Helyszín nincs megadva'}</span></div>
+        ${facts.length?`<div class="skc-facts">${facts.join('')}</div>`:''}
+        ${chips}
       </div>
-      ${btnsHtml}
     </div>
-
-    ${docsHtml}
-  </div>`;
+    ${docList}
+    <div class="skc-foot">
+      ${webHost?`<span class="skc-loc">${I(P.globe,14)}<span>${escapeHtml(webHost)}</span></span>`:`<span class="skc-loc soft">${escapeHtml(cityVal)}${districtVal?' · '+districtVal:''}</span>`}
+      <div class="skc-acts" onclick="event.stopPropagation()">
+        ${tel?`<a class="skc-btn sec" href="tel:${escapeHtml(tel)}" onclick="event.stopPropagation()">${I(P.phone,14)}Hívás</a>`:''}
+        <button class="skc-btn pri" type="button" onclick="event.stopPropagation();window.location.href='${target}'">Klinika megtekintése${I(P.arr,15)}</button>
+      </div>
+    </div>
+  </article>`;
 }
 
 function goPg(p){
@@ -2129,57 +2101,16 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 .footer-badge{font-size:12.5px;color:rgba(255,255,255,.6);background:rgba(255,255,255,.06);padding:5px 12px;border-radius:100px;font-weight:500;border:1px solid rgba(255,255,255,.1)}
 @media(max-width:768px){.footer-top{grid-template-columns:1fr;gap:2rem}
 </style>
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" class="footer-logo-mark" aria-hidden="true"><defs><linearGradient id="g_footmark" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#0c1f63"/><stop offset="55%" stop-color="#1c3aa8"/><stop offset="100%" stop-color="#3f6cff"/></linearGradient>
-<linearGradient id="sheen_footmark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff" stop-opacity="0.3"/><stop offset="40%" stop-color="#fff" stop-opacity="0"/></linearGradient>
-<radialGradient id="glow_footmark" cx="0.3" cy="0.16" r="0.9"><stop offset="0%" stop-color="#6f93ff" stop-opacity=".42"/><stop offset="48%" stop-color="#6f93ff" stop-opacity="0"/></radialGradient>
-<linearGradient id="cr_footmark" x1="0.5" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#41B86C"/><stop offset="100%" stop-color="#2C9650"/></linearGradient>
-<filter id="drop_footmark" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.0" stdDeviation="1.8" flood-color="#0b1f63" flood-opacity=".42"/></filter></defs><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#g_footmark)"/><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#glow_footmark)"/><path d="M26.4 5.6 L93.60000000000001 5.6 Q114.4 5.6 114.4 26.4 L114.4 93.60000000000001 Q114.4 114.4 93.60000000000001 114.4 L26.4 114.4 Q5.6 114.4 5.6 93.60000000000001 L5.6 26.4 Q5.6 5.6 26.4 5.6 Z" fill="none" stroke="#0a1c63" stroke-width="1.6" stroke-opacity=".9"/><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="none" stroke="#081a55" stroke-width="1" stroke-opacity=".5"/><g fill="url(#cr_footmark)" filter="url(#drop_footmark)"><rect x="48.0" y="27" width="24" height="66" rx="6"/><rect x="27" y="48.0" width="66" height="24" rx="6"/></g><g fill="#ffffff" ><rect x="50.0" y="29" width="20" height="62" rx="4"/><rect x="29" y="50.0" width="62" height="20" rx="4"/></g><path d="M26 4 L94 4 Q116 4 116 26 L116 94 Q116 116 94 116 L26 116 Q4 116 4 94 L4 26 Q4 4 26 4 Z" fill="url(#sheen_footmark)"/></svg><span class="footer-logo-text">Szakorvos<span class="hu">.hu</span></span></div>
-        <p class="footer-tagline">Az okos orvoskeresés platform</p>
-        <div class="footer-social">
-          <a href="#" class="footer-social-btn">f</a>
-          <a href="#" class="footer-social-btn">in</a>
-          <a href="#" class="footer-social-btn">ig</a>
-        </div>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <div class="footer-col-title">Platform</div>
-          <a href="talalatok.html">Orvoskeresés</a>
-          <a href="index.html">AI asszisztens</a>
-          <a href="talalatok.html">Időpontfoglalás</a>
-          <a href="vizsgalatok.html">Vizsgálatok</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Partnereknek</div>
-          <a href="register.html">Orvosoknak</a>
-          <a href="register.html">Klinikáknak</a>
-          <a href="register.html">Árak</a>
-          <a href="register.html">Regisztráció</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Cég</div>
-          <a href="#">Rólunk</a>
-          <a href="kapcsolat.html">Kapcsolat</a>
-          <a href="tudastar.html">Blog</a>
-          <a href="#">Karrier</a>
-        </div>
-        <div class="footer-col">
-          <div class="footer-col-title">Jogi</div>
-          <a href="adatvedelem.html">Adatvédelem</a>
-          <a href="#">ÁSZF</a>
-          <a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a>
-          <a href="#">GDPR</a>
-        </div>
-      </div>
+<footer id="skfoot">
+  <div class="wrap">
+    <div class="fbrand">
+      <div class="brand"><span class="logo" style="width:24px;height:24px"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E5BD9"></stop><stop offset=".55" stop-color="#183AA5"></stop><stop offset="1" stop-color="#12308F"></stop></linearGradient><linearGradient id="fh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#fg)"></rect><rect width="64" height="64" rx="14" fill="url(#fh)"></rect><path d="M24.5 11h15v13.5H53v15H39.5V53h-15V39.5H11v-15h13.5z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"></path></svg></span><span class="wm" style="font-size:20px">Szakorvos<em>.hu</em></span></div>
+      <p>Országos szakorvos- és klinikakereső: telefonszám, cím, rendelési idő és vélemények egy helyen.</p>
     </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 Szakorvos.hu — Minden jog fenntartva</div>
-      <div class="footer-badge">🇭🇺 Magyar fejlesztés</div>
-    </div>
+    <div class="fcol"><h4>Pácienseknek</h4><a href="/#kereso">Orvoskereső</a><a href="/#szakteruletek">Szakterületek</a><a href="/klinikak">Klinikák</a><a href="/#tudastar">Tudástár</a><a href="/#gyik">GYIK</a></div>
+    <div class="fcol"><h4>Orvosoknak</h4><a href="/register.html">Partnerprogram</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/login.html">Bejelentkezés</a><a href="mailto:info@szakorvos.hu">Kapcsolat</a></div>
+    <div class="fcol"><h4>Jogi</h4><a href="/adatvedelem.html">Adatvédelem</a><a href="/kapcsolat.html">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
+    <div class="bottom"><span>© 2026 szakorvos.hu</span><span>A tünetellenőrző nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a 112-t.</span></div>
   </div>
 </footer>
 <!-- ══════ LÁBLÉC VÉGE ══════ -->
@@ -2274,5 +2205,577 @@ document.addEventListener('DOMContentLoaded', loadClinics);
 </script>
 
   <script src="/js/cookie-consent.js" defer></script>
+<style id="landing-shell">
+/* a főoldal menüje és lábléce – pontos másolat, hatókörrel */
+#sknav,#skfoot{--blue: #183AA5;--blue-deep: #12308F;--blue-soft: #EAEFFB;--blue-line: #C4CFF0;--green: #2C9650;--green-deep: #1F7A3E;--green-soft: #E3F3E8;--teal: #1497A8;--teal-soft: #E0F4F6;--amber: #E39A2B;--amber-soft: #FCF0DA;--coral: #E0503A;--coral-soft: #FBE5E0;--violet: #6B4FD8;--violet-soft: #ECE8FB;--ink: #1B2338;--navy: #1B2338;--muted: #5B6478;--line: #E2E6EF;--bg: #FFFFFF;--bg2: #F5F7FC;--r: 12px;--muted2: #7A8396;--line2: #CDD3E0;--hair: rgba(0,0,0,.08);--blue-h: #12308F;--link: #183AA5;--sf: -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter","Helvetica Neue",Helvetica,Arial,sans-serif;--ease: cubic-bezier(.28,.11,.32,1);}
+#sknav *,#skfoot *{box-sizing: border-box;}
+#sknav button{font: inherit; color: inherit;}
+#sknav a,#skfoot a{color: inherit; text-decoration: none;}
+#sknav .wrap,#skfoot .wrap{max-width: 1040px; margin: 0px auto; padding: 0px 24px;}
+nav#sknav .wrap{max-width: 1240px;}
+nav#sknav{position: sticky; top: 0px; z-index: 20; background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); transition: box-shadow 0.2s;}
+nav#sknav.scrolled{box-shadow: rgba(24, 58, 165, 0.35) 0px 6px 24px -18px;}
+nav#sknav .wrap{display: flex; align-items: center; height: 68px; gap: 0px;}
+#sknav .brand,#skfoot .brand{display: flex; align-items: center; gap: 10px; flex: 0 0 auto; line-height: 1; margin-right: 36px;}
+#sknav .logo,#skfoot .logo{width: 32px; height: 32px; display: grid; place-items: center; flex: 0 0 auto;}
+#sknav .logo svg,#skfoot .logo svg{width: 100%; height: 100%; display: block;}
+#sknav .wm,#skfoot .wm{font-size: 22px; font-weight: 700; letter-spacing: -0.03em; color: var(--blue); line-height: 1; transform: translateY(1px);}
+#sknav .wm em,#skfoot .wm em{font-style: normal; color: var(--green);}
+#sknav .links{display: flex; align-items: center; gap: 4px; height: 100%;}
+#sknav .links .dd > a{display: inline-flex; align-items: center; gap: 4px; height: 40px; padding: 0px 13px; border-radius: 9px; color: var(--ink); font-weight: 600; font-size: 15px; line-height: 1; position: relative; transition: color 0.15s, background 0.15s; white-space: nowrap;}
+#sknav .links .dd > a:hover,#sknav .links .dd:hover > a,#sknav .links .dd:focus-within > a{color: var(--blue); background: var(--blue-soft);}
+#sknav .dd{position: relative; display: flex; align-items: center;}
+#sknav .chev{width: 15px; height: 15px; opacity: 0.6; transition: transform 0.2s; flex: 0 0 auto; margin-top: 1px;}
+#sknav .dd:hover .chev,#sknav .dd:focus-within .chev{transform: rotate(180deg); opacity: 1;}
+#sknav .menu{position: absolute; left: 0px; top: calc(100% + 4px); min-width: 236px; background: rgb(255, 255, 255); border: 1px solid var(--line); border-radius: 14px; box-shadow: rgba(24, 58, 165, 0.28) 0px 24px 48px -20px, rgba(24, 58, 165, 0.06) 0px 2px 6px; padding: 8px; display: none; flex-direction: column; z-index: 30; animation: 0.16s ease-out 0s 1 normal none running menuIn;}
+@keyframes menuIn { 
+  0% { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: none; }
+}
+#sknav .menu::before{content: ""; position: absolute; left: 0px; right: 0px; top: -8px; height: 8px;}
+#sknav .dd:hover .menu,#sknav .dd:focus-within .menu{display: flex;}
+#sknav .menu a{padding: 9px 12px; border-radius: 9px; font-size: 14.5px; font-weight: 500; color: var(--ink); white-space: nowrap; transition: background 0.12s, color 0.12s; line-height: 1.3;}
+#sknav .menu a:hover{background: var(--blue-soft); color: var(--blue);}
+#sknav .menu.cols{display: none; flex-direction: row; gap: 8px; padding: 16px; min-width: 600px;}
+#sknav .dd:hover .menu.cols,#sknav .dd:focus-within .menu.cols{display: flex;}
+#sknav .menu.cols > div{display: flex; flex-direction: column; min-width: 170px;}
+#sknav .menu.cols > div + div{border-left: 1px solid var(--line); padding-left: 8px;}
+#sknav .menu h5{margin: 2px 12px 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);}
+#sknav .menu a.all{color: var(--blue); font-weight: 600; margin-top: 6px;}
+#sknav .navr{display: flex; align-items: center; gap: 8px; margin-left: auto; flex: 0 0 auto;}
+#sknav .user{display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0px 13px; border-radius: 9px; color: var(--ink); font-weight: 600; font-size: 15px; line-height: 1; transition: background 0.15s, color 0.15s;}
+#sknav .user svg{width: 17px; height: 17px; flex: 0 0 auto;}
+#sknav .user:hover{background: var(--blue-soft); color: var(--blue);}
+#sknav .cta{display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--blue); color: rgb(255, 255, 255); font-weight: 700; border-radius: 10px; font-size: 15px; line-height: 1;}
+#sknav .cta:hover{background: var(--blue-deep);}
+#sknav .cta.sm{height: 40px; padding: 0px 18px; margin-left: 4px; box-shadow: rgba(24, 58, 165, 0.7) 0px 6px 16px -10px;}
+#sknav .burger{display: none; width: 40px; height: 40px; border: 1px solid var(--line); background: rgb(255, 255, 255); border-radius: 10px; cursor: pointer; flex-direction: column; justify-content: center; align-items: center; gap: 5px; padding: 0px; margin-left: 4px;}
+#sknav .burger span{display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 0.2s, opacity 0.2s;}
+#sknav .burger[aria-expanded="true"] span:nth-child(1){transform: translateY(7px) rotate(45deg);}
+#sknav .burger[aria-expanded="true"] span:nth-child(2){opacity: 0;}
+#sknav .burger[aria-expanded="true"] span:nth-child(3){transform: translateY(-7px) rotate(-45deg);}
+#sknav .mobnav{display: none; flex-direction: column; border-top: 1px solid var(--line); background: rgb(255, 255, 255); padding: 8px 20px 16px; max-height: calc(-68px + 100vh); overflow: auto;}
+#sknav .mobnav.on{display: flex;}
+#sknav .mobnav h5{margin: 14px 0px 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);}
+#sknav .mobnav a{padding: 10px 4px; font-weight: 600; font-size: 15.5px; color: var(--ink);}
+#sknav .mobnav a.acc{color: var(--blue);}
+@media (max-width: 1180px){#sknav .brand,#skfoot .brand{margin-right: 20px;}}
+@media (max-width: 1180px){#sknav .links{gap: 0px;}}
+@media (max-width: 1180px){#sknav .links .dd > a{padding: 0px 10px; font-size: 14.5px;}}
+@media (max-width: 1180px){#sknav .menu.cols{min-width: 520px;}}
+@media (max-width: 1180px){#sknav .menu.cols > div{min-width: 150px;}}
+@media (max-width: 1180px){#sknav .user span{display: none;}}
+@media (max-width: 1180px){#sknav .user{padding: 0px 10px;}}
+@media (max-width: 900px){#sknav .links{display: none;}}
+@media (max-width: 900px){#sknav .burger{display: flex;}}
+@media (max-width: 900px){nav#sknav .wrap{gap: 12px;}}
+@media (max-width: 640px){nav#sknav .wrap{height: 58px;}}
+@media (max-width: 640px){#sknav .logo,#skfoot .logo{width: 28px; height: 28px;}}
+@media (max-width: 640px){#sknav .wm,#skfoot .wm{font-size: 20px;}}
+@media (max-width: 640px){#sknav .cta.sm{height: 36px; padding: 0px 12px; font-size: 14px; margin-left: 0px;}}
+@media (max-width: 640px){#sknav .user{display: none;}}
+@media (max-width: 640px){#sknav .burger{width: 36px; height: 36px;}}
+@keyframes b { 
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+@keyframes pl { 
+  0% { r: 3; opacity: 0.5; }
+  100% { r: 12; opacity: 0; }
+}
+footer#skfoot{border-top: 1px solid var(--line); padding: 40px 0px; color: var(--muted); font-size: 14px;}
+footer#skfoot .wrap{display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; align-items: center;}
+footer#skfoot a:hover{color: var(--ink);}
+footer#skfoot{background: var(--bg2); border-top: 1px solid var(--line); padding: 56px 0px 28px;}
+footer#skfoot .wrap{display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; align-items: start;}
+footer#skfoot .fbrand p{margin: 12px 0px 0px; max-width: 34ch; line-height: 1.5;}
+footer#skfoot h4{margin: 0px 0px 12px; font-size: 14px; font-weight: 700; color: var(--blue);}
+footer#skfoot .fcol{display: flex; flex-direction: column; gap: 9px;}
+footer#skfoot .fcol a:hover{color: var(--blue);}
+footer#skfoot .bottom{grid-column: 1 / -1; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--line); padding-top: 18px; font-size: 13px; margin-top: 8px;}
+@media (max-width: 900px){footer#skfoot .wrap{grid-template-columns: 1fr 1fr;}}
+@media (max-width: 640px){footer#skfoot .wrap{grid-template-columns: 1fr; gap: 22px;}}
+@media (hover: hover){#sknav .cta{transition: background 0.15s, transform 0.15s, box-shadow 0.15s;}}
+@media (hover: hover){#sknav .cta.sm:hover{box-shadow: rgba(24, 58, 165, 0.8) 0px 8px 20px -10px;}}
+@media (hover: hover){#sknav .brand .logo,#skfoot .brand .logo{transition: transform 0.2s;}}
+@media (hover: hover){#sknav .brand:hover .logo,#skfoot .brand:hover .logo{transform: rotate(-8deg) scale(1.05);}}
+@keyframes bounce { 
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-3px); }
+}
+@media (hover: hover){footer#skfoot a{transition: color 0.15s;}}
+@media (prefers-reduced-motion: reduce){#sknav *,#skfoot *{animation: auto ease 0s 1 normal none running none !important; transition: none !important;}}
+#skfoot h4,#sknav h5{font-family: var(--sf);}
+#sknav .wrap,#skfoot .wrap{max-width: 1024px;}
+nav#sknav{background: rgba(255, 255, 255, 0.72); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--hair); box-shadow: none;}
+nav#sknav.scrolled{background: rgba(255, 255, 255, 0.8); box-shadow: none;}
+nav#sknav .wrap{height: 52px; max-width: 1120px;}
+#sknav .logo,#skfoot .logo{width: 28px; height: 28px;}
+#sknav .wm,#skfoot .wm{font-size: 19px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink);}
+#sknav .wm em,#skfoot .wm em{font-style: normal; font-weight: 400; color: var(--muted2);}
+#sknav .links .dd > a{height: 36px; padding: 0px 12px; border-radius: 0px; background: transparent; font-size: 13px; font-weight: 400; letter-spacing: -0.01em; color: rgba(0, 0, 0, 0.8);}
+#sknav .links .dd > a:hover,#sknav .links .dd:hover > a,#sknav .links .dd:focus-within > a{color: rgb(0, 0, 0); background: transparent;}
+#sknav .links .dd > a svg{opacity: 0.45;}
+#sknav .menu{border: 0px; border-radius: 18px; background: rgba(255, 255, 255, 0.94); backdrop-filter: saturate(180%) blur(20px); box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.14) 0px 16px 48px; padding: 10px;}
+#sknav .menu a{font-size: 14px; font-weight: 400; color: var(--ink); border-radius: 10px; padding: 8px 12px;}
+#sknav .menu a:hover{background: var(--bg2); color: var(--ink);}
+#sknav .menu a.all{color: var(--link);}
+#sknav .menu h5{font-size: 12px; font-weight: 400; letter-spacing: 0px; text-transform: none; color: var(--muted2);}
+#sknav .user{height: 36px; font-size: 13px; font-weight: 400; color: rgba(0, 0, 0, 0.8); background: transparent;}
+#sknav .user:hover{background: transparent; color: rgb(0, 0, 0);}
+#sknav .cta{border-radius: 980px; background: var(--blue); font-weight: 400; box-shadow: none;}
+#sknav .cta:hover{background: var(--blue-h);}
+#sknav .cta.sm{height: 30px; padding: 0px 14px; font-size: 13px; box-shadow: none;}
+#sknav .cta.sm:hover{box-shadow: none;}
+#sknav .brand:hover .logo,#skfoot .brand:hover .logo{transform: none;}
+#sknav .burger{border: 0px; background: transparent;}
+#sknav .mobnav{background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--hair); padding: 8px 24px 24px;}
+#sknav .mobnav h5{margin: 18px 0px 4px; font-size: 12px; font-weight: 400; letter-spacing: 0px; text-transform: none; color: var(--muted2);}
+#sknav .mobnav a{padding: 8px 0px; font-size: 19px; font-weight: 600; letter-spacing: 0.012em; color: var(--ink);}
+footer#skfoot{background: var(--bg2); border-top: 0px; padding: 32px 0px 18px; font-size: 12px; line-height: 1.33337; letter-spacing: -0.01em; color: var(--muted);}
+footer#skfoot .wrap{max-width: 1024px; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 28px;}
+footer#skfoot .fbrand .wm{font-size: 17px !important;}
+footer#skfoot .fbrand p{font-size: 12px; line-height: 1.5; color: var(--muted); max-width: 36ch;}
+footer#skfoot h4{margin: 0px 0px 10px; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink);}
+footer#skfoot .fcol{gap: 6px;}
+footer#skfoot .fcol a{color: rgb(58, 66, 86);}
+footer#skfoot a:hover,footer#skfoot .fcol a:hover{color: rgb(58, 66, 86); text-decoration: underline;}
+footer#skfoot .bottom{margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--line2); font-size: 12px; color: var(--muted2);}
+@media (max-width: 640px){#sknav .wrap,#skfoot .wrap{padding-left: 16px; padding-right: 16px;}}
+@media (max-width: 640px){nav#sknav .wrap{height: 48px;}}
+@media (max-width: 640px){#sknav .wm,#skfoot .wm{font-size: 18px;}}
+@media (max-width: 640px){#sknav .cta.sm{height: 30px; padding: 0px 12px; font-size: 13px;}}
+@media (max-width: 640px){footer#skfoot .wrap{grid-template-columns: 1fr 1fr; gap: 18px;}}
+@media (max-width: 640px){footer#skfoot .fbrand,footer#skfoot .bottom{grid-column: 1 / -1;}}
+#sknav .cta{background: rgb(24, 58, 165);}
+#sknav .cta:hover{background: rgb(18, 48, 143);}
+footer#skfoot h4{color: rgb(24, 58, 165);}
+@keyframes blobA { 
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(120px, -60px) scale(1.15); }
+  100% { transform: translate(40px, 80px) scale(0.95); }
+}
+@keyframes blobB { 
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-140px, 80px) scale(1.1); }
+  100% { transform: translate(-40px, 20px) scale(1.2); }
+}
+@keyframes aiBorder { 
+  0% { background-position: 0px 0px, 0% 50%; }
+  100% { background-position: 0px 0px, 300% 50%; }
+}
+@keyframes aiGlow { 
+  0%, 100% { opacity: 0.16; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.02); }
+}
+@keyframes btnShine { 
+  0%, 100% { background-position: 0% 0px; }
+  50% { background-position: 100% 0px; }
+}
+@keyframes spark { 
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(12deg); }
+}
+@keyframes livePulse { 
+  0% { transform: scale(0.4); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes heroIn { 
+  0% { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes aiBorder2 { 
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+@keyframes glowBreath { 
+  0% { opacity: 0.4; transform: scale(0.98); }
+  100% { opacity: 0.56; transform: scale(1.02); }
+}
+nav#sknav .wm{color: rgb(24, 58, 165);}
+nav#sknav .wm em{color: rgb(36, 138, 71); font-weight: 500;}
+@keyframes aispin { 
+  100% { transform: rotate(360deg); }
+}
+@keyframes sxcUp { 
+  0% { transform: translateY(24px); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes fade { 
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes sxcIn { 
+  0% { transform: translateY(6px); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes sxcDot { 
+  0%, 80%, 100% { transform: translateY(0px); opacity: 0.5; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+#sknav a.cta.sm[href$="register.html"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(24, 58, 165, 0.35) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="register.html"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
+@keyframes eyeP { 
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes hxP { 
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes hxP { 
+  0% { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes aqmF { 
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes aqmU { 
+  0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+  100% { opacity: 1; transform: none; }
+}
+
+nav#sknav{font-size:17px;line-height:1.47059;letter-spacing:-.022em;color:#1B2338;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important}
+</style>
+<script>
+(function(){
+  var nav=document.getElementById('sknav'); if(!nav) return;
+  function up(){ nav.classList.toggle('scrolled',window.scrollY>8); } up(); window.addEventListener('scroll',up,{passive:true});
+  var burger=document.getElementById('burger'), mob=document.getElementById('mobnav');
+  if(burger&&mob){ burger.addEventListener('click',function(){ var on=burger.getAttribute('aria-expanded')!=='true'; burger.setAttribute('aria-expanded',on?'true':'false'); mob.classList.toggle('on',on); });
+    [].forEach.call(mob.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ burger.setAttribute('aria-expanded','false'); mob.classList.remove('on'); }); }); }
+})();
+</script>
+<style id="results-v5">
+/* ================= TALÁLATI OLDAL – a főoldal (landing) dizájnrendszere ================= */
+:root{--r-b:#1A3BAA;--r-bd:#15329E;--r-g:#248A47;--r-ink:#1B2338;--r-mut:#5B6478;--r-mut2:#8A93A8;--r-ln:#E6EAF2;--r-bg:#F5F7FC;
+  --r-card:0 0 0 1px rgba(24,58,165,.07),0 1px 2px rgba(14,23,51,.04),0 12px 32px -20px rgba(24,58,165,.35);
+  --r-card-h:0 0 0 1px rgba(24,58,165,.14),0 2px 4px rgba(14,23,51,.05),0 22px 48px -24px rgba(24,58,165,.5)}
+body{background:var(--r-bg)!important;color:var(--r-ink)}
+body>div[aria-hidden="true"][style*="position:fixed"]{display:none!important}
+.hbar *,.pw *,.pp *,.view-toggle *,.szk-toast *{font-family:inherit!important}
+button,input,select,textarea{font-family:inherit}
+
+/* ---------- HERO ---------- */
+.hbar{position:relative;background:radial-gradient(900px 420px at 100% -10%,rgba(36,138,71,.10),transparent 60%),radial-gradient(800px 460px at -10% 110%,rgba(107,79,216,.10),transparent 62%),linear-gradient(180deg,#E3E8F3 0%,#E9EDF6 100%)!important;border-bottom:1px solid #D9DFEC!important;padding:0!important;margin:0!important;overflow:visible!important}
+.hbar::before,.hbar::after{display:none!important}
+.hbar-in{max-width:1320px!important;margin:0 auto!important;padding:34px 24px 54px!important;display:block!important;box-sizing:content-box}
+.hbar-left{max-width:none!important}
+.crumb{display:flex!important;align-items:center;gap:6px!important;margin:0 0 14px!important;font-size:13px!important;color:var(--r-mut)!important}
+.crumb svg{width:14px;height:14px;color:var(--r-mut2)}
+.crumb a{color:var(--r-mut)!important;font-weight:500!important;text-decoration:none!important}
+.crumb a:hover{color:var(--r-b)!important}
+.crumb-sep{color:var(--r-mut2)!important}
+.crumb-current{color:var(--r-ink)!important;font-weight:600!important}
+.htitle{font-size:clamp(34px,4vw,54px)!important;line-height:1.04!important;letter-spacing:-.035em!important;font-weight:800!important;color:var(--r-b)!important;margin:0!important;text-wrap:balance}
+.htitle b,.htitle em,.htitle span{color:var(--r-g)!important;font-weight:800!important;background:none!important;-webkit-text-fill-color:currentColor!important}
+.hsub{margin:12px 0 0!important;font-size:19px!important;line-height:1.45!important;color:#3E4760!important;letter-spacing:-.01em}
+.hsub b,.rh-num{color:var(--r-b)!important;font-weight:700!important}
+.rh-num:not(.rh-num-blue){color:var(--r-g)!important}
+/* kereső a hero-ban – a főoldali intelligens kereső mintájára */
+.hs-search{display:flex;align-items:center;gap:6px;margin:26px 0 0;padding:7px;border-radius:22px;background:#fff;border:1.5px solid transparent;
+  background:linear-gradient(#fff,#fff) padding-box,linear-gradient(120deg,rgba(107,79,216,.55),rgba(26,59,170,.45) 45%,rgba(36,138,71,.5)) border-box;
+  box-shadow:0 0 0 6px rgba(107,79,216,.05),0 24px 56px -26px rgba(26,59,170,.45),0 3px 10px rgba(14,23,51,.04);max-width:820px}
+.hs-f{flex:1;display:flex;align-items:center;gap:12px;min-width:0;height:52px;padding:0 16px;border-radius:15px;cursor:text;transition:background .15s}
+.hs-f:focus-within{background:#F4F6FD}
+.hs-f+.hs-f{position:relative}
+.hs-f+.hs-f::before{content:"";position:absolute;left:-3px;top:12px;bottom:12px;width:1px;background:var(--r-ln)}
+.hs-c{flex:0 0 32%}
+.hs-f svg{width:20px;height:20px;flex:none;color:#6B4FD8}
+.hs-c svg{color:var(--r-g)}
+.hs-f input{flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:17px;color:var(--r-ink);letter-spacing:-.01em}
+.hs-f input::placeholder{color:var(--r-mut2)}
+.hs-go{flex:none;display:inline-flex;align-items:center;gap:8px;height:52px;padding:0 26px;border:0;border-radius:999px;color:#fff;font-size:16.5px;font-weight:650;cursor:pointer;
+  background:linear-gradient(120deg,#1F3DBA 0%,#3B44C9 50%,#6B4FD8 100%);box-shadow:0 12px 26px -12px rgba(75,69,207,.85);transition:filter .15s,transform .15s}
+.hs-go:hover{filter:brightness(1.07)}
+.hs-go svg{width:18px;height:18px}
+
+/* ---------- ORVOS / KLINIKA KAPCSOLÓ – Apple szegmens ---------- */
+.view-toggle{display:flex!important;justify-content:center!important;max-width:none!important;margin:-24px auto 0!important;padding:0 16px!important;position:relative;z-index:6}
+.view-toggle-inner{display:inline-flex!important;gap:2px;padding:4px!important;border:0!important;border-radius:14px!important;background:rgba(255,255,255,.9)!important;
+  box-shadow:0 0 0 1px rgba(24,58,165,.08),0 12px 28px -14px rgba(24,58,165,.4)!important;-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px)}
+.view-toggle-btn{display:inline-flex!important;align-items:center;gap:8px!important;height:40px;padding:0 22px!important;border-radius:10px!important;font-size:15px!important;font-weight:600!important;color:var(--r-mut)!important;background:transparent!important;box-shadow:none!important;text-decoration:none}
+.view-toggle-btn svg{width:17px!important;height:17px!important}
+.view-toggle-btn.tg-doctors.active{background:var(--r-b)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(26,59,170,.9)!important}
+.view-toggle-btn.tg-clinics:hover{color:var(--r-b)!important;background:#EEF2FC!important}
+
+/* ---------- RÁCS ---------- */
+.pw{max-width:1320px!important;margin:0 auto!important;padding:30px 24px 64px!important;gap:18px 22px!important;z-index:auto!important;box-sizing:content-box;
+  grid-template-columns:260px minmax(0,1fr) 280px!important;grid-template-areas:"fsb main map"!important;align-items:start!important}
+.pw>.fsb{grid-area:fsb} .pw>main{grid-area:main;min-width:0} .pw>#resultsMapCol{grid-area:map}
+
+/* ---------- SZŰRŐ OLDALSÁV (desktop) ---------- */
+@keyframes popIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@media(min-width:861px){
+  .fsb{position:sticky!important;top:72px!important;align-self:start!important;max-height:calc(100vh - 92px)!important;overflow-y:auto!important;height:auto!important;
+    background:#fff!important;border:0!important;border-radius:22px!important;box-shadow:var(--r-card)!important;padding:0 0 8px!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;scrollbar-width:thin}
+  .fsb-hd{position:sticky;top:0;z-index:2;display:flex!important;align-items:center;justify-content:space-between;padding:18px 18px 14px 20px!important;background:#fff!important;border-bottom:1px solid #EEF1F6!important}
+  .fsb-title{display:flex!important;align-items:center;gap:8px;font-size:17px!important;font-weight:700!important;color:var(--r-ink)!important;letter-spacing:-.015em}
+  .fsb-title svg{color:var(--r-b)}
+  .fsb-badge{background:var(--r-b)!important;box-shadow:none!important;border-radius:999px!important;font-size:11.5px!important}
+  .fsb-reset{height:32px;padding:0 12px!important;border-radius:999px!important;font-size:13.5px!important;font-weight:600!important;color:var(--r-b)!important;background:#EEF2FC!important}
+  .fsb-reset:hover{background:#E2E8FA!important}
+  .filter-fab-close,.filter-fab,.fsb-backdrop{display:none!important}
+  .fsb-tags{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px!important;border-bottom:1px solid #EEF1F6!important}
+  .fsb-tags:empty{display:none!important}
+  .fss{border-bottom:1px solid #EEF1F6!important}
+  .fss:last-child{border-bottom:0!important}
+  .fss-tog{display:flex!important;align-items:center;justify-content:space-between;width:100%!important;padding:15px 20px!important;background:transparent!important;cursor:pointer}
+  .fss-tog:hover{background:#FAFBFD!important}
+  .fss-lbl{font-size:14.5px!important;font-weight:600!important;color:var(--r-ink)!important;text-transform:none!important;letter-spacing:-.01em!important}
+  .fss-arr{font-size:0!important;width:8px;height:8px;border-right:2px solid var(--r-mut2);border-bottom:2px solid var(--r-mut2);transform:rotate(45deg)!important;margin:-4px 4px 0 auto;transition:transform .2s}
+  .fss.open .fss-arr{transform:rotate(-135deg)!important;margin-top:4px}
+  .fss-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--r-b);color:#fff;font-size:11.5px;font-weight:700;margin:0 8px 0 auto}
+  .fss-n+.fss-arr{margin-left:0}
+  .fss-body{padding:0 20px 18px!important}
+}
+/* szűrő-elemek (popoverben és mobil fiókban egyaránt) */
+.range-track{background:#E6EAF3!important;height:4px!important;margin:16px 0 8px!important}
+.range-fill{background:var(--r-b)!important}
+.range-inp::-webkit-slider-thumb{background:#fff!important;border:0!important;width:22px!important;height:22px!important;box-shadow:0 0 0 1px rgba(14,23,51,.12),0 3px 8px rgba(14,23,51,.2)!important}
+.range-inp::-moz-range-thumb{background:#fff!important;border:0!important;box-shadow:0 0 0 1px rgba(14,23,51,.12),0 3px 8px rgba(14,23,51,.2)!important}
+.range-labels{font-size:12px!important;color:var(--r-mut2)!important}
+.range-val{background:#F4F6FB!important;color:var(--r-ink)!important;border-radius:12px!important;font-weight:600!important;font-size:14px!important;padding:8px 12px!important}
+.fss-body>div[style*="uppercase"]{font-size:12px!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important;color:var(--r-mut)!important;margin:2px 0 8px!important}
+.chips{gap:6px!important;padding-top:0!important}
+.chip{background:#F2F4F8!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;border-radius:999px!important;padding:8px 14px!important;font-size:14px!important;font-weight:500!important;color:var(--r-ink)!important;transition:background .15s,color .15s}
+.chip:hover{background:#E8ECF5!important;color:var(--r-ink)!important}
+.chip.on,.chip.g.on{background:var(--r-b)!important;color:#fff!important}
+.chk-list{gap:0!important}
+.chk-row{font-size:14.5px!important;padding:9px 6px!important;border-radius:10px!important;color:var(--r-ink)!important;gap:12px!important}
+.chk-row:hover{background:#F5F7FC!important}
+.chk-row input[type=checkbox]{width:18px!important;height:18px!important;accent-color:var(--r-b)!important}
+.chk-row-cnt{display:none!important}
+.chk-tag{font-size:11px!important;font-weight:600!important;border-radius:999px!important;padding:2px 8px!important}
+.fs-search{height:42px;border-radius:12px!important;border:1px solid var(--r-ln)!important;padding:0 14px!important;font-size:14.5px!important;margin-bottom:8px!important}
+.fs-search:focus{border-color:var(--r-b)!important;box-shadow:0 0 0 3px rgba(26,59,170,.12)}
+.tog-row{padding:10px 4px!important;font-size:14.5px!important}
+.tog-lbl{font-weight:600!important;color:var(--r-ink)!important;flex-direction:column;align-items:flex-start!important;gap:1px!important}
+.tog-sub{font-size:12.5px!important;color:var(--r-mut)!important}
+.toggle{width:44px!important;height:26px!important}
+.toggle-slider{background:#E3E7EF!important}
+.toggle-slider::before{width:22px!important;height:22px!important;left:2px!important;top:2px!important;box-shadow:0 2px 6px rgba(14,23,51,.2)!important}
+.toggle input:checked+.toggle-slider{background:var(--r-g)!important}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)!important}
+.atag{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 6px 0 12px!important;border-radius:999px!important;background:#fff!important;border:0!important;box-shadow:0 0 0 1px rgba(26,59,170,.25);color:var(--r-b)!important;font-size:13px!important;font-weight:600!important}
+.atag button{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#EEF2FC!important;color:var(--r-b)!important;font-size:14px!important}
+
+/* ---------- TALÁLATI SÁV ---------- */
+.rbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:0 2px}
+.rcnt{font-size:15px;color:var(--r-mut)}
+.rcnt span{font-weight:700;color:var(--r-ink);font-size:17px;letter-spacing:-.01em}
+.rbar-map{display:none;align-items:center;gap:8px;height:38px;padding:0 16px;border:0;border-radius:999px;background:#fff;color:var(--r-b);font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 0 1px rgba(24,58,165,.12),0 4px 12px -8px rgba(24,58,165,.4)}
+.rbar-map svg{color:var(--r-g)}
+#resList{display:flex;flex-direction:column;gap:16px}
+
+/* ---------- KÁRTYA ---------- */
+.skc{position:relative;display:block;background:#fff;border-radius:22px;box-shadow:var(--r-card);cursor:pointer;overflow:hidden;transition:box-shadow .25s,transform .25s;animation:skcIn .5s cubic-bezier(.2,.7,.2,1) both}
+.skc:hover{box-shadow:var(--r-card-h);transform:translateY(-2px)}
+@keyframes skcIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.skc-prem{box-shadow:0 0 0 1.5px rgba(214,160,30,.55),0 12px 32px -20px rgba(180,120,10,.45)}
+.skc-prem:hover{box-shadow:0 0 0 1.5px rgba(214,160,30,.8),0 22px 48px -24px rgba(180,120,10,.55)}
+.skc-main{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:18px;padding:22px 22px 18px}
+.skc-av{position:relative;width:72px;height:72px;border-radius:20px;background:linear-gradient(145deg,#EEF2FC,#DFE6F8)}
+.skc-av img{width:100%;height:100%;object-fit:cover;border-radius:20px;display:block}
+.skc-ini{display:grid;place-items:center;width:100%;height:100%;font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--r-b)}
+.skc-dot{position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;border-radius:50%;background:#2C9650;border:3px solid #fff}
+.skc-body{min-width:0}
+.skc-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.skc-name{margin:0;font-size:19px;line-height:1.25;font-weight:700;letter-spacing:-.022em;color:var(--r-ink);display:inline-flex;align-items:center;gap:6px;transition:color .15s}
+.skc:hover .skc-name{color:var(--r-b)}
+.skc-ver{display:inline-flex}
+.skc-prem-b{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;border-radius:999px;background:#FFF4DB;color:#9A6A00;font-size:11.5px;font-weight:700;letter-spacing:.01em}
+.skc-spec{margin-top:3px;font-size:15px;font-weight:600;color:var(--r-g);letter-spacing:-.01em}
+.skc-facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font-size:14px;color:#46506A}
+.skc-f{display:inline-flex;align-items:center;gap:6px}
+.skc-f svg{color:var(--r-mut2);flex:none}
+.skc-f b{color:var(--r-ink);font-weight:650}
+.skc-rate b{color:#B7791F}
+.skc-rate i{font-style:normal;color:var(--r-mut2)}
+.skc-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.skc-b{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:600}
+.skc-b.b-on{background:#EEF2FC;color:var(--r-b)} .skc-b.b-we{background:#FFF4E5;color:#B45309} .skc-b.b-fast{background:#E8F5EC;color:#1F7A3E} .skc-b.b-near{background:#EFEAFD;color:#5B3FC8}
+.skc-intro{margin:12px 0 0;font-size:14.5px;line-height:1.5;color:var(--r-mut);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.skc-side{text-align:right}
+.skc-fee b{display:block;font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--r-ink)}
+.skc-fee small{font-size:12.5px;color:var(--r-mut2)}
+.skc-foot{display:flex;align-items:center;gap:10px;padding:12px 14px 12px 22px;border-top:1px solid #EEF1F6;font-size:14px;color:var(--r-mut)}
+.skc-foot>svg{color:var(--r-g);flex:none}
+.skc-loc{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skc-loc b{color:var(--r-ink);font-weight:600}
+.skc-loc i{font-style:normal;color:var(--r-mut2)}
+.skc-loc.soft{color:var(--r-mut2)}
+.skc-more{flex:none;padding:3px 9px;border-radius:999px;background:#F2F4F8;color:var(--r-mut);font-size:12.5px;font-weight:600}
+.skc-acts{flex:none;display:flex;gap:8px;margin-left:auto}
+.skc-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 18px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;cursor:pointer;white-space:nowrap;transition:background .15s,box-shadow .15s,filter .15s;border:0}
+.skc-btn.pri{background:var(--r-b);color:#fff;box-shadow:0 8px 18px -10px rgba(26,59,170,.85)}
+.skc-btn.pri:hover{background:var(--r-bd)}
+.skc-btn.pri svg{transition:transform .2s}
+.skc-btn.pri:hover svg{transform:translateX(3px)}
+.skc-btn.sec{background:#F2F4F8;color:var(--r-ink)}
+.skc-btn.sec svg{color:var(--r-g)}
+.skc-btn.sec:hover{background:#E8ECF5}
+
+/* skeleton, üres állapot */
+.skel{height:170px!important;border-radius:22px!important;background:linear-gradient(90deg,#fff 0%,#F2F4F9 50%,#fff 100%)!important;background-size:200% 100%!important;box-shadow:var(--r-card)!important;border:0!important;animation:shim 1.3s linear infinite!important}
+@keyframes shim{from{background-position:200% 0}to{background-position:-200% 0}}
+.empty-st{background:#fff!important;border:0!important;border-radius:22px!important;box-shadow:var(--r-card)!important;padding:48px 28px!important}
+.empty-title{color:var(--r-ink)!important;font-weight:700!important;letter-spacing:-.02em}
+.empty-st button,.empty-st a.btn,.empty-st .sug-btn{border-radius:999px!important}
+
+/* több / lapozás */
+.load-more-wrap{margin-top:26px!important}
+.load-more-info{color:var(--r-mut)!important;font-size:14px!important}
+.load-more-btn{height:46px!important;padding:0 26px!important;background:#fff!important;color:var(--r-b)!important;border:0!important;border-radius:999px!important;font-weight:600!important;font-size:15px!important;box-shadow:0 0 0 1px rgba(24,58,165,.16),0 8px 20px -14px rgba(24,58,165,.45)!important}
+.load-more-btn:hover{box-shadow:0 0 0 1.5px var(--r-b),0 8px 20px -14px rgba(24,58,165,.55)!important}
+.pag{gap:6px!important;margin-top:18px!important}
+.pgb{min-width:40px!important;height:40px!important;border-radius:999px!important;border:0!important;background:#fff!important;color:var(--r-ink)!important;font-weight:600!important;box-shadow:0 0 0 1px rgba(24,58,165,.1)!important}
+.pgb.on{background:var(--r-b)!important;color:#fff!important;box-shadow:none!important}
+.pgb:disabled{opacity:.4}
+
+@media(min-width:1201px){
+  .skc-main{grid-template-columns:60px minmax(0,1fr) auto;gap:14px;padding:18px 18px 14px}
+  .skc-av{width:60px;height:60px;border-radius:17px} .skc-av img{border-radius:17px} .skc-ini{font-size:20px}
+  .skc-name{font-size:18px}
+  .skc-foot{flex-wrap:wrap;padding:12px 14px 12px 18px}
+  .skc-loc{flex:1 1 200px}
+}
+/* ---------- TÉRKÉP ---------- */
+.rmap-card{height:100%;background:#fff!important;border:0!important;border-radius:22px!important;box-shadow:var(--r-card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:hidden;display:flex;flex-direction:column}
+.rmap-head{background:#fff!important;padding:14px 16px!important;border-bottom:1px solid #EEF1F6!important;gap:8px!important}
+.rmap-title{white-space:nowrap;font-size:15px!important;font-weight:650!important;color:var(--r-ink)!important}
+.rmap-title svg{color:var(--r-g)!important}
+.rmap-count{white-space:nowrap;margin-left:auto;font-size:13px!important;color:var(--r-mut)!important;font-weight:500!important}
+.rmap-close{border:0!important;border-radius:999px!important;background:#F2F4F8!important}
+#resultsMap{background:#EEF2F8!important}
+@media(min-width:1201px){
+  #resultsMapCol{display:block!important;position:sticky!important;top:72px!important;align-self:start!important;height:calc(100vh - 92px)!important;max-height:760px;right:auto!important;left:auto!important;width:auto!important;max-width:none!important;padding:0!important;z-index:1!important;box-shadow:none!important;transition:none!important}
+  #resultsMapCol .rmap-close{display:none!important}
+  .rmap-fab{display:none!important}
+}
+@media(max-width:1200px){
+  .pw{grid-template-columns:250px minmax(0,1fr)!important;grid-template-areas:"fsb main"!important}
+  #resultsMapCol{position:fixed!important;top:0!important;right:-100%!important;left:auto!important;width:92vw!important;max-width:620px!important;height:100vh!important;height:100dvh!important;z-index:10001!important;padding:12px!important;display:block!important;transition:right .3s cubic-bezier(.4,0,.2,1)!important}
+  #resultsMapCol.open{right:0!important;box-shadow:-12px 0 44px rgba(14,23,51,.28)}
+  #resultsMapCol .rmap-close{display:inline-flex!important;align-items:center;justify-content:center}
+}
+@media(min-width:861px) and (max-width:1200px){ .rbar-map{display:inline-flex} .rmap-fab{display:none!important} }
+
+
+/* toast */
+.szk-toast{background:rgba(255,255,255,.96)!important;border:0!important;border-radius:999px!important;padding:12px 20px!important;box-shadow:0 0 0 1px rgba(24,58,165,.1),0 20px 44px -18px rgba(14,23,51,.45)!important;-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px)}
+
+/* ---------- MOBIL ---------- */
+@media(max-width:860px){
+  .hbar-in{padding:22px 16px 52px!important}
+  .htitle{font-size:32px!important;line-height:1.06!important}
+  .hsub{font-size:15.5px!important;margin-top:8px!important}
+  .hs-search{flex-wrap:wrap;margin-top:18px;padding:6px;border-radius:20px}
+  .hs-f{flex:1 1 100%;height:50px}
+  .hs-f+.hs-f::before{left:14px;right:14px;top:-3px;bottom:auto;width:auto;height:1px}
+  .hs-c{flex:1 1 0;min-width:0}
+  .hs-go{flex:none;height:46px;padding:0 18px}
+  .hs-go span{display:none}
+  .view-toggle{margin-top:-22px!important}
+  .view-toggle-inner{width:100%;max-width:400px;display:grid!important;grid-template-columns:1fr 1fr}
+  .view-toggle-btn{justify-content:center}
+  .pw{padding:20px 16px 110px!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"main"!important}
+  /* szűrő fiók */
+  .fsb{position:fixed!important;top:0!important;right:-100%!important;width:90vw!important;max-width:400px!important;height:100vh!important;height:100dvh!important;max-height:none!important;z-index:10001!important;background:#fff!important;border-radius:0!important;box-shadow:-12px 0 44px rgba(14,23,51,.28)!important;overflow-y:auto!important;padding:0 0 30px!important;border:0!important}
+  .fsb.open{right:0!important}
+  .fsb-backdrop{z-index:10000!important}
+  .fsb-hd{padding:18px 64px 14px 20px!important;border-bottom:1px solid #EEF1F6!important;background:#fff!important}
+  .fsb-title{font-size:18px!important;font-weight:700!important;color:var(--r-ink)!important}
+  .fsb-reset{color:var(--r-b)!important;font-weight:600!important}
+  .filter-fab-close{z-index:10002!important;top:14px!important;right:14px!important;width:36px!important;height:36px!important;border-radius:50%!important;background:#F2F4F8!important;border:0!important}
+  .fsb-tags{padding:12px 20px!important;border-bottom:1px solid #EEF1F6!important}
+  .fss{border-bottom:1px solid #EEF1F6!important}
+  .fss-tog{padding:16px 20px!important;background:transparent!important}
+  .fss-lbl{font-size:15.5px!important;font-weight:600!important;text-transform:none!important;letter-spacing:-.01em!important;color:var(--r-ink)!important}
+  .fss-arr{font-size:0!important;width:8px;height:8px;border-right:2px solid var(--r-mut2);border-bottom:2px solid var(--r-mut2);transform:rotate(45deg)!important;margin:-4px 4px 0 0}
+  .fss.open .fss-arr{transform:rotate(-135deg)!important;margin-top:4px}
+  .fss-body{padding:0 20px 18px!important}
+  .fss-n{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--r-b);color:#fff;font-size:11.5px;font-weight:700;margin-left:6px}
+  /* alsó lebegő sáv: Szűrők | Térkép */
+  .filter-fab,.rmap-fab{position:fixed!important;bottom:18px!important;z-index:500!important;height:48px!important;padding:0 20px!important;border:0!important;display:inline-flex!important;align-items:center;gap:8px;font-size:15px!important;font-weight:600!important;
+    background:var(--r-ink)!important;color:#fff!important;box-shadow:0 14px 30px -12px rgba(14,23,51,.6)!important;transform:none!important}
+  .filter-fab{left:auto!important;right:50%!important;border-radius:999px 0 0 999px!important;padding-right:18px!important}
+  .rmap-fab{right:auto!important;left:50%!important;border-radius:0 999px 999px 0!important;padding-left:18px!important;border-left:1px solid rgba(255,255,255,.18)!important}
+  .filter-fab-badge{background:#fff!important;color:var(--r-ink)!important}
+  .szk-toast{bottom:82px!important}
+  .rcnt span{font-size:16px}
+  .skc{border-radius:20px}
+  .skc-main{grid-template-columns:56px minmax(0,1fr);gap:14px;padding:16px 16px 12px}
+  .skc-av{width:56px;height:56px;border-radius:16px} .skc-av img{border-radius:16px} .skc-ini{font-size:19px}
+  .skc-name{font-size:17px}
+  .skc-spec{font-size:14px}
+  .skc-facts{font-size:13.5px;gap:4px 14px;margin-top:10px}
+  .skc-intro{font-size:14px}
+  .skc-side{grid-column:2;text-align:left;margin-top:-6px}
+  .skc-fee{display:flex;align-items:baseline;gap:6px}
+  .skc-fee b{font-size:16.5px}
+  .skc-foot{flex-wrap:wrap;padding:12px 16px 14px}
+  .skc-loc{flex-basis:calc(100% - 24px);white-space:normal}
+  .skc-acts{flex-basis:100%;margin:4px 0 0}
+  .skc-btn{flex:1;height:44px}
+}
+@media(prefers-reduced-motion:reduce){ .skc,.skel{animation:none!important} }
+</style>
+<style id="klinika-v5">
+/* klinika-specifikus kiegészítések */
+.view-toggle-btn.tg-clinics.active{background:var(--r-b)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(26,59,170,.9)!important}
+.view-toggle-btn.tg-doctors:hover{color:var(--r-b)!important;background:#EEF2FC!important}
+.view-toggle-btn.tg-doctors.active{background:transparent!important;color:var(--r-mut)!important;box-shadow:none!important}
+.rtop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px!important;padding:0 2px}
+.rcnt{font-size:15px!important;color:var(--r-mut)!important;font-weight:500!important}
+.rctrl{gap:8px!important}
+.sort-sel{height:40px;border:0!important;border-radius:999px!important;padding:0 36px 0 16px!important;font-size:14px!important;font-weight:600!important;color:var(--r-ink)!important;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235B6478' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center!important;-webkit-appearance:none;appearance:none;box-shadow:0 0 0 1px rgba(24,58,165,.12),0 4px 12px -8px rgba(24,58,165,.4)!important;cursor:pointer}
+.vtog{border:0!important;border-radius:999px!important;padding:3px!important;box-shadow:0 0 0 1px rgba(24,58,165,.12)!important}
+.vtog .vbtn{border-radius:999px!important;height:34px;padding:0 14px!important;font-size:13.5px!important;border:0!important}
+#resMap{border:0!important;border-radius:22px!important;box-shadow:var(--r-card)}
+/* szűrőmezők */
+#cityInput,#treatInput,#fName,#fSpec{height:44px!important;box-sizing:border-box;border:1px solid var(--r-ln)!important;border-radius:12px!important;padding:0 14px!important;font-size:14.5px!important;background:#fff!important;color:var(--r-ink)}
+#cityInput:focus,#treatInput:focus,#fName:focus,#fSpec:focus{border-color:var(--r-b)!important;box-shadow:0 0 0 3px rgba(26,59,170,.12)!important;outline:0}
+#fSpec{-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235B6478' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center!important;padding-right:36px!important;cursor:pointer}
+.city-chip{background:#EEF2FC!important;border:0!important;color:var(--r-b)!important;border-radius:999px!important;font-size:13px!important}
+.city-suggest{border:0!important;border-radius:16px!important;box-shadow:0 0 0 1px rgba(24,58,165,.08),0 24px 50px -20px rgba(14,23,51,.4)!important;padding:6px}
+.city-sug-item{border-radius:10px;font-size:14.5px!important;padding:10px 12px!important}
+.city-sug-item:hover,.city-sug-item.active{background:#F2F4FB!important;color:var(--r-b)!important}
+/* klinika-kártya elemei */
+.skc-av.cl{background:linear-gradient(145deg,#E6F4EA,#D6EEDD)}
+.skc-av.cl .skc-ini{color:#1F7A3E}
+.skc-av img+.skc-ini{display:none}
+.skc-addr{display:flex;align-items:flex-start;gap:6px;margin-top:5px;font-size:14.5px;color:#46506A;line-height:1.4}
+.skc-addr svg{color:var(--r-g);flex:none;margin-top:2px}
+.skc-rate{gap:6px!important}
+.skc-rate .kc-stars{display:inline-flex;gap:0;font-size:13px;letter-spacing:.5px}
+.kc-star.full,.kc-star.half{color:#F4B400}.kc-star.empty{color:#DDE2EC}
+.skc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.skc-chip{height:26px;display:inline-flex;align-items:center;padding:0 10px;border-radius:999px;background:#F2F4F8;color:#3E4760;font-size:12.5px;font-weight:500}
+.skc-chip.more{background:#EEF2FC;color:var(--r-b);font-weight:600}
+.skc-docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;padding:0 22px 16px}
+.skc-doc{display:flex;align-items:center;gap:10px;min-width:0;padding:8px 10px;border-radius:14px;background:#F7F8FC;text-decoration:none;color:var(--r-ink);transition:background .15s}
+.skc-doc:hover{background:#EEF2FC}
+.skc-doc-av{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--r-b);font-size:12.5px;font-weight:700;box-shadow:0 0 0 1px rgba(24,58,165,.1)}
+.skc-doc-t{flex:1;min-width:0;line-height:1.25}
+.skc-doc-t b{display:block;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skc-doc-t small{display:block;font-size:12px;color:var(--r-mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skc-doc-r{flex:none;font-size:12.5px;font-weight:600;color:#B7791F}
+.skc-doc-more{display:flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:14px;border:1.5px dashed #D6DDEF;color:var(--r-b);font-size:13px;font-weight:600;text-decoration:none}
+.skc-doc-more:hover{border-color:var(--r-b);background:#F5F7FD}
+.kcl .skc-loc{display:inline-flex;align-items:center;gap:6px}
+.kcl .skc-loc svg{color:var(--r-mut2);flex:none}
+.kcl .skc-foot>svg{display:none}
+@media(min-width:1201px){ .skc-docs{padding:0 18px 14px} }
+@media(max-width:860px){
+  .skc-addr{font-size:13.5px}
+  .skc-docs{grid-template-columns:1fr;padding:0 16px 14px}
+  .rtop{flex-wrap:wrap} .rctrl{width:100%} .sort-sel{flex:1}
+}
+@media(max-width:860px){ .filter-fab{left:50%!important;right:auto!important;transform:translateX(-50%)!important;border-radius:999px!important;padding:0 22px!important} .rtop .vtog{display:flex!important} }
+@media(max-width:860px){ .rctrl{flex-wrap:nowrap!important} .rctrl .vtog{flex:none} .rctrl .sort-sel{flex:1;min-width:0} }
+</style>
 </body>
 </html>
