@@ -1863,7 +1863,7 @@ function render(d){
   } else {
     const avEl2 = document.getElementById('dhAvatar');
     avEl2.classList.add('dh-avatar-ph');
-    avEl2.innerHTML = `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:54%;height:54%"><circle cx="24" cy="17" r="8" fill="#3B62C4"/><path d="M8 42c0-8.837 7.163-15 16-15s16 6.163 16 15" fill="#3B62C4"/><g transform="translate(31,29)"><circle cx="7" cy="7" r="7.5" fill="#fff"/><path d="M7 3.2v7.6M3.2 7h7.6" stroke="#4E9A32" stroke-width="2.2" stroke-linecap="round"/></g></svg>`;
+    avEl2.innerHTML = `<img src="/img/orvos-${d.gender==='female'?'no':'ferfi'}.webp" alt="${escapeHtml(fullName)}" style="width:100%;height:100%;object-fit:cover">`;
     if((d.availability||[]).length) document.getElementById('dhOnlineDot').style.display = 'block';
   }
   // AI badge eltávolítva — hero egyszerűsítve a klinika mintára
@@ -1907,7 +1907,7 @@ function render(d){
   const rat = parseFloat(d.rating) || 0;
   const reviews = parseInt(d.review_count) || 0;
   const ratingHtml = [];
-  if(rat > 0){
+  if(rat > 0 && reviews > 0){
     ratingHtml.push(`<span class="rating"><span class="star">★</span> <strong>${rat.toFixed(1)}</strong>${reviews ? ` <span class="review-count">(${reviews} értékelés)</span>` : ''}</span>`);
   }
   document.getElementById('dhRatingRow').innerHTML = ratingHtml.join('');
@@ -3301,8 +3301,8 @@ body::before{content:"";position:absolute;left:0;right:0;top:52px;height:340px;z
 .prof-tab:hover{color:var(--r-b)!important;background:#F2F4FB!important}
 .prof-tab.active{background:var(--r-b)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(42, 74, 156,.9)!important}
 /* chipek */
-.spec-chip{height:36px;display:inline-flex!important;align-items:center;padding:0 16px!important;border-radius:999px!important;background:#EBF0F8!important;border:0!important;color:var(--r-b)!important;font-weight:600!important;font-size:14px!important;box-shadow:none!important;text-decoration:none}
-.spec-chip:hover{background:#E5EAF6!important}
+.spec-chip{display:inline-flex!important;align-items:center;padding:0!important;border-radius:0!important;background:none!important;border:0!important;color:#4E9A32!important;font-weight:700!important;font-size:15px!important;box-shadow:none!important;text-decoration:none}
+.spec-chip:hover{text-decoration:underline;background:none!important}
 /* kapcsolat-lista */
 .kli-info-ico,.info-ico{width:40px!important;height:40px!important;border-radius:12px!important;background:#EBF0F8!important;color:var(--r-b)!important;border:0!important;box-shadow:none!important;flex:none}
 .info-lbl,.kli-info-text small,.kli-info-lbl{font-size:12.5px!important;font-weight:500!important;color:var(--r-mut)!important;text-transform:none!important;letter-spacing:0!important}
@@ -3654,7 +3654,7 @@ var PM = (function(){
     else kick.push('<span class="pm-pill src">'+I.info+'Nyilvános forrásokból összegyűjtött adatok</span>');
     if(d.is_partner) kick.push('<span class="pm-pill gold">★ Kiemelt partner</span>');
     var facts=[];
-    if(rat>0) facts.push('<span class="pm-fact r">'+I.star+'<b>'+PM.fmt1(rat)+'</b>'+(rc?' ('+rc+' értékelés)':'')+'</span>');
+    if(rat>0&&rc>0) facts.push('<span class="pm-fact r">'+I.star+'<b>'+PM.fmt1(rat)+'</b>'+(rc?' ('+rc+' értékelés)':'')+'</span>');
     if(d.experience_years) facts.push('<span class="pm-fact">'+I.brief+'<b>'+E(d.experience_years)+' év</b> tapasztalat</span>');
     if(langs.length>1||(langs[0]&&langs[0].toLowerCase()!=='magyar')) facts.push('<span class="pm-fact">'+I.globe+E(langs.join(', '))+'</span>');
     if(online) facts.push('<span class="pm-fact">'+I.video+'Online konzultáció</span>');
@@ -3702,7 +3702,7 @@ var PM = (function(){
       var hl2=PM.hoursList(hmap); main.push(PM.card('Rendelési idő','clock','<div style="margin-bottom:10px">'+PM.nowHtml(hl2)+'</div>'+PM.hoursHtml(hl2))); }
     var faq=(d._faq||[]).filter(function(f){return f.question&&f.answer;});
     if(faq.length) main.push(PM.card('Gyakori kérdések','help',faq.map(function(f,i){return '<details class="pm-faq"'+(i?'':' open')+'><summary>'+E(f.question)+'</summary><p>'+E(f.answer)+'</p></details>';}).join('')));
-    if(rat>0) main.push(PM.card('Értékelés','heart','<div class="pm-rate"><div class="big">'+PM.fmt1(rat)+'</div><div>'+PM.stars(rat)+'<small>'+(rc?rc+' értékelés alapján':'Összesített értékelés')+'</small></div></div>',{g:1}));
+    if(rat>0&&rc>0) main.push(PM.card('Értékelés','heart','<div class="pm-rate"><div class="big">'+PM.fmt1(rat)+'</div><div>'+PM.stars(rat)+'<small>'+(rc?rc+' értékelés alapján':'Összesített értékelés')+'</small></div></div>',{g:1}));
     var claimName=fn.main;
     var claim='<section class="pm-claim"><h3>Ön '+E(claimName)+'?</h3><p>'+(rich<2?'Az adatlap jelenleg csak nyilvános forrásokból származó alapadatokat tartalmaz. Igényelje ingyen, és egészítse ki bemutatkozással, fotóval, szolgáltatásokkal és árakkal – így a páciensek könnyebben választják Önt.':'Igényelje adatlapját, hogy naprakészen tarthassa adatait, és kiemelt megjelenést kapjon a keresőben.')+'</p><button class="pm-btn" type="button" onclick="if(window.openClaimModal)openClaimModal()">Adatlap igénylése</button></section>';
     if(!d.admin_user_id) main.push(claim);

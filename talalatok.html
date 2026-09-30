@@ -700,6 +700,27 @@ img{max-width:100%}
 /* csökkentett mozgás tisztelete */
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto}}
 </style>
+<style id="szk-fsb">
+@media(min-width:861px){
+ .pw{align-items:start!important}
+ .fsb{position:sticky!important;top:84px!important;align-self:start!important;max-height:calc(100vh - 104px)!important;overflow-y:auto!important;overscroll-behavior:contain}
+ .fss-body{animation:fssIn .18s ease}
+}
+@keyframes fssIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* találati lista a szűrőpanelen belül nyílik (nem vágja le a panel) */
+.fsb .city-suggest{position:static!important;margin-top:6px;max-height:220px;box-shadow:none!important;border:1px solid #E1E7F2!important;border-radius:12px!important}
+.fsb .fss{border-bottom:1px solid #EEF1F7}
+.fsb .fss:last-child{border-bottom:0}
+</style>
+<style id="szk-btn-soft">
+html body .skc-btn{height:34px!important;padding:0 14px!important;font-size:13px!important;font-weight:600!important;gap:6px!important}
+html body .skc-btn svg{width:13px!important;height:13px!important}
+html body .skc-btn.pri{background:#EBF0FB!important;color:#2A4A9C!important;box-shadow:none!important}
+html body .skc-btn.pri:hover{background:#2A4A9C!important;color:#fff!important}
+html body .skc-btn.sec{background:#fff!important;color:#386320!important;box-shadow:inset 0 0 0 1px #D5E8CA!important}
+html body .skc-btn.sec:hover{background:#EAF5E3!important}
+@media(max-width:860px){html body .skc-btn{height:38px!important;font-size:13.5px!important}}
+</style>
 </head>
 <body>
 <!-- ══════════════════════════════════════════
@@ -934,42 +955,47 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
     <div class="fsb-tags" id="fTags"></div>
 
-    <!-- 1. Értékelés -->
-    <!-- 2. Tapasztalat -->
-    <div class="fss open" id="fs2">
-      <button class="fss-tog" onclick="toggleSec('fs2')">
-        <span class="fss-lbl">Tapasztalat</span><span class="fss-arr">▼</span>
+    <div class="fss open" id="fs6">
+      <button class="fss-tog" onclick="toggleSec('fs6')">
+        <span class="fss-lbl">Helyszín</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
-        <div class="range-wrap">
-          <div class="range-track">
-            <div class="range-fill" id="expFill" style="left:0;right:0"></div>
-            <input type="range" class="range-inp" id="expMin" min="0" max="30" value="0" oninput="updateExp()">
-          </div>
-          <div class="range-labels"><span>0 év</span><span>30+ év</span></div>
-          <div class="range-val" id="expVal">Bármennyi tapasztalat</div>
+        <input class="fs-search" id="citySearch" placeholder="Város keresése…" oninput="filterCities(this.value)">
+        <div class="chk-list" id="cityList">
+          <label class="chk-row" data-c="Budapest"><input type="checkbox" value="Budapest" onchange="applyF()"> Budapest <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Debrecen"><input type="checkbox" value="Debrecen" onchange="applyF()"> Debrecen <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Pécs"><input type="checkbox" value="Pécs" onchange="applyF()"> Pécs <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Győr"><input type="checkbox" value="Győr" onchange="applyF()"> Győr <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Miskolc"><input type="checkbox" value="Miskolc" onchange="applyF()"> Miskolc <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Szeged"><input type="checkbox" value="Szeged" onchange="applyF()"> Szeged <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Kecskemét"><input type="checkbox" value="Kecskemét" onchange="applyF()"> Kecskemét <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Nyíregyháza"><input type="checkbox" value="Nyíregyháza" onchange="applyF()"> Nyíregyháza <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Székesfehérvár"><input type="checkbox" value="Székesfehérvár" onchange="applyF()"> Székesfehérvár <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Veszprém"><input type="checkbox" value="Veszprém" onchange="applyF()"> Veszprém <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row" data-c="Eger"><input type="checkbox" value="Eger" onchange="applyF()"> Eger <span class="chk-row-cnt">–</span></label>
         </div>
       </div>
     </div>
 
-    <!-- 3. Ár -->
-    <div class="fss open" id="fs3">
-      <button class="fss-tog" onclick="toggleSec('fs3')">
-        <span class="fss-lbl">Ár</span><span class="fss-arr">▼</span>
+    <div class="fss open" id="fs5">
+      <button class="fss-tog" onclick="toggleSec('fs5')">
+        <span class="fss-lbl">Fizetés</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
-        <div class="range-wrap">
-          <div class="range-track">
-            <div class="range-fill" id="priceFill" style="left:0;right:0"></div>
-            <input type="range" class="range-inp" id="priceMax" min="0" max="80000" step="2000" value="80000" oninput="updatePrice()">
-          </div>
-          <div class="range-labels"><span>0 Ft</span><span>80 000 Ft</span></div>
-          <div class="range-val" id="priceVal">Bármilyen ár</div>
+        <div class="chk-list">
+          <label class="chk-row"><input type="checkbox" value="OEP / TAJ kártya" onchange="applyF()"> OEP / TAJ kártya <span class="chk-tag tag-oep">Tb. támogatott</span><span class="chk-row-cnt" data-ins="oep">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="Magánfizető" onchange="applyF()"> Magánfizető <span class="chk-tag tag-hot">Prémium</span><span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="SIGNAL IDUNA" onchange="applyF()"> SIGNAL IDUNA <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="Generali" onchange="applyF()"> Generali <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="Allianz" onchange="applyF()"> Allianz <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="UNIQA" onchange="applyF()"> UNIQA <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="AXA" onchange="applyF()"> AXA <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="CIG Pannónia" onchange="applyF()"> CIG Pannónia <span class="chk-row-cnt">–</span></label>
+          <label class="chk-row"><input type="checkbox" value="Groupama" onchange="applyF()"> Groupama <span class="chk-row-cnt">–</span></label>
         </div>
       </div>
     </div>
 
-    <!-- 4. Elérhetőség -->
     <div class="fss open" id="fs4">
       <button class="fss-tog" onclick="toggleSec('fs4')">
         <span class="fss-lbl">Elérhetőség</span><span class="fss-arr">▼</span>
@@ -994,50 +1020,22 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-    <!-- 5. Biztosítók -->
-    <div class="fss open" id="fs5">
-      <button class="fss-tog" onclick="toggleSec('fs5')">
-        <span class="fss-lbl">Fizetés</span><span class="fss-arr">▼</span>
+    <div class="fss" id="fs3">
+      <button class="fss-tog" onclick="toggleSec('fs3')">
+        <span class="fss-lbl">Ár</span><span class="fss-arr">▼</span>
       </button>
       <div class="fss-body">
-        <div class="chk-list">
-          <label class="chk-row"><input type="checkbox" value="OEP / TAJ kártya" onchange="applyF()"> OEP / TAJ kártya <span class="chk-tag tag-oep">Tb. támogatott</span><span class="chk-row-cnt" data-ins="oep">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="Magánfizető" onchange="applyF()"> Magánfizető <span class="chk-tag tag-hot">Prémium</span><span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="SIGNAL IDUNA" onchange="applyF()"> SIGNAL IDUNA <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="Generali" onchange="applyF()"> Generali <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="Allianz" onchange="applyF()"> Allianz <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="UNIQA" onchange="applyF()"> UNIQA <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="AXA" onchange="applyF()"> AXA <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="CIG Pannónia" onchange="applyF()"> CIG Pannónia <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row"><input type="checkbox" value="Groupama" onchange="applyF()"> Groupama <span class="chk-row-cnt">–</span></label>
+        <div class="range-wrap">
+          <div class="range-track">
+            <div class="range-fill" id="priceFill" style="left:0;right:0"></div>
+            <input type="range" class="range-inp" id="priceMax" min="0" max="80000" step="2000" value="80000" oninput="updatePrice()">
+          </div>
+          <div class="range-labels"><span>0 Ft</span><span>80 000 Ft</span></div>
+          <div class="range-val" id="priceVal">Bármilyen ár</div>
         </div>
       </div>
     </div>
 
-    <!-- 6. Helyszín -->
-    <div class="fss open" id="fs6">
-      <button class="fss-tog" onclick="toggleSec('fs6')">
-        <span class="fss-lbl">Helyszín</span><span class="fss-arr">▼</span>
-      </button>
-      <div class="fss-body">
-        <input class="fs-search" id="citySearch" placeholder="Város keresése…" oninput="filterCities(this.value)">
-        <div class="chk-list" id="cityList">
-          <label class="chk-row" data-c="Budapest"><input type="checkbox" value="Budapest" onchange="applyF()"> Budapest <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Debrecen"><input type="checkbox" value="Debrecen" onchange="applyF()"> Debrecen <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Pécs"><input type="checkbox" value="Pécs" onchange="applyF()"> Pécs <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Győr"><input type="checkbox" value="Győr" onchange="applyF()"> Győr <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Miskolc"><input type="checkbox" value="Miskolc" onchange="applyF()"> Miskolc <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Szeged"><input type="checkbox" value="Szeged" onchange="applyF()"> Szeged <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Kecskemét"><input type="checkbox" value="Kecskemét" onchange="applyF()"> Kecskemét <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Nyíregyháza"><input type="checkbox" value="Nyíregyháza" onchange="applyF()"> Nyíregyháza <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Székesfehérvár"><input type="checkbox" value="Székesfehérvár" onchange="applyF()"> Székesfehérvár <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Veszprém"><input type="checkbox" value="Veszprém" onchange="applyF()"> Veszprém <span class="chk-row-cnt">–</span></label>
-          <label class="chk-row" data-c="Eger"><input type="checkbox" value="Eger" onchange="applyF()"> Eger <span class="chk-row-cnt">–</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. Orvos nyelve -->
     <div class="fss" id="fs7">
       <button class="fss-tog" onclick="toggleSec('fs7')">
         <span class="fss-lbl">Nyelv</span><span class="fss-arr">▼</span>
@@ -1056,7 +1054,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-    <!-- 8. Orvos neme -->
     <div class="fss" id="fs8">
       <button class="fss-tog" onclick="toggleSec('fs8')">
         <span class="fss-lbl">Nem</span><span class="fss-arr">▼</span>
@@ -1070,7 +1067,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-    <!-- 9. Konzultáció típusa -->
     <div class="fss" id="fs9">
       <button class="fss-tog" onclick="toggleSec('fs9')">
         <span class="fss-lbl">Konzultáció</span><span class="fss-arr">▼</span>
@@ -1086,7 +1082,22 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-    <!-- 10. Egyéb szűrők -->
+    <div class="fss" id="fs2">
+      <button class="fss-tog" onclick="toggleSec('fs2')">
+        <span class="fss-lbl">Tapasztalat</span><span class="fss-arr">▼</span>
+      </button>
+      <div class="fss-body">
+        <div class="range-wrap">
+          <div class="range-track">
+            <div class="range-fill" id="expFill" style="left:0;right:0"></div>
+            <input type="range" class="range-inp" id="expMin" min="0" max="30" value="0" oninput="updateExp()">
+          </div>
+          <div class="range-labels"><span>0 év</span><span>30+ év</span></div>
+          <div class="range-val" id="expVal">Bármennyi tapasztalat</div>
+        </div>
+      </div>
+    </div>
+
     <div class="fss" id="fs10">
       <button class="fss-tog" onclick="toggleSec('fs10')">
         <span class="fss-lbl">Egyéb</span><span class="fss-arr">▼</span>
@@ -1125,9 +1136,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     </div>
 
     <div class="pag" id="pagDiv" style="display:none">
-      <button class="pgb" id="pgPrev" onclick="changePg(-1)" aria-label="Előző oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="pgb" id="pgPrev" style="display:none" onclick="changePg(-1)" aria-label="Előző oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div id="pgNums"></div>
-      <button class="pgb" id="pgNext" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="pgb" id="pgNext" style="display:none" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
   </main>
   <!-- ══ TÉRKÉP OSZLOP (jobb) ══ -->
@@ -1228,7 +1239,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 /* ═════ CONSTANTS ═════ */
 const COLORS=['#2A4A9C','#3B62C4','#4E9A32','#6FBE49','#386320','#1D3574','#1D3574','#2b5fdb','#1a7e44','#0e2e7e','#3957c7','#0d6b3e'];
 const DS=['V','H','K','Sze','Cs','P','Szo'],DF=['Vasárnap','Hétfő','Kedd','Szerda','Csütörtök','Péntek','Szombat'];
-const PGS=8;
+const PGS=15;
 const UP=new URLSearchParams(location.search);
 let specQ=UP.get('specialty')||UP.get('spec')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
 const nameQ=UP.get('name')||''; if(nameQ){ freeQ=nameQ; specQ=''; }
@@ -2240,7 +2251,7 @@ function renderList(){
   const tot=filtered.length,pgs=Math.ceil(tot/PGS);
   // Load-more módban: az 1. oldaltól a curPg oldalig minden mutatva van
   // Sima pagination módban: csak az aktuális oldal
-  const st=0;
+  const st=(curPg-1)*PGS;
   const end=Math.min(curPg*PGS, tot);
   const pg=filtered.slice(st, end);
   const rcntEl=document.getElementById('rcnt');if(rcntEl)rcntEl.innerHTML=`<span>${tot}</span> orvos találva`;
@@ -2271,16 +2282,8 @@ function renderList(){
     });
   }, 200);
 
-  // ─ Load More gomb ─ (csak ha van még hátra)
-  const loadMoreWrap=document.getElementById('loadMoreWrap');
-  const loadMoreInfo=document.getElementById('loadMoreInfo');
-  if(end < tot){
-    loadMoreWrap.style.display='flex';
-    const remaining = tot - end;
-    loadMoreInfo.innerHTML = `<strong>${end}</strong> / ${tot} orvos megjelenítve · még ${remaining} hátra`;
-  } else {
-    loadMoreWrap.style.display='none';
-  }
+  // Load-more megszüntetve — számozott lapozó van helyette
+  document.getElementById('loadMoreWrap').style.display='none';
 
   // ─ Pagination ─ (csak ha több mint 1 oldal van)
   if(pgs>1){
@@ -2343,7 +2346,7 @@ function cardHNew(d,i){
   if(avD.includes(0)||avD.includes(6)) badges.push(`<span class="skc-b b-we" title="Hétvégén is rendel">${I(P.cal,12)}Hétvégén is</span>`);
   if(avD.length>=4) badges.push(`<span class="skc-b b-fast" title="Több napos elérhetőség">${I(P.bolt,12)}Gyors időpont</span>`);
   if(d._distance!=null){ const ds=d._distance<1?Math.round(d._distance*1000)+' m':d._distance.toFixed(1)+' km'; badges.push(`<span class="skc-b b-near" title="Távolság az Ön helyzetétől">${I(P.nav,12)}${ds}</span>`); }
-  const rat=parseFloat(d.rating||0), ratingFmt=rat>0?rat.toFixed(1):null, reviewCount=parseInt(d.review_count)||0;
+  const rat=parseFloat(d.rating||0), reviewCount=parseInt(d.review_count)||0, ratingFmt=(rat>0&&reviewCount>0)?rat.toFixed(1):null;
   const langsRaw=Array.isArray(d.languages)?d.languages:(typeof d.languages==='string'?d.languages.split(/[,;]/):[]);
   const langsAll=langsRaw.map(s=>(s||'').toString().trim()).filter(Boolean);
   const specsList=(d.doctor_specialties||[]).map(s=>s.specialties?.doctor_name||s.specialties?.name).filter(Boolean);
@@ -2356,7 +2359,7 @@ function cardHNew(d,i){
   if(d.university) facts.push(`<span class="skc-f">${I(P.edu,13)}${escapeHtml(d.university)}${d.graduation_year?` (${d.graduation_year})`:''}</span>`);
   if(langsAll.length>1||(langsAll.length===1&&langsAll[0].toLowerCase()!=='magyar')) facts.push(`<span class="skc-f">${I(P.globe,13)}${langsAll.map(l=>escapeHtml(l.charAt(0).toUpperCase()+l.slice(1))).join(', ')}</span>`);
   const nm=(d.name||'').replace(/^dr\.?\s+/i,''), ini=nm.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
-  const av=d.photo_url?`<img loading="lazy" decoding="async" src="${d.photo_url}" alt="${escapeHtml(d.name)}">`:`<span class="skc-ini">${escapeHtml(ini)}</span>`;
+  const av=`<img loading="lazy" decoding="async" src="${d.photo_url||('/img/orvos-'+(d.gender==='female'?'no':'ferfi')+'.webp')}" alt="${escapeHtml(d.name)}"${d.photo_url?'':' onerror="this.outerHTML=\'<span class=skc-ini>'+escapeHtml(ini)+'</span>\'"'}>`;
   const tel=(d.phone||clinic?.phone||'').replace(/\s/g,'');
   const moreCl=Math.max(0,(d.doctor_clinics||[]).length-1);
   const clinicAddress=clinic?.address||'';
@@ -2528,8 +2531,8 @@ function openPanel(id){
   document.getElementById('ppChips').style.display = visibleSpecs.length ? 'flex' : 'none';
 
   // Értékelés sor: ⭐ 4.9 (128 értékelés)
-  const ratingFmt = rat > 0 ? rat.toFixed(1) : null;
   const reviewCount = d.review_count || 0;
+  const ratingFmt = (rat > 0 && reviewCount > 0) ? rat.toFixed(1) : null;
   const metaParts = [];
   if (ratingFmt) {
     metaParts.push(`<span class="pp-meta-item"><span class="pp-star">★</span> <strong>${ratingFmt}</strong>${reviewCount ? ` <span class="pp-count-light">(${reviewCount} értékelés)</span>` : ''}</span>`);
@@ -3689,7 +3692,7 @@ html body .skc-main{grid-template-columns:84px minmax(0,1fr) auto;gap:20px;paddi
 html body .skc-av{width:84px;height:84px;border-radius:24px}
 html body .skc-av img{border-radius:24px}
 html body .skc-av.ph,html body .skc-av.cl{overflow:hidden}
-html body .skc-spec{display:inline-flex;align-items:center;gap:6px;margin-top:6px;height:26px;padding:0 11px;border-radius:999px;background:var(--av-bg,#EAF5E3);color:var(--av-fg,#4E9A32);font-size:13px;font-weight:700;letter-spacing:0}
+html body .skc-spec{display:block;margin-top:4px;padding:0;border-radius:0;background:none;color:#4E9A32;font-size:14px;font-weight:700;letter-spacing:-.01em}
 html body .skc-prem{background:linear-gradient(180deg,#FFFCF3 0%,#fff 46%);box-shadow:0 0 0 1.5px rgba(240, 179, 43,.75),0 16px 36px -20px rgba(138,96,16,.5)}
 html body .skc-prem-b{background:linear-gradient(135deg,#F7DC93,#F0B32B);color:#5F4610}
 html body .skc-foot{padding:14px 18px 14px 24px;background:#FAFBFD}

@@ -662,6 +662,27 @@ img{max-width:100%}
 /* csökkentett mozgás tisztelete */
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto}}
 </style>
+<style id="szk-fsb">
+@media(min-width:861px){
+ .pw{align-items:start!important}
+ .fsb{position:sticky!important;top:84px!important;align-self:start!important;max-height:calc(100vh - 104px)!important;overflow-y:auto!important;overscroll-behavior:contain}
+ .fss-body{animation:fssIn .18s ease}
+}
+@keyframes fssIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* találati lista a szűrőpanelen belül nyílik (nem vágja le a panel) */
+.fsb .city-suggest{position:static!important;margin-top:6px;max-height:220px;box-shadow:none!important;border:1px solid #E1E7F2!important;border-radius:12px!important}
+.fsb .fss{border-bottom:1px solid #EEF1F7}
+.fsb .fss:last-child{border-bottom:0}
+</style>
+<style id="szk-btn-soft">
+html body .skc-btn{height:34px!important;padding:0 14px!important;font-size:13px!important;font-weight:600!important;gap:6px!important}
+html body .skc-btn svg{width:13px!important;height:13px!important}
+html body .skc-btn.pri{background:#EBF0FB!important;color:#2A4A9C!important;box-shadow:none!important}
+html body .skc-btn.pri:hover{background:#2A4A9C!important;color:#fff!important}
+html body .skc-btn.sec{background:#fff!important;color:#386320!important;box-shadow:inset 0 0 0 1px #D5E8CA!important}
+html body .skc-btn.sec:hover{background:#EAF5E3!important}
+@media(max-width:860px){html body .skc-btn{height:38px!important;font-size:13.5px!important}}
+</style>
 </head>
 <body>
 <!-- ══════════════════════════════════════════
@@ -888,7 +909,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 
     <div class="fsb-tags" id="fTags"></div>
 
-    <!-- Város (autocomplete, többszörös) -->
     <div class="fss open" id="fsCity">
       <button class="fss-tog" onclick="toggleSec('fsCity')">
         <span class="fss-lbl">Város / kerület</span><span class="fss-arr">▼</span>
@@ -900,25 +920,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
             oninput="cityAcInput()" onfocus="cityAcInput()" onkeydown="cityAcKey(event)">
           <div class="city-suggest" id="citySuggest"></div>
         </div>
-        <!-- A tényleges szűrőérték(ek) – kompatibilitás miatt megtartjuk a régi rejtett selectet is -->
         <select id="fCity" style="display:none"><option value="">Minden város</option></select>
       </div>
     </div>
 
-    <!-- Klinika név -->
-    <div class="fss open" id="fsName">
-      <button class="fss-tog" onclick="toggleSec('fsName')">
-        <span class="fss-lbl">Klinika neve</span><span class="fss-arr">▼</span>
-      </button>
-      <div class="fss-body">
-        <input type="text" id="fName" placeholder="pl. Budai Egészségközpont" autocomplete="off"
-          style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;transition:border-color .15s,box-shadow .15s"
-          onfocus="this.style.borderColor='var(--brand)';this.style.boxShadow='0 0 0 3px rgba(59, 98, 196,.1)'"
-          onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-      </div>
-    </div>
-
-    <!-- Szakterület -->
     <div class="fss open" id="fsSpec">
       <button class="fss-tog" onclick="toggleSec('fsSpec')">
         <span class="fss-lbl">Szakterület</span><span class="fss-arr">▼</span>
@@ -930,7 +935,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-    <!-- Vizsgálat / kezelés -->
     <div class="fss open" id="fsTreat">
       <button class="fss-tog" onclick="toggleSec('fsTreat')">
         <span class="fss-lbl">Vizsgálat / kezelés</span><span class="fss-arr">▼</span>
@@ -945,7 +949,19 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
       </div>
     </div>
 
-  </aside><!-- /fsb -->
+  
+    <div class="fss" id="fsName">
+      <button class="fss-tog" onclick="toggleSec('fsName')">
+        <span class="fss-lbl">Klinika neve</span><span class="fss-arr">▼</span>
+      </button>
+      <div class="fss-body">
+        <input type="text" id="fName" placeholder="pl. Budai Egészségközpont" autocomplete="off"
+          style="width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font:inherit;font-size:13.5px;outline:none;transition:border-color .15s,box-shadow .15s"
+          onfocus="this.style.borderColor='var(--brand)';this.style.boxShadow='0 0 0 3px rgba(59, 98, 196,.1)'"
+          onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      </div>
+    </div>
+</aside><!-- /fsb -->
 
   <!-- RESULTS -->
   <main>
@@ -989,9 +1005,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
     </div>
 
     <div class="pag" id="pagDiv" style="display:none">
-      <button class="pgb" id="pgPrev" onclick="changePg(-1)" aria-label="Előző oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="pgb" id="pgPrev" style="display:none" onclick="changePg(-1)" aria-label="Előző oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div id="pgNums"></div>
-      <button class="pgb" id="pgNext" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="pgb" id="pgNext" style="display:none" onclick="changePg(1)" aria-label="Következő oldal"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
   </main>
   <!-- ══ TÉRKÉP OSZLOP (jobb, csak desktop) ══ -->
@@ -1012,7 +1028,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
 let allClinics = [];
 let filtered = [];
 let curPg = 1;
-const PER_PAGE = 12;
+const PER_PAGE = 15;
 
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
@@ -1590,24 +1606,30 @@ function renderList(){
   }
 
   const total = filtered.length;
+  const start = (curPg - 1) * PER_PAGE;
   const end = Math.min(curPg * PER_PAGE, total);
-  const visible = filtered.slice(0, end);
+  const visible = filtered.slice(start, end);
 
   list.innerHTML = visible.map((c, i) => clinicCardHTML(c, i)).join('');
 
-  // Automatikus betöltés (infinite scroll) — a gomb helyett egy figyelő elem
-  const loadMoreWrap = document.getElementById('loadMoreWrap');
-  const loadMoreInfo = document.getElementById('loadMoreInfo');
-  if(end < total){
-    loadMoreWrap.style.display = 'flex';
-    loadMoreInfo.innerHTML = `<strong>${end}</strong> / ${total} klinika · görgess a továbbiakért…`;
-    _ensureAutoLoadObserver();
+  // Load-more/auto-load megszüntetve — számozott lapozó
+  document.getElementById('loadMoreWrap').style.display = 'none';
+  const pages = Math.ceil(total / PER_PAGE);
+  const pagDiv = document.getElementById('pagDiv');
+  if(pages > 1){
+    pagDiv.style.display = 'flex';
+    let h = '';
+    for(let p = 1; p <= pages; p++){
+      if(p === 1 || p === pages || Math.abs(p - curPg) <= 1){
+        h += `<button class="pgb${p === curPg ? ' on' : ''}" onclick="goPg(${p})">${p}</button>`;
+      } else if(Math.abs(p - curPg) === 2){
+        h += `<span class="pg-ellipsis">…</span>`;
+      }
+    }
+    document.getElementById('pgNums').innerHTML = h;
   } else {
-    loadMoreWrap.style.display = 'none';
+    pagDiv.style.display = 'none';
   }
-
-  // Lapozó elrejtése (auto-load-ot használunk)
-  document.getElementById('pagDiv').style.display = 'none';
 }
 
 // Automatikus betöltés figyelő

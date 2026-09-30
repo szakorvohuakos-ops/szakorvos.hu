@@ -809,6 +809,7 @@ function escapeHtml(s){
   }[ch]));
 }
 
+function setText(id, txt){ var e=document.getElementById(id); if(e) e.textContent=txt; }
 async function loadArticle() {
   // Slug kiolvasása — vagy a query-ből (?slug=...) vagy az URL path-ból (/tudastar/<slug>)
   const params = new URLSearchParams(window.location.search);
@@ -867,6 +868,12 @@ async function loadArticle() {
           ? article.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
           : `Részletes útmutató: ${article.title} – tünetek, okok, kezelési lehetőségek és mikor forduljon ${specialty || 'orvos'}hoz. Szakorvos.hu egészségügyi tudástár.`);
 
+    try{
+      document.title = seoTitle;
+      var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content', seoDesc);
+      var cn=document.querySelector('link[rel="canonical"]'); if(cn) cn.setAttribute('href', 'https://www.szakorvos.hu/tudastar/'+slug);
+      [['og:title',seoTitle],['og:description',seoDesc],['og:url','https://www.szakorvos.hu/tudastar/'+slug]].forEach(function(p){ var o=document.querySelector('meta[property="'+p[0]+'"]'); if(o) o.setAttribute('content',p[1]); });
+    }catch(_){}
     const cleanSlug = slug;
     const canonicalUrl = `https://www.szakorvos.hu/tudastar/${cleanSlug}`;
     const ogImageUrl   = `https://www.szakorvos.hu/social/og-image.png`;

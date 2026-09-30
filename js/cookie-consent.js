@@ -11,7 +11,7 @@
   // ──────────────────────────────────────────────
   var GA_ID = 'G-XXXXXXXXXX';            // <<< IDE jön a te Measurement ID-d (G-...)
   var STORAGE_KEY = 'szk_cookie_consent'; // localStorage kulcs
-  var CONSENT_VERSION = '1';              // ha változik a süti-szabályzat, emeld → újra megkérdez
+  var CONSENT_VERSION = '2';              // ha változik a süti-szabályzat, emeld → újra megkérdez
 
   // ──────────────────────────────────────────────
   // Állapot beolvasása
@@ -25,12 +25,15 @@
       return obj;
     } catch (e) { return null; }
   }
-  function saveConsent(analytics) {
+  var state = { analytics: false, maps: false };
+  function saveConsent(analytics, maps) {
+    state.analytics = !!analytics; state.maps = !!maps;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        v: CONSENT_VERSION, analytics: !!analytics, ts: Date.now()
+        v: CONSENT_VERSION, analytics: state.analytics, maps: state.maps, ts: Date.now()
       }));
     } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent('szk:consent', { detail: { analytics: state.analytics, maps: state.maps } })); } catch (e) {}
   }
 
   // ──────────────────────────────────────────────
@@ -69,6 +72,8 @@
       + '.szk-cc-accept:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(44,150,80,.42)}'
       + '.szk-cc-reject{background:#fff;color:#52617a;border-color:#dce3ea}'
       + '.szk-cc-reject:hover{border-color:#94a3b8;color:#1a1f36}'
+      + '.szk-cc-set{display:flex;flex-direction:column;gap:8px;margin:0 0 14px;font-size:13px;color:#1a1f36}.szk-cc-set[hidden]{display:none}.szk-cc-set label{display:flex;gap:8px;align-items:center}'
+      + '.szk-cc-more{background:#fff;color:#2A4A9C;border-color:#dce3ea}'
       + '@media(max-width:520px){.szk-cc{padding:16px 16px 18px}.szk-cc-btn{min-width:0}}';
     var st = document.createElement('style');
     st.id = 'szk-cc-style';
@@ -86,17 +91,30 @@
       '<div class="szk-cc-title">'
       + '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8.5 8.5v.01M16 15.5v.01M12 12v.01M11 17v.01M7 14v.01"/></svg>'
       + 'Sütiket használunk</div>'
-      + '<p class="szk-cc-text">A weboldal működéséhez szükséges sütiket mindig használunk. Az <strong>anonimizált látogatottsági statisztikához</strong> (Google Analytics) az Ön hozzájárulását kérjük. Részletek az <a href="/adatvedelem.html">Adatvédelmi szabályzatban</a>.</p>'
+      + '<p class="szk-cc-text">A működéshez szükséges sütiket mindig használunk. Az <strong>anonim látogatottsági statisztikához</strong> (Google Analytics) és a <strong>Google Térkép</strong> megjelenítéséhez az Ön hozzájárulását kérjük. Részletek az <a href="/adatvedelem.html">Adatvédelmi tájékoztatóban</a>.</p>'
+      + '<div class="szk-cc-set" hidden>'
+      + '<label><input type="checkbox" checked disabled> Szükséges (mindig aktív)</label>'
+      + '<label><input type="checkbox" class="szk-cc-an"> Statisztika (Google Analytics)</label>'
+      + '<label><input type="checkbox" class="szk-cc-mp"> Google Térkép</label>'
+      + '</div>'
       + '<div class="szk-cc-btns">'
       + '<button class="szk-cc-btn szk-cc-reject" type="button">Csak a szükségeseket</button>'
-      + '<button class="szk-cc-btn szk-cc-accept" type="button">Elfogadom</button>'
+      + '<button class="szk-cc-btn szk-cc-more" type="button">Beállítások</button>'
+      + '<button class="szk-cc-btn szk-cc-accept" type="button">Elfogadom mindet</button>'
       + '</div>';
     document.body.appendChild(wrap);
 
     var acc = wrap.querySelector('.szk-cc-accept');
     var rej = wrap.querySelector('.szk-cc-reject');
-    acc.addEventListener('click', function () { saveConsent(true); loadGA(); hide(wrap); });
-    rej.addEventListener('click', function () { saveConsent(false); hide(wrap); });
+    var more = wrap.querySelector('.szk-cc-more');
+    var set = wrap.querySelector('.szk-cc-set');
+    acc.addEventListener('click', function () { saveConsent(true, true); loadGA(); hide(wrap); });
+    rej.addEventListener('click', function () { saveConsent(false, false); hide(wrap); });
+    more.addEventListener('click', function () {
+      if (set.hidden) { set.hidden = false; more.textContent = 'Kiválasztottak mentése'; return; }
+      var an = wrap.querySelector('.szk-cc-an').checked, mp = wrap.querySelector('.szk-cc-mp').checked;
+      saveConsent(an, mp); if (an) loadGA(); hide(wrap);
+    });
 
     requestAnimationFrame(function () { wrap.classList.add('show'); });
     return wrap;
@@ -116,10 +134,36 @@
   };
 
   // ──────────────────────────────────────────────
+  // Hozzájárulás-API (térkép stb.): szkConsent.has('maps'), szkConsent.maps('#map')
+  // ──────────────────────────────────────────────
+  window.szkConsent = {
+    has: function (k) { return !!state[k]; },
+    maps: function (sel) {
+      return new Promise(function (resolve) {
+        if (state.maps) return resolve();
+        var box = sel && document.querySelector(sel);
+        var ph = null;
+        if (box) {
+          ph = document.createElement('div');
+          ph.style.cssText = 'position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px;text-align:center;background:#EEF2FA;color:#1a1f36;font:600 14px Manrope,sans-serif';
+          ph.innerHTML = '<div>A térkép a Google szolgáltatása, betöltéséhez hozzájárulás kell.</div><button type="button" style="font:600 14px Manrope,sans-serif;padding:10px 18px;border:0;border-radius:10px;background:#2A4A9C;color:#fff;cursor:pointer">Térkép betöltése</button>';
+          if (getComputedStyle(box).position === 'static') box.style.position = 'relative';
+          box.appendChild(ph);
+          ph.querySelector('button').addEventListener('click', function () { saveConsent(state.analytics, true); });
+        }
+        window.addEventListener('szk:consent', function h(e) {
+          if (e.detail && e.detail.maps) { window.removeEventListener('szk:consent', h); if (ph && ph.parentNode) ph.parentNode.removeChild(ph); resolve(); }
+        });
+      });
+    }
+  };
+
+  // ──────────────────────────────────────────────
   // Indítás
   // ──────────────────────────────────────────────
   function init() {
     var c = readConsent();
+    if (c) { state.analytics = !!c.analytics; state.maps = !!c.maps; }
     if (c === null) {
       buildBanner();            // még nem döntött → banner
     } else if (c.analytics) {
