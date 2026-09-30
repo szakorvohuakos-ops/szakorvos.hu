@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session } } = await db.auth.getSession();
   if (!session) { window.location.replace('/login.html?redirect=' + encodeURIComponent(window.location.pathname)); return; }
   const { data: profile } = await db.from('user_profiles').select('role,full_name').eq('id', session.user.id).single();
-  if (!profile || !['superadmin','doctor_admin'].includes(profile.role)) {
+  if (profile?.role === 'superadmin') { window.location.replace('/admin.html#orvosok'); return; }
+  if (!profile || profile.role !== 'doctor_admin') {
     document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;background:#F4F6F8;gap:16px"><div style="font-size:48px">🚫</div><h2 style="color:#113293;margin:0">Hozzáférés megtagadva</h2><p style="color:#475569;margin:0">Ez az oldal csak orvos admin jogosultsággal érhető el.</p><a href="/login.html" style="background:#113293;color:white;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;margin-top:8px">Vissza a bejelentkezéshez</a></div>';
     return;
   }
@@ -687,6 +688,12 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){const d=doc
               <textarea class="form-input" id="pBio" rows="5" placeholder="Írjon magáról pár mondatot – ez jelenik meg a nyilvános profilján…"></textarea>
               <div class="form-hint">Minimum 100 karakter ajánlott a jobb megjelenésért.</div>
             </div>
+            <div class="form-group form-full" id="specBlock">
+              <label class="form-label">Szakterületek</label>
+              <div id="pSpecChips" style="min-height:30px;display:flex;flex-wrap:wrap;gap:6px;align-items:center"></div>
+              <select class="form-input" id="pSpecAdd" style="margin-top:8px" onchange="addOwnSpec(this.value)"></select>
+              <div class="form-hint">Ez alapján jelenik meg a szakterületi keresésekben. A módosítás azonnal mentődik.</div>
+            </div>
             <div class="form-group">
               <label class="form-label">Email</label>
               <input class="form-input" id="pEmail" type="email" placeholder="doktor@email.hu">
@@ -962,9 +969,49 @@ function switchTab(tab,el){
   if(tab==='reviews') loadReviews();
 }
 
+
+/* ═══ SZAKTERÜLETEK (saját) ═══ */
+let _allSpecs=[];
+async function loadOwnSpecs(){
+  if(!doctorData?.id){ 
+    const ch=document.getElementById('pSpecChips');
+    if(ch) ch.innerHTML='<span style="color:var(--muted);font-size:13px">Előbb mentse el a profilját, utána adhat meg szakterületet.</span>';
+    const ad=document.getElementById('pSpecAdd'); if(ad) ad.innerHTML='';
+    return; 
+  }
+  if(!_allSpecs.length){
+    const { data } = await db.from('specialties').select('id,name').order('name');
+    _allSpecs = data || [];
+  }
+  const { data: cur } = await db.from('doctor_specialties')
+    .select('specialty_id, specialties(name)').eq('doctor_id', doctorData.id);
+  const curIds = (cur||[]).map(x=>x.specialty_id);
+  const chips = document.getElementById('pSpecChips');
+  if(chips) chips.innerHTML = (cur||[]).length ? (cur||[]).map(x=>
+    `<span style="display:inline-flex;align-items:center;gap:6px;background:#E5EAF6;color:#2A4A9C;font-size:12.5px;font-weight:700;border-radius:100px;padding:4px 11px">${(x.specialties&&x.specialties.name)||''}
+     <button type="button" style="border:0;background:none;color:inherit;cursor:pointer;font-weight:800;padding:0;font-size:14px" onclick="removeOwnSpec('${x.specialty_id}')" aria-label="Eltávolítás">×</button></span>`).join('')
+    : '<span style="color:var(--muted);font-size:13px">Még nincs szakterület megadva</span>';
+  const add = document.getElementById('pSpecAdd');
+  if(add) add.innerHTML = '<option value="">+ Szakterület hozzáadása…</option>' +
+    _allSpecs.filter(sp=>!curIds.includes(sp.id)).map(sp=>`<option value="${sp.id}">${sp.name}</option>`).join('');
+}
+async function addOwnSpec(specId){
+  if(!specId || !doctorData?.id) return;
+  const { error } = await db.from('doctor_specialties').insert({ doctor_id: doctorData.id, specialty_id: specId });
+  if(error) alert('Nem sikerült menteni: '+error.message);
+  loadOwnSpecs();
+}
+async function removeOwnSpec(specId){
+  const { error } = await db.from('doctor_specialties').delete()
+    .eq('doctor_id', doctorData.id).eq('specialty_id', specId);
+  if(error) alert('Nem sikerült törölni: '+error.message);
+  loadOwnSpecs();
+}
+
 /* ═══ PROFILE LOAD ═══ */
 async function loadDoctorProfile(userId) {
   currentUserId = userId;
+  setTimeout(loadOwnSpecs, 400);
   const { data } = await db
     .from('doctors')
     .select('*, doctor_specialties(specialties(id,name)), doctor_clinics(clinics(id,name))')
@@ -973,6 +1020,7 @@ async function loadDoctorProfile(userId) {
 
   if (data) {
     doctorData = data;
+    setTimeout(loadOwnSpecs, 0);
     // Töltjük be a form mezőket
     const fields = {
       'pName': data.name,

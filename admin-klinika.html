@@ -989,20 +989,15 @@ function switchTab(tab,el){
 /* ═══ KLINIKA BETÖLTÉSE ═══ */
 async function loadClinicData(){
   try {
-    // Session-höz tartozó klinika a clinic_admins táblából
+    // Session-höz tartozó klinika (clinics.admin_user_id alapján)
     const { data: { session } } = await db.auth.getSession();
     if(!session?.user) return;
-    const { data: link } = await db
-      .from('clinic_admins')
-      .select('clinic_id')
-      .eq('user_id', session.user.id)
-      .maybeSingle();
-    const clinicId = link?.clinic_id;
-    if(!clinicId){
-      document.querySelector('.main').innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)">Nincs hozzád rendelt klinika. Kérj segítséget a szuperadmintól.</div>';
+    const { data } = await db.from('clinics').select('*, cities(name)')
+      .eq('admin_user_id', session.user.id).maybeSingle();
+    if(!data){
+      document.querySelector('.main').innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted)">Nincs Önhöz rendelt klinika. Írjon a kapcsolat\u0040szakorvos.hu címre, és összekötjük a klinikájával.</div>';
       return;
     }
-    const { data } = await db.from('clinics').select('*, cities(name)').eq('id', clinicId).single();
     clinicData = data;
     fillClinicForm(data);
   } catch(e){

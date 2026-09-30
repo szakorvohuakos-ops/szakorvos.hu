@@ -69,7 +69,10 @@ function page({ title, desc, canon, crumbs, body, ld = [] }) {
 <meta property="og:type" content="website"><meta property="og:site_name" content="Szakorvos.hu">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${SITE}${canon}"><meta property="og:locale" content="hu_HU">
-<meta name="theme-color" content="#1A3BAA">
+<meta name="theme-color" content="#2A4A9C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">\n<style id="szk-premium-mini">html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}::selection{background:#2A4A9C;color:#fff}h1,h2,h3{letter-spacing:-.02em}h1,h2{text-wrap:balance}p{text-wrap:pretty}a,button{-webkit-tap-highlight-color:transparent;transition:color .16s,background-color .16s,border-color .16s}:focus-visible{outline:2px solid #2A4A9C;outline-offset:2px;border-radius:4px}@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;scroll-behavior:auto}}</style>
 <link rel="icon" href="/favicon/favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="/szakorvos-icon.svg">
 <link rel="stylesheet" href="/szakorvos/seo.css?v=${CSS_VER}">
 ${lds}
@@ -95,6 +98,7 @@ const AI_BOX = (spec) => `<aside class="aibox">
   <span class="aibadge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l1.9 5.6 5.6 1.9-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9z"/></svg>AI-kereső</span>
   <div><b>Nem biztos benne, hogy ${spec ? esc(lc(spec)) + ' kell' : 'melyik szakorvos kell'}?</b><p>Írja le a panaszát a saját szavaival – az AI-kereső megmondja, melyik szakterület illik hozzá, és kiadja a közeli orvosokat.</p></div>
   <a class="btn ai" href="/">Kérdezze az AI-keresőt ›</a>
+  <small style="display:block;margin-top:6px;font-size:11.5px;opacity:.75">A beírt tünetleírást anonim módon dolgozzuk fel — <a href="/adatvedelem.html#ai">részletek</a></small>
 </aside>`;
 
 // ---------- fő ----------
@@ -242,7 +246,7 @@ ${AI_BOX(null)}`;
 const today = new Date().toISOString().slice(0, 10);
 const xmlEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const urlset = rows => `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${rows.map(([u, p]) => `  <url><loc>${xmlEsc(SITE + u)}</loc><lastmod>${today}</lastmod>${p ? `<priority>${p}</priority>` : ''}</url>`).join('\n')}\n</urlset>\n`;
-const STATIC = [['/', '1.0'], ['/talalatok', '0.9'], ['/klinikak', '0.8'], ['/tudastar', '0.7'], ['/vizsgalatok', '0.6'], ['/register.html', '0.5'], ['/kapcsolat.html', '0.3'], ['/adatvedelem.html', '0.2']];
+const STATIC = [['/', '1.0'], ['/talalatok', '0.9'], ['/klinikak', '0.8'], ['/tudastar', '0.7'], ['/vizsgalatok', '0.6'], ['/register.html', '0.5'], ['/kapcsolat.html', '0.3'], ['/adatvedelem.html', '0.2'], ['/aszf.html', '0.2'], ['/impresszum.html', '0.2']];
 write('sitemap-oldalak.xml', urlset([...STATIC, ...urls]));
 const docUrls = [...new Set(docs.map(doctorUrl))].map(u => [u, '0.6']);
 write('sitemap-orvosok.xml', urlset(docUrls));

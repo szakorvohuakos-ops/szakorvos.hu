@@ -30,7 +30,7 @@
 <link rel="manifest" href="/site.webmanifest">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
- {"@type":"Organization","name":"szakorvos.hu","url":"https://www.szakorvos.hu/","logo":"https://www.szakorvos.hu/logo/szakorvos-logo@2x.png","email":"info@szakorvos.hu","areaServed":"HU"},
+ {"@type":"Organization","name":"szakorvos.hu","url":"https://www.szakorvos.hu/","logo":"https://www.szakorvos.hu/logo/szakorvos-logo@2x.png","email":"kapcsolat\u0040szakorvos.hu","areaServed":"HU"},
  {"@type":"WebSite","name":"szakorvos.hu","url":"https://www.szakorvos.hu/","inLanguage":"hu-HU","potentialAction":{"@type":"SearchAction","target":"https://www.szakorvos.hu/talalatok?q={search_term_string}","query-input":"required name=search_term_string"}},
  {"@type":"FAQPage","mainEntity":[
   {"@type":"Question","name":"Orvosi diagnózist ad a panasz alapú keresés?","acceptedAnswer":{"@type":"Answer","text":"Nem. Csak abban segít, hogy a panaszához illő szakterületet és a sürgősség szintjét lássa, és gyorsan orvost találjon. A diagnózist mindig orvos állítja fel."}},
@@ -3295,9 +3295,9 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
       <span class="wm">Szakorvos<em>.hu</em></span>
     </a>
     <div class="links">
-      <div class="dd wide"><a href="#kereso2" aria-haspopup="true">Szakorvosok<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+      <div class="dd wide"><a href="#kereso" aria-haspopup="true">Szakorvosok<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
         <div class="menu cols">
-          <div><h5>Keresés</h5><a href="#kereso2">Orvoskereső</a><a href="#kereso2" class="js-sym">Panasz alapú keresés</a><a href="/talalatok">Összes szakorvos</a></div>
+          <div><h5>Keresés</h5><a href="#kereso">Orvoskereső</a><a href="#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok">Összes szakorvos</a></div>
           <div><h5>Szakterületek</h5><a href="/talalatok?q=Bőrgyógyász">Bőrgyógyász</a><a href="/talalatok?q=Nőgyógyász">Nőgyógyász</a><a href="/talalatok?q=Fogorvos">Fogorvos</a><a href="/talalatok?q=Gyermekorvos">Gyermekorvos</a><a href="/talalatok?all=1" class="all">Mind a 86 szakterület ›</a></div>
           <div><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=Győr">Győr</a><a href="#varosok" class="all">Összes város ›</a></div>
         </div></div>
@@ -3306,7 +3306,7 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
       <div class="dd"><a href="#tudastar" aria-haspopup="true">Tudástár<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
         <div class="menu"><a href="#tudastar">Cikkek és útmutatók</a><a href="/tudastar">Tünetek A–Z</a><a href="/tudastar">Beutaló-tudnivalók</a><a href="#gyik">Gyakori kérdések</a></div></div>
       <div class="dd"><a href="register.html" aria-haspopup="true">Orvosoknak<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
-        <div class="menu"><a href="register.html">Miért érdemes regisztrálni</a><a href="register.html#csomagok">Csomagok és árak</a><a href="register.html#gyik">Partner GYIK</a><a href="mailto:info@szakorvos.hu">Kapcsolat</a></div></div>
+        <div class="menu"><a href="register.html">Miért érdemes regisztrálni</a><a href="register.html#csomagok">Csomagok és árak</a><a href="register.html#gyik">Partner GYIK</a><a href="#" data-szkm="keep">Kapcsolat</a></div></div>
     </div>
     <div class="navr">
       <a class="user" href="login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Bejelentkezés</span></a>
@@ -3316,13 +3316,13 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
   </div>
   <div class="mobnav" id="mobnav">
     <h5>Szakorvosok</h5>
-    <a href="#kereso2">Orvoskereső</a><a href="#kereso2" class="js-sym">Panasz alapú keresés</a><a href="/talalatok?all=1">Szakterületek</a><a href="#varosok">Városok</a>
+    <a href="#kereso">Orvoskereső</a><a href="#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok?all=1">Szakterületek</a><a href="#varosok">Városok</a>
     <h5>Klinikák</h5>
     <a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a>
     <h5>Tudástár</h5>
     <a href="/tudastar">Cikkek</a><a href="/tudastar">Tünetek A–Z</a><a href="#gyik">GYIK</a>
     <h5>Orvosoknak</h5>
-    <a href="register.html" class="acc">Partnerprogram – csomagok és árak</a><a href="login.html">Bejelentkezés</a><a href="mailto:info@szakorvos.hu">Kapcsolat</a>
+    <a href="register.html" class="acc">Partnerprogram – csomagok és árak</a><a href="login.html">Bejelentkezés</a><a href="#" data-szkm="keep">Kapcsolat</a>
   </div>
 </nav>
 
@@ -3451,7 +3451,7 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
     </div><!-- /search classic -->
     </div><!-- /searchgrid -->
 
-    <p class="herofree">Ingyenes és regisztráció nélkül használható · A szakorvos.hu AI-asszisztens nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a <a href="tel:112">112-t</a>.</p>
+    <p class="herofree">Ingyenes és regisztráció nélkül használható · A beírt tünetleírást anonim módon, fiókhoz nem kötve dolgozzuk fel — <a href="/adatvedelem.html#ai">részletek</a> · A szakorvos.hu AI-asszisztens nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a <a href="tel:112">112-t</a>.</p>
   </div>
 </header>
 
@@ -3551,7 +3551,7 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
   <div class="wrap">
     <div class="shead">
       <div><p class="eyebrow">Segítség</p><h2>Gyakori kérdések</h2><p class="sub">Ha nem találja a választ, írjon nekünk.</p></div>
-      <a class="all" href="mailto:info@szakorvos.hu">info@szakorvos.hu ›</a>
+      <a class="all" href="#" data-szkm="keep"><span data-szkm>kapcsolat&#8203;[kukac]&#8203;szakorvos.hu</span> ›</a>
     </div>
     <div class="faqs">
       <details class="faq"><summary>Orvosi diagnózist ad a panasz alapú keresés?</summary><p>Nem. Csak abban segít, hogy a panaszához illő szakterületet és a sürgősség szintjét lássa, és gyorsan orvost találjon. A diagnózist mindig orvos állítja fel.</p></details>
@@ -3611,8 +3611,10 @@ background:url(data:image/webp;base64,UklGRvqNAABXRUJQVlA4IO6NAACQXAWdASpABoQDPs
     </div>
     <div class="fcol"><h4>Pácienseknek</h4><a href="#kereso">Orvoskereső</a><a href="#szakteruletek">Szakterületek</a><a href="/klinikak">Klinikák</a><a href="#tudastar">Tudástár</a><a href="#gyik">GYIK</a></div>
     <div class="fcol"><h4>Orvosoknak</h4><a href="register.html">Partnerprogram</a><a href="register.html#csomagok">Csomagok és árak</a><a href="login.html">Bejelentkezés</a></div>
-    <div class="fcol"><h4>Jogi</h4><a href="adatvedelem.html">Adatvédelem</a><a href="kapcsolat.html">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
-    <div class="bottom"><span>© 2026 szakorvos.hu</span><span>A szakorvos.hu AI-asszisztens nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a 112-t.</span></div>
+    <div class="fcol"><h4>Jogi</h4><a href="adatvedelem.html">Adatvédelem</a><a href="/aszf.html">ÁSZF</a><a href="/impresszum.html">Impresszum</a><a href="kapcsolat.html">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
+    <style>footer .fspecs{grid-column:1/-1;padding-top:18px;border-top:1px solid var(--line)}footer .fspecs h4{margin:0 0 10px}footer .fspecs .fsl{display:flex;flex-wrap:wrap;gap:6px 18px}footer .fspecs .fsl a{white-space:nowrap}</style>
+<div class="fspecs"><h4>Népszerű szakterületek</h4><div class="fsl"><a href="/szakorvos/nogyogyasz">Nőgyógyász</a><a href="/szakorvos/borgyogyasz">Bőrgyógyász</a><a href="/szakorvos/kardiologus">Kardiológus</a><a href="/szakorvos/urologus">Urológus</a><a href="/szakorvos/fogorvos">Fogorvos</a><a href="/szakorvos/szemeszet-szakorvos">Szemész</a><a href="/szakorvos/ortoped-traumatologus">Ortopéd-traumatológus</a><a href="/szakorvos/reumatologus">Reumatológus</a><a href="/szakorvos/gasztroenterologus">Gasztroenterológus</a><a href="/szakorvos/ful-orr-gege-szakorvos">Fül-orr-gégész</a><a href="/szakorvos/neurologus">Neurológus</a><a href="/szakorvos/pszichiatrus">Pszichiáter</a><a href="/szakorvos"><b>Összes szakterület →</b></a></div></div>
+<div class="bottom"><span>© 2026 szakorvos.hu</span><span>A szakorvos.hu AI-asszisztens nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a 112-t.</span></div>
   </div>
 </footer>
 
@@ -5016,5 +5018,6 @@ html body #tudastar .post:nth-child(3) .pcov svg{stroke:#5C3A05!important;color:
 <style id="photo-90">@media (min-width:1001px){html body .hero .hero-photo{bottom:0!important;background-size:auto 538px!important;background-position:right -50px top -22px!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%,#000 100%),linear-gradient(180deg,transparent,#000 25%,#000 85%,transparent 100%)!important;mask-image:linear-gradient(90deg,transparent 0%,#000 30%,#000 100%),linear-gradient(180deg,transparent,#000 25%,#000 85%,transparent 100%)!important;-webkit-mask-composite:source-in!important;mask-composite:intersect!important}}</style>
 <style id="hero-compact">@media (min-width:1001px){html body header.hero{padding-top:16px!important;padding-bottom:20px!important}html body .hero .herofree{margin-top:8px!important}}</style>
 <style id="scale-95">@media (min-width:1001px){html body .hero h1{zoom:.9025}html body .hero .wrap #ai-kereso{zoom:.95;flex:0 0 calc((80% - 38px)*.95 + 20px)!important;width:calc((80% - 38px)*.95 + 20px)!important;max-width:calc((80% - 38px)*.95 + 20px)!important}}</style>
+<script src="/js/skt.js" defer></script>
 </body>
 </html>
