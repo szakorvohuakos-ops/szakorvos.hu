@@ -1,0 +1,80 @@
+/* ==========================================================================
+   szakorvos.hu – közös UI réteg (a főoldal heró / landing stílusa alapján)
+   Minden publikus oldal a <head> végén tölti be, így felülírja a régi,
+   oldalankénti stílusokat. Új oldalon elég ezeket az osztályokat használni.
+   ========================================================================== */
+:root{
+  --ui-blue:#1D4992; --ui-blue-d:#163A78; --ui-blue-l:#E6EDFA;
+  --ui-green:#467A28; --ui-green-d:#386320; --ui-green-l:#EAF5E3;
+  --ui-navy:#0B1633; --ui-ink:#2B3752; --ui-muted:#5A6580; --ui-faint:#8A93A8;
+  --ui-line:#DCE3F0; --ui-line-2:#B9C6DE; --ui-field:#9DB0D9;
+  --ui-bg:#F5F8FD; --ui-card:#fff;
+  --ui-r-card:24px; --ui-r-box:18px; --ui-r-btn:12px;
+  --ui-sh-card:0 2px 4px rgba(11,22,51,.06),0 14px 28px -8px rgba(29,53,116,.20),0 40px 80px -30px rgba(29,53,116,.30);
+  --ui-sh-box:0 8px 20px -18px rgba(11,22,51,.35);
+  --ui-sh-hover:0 12px 24px -16px rgba(29,73,146,.40);
+  --ui-font:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+
+/* ---------- Tipográfia ---------- */
+html body main h1,html body .page-hero h1,html body .ph h1,html body .hdr h1{font-family:var(--ui-font)!important;font-weight:800!important;letter-spacing:-.02em!important;color:var(--ui-blue)!important}
+html body main h1 em,html body main h2 em,html body .page-hero h1 em{font-style:normal!important;color:var(--ui-green)!important;-webkit-text-fill-color:var(--ui-green)!important;background:none!important}
+html body main h2{font-family:var(--ui-font)!important;font-weight:800!important;letter-spacing:-.015em!important}
+html body .eyebrow,html body .kicker{font-family:var(--ui-font)!important;color:var(--ui-muted)!important;font-weight:700!important;letter-spacing:.08em!important;text-transform:uppercase!important}
+
+/* ---------- Gombok ---------- */
+html body .btn,html body .btn-primary,html body .btn-submit,html body .btn-cta,html body .btn-find,html body .skc-btn.pri,html body .ui-btn{
+  font-family:var(--ui-font)!important;font-weight:700!important;border-radius:var(--ui-r-btn)!important;
+  background:var(--ui-blue)!important;background-image:none!important;color:#fff!important;border:0!important;
+  box-shadow:0 8px 18px -10px rgba(29,73,146,.8)!important;transition:background .2s,transform .15s,box-shadow .2s!important}
+html body .btn:hover,html body .btn-primary:hover,html body .btn-submit:hover,html body .btn-cta:hover,html body .btn-find:hover,html body .skc-btn.pri:hover,html body .ui-btn:hover{background:var(--ui-blue-d)!important;transform:translateY(-1px)}
+html body .btn-outline,html body .btn.ghost,html body .skc-btn.sec,html body .ui-btn.sec{
+  background:#fff!important;color:var(--ui-blue)!important;border:1.5px solid var(--ui-field)!important;box-shadow:none!important}
+html body .btn-outline:hover,html body .btn.ghost:hover,html body .skc-btn.sec:hover,html body .ui-btn.sec:hover{background:#EEF3FB!important;border-color:var(--ui-blue)!important;color:var(--ui-blue)!important}
+html body .ui-btn.ai{background:var(--ui-green)!important;box-shadow:0 8px 18px -10px rgba(70,122,40,.8)!important}
+html body .ui-btn.ai:hover{background:var(--ui-green-d)!important}
+
+/* ---------- Űrlapmezők ---------- */
+html body main input[type=text],html body main input[type=email],html body main input[type=tel],html body main input[type=search],html body main input[type=password],html body main select,html body main textarea{
+  font-family:var(--ui-font)!important;border-radius:12px!important;border:1.5px solid var(--ui-line)!important;transition:border-color .2s,box-shadow .2s}
+html body main input:focus,html body main select:focus,html body main textarea:focus{outline:0!important;border-color:var(--ui-blue)!important;box-shadow:0 0 0 4px rgba(42,74,156,.12)!important}
+
+/* ---------- Kártyák ---------- */
+html body .skc,html body .pp-card,html body .ui-box,html body .post,html body .clinic-card,html body .cl-card,html body .tr-card{
+  background:var(--ui-card)!important;border:1px solid var(--ui-line)!important;border-radius:var(--ui-r-box)!important;box-shadow:var(--ui-sh-box)!important;transition:border-color .2s,box-shadow .2s,transform .2s}
+html body .skc:hover,html body .ui-box:hover,html body .clinic-card:hover,html body .cl-card:hover,html body .tr-card:hover{border-color:var(--ui-line-2)!important;box-shadow:var(--ui-sh-hover)!important}
+html body .ui-card{background:#fff;border-radius:var(--ui-r-card);box-shadow:var(--ui-sh-card);border:1px solid #E3E9F4}
+
+/* ---------- Találati kártya (orvos) ---------- */
+html body .skc-name{font-family:var(--ui-font)!important;color:var(--ui-navy)!important;font-weight:800!important}
+html body .skc-spec{color:var(--ui-blue)!important;font-weight:700!important}
+html body .skc-intro,html body .skc-loc{color:var(--ui-muted)!important}
+html body .skc-foot{border-top:1px solid #EEF2F8!important}
+html body .skc-btn{border-radius:var(--ui-r-btn)!important;font-family:var(--ui-font)!important;font-weight:700!important}
+html body .skc-b{border-radius:999px!important;font-weight:700!important}
+html body .skc-prem{border-color:#C9E3B8!important}
+
+/* ---------- Szűrő oldalsáv ---------- */
+html body .fss,html body .filters,html body .fsb{border-radius:var(--ui-r-box)!important}
+html body .fss-lbl{font-family:var(--ui-font)!important;color:var(--ui-navy)!important;font-weight:800!important}
+html body .chk-row{border-radius:10px!important}
+html body .chip{border-radius:999px!important;font-family:var(--ui-font)!important;font-weight:700!important}
+html body .chip.on,html body .chip.active{background:var(--ui-blue)!important;color:#fff!important;border-color:var(--ui-blue)!important}
+
+/* ---------- Orvosok / Klinikák váltó ---------- */
+html body .view-toggle-inner{background:#fff!important;border:1px solid var(--ui-line)!important;border-radius:14px!important;padding:4px!important;box-shadow:var(--ui-sh-box)!important}
+html body .view-toggle-btn{border-radius:10px!important;font-family:var(--ui-font)!important;font-weight:700!important;color:var(--ui-muted)!important;background:transparent!important}
+html body .view-toggle-btn.active{background:var(--ui-blue)!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(29,73,146,.8)!important}
+
+/* ---------- Kenyérmorzsa ---------- */
+html body .crumbs,html body .crumb,html body .breadcrumb{font-family:var(--ui-font)!important;color:var(--ui-muted)!important}
+html body .crumbs a,html body .breadcrumb a{color:var(--ui-blue)!important}
+
+/* ---------- Üres állapot / hiba ---------- */
+html body .empty-title{font-family:var(--ui-font)!important;color:var(--ui-navy)!important;font-weight:800!important}
+html body .empty-sub{color:var(--ui-muted)!important}
+
+/* ---------- Mobil ---------- */
+@media (max-width:640px){
+  html body .btn,html body .btn-submit,html body .btn-cta,html body .btn-find{min-height:46px}
+}
