@@ -293,7 +293,206 @@ body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Displ
 #skfoot .bottom{border-top-color:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.55)!important}
 #skfoot .fspecs{border-top-color:rgba(255,255,255,.12)!important}
 </style>
-<link rel="stylesheet" href="/css/szk-results.css?v=20261003">
+<style id="szk-results">
+/* ==========================================================================
+   szakorvos.hu – találati oldalak (orvos + klinika) közös stílusa – 2026.10
+   Elrendezés: fejléc (cím · középen Orvosok/Klinikák · rendezés) |
+               bal szűrő · kártyák · keskeny térkép
+   ========================================================================== */
+:root{--blue:#1D4992;--blue-d:#163A78;--blue-l:#E6EDFA;--green:#467A28;--green-d:#386320;--green-l:#EAF5E3;--navy:#0B1633;--ink:#2B3752;--muted:#5A6580;--faint:#8A93A8;--line:#DCE3F0;--line2:#B9C6DE;--field:#9DB0D9;--bg:#F5F8FD}
+html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif!important;color:var(--ink);background:var(--bg);-webkit-text-size-adjust:100%}
+.szr *,.szr *::before,.szr *::after{box-sizing:border-box}
+.szr main a,.szr .head a,.szr .side a{color:inherit;text-decoration:none}
+.szr button{font-family:inherit;cursor:pointer}
+.szr svg.i{width:18px;height:18px;flex:none}
+/* menü + lábléc a tartalom szélességéhez igazítva */
+.szr #sknav .wrap{max-width:1320px!important}
+.szr #skfoot .wrap{max-width:1320px!important}
+
+/* ---------- fejléc ---------- */
+.head{background:linear-gradient(180deg,#EAF0FA,#F5F8FD);border-bottom:1px solid #E3E9F4}
+.head .in{max-width:1320px;margin:0 auto;padding:18px 20px 16px}
+.crumbs{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.crumbs a{color:var(--blue)!important;font-weight:600}
+.ttl{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:end;gap:16px;margin:8px 0 6px}
+.ttl h1{margin:0;font-size:32px;line-height:1.15;font-weight:800;letter-spacing:-.02em;color:var(--blue)}
+.ttl h1 em{font-style:normal;color:var(--green)}
+.ttl p{margin:4px 0 0;color:var(--muted);font-size:15px;min-height:22px}
+.ttl p b{color:var(--navy)}
+.vt{display:inline-flex;background:#fff;border:1px solid var(--line);gap:2px;justify-self:center;padding:5px;border-radius:16px;box-shadow:0 8px 20px -16px rgba(11,22,51,.45)}
+.vt a,.vt span{display:inline-flex;gap:7px;align-items:center;padding:10px 22px;border-radius:11px;font-weight:700;font-size:15px;color:var(--muted)}
+.vt a:hover{color:var(--blue)}
+.vt .on{background:var(--blue);color:#fff!important;box-shadow:0 6px 14px -8px rgba(29,73,146,.8)}
+.vt svg{width:16px;height:16px}
+.sort{justify-self:end;display:inline-flex;align-items:center}
+.sort select{border:1px solid var(--line);border-radius:10px;height:40px;padding:0 10px;font:700 13.5px 'Manrope',sans-serif;color:var(--navy);background:#fff}
+.bar2{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.act{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.act .ac{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 12px;border-radius:999px;background:var(--blue-l);color:var(--blue);font-weight:700;font-size:13px;border:0}
+.act .ac b{width:20px;height:20px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:13px;line-height:1}
+.act .hint{font-size:13px;color:var(--faint)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 13px;white-space:nowrap;border-radius:999px;border:1px solid var(--field);background:#fff;font-weight:700;font-size:13.5px;color:var(--blue)}
+.chip svg{width:15px;height:15px}
+.chip .cnt{background:var(--blue);color:#fff;border-radius:99px;font-size:11px;padding:1px 7px}
+#mf{display:none}
+@media (min-width:1001px){.bar2.noact{display:none}}
+
+/* ---------- rács ---------- */
+.body{max-width:1320px;margin:0 auto;padding:22px 20px 60px;display:grid;grid-template-columns:264px minmax(0,1fr) 250px;gap:22px;align-items:start}
+.list{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* ---------- szűrő oldalsáv ---------- */
+.side{position:sticky;top:76px;max-height:calc(100vh - 96px);display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 20px -18px rgba(11,22,51,.35);overflow:hidden}
+.side .sh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px;border-bottom:1px solid #EEF1F6}
+.side .sh b{display:inline-flex;align-items:center;gap:8px;font-size:16px;color:var(--navy)}
+.side .sh b svg{color:var(--blue)}
+.side .clr{border:0;background:none;color:var(--blue);font-weight:700;font-size:13px;padding:0}
+.side .clr:disabled{color:var(--faint);cursor:default}
+.side .x{display:none}
+.side .sb{flex:1;overflow:auto;padding:4px 16px 8px;scrollbar-width:thin}
+.fg{border-bottom:1px solid #EEF1F6;padding:12px 0}
+.fg:last-child{border-bottom:0}
+.fg summary{list-style:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fg summary::-webkit-details-marker{display:none}
+.fg summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+.fg[open] summary::after{transform:rotate(-135deg) translateY(-1px)}
+.fg[open] summary{margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:2px}
+.ck{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:0 -8px;border-radius:10px;font-size:14.5px;color:var(--ink);cursor:pointer}
+.ck:hover{background:#F5F8FD}
+.ck input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:1.5px solid var(--field);border-radius:5px;margin:0;flex:none;display:grid;place-items:center;transition:background .15s,border-color .15s}
+.ck input[type=radio]{border-radius:50%}
+.ck input:checked{background:var(--blue);border-color:var(--blue)}
+.ck input:checked::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.ck i{margin-left:auto;font-style:normal;font-size:12px;color:var(--faint);font-weight:600}
+.ck[hidden]{display:none}
+.seg{display:flex;background:#F1F4FA;border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;height:34px;font-weight:700;font-size:13px;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--blue);box-shadow:0 2px 6px -2px rgba(11,22,51,.25)}
+.near{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:12px;border:1.5px solid var(--field);background:#fff;color:var(--blue);font-weight:700;font-size:13.5px;margin-bottom:6px}
+.near:hover{background:#EEF3FB}
+.near.on{background:var(--blue-l);border-color:var(--blue)}
+.rng{margin:6px 0 8px}
+.rng input{width:100%;accent-color:var(--blue)}
+.rl{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin-top:2px}
+.rl b{color:var(--navy);font-size:12.5px}
+.lnk{border:0;background:none;color:var(--blue);font-weight:700;font-size:13px;padding:6px 0 0}
+.fsearch{width:100%;height:38px;border:1.5px solid var(--line);border-radius:10px;padding:0 10px;font:600 14px 'Manrope',sans-serif;color:var(--navy);margin-bottom:6px;outline:0}
+.fsearch:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,74,156,.12)}
+.side .sf{display:none;padding:12px 16px;border-top:1px solid #EEF1F6}
+.side .sf .btn{width:100%}
+
+/* ---------- kártyák ---------- */
+.card{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:16px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 20px -18px rgba(11,22,51,.35);transition:border-color .2s,box-shadow .2s;cursor:pointer}
+.card:hover,.card.hl{border-color:var(--line2);box-shadow:0 14px 28px -18px rgba(29,73,146,.5)}
+.av{width:64px;height:64px;border-radius:18px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:20px;overflow:hidden}
+.av.f{background:#EEEAFA;color:#5B4BA0}
+.av img{width:100%;height:100%;object-fit:cover}
+.av svg{width:30px;height:30px}
+.av.sm{background:var(--green-l);color:var(--green)}
+.nm{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nm h3{margin:0;font-size:17.5px;font-weight:800;color:var(--navy);line-height:1.25}
+.nm h3 a:hover{color:var(--blue)}
+.ver{width:16px;height:16px;color:var(--blue);flex:none}
+.pb{font-size:11px;font-weight:800;color:#2E5A18;background:var(--green-l);padding:3px 8px;border-radius:99px}
+.sp{margin-top:2px;font-weight:700;color:var(--blue);font-size:14.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:13.5px;color:var(--muted)}
+.meta>span{display:inline-flex;align-items:flex-start;gap:6px}
+.meta>span.full{flex-basis:100%}
+.meta svg{width:15px;height:15px;color:var(--faint);margin-top:2px;flex:none}
+.meta b{color:var(--navy)}
+.meta .nr{color:var(--faint);font-style:italic}
+.st{color:#EEB84B}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:#F1F4FA;color:var(--ink)}
+.tag.g{background:var(--green-l);color:#2E5A18}
+.tag.b{background:var(--blue-l);color:var(--blue)}
+.tag.o{background:#fff;border:1px solid var(--line);color:var(--muted)}
+.acts{display:flex;flex-direction:column;gap:8px;justify-content:center;min-width:150px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:42px;padding:0 16px;border-radius:12px;font-weight:700;font-size:14px;border:0;white-space:nowrap;text-decoration:none;transition:background .2s,transform .15s}
+.btn.p{background:var(--blue);color:#fff!important;box-shadow:0 8px 18px -12px rgba(29,73,146,.9)}
+.btn.p:hover{background:var(--blue-d)}
+.btn.s{background:#fff;color:var(--blue)!important;border:1.5px solid var(--field)}
+.btn.s:hover{background:#EEF3FB;border-color:var(--blue)}
+.btn svg{width:16px;height:16px}
+.prem{border-color:#C9E3B8}
+.skel{height:132px;border-radius:18px;background:linear-gradient(90deg,#EEF2F8 0%,#F7F9FC 50%,#EEF2F8 100%);background-size:200% 100%;animation:szsk 1.2s infinite}
+@keyframes szsk{to{background-position:-200% 0}}
+/* AI doboz */
+.aibox{display:flex;align-items:center;gap:14px;background:#F3FAEF;border:1px solid #C9E3B8;border-radius:18px;padding:16px 18px}
+.aibox .ic{width:42px;height:42px;border-radius:12px;background:var(--green);color:#fff;display:grid;place-items:center;flex:none}
+.aibox b{display:block;color:#2E5A18;font-size:15.5px}
+.aibox small{display:block;color:#4E6B3D;font-size:13.5px;margin-top:2px}
+.aibox .btn{margin-left:auto;background:var(--green);color:#fff!important}
+.aibox .btn:hover{background:var(--green-d)}
+/* üres állapot */
+.empty{background:#fff;border:1px solid var(--line);border-radius:18px;padding:34px 24px;text-align:center}
+.empty h2{margin:0 0 6px;font-size:21px;color:var(--navy);font-weight:800}
+.empty p{margin:0 auto 16px;max-width:520px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.empty .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* lapozó */
+.pager{display:flex;justify-content:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pager button{min-width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:700;color:var(--ink)}
+.pager button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.pager button:disabled{opacity:.45;cursor:default}
+.pager span{align-self:center;color:var(--faint);padding:0 2px}
+
+/* ---------- térkép ---------- */
+.map{position:sticky;top:76px;height:calc(100vh - 100px);min-height:460px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:#E8EEF7;box-shadow:0 2px 4px rgba(11,22,51,.05),0 24px 50px -28px rgba(29,53,116,.35)}
+.map #gmap{position:absolute;inset:0}
+.map .mtop{position:absolute;left:12px;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;z-index:6;pointer-events:none}
+.map .mtop b{pointer-events:auto;align-self:stretch;text-align:center;background:#fff;border-radius:12px;padding:8px 10px;font-size:13px;color:var(--navy);box-shadow:0 6px 16px -10px rgba(11,22,51,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map .mmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}
+
+/* ---------- mobil fiók + lista/térkép váltó ---------- */
+.scrim{position:fixed;inset:0;background:rgba(11,22,51,.35);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
+.scrim.on{opacity:1;pointer-events:auto}
+.mtog{display:none}
+
+@media (max-width:1240px){.body{grid-template-columns:240px minmax(0,1fr) 210px}.ttl h1{font-size:29px}}
+@media (max-width:1000px){
+ .body{grid-template-columns:minmax(0,1fr)}
+ .ttl{grid-template-columns:1fr auto;row-gap:12px}
+ .ttl>div:first-child{grid-column:1/-1}
+ .vt{justify-self:start}
+ #mf{display:inline-flex}
+ .side{position:fixed;top:0;right:0;bottom:0;left:auto;width:min(380px,100%);max-height:none;border-radius:0;z-index:61;transform:translateX(102%);transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+ .side.on{transform:none}
+ .side .x{display:grid;place-items:center;border:0;background:#F1F4FA;width:32px;height:32px;border-radius:50%;font-size:18px;margin-left:8px;color:var(--ink)}
+ .side .clr{margin-left:auto}
+ .side .sf{display:block}
+ .map{display:none}
+ body.mapv .map{display:block;position:relative;top:0;height:72vh}
+ body.mapv .list{display:none}
+ .mtog{display:inline-flex;position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:40;background:var(--navy);color:#fff;border:0;border-radius:999px;height:46px;padding:0 20px;font-weight:800;font-size:14.5px;gap:8px;align-items:center;box-shadow:0 12px 28px -12px rgba(11,22,51,.7)}
+}
+@media (max-width:640px){
+ .head .in{padding:14px 16px 14px}
+ .ttl h1{font-size:24px}
+ .ttl{grid-template-columns:minmax(0,1fr) auto;column-gap:10px}
+ .vt{justify-self:stretch;display:flex}.vt a,.vt span{flex:1;justify-content:center;padding:9px 8px;font-size:14px}
+ .sort select{height:44px;max-width:124px;font-size:13px;padding:0 6px}
+ .bar2{flex-wrap:nowrap;overflow-x:auto;margin:10px -16px 0;padding:0 16px 4px;scrollbar-width:none}
+ .bar2::-webkit-scrollbar{display:none}
+ .bar2>*{flex:none}
+ .bar2 .act{flex-wrap:nowrap}
+ .body{padding:16px 16px 90px}
+ .card{grid-template-columns:52px minmax(0,1fr);padding:14px;gap:12px}
+ .av{width:52px;height:52px;border-radius:14px;font-size:17px}
+ .av svg{width:24px;height:24px}
+ .acts{grid-column:1/-1;flex-direction:row;min-width:0}
+ .acts .btn{flex:1}
+ .aibox{flex-wrap:wrap}.aibox .btn{margin-left:0;width:100%}
+}
+#crumb2{display:contents}
+@media (max-width:1000px){.bar2 #mf{order:-1}}
+/* kiegészítő színek (logó): négyszínű csík a menü alatt, vidámabb akcentusok */
+body.szr #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
+.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
+.szr .tag.b{background:#FFF6D9;color:#9A7108}
+.szr .act .ac{background:#FFF6D9;color:#7A5806}
+
+</style>
 </head>
 <body class="szr">
 <nav id="sknav">
@@ -767,7 +966,123 @@ updateHero().then(load).catch(function(e){ $('list').innerHTML='<div class="empt
     [].forEach.call(mob.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ burger.setAttribute('aria-expanded','false'); mob.classList.remove('on'); }); }); }
 })();
 </script>
-<script src="/js/szk-map.js?v=20261002"></script>
+<script id="szk-map">
+/* ==========================================================================
+   szakorvos.hu – közös Google-térkép segéd (2026.10)
+   - Adatvédelmi kapu: a Google Maps csak a látogató kérésére töltődik be
+     (localStorage 'szk_maps_ok' – ugyanaz a kulcs, mint a régi oldalakon)
+   - Találati térkép: értékelés-címkés jelölők, kártya ↔ jelölő kiemelés
+   ========================================================================== */
+(function(){
+  if(window.szkMap) return;
+  var KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4', P=null, gate=null, go=null;
+  var STYLE=[{elementType:'geometry',stylers:[{color:'#e9eef5'}]},{elementType:'labels.text.fill',stylers:[{color:'#44506A'}]},{elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#d5deec'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#bcd6f5'}]}];
+  function allowed(){ try{ if(localStorage.getItem('szk_maps_ok')==='1') return true; }catch(e){} return !!window.__szkMapsOk; }
+  function raw(){
+    if(window.google&&google.maps&&typeof google.maps.Map==='function') return Promise.resolve(google.maps);
+    if(P) return P;
+    P=new Promise(function(res,rej){
+      window._szkMapReady=function(){ res(google.maps); };
+      var s=document.createElement('script');
+      s.src='https://maps.googleapis.com/maps/api/js?key='+KEY+'&callback=_szkMapReady&language=hu&region=HU';
+      s.async=true; s.onerror=function(){ P=null; rej(new Error('maps')); };
+      document.head.appendChild(s);
+    });
+    return P;
+  }
+  function start(){
+    try{ localStorage.setItem('szk_maps_ok','1'); }catch(e){}
+    window.__szkMapsOk=true;
+    document.querySelectorAll('.szk-map-consent').forEach(function(o){ o.remove(); });
+    if(go) go();
+  }
+  window._szkMapsStart=start;
+  function consent(el){
+    if(!el||el.querySelector('.szk-map-consent')) return;
+    var o=document.createElement('div'); o.className='szk-map-consent';
+    o.style.cssText='position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#EBF0F8;padding:16px;text-align:center;border-radius:inherit';
+    o.innerHTML='<div style="font-size:12.5px;color:#44506A;max-width:30ch;line-height:1.5">A térképet a Google Maps szolgáltatja – betöltésekor az IP-címe a Google-hoz kerül. <a href="/adatvedelem.html" style="color:#1D4992;text-decoration:underline">Részletek</a></div><button type="button" style="font:700 13px Manrope,sans-serif;color:#fff;background:#1D4992;border:0;border-radius:10px;padding:9px 16px;cursor:pointer">Térkép betöltése</button>';
+    o.querySelector('button').addEventListener('click',start);
+    el.appendChild(o);
+  }
+  function load(el){
+    if(allowed()) return raw();
+    if(!gate) gate=new Promise(function(r){ go=r; });
+    consent(el);
+    return gate.then(raw);
+  }
+  function pill(maps,text,on){
+    text=String(text||'');
+    var w=Math.max(30,Math.round(text.length*7.4+20)),h=34;
+    var c=on?'#467A28':'#1D4992';
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'"><rect x="1" y="1" width="'+(w-2)+'" height="24" rx="10" fill="'+c+'" stroke="#fff" stroke-width="1.5"/><path d="M'+(w/2-6)+' 24 L'+(w/2)+' 32 L'+(w/2+6)+' 24 Z" fill="'+c+'"/><text x="'+(w/2)+'" y="17" text-anchor="middle" font-family="Manrope,Arial,sans-serif" font-size="12" font-weight="800" fill="#fff">'+text.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</text></svg>';
+    return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg),scaledSize:new maps.Size(w,h),anchor:new maps.Point(w/2,h)};
+  }
+  function clusterIcon(maps,count,position){
+    var size=count<10?36:count<50?44:52;
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+(size/2-1)+'" fill="rgba(29,73,146,.18)"/><circle cx="'+size/2+'" cy="'+size/2+'" r="'+(size/2-5)+'" fill="#1D4992" stroke="#fff" stroke-width="2"/><text x="'+size/2+'" y="'+size/2+'" text-anchor="middle" dominant-baseline="central" fill="#fff" font-family="Manrope,Arial,sans-serif" font-size="'+Math.round(size*.32)+'" font-weight="800">'+count+'</text></svg>';
+    return new maps.Marker({position:position,zIndex:1000+count,icon:{url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg),scaledSize:new maps.Size(size,size),anchor:new maps.Point(size/2,size/2)}});
+  }
+  /* Találati térkép. items: [{id,lat,lng,label,title}] ; opts: {onHover(id,on), onClick(id)} */
+  function results(el,opts){
+    opts=opts||{};
+    var map=null,maps=null,mk={},cluster=null,pending=null,ready=null;
+    function draw(items){
+      if(!map) return;
+      Object.keys(mk).forEach(function(k){ mk[k].setMap(null); }); mk={};
+      if(cluster&&cluster.clearMarkers) cluster.clearMarkers();
+      var b=new maps.LatLngBounds(),list=[],n=0;
+      items.forEach(function(it){
+        if(!it||!isFinite(it.lat)||!isFinite(it.lng)||mk[it.id]) return;
+        var m=new maps.Marker({position:{lat:+it.lat,lng:+it.lng},title:it.title||'',icon:pill(maps,it.label,false),zIndex:10});
+        m._lb=it.label;
+        m.addListener('mouseover',function(){ hl(it.id,true); if(opts.onHover) opts.onHover(it.id,true); });
+        m.addListener('mouseout',function(){ hl(it.id,false); if(opts.onHover) opts.onHover(it.id,false); });
+        m.addListener('click',function(){ if(opts.onClick) opts.onClick(it.id); });
+        mk[it.id]=m; list.push(m); b.extend(m.getPosition()); n++;
+      });
+      var mc=window.markerClusterer&&window.markerClusterer.MarkerClusterer;
+      if(mc&&list.length>40){ cluster=new mc({map:map,markers:list,renderer:{render:function(o){ return clusterIcon(maps,o.count,o.position); }}}); }
+      else list.forEach(function(m){ m.setMap(map); });
+      if(n===1){ map.setCenter(list[0].getPosition()); map.setZoom(14); }
+      else if(n>1){ map.fitBounds(b,40); }
+      return n;
+    }
+    function hl(id,on){
+      var m=mk[id]; if(!m||!maps) return;
+      m.setIcon(pill(maps,m._lb,on)); m.setZIndex(on?999:10);
+    }
+    function init(){
+      if(ready) return ready;
+      ready=load(el).then(function(g){
+        maps=g;
+        var box=el.querySelector('#gmap')||el;
+        map=new maps.Map(box,{center:{lat:47.4979,lng:19.0402},zoom:11,styles:STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,clickableIcons:false,gestureHandling:'cooperative'});
+        if(pending){ draw(pending); pending=null; }
+        return map;
+      });
+      ready.catch(function(){ var m=el.querySelector('.mmsg'); if(m){ m.textContent='A térkép most nem tölthető be.'; m.hidden=false; } });
+      return ready;
+    }
+    return {
+      set:function(items){ if(map) draw(items); else { pending=items; init(); } },
+      hl:hl,
+      resize:function(){ if(map&&maps){ maps.event.trigger(map,'resize'); var b=new maps.LatLngBounds(),n=0; Object.keys(mk).forEach(function(k){ b.extend(mk[k].getPosition()); n++; }); if(n>1) map.fitBounds(b,40); else if(n===1){ map.setCenter(b.getCenter()); } } }
+    };
+  }
+  /* Egyetlen hely (adatlapok) */
+  function single(el,lat,lng,label){
+    return load(el).then(function(maps){
+      var box=el.querySelector('.gm')||el;
+      var map=new maps.Map(box,{center:{lat:+lat,lng:+lng},zoom:15,styles:STYLE,disableDefaultUI:true,zoomControl:true,clickableIcons:false,gestureHandling:'cooperative'});
+      new maps.Marker({position:{lat:+lat,lng:+lng},map:map,icon:pill(maps,label||'●',false)});
+      return map;
+    });
+  }
+  window.szkMap={load:load,results:results,single:single,allowed:allowed};
+})();
+
+</script>
 <script src="/js/cookie-consent.js" defer></script>
 <script id="skt">
 /* szakorvos.hu – látogatottságmérés (saját, sütimentes; munkamenet-azonosító csak a böngészőlap élettartamára) */
