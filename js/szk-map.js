@@ -1,14 +1,13 @@
 /* ==========================================================================
    szakorvos.hu – közös Google-térkép segéd (2026.10)
-   - Adatvédelmi kapu: a Google Maps csak a látogató kérésére töltődik be
-     (localStorage 'szk_maps_ok' – ugyanaz a kulcs, mint a régi oldalakon)
+   - A Google Maps automatikusan betöltődik (a korábbi kattintós kapu kikapcsolva)
    - Találati térkép: értékelés-címkés jelölők, kártya ↔ jelölő kiemelés
    ========================================================================== */
 (function(){
   if(window.szkMap) return;
   var KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4', P=null, gate=null, go=null;
   var STYLE=[{elementType:'geometry',stylers:[{color:'#e9eef5'}]},{elementType:'labels.text.fill',stylers:[{color:'#44506A'}]},{elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#d5deec'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#bcd6f5'}]}];
-  function allowed(){ try{ if(localStorage.getItem('szk_maps_ok')==='1') return true; }catch(e){} return !!window.__szkMapsOk; }
+  function allowed(){ return true; } /* térkép automatikusan töltődik (2026.10) */
   function raw(){
     if(window.google&&google.maps&&typeof google.maps.Map==='function') return Promise.resolve(google.maps);
     if(P) return P;

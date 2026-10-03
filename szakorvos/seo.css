@@ -246,14 +246,12 @@ body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Displ
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body.seo{margin:0;background:#F5F8FD;color:#2B3752;font-family:"Manrope",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif!important;-webkit-font-smoothing:antialiased;line-height:1.5}
-/* négyszínű csík a menü alatt (a logó színei) */
-body.seo #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
-body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 0%,rgba(242,190,58,.20),transparent 70%),radial-gradient(380px 260px at 70% 4%,rgba(232,105,47,.08),transparent 70%),linear-gradient(180deg,#EAF0FA 0,#F5F8FD 360px) no-repeat,#F5F8FD}
+body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 0%,rgba(242,190,58,.10),transparent 70%),linear-gradient(180deg,#EAF0FA 0,#F5F8FD 360px) no-repeat,#F5F8FD}
 .sw{max-width:1120px;margin:0 auto;padding:20px 20px 60px}
 .crumbs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:#5A6580;margin-bottom:18px}
 .crumbs a{color:#1D4992;font-weight:600;text-decoration:none}.crumbs a:hover{text-decoration:underline}
 .sh{margin-bottom:24px}
-.eb{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#FDEEE6;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C2531C}
+.eb{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#E6EDFA;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#1D4992}
 .sh h1{margin:10px 0 0;font-size:clamp(30px,4.2vw,42px);line-height:1.1;letter-spacing:-.025em;font-weight:800;color:#1D4992}
 .lead{margin:12px 0 0;max-width:720px;font-size:17px;line-height:1.6;color:#5A6580}
 .lead b{color:#0B1633;font-variant-numeric:tabular-nums}
@@ -275,9 +273,7 @@ body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 
 .dc:hover{border-color:#B9C6DE;box-shadow:0 14px 28px -18px rgba(29,73,146,.5)}
 .dc[hidden]{display:none}
 .av{flex:none;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:#E6EDFA;color:#1D4992;font-weight:800;font-size:18px;text-decoration:none}
-.dc:nth-child(4n+2) .av{background:#EAF5E3;color:#467A28}
-.dc:nth-child(4n+3) .av{background:#FFF6D9;color:#9A7108}
-.dc:nth-child(4n+4) .av{background:#FDEEE6;color:#C2531C}
+.dc:nth-child(2n) .av{background:#EAF5E3;color:#467A28}
 .dm{flex:1;min-width:0}
 .dm h3{margin:0;font-size:17.5px;line-height:1.3;font-weight:800;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .dm h3 a{color:#0B1633;text-decoration:none}.dm h3 a:hover{color:#1D4992}
@@ -285,7 +281,7 @@ body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 
 .ds{margin:2px 0 0;font-size:14.5px;color:#1D4992;font-weight:700}
 .cl{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
 .cl li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:14px;color:#5A6580}
-.cl svg{width:14px;height:14px;flex:none;color:#E8692F}
+.cl svg{width:14px;height:14px;flex:none;color:#467A28}
 .cl a{color:#0B1633;text-decoration:none;font-weight:700}.cl a:hover{color:#1D4992;text-decoration:underline}
 .di{color:#8A93A8}.rt{color:#B7791F;font-weight:700;font-size:13px}.rt small{color:#8A93A8;font-weight:500}
 .cl .more{color:#8A93A8;font-size:13px;padding-left:20px}
@@ -300,7 +296,6 @@ body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 
 .about,.rel{margin-top:30px}
 .about{background:#fff;border:1px solid #DCE3F0;border-radius:18px;padding:22px;box-shadow:0 8px 20px -18px rgba(11,22,51,.35)}
 .about h2,.rel h2,.h2{margin:0 0 12px;font-size:22px;font-weight:800;letter-spacing:-.015em;color:#0B1633}
-.about h2::before,.rel h2::before,.h2::before{content:"";display:block;width:36px;height:4px;border-radius:4px;background:linear-gradient(90deg,#F2BE3A,#E8692F);margin-bottom:10px}
 .h2{margin-top:34px}
 .about p{margin:0;max-width:780px;font-size:16px;line-height:1.7;color:#2B3752}
 .tags{display:flex;flex-wrap:wrap;gap:8px}
@@ -310,7 +305,7 @@ body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 
 .all{margin:12px 0 0;font-size:14.5px}.all a{color:#1D4992;font-weight:800;text-decoration:none}
 .cities{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
 .cities a{display:flex;flex-direction:column;gap:2px;padding:14px 16px;border-radius:16px;background:#fff;text-decoration:none;border:1px solid #DCE3F0;border-left:4px solid #1D4992;transition:transform .15s,box-shadow .15s,border-color .15s}
-.cities a:nth-child(4n+2){border-left-color:#6BAF45}.cities a:nth-child(4n+3){border-left-color:#F2BE3A}.cities a:nth-child(4n+4){border-left-color:#E8692F}
+.cities a:nth-child(2n){border-left-color:#6BAF45}
 .cities a:hover{transform:translateY(-1px);box-shadow:0 12px 24px -18px rgba(29,73,146,.5)}
 .cities b{font-size:15.5px;color:#0B1633;font-weight:800}
 .cities small{font-size:13px;color:#8A93A8}
@@ -328,3 +323,74 @@ body.seo #content{overflow-x:clip;background:radial-gradient(420px 300px at 96% 
   .btn{height:44px;font-size:14.5px}
   .about{padding:18px 16px}
 }
+
+/* ==========================================================================
+   KOMPAKT (2026.10.03) – kisebb elemek, nagyobb térköz (fejléc kivétel)
+   ========================================================================== */
+body.seo .chips{gap:9px;padding-bottom:12px;margin-bottom:10px}
+body.seo .chips button{height:32px;padding:0 12px;font-size:13px}
+body.seo .list{gap:16px}
+body.seo .dc{padding:14px 16px;gap:14px;border-radius:16px}
+body.seo .av{width:48px;height:48px;border-radius:14px;font-size:16px}
+body.seo .dm h3{font-size:16.5px}
+body.seo .ds{font-size:13.5px}
+body.seo .cl{margin-top:6px}
+body.seo .cl li{font-size:13.5px}
+body.seo .go{height:36px;padding:0 13px;font-size:13.5px;border-radius:10px}
+body.seo .aibox{margin:34px 0 10px;padding:15px 18px;gap:16px;border-radius:16px}
+body.seo .aibox b{font-size:15.5px}
+body.seo .aibox p{font-size:14px}
+body.seo .about,body.seo .rel{margin-top:36px}
+body.seo .about{padding:20px;border-radius:16px}
+body.seo .about h2,body.seo .rel h2,body.seo .h2{font-size:20px;margin-bottom:14px}
+body.seo .h2{margin-top:40px}
+body.seo .about p{font-size:15.5px}
+body.seo .tags{gap:9px}
+body.seo .tags a{height:32px;padding:0 12px;font-size:13.5px}
+body.seo .cities{gap:12px}
+body.seo .cities a{padding:11px 14px;border-radius:14px}
+body.seo .cities b{font-size:14.5px}
+body.seo .cities small{font-size:12.5px}
+body.seo .src{margin-top:38px}
+@media (max-width:720px){
+ body.seo .dc{padding:12px;gap:12px}
+ body.seo .av{width:42px;height:42px;border-radius:12px;font-size:14px}
+ body.seo .list{gap:12px}
+ body.seo .about{padding:16px 14px}
+}
+
+/* KOMPAKT 2 (2026.10.03) – kisebb dobozok */
+body.seo .dc{padding:12px 14px;border-radius:14px}
+body.seo .av{width:44px;height:44px;border-radius:12px;font-size:15px}
+body.seo .aibox{padding:13px 16px;border-radius:14px}
+body.seo .about{padding:17px 18px;border-radius:14px}
+body.seo .cities a{padding:10px 12px;border-radius:12px}
+@media (max-width:720px){body.seo .dc{padding:11px 12px}body.seo .av{width:40px;height:40px}}
+@media (max-width:720px){body.seo .dc{padding:11px 12px}body.seo .av{width:40px;height:40px}}
+
+/* javítások (2026.10.03): pin-ikon ne maradjon árván, gombszöveg törése */
+body.seo .cl li{display:block;position:relative;padding-left:20px;line-height:1.45}
+body.seo .cl li svg{position:absolute;left:0;top:3px}
+body.seo .cl li.more{padding-left:20px}
+body.seo .acts .btn{white-space:normal;text-align:center;height:auto;min-height:40px;padding-top:9px;padding-bottom:9px;line-height:1.3}
+@media (max-width:720px){body.seo .acts .btn{width:100%}}
+
+/* KOMPAKT 3 (2026.10.03) */
+body.seo .list{gap:20px}
+body.seo .dm h3{font-size:15.5px}
+body.seo .ds{font-size:13px}
+body.seo .cl li{font-size:13px}
+body.seo .go{height:34px;font-size:13px;padding:0 12px}
+body.seo .av{width:42px;height:42px;font-size:14px}
+body.seo .about,body.seo .rel{margin-top:44px}
+body.seo .h2{margin-top:48px}
+body.seo .about h2,body.seo .rel h2,body.seo .h2{font-size:18px}
+body.seo .about p{font-size:15px}
+body.seo .tags{gap:10px}
+body.seo .tags a{height:30px;font-size:13px;padding:0 11px}
+body.seo .cities{gap:14px}
+body.seo .cities b{font-size:14px}
+body.seo .chips button{height:30px;font-size:12.5px}
+body.seo .aibox{margin:44px 0 12px}
+body.seo .aibox b{font-size:15px}body.seo .aibox p{font-size:13.5px}
+@media (max-width:720px){body.seo .list{gap:14px}body.seo .av{width:38px;height:38px;font-size:13px}}

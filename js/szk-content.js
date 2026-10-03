@@ -43,6 +43,8 @@
       var as=box.querySelectorAll('a');
       var spy=function(){ var cur=null; hs.forEach(function(h,i){ if(h.getBoundingClientRect().top<140) cur=i; }); as.forEach(function(a,i){ a.classList.toggle('on',i===cur); }); };
       window.addEventListener('scroll',spy,{passive:true}); spy(); }
+    if(opts.mobile){ var d=document.createElement('details'); d.className='mtoc'; d.innerHTML='<summary>'+(opts.title||'Tartalom')+' <i>'+items.length+'</i></summary>'+items.map(function(x){ return '<a href="#'+x[0]+'">'+x[1].replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];})+'</a>'; }).join('');
+      d.addEventListener('click',function(e){ if(e.target.closest('a')) d.open=false; }); opts.mobile.parentNode.insertBefore(d,opts.mobile); document.body.classList.add('has-mtoc'); }
     return items;
   }
   function readMin(html){ var w=String(html||'').replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length; return Math.max(1,Math.round(w/200)); }

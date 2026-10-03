@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 
+
+
+
+
+
+
   <meta name="theme-color" content="#2A4A9C">
   <link rel="canonical" href="https://www.szakorvos.hu/talalatok">
   <meta name="description" content="Találja meg a legjobb szakorvost az Ön közelében. Szűrjön szakterület, város, biztosító és értékelés alapján. Foglaljon online időpontot.">
@@ -44,7 +50,7 @@ const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 </script>
 <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js" defer></script>
 <script type="application/ld+json" id="schemaCollection">{"@context":"https://schema.org","@type":"CollectionPage","name":"Szakorvos kereső","url":"https://www.szakorvos.hu/talalatok","description":"Találja meg a legjobb szakorvost az Ön közelében.","inLanguage":"hu","isPartOf":{"@type":"WebSite","name":"Szakorvos.hu","url":"https://www.szakorvos.hu"}}</script>
-<script type="application/ld+json" id="schemaBreadcrumb">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Főoldal","item":"https://www.szakorvos.hu"},{"@type":"ListItem","position":2,"name":"Orvos kereső","item":"https://www.szakorvos.hu/talalatok"}]}</script>
+<script type="application/ld+json" id="schemaBreadcrumb">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Kezdőlap","item":"https://www.szakorvos.hu"},{"@type":"ListItem","position":2,"name":"Orvos kereső","item":"https://www.szakorvos.hu/talalatok"}]}</script>
 <script type="application/ld+json" id="schemaItemList"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -487,10 +493,87 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 #crumb2{display:contents}
 @media (max-width:1000px){.bar2 #mf{order:-1}}
 /* kiegészítő színek (logó): négyszínű csík a menü alatt, vidámabb akcentusok */
-body.szr #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
-.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
-.szr .tag.b{background:#FFF6D9;color:#9A7108}
+.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.10),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
+/* óvatos kiegészítő színek (narancs, citromsárga) */
+.szr .side .sh b svg{color:#E8692F}
 .szr .act .ac{background:#FFF6D9;color:#7A5806}
+.szr .act .ac b{color:#9A7108}
+.szr .pb{background:#FFF6D9;color:#7A5806}
+.szr .card.prem{border-color:#F2DD9B;box-shadow:0 10px 24px -18px rgba(176,128,10,.45)}
+.szr .card.prem .ver{color:#C9940F}
+.szr .tag.b{background:#FDEEE6;color:#C2531C}
+
+/* ==========================================================================
+   KOMPAKT (2026.10.03) – kisebb elemek, nagyobb térköz (fejléc kivétel)
+   ========================================================================== */
+.szr .body{gap:26px;padding-top:26px}
+.szr .list{gap:18px}
+.szr .card{padding:14px 16px;gap:14px;border-radius:16px}
+.szr .av{width:56px;height:56px;border-radius:15px;font-size:18px}
+.szr .av svg{width:26px;height:26px}
+.szr .nm h3{font-size:16.5px}
+.szr .sp{font-size:13.5px}
+.szr .meta{font-size:13px;margin-top:6px;gap:5px 12px}
+.szr .meta svg{width:14px;height:14px}
+.szr .tags{margin-top:8px}
+.szr .tag{font-size:11.5px;padding:3px 9px}
+.szr .acts{min-width:132px;gap:8px}
+.szr main .btn,.szr .acts .btn{height:36px;font-size:13.5px;padding:0 13px;border-radius:10px}
+.szr .btn svg{width:15px;height:15px}
+.szr .side .sh{padding:12px 14px}
+.szr .side .sh b{font-size:15px}
+.szr .side .sb{padding:4px 14px 8px}
+.szr .fg{padding:12px 0}
+.szr .fg summary{font-size:12px}
+.szr .fg[open] summary{margin-bottom:10px}
+.szr .ck{padding:5px 8px;font-size:13.5px}
+.szr .ck input{width:16px;height:16px}
+.szr .seg button{height:30px;font-size:12.5px}
+.szr .near{height:36px;font-size:13px}
+.szr .fsearch{height:34px;font-size:13.5px}
+.szr .aibox{padding:13px 16px;border-radius:16px;gap:12px}
+.szr .aibox .ic{width:36px;height:36px;border-radius:10px}
+.szr .aibox b{font-size:15px}.szr .aibox small{font-size:13px}
+.szr .pager{gap:8px;margin-top:12px}
+.szr .pager button{min-width:36px;height:36px;border-radius:10px}
+.szr .empty{padding:26px 20px}
+.szr .empty h2{font-size:19px}
+.szr .skel{height:116px}
+@media (max-width:1000px){.szr .body{gap:18px}}
+@media (max-width:640px){
+ .szr .body{padding-top:16px}
+ .szr .list{gap:14px}
+ .szr .card{padding:12px;gap:12px}
+ .szr .av{width:48px;height:48px;border-radius:13px;font-size:16px}
+ .szr .acts{min-width:0}
+}
+
+/* KOMPAKT 2 (2026.10.03) – kisebb dobozok */
+.szr .card{padding:12px 14px;border-radius:14px}
+.szr .av{width:50px;height:50px;border-radius:13px;font-size:16px}
+.szr .side{border-radius:14px}
+.szr .aibox{padding:11px 14px;border-radius:13px}
+.szr .empty{padding:22px 18px;border-radius:14px}
+.szr .map{border-radius:16px}
+@media (max-width:640px){.szr .card{padding:11px 12px}.szr .av{width:44px;height:44px;font-size:15px}}
+.szr .crumbs .sep{font-style:normal;color:var(--faint)}
+
+/* KOMPAKT 3 (2026.10.03) */
+.szr .body{gap:32px;padding-top:30px}
+.szr .list{gap:20px}
+.szr .card{gap:14px}
+.szr .av{width:46px;height:46px;border-radius:12px;font-size:15px}
+.szr .nm h3{font-size:15.5px}
+.szr .sp{font-size:13px}
+.szr .meta{font-size:12.5px}
+.szr .tag{font-size:11px;padding:3px 8px}
+.szr main .btn,.szr .acts .btn{height:34px;font-size:13px;padding:0 12px}
+.szr .acts{min-width:124px}
+.szr .side .sh b{font-size:14.5px}
+.szr .ck{font-size:13px}
+.szr .fg{padding:14px 0}
+.szr .aibox b{font-size:14.5px}.szr .aibox small{font-size:12.5px}
+@media (max-width:640px){.szr .list{gap:16px}.szr .av{width:42px;height:42px;font-size:14px}}
 
 </style>
 </head>
@@ -547,7 +630,7 @@ body.szr #sknav{border-bottom:4px solid transparent;border-image:linear-gradient
 </defs></svg>
 
 <header class="head"><div class="in">
- <nav class="crumbs" aria-label="Morzsamenü"><a href="/">Kezdőlap</a>›<a href="/szakorvos">Szakorvosok</a>›<span id="crumb2">Találatok</span></nav>
+ <nav class="crumbs" aria-label="Morzsamenü"><a href="/">Kezdőlap</a><i class="sep" aria-hidden="true">›</i><a href="/szakorvos">Szakorvosok</a><i class="sep" aria-hidden="true">›</i><span id="crumb2">Találatok</span></nav>
  <div class="ttl">
   <div><h1 id="rh1">Orvos keresési <em>találatok</em></h1><p id="rhSub"></p></div>
   <div class="vt" role="tablist" aria-label="Nézet"><span class="on" role="tab" aria-selected="true"><svg><use href="#i-doc"/></svg>Orvosok</span><a id="toClinics" role="tab" href="/klinikak"><svg><use href="#i-cl"/></svg>Klinikák</a></div>
@@ -846,9 +929,18 @@ function chips(){
 var ICONS={pin:'<svg><use href="#i-pin"/></svg>'};
 function docUrl(d){ return (d.slug&&d._specSlug)?('/'+d._specSlug+'/'+d.slug):('/orvos/'+(d.slug||d.id)); }
 function ini(n){ return String(n||'').replace(/^dr\.?\s*/i,'').split(/\s+/).filter(Boolean).map(function(w){return w[0];}).join('').slice(0,2).toUpperCase(); }
+function fmtN(t,n){ var toks=String((t?t+' ':'')+(n||'')).replace(/\s+/g,' ').trim().split(' '),pre=[],suf=[],D={phd:'PhD',csc:'CSc',dsc:'DSc',mba:'MBA',frcs:'FRCS',febs:'FEBS',facs:'FACS',edpm:'EDPM',msc:'MSc'};
+  function as(d){ if(suf.indexOf(d)<0) suf.push(d); }
+  while(toks.length>1){ var k=toks[0].toLowerCase().replace(/,+$/,''),kd=k.replace(/\./g,'');
+    if(/^dr\.?$/.test(k)) pre.push('Dr.'); else if(/^prof\.?$/.test(k)) pre.push('Prof.'); else if(/^med\.?$/.test(k)) pre.push('med.'); else if(/^habil\.?$/.test(k)) pre.push('habil.'); else if(/^med\.habil\.?$/.test(k)){ pre.push('med.'); pre.push('habil.'); }
+    else if(/^ph\.?d\.?$/.test(k)) as('PhD'); else if(k==='ph.'||k==='ph'){ if(/^d\.?,?$/i.test(toks[1]||'')) toks.shift(); as('PhD'); }
+    else if(D[kd]) as(D[kd]); else if(k==='doktora') as('DSc'); else if(/^(az|mta|orvostudomány|egyetemi|tanár|tanszékvezető|címzetes)$/.test(k)){} else break; toks.shift(); }
+  var nm=toks.join(' ').replace(/\s+Ph\.?\s?D\.?$/i,function(){ as('PhD'); return ''; }).trim();
+  var p=['Prof.','Dr.','med.','habil.'].filter(function(x){ return pre.indexOf(x)>-1; });
+  return (p.length?p.join(' ')+' ':'')+nm+(suf.length?' '+suf.join(', '):''); }
 function card(d,i){
   var c=d._pc||pickClinic(d),url=docUrl(d),ph=d.phone||(c&&c.phone)||'';
-  var nm=(d.title?d.title+' ':'')+d.name, more=d._cl.length-1, tags=[];
+  var nm=fmtN(d.title,d.name), more=d._cl.length-1, tags=[];
   if(d._km!=null) tags.push('<span class="tag b">'+(d._km<1?Math.round(d._km*1000)+' m':fr(d._km)+' km')+'</span>');
   if(d._open.weekend) tags.push('<span class="tag g">Hétvégén is</span>');
   if(d._online) tags.push('<span class="tag g">Online konzultáció</span>');
@@ -886,7 +978,7 @@ function render(){
     c.addEventListener('mouseleave',function(){ if(MAP) MAP.hl(c.dataset.id,false); }); });
   L.querySelectorAll('.pager [data-p]').forEach(function(b){ b.addEventListener('click',function(){ page=+b.dataset.p; render(); var t=$('main').getBoundingClientRect().top+window.scrollY-80; window.scrollTo({top:t,behavior:'smooth'}); }); });
   /* térkép: az aktuális oldal orvosai */
-  var it=sl.map(function(d){ var c=d._pc||pickClinic(d); return c&&c.lat&&c.lng?{id:d.id,lat:+c.lat,lng:+c.lng,label:+c.google_rating?'★ '+fr(c.google_rating):ini(d.name),title:(d.title?d.title+' ':'')+d.name}:null; }).filter(Boolean);
+  var it=sl.map(function(d){ var c=d._pc||pickClinic(d); return c&&c.lat&&c.lng?{id:d.id,lat:+c.lat,lng:+c.lng,label:+c.google_rating?'★ '+fr(c.google_rating):ini(d.name),title:fmtN(d.title,d.name)}:null; }).filter(Boolean);
   $('mapCnt').textContent=it.length+' orvos a térképen';
   mapSet(it);
 }
@@ -915,10 +1007,10 @@ function schema(){ try{
   var cur='https://www.szakorvos.hu/talalatok'+(specQ||cityQ?'?'+[specQ?'specialty='+encodeURIComponent(specQ):'',cityQ?'city='+encodeURIComponent(cityQ):''].filter(Boolean).join('&'):'');
   var lab=DOCTOR_LABEL||specQ||'Szakorvosok', nm=lab+(cityQ?' – '+cityQ:'')+' | Szakorvos.hu';
   var e=$('schemaCollection'); if(e) e.textContent=JSON.stringify({'@context':'https://schema.org','@type':'CollectionPage',name:nm,url:cur,inLanguage:'hu',isPartOf:{'@type':'WebSite',name:'Szakorvos.hu',url:'https://www.szakorvos.hu'}});
-  var it=[{'@type':'ListItem',position:1,name:'Főoldal',item:'https://www.szakorvos.hu'},{'@type':'ListItem',position:2,name:'Szakorvosok',item:'https://www.szakorvos.hu/talalatok'}];
+  var it=[{'@type':'ListItem',position:1,name:'Kezdőlap',item:'https://www.szakorvos.hu'},{'@type':'ListItem',position:2,name:'Szakorvosok',item:'https://www.szakorvos.hu/talalatok'}];
   if(specQ||cityQ) it.push({'@type':'ListItem',position:3,name:lab+(cityQ?' '+toLocativeHu(cityQ):''),item:cur});
   var bc=$('schemaBreadcrumb'); if(bc) bc.textContent=JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:it});
-  var li=$('schemaItemList'); if(li&&view.length) li.textContent=JSON.stringify({'@context':'https://schema.org','@type':'ItemList',name:nm,numberOfItems:view.length,itemListElement:view.slice(0,20).map(function(d,i){ return {'@type':'ListItem',position:i+1,item:{'@type':'Physician',name:(d.title?d.title+' ':'')+d.name,url:'https://www.szakorvos.hu'+docUrl(d),medicalSpecialty:d._spec||undefined,image:d.photo_url||undefined}}; })});
+  var li=$('schemaItemList'); if(li&&view.length) li.textContent=JSON.stringify({'@context':'https://schema.org','@type':'ItemList',name:nm,numberOfItems:view.length,itemListElement:view.slice(0,20).map(function(d,i){ return {'@type':'ListItem',position:i+1,item:{'@type':'Physician',name:fmtN(d.title,d.name),url:'https://www.szakorvos.hu'+docUrl(d),medicalSpecialty:d._spec||undefined,image:d.photo_url||undefined}}; })});
 }catch(e){} }
 
 /* ─── térkép ─── */
@@ -969,15 +1061,14 @@ updateHero().then(load).catch(function(e){ $('list').innerHTML='<div class="empt
 <script id="szk-map">
 /* ==========================================================================
    szakorvos.hu – közös Google-térkép segéd (2026.10)
-   - Adatvédelmi kapu: a Google Maps csak a látogató kérésére töltődik be
-     (localStorage 'szk_maps_ok' – ugyanaz a kulcs, mint a régi oldalakon)
+   - A Google Maps automatikusan betöltődik (a korábbi kattintós kapu kikapcsolva)
    - Találati térkép: értékelés-címkés jelölők, kártya ↔ jelölő kiemelés
    ========================================================================== */
 (function(){
   if(window.szkMap) return;
   var KEY='AIzaSyA7_ptIph0HibAawgDxRGK0f9visixFo_4', P=null, gate=null, go=null;
   var STYLE=[{elementType:'geometry',stylers:[{color:'#e9eef5'}]},{elementType:'labels.text.fill',stylers:[{color:'#44506A'}]},{elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#d5deec'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#bcd6f5'}]}];
-  function allowed(){ try{ if(localStorage.getItem('szk_maps_ok')==='1') return true; }catch(e){} return !!window.__szkMapsOk; }
+  function allowed(){ return true; } /* térkép automatikusan töltődik (2026.10) */
   function raw(){
     if(window.google&&google.maps&&typeof google.maps.Map==='function') return Promise.resolve(google.maps);
     if(P) return P;
@@ -1083,7 +1174,7 @@ updateHero().then(load).catch(function(e){ $('list').innerHTML='<div class="empt
 })();
 
 </script>
-<script src="/js/cookie-consent.js" defer></script>
+<script src="/js/cookie-consent.js?v=20261003" defer></script>
 <script id="skt">
 /* szakorvos.hu – látogatottságmérés (saját, sütimentes; munkamenet-azonosító csak a böngészőlap élettartamára) */
 (function(){

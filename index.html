@@ -4251,6 +4251,67 @@ html body .hero #ai-kereso .classicbox #f-classic .aimt .x{position:absolute;rig
 @media (min-width:1001px){html body .hero #ai-kereso .classicbox #f-classic .aimt{width:450px}}
 @media (max-width:640px){html body .hero #ai-kereso .classicbox #f-classic .aimt{left:-2px;width:calc(100% + 4px);max-width:none}}
 </style>
+<style id="szk-kompakt">
+/* KOMPAKT (2026.10.03) – a hero alatti szekciók: kisebb elemek, nagyobb térköz */
+html body section#varosok,html body section#partner,html body section#gyik{padding-top:68px!important;padding-bottom:68px!important}
+html body section#rolunk{padding-top:56px!important;padding-bottom:56px!important}
+html body section .shead{margin-bottom:32px}
+html body #citygrid{gap:12px}
+html body #citygrid button{height:60px;padding:9px 14px;border-radius:15px!important}
+html body #nearme{padding:11px 14px;gap:12px}
+html body .clabel{margin:18px 0 10px}
+html body #partner .partner{padding:34px 38px!important;gap:44px}
+html body #partner .partner .btn{height:38px!important;font-size:14px!important;padding:0 16px!important}
+html body #partner .partner li{padding:9px 0;font-size:13.5px}
+html body #gyik .faqs{gap:12px}
+html body #gyik .faq{padding:0 16px!important;border-radius:14px!important}
+html body #gyik .faq summary{padding:13px 0!important;font-size:15px}
+html body #gyik .faq p{font-size:14.5px;padding-bottom:14px!important}
+html body .seogrid{gap:56px}
+html body #seolinks a{padding:7px 0}
+html body #citygrid button{height:54px!important;padding:8px 12px!important;border-radius:12px!important}
+html body #nearme{padding:9px 12px!important;border-radius:13px!important}
+html body #gyik .faq{border-radius:12px!important;padding:0 14px!important}
+html body #gyik .faq summary{padding:11px 0!important;font-size:14.5px!important}
+html body #partner .partner{padding:28px 32px!important;border-radius:18px!important}
+@media (min-width:1001px){ html body section#varosok h2,html body section#gyik h2,html body #partner .partner h2{font-size:28px!important} html body #rolunk .seotext h2{font-size:25px!important} }
+@media (max-width:1000px){ html body #partner .partner{padding:30px!important} html body section#varosok,html body section#partner,html body section#gyik{padding-top:54px!important;padding-bottom:54px!important} }
+@media (max-width:640px){
+ html body section#varosok,html body section#partner,html body section#gyik{padding-top:48px!important;padding-bottom:48px!important}
+ html body section#rolunk{padding-top:40px!important;padding-bottom:40px!important}
+ html body section .shead{margin-bottom:20px}
+ html body #partner .partner{padding:22px 18px!important;gap:22px}
+ html body #citygrid{gap:10px}
+ html body #citygrid button{height:56px}
+}
+</style>
+<style id="szk-kompakt3">
+/* KOMPAKT 3 (2026.10.03) – főoldal, hero alatt */
+html body section#varosok,html body section#partner,html body section#gyik{padding-top:84px!important;padding-bottom:84px!important}
+html body section#rolunk{padding-top:68px!important;padding-bottom:68px!important}
+@media (min-width:1001px){ html body section#varosok h2,html body section#gyik h2,html body #partner .partner h2{font-size:26px!important} html body #rolunk .seotext h2{font-size:22px!important} }
+html body section .shead{margin-bottom:36px}
+html body section .shead .sub{font-size:14.5px}
+html body #citygrid{gap:14px}
+html body #citygrid button{height:auto!important;min-height:52px;padding:8px 12px!important}
+
+html body #nearme{padding:8px 12px!important}
+html body #partner .partner{padding:30px 34px!important;gap:48px}
+html body #partner .partner p{font-size:14px}
+html body #partner .partner .btn{height:36px!important;font-size:13.5px!important}
+html body #gyik .faqs{gap:14px}
+html body #gyik .faq summary{padding:11px 0!important;font-size:14px!important}
+html body #gyik .faq p{font-size:14px!important}
+html body #seolinks a{font-size:12.5px}
+@media (max-width:1000px){ html body section#varosok,html body section#partner,html body section#gyik{padding-top:60px!important;padding-bottom:60px!important} }
+@media (max-width:640px){
+ html body section#varosok,html body section#partner,html body section#gyik{padding-top:52px!important;padding-bottom:52px!important}
+ html body section#rolunk{padding-top:44px!important;padding-bottom:44px!important}
+ html body section .shead{margin-bottom:22px}
+ html body #partner .partner{padding:22px 18px!important;gap:22px}
+ html body #citygrid{gap:10px}
+}
+</style>
 </head>
 <body>
 
@@ -5536,7 +5597,7 @@ fld.appendChild(tip);tip.querySelector('.x').addEventListener('mousedown',functi
 document.addEventListener('szk:aimode',function(e){var on=!!(e.detail&&e.detail.on),t=mk();if(!t)return;if(on&&!was){closed=false;t.classList.add('on');clearTimeout(hideT);hideT=setTimeout(function(){t.classList.remove('on');},5000);}if(!on){clearTimeout(hideT);t.classList.remove('on');}was=on;});
 document.addEventListener('input',function(e){if(e.target&&e.target.id==='q'&&!e.target.value.trim()&&tip){tip.classList.remove('on');was=false;}},true);
 })();</script>
-<script src="/js/cookie-consent.js" defer></script>
+<script src="/js/cookie-consent.js?v=20261003" defer></script>
 
 <script>
 (function(){
@@ -5999,5 +6060,110 @@ window.addEventListener('pointerup',function(){if(!down)return;down=false;setTim
 tr.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();moved=false;}},true);
 tr.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)>Math.abs(e.deltaX)&&e.shiftKey){tr.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
 })();</script>
+<style id="hero-swap">
+/* hero kereső: Google-értékelés jobbra fent, AI kereső balra lent, térkép jobbra lent (2026.10.03) */
+html body .hero #ai-kereso .bh{display:flex;align-items:center;justify-content:space-between;gap:12px}
+html body .hero #ai-kereso .bh>.gtrust{position:static!important;margin:0 0 0 auto!important;width:auto!important;height:auto!important;border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;display:inline-flex!important;align-items:center!important;gap:8px!important;flex:none;text-decoration:none}
+html body .hero #ai-kereso .bh>.gtrust .pfi{width:20px!important;height:20px!important;padding:0!important;background:none!important;box-shadow:none!important;border:0!important;transform:none!important;margin:0!important}
+html body .hero #ai-kereso .bh>.gtrust .pft{display:flex!important;align-items:baseline;gap:6px;white-space:nowrap}
+html body .hero #ai-kereso .bh>.gtrust .pft b{font-size:14px!important}
+html body .hero #ai-kereso .bh>.gtrust .pft small{display:inline!important;font-size:12.5px!important;color:#5A6580!important;margin:0!important}
+html body .hero #ai-kereso .classicbox .cpills{display:flex!important;flex-wrap:nowrap!important;align-items:center;justify-content:space-between!important;gap:10px}
+html body .hero #ai-kereso .bh>.gtrust .pft em{display:none!important}
+html body .hero #ai-kereso .bh>.gtrust .pft b{font-weight:800;color:#1D4992}
+html body .hero #ai-kereso .bh>.gtrust .pft small{font-weight:500!important}
+html body .hero #ai-kereso .bh>.gtrust .pft small::before{content:"·";margin:0 6px 0 2px;color:#9AA3B5}
+html body .hero #ai-kereso .bh .bht{white-space:nowrap}
+html body .hero #ai-kereso .classicbox .cpills .mapb svg{width:16px!important;height:16px!important;flex:none}
+html body .hero #ai-kereso .classicbox .cpills .aiw{position:relative;display:inline-flex;flex:none}
+html body .hero #ai-kereso .classicbox .cpills .aib{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 14px;border:0;border-radius:12px;background:#467A28;color:#fff;font:700 13.5px 'Manrope',system-ui,sans-serif;cursor:pointer;white-space:nowrap;box-shadow:0 8px 18px -12px rgba(70,122,40,.9)}
+html body .hero #ai-kereso .classicbox .cpills .aib:hover{background:#386320}
+html body .hero #ai-kereso .classicbox .cpills .aib svg{width:15px;height:15px}
+html body .hero #ai-kereso .classicbox .cpills .aitip{display:none!important}
+html body .hero #ai-kereso .classicbox .cpills .mapb{margin-left:auto!important;width:auto!important;flex:0 0 auto}
+@media (max-width:640px){
+ html body .hero #ai-kereso .bh>.gtrust .pft small{display:none!important}
+ html body .hero #ai-kereso .classicbox .cpills .aiw,html body .hero #ai-kereso .classicbox .cpills>.aib,html body .hero #ai-kereso .classicbox .cpills .mapb{flex:1 1 0!important;min-width:0}
+ html body .hero #ai-kereso .classicbox .cpills .aib{width:100%;justify-content:center;height:40px}
+ html body .hero #ai-kereso .classicbox .cpills .mapb{justify-content:center;height:40px!important;margin-left:0!important}
+}
+</style>
+<script id="hero-swap-js">(function(){
+ function fix(){ var a=document.getElementById('ai-kereso'); if(!a) return false; var bh=a.querySelector('.classicbox .bh'), cp=a.querySelector('.classicbox .cpills'); if(!bh||!cp) return false;
+  var g=a.querySelector('.gtrust')||document.querySelector('.hero .gtrust'), ai=bh.querySelector('.aiw')||bh.querySelector('.aib')||cp.querySelector('.aiw')||cp.querySelector('.aib'), mb=cp.querySelector('.mapb');
+  if(ai&&ai.parentNode!==cp) cp.insertBefore(ai,cp.firstChild); else if(ai&&cp.firstChild!==ai) cp.insertBefore(ai,cp.firstChild);
+  if(mb&&cp.lastElementChild!==mb) cp.appendChild(mb);
+  if(g&&g.parentNode!==bh){ g.removeAttribute('style'); bh.appendChild(g); }
+  return !!(g&&ai&&mb); }
+ var n=0,t=setInterval(function(){ fix(); if(++n>60) clearInterval(t); },100);
+ addEventListener('load',function(){ fix(); setTimeout(fix,300); setTimeout(fix,1200); });
+ addEventListener('resize',function(){ setTimeout(fix,50); });
+})();</script>
+<style id="hero-polish">
+/* hero kereső finomítás (2026.10.03): fehér doboz, világos sztetoszkóp ikon, szebb AI gomb, példák */
+html body .hero #ai-kereso{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:0 1px 2px rgba(11,22,51,.05),0 24px 60px -28px rgba(29,53,116,.38)!important}
+html body .hero #ai-kereso .bh .bhi{background:#E6EDFA!important;color:#1D4992!important;width:34px;height:34px;border-radius:10px}
+html body .hero #ai-kereso .bh .bhi svg{width:18px!important;height:18px!important}
+html body .hero #ai-kereso .classicbox .cpills .aib{height:34px!important;padding:0 13px 0 11px!important;border:1px solid #C9E3B8!important;border-radius:999px!important;background:#F3FAEF!important;color:#2E5A18!important;font:700 13px 'Manrope',system-ui,sans-serif!important;box-shadow:none!important;gap:6px!important;transition:background .2s,border-color .2s}
+html body .hero #ai-kereso .classicbox .cpills .aib:hover{background:#E6F3DC!important;border-color:#A9D18E!important}
+html body .hero #ai-kereso .classicbox .cpills .aib svg{width:14px!important;height:14px!important;color:#467A28}
+html body .hero #ai-kereso .classicbox .cpills .aib .ait{font-weight:500;color:#4E6B3D;margin-left:2px}
+html body .hero #ai-kereso .classicbox .cpills .mapb{height:34px!important;border-radius:999px!important;font-size:13px!important;border-width:1px!important}
+html body .hero #ai-kereso .exq{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:12px 2px 0;font:500 12.5px 'Manrope',system-ui,sans-serif;color:#5A6580}
+html body .hero #ai-kereso .exq>span{font-weight:700;color:#8A93A8;margin-right:2px}
+html body .hero #ai-kereso .exq button{border:1px solid #DCE3F0;background:#F7F9FD;color:#2B3752;border-radius:999px;height:28px;padding:0 11px;font:600 12.5px 'Manrope',system-ui,sans-serif;cursor:pointer;white-space:nowrap;transition:border-color .15s,color .15s,background .15s}
+html body .hero #ai-kereso .exq button:hover{border-color:#1D4992;color:#1D4992;background:#fff}
+html body .hero #ai-kereso .exq button i{font-style:normal;color:#8A93A8;font-weight:500;margin-right:4px}
+@media (max-width:640px){
+ html body .hero #ai-kereso .exq{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:10px -4px 0;padding:0 4px 2px}
+ html body .hero #ai-kereso .exq::-webkit-scrollbar{display:none}
+ html body .hero #ai-kereso .exq button i{display:none}
+ html body .hero #ai-kereso .classicbox .cpills .aib,html body .hero #ai-kereso .classicbox .cpills .mapb{height:38px!important}
+ html body .hero #ai-kereso .classicbox .cpills .aib .ait{display:none}
+}
+</style>
+<script id="hero-polish-js">(function(){
+ var STETH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2a4 4 0 0 0 8 0v-2"/><circle cx="18" cy="12" r="2"/></svg>';
+ var EX=[['Szakterület','Bőrgyógyász'],['Tünet','Hátfájás'],['Vizsgálat','Hasi ultrahang'],['Kezelés','Fogszabályozás']];
+ function run(){ var a=document.getElementById('ai-kereso'); if(!a) return false; var bh=a.querySelector('.classicbox .bh'), f=document.getElementById('f-classic'); if(!bh||!f) return false;
+  var i=bh.querySelector('.bhi'); if(i&&!i.dataset.st){ i.innerHTML=STETH; i.dataset.st=1; }
+  var ab=a.querySelector('.aib'); if(ab&&!ab.querySelector('.ait')){ ab.insertAdjacentHTML('beforeend','<span class="ait">– írja le a panaszát</span>'); }
+  if(!a.querySelector('.exq')){ var d=document.createElement('div'); d.className='exq'; d.setAttribute('aria-label','Keresési példák');
+   d.innerHTML='<span>Például:</span>'+EX.map(function(x){ return '<button type="button" data-q="'+x[1]+'"><i>'+x[0]+':</i>'+x[1]+'</button>'; }).join('');
+   d.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; var q=document.getElementById('q'), fc=document.getElementById('f-classic'); if(!q||!fc) return; q.value=b.dataset.q; try{ q.dispatchEvent(new Event('input',{bubbles:true})); }catch(_){}
+    if(fc.requestSubmit) fc.requestSubmit(); else fc.querySelector('.btn').click(); });
+   f.parentNode.insertBefore(d,f.nextSibling); }
+  return true; }
+ var n=0,t=setInterval(function(){ if(run()&&++n>20) clearInterval(t); },150);
+ addEventListener('load',function(){ setTimeout(run,300); });
+})();</script>
+<style id="hero-polish2">
+/* AI gomb dominánsabb, kereső mögötti háttér fehérebb (2026.10.03) */
+html body .hero .hero-photo{opacity:.5!important}
+html body .hero::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 70% at 50% 55%,rgba(255,255,255,.85),rgba(255,255,255,.35) 70%,rgba(255,255,255,0) 100%)}
+html body .hero>.wrap{position:relative;z-index:1}
+html body .hero #ai-kereso .classicbox .cpills .aib{height:40px!important;padding:0 18px 0 14px!important;border:0!important;border-radius:999px!important;background:linear-gradient(135deg,#55963A,#3E7424)!important;color:#fff!important;font:800 14px 'Manrope',system-ui,sans-serif!important;box-shadow:0 10px 22px -10px rgba(70,122,40,.75),inset 0 1px 0 rgba(255,255,255,.18)!important;gap:8px!important}
+html body .hero #ai-kereso .classicbox .cpills .aib:hover{background:linear-gradient(135deg,#4C8A33,#35661E)!important;transform:translateY(-1px)}
+html body .hero #ai-kereso .classicbox .cpills .aib svg{width:16px!important;height:16px!important;color:#FCE58A!important}
+html body .hero #ai-kereso .classicbox .cpills .aib .ait{color:rgba(255,255,255,.85)!important;font-weight:600!important}
+html body .hero #ai-kereso .classicbox .cpills .mapb{height:40px!important}
+@media (max-width:640px){html body .hero #ai-kereso .classicbox .cpills .aib,html body .hero #ai-kereso .classicbox .cpills .mapb{height:42px!important}}
+</style>
+<style id="hero-polish3">
+html body .hero #ai-kereso .bh .bhi{display:none!important}
+html body .hero #ai-kereso .classicbox .cpills .aib{height:38px!important;padding:0 16px 0 13px!important;background:linear-gradient(135deg,#5E9E43,#4A8230)!important;font-weight:700!important;font-size:13.5px!important;box-shadow:0 6px 14px -9px rgba(70,122,40,.6)!important}
+html body .hero #ai-kereso .classicbox .cpills .aib:hover{background:linear-gradient(135deg,#55923B,#41762A)!important}
+html body .hero #ai-kereso .classicbox .cpills .aib svg{color:#F6E39A!important}
+html body .hero #ai-kereso .classicbox .cpills .aib .ait{color:rgba(255,255,255,.82)!important;font-weight:500!important}
+html body .hero #ai-kereso .classicbox .cpills .mapb{height:38px!important}
+@media (max-width:640px){html body .hero #ai-kereso .classicbox .cpills .aib,html body .hero #ai-kereso .classicbox .cpills .mapb{height:40px!important}}
+</style>
+<style id="ai-on-frame">
+/* AI mód: a kereső kerete is zöld (2026.10.03) */
+html body .hero #ai-kereso .classicbox #f-classic{transition:border-color .25s,box-shadow .25s}
+html body .hero #ai-kereso .classicbox #f-classic.ai-on{border-color:#467A28!important;box-shadow:0 0 0 5px rgba(70,122,40,.12),0 16px 34px -18px rgba(46,90,24,.45)!important}
+html body .hero #ai-kereso .classicbox #f-classic.ai-on .field>svg,html body .hero #ai-kereso .classicbox #f-classic.ai-on .fw .lb{color:#467A28!important}
+html body .hero #ai-kereso .classicbox #f-classic.ai-on .seg{border-color:#C9E3B8!important}
+</style>
 </body>
 </html>

@@ -284,11 +284,144 @@ h1 small{font-size:.55em;color:var(--muted);font-weight:700;margin-left:6px}
  .av.cl svg{width:30px;height:30px}
 }
 /* kiegészítő színek (logó) */
-body.szp #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
-.szp .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD 85%)}
-.szp .main .sec:nth-of-type(4n+2) h2 .ic{background:#EAF5E3;color:#467A28}
-.szp .main .sec:nth-of-type(4n+3) h2 .ic{background:#FFF6D9;color:#9A7108}
-.szp .main .sec:nth-of-type(4n+4) h2 .ic{background:#FDEEE6;color:#C2531C}
+.szp .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.10),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD 85%)}
+.szp .main .sec:nth-of-type(2n) h2 .ic{background:#EAF5E3;color:#467A28}
 .szp .prose h2::before{display:none}
-.szp .tl .it::before{border-color:#E8692F}
 .szp .pill.gold{background:#FFF6D9;color:#7A5806}
+/* óvatos kiegészítő színek (narancs, citromsárga) */
+.szp #field h2 .ic{background:#FDEEE6;color:#C2531C}
+.szp .tl .it::before{border-color:#F2BE3A}
+.szp .hrs .t,.szp .hrs2 .t{background:#FFF6D9;border-radius:6px;padding:0 6px;margin:0 -6px}
+.szp .lsel label:has(input:checked){border-color:#F2BE3A;background:#FFFBEC}
+.szp .rbig .rs{color:#F2BE3A}
+
+/* ==========================================================================
+   KOMPAKT (2026.10.03) – kisebb elemek, nagyobb térköz (hero kivétel)
+   ========================================================================== */
+.szp .tabs{margin-top:26px}
+.szp .tabs a{padding:12px 13px 10px;font-size:14px}
+.szp .grid{gap:30px;padding-top:28px;padding-bottom:76px}
+.szp .main{gap:24px}
+.szp .sec{padding:18px 20px;border-radius:16px}
+.szp .sec h2{font-size:18px;margin-bottom:16px;gap:10px}
+.szp .sec h2 .ic{width:30px;height:30px;border-radius:9px}
+.szp .sec h2 .ic svg{width:16px;height:16px}
+.szp .grid .btn{height:38px;font-size:13.5px;padding:0 14px;border-radius:10px}
+.szp .grid .btn svg{width:15px;height:15px}
+.szp .grid .btn.sm{height:34px;font-size:13px;padding:0 12px}
+.szp .lead{font-size:15.5px}
+.szp .loc{padding:13px 14px;grid-template-columns:38px minmax(0,1fr) auto;gap:12px;border-radius:14px}
+.szp .loc+.loc{margin-top:12px}
+.szp .loc .li{width:38px;height:38px;border-radius:10px}
+.szp .loc .li svg{width:18px;height:18px}
+.szp .loc h3{font-size:15px}
+.szp .loc .ad,.szp .loc .ln{font-size:13px}
+.szp .loc .la{min-width:124px;gap:7px}
+.szp .more{height:38px;font-size:13.5px;margin-top:14px}
+.szp .empty{padding:14px 16px;gap:14px}
+.szp .empty .ei{width:40px;height:40px;border-radius:12px}
+.szp .kv{gap:9px;margin-top:16px}
+.szp .kv span{font-size:13px;padding:5px 9px}
+.szp .tl .it{padding-bottom:18px}
+.szp .tl .it b{font-size:14.5px}
+.szp .tl .it span{font-size:13px}
+.szp .svc{font-size:14px}
+.szp .svc td{padding:9px 0}
+.szp .chips{gap:9px;margin-top:16px}
+.szp .chip{height:32px;padding:0 12px;font-size:13px}
+.szp .arts{gap:12px;margin-top:16px}
+.szp .art{padding:10px 12px;font-size:13.5px;border-radius:11px}
+.szp .rt{padding:9px 0;font-size:13.5px}
+.szp .sim{gap:16px}
+.szp .sc{padding:12px;border-radius:14px}
+.szp .sc .sa{width:38px;height:38px;border-radius:11px;font-size:14px}
+.szp .sc b{font-size:14.5px}.szp .sc span{font-size:12.5px}
+.szp .side{gap:18px}
+.szp .side .card{padding:16px;border-radius:18px}
+.szp .side .card h3{font-size:15px;margin-bottom:12px}
+.szp .lsel{gap:8px}
+.szp .lsel label{padding:8px 10px;font-size:13px;border-radius:11px}
+.szp .lsel b{font-size:13.5px}
+.szp .phn{font-size:18px}
+.szp .phn svg{width:18px;height:18px}
+.szp .cbtns{gap:8px}
+.szp .side .btn{height:40px;font-size:14px;border-radius:11px}
+.szp .side .row2{gap:8px}
+.szp .mini{height:150px;border-radius:14px}
+.szp .claim{padding:15px;border-radius:18px}
+.szp .claim b{font-size:15px}.szp .claim p{font-size:13px}
+.szp .claim .btn{height:38px;font-size:13.5px}
+.szp .sf{gap:9px;margin-bottom:16px}
+.szp .sf button{height:30px;font-size:12.5px}
+.szp .dl{gap:12px}
+.szp .dr{padding:9px 11px;border-radius:12px;gap:10px}
+.szp .dr .da{width:36px;height:36px;border-radius:10px;font-size:13px}
+.szp .dr b{font-size:14px}.szp .dr span{font-size:12.5px}
+.szp .spg{gap:9px}
+.szp .spg a{height:34px;font-size:13.5px;padding:0 12px;border-radius:10px}
+.szp .two{gap:22px}
+.szp .hrs2{font-size:14px}
+.szp .acc{font-size:13.5px;gap:10px}
+.szp .rbig .rn{font-size:38px}
+.szp .rbig .rs{font-size:19px}
+.szp .revs{gap:12px}
+.szp .faq details{padding:10px 14px;border-radius:12px}
+.szp .faq details+details{margin-top:10px}
+.szp .faq summary{font-size:14.5px}
+.szp .faq p{font-size:14px}
+@media (max-width:640px){
+ .szp .tabs{margin-top:18px}
+ .szp .grid{gap:20px;padding-top:20px}
+ .szp .main{gap:18px}
+ .szp .sec{padding:15px 14px}
+ .szp .sec h2{font-size:17px}
+ .szp .loc{grid-template-columns:36px minmax(0,1fr);padding:12px;gap:10px}
+ .szp .loc .li{width:36px;height:36px}
+ .szp .loc .la{min-width:0}
+ .szp .sim{gap:12px}
+ .szp .bbar .btn{height:44px}
+}
+
+/* KOMPAKT 2 (2026.10.03) – kisebb dobozok */
+.szp .sec{padding:16px 18px;border-radius:14px}
+.szp .sec h2{font-size:17px;margin-bottom:14px}
+.szp .loc{padding:11px 12px;border-radius:12px}
+.szp .side .card{padding:14px;border-radius:14px}
+.szp .claim{padding:13px;border-radius:14px}
+.szp .sc{padding:11px;border-radius:12px}
+.szp .dr{padding:8px 10px;border-radius:11px}
+.szp .art{padding:9px 11px;border-radius:10px}
+.szp .faq details{padding:9px 12px;border-radius:11px}
+.szp .empty{padding:12px 14px;border-radius:13px}
+.szp .mini{height:136px;border-radius:12px}
+@media (max-width:640px){.szp .sec{padding:14px 13px}.szp .loc{padding:10px}}
+
+/* KOMPAKT 3 (2026.10.03) */
+.szp .grid{gap:40px;padding-top:34px;padding-bottom:88px}
+.szp .main{gap:30px}
+.szp .side{gap:22px}
+.szp .sec h2{font-size:16px;margin-bottom:16px}
+.szp .sec h2 .ic{width:28px;height:28px}
+.szp .sec h2 .ic svg{width:15px;height:15px}
+.szp .lead{font-size:15px}
+.szp .muted{font-size:13.5px}
+.szp .grid .btn{height:34px;font-size:13px;padding:0 12px}
+.szp .grid .btn.sm{height:32px;font-size:12.5px}
+.szp .side .btn{height:38px;font-size:13.5px}
+.szp .loc+.loc{margin-top:14px}
+.szp .loc h3{font-size:14.5px}
+.szp .loc .li{width:34px;height:34px}
+.szp .loc{grid-template-columns:34px minmax(0,1fr) auto}
+.szp .tl .it b{font-size:14px}
+.szp .svc{font-size:13.5px}
+.szp .chip{height:30px;font-size:12.5px;padding:0 11px}
+.szp .art{font-size:13px}
+.szp .rt{font-size:13px}
+.szp .sim,.szp .dl,.szp .arts{gap:16px}
+.szp .sc b,.szp .dr b{font-size:14px}
+.szp .side .card h3{font-size:14.5px}
+.szp .phn{font-size:17px}
+.szp .tabs a{font-size:13.5px}
+.szp .rbig .rn{font-size:34px}
+.szp .faq summary{font-size:14px}
+@media (max-width:640px){.szp .grid{gap:24px;padding-top:24px}.szp .main{gap:20px}.szp .loc{grid-template-columns:34px minmax(0,1fr)}}

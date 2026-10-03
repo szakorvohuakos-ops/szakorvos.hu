@@ -42,7 +42,7 @@ function doctorUrl(d) {
   const prim = (d.sp.find(x => x[1]) || d.sp[0] || [])[0];
   return d.s.startsWith('dr-') && prim ? `/${prim}/${d.s}` : `/orvos/${d.s}`;
 }
-const initials = n => n.replace(/^(dr\.?|prof\.?|med\.?|habil\.?|phd)\s+/gi, '').replace(/^(dr\.?|prof\.?)\s+/gi, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+import { fmtName, initials, sortKey } from './name.mjs';
 
 // ---------- sablon ----------
 const SHELL_RAW = fs.readFileSync(path.join(HERE, 'shell', 'shell.html'), 'utf8');
@@ -97,7 +97,7 @@ ${SHELL}
 const AI_BOX = (spec) => `<aside class="aibox">
   <span class="aibadge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l1.9 5.6 5.6 1.9-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.9z"/></svg>AI-kereső</span>
   <div><b>Nem biztos benne, hogy ${spec ? esc(lc(spec)) + ' kell' : 'melyik szakorvos kell'}?</b><p>Írja le a panaszát a saját szavaival – az AI-kereső megmondja, melyik szakterület illik hozzá, és kiadja a közeli orvosokat.</p></div>
-  <a class="btn ai" href="/">Kérdezze az AI-keresőt ›</a>
+  <a class="btn ai" href="/">Kérdezze az AI-keresőt&nbsp;›</a>
   <small style="display:block;margin-top:6px;font-size:11.5px;opacity:.75">A beírt tünetleírást anonim módon dolgozzuk fel — <a href="/adatvedelem.html#ai">részletek</a></small>
 </aside>`;
 
@@ -105,7 +105,7 @@ const AI_BOX = (spec) => `<aside class="aibox">
 const data = await load();
 const specs = new Map(data.specialties.map(s => [s.slug, s]));
 const clinics = data.clinics; // id -> [name, slug, city, district, rating, reviews]
-const docs = data.doctors.map(a => ({ n: a[0], s: a[1], p: !!a[2], q: +a[3] || 0, sp: a[4] || [], cl: a[5] || [] }));
+const docs = data.doctors.map(a => ({ raw: a[0], n: fmtName(a[0]), k: sortKey(a[0]), s: a[1], p: !!a[2], q: +a[3] || 0, sp: a[4] || [], cl: a[5] || [] }));
 
 // index: spec -> city -> Set(doctor idx)
 const combo = new Map(); const cityDocs = new Map(); const cityName = new Map();
@@ -135,7 +135,7 @@ for (const [sl, cm] of combo) {
   const sp = specs.get(sl);
   for (const [city, set] of cm) {
     if (set.size < MIN_COMBO) continue;
-    const list = [...set].map(i => docs[i]).sort((a, b) => (b.p - a.p) || (b.q - a.q) || coll.compare(a.n.replace(/^(dr\.?|prof\.?)\s*/i, ''), b.n.replace(/^(dr\.?|prof\.?)\s*/i, '')));
+    const list = [...set].map(i => docs[i]).sort((a, b) => (b.p - a.p) || (b.q - a.q) || coll.compare(a.k, b.k));
     const clinicSet = new Set();
     const cards = list.map(d => {
       const cls = d.cl.map(id => [id, clinics[id]]).filter(([, c]) => c && c[2] === city);
@@ -144,7 +144,7 @@ for (const [sl, cm] of combo) {
       const url = doctorUrl(d);
       const others = d.sp.map(x => specs.get(x[0])?.dn).filter(Boolean).filter(x => x !== sp.dn);
       return `<article class="dc"${dist.length ? ` data-d="${esc(dist.join(' '))}"` : ''}>
-  <a class="av" href="${url}" tabindex="-1" aria-hidden="true">${esc(initials(d.n))}</a>
+  <a class="av" href="${url}" tabindex="-1" aria-hidden="true">${esc(initials(d.raw))}</a>
   <div class="dm">
     <h3><a href="${url}">${esc(d.n)}</a>${d.p ? '<span class="pb">Partner</span>' : ''}</h3>
     <p class="ds">${esc(sp.dn)}${others.length ? ' · ' + esc(others.slice(0, 2).join(', ')) : ''}</p>
@@ -165,7 +165,7 @@ for (const [sl, cm] of combo) {
   <span class="eb">${esc(sp.n)}</span>
   <h1>${esc(sp.dn)} – ${esc(city)}</h1>
   <p class="lead"><b>${list.length}</b> ${esc(lc(sp.dn))} <b>${clinicSet.size}</b> rendelőben, ${esc(city)} területén. Válassza ki az orvost, és nézze meg az elérhetőségeit, rendelési helyeit.</p>
-  <div class="acts"><a class="btn pri" href="/talalatok?specialty=${encodeURIComponent(sl)}&amp;city=${encodeURIComponent(city)}">Szűrés és térkép ›</a><a class="btn ghost" href="/szakorvos/${sl}">${esc(sp.dn)} más városokban</a></div>
+  <div class="acts"><a class="btn pri" href="/talalatok?specialty=${encodeURIComponent(sl)}&amp;city=${encodeURIComponent(city)}">Szűrés és térkép&nbsp;›</a><a class="btn ghost" href="/szakorvos/${sl}">${esc(sp.dn)} más városokban</a></div>
 </header>
 ${dists.length > 1 ? `<div class="chips" id="dchips" role="group" aria-label="Kerület szerinti szűrés"><button type="button" class="on" data-k="">Összes kerület</button>${dists.map(k => `<button type="button" data-k="${esc(k)}">${esc(k)}. ker.</button>`).join('')}</div>` : ''}
 <section class="list" aria-label="Orvosok">
@@ -181,7 +181,7 @@ ${dists.length > 1 ? `<script>(function(){var c=document.getElementById('dchips'
       '@context': 'https://schema.org', '@type': 'ItemList', name: `${sp.dn} – ${city}`, numberOfItems: list.length,
       itemListElement: list.slice(0, 100).map((d, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'Physician', name: d.n, url: SITE + doctorUrl(d), address: { '@type': 'PostalAddress', addressLocality: city, addressCountry: 'HU' } } }))
     }];
-    write(`szakorvos/${sl}/${slugify(city)}/index.html`, page({ title, desc, canon, crumbs: [['Főoldal', '/'], ['Szakorvosok', '/szakorvos'], [sp.dn, `/szakorvos/${sl}`], [city, canon]], body, ld }));
+    write(`szakorvos/${sl}/${slugify(city)}/index.html`, page({ title, desc, canon, crumbs: [['Kezdőlap', '/'], ['Szakorvosok', '/szakorvos'], [sp.dn, `/szakorvos/${sl}`], [city, canon]], body, ld }));
     urls.push([canon, '0.8']); nCombo++;
   }
 }
@@ -196,13 +196,13 @@ for (const [sl, sp] of specs) {
   <span class="eb">${esc(sp.n)}</span>
   <h1>${esc(sp.dn)} – városok szerint</h1>
   <p class="lead"><b>${fmt(total)}</b> ${esc(lc(sp.dn))} <b>${rows.length}</b> településen. Válassza ki a várost!</p>
-  <div class="acts"><a class="btn pri" href="/talalatok?specialty=${encodeURIComponent(sl)}">Összes ${esc(lc(sp.dn))} a találati oldalon ›</a></div>
+  <div class="acts"><a class="btn pri" href="/talalatok?specialty=${encodeURIComponent(sl)}">Összes ${esc(lc(sp.dn))} a találati oldalon&nbsp;›</a></div>
 </header>
 <section class="cities" aria-label="Városok">${rows.map(([c, n]) => hasCombo(sl, c) ? `<a href="${comboUrl(sl, c)}"><b>${esc(c)}</b><small>${n} orvos</small></a>` : `<a class="thin" href="/talalatok?specialty=${encodeURIComponent(sl)}&amp;city=${encodeURIComponent(c)}"><b>${esc(c)}</b><small>${n} orvos</small></a>`).join('')}</section>
 ${AI_BOX(sp.dn)}
 ${sp.desc ? `<section class="about"><h2>Mivel foglalkozik a ${esc(lc(sp.dn))}?</h2><p>${esc(sp.desc)}</p></section>` : ''}
 <section class="rel"><h2>További szakterületek</h2><div class="tags">${[...specs.values()].filter(s => s.slug !== sl && specTotal(s.slug)).map(s => `<a href="/szakorvos/${s.slug}">${esc(s.dn)}</a>`).join('')}</div></section>`;
-  write(`szakorvos/${sl}/index.html`, page({ title: `${sp.dn} – ${fmt(total)} szakorvos ${rows.length} településen | Szakorvos.hu`, desc: `${sp.dn} keresése városok szerint: ${fmt(total)} orvos ${rows.length} településen, rendelővel, címmel és értékeléssel.`, canon, crumbs: [['Főoldal', '/'], ['Szakorvosok', '/szakorvos'], [sp.dn, canon]], body }));
+  write(`szakorvos/${sl}/index.html`, page({ title: `${sp.dn} – ${fmt(total)} szakorvos ${rows.length} településen | Szakorvos.hu`, desc: `${sp.dn} keresése városok szerint: ${fmt(total)} orvos ${rows.length} településen, rendelővel, címmel és értékeléssel.`, canon, crumbs: [['Kezdőlap', '/'], ['Szakorvosok', '/szakorvos'], [sp.dn, canon]], body }));
   urls.push([canon, '0.7']); nSpec++;
 }
 
@@ -216,11 +216,11 @@ for (const [city, set] of cityDocs) {
   <span class="eb">Városi szakorvos-kereső</span>
   <h1>Szakorvosok – ${esc(city)}</h1>
   <p class="lead"><b>${fmt(set.size)}</b> szakorvos <b>${clinicN}</b> rendelőben, <b>${rows.length}</b> szakterületen, ${esc(city)} területén.</p>
-  <div class="acts"><a class="btn pri" href="/talalatok?city=${encodeURIComponent(city)}">Összes orvos – ${esc(city)} ›</a><a class="btn ghost" href="/klinikak?city=${encodeURIComponent(city)}">Rendelők</a></div>
+  <div class="acts"><a class="btn pri" href="/talalatok?city=${encodeURIComponent(city)}">Összes orvos – ${esc(city)}&nbsp;›</a><a class="btn ghost" href="/klinikak?city=${encodeURIComponent(city)}">Rendelők</a></div>
 </header>
 <section class="cities" aria-label="Szakterületek">${rows.map(([sl, n]) => hasCombo(sl, city) ? `<a href="${comboUrl(sl, city)}"><b>${esc(specs.get(sl).dn)}</b><small>${n} orvos</small></a>` : `<a class="thin" href="/talalatok?specialty=${encodeURIComponent(sl)}&amp;city=${encodeURIComponent(city)}"><b>${esc(specs.get(sl).dn)}</b><small>${n} orvos</small></a>`).join('')}</section>
 ${AI_BOX(null)}`;
-  write(`szakorvos/varos/${slugify(city)}/index.html`, page({ title: `Szakorvos ${city} – ${fmt(set.size)} orvos, ${rows.length} szakterület | Szakorvos.hu`, desc: `Szakorvosok ${city} területén szakterület szerint: ${fmt(set.size)} orvos ${clinicN} rendelőben. Név, cím, elérhetőség és értékelés.`, canon, crumbs: [['Főoldal', '/'], ['Szakorvosok', '/szakorvos'], [city, canon]], body }));
+  write(`szakorvos/varos/${slugify(city)}/index.html`, page({ title: `Szakorvos ${city} – ${fmt(set.size)} orvos, ${rows.length} szakterület | Szakorvos.hu`, desc: `Szakorvosok ${city} területén szakterület szerint: ${fmt(set.size)} orvos ${clinicN} rendelőben. Név, cím, elérhetőség és értékelés.`, canon, crumbs: [['Kezdőlap', '/'], ['Szakorvosok', '/szakorvos'], [city, canon]], body }));
   urls.push([canon, '0.7']); nCity++;
 }
 
@@ -238,7 +238,7 @@ ${AI_BOX(null)}`;
 <h2 class="h2">Városok</h2>
 <section class="cities" aria-label="Városok">${cityRows.map(([c, n]) => `<a href="${cityUrl(c)}"><b>${esc(c)}</b><small>${fmt(n)} orvos</small></a>`).join('')}</section>
 ${AI_BOX(null)}`;
-  write('szakorvos/index.html', page({ title: 'Szakorvosok szakterület és város szerint | Szakorvos.hu', desc: `Országos szakorvos-kereső: ${fmt(docs.length)} orvos ${specRows.length} szakterületen és ${cityRows.length} városban. Válasszon szakterületet vagy várost.`, canon: '/szakorvos', crumbs: [['Főoldal', '/'], ['Szakorvosok', '/szakorvos']], body }));
+  write('szakorvos/index.html', page({ title: 'Szakorvosok szakterület és város szerint | Szakorvos.hu', desc: `Országos szakorvos-kereső: ${fmt(docs.length)} orvos ${specRows.length} szakterületen és ${cityRows.length} városban. Válasszon szakterületet vagy várost.`, canon: '/szakorvos', crumbs: [['Kezdőlap', '/'], ['Szakorvosok', '/szakorvos']], body }));
   urls.unshift(['/szakorvos', '0.8']);
 }
 

@@ -191,7 +191,84 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 #crumb2{display:contents}
 @media (max-width:1000px){.bar2 #mf{order:-1}}
 /* kiegészítő színek (logó): négyszínű csík a menü alatt, vidámabb akcentusok */
-body.szr #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
-.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
-.szr .tag.b{background:#FFF6D9;color:#9A7108}
+.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.10),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
+/* óvatos kiegészítő színek (narancs, citromsárga) */
+.szr .side .sh b svg{color:#E8692F}
 .szr .act .ac{background:#FFF6D9;color:#7A5806}
+.szr .act .ac b{color:#9A7108}
+.szr .pb{background:#FFF6D9;color:#7A5806}
+.szr .card.prem{border-color:#F2DD9B;box-shadow:0 10px 24px -18px rgba(176,128,10,.45)}
+.szr .card.prem .ver{color:#C9940F}
+.szr .tag.b{background:#FDEEE6;color:#C2531C}
+
+/* ==========================================================================
+   KOMPAKT (2026.10.03) – kisebb elemek, nagyobb térköz (fejléc kivétel)
+   ========================================================================== */
+.szr .body{gap:26px;padding-top:26px}
+.szr .list{gap:18px}
+.szr .card{padding:14px 16px;gap:14px;border-radius:16px}
+.szr .av{width:56px;height:56px;border-radius:15px;font-size:18px}
+.szr .av svg{width:26px;height:26px}
+.szr .nm h3{font-size:16.5px}
+.szr .sp{font-size:13.5px}
+.szr .meta{font-size:13px;margin-top:6px;gap:5px 12px}
+.szr .meta svg{width:14px;height:14px}
+.szr .tags{margin-top:8px}
+.szr .tag{font-size:11.5px;padding:3px 9px}
+.szr .acts{min-width:132px;gap:8px}
+.szr main .btn,.szr .acts .btn{height:36px;font-size:13.5px;padding:0 13px;border-radius:10px}
+.szr .btn svg{width:15px;height:15px}
+.szr .side .sh{padding:12px 14px}
+.szr .side .sh b{font-size:15px}
+.szr .side .sb{padding:4px 14px 8px}
+.szr .fg{padding:12px 0}
+.szr .fg summary{font-size:12px}
+.szr .fg[open] summary{margin-bottom:10px}
+.szr .ck{padding:5px 8px;font-size:13.5px}
+.szr .ck input{width:16px;height:16px}
+.szr .seg button{height:30px;font-size:12.5px}
+.szr .near{height:36px;font-size:13px}
+.szr .fsearch{height:34px;font-size:13.5px}
+.szr .aibox{padding:13px 16px;border-radius:16px;gap:12px}
+.szr .aibox .ic{width:36px;height:36px;border-radius:10px}
+.szr .aibox b{font-size:15px}.szr .aibox small{font-size:13px}
+.szr .pager{gap:8px;margin-top:12px}
+.szr .pager button{min-width:36px;height:36px;border-radius:10px}
+.szr .empty{padding:26px 20px}
+.szr .empty h2{font-size:19px}
+.szr .skel{height:116px}
+@media (max-width:1000px){.szr .body{gap:18px}}
+@media (max-width:640px){
+ .szr .body{padding-top:16px}
+ .szr .list{gap:14px}
+ .szr .card{padding:12px;gap:12px}
+ .szr .av{width:48px;height:48px;border-radius:13px;font-size:16px}
+ .szr .acts{min-width:0}
+}
+
+/* KOMPAKT 2 (2026.10.03) – kisebb dobozok */
+.szr .card{padding:12px 14px;border-radius:14px}
+.szr .av{width:50px;height:50px;border-radius:13px;font-size:16px}
+.szr .side{border-radius:14px}
+.szr .aibox{padding:11px 14px;border-radius:13px}
+.szr .empty{padding:22px 18px;border-radius:14px}
+.szr .map{border-radius:16px}
+@media (max-width:640px){.szr .card{padding:11px 12px}.szr .av{width:44px;height:44px;font-size:15px}}
+.szr .crumbs .sep{font-style:normal;color:var(--faint)}
+
+/* KOMPAKT 3 (2026.10.03) */
+.szr .body{gap:32px;padding-top:30px}
+.szr .list{gap:20px}
+.szr .card{gap:14px}
+.szr .av{width:46px;height:46px;border-radius:12px;font-size:15px}
+.szr .nm h3{font-size:15.5px}
+.szr .sp{font-size:13px}
+.szr .meta{font-size:12.5px}
+.szr .tag{font-size:11px;padding:3px 8px}
+.szr main .btn,.szr .acts .btn{height:34px;font-size:13px;padding:0 12px}
+.szr .acts{min-width:124px}
+.szr .side .sh b{font-size:14.5px}
+.szr .ck{font-size:13px}
+.szr .fg{padding:14px 0}
+.szr .aibox b{font-size:14.5px}.szr .aibox small{font-size:12.5px}
+@media (max-width:640px){.szr .list{gap:16px}.szr .av{width:42px;height:42px;font-size:14px}}
