@@ -4680,7 +4680,86 @@ html.nv-lock,html.nv-lock body{overflow:hidden!important}
   </div>
 </header>
 
+<style id="lw">
+/* Landing: a hero alatti rész normál (nem vastag) betűvel; a hero érintetlen, csak a „Mit keres?" vékony */
+#varosok,#vizsgalatok,#tudastar,#partner,#gyik,#rolunk,footer{font-weight:400}
+#varosok *,#vizsgalatok *,#tudastar *,#partner *,#gyik *,#rolunk *,footer *{font-weight:400!important}
+#varosok h2,#vizsgalatok h2,#tudastar h2,#partner h2,#gyik h2,#rolunk h2,#varosok h3,#rolunk h3,.kxc b,.clist .cn,.faq summary,.shead .all{font-weight:500!important}
+#varosok h2 em,#vizsgalatok h2 em,#tudastar h2 em,#partner h2 em,#gyik h2 em,#rolunk h2 em{font-weight:500!important}
+html body .hero #ai-kereso #cl-lbl .tx b.kk,.bht,.bht *{font-weight:300!important}
+#vizsgalatok .kxc b,#tudastar .kxc b{font-weight:500!important}
+#varosok .eyebrow,#vizsgalatok .eyebrow,#tudastar .eyebrow,#gyik .eyebrow{color:#1D4992!important}
+html body #varosok .shead a.all,html body #vizsgalatok .shead a.all,html body #tudastar .shead a.all,html body #gyik .shead a.all{color:#1D4992!important;font-weight:500!important}
+#partner .btn,#partner .btn *,.faq summary{font-weight:500!important}
+@media (max-width:560px){
+  #vizsgalatok .kxg{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #vizsgalatok .kxc{padding:12px 28px 12px 13px}
+  #vizsgalatok .kxc b{font-size:14.5px}
+  #vizsgalatok .kxc i{right:10px;font-size:18px}
+  #tudastar .kxc{padding:12px 34px 12px 14px}
+}
+html body #hogyan h2,html body #varosok h2,html body #vizsgalatok h2,html body #tudastar h2,html body #partner h2,html body #gyik h2,html body #rolunk h2{font-size:clamp(26px,3.2vw,34px)!important;line-height:1.15!important;font-weight:600!important;letter-spacing:-.025em!important;color:#16387F!important;margin:0!important}
+html body #hogyan h2 em,html body #varosok h2 em,html body #vizsgalatok h2 em,html body #tudastar h2 em,html body #partner h2 em,html body #gyik h2 em,html body #rolunk h2 em{font-weight:600!important;font-style:normal!important}
+html body section#hogyan h2,html body section#varosok h2,html body section#vizsgalatok h2,html body section#tudastar h2,html body section#gyik h2,html body #partner .partner h2,html body #rolunk .seotext h2{font-size:clamp(26px,3.2vw,34px)!important;line-height:1.15!important;font-weight:600!important;letter-spacing:-.025em!important;color:#16387F!important;margin:0!important}
+html body section#hogyan h2 em,html body section#varosok h2 em,html body section#vizsgalatok h2 em,html body section#tudastar h2 em,html body section#gyik h2 em,html body #partner .partner h2 em,html body #rolunk .seotext h2 em{font-weight:600!important}
+@media (min-width:1001px){html body section#hogyan h2,html body section#varosok h2,html body section#vizsgalatok h2,html body section#tudastar h2,html body section#gyik h2,html body #partner .partner h2,html body #rolunk .seotext h2{font-size:34px!important}}
+html body #partner .partner h2,html body #rolunk .seotext h2{font-size:28px!important;margin:0 0 12px!important}
+@media (max-width:640px){html body #partner .partner h2,html body #rolunk .seotext h2{font-size:24px!important}}
+/* Hero: a „Mit keres?" dominánsabb (nagyobb, sötétebb, vékony marad) */
+html body .hero #ai-kereso .bh .bht{font-size:32px!important;line-height:1.1!important;letter-spacing:-.03em!important;color:#0B1633!important;gap:14px!important}
+html body .hero #ai-kereso .bh .bhi{width:46px!important;height:46px!important;border-radius:14px!important;background:#1D4992!important;color:#fff!important}
+html body .hero #ai-kereso .bh .bhi svg{width:23px!important;height:23px!important}
+@media (max-width:640px){
+  html body .hero #ai-kereso .bh .bht{font-size:26px!important;gap:11px!important}
+  html body .hero #ai-kereso .bh .bhi{width:40px!important;height:40px!important;border-radius:12px!important}
+  html body .hero #ai-kereso .bh .bhi svg{width:20px!important;height:20px!important}
+}
+</style>
 <!-- ================= MIÉRT MI ================= -->
+
+<style id="hw">
+  html body #hogyan{background:#fff!important;padding:72px 0 64px}
+  #hogyan h2,#hogyan h2 em{font-weight:500!important}
+  #hogyan .eyebrow{font-weight:500!important;color:#1D4992!important}
+  #hogyan .hst b [data-stat],#hogyan .hst [data-stat]{font:inherit!important;color:inherit!important;letter-spacing:inherit!important;display:inline!important}
+  #hogyan .hws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;position:relative;margin:6px 0 0}
+  #hogyan .hw{position:relative;padding:26px 26px 28px;border:1px solid rgba(29,73,146,.12);border-radius:20px;background:linear-gradient(180deg,#fff,#f8faff)}
+  #hogyan .hw .n{display:block;font-size:44px;line-height:1;font-weight:300!important;letter-spacing:-.04em;color:#1D4992;opacity:.9;margin:0 0 18px;font-variant-numeric:tabular-nums}
+  #hogyan .hw .ic{position:absolute;right:22px;top:22px;width:44px;height:44px;border-radius:13px;background:#EAF0FB;color:#1D4992;display:grid;place-items:center}
+  #hogyan .hw .ic svg{width:22px;height:22px}
+  #hogyan .hw:nth-child(2) .ic{background:#EDF4E8;color:#467A28}
+  #hogyan .hw:nth-child(3) .ic{background:#FAEAE4;color:#B84A22}
+  #hogyan .hw h3{margin:0 0 8px;font-size:19px;line-height:1.3;letter-spacing:-.02em;color:#0B1633;font-weight:500!important}
+  #hogyan .hw p{margin:0;font-size:15px;line-height:1.6;color:#44506A;font-weight:400!important}
+  #hogyan .hst{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:44px 0 0;padding:28px 0 0;border-top:1px solid rgba(29,73,146,.1)}
+  #hogyan .hst>div{text-align:center;padding:4px 10px;border-left:1px solid rgba(29,73,146,.1)}
+  #hogyan .hst>div:first-child{border-left:0}
+  #hogyan .hst b{display:block;font-size:34px;line-height:1.1;font-weight:300!important;letter-spacing:-.03em;color:#1D4992;font-variant-numeric:tabular-nums}
+  #hogyan .hst b *{font-weight:300!important}
+  #hogyan .hst span{display:block;margin-top:6px;font-size:13.5px;color:#5b6785;font-weight:400!important}
+  @media (max-width:900px){ #hogyan{padding:52px 0 48px} #hogyan .hws{grid-template-columns:1fr;gap:12px} #hogyan .hw{padding:20px 20px 22px} #hogyan .hw .n{font-size:36px;margin-bottom:12px} #hogyan .hw .ic{top:18px;right:18px}
+    #hogyan .hst{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px;margin-top:34px} #hogyan .hst>div{border-left:0} #hogyan .hst>div:nth-child(even){border-left:1px solid rgba(29,73,146,.1)} #hogyan .hst>div:last-child{grid-column:1/-1;border-left:0} #hogyan .hst b{font-size:30px} }
+</style>
+<!-- ================= HOGYAN MŰKÖDIK ================= -->
+<section id="hogyan">
+  <div class="wrap">
+    <div class="shead">
+      <div><p class="eyebrow" style="--ec:#1D4992">Hogyan működik</p><h2>Három lépés a megfelelő <em>szakorvosig</em></h2><p class="sub">Nem kell tudnia, melyik szakorvost keresi – elég, ha leírja, mi a baj.</p></div>
+    </div>
+    <div class="hws">
+      <div class="hw"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10L4 20z"/><path d="M14 7l3 3"/></svg></span><span class="n">1</span><h3>Írja le a panaszát</h3><p>Saját szavaival, vagy válasszon szakterületet, vizsgálatot és várost – ahogy Önnek kényelmesebb.</p></div>
+      <div class="hw"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg></span><span class="n">2</span><h3>Megmutatjuk a szakterületet</h3><p>A panasz alapján javaslunk szakterületet, és jelezzük a sürgősséget. Ez nem diagnózis, hanem útmutatás.</p></div>
+      <div class="hw"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.2 7-12A7 7 0 0 0 5 10c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></span><span class="n">3</span><h3>Válasszon orvost vagy rendelőt</h3><p>Szűrjön helyszín, rendelési idő, nyelv és értékelés szerint, majd vegye fel a kapcsolatot a rendelővel.</p></div>
+    </div>
+    <div class="hst" aria-label="Az adatbázis mérete">
+      <div><b><span data-stat="doctors">7 212</span></b><span>orvos</span></div>
+      <div><b><span data-stat="clinics">1 929</span></b><span>rendelő</span></div>
+      <div><b><span data-stat="specialties">86</span></b><span>szakterület</span></div>
+      <div><b>1 368</b><span>vizsgálat</span></div>
+      <div><b>2 463</b><span>tudástár-cikk</span></div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= VÁROSOK ================= -->
 <section id="varosok" class="alt">
