@@ -190,3 +190,8 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 }
 #crumb2{display:contents}
 @media (max-width:1000px){.bar2 #mf{order:-1}}
+/* kiegészítő színek (logó): négyszínű csík a menü alatt, vidámabb akcentusok */
+body.szr #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
+.szr .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD)}
+.szr .tag.b{background:#FFF6D9;color:#9A7108}
+.szr .act .ac{background:#FFF6D9;color:#7A5806}

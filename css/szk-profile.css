@@ -283,3 +283,12 @@ h1 small{font-size:.55em;color:var(--muted);font-weight:700;margin-left:6px}
  .av,.av.cl{width:64px;height:64px;font-size:21px;border-radius:18px}
  .av.cl svg{width:30px;height:30px}
 }
+/* kiegészítő színek (logó) */
+body.szp #sknav{border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#1D4992 0 25%,#6BAF45 25% 50%,#F2BE3A 50% 75%,#E8692F 75% 100%) 1}
+.szp .head{background:radial-gradient(420px 260px at 98% 0%,rgba(242,190,58,.22),transparent 70%),linear-gradient(180deg,#EAF0FA,#F5F8FD 85%)}
+.szp .main .sec:nth-of-type(4n+2) h2 .ic{background:#EAF5E3;color:#467A28}
+.szp .main .sec:nth-of-type(4n+3) h2 .ic{background:#FFF6D9;color:#9A7108}
+.szp .main .sec:nth-of-type(4n+4) h2 .ic{background:#FDEEE6;color:#C2531C}
+.szp .prose h2::before{display:none}
+.szp .tl .it::before{border-color:#E8692F}
+.szp .pill.gold{background:#FFF6D9;color:#7A5806}

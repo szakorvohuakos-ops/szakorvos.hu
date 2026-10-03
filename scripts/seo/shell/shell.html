@@ -1,13 +1,13 @@
 <style id="landing-shell">
 /* a főoldal menüje és lábléce – pontos másolat, hatókörrel */
-#sknav,#skfoot{--blue: #2A4A9C;--blue-deep: #1D3574;--blue-soft: #E5EAF6;--blue-line: #B9C6E2;--green: #4E9A32;--green-deep: #4E9A32;--green-soft: #E3F3E8;--teal: #1497A8;--teal-soft: #E0F4F6;--amber: #F0B32B;--amber-soft: #FCF0DA;--coral: #D9552B;--coral-soft: #FAE7DE;--violet: #6B4FD8;--violet-soft: #ECE8FB;--ink: #0B1633;--navy: #0B1633;--muted: #44506A;--line: #E2E6EF;--bg: #FFFFFF;--bg2: #F5F7FC;--r: 12px;--muted2: #7A8396;--line2: #CDD3E0;--hair: rgba(0,0,0,.08);--blue-h: #1D3574;--link: #2A4A9C;--sf: "Manrope",-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;--ease: cubic-bezier(.28,.11,.32,1);}
+#sknav,#skfoot{--blue: #2A4A9C;--blue-deep: #1D3574;--blue-soft: #EBF0F8;--blue-line: #B9C6E2;--green: #4E9A32;--green-deep: #4E9A32;--green-soft: #EAF5E3;--teal: #4E9A32;--teal-soft: #EAF5E3;--amber: #F0B32B;--amber-soft: #FDF4E1;--coral: #D9552B;--coral-soft: #FAE7DE;--violet: #3B62C4;--violet-soft: #E5EAF6;--ink: #0B1633;--navy: #0B1633;--muted: #44506A;--line: #E2E6EF;--bg: #FFFFFF;--bg2: #F3F5F9;--r: 12px;--muted2: #7A8396;--line2: #CDD3E0;--hair: rgba(0,0,0,.08);--blue-h: #1D3574;--link: #2A4A9C;--sf: -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Manrope","Helvetica Neue",Helvetica,Arial,sans-serif;--ease: cubic-bezier(.28,.11,.32,1);}
 #sknav *,#skfoot *{box-sizing: border-box;}
 #sknav button{font: inherit; color: inherit;}
 #sknav a,#skfoot a{color: inherit; text-decoration: none;}
 #sknav .wrap,#skfoot .wrap{max-width: 1040px; margin: 0px auto; padding: 0px 24px;}
 nav#sknav .wrap{max-width: 1240px;}
 nav#sknav{position: sticky; top: 0px; z-index: 20; background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); transition: box-shadow 0.2s;}
-nav#sknav.scrolled{box-shadow: rgba(24, 58, 165, 0.35) 0px 6px 24px -18px;}
+nav#sknav.scrolled{box-shadow: rgba(42, 74, 156, 0.35) 0px 6px 24px -18px;}
 nav#sknav .wrap{display: flex; align-items: center; height: 68px; gap: 0px;}
 #sknav .brand,#skfoot .brand{display: flex; align-items: center; gap: 10px; flex: 0 0 auto; line-height: 1; margin-right: 36px;}
 #sknav .logo,#skfoot .logo{width: 32px; height: 32px; display: grid; place-items: center; flex: 0 0 auto;}
@@ -20,7 +20,7 @@ nav#sknav .wrap{display: flex; align-items: center; height: 68px; gap: 0px;}
 #sknav .dd{position: relative; display: flex; align-items: center;}
 #sknav .chev{width: 15px; height: 15px; opacity: 0.6; transition: transform 0.2s; flex: 0 0 auto; margin-top: 1px;}
 #sknav .dd:hover .chev,#sknav .dd:focus-within .chev{transform: rotate(180deg); opacity: 1;}
-#sknav .menu{position: absolute; left: 0px; top: calc(100% + 4px); min-width: 236px; background: rgb(255, 255, 255); border: 1px solid var(--line); border-radius: 14px; box-shadow: rgba(24, 58, 165, 0.28) 0px 24px 48px -20px, rgba(24, 58, 165, 0.06) 0px 2px 6px; padding: 8px; display: none; flex-direction: column; z-index: 30; animation: 0.16s ease-out 0s 1 normal none running menuIn;}
+#sknav .menu{position: absolute; left: 0px; top: calc(100% + 4px); min-width: 236px; background: rgb(255, 255, 255); border: 1px solid var(--line); border-radius: 14px; box-shadow: rgba(42, 74, 156, 0.28) 0px 24px 48px -20px, rgba(42, 74, 156, 0.06) 0px 2px 6px; padding: 8px; display: none; flex-direction: column; z-index: 30; animation: 0.16s ease-out 0s 1 normal none running menuIn;}
 @keyframes menuIn { 
   0% { opacity: 0; transform: translateY(-4px); }
   100% { opacity: 1; transform: none; }
@@ -41,7 +41,7 @@ nav#sknav .wrap{display: flex; align-items: center; height: 68px; gap: 0px;}
 #sknav .user:hover{background: var(--blue-soft); color: var(--blue);}
 #sknav .cta{display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--blue); color: rgb(255, 255, 255); font-weight: 700; border-radius: 10px; font-size: 15px; line-height: 1;}
 #sknav .cta:hover{background: var(--blue-deep);}
-#sknav .cta.sm{height: 40px; padding: 0px 18px; margin-left: 4px; box-shadow: rgba(24, 58, 165, 0.7) 0px 6px 16px -10px;}
+#sknav .cta.sm{height: 40px; padding: 0px 18px; margin-left: 4px; box-shadow: rgba(42, 74, 156, 0.7) 0px 6px 16px -10px;}
 #sknav .burger{display: none; width: 40px; height: 40px; border: 1px solid var(--line); background: rgb(255, 255, 255); border-radius: 10px; cursor: pointer; flex-direction: column; justify-content: center; align-items: center; gap: 5px; padding: 0px; margin-left: 4px;}
 #sknav .burger span{display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; transition: transform 0.2s, opacity 0.2s;}
 #sknav .burger[aria-expanded="true"] span:nth-child(1){transform: translateY(7px) rotate(45deg);}
@@ -89,7 +89,7 @@ footer#skfoot .bottom{grid-column: 1 / -1; display: flex; justify-content: space
 @media (max-width: 900px){footer#skfoot .wrap{grid-template-columns: 1fr 1fr;}}
 @media (max-width: 640px){footer#skfoot .wrap{grid-template-columns: 1fr; gap: 22px;}}
 @media (hover: hover){#sknav .cta{transition: background 0.15s, transform 0.15s, box-shadow 0.15s;}}
-@media (hover: hover){#sknav .cta.sm:hover{box-shadow: rgba(24, 58, 165, 0.8) 0px 8px 20px -10px;}}
+@media (hover: hover){#sknav .cta.sm:hover{box-shadow: rgba(42, 74, 156, 0.8) 0px 8px 20px -10px;}}
 @media (hover: hover){#sknav .brand .logo,#skfoot .brand .logo{transition: transform 0.2s;}}
 @media (hover: hover){#sknav .brand:hover .logo,#skfoot .brand:hover .logo{transform: rotate(-8deg) scale(1.05);}}
 @keyframes bounce { 
@@ -206,7 +206,7 @@ nav#sknav .wm em{color: rgb(36, 138, 71); font-weight: 500;}
   0%, 80%, 100% { transform: translateY(0px); opacity: 0.5; }
   40% { transform: translateY(-4px); opacity: 1; }
 }
-#sknav a.cta.sm[href$="register.html"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(24, 58, 165, 0.35) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="register.html"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(42, 74, 156, 0.35) 0px 0px 0px 1.5px inset !important;}
 #sknav a.cta.sm[href$="register.html"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
 @keyframes eyeP { 
   0% { transform: scale(0.5); opacity: 1; }
@@ -230,7 +230,18 @@ nav#sknav .wm em{color: rgb(36, 138, 71); font-weight: 500;}
 }
 
 nav#sknav{font-size:17px;line-height:1.47059;letter-spacing:-.022em;color:#0B1633;-webkit-font-smoothing:antialiased}
-body{font-family:"Manrope",-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif !important}
+body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", Inter, "Helvetica Neue", Helvetica, Arial, sans-serif !important}
+
+/* lábléc – mint a főoldalon */
+#skfoot,footer#skfoot{background:#0B1633!important;color:rgba(255,255,255,.7)!important;border-top:0!important}
+#skfoot h4{color:#F6CE7F!important}
+#skfoot a{color:rgba(255,255,255,.8)!important}
+#skfoot a:hover{color:#fff!important;text-decoration:underline}
+#skfoot p{color:rgba(255,255,255,.7)!important}
+#skfoot .wm,#skfoot .brand .wm{color:#fff!important}
+#skfoot .wm em,#skfoot .brand .wm em{color:#8FD473!important}
+#skfoot .bottom{border-top-color:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.55)!important}
+#skfoot .fspecs{border-top-color:rgba(255,255,255,.12)!important}
 </style>
 <script>
 (function(){
