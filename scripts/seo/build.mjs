@@ -76,6 +76,7 @@ function page({ title, desc, canon, crumbs, body, ld = [] }) {
 ${lds}
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head><body class="seo">
 ${NAV}
 <main id="content">

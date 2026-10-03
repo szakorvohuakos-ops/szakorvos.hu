@@ -527,7 +527,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 .map #gmap{position:absolute;inset:0}
 .map .mtop{position:absolute;left:12px;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;z-index:6;pointer-events:none}
 .map .mtop b{pointer-events:auto;align-self:stretch;text-align:center;background:#fff;border-radius:12px;padding:8px 10px;font-size:13px;color:var(--navy);box-shadow:0 6px 16px -10px rgba(11,22,51,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.map .mmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}
+.map .mmsg[hidden]{display:none!important}.map .mmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}
 
 /* ---------- mobil fiók + lista/térkép váltó ---------- */
 .scrim{position:fixed;inset:0;background:rgba(11,22,51,.35);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
@@ -677,6 +677,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 }
 
 </style>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body class="szr">
 <nav id="sknav" class="nv" aria-label="Fő navigáció">
@@ -801,6 +802,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 var UP=new URLSearchParams(location.search);
 var specP=UP.get('specialty')||UP.get('spec')||'',cityP=UP.get('city')||'',qP=UP.get('q')||'',distP=String(UP.get('district')||'').replace(/\.$/,'').trim().toUpperCase();
 var latQ=parseFloat(UP.get('lat')||''),lngQ=parseFloat(UP.get('lng')||''),hasGeoQ=!isNaN(latQ)&&!isNaN(lngQ);
+function isBig(c){ return c.clinic_type?c.clinic_type==='big':c._specs.length>3; }
 var PER=15,all=[],view=[],page=1,SPECS={};
 var geo=hasGeoQ?{lat:latQ,lng:lngQ}:null,radius=parseFloat(UP.get('radius')||'15')||15;
 var F;function reset(){ F={spec:'',name:'',city:{},dist:{},open:{},rating:0,type:'',other:{}}; } reset();
@@ -826,7 +828,7 @@ async function fetchAll(table,cols,tweak){ var from=0,out=[];
   while(true){ var q=db.from(table).select(cols).range(from,from+999); if(tweak) q=tweak(q); var r=await q; if(r.error) return {error:r.error}; out=out.concat(r.data||[]); if(!r.data||r.data.length<1000) break; from+=1000; }
   return {data:out}; }
 async function load(){
-  var CS='id, slug, name, address, district, phone, website, photo_url, lat, lng, status, google_rating, google_review_count, opening_hours, cities(name)';
+  var CS='id, slug, name, address, district, phone, website, photo_url, lat, lng, status, google_rating, google_review_count, opening_hours, clinic_type, cities(name)';
   var res=await Promise.all([
     fetchAll('clinics',CS,function(q){return q.in('status',['active','partner']).order('id');}),
     fetchAll('doctor_clinics','clinic_id, doctor_id',function(q){return q.order('clinic_id').order('doctor_id');}),
@@ -886,7 +888,7 @@ function build(){
   /* Értékelés */
   h+='<details class="fg" open><summary>Google-értékelés</summary><div class="seg" data-seg="rating"><button type="button" data-v="0"'+(F.rating?'':' class="on"')+'>Mind</button><button type="button" data-v="4"'+(F.rating===4?' class="on"':'')+'>4 ★+</button><button type="button" data-v="4.5"'+(F.rating===4.5?' class="on"':'')+'>4,5 ★+</button></div></details>';
   /* Típus */
-  var T=pool('type'),n1=T.filter(function(c){return c._specs.length<=3;}).length,n2=T.length-n1;
+  var T=pool('type'),n1=T.filter(function(c){return !isBig(c);}).length,n2=T.length-n1;
   if(n1&&n2) h+='<details class="fg"><summary>Rendelő típusa</summary><div class="seg" data-seg="type"><button type="button" data-v=""'+(F.type?'':' class="on"')+'>Mind</button><button type="button" data-v="small"'+(F.type==='small'?' class="on"':'')+'>Szakrendelő</button><button type="button" data-v="big"'+(F.type==='big'?' class="on"':'')+'>Egészségközpont</button></div></details>';
   /* Egyéb */
   var O=pool('other'), ot=[['phone','Telefonszám megadva',function(c){return !!c.phone;}],['web','Van weboldala',function(c){return !!c.website;}],['partner','Kiemelt partner',function(c){return c.status==='partner';}]].map(function(o){ o[3]=O.filter(o[2]).length; return o; }).filter(function(o){return o[3]>0||F.other[o[0]];});
@@ -923,7 +925,7 @@ function pass(c,skip){
   var ds=Object.keys(F.dist); if(skip!=='dist'&&ds.length&&ds.indexOf(c._dist)<0) return false;
   if(skip!=='open'){ var os=Object.keys(F.open); if(os.length&&!os.every(function(k){return c._open[k];})) return false; }
   if(F.rating&&!(c._r>=F.rating)) return false;
-  if(skip!=='type'&&F.type){ var big=c._specs.length>3; if(F.type==='big'?!big:big) return false; }
+  if(skip!=='type'&&F.type){ var big=isBig(c); if(F.type==='big'?!big:big) return false; }
   if(skip!=='other'){ if(F.other.phone&&!c.phone) return false; if(F.other.web&&!c.website) return false; if(F.other.partner&&c.status!=='partner') return false; }
   if(geo){ if(!(c.lat&&c.lng)) return false; c._km=hav(geo.lat,geo.lng,+c.lat,+c.lng); if(c._km>radius) return false; } else c._km=null;
   return true;
@@ -980,7 +982,7 @@ function chips(){
 /* ─── kártyák ─── */
 function clUrl(c){ return c.slug?'/klinikak/'+encodeURIComponent(c.slug):'/klinika.html?id='+c.id; }
 function card(c){
-  var url=clUrl(c),sp=F.spec,big=c._specs.length>3,st=status(c._oh);
+  var url=clUrl(c),sp=F.spec,big=isBig(c),st=status(c._oh);
   var others=c._specs.filter(function(s){return s!==sp;}), more=others.length-3;
   var adr=String(c.address||'').replace(/^\d{4}\s+/,'');
   var dn=sp&&SPECS[sp]&&SPECS[sp].doctor_name?SPECS[sp].doctor_name.toLowerCase():'';

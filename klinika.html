@@ -804,6 +804,7 @@ h1 small{font-size:.55em;color:var(--muted);font-weight:700;margin-left:6px}
 @media (max-width:640px){.szp .grid{gap:24px;padding-top:24px}.szp .main{gap:20px}.szp .loc{grid-template-columns:34px minmax(0,1fr)}}
 
 </style>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body class="szp">
 <nav id="sknav" class="nv" aria-label="Fő navigáció">
@@ -937,7 +938,7 @@ async function load(){
 function fail(){ var _rm=document.querySelector('meta[name="robots"]'); if(!_rm){_rm=document.createElement('meta');_rm.setAttribute('name','robots');document.head.appendChild(_rm);} _rm.setAttribute('content','noindex,follow');  $('pg').innerHTML='<div class="err"><h1>A rendelő nem található</h1><p>Lehet, hogy az adatlap megszűnt vagy a hivatkozás hibás.</p><a class="btn p" href="/klinikak">Vissza a klinikákhoz</a></div>'; $('hero').remove(); document.querySelector('.tabs').remove(); }
 
 function render(){
-  var c=C,s=status(c._oh),partner=c.status==='partner'||c.is_premium===true,big=SPK.length>3;
+  var c=C,s=status(c._oh),partner=c.status==='partner'||c.is_premium===true,big=c.clinic_type?c.clinic_type==='big':SPK.length>3;
   var dm=String(c.address||'').match(/\b([IVXL]+)\.\s*kerület/), dist=dm?dm[1]:(c.district||'');
   var where=c._city?(c._city+(c._city==='Budapest'&&dist?' '+dist+'. kerület':'')):'';
   var rat=+c.google_rating||0, rc=+c.google_review_count||0;

@@ -830,6 +830,7 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
 }
 
 </style>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body class="szg">
 <nav id="sknav" class="nv" aria-label="Fő navigáció">
@@ -967,7 +968,7 @@ var COL=['#1D4992','#467A28','#1D4992','#467A28'];
 var A=[],q='',more={};
 function letter(t){ var c=norm(String(t||'').trim().charAt(0)).toUpperCase(); return /[A-Z]/.test(c)?c:'#'; }
 async function load(){
-  try{ var out=[],from=0; while(true){ var r=await db.from('knowledge_articles').select('id, title, slug, description').order('title').range(from,from+999); if(r.error) throw r.error; out=out.concat(r.data||[]); if(!r.data||r.data.length<1000) break; from+=1000; }
+  try{ var out=[],from=0; while(true){ var r=await db.from('knowledge_articles').select('id, title, slug, description, specialty').order('title').range(from,from+999); if(r.error) throw r.error; out=out.concat(r.data||[]); if(!r.data||r.data.length<1000) break; from+=1000; }
     var col=new Intl.Collator('hu'); A=out.filter(function(a){return a.title&&a.slug;}).sort(function(a,b){return col.compare(a.title,b.title);});
     A.forEach(function(a){ a._l=letter(a.title); a._s=norm(a.title+' '+(a.description||'')); });
     $('nArt').textContent=A.length.toLocaleString('hu-HU');
@@ -977,7 +978,7 @@ async function load(){
 }
 function desc(a){ return String(a.description||'').replace(/\s*–?\s*Részletes útmutató a Szakorvos\.hu.*$/,'').replace(/\.\.\.$/,'…'); }
 function hl(s){ if(!q||q.length<2) return esc(s); var i=norm(s).indexOf(norm(q)); if(i<0) return esc(s); return esc(s.slice(0,i))+'<mark>'+esc(s.substr(i,q.length))+'</mark>'+esc(s.slice(i+q.length)); }
-function spec(a){ var m=String(a.description||'').match(/mikor forduljon\s+(\S+?)(?:hoz|hez|höz)\b/i); return m?m[1].charAt(0).toUpperCase()+m[1].slice(1):''; }
+function spec(a){ return a.specialty?String(a.specialty):''; }
 function card(a){ var sp=spec(a), tpl=/– tünetek, okok, kezelési lehetőségek/.test(a.description||'');
   return '<a class="card ac" href="/tudastar/'+encodeURIComponent(a.slug)+'"><h3>'+hl(a.title)+'</h3>'+(a.description&&!tpl?'<p>'+esc(desc(a))+'</p>':'')+'<span class="ft">'+(sp?'<span class="sg"><svg><use href="#i-st"/></svg>'+esc(sp)+'</span>':'')+'<span class="go">Elolvasom<svg><use href="#i-ar"/></svg></span></span></a>'; }
 function render(){

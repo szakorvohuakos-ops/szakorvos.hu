@@ -528,7 +528,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 .map #gmap{position:absolute;inset:0}
 .map .mtop{position:absolute;left:12px;right:12px;top:12px;display:flex;flex-direction:column;gap:8px;z-index:6;pointer-events:none}
 .map .mtop b{pointer-events:auto;align-self:stretch;text-align:center;background:#fff;border-radius:12px;padding:8px 10px;font-size:13px;color:var(--navy);box-shadow:0 6px 16px -10px rgba(11,22,51,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.map .mmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}
+.map .mmsg[hidden]{display:none!important}.map .mmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:13px}
 
 /* ---------- mobil fiók + lista/térkép váltó ---------- */
 .scrim{position:fixed;inset:0;background:rgba(11,22,51,.35);opacity:0;pointer-events:none;transition:opacity .25s;z-index:60}
@@ -678,6 +678,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 }
 
 </style>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body class="szr">
 <nav id="sknav" class="nv" aria-label="Fő navigáció">
@@ -802,7 +803,7 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 var UP=new URLSearchParams(location.search);
 var specQ=UP.get('specialty')||UP.get('spec')||'',cityQ=UP.get('city')||'',freeQ=UP.get('q')||'',districtQ=UP.get('district')||'';
 var nameQ=UP.get('name')||''; if(nameQ){ freeQ=nameQ; specQ=''; }
-var allQ=UP.get('all')==='1';
+var allQ=UP.get('all')==='1'||!location.search.replace(/^\?/,'');
 var daysQ=(UP.get('days')||'').split(',').map(function(s){return parseInt(s,10);}).filter(function(n){return !isNaN(n)&&n>=0&&n<=6;});
 var weekendQ=UP.get('weekend')==='1'||UP.get('weekend')==='true';
 var genderQ=(UP.get('gender')||'').toLowerCase();

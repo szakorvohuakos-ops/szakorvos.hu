@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/css/fonts.css">
+<link rel="stylesheet" href="/css/fonts-landing.css">
 <meta name="color-scheme" content="light">
+<script>/* Supabase jelszó-visszaállító link a főoldalra érkezik (Site URL) -> átirányítás a jelszócsere oldalra */
+(function(){var h=location.hash||'',q=location.search||'';if(/[#&]type=recovery/.test(h)||/[#&]error_code=otp_expired/.test(h)||/[?&]code=[0-9a-f-]{20,}/i.test(q)&&!/[?&]q=/.test(q)){location.replace('/reset-password.html'+q+h);}})();</script>
 <title>Országos szakorvoskereső – orvosok és rendelők | szakorvos.hu</title>
 <meta name="description" content="Keressen szakorvost és rendelőt szakterület, város vagy panasz alapján. Közel 7 000 orvos és 1 900 rendelő elérhetőséggel, rendelési idővel, Google-értékelésekkel.">
 <link rel="canonical" href="https://www.szakorvos.hu/">
@@ -4499,6 +4501,7 @@ html.nv-lock,html.nv-lock body{overflow:hidden!important}
 @media (prefers-reduced-motion:reduce){#sknav .nv-it.open .nv-pan,#sknav .nv-dr-in{animation:none!important}}
 
 </style>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body>
 
@@ -4705,8 +4708,39 @@ html.nv-lock,html.nv-lock body{overflow:hidden!important}
   </div>
 </section>
 
-<!-- ================= KIEMELT ORVOSOK ================= -->
+<style id="kx">
+  .kx .kxg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .kx.k3 .kxg{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kxc{position:relative;display:flex;flex-direction:column;gap:3px;padding:16px 38px 16px 18px;border:1px solid rgba(29,73,146,.12);border-radius:16px;background:#fff;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s}
+  .kxc:hover{border-color:rgba(29,73,146,.35);box-shadow:0 6px 18px rgba(29,73,146,.08);transform:translateY(-1px)}
+  .kxc b{font-size:16px;line-height:1.3;letter-spacing:-.014em;color:var(--navy,#0f1f4a)}
+  .kxc small{font-size:13px;color:var(--muted,#5b6785)}
+  .kxc i{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-style:normal;font-size:22px;color:#1D4992}
+  @media (max-width:900px){ .kx .kxg,.kx.k3 .kxg{grid-template-columns:repeat(2,minmax(0,1fr))} }
+  @media (max-width:560px){ .kx .kxg,.kx.k3 .kxg{grid-template-columns:1fr;gap:10px} .kxc{padding:14px 36px 14px 16px} }
+</style>
+<!-- ================= VIZSGÁLATOK ================= -->
+<section id="vizsgalatok" class="kx">
+  <div class="wrap">
+    <div class="shead">
+      <div><p class="eyebrow">Vizsgálatok</p><h2>Milyen vizsgálatra <em>van szüksége?</em></h2><p class="sub">Több mint 1 300 vizsgálat és beavatkozás – megmutatjuk, melyik szakterületen és hol végzik.</p></div>
+      <a class="all" href="/vizsgalatok">Összes vizsgálat ›</a>
+    </div>
+    <div class="kxg"><a class="kxc" href="/vizsgalatok/kardiologia-ekg-vizsgalat"><b>EKG vizsgálat</b><small>Kardiológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/radiologia-ultrahang-vizsgalat"><b>Ultrahang vizsgálat</b><small>Radiológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/radiologia-mri-vizsgalat"><b>MRI vizsgálat</b><small>Radiológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/radiologia-mammografia"><b>Mammográfia</b><small>Radiológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/kardiologia-terheleses-ekg"><b>Terheléses EKG</b><small>Kardiológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/szemeszet-szemfenek-vizsgalat"><b>Szemfenék vizsgálat</b><small>Szemészet</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/endokrinologia-es-an-pajzsmirigy-ultrahang"><b>Pajzsmirigy ultrahang</b><small>Endokrinológia</small><i aria-hidden="true">›</i></a><a class="kxc" href="/vizsgalatok/allergia-teszt"><b>Allergia teszt</b><small>Allergológia</small><i aria-hidden="true">›</i></a></div>
+  </div>
+</section>
+
 <!-- ================= TUDÁSTÁR ================= -->
+<section id="tudastar" class="kx k3 alt">
+  <div class="wrap">
+    <div class="shead">
+      <div><p class="eyebrow">Tudástár</p><h2>Megbízható <em>egészségügyi tudnivalók</em></h2><p class="sub">Betegségek, kezelések és vizsgálatok közérthetően – és hogy melyik szakorvoshoz forduljon.</p></div>
+      <a class="all" href="/tudastar">Összes cikk ›</a>
+    </div>
+    <div class="kxg"><a class="kxc" href="/tudastar/allergiak"><b>Allergiák</b><small>Allergológus</small><i aria-hidden="true">›</i></a><a class="kxc" href="/tudastar/almatlansag"><b>Álmatlanság</b><small>Pszichiáter</small><i aria-hidden="true">›</i></a><a class="kxc" href="/tudastar/adhd"><b>ADHD</b><small>Pszichiáter</small><i aria-hidden="true">›</i></a><a class="kxc" href="/tudastar/akne-kezelesek"><b>Akne kezelések</b><small>Bőrgyógyász</small><i aria-hidden="true">›</i></a><a class="kxc" href="/tudastar/achilles-in"><b>Achilles-ín</b><small>Ortopéd traumatológus</small><i aria-hidden="true">›</i></a><a class="kxc" href="/tudastar/allergen-immunterapia"><b>Allergén immunterápia</b><small>Allergológus</small><i aria-hidden="true">›</i></a></div>
+  </div>
+</section>
+
 
 <!-- ================= ORVOSOKNAK ================= -->
 <section id="partner">

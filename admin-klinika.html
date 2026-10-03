@@ -1169,6 +1169,7 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
 })();
 
 </script>
+<style id="nav-slim">nav#sknav .wrap{max-width:none!important;padding-left:20px!important;padding-right:20px!important;height:54px!important}@media(max-width:640px){nav#sknav .wrap{height:48px!important;padding-left:14px!important;padding-right:14px!important}}</style>
 </head>
 <body class="szg adm-body" data-title="Klinika admin">
 <nav id="sknav" class="nv" aria-label="Fő navigáció">
@@ -1344,6 +1345,7 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
     <h2><span class="ic g"><svg><use href="#a-ph"/></svg></span>Elérhetőség</h2>
     <div class="row"><div class="fld"><label for="cPhone">Telefon</label><input id="cPhone" type="tel" maxlength="40" placeholder="+36 1 234 5678"></div>
      <div class="fld"><label for="cEmail">E-mail</label><input id="cEmail" type="email" maxlength="200" placeholder="info@rendelo.hu"></div></div>
+    <div class="row"><div class="fld"><label for="cType">Rendelő típusa</label><select id="cType"><option value="">Automatikus (szakterületek száma alapján)</option><option value="small">Szakrendelő</option><option value="big">Egészségközpont</option></select><span class="note">Ez jelenik meg az adatlapon és a találati listában.</span></div></div>
     <div class="row"><div class="fld"><label for="cWeb">Weboldal</label><input id="cWeb" type="url" maxlength="300" placeholder="https://www.rendelo.hu"></div>
      <div class="fld"><label for="cTax">Adószám</label><input id="cTax" maxlength="20" placeholder="12345678-1-42"><span class="note">Nem jelenik meg nyilvánosan.</span></div></div>
    </form>
@@ -1495,7 +1497,7 @@ document.addEventListener('click',function(e){ var g=e.target.closest('[data-go]
 $('cDist').innerHTML='<option value="">— Válasszon —</option>'+ROM.map(function(k){ return '<option value="'+k+'">'+k+'. kerület</option>'; }).join('');
 function fill(){
   $('cName').value=C.name||''; $('cCity').value=cityName; $('cZip').value=C.postal_code||''; $('cStreet').value=C.street||''; $('cDist').value=C.district||''; $('distW').hidden=!isBp;
-  $('cPhone').value=C.phone||''; $('cEmail').value=C.email||''; $('cWeb').value=C.website||''; $('cTax').value=C.tax_number||''; $('cDesc').value=C.description||'';
+  $('cPhone').value=C.phone||''; $('cEmail').value=C.email||''; $('cWeb').value=C.website||''; $('cTax').value=C.tax_number||''; $('cDesc').value=C.description||''; if($('cType')) $('cType').value=C.clinic_type||'';
   $('cTrans').value=C.public_transport||''; $('cPark').value=C.parking_info||''; $('cAcc').value=C.accessibility||''; $('cDescN').textContent=$('cDesc').value.length+' karakter';
   drawOH(parseOH(C.opening_hours)); }
 $('cDesc').addEventListener('input',function(){ $('cDescN').textContent=this.value.length+' karakter'; });
@@ -1527,7 +1529,7 @@ async function save(){
   var oh=readOH(); if(oh.bad){ A.toast(oh.bad+': a zárás legyen későbbi a nyitásnál.','err'); A.jump('nyitvatartas','ohBox'); return; }
   var p={ postal_code:zip||null, street:$('cStreet').value.trim()||null, district:isBp?($('cDist').value||null):(C.district||null), phone:$('cPhone').value.trim()||null, email:em||null, website:web||null,
     tax_number:$('cTax').value.trim()||null, description:$('cDesc').value.trim()||null, opening_hours:oh,
-    public_transport:$('cTrans').value.trim()||null, parking_info:$('cPark').value.trim()||null, accessibility:$('cAcc').value.trim()||null };
+    public_transport:$('cTrans').value.trim()||null, parking_info:$('cPark').value.trim()||null, accessibility:$('cAcc').value.trim()||null, clinic_type:($('cType')&&$('cType').value)||null };
   var addrChanged=p.postal_code!==(C.postal_code||null)||p.street!==(C.street||null)||p.district!==(C.district||null);
   if(addrChanged){ p.lat=null; p.lng=null; }
   A.busy($('sbSave'),true);
