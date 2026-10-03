@@ -1,21 +1,11 @@
 # ──────────────────────────────────────────────────────────────────────────
 # robots.txt — Szakorvos.hu
+# Az admin- és belső oldalakat meta robots "noindex" védi (nem Disallow,
+# hogy a keresők láthassák a noindex utasítást).
 # ──────────────────────────────────────────────────────────────────────────
 
-# Általános — minden crawler engedélyezve, kivéve az admin oldalak
 User-agent: *
 Allow: /
-Disallow: /admin.html
-Disallow: /admin-orvos.html
-Disallow: /admin-klinika.html
-Disallow: /admin-tudastar.html
-Disallow: /admin-beallitasok.html
-Disallow: /generator.html
-Disallow: /admin-import.html
-Disallow: /admin-klinika-edit.html
-Disallow: /admin-klinika-demo.html
-Disallow: /admin-orvos-demo.html
-Disallow: /admin-email-scraper.html
 
 # ──────────────────────────────────────────────────────────────────────────
 # AI / LLM crawler-ek — explicit engedély (tartalmaink LLM-eknek is jók)

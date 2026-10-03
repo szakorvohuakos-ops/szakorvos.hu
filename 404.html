@@ -18,15 +18,14 @@
 <meta name="twitter:image" content="https://www.szakorvos.hu/social/og-image.png">
 <meta name="description" content="A keresett oldal nem található. Térjen vissza a főoldalra, keressen szakorvost, vagy böngésszen a tudástárban.">
 <meta name="robots" content="noindex,follow">
-<link rel="canonical" href="https://www.szakorvos.hu/404">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Szakorvos.hu">
 <meta property="og:title" content="Az oldal nem található — Szakorvos.hu">
 <meta property="og:description" content="A keresett oldal nem található. Keressen szakorvost, klinikát vagy böngésszen a tudástárban.">
 <meta property="og:url" content="https://www.szakorvos.hu/404">
 <meta property="og:locale" content="hu_HU">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -243,8 +242,8 @@ nav#sknav .wm em{color: rgb(36, 138, 71); font-weight: 500;}
   0%, 80%, 100% { transform: translateY(0px); opacity: 0.5; }
   40% { transform: translateY(-4px); opacity: 1; }
 }
-#sknav a.cta.sm[href$="register.html"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(42, 74, 156, 0.35) 0px 0px 0px 1.5px inset !important;}
-#sknav a.cta.sm[href$="register.html"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="/register"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(42, 74, 156, 0.35) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="/register"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
 @keyframes eyeP { 
   0% { transform: scale(0.5); opacity: 1; }
   100% { transform: scale(1.6); opacity: 0; }
@@ -279,7 +278,76 @@ body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Displ
 #skfoot .wm em,#skfoot .brand .wm em{color:#8FD473!important}
 #skfoot .bottom{border-top-color:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.55)!important}
 #skfoot .fspecs{border-top-color:rgba(255,255,255,.12)!important}
+</style><style id="szk-nav">
+/* szakorvos.hu – fő navigáció v2 (2026.10): kattintásra nyíló menük, mobil fiók-menü harmonikával */
+#sknav.nv{--nv-ink:#0B1633;--nv-mut:#5B6680;--nv-blue:#1D4992;--nv-blue-s:#EBF0F8;--nv-line:#E3E8F1;--nv-green:#4E9A32;
+  position:sticky;top:0;z-index:900;background:rgba(255,255,255,.9);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid var(--nv-line);box-shadow:none;font-family:inherit}
+#sknav.nv.scrolled{background:rgba(255,255,255,.95);box-shadow:0 8px 24px -20px rgba(29,73,146,.45)}
+#sknav.nv *{box-sizing:border-box}
+#sknav .nv-bar{display:flex;align-items:center;gap:8px;height:62px}
+#sknav.nv .brand{margin-right:18px;flex:none}
+#sknav .nv-main{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;height:100%}
+#sknav .nv-it{position:relative;height:100%;display:flex;align-items:center}
+#sknav .nv-top{display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:var(--nv-ink);font:inherit;font-size:14.5px;font-weight:600;letter-spacing:-.005em;cursor:pointer;white-space:nowrap;position:relative}
+#sknav .nv-top:hover,#sknav .nv-it.open .nv-top{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-top:focus-visible,#sknav .nv-pan a:focus-visible,#sknav .nv-acc-h:focus-visible,#sknav .nv-burger:focus-visible,#sknav .nv-user:focus-visible,#sknav .nv-cta:focus-visible{outline:2px solid var(--nv-blue);outline-offset:2px}
+#sknav .nv-it.cur .nv-top::after{content:"";position:absolute;left:12px;right:12px;bottom:-11px;height:3px;border-radius:3px 3px 0 0;background:var(--nv-blue)}
+#sknav .nv-chev{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:.55;flex:none;transition:transform .18s!important}
+#sknav .nv-it.open .nv-chev,#sknav .nv-acc.open .nv-chev{transform:rotate(180deg);opacity:1}
+#sknav .nv-pan{position:absolute;top:calc(100% - 6px);left:0;min-width:230px;display:none;flex-direction:column;padding:8px;background:#fff;border:1px solid var(--nv-line);border-radius:16px;box-shadow:0 26px 50px -22px rgba(16,36,82,.38),0 2px 8px rgba(16,36,82,.06);z-index:2}
+#sknav .nv-pan.nv-r{left:auto;right:0}
+#sknav .nv-it.open .nv-pan{display:flex;animation:nvIn .14s ease-out!important}
+@keyframes nvIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+#sknav .nv-pan.nv-wide{flex-direction:row;gap:6px;padding:14px;min-width:700px}
+#sknav .nv-col{display:flex;flex-direction:column;flex:1 0 auto;min-width:200px}#sknav .nv-pan h5{white-space:nowrap}#sknav .nv-tag{flex:none}
+#sknav .nv-col+.nv-col{border-left:1px solid var(--nv-line);padding-left:8px}
+#sknav .nv-pan h5{margin:2px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--nv-mut)}
+#sknav .nv-pan a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;color:var(--nv-ink);font-size:14.5px;font-weight:500;line-height:1.3;white-space:nowrap;text-decoration:none}
+#sknav .nv-pan a:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-pan a.nv-all{color:var(--nv-blue);font-weight:700;margin-top:2px}
+#sknav .nv-pan a[aria-current="page"],#sknav .nv-acc-b a[aria-current="page"]{color:var(--nv-blue);font-weight:700}
+#sknav .nv-tag{font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#5E9E43,#4A8230);border-radius:6px;padding:2px 6px;line-height:1.2}
+#sknav .nv-side{display:flex;align-items:center;gap:6px;margin-left:auto;flex:none}
+#sknav .nv-user{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:10px;color:var(--nv-ink);font-size:14.5px;font-weight:600;text-decoration:none;white-space:nowrap}
+#sknav .nv-user:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-user svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;flex:none}
+#sknav .nv-cta{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:10px;background:var(--nv-blue);color:#fff;font-size:14.5px;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 6px 16px -10px rgba(29,73,146,.8)}
+#sknav .nv-cta:hover{background:#163A78;color:#fff}
+#sknav .nv-burger{display:none;width:40px;height:40px;border:1px solid var(--nv-line);border-radius:11px;background:#fff;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}
+#sknav .nv-burger span{display:block;width:18px;height:2px;border-radius:2px;background:var(--nv-ink);transition:transform .2s,opacity .2s!important}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* mobil fiók */
+#sknav .nv-drawer{position:fixed;left:0;right:0;bottom:0;top:var(--nv-h,59px);background:rgba(11,22,51,.28);z-index:950}
+#sknav .nv-drawer[hidden]{display:none}
+#sknav .nv-dr-in{background:#fff;max-height:100%;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--nv-line);box-shadow:0 24px 40px -20px rgba(11,22,51,.35);animation:nvDr .18s ease-out!important}
+@keyframes nvDr{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+#sknav .nv-dr-search{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;margin:2px 0 8px;border:1.5px solid #D5DDEB;border-radius:14px;background:#F7F9FD;color:var(--nv-mut);font-size:15px;font-weight:600;text-decoration:none}
+#sknav .nv-dr-search svg{width:19px;height:19px;fill:none;stroke:var(--nv-blue);stroke-width:2.2;stroke-linecap:round}
+#sknav .nv-acc{border-bottom:1px solid var(--nv-line)}
+#sknav .nv-acc-h{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;height:52px;padding:0 4px;border:0;background:none;color:var(--nv-ink);font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left}
+#sknav .nv-acc.cur .nv-acc-h{color:var(--nv-blue)}
+#sknav .nv-acc-h .nv-chev{width:18px;height:18px}
+#sknav .nv-acc-b{display:none;flex-direction:column;padding:0 0 10px}
+#sknav .nv-acc.open .nv-acc-b{display:flex}
+#sknav .nv-acc-b a{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:10px;color:#2B3650;font-size:15px;font-weight:500;text-decoration:none}
+#sknav .nv-acc-b a:active,#sknav .nv-acc-b a:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-dr-link{display:flex;align-items:center;height:52px;padding:0 4px;color:var(--nv-ink);font-size:16px;font-weight:700;text-decoration:none;border-bottom:1px solid var(--nv-line)}
+#sknav .nv-dr-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+#sknav .nv-dr-btn{display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none}
+#sknav .nv-dr-btn.p{background:var(--nv-blue);color:#fff}
+#sknav .nv-dr-btn.s{background:#fff;color:var(--nv-blue);border:1.5px solid #C9D6EE}
+html.nv-lock,html.nv-lock body{overflow:hidden!important}
+#sknav.nv.dr-open{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important;z-index:2000!important}
+@media (max-width:1120px){#sknav .nv-top{padding:0 9px;font-size:14px}#sknav .nv-user span{display:none}#sknav .nv-user{padding:0 10px}#sknav.nv .brand{margin-right:8px}}
+@media (max-width:1023px){#sknav .nv-main,#sknav .nv-user{display:none}#sknav .nv-burger{display:flex}}
+@media (max-width:640px){#sknav .nv-bar{height:58px;gap:6px}#sknav .nv-cta{height:36px;padding:0 12px;font-size:13.5px}#sknav .nv-burger{width:38px;height:38px}}
+@media (max-width:360px){#sknav .nv-cta{display:none}}
+@media (prefers-reduced-motion:reduce){#sknav .nv-it.open .nv-pan,#sknav .nv-dr-in{animation:none!important}}
+
 </style>
+
 <style id="szk-pages">
 /* ==========================================================================
    szakorvos.hu – tartalmi oldalak közös stílusa (2026.10)
@@ -758,43 +826,53 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
 </style>
 </head>
 <body class="szg">
-<nav id="sknav">
-  <div class="wrap">
-    <a class="brand" href="/">
+<nav id="sknav" class="nv" aria-label="Fő navigáció">
+  <div class="wrap nv-bar">
+    <a class="brand" href="/" aria-label="Szakorvos.hu – kezdőlap">
       <span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B62C4"></stop><stop offset=".55" stop-color="#2A4A9C"></stop><stop offset="1" stop-color="#1D3574"></stop></linearGradient><linearGradient id="lh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#lg)"></rect><rect width="64" height="64" rx="14" fill="url(#lh)"></rect><path d="M24.5 11h15v13.5H53v15H39.5V53h-15V39.5H11v-15h13.5z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"></path></svg></span>
       <span class="wm">Szakorvos<em>.hu</em></span>
     </a>
-    <div class="links">
-      <div class="dd wide"><a href="/#kereso" aria-haspopup="true">Szakorvosok<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu cols">
-          <div><h5>Keresés</h5><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok">Összes szakorvos</a></div>
-          <div><h5>Szakterületek</h5><a href="/talalatok?q=Bőrgyógyász">Bőrgyógyász</a><a href="/talalatok?q=Nőgyógyász">Nőgyógyász</a><a href="/talalatok?q=Fogorvos">Fogorvos</a><a href="/talalatok?q=Gyermekorvos">Gyermekorvos</a><a href="/talalatok?all=1" class="all">Mind a 86 szakterület ›</a></div>
-          <div><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=Győr">Győr</a><a href="/#varosok" class="all">Összes város ›</a></div>
-        </div></div>
-      <div class="dd"><a href="/klinikak" aria-haspopup="true">Klinikák<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a><a href="/klinikak?magan=1">Magánklinikák</a><a href="/klinikak">Ügyeletek</a></div></div>
-      <div class="dd"><a href="/#tudastar" aria-haspopup="true">Tudástár<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/#tudastar">Cikkek és útmutatók</a><a href="/tudastar">Tünetek A–Z</a><a href="/tudastar">Beutaló-tudnivalók</a><a href="/#gyik">Gyakori kérdések</a></div></div>
-      <div class="dd"><a href="/register.html" aria-haspopup="true">Orvosoknak<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/register.html">Miért érdemes regisztrálni</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/register.html#gyik">Partner GYIK</a><a href="#" data-szkm="keep">Kapcsolat</a></div></div>
-    </div>
-    <div class="navr">
-      <a class="user" href="/login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Bejelentkezés</span></a>
-      <a class="cta sm" href="/register.html">Partnerprogram</a>
-      <button class="burger" id="burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button>
+    <ul class="nv-main">
+      <li class="nv-it" data-sec="orvos"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-orvos">Szakorvosok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan nv-wide" id="nvp-orvos">
+          <div class="nv-col"><h5>Keresés</h5><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Keresés panasz alapján <span class="nv-tag">AI</span></a><a href="/talalatok">Összes szakorvos</a></div>
+          <div class="nv-col"><h5>Népszerű szakterületek</h5><a href="/szakorvos/borgyogyasz/">Bőrgyógyász</a><a href="/szakorvos/nogyogyasz/">Nőgyógyász</a><a href="/szakorvos/kardiologus/">Kardiológus</a><a href="/szakorvos/ortoped-traumatologus/">Ortopéd-traumatológus</a><a href="/szakorvos/" class="nv-all">Összes szakterület ›</a></div>
+          <div class="nv-col"><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=P%C3%A9cs">Pécs</a><a href="/talalatok?city=Gy%C5%91r">Győr</a></div>
+        </div></li>
+      <li class="nv-it" data-sec="rendelo"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-rendelo">Rendelők<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-rendelo"><a href="/klinikak">Klinika- és rendelőkereső</a><a href="/klinikak#terkep" class="js-openmap">Rendelők a térképen</a><a href="/klinikak?city=Budapest">Budapesti rendelők</a></div></li>
+      <li class="nv-it" data-sec="vizsg"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-vizsg">Vizsgálatok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-vizsg"><a href="/vizsgalatok">Összes vizsgálat</a><a href="/vizsgalatok?q=ultrahang">Ultrahang</a><a href="/vizsgalatok?q=labor">Laborvizsgálat</a><a href="/vizsgalatok?q=MR">MR-vizsgálat</a><a href="/vizsgalatok?q=EKG">EKG</a></div></li>
+      <li class="nv-it" data-sec="tudas"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-tudas">Tudástár<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-tudas"><a href="/tudastar">Cikkek és útmutatók</a><a href="/#gyik">Gyakori kérdések</a></div></li>
+      <li class="nv-it" data-sec="partner"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-partner">Orvosoknak<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan nv-r" id="nvp-partner"><a href="/register">Partnerprogram</a><a href="/register#finder">Adatlap igénylése</a><a href="/demo-orvos.html">Kezelőfelület – bemutató</a><a href="/login">Bejelentkezés</a><a href="/kapcsolat">Kapcsolat</a></div></li>
+    </ul>
+    <div class="nv-side">
+      <a class="nv-user" href="/login"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Bejelentkezés</span></a>
+      <a class="nv-cta" href="/register">Partnerprogram</a>
+      <button class="nv-burger" type="button" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="nv-drawer"><span></span><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobnav" id="mobnav">
-    <h5>Szakorvosok</h5>
-    <a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok?all=1">Szakterületek</a><a href="/#varosok">Városok</a>
-    <h5>Klinikák</h5>
-    <a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a>
-    <h5>Tudástár</h5>
-    <a href="/tudastar">Cikkek</a><a href="/tudastar">Tünetek A–Z</a><a href="/#gyik">GYIK</a>
-    <h5>Orvosoknak</h5>
-    <a href="/register.html" class="acc">Partnerprogram – csomagok és árak</a><a href="/login.html">Bejelentkezés</a><a href="#" data-szkm="keep">Kapcsolat</a>
+  <div class="nv-drawer" id="nv-drawer" hidden>
+    <div class="nv-dr-in">
+      <a class="nv-dr-search" href="/#kereso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>Orvost vagy rendelőt keresek</a>
+      <div class="nv-acc" data-sec="orvos"><button type="button" class="nv-acc-h" aria-expanded="false">Szakorvosok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Keresés panasz alapján <span class="nv-tag">AI</span></a><a href="/talalatok">Összes szakorvos</a><a href="/szakorvos/">Szakterületek A–Z</a><a href="/#varosok">Városok</a></div></div>
+      <div class="nv-acc" data-sec="rendelo"><button type="button" class="nv-acc-h" aria-expanded="false">Rendelők<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/klinikak">Klinika- és rendelőkereső</a><a href="/klinikak#terkep" class="js-openmap">Rendelők a térképen</a></div></div>
+      <div class="nv-acc" data-sec="vizsg"><button type="button" class="nv-acc-h" aria-expanded="false">Vizsgálatok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/vizsgalatok">Összes vizsgálat</a><a href="/vizsgalatok?q=ultrahang">Ultrahang</a><a href="/vizsgalatok?q=labor">Laborvizsgálat</a><a href="/vizsgalatok?q=MR">MR-vizsgálat</a></div></div>
+      <div class="nv-acc" data-sec="tudas"><button type="button" class="nv-acc-h" aria-expanded="false">Tudástár<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/tudastar">Cikkek és útmutatók</a><a href="/#gyik">Gyakori kérdések</a></div></div>
+      <div class="nv-acc" data-sec="partner"><button type="button" class="nv-acc-h" aria-expanded="false">Orvosoknak, rendelőknek<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/register">Partnerprogram</a><a href="/register#finder">Adatlap igénylése</a><a href="/demo-orvos.html">Kezelőfelület – bemutató</a></div></div>
+      <a class="nv-dr-link" href="/kapcsolat">Kapcsolat</a>
+      <div class="nv-dr-foot"><a class="nv-dr-btn s nv-login" href="/login">Bejelentkezés</a><a class="nv-dr-btn p" href="/register">Partnerprogram</a></div>
+    </div>
   </div>
 </nav>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
  <symbol id="i-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
  <symbol id="i-st" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M12 15v2a4 4 0 0 0 8 0v-3"/><circle cx="20" cy="12" r="2"/></symbol>
@@ -865,23 +943,83 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
       <p>Országos szakorvos- és klinikakereső: telefonszám, cím, rendelési idő és vélemények egy helyen.</p>
     </div>
     <div class="fcol"><h4>Pácienseknek</h4><a href="/#kereso">Orvoskereső</a><a href="/#szakteruletek">Szakterületek</a><a href="/klinikak">Klinikák</a><a href="/#tudastar">Tudástár</a><a href="/#gyik">GYIK</a></div>
-    <div class="fcol"><h4>Orvosoknak</h4><a href="/register.html">Partnerprogram</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/login.html">Bejelentkezés</a></div>
-    <div class="fcol"><h4>Jogi</h4><a href="/adatvedelem.html">Adatvédelem</a><a href="/aszf.html">ÁSZF</a><a href="/impresszum.html">Impresszum</a><a href="/kapcsolat.html">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
+    <div class="fcol"><h4>Orvosoknak</h4><a href="/register">Partnerprogram</a><a href="/register#csomagok">Csomagok és árak</a><a href="/login">Bejelentkezés</a></div>
+    <div class="fcol"><h4>Jogi</h4><a href="/adatvedelem">Adatvédelem</a><a href="/aszf">ÁSZF</a><a href="/impresszum">Impresszum</a><a href="/kapcsolat">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
     <style>#skfoot .wrap{max-width:1120px!important;margin:0 auto!important;box-sizing:border-box}#skfoot .fspecs{grid-column:1/-1;padding-top:18px;border-top:1px solid var(--line)}#skfoot .fspecs h4{margin:0 0 10px}#skfoot .fspecs .fsl{display:flex;flex-wrap:wrap;gap:6px 18px}#skfoot .fspecs .fsl a{white-space:nowrap}</style>
 <div class="fspecs"><h4>Népszerű szakterületek</h4><div class="fsl"><a href="/szakorvos/nogyogyasz">Nőgyógyász</a><a href="/szakorvos/borgyogyasz">Bőrgyógyász</a><a href="/szakorvos/kardiologus">Kardiológus</a><a href="/szakorvos/urologus">Urológus</a><a href="/szakorvos/fogorvos">Fogorvos</a><a href="/szakorvos/szemeszet-szakorvos">Szemész</a><a href="/szakorvos/ortoped-traumatologus">Ortopéd-traumatológus</a><a href="/szakorvos/reumatologus">Reumatológus</a><a href="/szakorvos/gasztroenterologus">Gasztroenterológus</a><a href="/szakorvos/ful-orr-gege-szakorvos">Fül-orr-gégész</a><a href="/szakorvos/neurologus">Neurológus</a><a href="/szakorvos/pszichiatrus">Pszichiáter</a><a href="/szakorvos"><b>Összes szakterület →</b></a></div></div>
     <div class="bottom"><span>© 2026 szakorvos.hu</span><span>A tünetellenőrző nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a 112-t.</span></div>
   </div>
 </footer>
-<script>
+<script id="szk-nav">
+/* szakorvos.hu – fő navigáció v2 (2026.10) */
 (function(){
-  var nav=document.getElementById('sknav'); if(!nav) return;
-  function up(){ nav.classList.toggle('scrolled',window.scrollY>8); } up(); window.addEventListener('scroll',up,{passive:true});
-  var burger=document.getElementById('burger'), mob=document.getElementById('mobnav');
-  if(burger&&mob){ burger.addEventListener('click',function(){ var on=burger.getAttribute('aria-expanded')!=='true'; burger.setAttribute('aria-expanded',on?'true':'false'); mob.classList.toggle('on',on); });
-    [].forEach.call(mob.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ burger.setAttribute('aria-expanded','false'); mob.classList.remove('on'); }); }); }
+'use strict';
+var nav=document.getElementById('sknav'); if(!nav||nav.__nv) return; nav.__nv=1;
+var items=[].slice.call(nav.querySelectorAll('.nv-it')), burger=nav.querySelector('.nv-burger'), drawer=document.getElementById('nv-drawer');
+var fine=window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches, tClose=null;
+
+/* görgetés-árnyék */
+function sc(){ nav.classList.toggle('scrolled',window.scrollY>8); } sc(); window.addEventListener('scroll',sc,{passive:true});
+
+/* asztali lenyíló menük */
+function setOpen(it,on){ it.classList.toggle('open',on); var b=it.querySelector('.nv-top'); if(b) b.setAttribute('aria-expanded',on?'true':'false'); }
+function closeAll(ex){ items.forEach(function(it){ if(it!==ex) setOpen(it,false); }); }
+items.forEach(function(it){
+  var b=it.querySelector('.nv-top');
+  b.addEventListener('click',function(e){ e.stopPropagation(); var on=!it.classList.contains('open')||(Date.now()-(it._ho||0)<600); closeAll(it); setOpen(it,on); if(on&&e.detail===0){ var f=it.querySelector('.nv-pan a'); if(f) f.focus(); } });
+  if(fine){
+    it.addEventListener('mouseenter',function(){ clearTimeout(tClose); if(!it.classList.contains('open')) it._ho=Date.now(); closeAll(it); setOpen(it,true); });
+    it.addEventListener('mouseleave',function(){ clearTimeout(tClose); tClose=setTimeout(function(){ setOpen(it,false); },180); });
+  }
+  it.addEventListener('keydown',function(e){
+    var links=[].slice.call(it.querySelectorAll('.nv-pan a')), i=links.indexOf(document.activeElement);
+    if(e.key==='Escape'){ setOpen(it,false); b.focus(); }
+    else if(e.key==='ArrowDown'){ e.preventDefault(); if(!it.classList.contains('open')){ closeAll(it); setOpen(it,true); } (links[i+1]||links[0]).focus(); }
+    else if(e.key==='ArrowUp'&&i>=0){ e.preventDefault(); (links[i-1]||links[links.length-1]).focus(); }
+  });
+  it.addEventListener('focusout',function(e){ if(!it.contains(e.relatedTarget)) setOpen(it,false); });
+  [].forEach.call(it.querySelectorAll('.nv-pan a'),function(a){ a.addEventListener('click',function(){ setOpen(it,false); }); });
+});
+document.addEventListener('click',function(e){ if(!nav.contains(e.target)) closeAll(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeAll(); if(drawer&&!drawer.hidden){ setDrawer(false); burger.focus(); } } });
+
+/* mobil fiók */
+function setDrawer(on){
+  if(!drawer) return;
+  if(on) closeAll();
+  nav.style.setProperty('--nv-h',Math.round(nav.getBoundingClientRect().bottom)+'px');
+  drawer.hidden=!on; burger.setAttribute('aria-expanded',on?'true':'false'); burger.setAttribute('aria-label',on?'Menü bezárása':'Menü megnyitása');
+  document.documentElement.classList.toggle('nv-lock',on);
+  nav.classList.toggle('dr-open',on);
+}
+if(burger&&drawer){
+  burger.addEventListener('click',function(){ setDrawer(drawer.hidden); });
+  drawer.addEventListener('click',function(e){ if(e.target===drawer) setDrawer(false); });
+  [].forEach.call(drawer.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ setDrawer(false); }); });
+  [].forEach.call(drawer.querySelectorAll('.nv-acc-h'),function(h){ h.addEventListener('click',function(){ var acc=h.parentNode, on=!acc.classList.contains('open'); acc.classList.toggle('open',on); h.setAttribute('aria-expanded',on?'true':'false'); }); });
+  window.addEventListener('resize',function(){ if(!drawer.hidden&&window.innerWidth>1023) setDrawer(false); });
+}
+
+/* aktuális oldal jelölése */
+var p=location.pathname.replace(/\.html$/,'').replace(/\/+$/,'')||'/', sec=null;
+if(/^\/(talalatok|szakorvos|orvos)(\/|$)/.test(p)||/^\/[a-z-]+\/dr-/.test(p)) sec='orvos';
+else if(/^\/(klinikak|klinika)(\/|$)/.test(p)) sec='rendelo';
+else if(/^\/vizsgalat/.test(p)) sec='vizsg';
+else if(/^\/tudastar/.test(p)) sec='tudas';
+else if(/^\/(register|demo-orvos|demo-klinika|login|kapcsolat|admin-orvos|admin-klinika)$/.test(p)) sec='partner';
+if(sec){ [].forEach.call(nav.querySelectorAll('[data-sec="'+sec+'"]'),function(x){ x.classList.add('cur'); if(x.classList.contains('nv-acc')){ x.classList.add('open'); var h=x.querySelector('.nv-acc-h'); if(h) h.setAttribute('aria-expanded','true'); } }); }
+var here=location.pathname+location.search;
+[].forEach.call(nav.querySelectorAll('.nv-pan a,.nv-acc-b a'),function(a){ var u=a.getAttribute('href')||''; if(u.indexOf('#')<0&&(u===here||u.replace(/\.html$/,'')===p)) a.setAttribute('aria-current','page'); });
+
+/* „Rendelők a térképen”: a főoldalon modál (index kezeli), a klinikalistán a térkép megnyitása */
+function openMapHere(){ var t=document.getElementById('mtog'); if(t&&t.offsetParent){ t.click(); return true; } var m=document.getElementById('mapCol')||document.getElementById('gmap'); if(m){ m.scrollIntoView({behavior:'smooth',block:'start'}); return true; } return false; }
+if(location.hash==='#terkep'&&/^\/klinikak/.test(p)) setTimeout(openMapHere,600);
+[].forEach.call(nav.querySelectorAll('a[href="/klinikak#terkep"]'),function(a){ a.addEventListener('click',function(e){ if(/^\/klinikak/.test(p)&&openMapHere()) e.preventDefault(); }); });
 })();
+
 </script>
-<script src="/js/cookie-consent.js?v=20261003" defer></script>
+
+<script src="/js/cookie-consent.js?v=20261003b" defer></script>
 <script id="skt">
 /* szakorvos.hu – látogatottságmérés (saját, sütimentes; munkamenet-azonosító csak a böngészőlap élettartamára) */
 (function(){

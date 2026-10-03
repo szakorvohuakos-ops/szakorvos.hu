@@ -175,6 +175,21 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
 
   try {
+    // — Jogosultság (audit, 2026-10-03): csak service_role vagy superadmin —
+    const tok = (req.headers.get('authorization') ?? '').replace(/^Bearer\s+/i, '');
+    let allowed = tok === SUPABASE_SERVICE_KEY;
+    if (!allowed && tok) {
+      const adb = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, { auth: { persistSession: false } });
+      const { data: u } = await adb.auth.getUser(tok);
+      if (u?.user) {
+        const { data: p } = await adb.from('user_profiles').select('role').eq('id', u.user.id).single();
+        allowed = p?.role === 'superadmin';
+      }
+    }
+    if (!allowed) {
+      return new Response(JSON.stringify({ error: 'forbidden' }),
+        { status: 403, headers: { ...CORS, 'Content-Type': 'application/json' } });
+    }
     const body = req.method === 'POST' ? await req.json().catch(() => ({})) : {};
     const queries: string[] = body.queries?.length ? body.queries : DEFAULT_QUERIES;
     const maxPerQuery = Math.min(body.max_per_query || 20, 60);

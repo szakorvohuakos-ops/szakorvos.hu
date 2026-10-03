@@ -31,7 +31,7 @@
     if(!el||el.querySelector('.szk-map-consent')) return;
     var o=document.createElement('div'); o.className='szk-map-consent';
     o.style.cssText='position:absolute;inset:0;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#EBF0F8;padding:16px;text-align:center;border-radius:inherit';
-    o.innerHTML='<div style="font-size:12.5px;color:#44506A;max-width:30ch;line-height:1.5">A térképet a Google Maps szolgáltatja – betöltésekor az IP-címe a Google-hoz kerül. <a href="/adatvedelem.html" style="color:#1D4992;text-decoration:underline">Részletek</a></div><button type="button" style="font:700 13px Manrope,sans-serif;color:#fff;background:#1D4992;border:0;border-radius:10px;padding:9px 16px;cursor:pointer">Térkép betöltése</button>';
+    o.innerHTML='<div style="font-size:12.5px;color:#44506A;max-width:30ch;line-height:1.5">A térképet a Google Maps szolgáltatja – betöltésekor az IP-címe a Google-hoz kerül. <a href="/adatvedelem" style="color:#1D4992;text-decoration:underline">Részletek</a></div><button type="button" style="font:700 13px Manrope,sans-serif;color:#fff;background:#1D4992;border:0;border-radius:10px;padding:9px 16px;cursor:pointer">Térkép betöltése</button>';
     o.querySelector('button').addEventListener('click',start);
     el.appendChild(o);
   }
@@ -57,11 +57,14 @@
   function results(el,opts){
     opts=opts||{};
     var map=null,maps=null,mk={},cluster=null,pending=null,ready=null;
+    var focus=null;
+    function nz(t){ return String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim(); }
+    var last=[];
     function draw(items){
-      if(!map) return;
+      if(!map) return; last=items||[];
       Object.keys(mk).forEach(function(k){ mk[k].setMap(null); }); mk={};
       if(cluster&&cluster.clearMarkers) cluster.clearMarkers();
-      var b=new maps.LatLngBounds(),list=[],n=0;
+      var b=new maps.LatLngBounds(),list=[],n=0,fb=0;
       items.forEach(function(it){
         if(!it||!isFinite(it.lat)||!isFinite(it.lng)||mk[it.id]) return;
         var m=new maps.Marker({position:{lat:+it.lat,lng:+it.lng},title:it.title||'',icon:pill(maps,it.label,false),zIndex:10});
@@ -69,13 +72,16 @@
         m.addListener('mouseover',function(){ hl(it.id,true); if(opts.onHover) opts.onHover(it.id,true); });
         m.addListener('mouseout',function(){ hl(it.id,false); if(opts.onHover) opts.onHover(it.id,false); });
         m.addListener('click',function(){ if(opts.onClick) opts.onClick(it.id); });
-        mk[it.id]=m; list.push(m); b.extend(m.getPosition()); n++;
+        mk[it.id]=m; list.push(m); n++;
+        if(!focus||!focus.city||nz(it.city)===nz(focus.city)){ b.extend(m.getPosition()); fb++; }
       });
       var mc=window.markerClusterer&&window.markerClusterer.MarkerClusterer;
       if(mc&&list.length>40){ cluster=new mc({map:map,markers:list,renderer:{render:function(o){ return clusterIcon(maps,o.count,o.position); }}}); }
       else list.forEach(function(m){ m.setMap(map); });
-      if(n===1){ map.setCenter(list[0].getPosition()); map.setZoom(14); }
-      else if(n>1){ map.fitBounds(b,40); }
+      if(focus&&focus.city&&!fb&&!focus.center){ list.forEach(function(m){ b.extend(m.getPosition()); }); fb=list.length; }
+      if(fb===1){ map.setCenter(b.getCenter()); map.setZoom(14); }
+      else if(fb>1){ map.fitBounds(b,40); maps.event.addListenerOnce(map,'idle',function(){ if(map.getZoom()>16) map.setZoom(16); }); }
+      else if(focus&&focus.center){ map.setCenter(focus.center); map.setZoom(12); }
       return n;
     }
     function hl(id,on){
@@ -87,7 +93,7 @@
       ready=load(el).then(function(g){
         maps=g;
         var box=el.querySelector('#gmap')||el;
-        map=new maps.Map(box,{center:{lat:47.4979,lng:19.0402},zoom:11,styles:STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,clickableIcons:false,gestureHandling:'cooperative'});
+        map=new maps.Map(box,{center:(focus&&focus.center)||{lat:47.4979,lng:19.0402},zoom:(focus&&focus.center)?12:11,styles:STYLE,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,clickableIcons:false,gestureHandling:'greedy',zoomControl:true,scrollwheel:true});
         if(pending){ draw(pending); pending=null; }
         return map;
       });
@@ -95,16 +101,17 @@
       return ready;
     }
     return {
-      set:function(items){ if(map) draw(items); else { pending=items; init(); } },
+      set:function(items,f){ focus=f||null; if(map) draw(items); else { pending=items; init(); } },
       hl:hl,
-      resize:function(){ if(map&&maps){ maps.event.trigger(map,'resize'); var b=new maps.LatLngBounds(),n=0; Object.keys(mk).forEach(function(k){ b.extend(mk[k].getPosition()); n++; }); if(n>1) map.fitBounds(b,40); else if(n===1){ map.setCenter(b.getCenter()); } } }
+      resize:function(){ if(map&&maps){ maps.event.trigger(map,'resize'); draw(last); } }
     };
   }
   /* Egyetlen hely (adatlapok) */
   function single(el,lat,lng,label){
     return load(el).then(function(maps){
       var box=el.querySelector('.gm')||el;
-      var map=new maps.Map(box,{center:{lat:+lat,lng:+lng},zoom:15,styles:STYLE,disableDefaultUI:true,zoomControl:true,clickableIcons:false,gestureHandling:'cooperative'});
+      var map=new maps.Map(box,{center:{lat:+lat,lng:+lng},zoom:15,styles:STYLE,disableDefaultUI:true,zoomControl:true,clickableIcons:false,gestureHandling:'greedy',zoomControl:true,scrollwheel:true});
+        maps.event.addListener(map,'zoom_changed',function(){});
       new maps.Marker({position:{lat:+lat,lng:+lng},map:map,icon:pill(maps,label||'●',false)});
       return map;
     });

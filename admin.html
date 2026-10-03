@@ -8,10 +8,10 @@
 <title>Szuperadmin | Szakorvos.hu</title>
 <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
 <link rel="shortcut icon" href="/favicon/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
 <link rel="preconnect" href="https://asgnkjmwzhbczpvetprh.supabase.co">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -152,7 +152,9 @@ table.t{width:100%;border-collapse:collapse;font-size:13.5px}
     <a class="nav" href="#szakteruletek" data-s="szakteruletek">Szakterületek</a>
     <h5>Beérkező</h5>
     <a class="nav" href="#uzenetek" data-s="uzenetek">Üzenetek <span class="b" id="bUz"></span></a>
+    <a class="nav" href="#jelentkezesek" data-s="jelentkezesek">Jelentkezések <span class="b" id="bJel"></span></a>
     <a class="nav" href="#igenylesek" data-s="igenylesek">Profil-igénylések <span class="b" id="bIg"></span></a>
+    <a class="nav" href="#kerelmek" data-s="kerelmek">Partner-kérések <span class="b" id="bKr"></span></a>
     <a class="nav" href="#felhasznalok" data-s="felhasznalok">Felhasználók</a>
     <h5>Szerkesztők</h5>
     <a class="nav" href="admin-tudastar.html">Tudástár-szerkesztő ↗</a>
@@ -303,10 +305,24 @@ table.t{width:100%;border-collapse:collapse;font-size:13.5px}
       <div class="card"><div id="tUzenet"></div></div>
     </section>
 
+    <!-- ═══ JELENTKEZÉSEK (partnerprogram) ═══ -->
+    <section class="section" id="s-jelentkezesek">
+      <div class="topbar"><h1>Partner-jelentkezések</h1></div>
+      <div class="card"><p class="mut" style="margin:0 0 12px">A Partnerprogram oldalról érkezett jelentkezések. Ellenőrzés után a <b>Meghívó + hozzárendelés</b> e-mailes meghívót küld a kezelőfelülethez, és a jelölt adatlapot a felhasználóhoz rendeli.</p>
+      <div class="jtabs" id="jTabs"><button class="btn sm pri" data-j="new">Új</button> <button class="btn sm" data-j="done">Kész</button> <button class="btn sm" data-j="rejected">Elutasított</button> <button class="btn sm" data-j="spam">Spam</button></div>
+      <div id="tJel" style="margin-top:12px"></div></div>
+    </section>
+
     <!-- ═══ IGÉNYLÉSEK ═══ -->
     <section class="section" id="s-igenylesek">
       <div class="topbar"><h1>Profil-igénylések</h1></div>
       <div class="card"><div id="tIgeny"></div></div>
+    </section>
+
+    <!-- ═══ PARTNER-KÉRÉSEK (orvos/klinika admin) ═══ -->
+    <section class="section" id="s-kerelmek">
+      <div class="topbar"><h1>Partner-kérések</h1></div>
+      <div class="card"><p class="mut" style="margin:0 0 12px">Az orvos- és klinika-adminból érkező kérések (orvos felvétele/eltávolítása, rendelési hely, névváltozás). A módosítást az Orvosok / Klinikák menüben végezze el, majd jelölje teljesítettnek.</p><div id="tKer"></div></div>
     </section>
 
     <!-- ═══ FELHASZNÁLÓK ═══ -->
@@ -343,7 +359,7 @@ function openModal(html){ $('#modalBox').innerHTML=html; $('#modalBg').classList
 /* ── auth ── */
 async function guard(){
   const { data:{ session } } = await db.auth.getSession();
-  if(!session){ window.location.replace('/login.html?redirect=admin'); return null; }
+  if(!session){ window.location.replace('/login?redirect=admin'); return null; }
   const { data:p } = await db.from('user_profiles').select('role,email,full_name').eq('id', session.user.id).single();
   if(!p || p.role !== 'superadmin'){
     document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:14px;font-family:Manrope,sans-serif;background:#F3F5F9;visibility:visible"><h2 style="color:#0B1633">Hozzáférés megtagadva</h2><p style="color:#44506A">Ez a felület csak szuperadminok számára érhető el.</p><a href="/" style="color:#2A4A9C">← Vissza a főoldalra</a></div>';
@@ -353,10 +369,10 @@ async function guard(){
   $('#userEmail').textContent = p.email || session.user.email || '';
   return session;
 }
-async function logout(){ await db.auth.signOut(); window.location.href='/login.html'; }
+async function logout(){ await db.auth.signOut(); window.location.href='/login'; }
 
 /* ── navigáció ── */
-const SECTIONS = ['attekintes','latogatottsag','keresesek','orvosok','klinikak','tudastar','vizsgalatok','szakteruletek','uzenetek','igenylesek','felhasznalok'];
+const SECTIONS = ['attekintes','latogatottsag','keresesek','orvosok','klinikak','tudastar','vizsgalatok','szakteruletek','uzenetek','jelentkezesek','igenylesek','kerelmek','felhasznalok'];
 const loaded = {};
 function nav(){
   let s = (location.hash||'#attekintes').slice(1);
@@ -427,6 +443,8 @@ attekintes: async function(){
     db.from('doctor_claim_requests').select('id',{count:'exact',head:true}).eq('status','pending'),
     db.from('contact_messages').select('id',{count:'exact',head:true}).or('status.is.null,status.eq.new')
   ]);
+  try{ const jn=await db.from('partner_registrations').select('id',{count:'exact',head:true}).eq('status','new'); if(jn.count){ $('#bJel').style.display='inline-block'; $('#bJel').textContent=jn.count; } }catch(e){}
+  try{ const kr=await db.from('admin_requests').select('id',{count:'exact',head:true}).eq('status','pending'); if(kr.count){ $('#bKr').style.display='inline-block'; $('#bKr').textContent=kr.count; } }catch(e){}
   $('#kOrvos').textContent=num(o.count); $('#kKlinika').textContent=num(k.count);
   $('#kIgeny').textContent=num(ig.count); $('#kUzenet').textContent=num(uz.count);
   if(ig.count){ $('#kpiIg').classList.add('warn'); $('#bIg').style.display='inline-block'; $('#bIg').textContent=ig.count; }
@@ -478,7 +496,9 @@ tudastar: async function(){ ST.cikkPage=0; await loadCikkek(); },
 vizsgalatok: async function(){ ST.vizsgPage=0; await loadVizsg(); },
 szakteruletek: loadSpecs,
 uzenetek: loadUzenetek,
+jelentkezesek: loadJelentkezesek,
 igenylesek: loadIgenylesek,
+kerelmek: loadKerelmek,
 felhasznalok: loadUsers
 };
 
@@ -651,7 +671,8 @@ async function loadIgenylesek(){
       <td class="mut">${dt(r.created_at)}</td>
       <td>${pill(r.status)}</td>
       <td style="text-align:right;white-space:nowrap">${r.status==='pending'?`
-        <button class="btn pri sm" onclick="setIgeny('${r.id}','approved')">Jóváhagy</button>
+        ${r.doctor_id&&r.email?`<button class="btn pri sm" onclick="inviteClaim('${r.id}')">Meghívó + hozzárendelés</button>`:''}
+        <button class="btn sm" onclick="setIgeny('${r.id}','approved')">Jóváhagy</button>
         <button class="btn dan sm" onclick="setIgeny('${r.id}','rejected')">Elutasít</button>`:''}
       </td></tr>`).join('')+'</table>';
 }
@@ -663,19 +684,128 @@ async function setIgeny(id,status){
   if(error) toast('Hiba: '+error.message,true); else { toast(status==='approved'?'Igénylés jóváhagyva':'Igénylés elutasítva'); loadIgenylesek(); }
 }
 
+/* ── JELENTKEZÉSEK (partner_registrations) ── */
+let JEL_TAB='new', JEL_ROWS={};
+document.addEventListener('click',e=>{ const b=e.target.closest('#jTabs [data-j]'); if(!b) return; JEL_TAB=b.dataset.j; document.querySelectorAll('#jTabs [data-j]').forEach(x=>x.classList.toggle('pri',x===b)); loadJelentkezesek(); });
+async function loadJelentkezesek(){
+  let q=db.from('partner_registrations').select('*, doctors(name,title,slug), clinics(name,slug)').order('created_at',{ascending:false}).limit(200);
+  q = JEL_TAB==='new' ? q.or('status.is.null,status.eq.new') : q.eq('status',JEL_TAB);
+  const { data, error } = await q;
+  if(error){ $('#tJel').innerHTML='<div class="empty">'+(/doctor_id|clinic_id|relationship/.test(error.message)?'Futtassa a 015-ös SQL-t (partner_registrations bővítés).':'Hiba: '+esc(error.message))+'</div>'; return; }
+  JEL_ROWS={}; (data||[]).forEach(r=>JEL_ROWS[r.id]=r);
+  if(!data.length){ $('#tJel').innerHTML='<div class="empty">Nincs ilyen jelentkezés</div>'; return; }
+  const pill=s=>s==='done'?'<span class="pill g">Kész</span>':s==='rejected'?'<span class="pill r">Elutasítva</span>':s==='spam'?'<span class="pill r">Spam</span>':'<span class="pill a">Új</span>';
+  $('#tJel').innerHTML='<table class="t"><tr><th>Jelentkező</th><th>Típus / adatlap</th><th>Részletek</th><th>Érkezett</th><th>Állapot</th><th></th></tr>'+
+    data.map(r=>{
+      const prof = r.doctors ? 'Igényelt: <a href="https://www.szakorvos.hu/orvos/'+esc(r.doctors.slug)+'" target="_blank" rel="noopener">'+esc(((r.doctors.title||'')+' '+r.doctors.name).trim())+'</a>'
+        : r.clinics ? 'Igényelt: <a href="https://www.szakorvos.hu/klinikak/'+esc(r.clinics.slug)+'" target="_blank" rel="noopener">'+esc(r.clinics.name)+'</a>'
+        : '<span class="mut">Új adatlap</span>';
+      const det=[r.specialty&&esc(r.specialty), r.clinic_name&&esc(r.clinic_name), esc(r.city||''), r.message&&('<span class="mut">'+esc(r.message).slice(0,240)+'</span>'), r.admin_note&&('<span class="mut">Jegyzet: '+esc(r.admin_note)+'</span>')].filter(Boolean).join('<br>');
+      const act = (r.status==='new'||!r.status) ? `<button class="btn pri sm" onclick="inviteJel('${r.id}')">Meghívó + hozzárendelés</button> <button class="btn sm" onclick="setJel('${r.id}','done')">Kész</button> <button class="btn dan sm" onclick="setJel('${r.id}','rejected')">Elutasít</button> <button class="btn sm" onclick="setJel('${r.id}','spam')">Spam</button>`
+        : `<button class="btn sm" onclick="setJel('${r.id}','new')">Vissza: új</button>`;
+      return `<tr><td><b>${esc((r.last_name||'')+' '+(r.first_name||''))}</b><br><span class="mut">${esc(r.email||'')}<br>${esc(r.phone||'')}</span></td>
+        <td>${r.reg_type==='clinic'?'Rendelő':'Orvos'}<br>${prof}</td><td>${det||'—'}</td><td class="mut">${dt(r.created_at)}</td><td>${pill(r.status)}</td>
+        <td style="text-align:right;white-space:normal;min-width:180px">${act}</td></tr>`; }).join('')+'</table>';
+}
+async function setJel(id,status){
+  const note = status==='rejected' ? (prompt('Elutasítás indoka (belső jegyzet):')||null) : undefined;
+  const upd={status, reviewed_at:status==='new'?null:new Date().toISOString()}; if(note!==undefined) upd.admin_note=note;
+  const { error } = await db.from('partner_registrations').update(upd).eq('id',id);
+  if(error) toast('Hiba: '+error.message,true); else { toast('Mentve'); loadJelentkezesek(); }
+}
+/* meghívó küldése + adatlap hozzárendelése (közös: jelentkezés és profil-igénylés) */
+async function inviteAndLink(email, kind, targetId){
+  const role = kind==='clinic' ? 'clinic_admin' : 'doctor_admin';
+  let invErr=null;
+  try{ const r=await db.functions.invoke('invite-user',{body:{email, role}}); if(r.error) invErr=r.error.message||String(r.error); else if(r.data&&r.data.error) invErr=r.data.error; }catch(e){ invErr=e.message; }
+  const { data:u } = await db.from('user_profiles').select('id,role').ilike('email', email.replace(/[\\%_]/g,'\\$&')).limit(1);
+  const uid = u&&u[0]&&u[0].id;
+  if(!uid) throw new Error('A meghívó nem ment ki'+(invErr?': '+invErr:'')+'.');
+  if(u[0].role!==role && u[0].role!=='superadmin'){
+    if(!confirm('Ez a felhasználó már létezik „'+u[0].role+'” szerepkörrel. Átállítja erre: '+role+'?')) throw new Error('Megszakítva');
+    const { error:re } = await db.from('user_profiles').update({role}).eq('id',uid); if(re) throw re;
+  }
+  if(targetId){
+    const upd = kind==='clinic' ? {admin_user_id:uid, status:'partner'} : {admin_user_id:uid, is_partner:true, verified_at:new Date().toISOString(), verified_by:(await db.auth.getUser()).data.user.id};
+    const { error:le } = await db.from(kind==='clinic'?'clinics':'doctors').update(upd).eq('id',targetId); if(le) throw le;
+  }
+  return {uid, existed:!!invErr};
+}
+async function inviteJel(id){
+  const r=JEL_ROWS[id]; if(!r) return;
+  const kind=r.reg_type==='clinic'?'clinic':'doctor', target=kind==='clinic'?r.clinic_id:r.doctor_id;
+  const tname = r.doctors ? ((r.doctors.title||'')+' '+r.doctors.name).trim() : r.clinics ? r.clinics.name : null;
+  if(!confirm('Meghívó küldése: '+r.email+'\n'+(tname?'Hozzárendelt adatlap: '+tname:'Nincs kijelölt adatlap – az orvos a belépés után maga hozza létre (klinikánál a Felhasználók menüben rendelje hozzá).')+'\n\nMehet?')) return;
+  try{
+    const res=await inviteAndLink(r.email, kind, target);
+    const { error } = await db.from('partner_registrations').update({status:'done', user_id:res.uid, reviewed_at:new Date().toISOString()}).eq('id',id); if(error) throw error;
+    toast(res.existed?'Meglévő fiók hozzárendelve':'Meghívó elküldve'+(target?' és adatlap hozzárendelve':'')); loadJelentkezesek();
+  }catch(e){ if(e.message!=='Megszakítva') toast('Hiba: '+e.message,true); }
+}
+async function inviteClaim(id){
+  const { data:r } = await db.from('doctor_claim_requests').select('id,email,doctor_id,doctors(name,title)').eq('id',id).single();
+  if(!r) return;
+  if(!confirm('Meghívó küldése: '+r.email+'\nHozzárendelt adatlap: '+(r.doctors?((r.doctors.title||'')+' '+r.doctors.name).trim():r.doctor_id)+'\n\nMehet?')) return;
+  try{ const res=await inviteAndLink(r.email,'doctor',r.doctor_id);
+    const { data:{ session } } = await db.auth.getSession();
+    await db.from('doctor_claim_requests').update({status:'approved', reviewed_by:session.user.id, reviewed_at:new Date().toISOString()}).eq('id',id);
+    toast(res.existed?'Meglévő fiók hozzárendelve':'Meghívó elküldve, adatlap hozzárendelve'); loadIgenylesek();
+  }catch(e){ if(e.message!=='Megszakítva') toast('Hiba: '+e.message,true); }
+}
+
+/* ── PARTNER-KÉRÉSEK ── */
+const KR_KIND={clinic_add_doctor:'Orvos felvétele',clinic_remove_doctor:'Orvos eltávolítása',doctor_add_clinic:'Új rendelési hely',doctor_remove_clinic:'Rendelési hely eltávolítása',name_change:'Névváltozás',other:'Egyéb'};
+async function loadKerelmek(){
+  const { data, error } = await db.from('admin_requests').select('*, clinics(name,slug), doctors(name,title,slug)').order('created_at',{ascending:false}).limit(200);
+  if(error){ $('#tKer').innerHTML='<div class="empty">'+(/admin_requests/.test(error.message)?'A kérés-tábla még nincs létrehozva – futtassa a 014-es SQL-t.':'Hiba: '+esc(error.message))+'</div>'; return; }
+  if(!data.length){ $('#tKer').innerHTML='<div class="empty">Nincs beérkezett kérés</div>'; return; }
+  const pill=s=>s==='done'||s==='approved'?'<span class="pill g">Teljesítve</span>':s==='rejected'?'<span class="pill r">Elutasítva</span>':'<span class="pill a">Függőben</span>';
+  $('#tKer').innerHTML='<table class="t"><tr><th>Kérés</th><th>Kitől</th><th>Részletek</th><th>Érkezett</th><th>Állapot</th><th></th></tr>'+
+    data.map(r=>{ const p=r.payload||{}; const det=[p.name&&('<b>'+esc(p.name)+'</b>'),p.specialty&&esc(p.specialty),p.address&&esc(p.address),p.email&&esc(p.email),r.message&&('<span class="mut">'+esc(r.message).slice(0,200)+'</span>')].filter(Boolean).join('<br>');
+      const who=r.clinics?('Klinika: <a href="https://www.szakorvos.hu/klinikak/'+esc(r.clinics.slug)+'" target="_blank" rel="noopener">'+esc(r.clinics.name)+'</a>'):'';
+      const whoD=r.doctors?('Orvos: <a href="https://www.szakorvos.hu/orvos/'+esc(r.doctors.slug)+'" target="_blank" rel="noopener">'+esc(((r.doctors.title||'')+' '+r.doctors.name).trim())+'</a>'):'';
+      return `<tr><td><b>${esc(KR_KIND[r.kind]||r.kind)}</b></td><td>${[who,whoD].filter(Boolean).join('<br>')||'—'}</td><td>${det||'—'}</td><td class="mut">${dt(r.created_at)}</td><td>${pill(r.status)}${r.admin_note?'<br><span class="mut">'+esc(r.admin_note)+'</span>':''}</td>
+      <td style="text-align:right;white-space:nowrap">${r.status==='pending'?`<button class="btn pri sm" onclick="setKerelem('${r.id}','done')">Teljesítve</button> <button class="btn dan sm" onclick="setKerelem('${r.id}','rejected')">Elutasít</button>`:''}</td></tr>`; }).join('')+'</table>';
+}
+async function setKerelem(id,status){
+  const note = prompt(status==='rejected'?'Elutasítás indoka (a kérő látja):':'Megjegyzés a kérőnek (nem kötelező):')||null;
+  const { error } = await db.from('admin_requests').update({status, admin_note:note, reviewed_at:new Date().toISOString()}).eq('id',id);
+  if(error) toast('Hiba: '+error.message,true); else { toast(status==='done'?'Kérés teljesítve':'Kérés elutasítva'); loadKerelmek(); }
+}
+
 /* ── FELHASZNÁLÓK ── */
 async function loadUsers(){
   const { data, error } = await db.from('user_profiles').select('id,full_name,email,role,created_at').order('created_at',{ascending:false}).limit(200);
   if(error){ toast('Hiba: '+error.message,true); return; }
+  const ids=data.filter(u=>u.role==='doctor_admin'||u.role==='clinic_admin').map(u=>u.id);
+  let dmap={},cmap={};
+  if(ids.length){ const [d,c]=await Promise.all([db.from('doctors').select('id,name,title,slug,admin_user_id').in('admin_user_id',ids),db.from('clinics').select('id,name,slug,admin_user_id').in('admin_user_id',ids)]);
+    (d.data||[]).forEach(x=>{ dmap[x.admin_user_id]=x; }); (c.data||[]).forEach(x=>{ cmap[x.admin_user_id]=x; }); }
   const roles=['patient','doctor_admin','clinic_admin','superadmin'];
   const rName={patient:'Páciens',doctor_admin:'Orvos-admin',clinic_admin:'Klinika-admin',superadmin:'Szuperadmin'};
-  $('#tUser').innerHTML='<table class="t"><tr><th>Felhasználó</th><th>Regisztrált</th><th>Szerepkör</th></tr>'+
+  const link=u=>{ if(u.role==='doctor_admin'){ const d=dmap[u.id]; return (d?`<a href="https://www.szakorvos.hu/orvos/${esc(d.slug)}" target="_blank" rel="noopener">${esc(((d.title||'')+' '+d.name).trim())}</a><br>`:'<span class="mut">nincs hozzárendelve</span><br>')+`<button class="btn sm" onclick="linkProfile('${u.id}','doctor')">${d?'Módosítás':'Orvos hozzárendelése'}</button>`; }
+    if(u.role==='clinic_admin'){ const c=cmap[u.id]; return (c?`<a href="https://www.szakorvos.hu/klinikak/${esc(c.slug)}" target="_blank" rel="noopener">${esc(c.name)}</a><br>`:'<span class="mut">nincs hozzárendelve</span><br>')+`<button class="btn sm" onclick="linkProfile('${u.id}','clinic')">${c?'Módosítás':'Klinika hozzárendelése'}</button>`; }
+    return '<span class="mut">—</span>'; };
+  $('#tUser').innerHTML='<table class="t"><tr><th>Felhasználó</th><th>Regisztrált</th><th>Szerepkör</th><th>Kezelt adatlap</th></tr>'+
     data.map(u=>`<tr>
       <td><b>${esc(u.full_name||'—')}</b><br><span class="mut">${esc(u.email||'')}</span></td>
       <td class="mut">${dt(u.created_at)}</td>
       <td><select class="inp" style="padding:5px 8px;font-size:12.5px" onchange="setRole('${u.id}',this.value,this)">
         ${roles.map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${rName[r]}</option>`).join('')}
-      </select></td></tr>`).join('')+'</table>';
+      </select></td><td>${link(u)}</td></tr>`).join('')+'</table>';
+}
+async function linkProfile(uid,kind){
+  const q=(prompt(kind==='doctor'?'Orvos neve (vagy egy része):':'Klinika neve (vagy egy része):')||'').trim(); if(q.length<3) return;
+  const t=kind==='doctor'?'doctors':'clinics';
+  const { data, error } = await db.from(t).select(kind==='doctor'?'id,name,title,admin_user_id':'id,name,address,admin_user_id').ilike('name','%'+q+'%').limit(10);
+  if(error){ toast('Hiba: '+error.message,true); return; }
+  if(!data.length){ toast('Nincs találat'); return; }
+  const pick=prompt('Válasszon sorszámot:\n'+data.map((x,i)=>(i+1)+'. '+((x.title?x.title+' ':'')+x.name)+(x.address?' – '+x.address:'')+(x.admin_user_id?' (már van kezelője)':'')).join('\n'));
+  const it=data[(parseInt(pick,10)||0)-1]; if(!it) return;
+  if(it.admin_user_id&&it.admin_user_id!==uid&&!confirm('Ennek az adatlapnak már van kezelője. Lecseréli?')) return;
+  await db.from(t).update({admin_user_id:null}).eq('admin_user_id',uid);
+  const r=await db.from(t).update({admin_user_id:uid}).eq('id',it.id);
+  if(r.error) toast('Hiba: '+r.error.message,true); else { toast('Hozzárendelve: '+it.name); loadUsers(); }
 }
 async function setRole(id,role,el){
   if(role==='superadmin' && !confirm('Biztosan SZUPERADMIN jogot ad ennek a felhasználónak?')){ loadUsers(); return; }

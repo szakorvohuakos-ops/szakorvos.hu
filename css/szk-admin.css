@@ -1,0 +1,228 @@
+/* ==========================================================================
+   szakorvos.hu – orvos- és klinika-admin közös stílusa (2026.10)
+   Alap: szk-pages.css tokenjei (.szg); ez csak az admin-elrendezést adja
+   ========================================================================== */
+.szg.adm-body{background:#F3F6FB}
+.adm-gate{min-height:60vh;display:grid;place-items:center;padding:60px 20px;text-align:center;color:var(--muted)}
+.adm-gate .spin{border-color:rgba(29,73,146,.18);border-top-color:var(--blue);width:28px;height:28px;margin:0 auto 12px}
+.adm-gate h1{font-size:22px;color:var(--navy);margin:0 0 8px}
+.adm-gate p{margin:0 auto 18px;max-width:460px;line-height:1.6}
+.adm{max-width:1200px;margin:0 auto;padding:32px 20px 90px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:36px;align-items:start}
+.adm[hidden]{display:none}
+
+/* ---------- oldalsáv ---------- */
+.adm-side{position:sticky;top:84px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh-box);overflow:hidden}
+.adm-me{display:flex;gap:12px;align-items:center;padding:18px 16px 16px;border-bottom:1px solid #EEF1F6}
+.adm-me .av{width:48px;height:48px;border-radius:14px;flex:none;display:grid;place-items:center;font-weight:800;font-size:16px;background:var(--blue-l);color:var(--blue);overflow:hidden}
+.adm-me .av img{width:100%;height:100%;object-fit:cover}
+.adm-me b{display:block;font-size:14.5px;color:var(--navy);line-height:1.3;word-break:break-word}
+.adm-me small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.adm-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;border-radius:99px;padding:2px 8px;margin-top:6px}
+.adm-pill.ok{background:var(--green-l);color:#2E5A18}
+.adm-pill.wait{background:var(--sun-l);color:var(--sun-d)}
+.adm-pill.off{background:#F1F4FA;color:var(--muted)}
+.adm-pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.adm-nav{display:flex;flex-direction:column;padding:8px}
+.adm-nav button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:left;padding:10px 12px;border-radius:11px;font:700 14px 'Manrope',sans-serif;color:var(--ink);cursor:pointer}
+.adm-nav button svg{width:17px;height:17px;color:var(--faint);flex:none}
+.adm-nav button:hover{background:#F5F8FD;color:var(--blue)}
+.adm-nav button.on{background:var(--blue-l);color:var(--blue)}
+.adm-nav button.on svg{color:var(--blue)}
+.adm-nav button em{margin-left:auto;font-style:normal;font-size:11px;font-weight:800;background:var(--sun-l);color:var(--sun-d);border-radius:99px;padding:1px 7px}
+.adm-sfoot{border-top:1px solid #EEF1F6;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
+.adm-sfoot a,.adm-sfoot button{display:flex;align-items:center;gap:10px;border:0;background:none;padding:9px 12px;border-radius:10px;font:600 13px 'Manrope',sans-serif;color:var(--muted);cursor:pointer;text-decoration:none;text-align:left}
+.adm-sfoot a:hover,.adm-sfoot button:hover{background:#F5F8FD;color:var(--blue)}
+.adm-sfoot svg{width:16px;height:16px;flex:none}
+
+/* ---------- tartalom ---------- */
+.adm-main{min-width:0}
+.adm-pane{display:none}
+.adm-pane.on{display:block;animation:admIn .25s ease}
+@keyframes admIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.adm-h{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 24px;flex-wrap:wrap}
+.adm-h h1{margin:0;font-size:26px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
+.adm-h p{margin:6px 0 0;color:var(--muted);font-size:14.5px}
+.adm-h .btn{flex:none}
+.adm .sec{margin:0}
+.adm .sec+.sec{margin-top:24px}
+.adm .sec h2{font-size:17px}
+.adm .sec h2 .ic{width:30px;height:30px;border-radius:9px}
+.adm .sec h2 .ic svg{width:16px;height:16px}
+.adm .sec .hint{margin:-8px 0 16px;color:var(--muted);font-size:13.5px;line-height:1.55}
+.adm .fld{margin-bottom:16px}
+.adm .fld .note{display:block;font-size:12px;color:var(--faint);margin-top:5px;line-height:1.45}
+.adm .fld input[readonly]{background:#F5F7FB;color:var(--muted)}
+.adm .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.adm .form .row,.adm .row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.adm .cnt{float:right;font-weight:600;color:var(--faint);font-size:12px}
+.adm .lockline{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-top:6px}
+.adm .lockline button{border:0;background:none;color:var(--blue);font:700 12px 'Manrope',sans-serif;padding:0;cursor:pointer;text-decoration:underline}
+
+/* statisztika-csempék */
+.adm-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.adm-stat{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh-box);padding:16px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.adm-stat .ic{margin-bottom:6px}
+.adm-stat b{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.1}
+.adm-stat span{font-size:12.5px;color:var(--muted);line-height:1.4}
+
+/* állapot-sáv */
+.adm-banner{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:14px 16px;margin-bottom:24px;font-size:14px;line-height:1.55}
+.adm-banner svg{width:18px;height:18px;flex:none;margin-top:2px}
+.adm-banner b{color:var(--navy)}
+.adm-banner.wait{background:var(--sun-l);border:1px solid #F2DD9B;color:#6B5208}
+.adm-banner.ok{background:#F3FAEF;border:1px solid #C9E3B8;color:#2E5A18}
+.adm-banner.info{background:#F2F6FD;border:1px solid #D3DEF2;color:var(--ink)}
+
+/* kitöltöttség */
+.adm-comp{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.adm-ring{--p:0;width:76px;height:76px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--c,#1D4992) calc(var(--p)*1%),#E6ECF6 0)}
+.adm-ring b{width:60px;height:60px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:17px;font-weight:800;color:var(--navy)}
+.adm-comp .tx{flex:1;min-width:220px}
+.adm-comp .tx strong{display:block;color:var(--navy);font-size:15px}
+.adm-comp .tx p{margin:4px 0 0;color:var(--muted);font-size:13.5px}
+.adm-miss{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.adm-miss button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px;border-radius:99px;border:1px dashed var(--line2);background:#FAFCFF;font:700 12.5px 'Manrope',sans-serif;color:var(--ink);cursor:pointer}
+.adm-miss button:hover{border-color:var(--blue);color:var(--blue)}
+.adm-miss button i{font-style:normal;color:var(--faint);font-weight:600}
+
+/* gyors-linkek */
+.adm-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.adm-quick a,.adm-quick button{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--sh-box);text-decoration:none;color:var(--navy);font:700 14px 'Manrope',sans-serif;cursor:pointer;text-align:left}
+.adm-quick a:hover,.adm-quick button:hover{border-color:var(--line2);box-shadow:var(--sh-hover)}
+.adm-quick small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
+
+/* kapcsolók */
+.tgl{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#FAFCFF;cursor:pointer}
+.tgl+.tgl{margin-top:10px}
+.tgl>span:first-child{flex:1;min-width:0}
+.tgl b{display:block;font-size:14px;color:var(--navy)}
+.tgl small{display:block;font-size:12px;color:var(--faint);margin-top:1px}
+.sw{position:relative;width:40px;height:23px;flex:none}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;width:100%;height:100%;z-index:1}
+.sw i{position:absolute;inset:0;border-radius:99px;background:#CBD3E2;transition:background .2s}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(11,22,51,.3);transition:transform .2s}
+.sw input:checked+i{background:var(--green)}
+.sw input:checked+i::after{transform:translateX(17px)}
+.sw input:focus-visible+i{outline:2px solid var(--blue);outline-offset:2px}
+.tg2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tg2 .tgl+.tgl{margin-top:0}
+
+/* lista-szerkesztő (szakvizsgák, tagságok…) */
+.lst{display:flex;flex-direction:column;gap:8px}
+.lst .it{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 14px;border:1px solid var(--line);border-radius:11px;background:#fff;font-size:14px;color:var(--ink)}
+.lst .it span{flex:1;min-width:0;word-break:break-word}
+.lst .it button{width:28px;height:28px;border:0;border-radius:8px;background:none;color:var(--faint);cursor:pointer;font-size:18px;line-height:1;flex:none}
+.lst .it button:hover{background:#FDECEA;color:#B4483E}
+.lst-add{display:flex;gap:8px;margin-top:8px}
+.lst-add input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:11px;padding:9px 11px;font:600 14px 'Manrope',sans-serif;color:var(--navy);outline:0}
+.lst-add input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(42,74,156,.12)}
+.lst-empty{font-size:13px;color:var(--faint);padding:2px 0}
+.chipsx{display:flex;flex-wrap:wrap;gap:8px}
+.chipx{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 6px 0 12px;border-radius:99px;background:var(--blue-l);color:var(--blue);font-weight:700;font-size:13px}
+.chipx button{width:22px;height:22px;border:0;border-radius:50%;background:#fff;color:var(--blue);cursor:pointer;font-size:14px;line-height:1;display:grid;place-items:center}
+.chipx.pri{background:var(--green-l);color:#2E5A18}
+.chipx.pri button{color:#2E5A18}
+.chipx .star{border:0;background:none;width:auto;height:auto;color:inherit;font-size:13px;cursor:pointer;padding:0 2px;opacity:.55}
+.chipx.pri .star{opacity:1;color:var(--sun-d)}
+
+/* képfeltöltés */
+.up{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.up .pv{width:104px;height:104px;border-radius:20px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;overflow:hidden;flex:none;font-weight:800;font-size:28px;border:1px solid var(--line)}
+.up .pv img{width:100%;height:100%;object-fit:cover}
+.up .pv.cover{width:240px;height:90px;border-radius:14px}
+.up .ctl{display:flex;flex-direction:column;gap:8px;min-width:200px;flex:1}
+.up .ctl small{font-size:12px;color:var(--faint);line-height:1.45}
+.up .bt{display:flex;gap:8px;flex-wrap:wrap}
+.up input[type=file]{display:none}
+.prog{height:6px;border-radius:99px;background:#E6ECF6;overflow:hidden;display:none}
+.prog i{display:block;height:100%;width:0;background:var(--blue);transition:width .3s}
+.prog.on{display:block}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:16px}
+.gal .g{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#EEF2F8;border:1px solid var(--line)}
+.gal .g img{width:100%;height:100%;object-fit:cover}
+.gal .g button{position:absolute;top:6px;right:6px;width:28px;height:28px;border:0;border-radius:8px;background:rgba(11,22,51,.65);color:#fff;font-size:16px;cursor:pointer;line-height:1}
+.gal .add{display:grid;place-items:center;text-align:center;font:700 13px 'Manrope',sans-serif;color:var(--blue);border:1.5px dashed var(--line2);background:#FAFCFF;cursor:pointer;padding:8px}
+.gal .add svg{width:22px;height:22px;display:block;margin:0 auto 4px}
+
+/* nyitvatartás */
+.oh{display:flex;flex-direction:column;gap:8px}
+.oh .d{display:grid;grid-template-columns:110px 70px minmax(0,1fr);gap:12px;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.oh .d b{font-size:14px;color:var(--navy)}
+.oh .d .tm{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.oh .d .tm input{border:1.5px solid var(--line);border-radius:10px;padding:7px 9px;font:600 14px 'Manrope',sans-serif;color:var(--navy);width:112px}
+.oh .d .tm span{color:var(--faint)}
+.oh .d.closed .tm{opacity:.45;pointer-events:none}
+.oh .d .cl{font-size:13px;font-weight:700;color:var(--muted)}
+.oh-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+/* listák: rendelők, orvosok, kérések */
+.rows{display:flex;flex-direction:column;gap:12px}
+.rw{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.rw .av{width:48px;height:48px;border-radius:13px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:15px;overflow:hidden}
+.rw .av img{width:100%;height:100%;object-fit:cover}
+.rw .av svg{width:22px;height:22px}
+.rw b{display:block;font-size:15px;color:var(--navy);line-height:1.3}
+.rw small{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.45}
+.rw .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.rw .fee{display:flex;align-items:center;gap:6px}
+.rw .fee input{width:110px;border:1.5px solid var(--line);border-radius:10px;padding:7px 9px;font:600 14px 'Manrope',sans-serif;color:var(--navy);text-align:right}
+.rw .fee span{font-size:13px;color:var(--muted)}
+.rw .ohx{grid-column:2/-1;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.rw .ohx i{font-style:normal;color:var(--ink);font-weight:700}
+.st{display:inline-flex;align-items:center;font-size:11.5px;font-weight:800;border-radius:99px;padding:3px 9px}
+.st.pending{background:var(--sun-l);color:var(--sun-d)}
+.st.approved,.st.done{background:var(--green-l);color:#2E5A18}
+.st.rejected{background:#FDECEA;color:#9B2C1F}
+.st.act{background:var(--green-l);color:#2E5A18}
+.st.inact{background:#F1F4FA;color:var(--muted)}
+.adm-empty{text-align:center;padding:26px 18px;border:1.5px dashed var(--line2);border-radius:14px;color:var(--muted);font-size:14px;background:#FAFCFF}
+.adm-empty b{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+
+/* mentés-sáv */
+.savebar{position:fixed;left:50%;bottom:20px;transform:translate(-50%,140%);z-index:80;display:flex;align-items:center;gap:14px;background:var(--navy);color:#fff;border-radius:14px;padding:10px 10px 10px 18px;box-shadow:0 18px 40px -16px rgba(11,22,51,.7);transition:transform .3s cubic-bezier(.2,.8,.2,1);max-width:calc(100% - 32px)}
+.savebar.on{transform:translate(-50%,0)}
+.savebar span{font-size:13.5px;font-weight:600;color:#D6E1F5}
+.savebar .btn{height:38px}
+.savebar .btn.ghost{background:transparent;color:#fff!important;border:1px solid rgba(255,255,255,.3)}
+
+/* modális ablak */
+.mdl{position:fixed;inset:0;z-index:9500;background:rgba(11,22,51,.45);display:none;align-items:center;justify-content:center;padding:16px}
+.mdl.on{display:flex}
+.mdl .box{background:#fff;border-radius:20px;max-width:520px;width:100%;max-height:calc(100vh - 32px);overflow:auto;padding:24px;box-shadow:0 30px 80px -20px rgba(11,22,51,.5)}
+.mdl h2{margin:0 0 6px;font-size:20px;color:var(--navy);font-weight:800}
+.mdl .sub2{margin:0 0 18px;color:var(--muted);font-size:14px;line-height:1.55}
+.mdl .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+
+@media (max-width:1000px){
+ .adm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .adm-quick{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+ .adm{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:18px}
+ .adm-side{position:static}
+ .adm-me{padding:14px}
+ .adm-nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;gap:4px;padding:8px}
+ .adm-nav::-webkit-scrollbar{display:none}
+ .adm-nav button{width:auto;flex:none;white-space:nowrap;padding:9px 12px}
+ .adm-sfoot{flex-direction:row;flex-wrap:wrap}
+}
+@media (max-width:640px){
+ .adm{padding:16px 16px 100px}
+ .adm-h h1{font-size:22px}
+ .adm .row3,.adm .form .row,.adm .row2,.tg2{grid-template-columns:minmax(0,1fr)}
+ .adm .form .row{gap:0}
+ .adm-stats{gap:12px}
+ .adm-stat b{font-size:21px}
+ .rw{grid-template-columns:44px minmax(0,1fr);padding:12px}
+ .rw .acts{grid-column:1/-1;justify-content:flex-start}
+ .rw .ohx{grid-column:1/-1}
+ .oh .d{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .oh .d .tm{grid-column:1/-1}
+ .up .pv.cover{width:100%}
+ .savebar{left:16px;right:16px;transform:translateY(140%);justify-content:space-between}
+ .savebar.on{transform:none}
+}
+.flash{outline:2px solid var(--sun);outline-offset:6px;border-radius:12px}
+.adm .btn.s .spin,.mdl .btn.s .spin{border-color:rgba(29,73,146,.2);border-top-color:var(--blue)}
+.adm-gate[hidden]{display:none}
+.savebar:not(.on){visibility:hidden;transition:transform .3s,visibility 0s .3s}

@@ -5,6 +5,18 @@
 // Secret-ek: RESEND_API_KEY, CONTACT_TO, CONTACT_FROM
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// Rate limithez (audit, 2026-10-03)
+const db = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  { auth: { persistSession: false } },
+);
+async function sha(t: string) {
+  const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+  return Array.from(new Uint8Array(h)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -35,6 +47,30 @@ serve(async (req) => {
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ error: "Hiányzó mező" }), {
         status: 400, headers: { ...CORS, "Content-Type": "application/json" },
+      });
+    }
+
+    // — Bemenet-ellenőrzés + rate limit (audit, 2026-10-03) —
+    if (String(name).length > 200 || String(email).length > 200 ||
+        String(topic ?? "").length > 120 || String(message).length > 5000 ||
+        !/^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(String(email))) {
+      return new Response(JSON.stringify({ error: "Érvénytelen mező" }), {
+        status: 400, headers: { ...CORS, "Content-Type": "application/json" },
+      });
+    }
+    const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "anon";
+    const ipKey = (await sha("ce|" + ip)).slice(0, 24);
+    const { data: okIp } = await db.rpc("v2_rate_hit", { p_key: "ce:" + ipKey, p_window_sec: 600, p_max: 3 });
+    if (okIp === false) {
+      return new Response(JSON.stringify({ error: "Túl sok üzenet, próbálja újra később." }), {
+        status: 429, headers: { ...CORS, "Content-Type": "application/json" },
+      });
+    }
+    const day = new Date().toISOString().slice(0, 10);
+    const { data: okDay } = await db.rpc("v2_rate_hit", { p_key: "ceday:" + day, p_window_sec: 86400, p_max: 200 });
+    if (okDay === false) {
+      return new Response(JSON.stringify({ error: "A napi üzenetkeret elfogyott, kérjük, próbálja holnap." }), {
+        status: 429, headers: { ...CORS, "Content-Type": "application/json" },
       });
     }
 

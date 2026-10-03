@@ -272,3 +272,25 @@ html body.szr{margin:0;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',
 .szr .fg{padding:14px 0}
 .szr .aibox b{font-size:14.5px}.szr .aibox small{font-size:12.5px}
 @media (max-width:640px){.szr .list{gap:16px}.szr .av{width:42px;height:42px;font-size:14px}}
+
+/* szellősebb fejléc (2026.10.03) */
+.szr .head .in{padding:26px 20px 28px}
+.szr .head .crumbs{margin-bottom:14px}
+.szr .ttl{margin:0;gap:24px;align-items:center}
+.szr .ttl h1{line-height:1.2;font-size:30px}
+.szr .ttl h1 em{display:inline-block;margin-top:2px}
+.szr .ttl p{margin:10px 0 0;font-size:15px}
+.szr .bar2{margin-top:16px;gap:10px}
+.szr .act{gap:10px}
+.szr .act .ac{height:34px;padding:0 8px 0 14px;gap:8px}
+.szr .sort select{height:42px;padding:0 12px}
+@media (max-width:1240px){.szr .ttl h1{font-size:28px}}
+@media (max-width:1000px){.szr .ttl{row-gap:18px}}
+@media (max-width:640px){
+ .szr .head .in{padding:18px 16px 20px}
+ .szr .head .crumbs{margin-bottom:10px}
+ .szr .ttl{row-gap:14px}
+ .szr .ttl h1{font-size:24px}
+ .szr .ttl p{margin-top:8px}
+ .szr .bar2{margin-top:14px}
+}

@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <meta name="theme-color" content="#2A4A9C">
-<link rel="canonical" href="https://www.szakorvos.hu/register.html">
+<link rel="canonical" href="https://www.szakorvos.hu/register">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Szakorvos.hu">
 <meta property="og:title" content="Partnerprogram orvosoknak és klinikáknak — Szakorvos.hu">
 <meta property="og:description" content="Igényelje ellenőrzött szakorvosi vagy klinikai profilját, és jelenjen meg ott, ahol a páciensek keresnek.">
-<meta property="og:url" content="https://www.szakorvos.hu/register.html">
+<meta property="og:url" content="https://www.szakorvos.hu/register">
 <meta property="og:locale" content="hu_HU">
 <meta name="description" content="Csatlakozzon Magyarország vezető magánegészségügyi platformjához. Növelje páciensszámát, kezelje online profilját és foglalásait egy helyen.">
 <title>Legyen Ön is partnerünk | Szakorvos.hu</title>
@@ -24,8 +24,8 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.szakorvos.hu/social/og-image.png">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://asgnkjmwzhbczpvetprh.supabase.co';
@@ -242,8 +242,8 @@ nav#sknav .wm em{color: rgb(36, 138, 71); font-weight: 500;}
   0%, 80%, 100% { transform: translateY(0px); opacity: 0.5; }
   40% { transform: translateY(-4px); opacity: 1; }
 }
-#sknav a.cta.sm[href$="register.html"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(42, 74, 156, 0.35) 0px 0px 0px 1.5px inset !important;}
-#sknav a.cta.sm[href$="register.html"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="/register"]{background: transparent !important; color: rgb(24, 58, 165) !important; box-shadow: rgba(42, 74, 156, 0.35) 0px 0px 0px 1.5px inset !important;}
+#sknav a.cta.sm[href$="/register"]:hover{background: rgb(238, 242, 252) !important; box-shadow: rgb(24, 58, 165) 0px 0px 0px 1.5px inset !important;}
 @keyframes eyeP { 
   0% { transform: scale(0.5); opacity: 1; }
   100% { transform: scale(1.6); opacity: 0; }
@@ -278,7 +278,76 @@ body{font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Displ
 #skfoot .wm em,#skfoot .brand .wm em{color:#8FD473!important}
 #skfoot .bottom{border-top-color:rgba(255,255,255,.12)!important;color:rgba(255,255,255,.55)!important}
 #skfoot .fspecs{border-top-color:rgba(255,255,255,.12)!important}
+</style><style id="szk-nav">
+/* szakorvos.hu – fő navigáció v2 (2026.10): kattintásra nyíló menük, mobil fiók-menü harmonikával */
+#sknav.nv{--nv-ink:#0B1633;--nv-mut:#5B6680;--nv-blue:#1D4992;--nv-blue-s:#EBF0F8;--nv-line:#E3E8F1;--nv-green:#4E9A32;
+  position:sticky;top:0;z-index:900;background:rgba(255,255,255,.9);-webkit-backdrop-filter:saturate(180%) blur(18px);backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid var(--nv-line);box-shadow:none;font-family:inherit}
+#sknav.nv.scrolled{background:rgba(255,255,255,.95);box-shadow:0 8px 24px -20px rgba(29,73,146,.45)}
+#sknav.nv *{box-sizing:border-box}
+#sknav .nv-bar{display:flex;align-items:center;gap:8px;height:62px}
+#sknav.nv .brand{margin-right:18px;flex:none}
+#sknav .nv-main{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0;height:100%}
+#sknav .nv-it{position:relative;height:100%;display:flex;align-items:center}
+#sknav .nv-top{display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 12px;border:0;border-radius:10px;background:transparent;color:var(--nv-ink);font:inherit;font-size:14.5px;font-weight:600;letter-spacing:-.005em;cursor:pointer;white-space:nowrap;position:relative}
+#sknav .nv-top:hover,#sknav .nv-it.open .nv-top{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-top:focus-visible,#sknav .nv-pan a:focus-visible,#sknav .nv-acc-h:focus-visible,#sknav .nv-burger:focus-visible,#sknav .nv-user:focus-visible,#sknav .nv-cta:focus-visible{outline:2px solid var(--nv-blue);outline-offset:2px}
+#sknav .nv-it.cur .nv-top::after{content:"";position:absolute;left:12px;right:12px;bottom:-11px;height:3px;border-radius:3px 3px 0 0;background:var(--nv-blue)}
+#sknav .nv-chev{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:.55;flex:none;transition:transform .18s!important}
+#sknav .nv-it.open .nv-chev,#sknav .nv-acc.open .nv-chev{transform:rotate(180deg);opacity:1}
+#sknav .nv-pan{position:absolute;top:calc(100% - 6px);left:0;min-width:230px;display:none;flex-direction:column;padding:8px;background:#fff;border:1px solid var(--nv-line);border-radius:16px;box-shadow:0 26px 50px -22px rgba(16,36,82,.38),0 2px 8px rgba(16,36,82,.06);z-index:2}
+#sknav .nv-pan.nv-r{left:auto;right:0}
+#sknav .nv-it.open .nv-pan{display:flex;animation:nvIn .14s ease-out!important}
+@keyframes nvIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+#sknav .nv-pan.nv-wide{flex-direction:row;gap:6px;padding:14px;min-width:700px}
+#sknav .nv-col{display:flex;flex-direction:column;flex:1 0 auto;min-width:200px}#sknav .nv-pan h5{white-space:nowrap}#sknav .nv-tag{flex:none}
+#sknav .nv-col+.nv-col{border-left:1px solid var(--nv-line);padding-left:8px}
+#sknav .nv-pan h5{margin:2px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--nv-mut)}
+#sknav .nv-pan a{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;color:var(--nv-ink);font-size:14.5px;font-weight:500;line-height:1.3;white-space:nowrap;text-decoration:none}
+#sknav .nv-pan a:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-pan a.nv-all{color:var(--nv-blue);font-weight:700;margin-top:2px}
+#sknav .nv-pan a[aria-current="page"],#sknav .nv-acc-b a[aria-current="page"]{color:var(--nv-blue);font-weight:700}
+#sknav .nv-tag{font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#5E9E43,#4A8230);border-radius:6px;padding:2px 6px;line-height:1.2}
+#sknav .nv-side{display:flex;align-items:center;gap:6px;margin-left:auto;flex:none}
+#sknav .nv-user{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 12px;border-radius:10px;color:var(--nv-ink);font-size:14.5px;font-weight:600;text-decoration:none;white-space:nowrap}
+#sknav .nv-user:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-user svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;flex:none}
+#sknav .nv-cta{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:10px;background:var(--nv-blue);color:#fff;font-size:14.5px;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 6px 16px -10px rgba(29,73,146,.8)}
+#sknav .nv-cta:hover{background:#163A78;color:#fff}
+#sknav .nv-burger{display:none;width:40px;height:40px;border:1px solid var(--nv-line);border-radius:11px;background:#fff;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px;padding:0}
+#sknav .nv-burger span{display:block;width:18px;height:2px;border-radius:2px;background:var(--nv-ink);transition:transform .2s,opacity .2s!important}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+#sknav .nv-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* mobil fiók */
+#sknav .nv-drawer{position:fixed;left:0;right:0;bottom:0;top:var(--nv-h,59px);background:rgba(11,22,51,.28);z-index:950}
+#sknav .nv-drawer[hidden]{display:none}
+#sknav .nv-dr-in{background:#fff;max-height:100%;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px calc(18px + env(safe-area-inset-bottom));border-top:1px solid var(--nv-line);box-shadow:0 24px 40px -20px rgba(11,22,51,.35);animation:nvDr .18s ease-out!important}
+@keyframes nvDr{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+#sknav .nv-dr-search{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;margin:2px 0 8px;border:1.5px solid #D5DDEB;border-radius:14px;background:#F7F9FD;color:var(--nv-mut);font-size:15px;font-weight:600;text-decoration:none}
+#sknav .nv-dr-search svg{width:19px;height:19px;fill:none;stroke:var(--nv-blue);stroke-width:2.2;stroke-linecap:round}
+#sknav .nv-acc{border-bottom:1px solid var(--nv-line)}
+#sknav .nv-acc-h{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;height:52px;padding:0 4px;border:0;background:none;color:var(--nv-ink);font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left}
+#sknav .nv-acc.cur .nv-acc-h{color:var(--nv-blue)}
+#sknav .nv-acc-h .nv-chev{width:18px;height:18px}
+#sknav .nv-acc-b{display:none;flex-direction:column;padding:0 0 10px}
+#sknav .nv-acc.open .nv-acc-b{display:flex}
+#sknav .nv-acc-b a{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:10px;color:#2B3650;font-size:15px;font-weight:500;text-decoration:none}
+#sknav .nv-acc-b a:active,#sknav .nv-acc-b a:hover{background:var(--nv-blue-s);color:var(--nv-blue)}
+#sknav .nv-dr-link{display:flex;align-items:center;height:52px;padding:0 4px;color:var(--nv-ink);font-size:16px;font-weight:700;text-decoration:none;border-bottom:1px solid var(--nv-line)}
+#sknav .nv-dr-foot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+#sknav .nv-dr-btn{display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none}
+#sknav .nv-dr-btn.p{background:var(--nv-blue);color:#fff}
+#sknav .nv-dr-btn.s{background:#fff;color:var(--nv-blue);border:1.5px solid #C9D6EE}
+html.nv-lock,html.nv-lock body{overflow:hidden!important}
+#sknav.nv.dr-open{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important;z-index:2000!important}
+@media (max-width:1120px){#sknav .nv-top{padding:0 9px;font-size:14px}#sknav .nv-user span{display:none}#sknav .nv-user{padding:0 10px}#sknav.nv .brand{margin-right:8px}}
+@media (max-width:1023px){#sknav .nv-main,#sknav .nv-user{display:none}#sknav .nv-burger{display:flex}}
+@media (max-width:640px){#sknav .nv-bar{height:58px;gap:6px}#sknav .nv-cta{height:36px;padding:0 12px;font-size:13.5px}#sknav .nv-burger{width:38px;height:38px}}
+@media (max-width:360px){#sknav .nv-cta{display:none}}
+@media (prefers-reduced-motion:reduce){#sknav .nv-it.open .nv-pan,#sknav .nv-dr-in{animation:none!important}}
+
 </style>
+
 <style id="szk-pages">
 /* ==========================================================================
    szakorvos.hu – tartalmi oldalak közös stílusa (2026.10)
@@ -757,43 +826,53 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
 </style>
 </head>
 <body class="szg">
-<nav id="sknav">
-  <div class="wrap">
-    <a class="brand" href="/">
+<nav id="sknav" class="nv" aria-label="Fő navigáció">
+  <div class="wrap nv-bar">
+    <a class="brand" href="/" aria-label="Szakorvos.hu – kezdőlap">
       <span class="logo"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B62C4"></stop><stop offset=".55" stop-color="#2A4A9C"></stop><stop offset="1" stop-color="#1D3574"></stop></linearGradient><linearGradient id="lh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".14"></stop><stop offset="1" stop-color="#fff" stop-opacity="0"></stop></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(#lg)"></rect><rect width="64" height="64" rx="14" fill="url(#lh)"></rect><path d="M24.5 11h15v13.5H53v15H39.5V53h-15V39.5H11v-15h13.5z" fill="#fff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"></path></svg></span>
       <span class="wm">Szakorvos<em>.hu</em></span>
     </a>
-    <div class="links">
-      <div class="dd wide"><a href="/#kereso" aria-haspopup="true">Szakorvosok<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu cols">
-          <div><h5>Keresés</h5><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok">Összes szakorvos</a></div>
-          <div><h5>Szakterületek</h5><a href="/talalatok?q=Bőrgyógyász">Bőrgyógyász</a><a href="/talalatok?q=Nőgyógyász">Nőgyógyász</a><a href="/talalatok?q=Fogorvos">Fogorvos</a><a href="/talalatok?q=Gyermekorvos">Gyermekorvos</a><a href="/talalatok?all=1" class="all">Mind a 86 szakterület ›</a></div>
-          <div><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=Győr">Győr</a><a href="/#varosok" class="all">Összes város ›</a></div>
-        </div></div>
-      <div class="dd"><a href="/klinikak" aria-haspopup="true">Klinikák<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a><a href="/klinikak?magan=1">Magánklinikák</a><a href="/klinikak">Ügyeletek</a></div></div>
-      <div class="dd"><a href="/#tudastar" aria-haspopup="true">Tudástár<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/#tudastar">Cikkek és útmutatók</a><a href="/tudastar">Tünetek A–Z</a><a href="/tudastar">Beutaló-tudnivalók</a><a href="/#gyik">Gyakori kérdések</a></div></div>
-      <div class="dd"><a href="/register.html" aria-haspopup="true">Orvosoknak<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></a>
-        <div class="menu"><a href="/register.html">Miért érdemes regisztrálni</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/register.html#gyik">Partner GYIK</a><a href="#" data-szkm="keep">Kapcsolat</a></div></div>
-    </div>
-    <div class="navr">
-      <a class="user" href="/login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Bejelentkezés</span></a>
-      <a class="cta sm" href="/register.html">Partnerprogram</a>
-      <button class="burger" id="burger" type="button" aria-label="Menü" aria-expanded="false" aria-controls="mobnav"><span></span><span></span><span></span></button>
+    <ul class="nv-main">
+      <li class="nv-it" data-sec="orvos"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-orvos">Szakorvosok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan nv-wide" id="nvp-orvos">
+          <div class="nv-col"><h5>Keresés</h5><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Keresés panasz alapján <span class="nv-tag">AI</span></a><a href="/talalatok">Összes szakorvos</a></div>
+          <div class="nv-col"><h5>Népszerű szakterületek</h5><a href="/szakorvos/borgyogyasz/">Bőrgyógyász</a><a href="/szakorvos/nogyogyasz/">Nőgyógyász</a><a href="/szakorvos/kardiologus/">Kardiológus</a><a href="/szakorvos/ortoped-traumatologus/">Ortopéd-traumatológus</a><a href="/szakorvos/" class="nv-all">Összes szakterület ›</a></div>
+          <div class="nv-col"><h5>Városok</h5><a href="/talalatok?city=Budapest">Budapest</a><a href="/talalatok?city=Debrecen">Debrecen</a><a href="/talalatok?city=Szeged">Szeged</a><a href="/talalatok?city=P%C3%A9cs">Pécs</a><a href="/talalatok?city=Gy%C5%91r">Győr</a></div>
+        </div></li>
+      <li class="nv-it" data-sec="rendelo"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-rendelo">Rendelők<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-rendelo"><a href="/klinikak">Klinika- és rendelőkereső</a><a href="/klinikak#terkep" class="js-openmap">Rendelők a térképen</a><a href="/klinikak?city=Budapest">Budapesti rendelők</a></div></li>
+      <li class="nv-it" data-sec="vizsg"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-vizsg">Vizsgálatok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-vizsg"><a href="/vizsgalatok">Összes vizsgálat</a><a href="/vizsgalatok?q=ultrahang">Ultrahang</a><a href="/vizsgalatok?q=labor">Laborvizsgálat</a><a href="/vizsgalatok?q=MR">MR-vizsgálat</a><a href="/vizsgalatok?q=EKG">EKG</a></div></li>
+      <li class="nv-it" data-sec="tudas"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-tudas">Tudástár<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan" id="nvp-tudas"><a href="/tudastar">Cikkek és útmutatók</a><a href="/#gyik">Gyakori kérdések</a></div></li>
+      <li class="nv-it" data-sec="partner"><button type="button" class="nv-top" aria-expanded="false" aria-controls="nvp-partner">Orvosoknak<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-pan nv-r" id="nvp-partner"><a href="/register">Partnerprogram</a><a href="/register#finder">Adatlap igénylése</a><a href="/demo-orvos.html">Kezelőfelület – bemutató</a><a href="/login">Bejelentkezés</a><a href="/kapcsolat">Kapcsolat</a></div></li>
+    </ul>
+    <div class="nv-side">
+      <a class="nv-user" href="/login"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Bejelentkezés</span></a>
+      <a class="nv-cta" href="/register">Partnerprogram</a>
+      <button class="nv-burger" type="button" aria-label="Menü megnyitása" aria-expanded="false" aria-controls="nv-drawer"><span></span><span></span><span></span></button>
     </div>
   </div>
-  <div class="mobnav" id="mobnav">
-    <h5>Szakorvosok</h5>
-    <a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Panasz alapú keresés</a><a href="/talalatok?all=1">Szakterületek</a><a href="/#varosok">Városok</a>
-    <h5>Klinikák</h5>
-    <a href="/klinikak">Klinikakereső</a><a href="/klinikak" class="js-openmap">Klinikák a térképen</a>
-    <h5>Tudástár</h5>
-    <a href="/tudastar">Cikkek</a><a href="/tudastar">Tünetek A–Z</a><a href="/#gyik">GYIK</a>
-    <h5>Orvosoknak</h5>
-    <a href="/register.html" class="acc">Partnerprogram – csomagok és árak</a><a href="/login.html">Bejelentkezés</a><a href="#" data-szkm="keep">Kapcsolat</a>
+  <div class="nv-drawer" id="nv-drawer" hidden>
+    <div class="nv-dr-in">
+      <a class="nv-dr-search" href="/#kereso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>Orvost vagy rendelőt keresek</a>
+      <div class="nv-acc" data-sec="orvos"><button type="button" class="nv-acc-h" aria-expanded="false">Szakorvosok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/#kereso">Orvoskereső</a><a href="/#kereso" class="js-sym">Keresés panasz alapján <span class="nv-tag">AI</span></a><a href="/talalatok">Összes szakorvos</a><a href="/szakorvos/">Szakterületek A–Z</a><a href="/#varosok">Városok</a></div></div>
+      <div class="nv-acc" data-sec="rendelo"><button type="button" class="nv-acc-h" aria-expanded="false">Rendelők<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/klinikak">Klinika- és rendelőkereső</a><a href="/klinikak#terkep" class="js-openmap">Rendelők a térképen</a></div></div>
+      <div class="nv-acc" data-sec="vizsg"><button type="button" class="nv-acc-h" aria-expanded="false">Vizsgálatok<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/vizsgalatok">Összes vizsgálat</a><a href="/vizsgalatok?q=ultrahang">Ultrahang</a><a href="/vizsgalatok?q=labor">Laborvizsgálat</a><a href="/vizsgalatok?q=MR">MR-vizsgálat</a></div></div>
+      <div class="nv-acc" data-sec="tudas"><button type="button" class="nv-acc-h" aria-expanded="false">Tudástár<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/tudastar">Cikkek és útmutatók</a><a href="/#gyik">Gyakori kérdések</a></div></div>
+      <div class="nv-acc" data-sec="partner"><button type="button" class="nv-acc-h" aria-expanded="false">Orvosoknak, rendelőknek<svg class="nv-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="nv-acc-b"><a href="/register">Partnerprogram</a><a href="/register#finder">Adatlap igénylése</a><a href="/demo-orvos.html">Kezelőfelület – bemutató</a></div></div>
+      <a class="nv-dr-link" href="/kapcsolat">Kapcsolat</a>
+      <div class="nv-dr-foot"><a class="nv-dr-btn s nv-login" href="/login">Bejelentkezés</a><a class="nv-dr-btn p" href="/register">Partnerprogram</a></div>
+    </div>
   </div>
 </nav>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
  <symbol id="i-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
  <symbol id="i-st" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a6 6 0 0 0 12 0V3"/><path d="M12 15v2a4 4 0 0 0 8 0v-3"/><circle cx="20" cy="12" r="2"/></symbol>
@@ -831,228 +910,302 @@ a.card:hover{border-color:var(--line2);box-shadow:var(--sh-hover);transform:tran
 </defs></svg>
 
 <style>
-.rg-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center}
-.rg-hero .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.rg-ticks{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:16px;font-size:14px;color:var(--muted)}
+.rg-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:center}
+.rg-ticks{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:18px;font-size:14px;color:var(--muted)}
 .rg-ticks span{display:inline-flex;align-items:center;gap:6px}
 .rg-ticks svg{width:15px;height:15px;color:var(--green)}
-.pv{position:relative;padding:20px 10px}
-.pv-card{background:#fff;border:1px solid #E3E9F4;border-radius:24px;box-shadow:var(--sh-card);padding:22px;position:relative}
-.pv-tag{position:absolute;top:-12px;left:20px;background:var(--sun);color:var(--navy);font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
-.pv-top{display:flex;gap:14px;align-items:center}
-.pv-av{width:64px;height:64px;border-radius:18px;background:#EEEAFA;color:#5B4BA0;display:grid;place-items:center;font-weight:800;font-size:21px}
-.pv-n{font-size:19px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:6px}
-.pv-n svg{width:17px;height:17px;color:var(--blue)}
-.pv-s{color:var(--green);font-weight:800;font-size:14.5px}
-.pv-r{margin-top:12px;font-size:14px;color:var(--muted)}.pv-r b{color:var(--navy)}
-.pv-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-.pv-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-.pv-f{position:absolute;display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:0 14px 30px -16px rgba(11,22,51,.4);font-size:13px;color:var(--muted)}
-.pv-f b{display:block;color:var(--navy);font-size:14px}
-.pv-f.a{right:-6px;top:-4px}.pv-f.b{left:-14px;bottom:-6px}
+.fd{background:#fff;border:1px solid #E3E9F4;border-radius:24px;box-shadow:var(--sh-card);padding:24px}
+.fd h2{margin:0 0 4px;font-size:21px;color:var(--navy);font-weight:800}
+.fd .sub{margin:0 0 14px;color:var(--muted);font-size:14.5px;line-height:1.5}
+.fd .seg2{margin-bottom:12px}
+.fd-in{position:relative}
+.fd-in svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--faint);pointer-events:none}
+.fd-in input{width:100%;height:50px;border:1.5px solid #D5DDEB;border-radius:14px;padding:0 14px 0 42px;font:inherit;font-size:15.5px;color:var(--ink);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.fd-in input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(29,73,146,.12)}
+.fd-res{display:flex;flex-direction:column;gap:8px;margin-top:12px;min-height:0}
+.fd-it{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#FAFCFF}
+.fd-av{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--blue-l);color:var(--blue);overflow:hidden}
+.fd-av img{width:100%;height:100%;object-fit:cover}
+.fd-av.c{background:var(--green-l);color:var(--green)}
+.fd-tx{flex:1;min-width:0}
+.fd-tx b{display:block;color:var(--navy);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd-tx span{display:block;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd-it .btn{flex:none}
+.fd-ok{font-size:12px;font-weight:800;color:var(--green);background:var(--green-l);border-radius:99px;padding:4px 9px;flex:none}
+.fd-hint{font-size:13.5px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+.fd-new{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:14px;color:var(--muted)}
 .st4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}
 .st4 div{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--sh-box);border-top:4px solid var(--blue)}
 .st4 div:nth-child(2n){border-top-color:var(--green-b)}
 .st4 b{display:block;font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-.02em}
 .st4 span{color:var(--muted);font-size:14px}
-.sh{text-align:center;max-width:720px;margin:0 auto 24px}
+.sh{text-align:center;max-width:720px;margin:0 auto 26px}
 .sh h2{margin:10px 0 8px;font-size:32px;font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1.2}
 .sh p{margin:0;color:var(--muted);font-size:16px;line-height:1.6}
-.blk{padding:56px 0}
+.blk{padding:60px 0}
 .blk.alt{background:#fff;border-top:1px solid #E8EDF6;border-bottom:1px solid #E8EDF6}
-.pil h3,.ben h3{margin:12px 0 6px;font-size:18px;color:var(--navy)}
-.pil p,.ben p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6}
-.soon{font-size:11px;font-weight:800;background:var(--sun-l);color:var(--sun-d);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle;letter-spacing:.03em}
-.dm{display:flex;flex-direction:column;gap:10px}
-.dm .t{display:flex;gap:12px;align-items:center}
-.dm .av{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;font-weight:800;background:var(--blue-l);color:var(--blue)}
-.dm .av.f{background:#EEEAFA;color:#5B4BA0}.dm .av.c{background:var(--green-l);color:var(--green)}
-.dm b{font-size:16px;color:var(--navy);display:flex;gap:6px;align-items:center}.dm b svg{width:15px;height:15px;color:var(--blue)}
-.dm .s{font-size:13.5px;color:var(--blue);font-weight:700}
-.dm .r{font-size:13.5px;color:var(--muted)}.dm .r i{font-style:normal;color:#EEB84B}
-.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;counter-reset:s}
-.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--sh-box)}
-.step .n{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;background:var(--blue)}
-.step:nth-child(2n) .n{background:var(--green)}
-.step h4{margin:12px 0 4px;font-size:17px;color:var(--navy)}
-.step p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
-.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
-.plan{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--sh-box);display:flex;flex-direction:column}
-.plan.ft{border:2px solid var(--sun);box-shadow:0 24px 50px -28px rgba(176,128,10,.55)}
+.ben h3{margin:12px 0 6px;font-size:18px;color:var(--navy)}
+.ben p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.6}
+.new{font-size:11px;font-weight:800;background:var(--green-l);color:var(--green);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:middle;letter-spacing:.03em}
+.hw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px;align-items:center}
+.hw ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.hw li{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--sh-box)}
+.hw .n{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;background:var(--blue);flex:none}
+.hw li:nth-child(2) .n{background:var(--green)}.hw li:nth-child(3) .n{background:var(--sun-d)}
+.hw h4{margin:2px 0 4px;font-size:17px;color:var(--navy)}
+.hw p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.55}
+.mk{background:#fff;border:1px solid #E3E9F4;border-radius:22px;box-shadow:var(--sh-card);overflow:hidden}
+.mk-bar{display:flex;gap:6px;padding:12px 14px;background:#F3F6FB;border-bottom:1px solid var(--line)}
+.mk-bar i{width:10px;height:10px;border-radius:50%;background:#D5DDEB}
+.mk-in{display:grid;grid-template-columns:130px minmax(0,1fr);min-height:250px}
+.mk-side{background:#0F2550;padding:14px 10px;display:flex;flex-direction:column;gap:6px}
+.mk-side span{font-size:12px;color:#B9C6E0;padding:7px 9px;border-radius:9px;font-weight:700}
+.mk-side span.on{background:rgba(255,255,255,.12);color:#fff}
+.mk-main{padding:16px;display:flex;flex-direction:column;gap:12px}
+.mk-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mk-st{border:1px solid var(--line);border-radius:12px;padding:10px}
+.mk-st b{display:block;font-size:19px;color:var(--navy)}.mk-st span{font-size:11.5px;color:var(--muted)}
+.mk-pr{border:1px solid var(--line);border-radius:12px;padding:12px;font-size:13px;color:var(--muted)}
+.mk-pr b{color:var(--navy)}
+.mk-bg{height:8px;border-radius:99px;background:#E8EDF6;margin-top:8px;overflow:hidden}
+.mk-bg i{display:block;height:100%;width:78%;background:linear-gradient(90deg,var(--green),var(--green-b))}
+.mk-ln{height:9px;border-radius:6px;background:#EEF2F8}.mk-ln.s{width:60%}
+.rg-demo{margin-top:14px;font-size:14.5px;color:var(--muted)}.rg-demo a{color:var(--blue);font-weight:800;text-decoration:underline;text-underline-offset:3px}.rg-demo span{font-size:13px}
+.mk-cta{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.pk{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:18px;align-items:stretch}
+.plan{position:relative;background:#fff;border:2px solid var(--sun);border-radius:22px;padding:26px;box-shadow:0 24px 50px -28px rgba(176,128,10,.55);display:flex;flex-direction:column}
 .plan .flag{position:absolute;top:-13px;left:22px;background:var(--sun);color:var(--navy);font-size:12px;font-weight:800;padding:5px 12px;border-radius:999px}
 .plan .nm{font-size:18px;font-weight:800;color:var(--navy)}
-.plan .pr{margin:10px 0 4px;font-size:34px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
+.plan .pr{margin:8px 0 4px;font-size:34px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
 .plan .pr small{font-size:14px;color:var(--muted);font-weight:700}
-.plan .nt{font-size:13.5px;color:var(--muted)}
-.plan ul{list-style:none;margin:16px 0 20px;padding:0;display:flex;flex-direction:column;gap:9px;flex:1}
+.plan .nt{font-size:14px;color:var(--muted)}
+.plan ul{list-style:none;margin:16px 0 20px;padding:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px 16px;flex:1}
 .plan li{display:flex;gap:9px;font-size:14.5px;color:var(--ink);line-height:1.4}
 .plan li svg{width:16px;height:16px;color:var(--green);flex:none;margin-top:2px}
-.plan li.off{color:var(--faint)}.plan li.off svg{color:#C3CAD8}
-.plan .btn{width:100%}
-.rg-form{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:36px;align-items:start}
+.pk-side{display:flex;flex-direction:column;gap:14px}
+.pk-side .box{margin:0;flex:1}
+.rg-form{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:36px;align-items:start}
 .rg-form ul{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:10px}
 .rg-form li{display:flex;gap:10px;align-items:center;font-weight:700;color:var(--navy)}
 .rg-form li i{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-style:normal;flex:none}
 .rg-form li i svg{width:15px;height:15px}
 .fcard{background:#fff;border:1px solid #E3E9F4;border-radius:24px;box-shadow:var(--sh-card);padding:28px;position:relative;overflow:hidden;scroll-margin-top:90px}
 .fcard h3{margin:0;font-size:22px;color:var(--navy);font-weight:800}
-.fcard .sub{margin:6px 0 18px}
-.fcard .legal{margin-top:14px;font-size:12.5px;color:var(--faint);text-align:center}
-.fcard .legal a{color:var(--blue);text-decoration:underline}
+.fcard .sub{margin:6px 0 16px}
+.sel{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--green-b);background:var(--green-l);border-radius:14px;margin-bottom:14px}
+.sel .fd-tx b{white-space:normal}
+.sel button{background:none;border:0;color:var(--blue);font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;text-decoration:underline;flex:none}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.cns{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.5;margin:4px 0 14px;cursor:pointer}
+.cns input{width:18px;height:18px;margin:1px 0 0;flex:none;accent-color:var(--blue)}
+.cns a{color:var(--blue);text-decoration:underline}
+.fld textarea{min-height:84px;resize:vertical}
 .okbox{text-align:center;padding:20px 0}
 .okbox .ic{margin:0 auto 12px}
-@media (max-width:1000px){.rg-hero,.rg-form{grid-template-columns:minmax(0,1fr)}.st4{grid-template-columns:repeat(2,minmax(0,1fr))}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.plans{grid-template-columns:minmax(0,1fr)}.pv{max-width:480px}}
-@media (max-width:640px){.sh h2{font-size:25px}.blk{padding:40px 0}.steps{grid-template-columns:minmax(0,1fr)}.pv-f{display:none}.fcard{padding:20px 16px}}
+@media (max-width:1000px){.rg-hero,.rg-form,.hw,.pk{grid-template-columns:minmax(0,1fr)}.st4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.sh h2{font-size:25px}.blk{padding:44px 0}.fcard,.fd{padding:20px 16px}.plan ul{grid-template-columns:minmax(0,1fr)}.mk-in{grid-template-columns:minmax(0,1fr)}.mk-side{flex-direction:row;overflow:hidden}.fd-it{gap:10px;padding:10px}.fd-av{width:38px;height:38px}.fd-it .btn{padding:0 12px}.fd-ok{font-size:11px;padding:4px 7px}}
 </style>
 <header class="ph"><div class="wrap" style="padding-bottom:40px">
  <nav class="crumbs" aria-label="Morzsamenü"><a href="/">Kezdőlap</a>›<span>Partnerprogram</span></nav>
  <div class="rg-hero">
   <div>
-   <span class="kick"><svg><use href="#i-heart"/></svg>Partnereknek · Alapító program</span>
-   <h1>Legyen ott, ahol a betegek <em>Önt keresik.</em></h1>
-   <p class="lead">A Szakorvos.hu okos orvoskereső: keresés, AI-asszisztens és térképes találatok egy helyen. Igényelje saját, ellenőrzött szakorvosi vagy klinikai adatlapját, és jelenjen meg ott, ahol a páciensek keresnek.</p>
-   <div class="row"><a class="btn o" href="#formCard">Csatlakozom – ingyenes<svg><use href="#i-ar"/></svg></a><a class="btn s" href="/kapcsolat.html?tema=partner">Beszéljünk róla</a></div>
-   <div class="rg-ticks"><span><svg><use href="#i-check"/></svg>A béta alatt ingyenes</span><span><svg><use href="#i-check"/></svg>Nincs kötelezettség</span><span><svg><use href="#i-check"/></svg>2 perc a regisztráció</span></div>
+   <span class="kick"><svg><use href="#i-heart"/></svg>Orvosoknak és rendelőknek · Alapító program</span>
+   <h1>Vegye át a saját adatlapját&nbsp;– <em>ingyen.</em></h1>
+   <p class="lead">Nagy eséllyel már szerepel a Szakorvos.hu-n. Igényelje az adatlapját, és saját kezelőfelületen frissítheti fotóját, bemutatkozását, rendelési helyeit és díjait – az ellenőrzött jelvénnyel együtt.</p>
+   <div class="rg-ticks"><span><svg><use href="#i-check"/></svg>A béta alatt ingyenes</span><span><svg><use href="#i-check"/></svg>Nincs kötelezettség</span><span><svg><use href="#i-check"/></svg>Saját admin felület</span></div>
+   <div class="rg-demo">Nézze meg előre: <a href="/demo-orvos.html">orvos kezelőfelület</a> · <a href="/demo-klinika.html">rendelő kezelőfelület</a> <span>(bemutató, regisztráció nélkül)</span></div>
   </div>
-  <div class="pv">
-   <div class="pv-card">
-    <span class="pv-tag">Így néz ki egy partner-adatlap</span>
-    <div class="pv-top"><span class="pv-av">KA</span><div><div class="pv-n">Dr. Kovács Anna<svg><use href="#i-chk"/></svg></div><div class="pv-s">Kardiológus · Budapest</div></div></div>
-    <div class="pv-r"><span style="color:#EEB84B">★★★★★</span> <b>4,9</b> · a rendelő Google-értékelése</div>
-    <div class="pv-tags"><span class="tag">15+ év tapasztalat</span><span class="tag g">Online konzultáció</span><span class="tag y">★ Kiemelt partner</span></div>
-    <div class="pv-btns"><span class="btn p sm">Hívás</span><span class="btn s sm">Útvonal</span></div>
-   </div>
-   <div class="pv-f a"><span class="ic g"><svg><use href="#i-shield"/></svg></span><span><b>Ellenőrzött</b>hiteles adatlap</span></div>
-   <div class="pv-f b"><span class="ic o"><svg><use href="#i-zap"/></svg></span><span><b>Kiemelt</b>a találatok élén</span></div>
+  <div class="fd" id="finder">
+   <h2>Keresse meg az adatlapját</h2>
+   <p class="sub">Írja be a nevét vagy a rendelő nevét, és jelölje meg, melyik az Öné.</p>
+   <div class="seg2" role="tablist" id="fdSeg"><button type="button" class="on" data-t="doctor">Orvos vagyok</button><button type="button" data-t="clinic">Rendelő vagyok</button></div>
+   <div class="fd-in"><svg><use href="#i-s"/></svg><input id="fdQ" type="search" autocomplete="off" placeholder="Pl. Kovács Anna" aria-label="Adatlap keresése"></div>
+   <div class="fd-res" id="fdRes" aria-live="polite"></div>
+   <div class="fd-new"><span>Nem találja magát?</span><button type="button" class="btn s sm" id="fdNew">Új adatlapot kérek</button></div>
   </div>
  </div>
- <div class="st4"><div><b id="statDoctors">7 000+</b><span>aktív szakorvos</span></div><div><b id="statClinics">2 100+</b><span>klinika és rendelő</span></div><div><b id="statSpecs">86</b><span>szakterület</span></div><div><b>219 000+</b><span>Google-értékelés a rendelőkről</span></div></div>
+ <div class="st4"><div><b id="statDoctors">7 000+</b><span>szakorvos</span></div><div><b id="statClinics">2 100+</b><span>klinika és rendelő</span></div><div><b id="statSpecs">86</b><span>szakterület</span></div><div><b>219 000+</b><span>Google-értékelés a rendelőkről</span></div></div>
 </div></header>
 
 <section class="blk"><div class="wrap">
- <div class="sh"><span class="kick b">Miért a Szakorvos.hu</span><h2>Több mint egy katalógus</h2><p>Nem hirdetési felület, hanem modern keresőplatform, amely a pácienst a megfelelő szakemberhez irányítja. Önnek ez új, minősített megkeresést jelent.</p></div>
+ <div class="sh"><span class="kick b">Mit kap a partner</span><h2>Láthatóság, bizalom, saját kezelőfelület</h2><p>Nem hirdetési felület, hanem keresőplatform, amely a pácienst a megfelelő szakemberhez irányítja.</p></div>
  <div class="g3">
-  <div class="card pil"><span class="ic lg"><svg><use href="#i-s"/></svg></span><h3>Láthatóság</h3><p>Megjelenik a szabadszavas keresésben, a szakterületi listákban, a térképen és az AI-asszisztens ajánlásaiban is – pontosan ott, ahol a beteg keres.</p></div>
-  <div class="card pil"><span class="ic lg g"><svg><use href="#i-shield"/></svg></span><h3>Bizalom</h3><p>Ellenőrzött jelvény, valódi Google-értékelések és teljes, naprakész adatlap. A páciens magabiztosan választ, mert tudja, kihez fordul.</p></div>
-  <div class="card pil"><span class="ic lg o"><svg><use href="#i-zap"/></svg></span><h3>Egyszerűség</h3><p>Egy adatlap, amely minden csatornán dolgozik Ön helyett. Egyszer kitölti, mi gondoskodunk a megjelenésről – felesleges adminisztráció nélkül.</p></div>
+  <div class="card ben"><span class="ic"><svg><use href="#i-file"/></svg></span><h3>Saját kezelőfelület <span class="new">ÚJ</span></h3><p>Fotó, bemutatkozás, végzettség, nyelvek, szakterületek, rendelési helyek és díjak – bármikor, saját kezűleg frissíthető.</p></div>
+  <div class="card ben"><span class="ic g"><svg><use href="#i-chk"/></svg></span><h3>„Ellenőrzött” jelvény</h3><p>A visszaigazolt adatlapok jól látható jelvényt kapnak – a páciens tudja, hogy hiteles adatokat lát.</p></div>
+  <div class="card ben"><span class="ic o"><svg><use href="#i-zap"/></svg></span><h3>Kiemelt megjelenés</h3><p>A partner-adatlapok előnyt kapnak a releváns keresésekben, a térképen és a szakterületi listákban.</p></div>
+  <div class="card ben"><span class="ic"><svg><use href="#i-sp"/></svg></span><h3>Megjelenés az AI-ban</h3><p>Az AI-asszisztens a tünet- és igényalapú kérdésekre a releváns partnereket is ajánlja.</p></div>
+  <div class="card ben"><span class="ic y"><svg><use href="#i-ph"/></svg></span><h3>Közvetlen elérhetőség</h3><p>„Hívás” és „Útvonal” gomb az adatlapon – a beteg egy kattintással eléri Önt.</p></div>
+  <div class="card ben"><span class="ic g"><svg><use href="#i-chart"/></svg></span><h3>Statisztikák <span class="new">ÚJ</span></h3><p>Lássa a kezelőfelületen, hányan nézték meg az adatlapját, és mennyire teljes a profilja.</p></div>
  </div>
 </div></section>
 
 <section class="blk alt"><div class="wrap">
- <div class="sh"><span class="kick y">Mit kap a partner</span><h2>Minden, ami a megjelenéshez kell</h2><p>Az alapító partnerek a béta alatt a teljes funkciókészletet ingyen használhatják.</p></div>
- <div class="g3">
-  <div class="card ben"><span class="ic"><svg><use href="#i-file"/></svg></span><h3>Szerkeszthető adatlap</h3><p>Fotó, bemutatkozás, végzettség, nyelvek, elérhetőség és rendelési adatok – saját kezűleg frissíthető, mindig naprakész.</p></div>
-  <div class="card ben"><span class="ic g"><svg><use href="#i-chk"/></svg></span><h3>„Ellenőrzött” jelvény</h3><p>A hitelesített adatlapok jól látható jelvényt kapnak – ez a bizalom jele, amely érezhetően növeli a megkeresések arányát.</p></div>
-  <div class="card ben"><span class="ic o"><svg><use href="#i-chart"/></svg></span><h3>Előrébb a találatokban</h3><p>A partner-adatlapok kiemelt megjelenést kapnak a releváns keresésekben – a páciens hamarabb megtalálja Önt.</p></div>
-  <div class="card ben"><span class="ic y"><svg><use href="#i-ph"/></svg></span><h3>Közvetlen elérhetőség</h3><p>„Hívás” és „Útvonal” gomb az adatlapon – a beteg egy kattintással kapcsolatba lép Önnel.</p></div>
-  <div class="card ben"><span class="ic"><svg><use href="#i-sp"/></svg></span><h3>Megjelenés az AI-ban</h3><p>Az AI-asszisztens a tünet- és igényalapú kérdésekre a releváns partnereket is ajánlja – nem csak egy listában, hanem beszélgetésben.</p></div>
-  <div class="card ben"><span class="ic g"><svg><use href="#i-chart"/></svg></span><h3>Adatlap-statisztikák <span class="soon">hamarosan</span></h3><p>Lássa, hányan nézték meg az adatlapját, mire kerestek rá, és honnan érkeztek – adatalapú döntésekhez.</p></div>
- </div>
-</div></section>
-
-<section class="blk"><div class="wrap">
- <div class="sh"><span class="kick">Példák</span><h2>Így jelennek meg az ellenőrzött partnerek</h2><p>Néhány példa arra, hogyan néz ki egy kész partner-adatlap a találatok között.</p></div>
- <div class="g3">
-  <div class="card dm"><div class="t"><span class="av f">NE</span><div><b>Dr. Nagy Eszter<svg><use href="#i-chk"/></svg></b><div class="s">Bőrgyógyász · Budapest V.</div></div></div><div class="r"><i>★★★★★</i> 4,9 · 86 értékelés</div><div class="chips"><span class="tag">12+ év</span><span class="tag g">Online recept</span><span class="tag y">Kiemelt</span></div></div>
-  <div class="card dm"><div class="t"><span class="av">TG</span><div><b>Dr. Tóth Gábor<svg><use href="#i-chk"/></svg></b><div class="s">Ortopéd orvos · Debrecen</div></div></div><div class="r"><i>★★★★★</i> 4,8 · 64 értékelés</div><div class="chips"><span class="tag">20+ év</span><span class="tag g">Sportsérülés</span><span class="tag o">Ultrahang</span></div></div>
-  <div class="card dm"><div class="t"><span class="av c"><svg width="24" height="24"><use href="#i-cl"/></svg></span><div><b>Belváros Egészségközpont<svg><use href="#i-chk"/></svg></b><div class="s">Magánklinika · Szeged</div></div></div><div class="r"><i>★★★★★</i> 4,7 · 210 értékelés</div><div class="chips"><span class="tag">14 szakorvos</span><span class="tag y">Kiemelt</span><span class="tag g">Parkolás</span></div></div>
- </div>
- <p class="muted" style="text-align:center;font-size:13px;margin:14px 0 0">A fenti adatlapok illusztrációk – a valódi partneradatokat az ellenőrzés után jelenítjük meg.</p>
-</div></section>
-
-<section class="blk alt"><div class="wrap">
- <div class="sh"><span class="kick g">Hogyan működik</span><h2>Négy lépés a megjelenésig</h2></div>
- <div class="steps">
-  <div class="step"><span class="n">1</span><h4>Regisztráció</h4><p>Töltse ki az űrlapot 2 perc alatt – orvosként, klinikaként vagy mindkettőként.</p></div>
-  <div class="step"><span class="n">2</span><h4>Egyeztetés</h4><p>Csapatunk 24 órán belül felveszi Önnel a kapcsolatot, és összepárosítja a meglévő adatlapjával.</p></div>
-  <div class="step"><span class="n">3</span><h4>Adatlap feltöltése</h4><p>Fotó, bemutatkozás, rendelési és elérhetőségi adatok – segítünk, hogy minden a helyére kerüljön.</p></div>
-  <div class="step"><span class="n">4</span><h4>Megjelenés</h4><p>Az ellenőrzött, kiemelt adatlap élesedik a keresésben, a térképen és az AI-ajánlásokban.</p></div>
+ <div class="sh"><span class="kick g">Hogyan működik</span><h2>Három lépés a saját adatlapig</h2></div>
+ <div class="hw">
+  <ol>
+   <li><span class="n">1</span><div><h4>Megjelöli az adatlapját</h4><p>Fent megkeresi magát vagy a rendelőt, és pár adattal jelentkezik. Ha még nem szerepel, új adatlapot kér.</p></div></li>
+   <li><span class="n">2</span><div><h4>Ellenőrizzük</h4><p>Csapatunk 1–2 munkanapon belül visszaigazolja, hogy valóban Ön az adatlap gazdája.</p></div></li>
+   <li><span class="n">3</span><div><h4>Belép és szerkeszt</h4><p>E-mailben meghívót kap a kezelőfelülethez – onnantól Ön tartja naprakészen az adatait.</p></div></li>
+  </ol>
+  <div>
+  <div class="mk" aria-hidden="true">
+   <div class="mk-bar"><i></i><i></i><i></i></div>
+   <div class="mk-in">
+    <div class="mk-side"><span class="on">Áttekintés</span><span>Profil</span><span>Szakterületek</span><span>Rendelési helyek</span></div>
+    <div class="mk-main">
+     <div class="mk-row"><div class="mk-st"><b>1 240</b><span>megtekintés</span></div><div class="mk-st"><b>86</b><span>hívás-kattintás</span></div><div class="mk-st"><b>3</b><span>rendelési hely</span></div></div>
+     <div class="mk-pr"><b>Profil teljessége: 78%</b><div class="mk-bg"><i></i></div></div>
+     <div class="mk-ln"></div><div class="mk-ln s"></div>
+    </div>
+   </div>
+  </div>
+  <div class="mk-cta"><a class="btn p" href="/demo-orvos.html">Orvos kezelőfelület kipróbálása<svg><use href="#i-ar"/></svg></a><a class="btn s" href="/demo-klinika.html">Rendelő kezelőfelület</a></div>
+  </div>
  </div>
 </div></section>
 
 <section class="blk" id="csomagok"><div class="wrap">
- <div class="sh"><span class="kick y">Csomagok</span><h2>Most ingyenes – alapító kedvezménnyel</h2><p>A platform béta fázisban van. Aki most csatlakozik, alapító partnerként a teljes funkciókészletet díjmentesen használja.</p></div>
- <div class="plans">
-  <div class="plan ft"><span class="flag">Most ezt válassza</span><div class="nm">Alapító Partner</div><div class="pr">Ingyenes <small>/ a béta alatt</small></div><div class="nt">Alapító kedvezmény a fizetős indulásnál.</div>
-   <ul><li><svg><use href="#i-check"/></svg>Teljes, szerkeszthető adatlap</li><li><svg><use href="#i-check"/></svg>„Ellenőrzött” jelvény</li><li><svg><use href="#i-check"/></svg>Kiemelt megjelenés a keresésben</li><li><svg><use href="#i-check"/></svg>Hívás és útvonal gomb</li><li><svg><use href="#i-check"/></svg>Megjelenés az AI-asszisztensben</li></ul>
-   <a class="btn p" href="#formCard">Csatlakozom ingyen</a></div>
-  <div class="plan"><div class="nm">Pro <span class="soon">hamarosan</span></div><div class="pr">–</div><div class="nt">Alapító partnereknek kedvezmény.</div>
-   <ul><li><svg><use href="#i-check"/></svg>Minden, ami az Alapító csomagban</li><li><svg><use href="#i-check"/></svg>Garantált top találati pozíció</li><li><svg><use href="#i-check"/></svg>Részletes adatlap-statisztikák</li><li><svg><use href="#i-check"/></svg>Galéria és bővített bemutatkozás</li><li class="off"><svg><use href="#i-check"/></svg>Csapatkezelés</li></ul>
-   <a class="btn s" href="#formCard">Értesítést kérek</a></div>
-  <div class="plan"><div class="nm">Klinika / Prémium <span class="soon">hamarosan</span></div><div class="pr">–</div><div class="nt">Több orvosnak, intézménynek.</div>
-   <ul><li><svg><use href="#i-check"/></svg>Minden, ami a Pro csomagban</li><li><svg><use href="#i-check"/></svg>Több orvos egy intézményi adatlapon</li><li><svg><use href="#i-check"/></svg>Foglalási rendszer-szinkron</li><li><svg><use href="#i-check"/></svg>Dedikált kapcsolattartó</li><li><svg><use href="#i-check"/></svg>Egyedi megállapodás</li></ul>
-   <a class="btn s" href="/kapcsolat.html?tema=clinic">Ajánlatot kérek</a></div>
+ <div class="sh"><span class="kick y">Csomag</span><h2>Most ingyenes – alapító kedvezménnyel</h2><p>A platform béta fázisban van. Aki most csatlakozik, a teljes funkciókészletet díjmentesen használja.</p></div>
+ <div class="pk">
+  <div class="plan"><span class="flag">Alapító partner</span><div class="nm">Teljes csomag</div><div class="pr">Ingyenes <small>/ a béta alatt</small></div><div class="nt">Tartós alapító kedvezmény a fizetős indulásnál – előre szólunk, meglepetés nélkül.</div>
+   <ul><li><svg><use href="#i-check"/></svg>Saját kezelőfelület</li><li><svg><use href="#i-check"/></svg>„Ellenőrzött” jelvény</li><li><svg><use href="#i-check"/></svg>Kiemelt megjelenés</li><li><svg><use href="#i-check"/></svg>Megjelenés az AI-ban</li><li><svg><use href="#i-check"/></svg>Hívás és útvonal gomb</li><li><svg><use href="#i-check"/></svg>Statisztikák</li><li><svg><use href="#i-check"/></svg>Rendelők: galéria, nyitvatartás</li><li><svg><use href="#i-check"/></svg>Rendelők: orvoslista kezelése</li></ul>
+   <a class="btn o" href="#finder">Megkeresem az adatlapom<svg><use href="#i-ar"/></svg></a></div>
+  <div class="pk-side">
+   <div class="box b"><span class="ic lg"><svg><use href="#i-shield"/></svg></span><div><b style="font-size:17px">A relevancia az első</b><p>A partnerség láthatóságot ad, de nem írja felül a páciens érdekét: egy nyilvánvalóan relevánsabb szakember elé sosem kerül.</p></div></div>
+   <div class="box"><span class="ic lg g"><svg><use href="#i-users"/></svg></span><div><b style="font-size:17px">Több orvos, intézmény?</b><p>Klinikáknak egyedi megállapodást kínálunk. <a href="/kapcsolat?tema=clinic" style="color:var(--blue);font-weight:700">Írjon nekünk</a>.</p></div></div>
+  </div>
  </div>
- <p class="muted" style="text-align:center;max-width:760px;margin:20px auto 0;font-size:14.5px;line-height:1.6">A béta alatt <b style="color:var(--navy)">minden funkció ingyenes</b>, és nem veszünk el olyat, amit egyszer adtunk. Amikor a fizetős csomagok elindulnak, az alapító partnerek <b style="color:var(--navy)">tartós kedvezményt</b> kapnak – előre szólunk, meglepetés nélkül.</p>
- <div class="box b" style="margin-top:26px"><span class="ic lg"><svg><use href="#i-shield"/></svg></span><div><b style="font-size:18px">A relevancia mindig az első</b><p>A partnerség láthatóságot ad, de nem írja felül a páciens érdekét: a találatokat elsősorban a keresési relevancia rendezi. A partner-adatlap előnyt élvez, de soha nem kerül egy nyilvánvalóan relevánsabb szakember elé. Így a betegek megbíznak a listában – és ettől értékes a megjelenés.</p></div></div>
 </div></section>
 
 <section class="blk alt" id="gyik"><div class="wrap">
  <div class="sh"><span class="kick b">Gyakori kérdések</span><h2>Amit a partnerek kérdezni szoktak</h2></div>
  <div class="faq narrow" style="margin:0 auto">
-  <details><summary>Mennyibe kerül a csatlakozás?</summary><div>A béta program alatt a teljes funkciókészlet ingyenes. Aki most csatlakozik, alapító partnerként tartós kedvezményt kap, amikor a fizetős csomagok elindulnak.</div></details>
-  <details><summary>Mi történik a béta vége után?</summary><div>Időben, előre jelezzük a változást – nem lesz meglepetés. Amit a béta alatt megkapott (adatlap, jelvény, megjelenés), azt nem vesszük el. Az alapító partnerek külön kedvezményes feltételeket kapnak.</div></details>
-  <details><summary>Hogyan ellenőrzik az adataimat?</summary><div>A regisztráció után csapatunk egyezteti Önnel az adatokat, és összepárosítja a már meglévő, nyilvános adatlapjával. Az „Ellenőrzött” jelvényt csak a visszaigazolt adatlapok kapják meg.</div></details>
-  <details><summary>Már szerepelek a Szakorvos.hu-n. Akkor is regisztráljak?</summary><div>Igen. A nyilvános adatlap alapszintű – a partner-regisztrációval igényli az adatlap feletti rendelkezést, a szerkesztést, az ellenőrzött jelvényt és a kiemelt megjelenést.</div></details>
-  <details><summary>A kiemelés miatt rosszabb orvosok kerülnek előre?</summary><div>Nem. A rendezés alapja mindig a páciens keresési relevanciája. A partnerség láthatósági előnyt jelent, de nem előzi meg az egyértelműen relevánsabb találatot – ezért megbízható a lista.</div></details>
-  <details><summary>Lemondhatom bármikor?</summary><div>Igen, kötöttség nélkül. A regisztráció nem jár elkötelezettséggel, és bármikor kérheti az adatlap módosítását vagy törlését a <a href="/kapcsolat.html" style="color:var(--blue);font-weight:700">kapcsolat oldalon</a>.</div></details>
+  <details><summary>Mennyibe kerül?</summary><div>A béta alatt minden funkció ingyenes. Amit egyszer megkapott, azt nem vesszük el; a fizetős csomagok indulásakor az alapító partnerek tartós kedvezményt kapnak, és ezt időben előre jelezzük.</div></details>
+  <details><summary>Már szerepelek az oldalon. Miért jelentkezzek?</summary><div>A nyilvános adatlap alapszintű, és nem Ön szerkeszti. Jelentkezés után saját kezelőfelületen frissítheti az adatait, és megkapja az „Ellenőrzött” jelvényt.</div></details>
+  <details><summary>Hogyan ellenőrzik, hogy valóban én vagyok?</summary><div>Csapatunk a megadott elérhetőségeken (és szükség esetén a rendelőn keresztül) egyezteti Önnel az adatokat. A kezelőfelülethez csak ezután küldünk meghívót.</div></details>
+  <details><summary>Hibás adat szerepel rólam. Mit tegyek?</summary><div>Jelentkezzen itt, és a kezelőfelületen kijavíthatja. Ha nem szeretne partner lenni, a <a href="/kapcsolat" style="color:var(--blue);font-weight:700">kapcsolat oldalon</a> is jelezheti a hibát vagy kérheti az adatlap törlését.</div></details>
+  <details><summary>Lemondhatom bármikor?</summary><div>Igen, kötöttség nélkül – a jelentkezés nem jár semmilyen elköteleződéssel.</div></details>
  </div>
 </div></section>
 
 <section class="blk"><div class="wrap">
  <div class="rg-form">
   <div>
-   <span class="kick"><svg><use href="#i-uplus"/></svg>Ingyenes regisztráció</span>
-   <h2 class="h2" style="font-size:32px;margin-top:12px;line-height:1.2">Pár perc, és láthatóvá válik a betegek előtt</h2>
-   <p class="muted" style="font-size:16px;line-height:1.6">Töltse ki az adatait, a többit elintézzük. Csapatunk 24 órán belül jelentkezik, és segít beállítani az adatlapját.</p>
-   <ul><li><i style="background:var(--green-l);color:var(--green)"><svg><use href="#i-check"/></svg></i>Nincs előfizetés, nincs kötelezettség</li><li><i style="background:var(--sun-l);color:var(--sun-d)"><svg><use href="#i-users"/></svg></i>Személyes segítség az induláshoz</li><li><i style="background:var(--orange-l);color:var(--orange-d)"><svg><use href="#i-star"/></svg></i>Alapító kedvezmény a fizetős indulásnál</li></ul>
+   <span class="kick"><svg><use href="#i-uplus"/></svg>Jelentkezés</span>
+   <h2 class="h2" style="font-size:32px;margin-top:12px;line-height:1.2">Pár adat, és jelentkezünk</h2>
+   <p class="muted" style="font-size:16px;line-height:1.6">Az ellenőrzés után e-mailben küldjük a kezelőfelület meghívóját.</p>
+   <ul><li><i style="background:var(--green-l);color:var(--green)"><svg><use href="#i-check"/></svg></i>Nincs előfizetés, nincs kötelezettség</li><li><i style="background:var(--sun-l);color:var(--sun-d)"><svg><use href="#i-users"/></svg></i>Személyes segítség az induláshoz</li><li><i style="background:var(--orange-l);color:var(--orange-d)"><svg><use href="#i-star"/></svg></i>Alapító kedvezmény később is</li></ul>
   </div>
   <div class="fcard" id="formCard">
    <div id="regWrap">
-    <h3>Regisztráljon most – ingyen</h3>
-    <p class="sub">Töltse ki az adatokat, és csapatunk 24 órán belül felveszi Önnel a kapcsolatot.</p>
-    <div class="seg2" role="tablist"><button type="button" class="on" data-t="doctor">Orvos</button><button type="button" data-t="clinic">Klinika</button><button type="button" data-t="both">Mindkettő</button></div>
+    <h3 id="fTitle">Jelentkezés partnernek</h3>
+    <p class="sub muted" id="fSub">Töltse ki az adatokat – 1–2 munkanapon belül jelentkezünk.</p>
+    <div class="sel" id="selBox" hidden><span class="fd-av" id="selAv"></span><span class="fd-tx"><b id="selName"></b><span id="selSub"></span></span><button type="button" id="selClr">Másik</button></div>
+    <div class="seg2" role="tablist" id="typeSeg"><button type="button" class="on" data-t="doctor">Orvos</button><button type="button" data-t="clinic">Rendelő / klinika</button></div>
     <div class="msg err" id="regErr" hidden></div>
     <form id="regForm" class="form" novalidate>
      <div class="row"><div class="fld"><label for="f1">Vezetéknév <span class="rq">*</span></label><input id="f1" name="last_name" placeholder="Kiss" required autocomplete="family-name" maxlength="100"></div><div class="fld"><label for="f2">Keresztnév <span class="rq">*</span></label><input id="f2" name="first_name" placeholder="Anna" required autocomplete="given-name" maxlength="100"></div></div>
-     <div class="row"><div class="fld"><label for="f3">E-mail-cím <span class="rq">*</span></label><input id="f3" name="email" type="email" placeholder="anna@rendelo.hu" required autocomplete="email" maxlength="200"></div><div class="fld"><label for="f4">Telefonszám</label><input id="f4" name="phone" type="tel" placeholder="+36 30 123 4567" autocomplete="tel" maxlength="40"></div></div>
-     <div class="fld" id="specGroup"><label for="specSel">Szakterület</label><select id="specSel" name="specialty"><option value="">Válasszon…</option></select></div>
-     <div class="fld" id="clinicGroup" hidden><label for="f6">Klinika neve</label><input id="f6" name="clinic_name" placeholder="Egészség Klinika Kft." maxlength="200"></div>
-     <div class="fld"><label for="f7">Település <span class="rq">*</span></label><input id="f7" name="city" placeholder="Budapest" required maxlength="120"></div>
-     <input type="hidden" name="reg_type" id="regType" value="doctor">
-     <button type="submit" class="btn o" id="submitBtn" style="width:100%;height:50px">Ingyenes regisztráció indítása</button>
+     <div class="row"><div class="fld"><label for="f3">E-mail-cím <span class="rq">*</span></label><input id="f3" name="email" type="email" placeholder="anna@rendelo.hu" required autocomplete="email" maxlength="200"></div><div class="fld"><label for="f4">Telefonszám <span class="rq">*</span></label><input id="f4" name="phone" type="tel" placeholder="+36 30 123 4567" required autocomplete="tel" maxlength="40"></div></div>
+     <div class="fld" id="specGroup"><label for="f5">Szakterület <span class="rq">*</span></label><select id="f5" name="specialty"><option value="">Válasszon…</option></select></div>
+     <div class="fld" id="clinicGroup" hidden><label for="f6">Rendelő / klinika neve <span class="rq">*</span></label><input id="f6" name="clinic_name" placeholder="Egészség Klinika Kft." maxlength="200"></div>
+     <div class="fld"><label for="f7">Település <span class="rq">*</span></label><input id="f7" name="city" placeholder="Budapest" required maxlength="120" autocomplete="address-level2"></div>
+     <div class="fld"><label for="f8">Üzenet <span class="muted" style="font-weight:600">(nem kötelező)</span></label><textarea id="f8" name="message" maxlength="2000" placeholder="Pl. melyik rendelőben dolgozik, mikor érhetjük el telefonon"></textarea></div>
+     <div class="hp" aria-hidden="true"><label for="fWeb">Weboldal</label><input id="fWeb" name="website" tabindex="-1" autocomplete="off"></div>
+     <label class="cns"><input type="checkbox" id="fConsent" name="consent"><span>Elfogadom az <a href="/aszf" target="_blank">ÁSZF-et</a>, és hozzájárulok, hogy adataimat a jelentkezés ügyintézéséhez az <a href="/adatvedelem" target="_blank">adatvédelmi tájékoztató</a> szerint kezeljék. <span class="rq">*</span></span></label>
+     <button type="submit" class="btn o" id="submitBtn" style="width:100%;height:50px">Jelentkezés elküldése</button>
     </form>
-    <p class="legal">A regisztrációval elfogadja az <a href="/adatvedelem.html">adatvédelmi tájékoztatót</a> és az <a href="/aszf.html">ÁSZF-et</a>.</p>
    </div>
-   <div class="okbox" id="formSuccess" hidden><span class="ic lg g"><svg><use href="#i-check"/></svg></span><h3>Köszönjük a regisztrációt!</h3><p class="muted">Csapatunk hamarosan felveszi Önnel a kapcsolatot. Addig is nézzen körül a <a href="/" style="color:var(--blue);font-weight:700">keresőben</a>!</p></div>
+   <div class="okbox" id="formSuccess" hidden><span class="ic lg g"><svg><use href="#i-check"/></svg></span><h3>Köszönjük a jelentkezést!</h3><p class="muted">1–2 munkanapon belül jelentkezünk a megadott e-mail-címen. Addig is nézzen körül a <a href="/" style="color:var(--blue);font-weight:700">keresőben</a>!</p></div>
   </div>
  </div>
 </div></section>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ═══════════ szakorvos.hu – partnerprogram (2026.10) ═══════════ */
+/* ═══════════ szakorvos.hu – partnerprogram v2 (2026.10) ═══════════ */
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id);};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var T0=Date.now(), mode='doctor', picked=null, timer=null, seq=0;
 function toast(m){ var t=$('toast'); t.textContent=m; t.classList.add('on'); clearTimeout(t._t); t._t=setTimeout(function(){ t.classList.remove('on'); },4500); }
-document.querySelectorAll('a[href="#formCard"]').forEach(function(a){ a.addEventListener('click',function(e){ e.preventDefault(); $('formCard').scrollIntoView({behavior:'smooth'}); setTimeout(function(){ $('f1').focus({preventScroll:true}); },500); }); });
-(async function(){ try{ var r=await db.from('specialties').select('name').eq('is_active',true).order('name'); var s=$('specSel'); (r.data||[]).forEach(function(x){ var o=document.createElement('option'); o.value=x.name; o.textContent=x.name; s.appendChild(o); }); }catch(e){} })();
+function go(el,focus){ el.scrollIntoView({behavior:'smooth',block:'start'}); if(focus) setTimeout(function(){ focus.focus({preventScroll:true}); },500); }
+function ini(n){ var p=String(n||'').replace(/^(dr\.?|prof\.?)\s+/ig,'').split(/\s+/).filter(Boolean); return ((p[0]||'')[0]||'').toUpperCase()+((p[1]||'')[0]||'').toUpperCase(); }
+function fullName(d){ var n=d.name||''; return (d.title&&n.toLowerCase().indexOf(String(d.title).toLowerCase())!==0)?(d.title+' '+n):n; }
+document.querySelectorAll('a[href="#finder"]').forEach(function(a){ a.addEventListener('click',function(e){ e.preventDefault(); go($('finder'),$('fdQ')); }); });
+
+/* adatok: szakterületek + statisztika */
+(async function(){ try{ var r=await db.from('specialties').select('name').eq('is_active',true).order('name'); var s=$('f5'); (r.data||[]).forEach(function(x){ var o=document.createElement('option'); o.value=x.name; o.textContent=x.name; s.appendChild(o); }); }catch(e){} })();
 (async function(){ try{ var R=await Promise.all([db.from('doctors').select('id',{count:'exact',head:true}).eq('is_active',true),db.from('clinics').select('id',{count:'exact',head:true}).in('status',['active','partner']),db.from('specialties').select('id',{count:'exact',head:true}).eq('is_active',true)]);
-  var f=function(n){ return (Math.floor(n/100)*100).toLocaleString('hu-HU')+'+'; };
+  var f=function(n){ return n<1000?String(n):(Math.floor(n/100)*100).toLocaleString('hu-HU')+'+'; };
   if(R[0].count) $('statDoctors').textContent=f(R[0].count); if(R[1].count) $('statClinics').textContent=f(R[1].count); if(R[2].count) $('statSpecs').textContent=R[2].count; }catch(e){} })();
-document.querySelectorAll('.seg2 button').forEach(function(b){ b.addEventListener('click',function(){ document.querySelectorAll('.seg2 button').forEach(function(x){ x.classList.toggle('on',x===b); }); var t=b.dataset.t; $('regType').value=t; $('specGroup').hidden=t==='clinic'; $('clinicGroup').hidden=t==='doctor'; }); });
+
+/* adatlap-kereső */
+function setMode(t){ mode=t; document.querySelectorAll('#fdSeg button').forEach(function(x){ x.classList.toggle('on',x.dataset.t===t); }); $('fdQ').placeholder=t==='doctor'?'Pl. Kovács Anna':'Pl. Belváros Egészségközpont'; $('fdRes').innerHTML=''; if($('fdQ').value.trim().length>=3) search(); }
+document.querySelectorAll('#fdSeg button').forEach(function(b){ b.addEventListener('click',function(){ setMode(b.dataset.t); }); });
+$('fdQ').addEventListener('input',function(){ clearTimeout(timer); timer=setTimeout(search,280); });
+async function search(){
+  var q=$('fdQ').value.trim().replace(/[%_,()]/g,' ').replace(/^(dr\.?|prof\.?)\s+/i,'').trim(), box=$('fdRes'), my=++seq;
+  if(q.length<3){ box.innerHTML=q.length?'<p class="fd-hint">Írjon be legalább 3 karaktert.</p>':''; return; }
+  box.innerHTML='<p class="fd-hint">Keresés…</p>';
+  var pat='%'+q.split(/\s+/).join('%')+'%', r;
+  try{
+    if(mode==='doctor') r=await db.from('doctors').select('id,name,title,slug,photo_url,verified_at,doctor_specialties(is_primary,specialties(name))').eq('is_active',true).ilike('name',pat).order('name').limit(6);
+    else r=await db.from('clinics').select('id,name,slug,photo_url,status,address,cities(name)').in('status',['active','partner']).ilike('name',pat).order('name').limit(6);
+  }catch(e){ r={error:e}; }
+  if(my!==seq) return;
+  if(r.error){ box.innerHTML='<p class="fd-hint">A keresés most nem elérhető – kérjen új adatlapot lent.</p>'; return; }
+  var L=r.data||[];
+  if(!L.length){ box.innerHTML='<p class="fd-hint">Nincs találat erre: „'+esc(q)+'”. Próbálja másképp írni, vagy kérjen új adatlapot.</p>'; return; }
+  box.innerHTML=L.map(function(x,i){
+    var nm, sub, done, av;
+    if(mode==='doctor'){ var sp=(x.doctor_specialties||[]).slice().sort(function(a,b){return (b.is_primary?1:0)-(a.is_primary?1:0);}).map(function(s){return s.specialties&&s.specialties.name;}).filter(Boolean); nm=fullName(x); sub=sp.slice(0,2).join(', ')||'Szakorvos'; done=!!x.verified_at; av='<span class="fd-av">'+(x.photo_url?'<img src="'+esc(x.photo_url)+'" alt="" loading="lazy">':esc(ini(x.name)))+'</span>'; }
+    else { nm=x.name; sub=(x.cities&&x.cities.name)||x.address||'Rendelő'; done=x.status==='partner'; av='<span class="fd-av c">'+(x.photo_url?'<img src="'+esc(x.photo_url)+'" alt="" loading="lazy">':esc(ini(x.name)))+'</span>'; }
+    x._nm=nm; x._sub=sub;
+    return '<div class="fd-it">'+av+'<span class="fd-tx"><b>'+esc(nm)+'</b><span>'+esc(sub)+'</span></span>'+(done?'<span class="fd-ok" title="Ennek az adatlapnak már van kezelője">Már kezelt · <a href="/login" style="color:inherit">Belépés</a></span>':'<button type="button" class="btn p sm" data-pick="'+i+'">Ez vagyok</button>')+'</div>';
+  }).join('');
+  box.querySelectorAll('[data-pick]').forEach(function(b){ b.addEventListener('click',function(){ pick(L[+b.dataset.pick]); }); });
+}
+function pick(x){
+  picked={kind:mode,id:x.id,name:x._nm,sub:x._sub,photo:x.photo_url};
+  setType(mode,true);
+  $('selName').textContent=x._nm; $('selSub').textContent=x._sub;
+  $('selAv').className='fd-av'+(mode==='clinic'?' c':''); $('selAv').innerHTML=x.photo_url?'<img src="'+esc(x.photo_url)+'" alt="">':esc(ini(x._nm));
+  $('selBox').hidden=false; $('typeSeg').hidden=true;
+  $('fTitle').textContent=mode==='doctor'?'Adatlap igénylése':'Rendelő adatlapjának igénylése';
+  if(mode==='doctor'){ var p=String(x.name||'').replace(/^(dr\.?|prof\.?)\s+/ig,'').trim().split(/\s+/); if(p.length>=2&&!$('f1').value&&!$('f2').value){ $('f1').value=p[0]; $('f2').value=p.slice(1).join(' '); } }
+  else if(!$('f6').value) $('f6').value=x._nm;
+  go($('formCard'),$(mode==='doctor'?'f3':'f1'));
+}
+$('selClr').addEventListener('click',function(){ picked=null; $('selBox').hidden=true; $('typeSeg').hidden=false; $('fTitle').textContent='Jelentkezés partnernek'; go($('finder'),$('fdQ')); });
+$('fdNew').addEventListener('click',function(){ picked=null; $('selBox').hidden=true; $('typeSeg').hidden=false; setType(mode); $('fTitle').textContent='Új adatlap kérése'; go($('formCard'),$('f1')); });
+
+/* űrlap */
+function setType(t,locked){ $('regForm').dataset.t=t; document.querySelectorAll('#typeSeg button').forEach(function(x){ x.classList.toggle('on',x.dataset.t===t); }); $('specGroup').hidden=t==='clinic'||(locked&&t==='doctor'); $('clinicGroup').hidden=t==='doctor'; }
+document.querySelectorAll('#typeSeg button').forEach(function(b){ b.addEventListener('click',function(){ setType(b.dataset.t); }); });
+setType('doctor');
+function fail(m){ var e=$('regErr'); e.textContent=m; e.hidden=false; e.scrollIntoView({behavior:'smooth',block:'center'}); }
 $('regForm').addEventListener('submit',async function(e){
-  e.preventDefault(); var f=e.target,fd=new FormData(f),err=$('regErr'),btn=$('submitBtn');
-  var p={first_name:String(fd.get('first_name')||'').trim(),last_name:String(fd.get('last_name')||'').trim(),email:String(fd.get('email')||'').trim(),phone:String(fd.get('phone')||'').trim()||null,specialty:fd.get('specialty')||null,clinic_name:String(fd.get('clinic_name')||'').trim()||null,city:String(fd.get('city')||'').trim(),reg_type:fd.get('reg_type'),created_at:new Date().toISOString()};
-  if(!p.first_name||!p.last_name||!p.email||!p.city){ err.textContent='Kérjük, töltse ki a csillaggal jelölt mezőket.'; err.hidden=false; return; }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)){ err.textContent='Kérjük, érvényes e-mail-címet adjon meg.'; err.hidden=false; return; }
-  if(p.reg_type==='clinic') p.specialty=null; if(p.reg_type==='doctor') p.clinic_name=null;
-  err.hidden=true; btn.disabled=true; btn.textContent='Küldés…';
+  e.preventDefault(); var f=e.target,fd=new FormData(f),btn=$('submitBtn'),t=f.dataset.t||'doctor';
+  var v=function(k){ return String(fd.get(k)||'').trim(); };
+  if(v('website')){ $('regWrap').hidden=true; $('formSuccess').hidden=false; return; }   /* honeypot: bot */
+  var p={first_name:v('first_name'),last_name:v('last_name'),email:v('email'),phone:v('phone'),city:v('city'),reg_type:t,message:v('message')||null,consent:$('fConsent').checked,
+    specialty:t==='doctor'?(v('specialty')||null):null, clinic_name:t==='clinic'?(v('clinic_name')||null):null,
+    doctor_id:picked&&picked.kind==='doctor'?picked.id:null, clinic_id:picked&&picked.kind==='clinic'?picked.id:null};
+  if(p.first_name.length<2||p.last_name.length<2||!p.email||!p.phone||p.city.length<2) return fail('Kérjük, töltse ki a csillaggal jelölt mezőket.');
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email)) return fail('Kérjük, érvényes e-mail-címet adjon meg.');
+  if(p.phone.replace(/\D/g,'').length<6) return fail('Kérjük, érvényes telefonszámot adjon meg.');
+  if(t==='doctor'&&!p.specialty&&!p.doctor_id) return fail('Kérjük, válassza ki a szakterületét.');
+  if(t==='clinic'&&!p.clinic_name&&!p.clinic_id) return fail('Kérjük, adja meg a rendelő nevét.');
+  if(!p.consent) return fail('A jelentkezéshez kérjük, fogadja el az ÁSZF-et és az adatkezelést.');
+  if(Date.now()-T0<4000) return fail('Kérjük, ellenőrizze az adatokat, majd küldje el újra.');
+  $('regErr').hidden=true; btn.disabled=true; btn.textContent='Küldés…';
   try{ var r=await db.from('partner_registrations').insert(p); if(r.error) throw r.error;
-    $('regWrap').hidden=true; $('formSuccess').hidden=false; toast('Sikeres regisztráció! Hamarosan jelentkezünk.');
-    try{ window.SKT&&SKT.send('partner_signup',{reg_type:p.reg_type}); }catch(_){}
-  }catch(x){ btn.disabled=false; btn.textContent='Ingyenes regisztráció indítása'; err.textContent='Nem sikerült elküldeni a jelentkezést. Kérjük, próbálja újra, vagy írjon nekünk a kapcsolat oldalon.'; err.hidden=false; }
+    $('regWrap').hidden=true; $('formSuccess').hidden=false; toast('Köszönjük! Hamarosan jelentkezünk.');
+    try{ await db.functions.invoke('bright-responder',{body:{name:p.last_name+' '+p.first_name,email:p.email,topic:'partner',message:'[Partner-jelentkezés] '+(t==='doctor'?'Orvos':'Rendelő')+(picked?' – igényelt adatlap: '+picked.name+' ('+picked.id+')':' – új adatlap')+'\nTelefon: '+p.phone+'\nTelepülés: '+p.city+(p.specialty?'\nSzakterület: '+p.specialty:'')+(p.clinic_name?'\nRendelő: '+p.clinic_name:'')+(p.message?'\n\n'+p.message:'')}}); }catch(_){}
+    try{ window.SKT&&SKT.send('partner_signup',{reg_type:t,claim:!!picked}); }catch(_){}
+  }catch(x){ btn.disabled=false; btn.textContent='Jelentkezés elküldése';
+    var m=String((x&&x.message)||''); fail(/24 órá|Túl sok/.test(m)?m:'Nem sikerült elküldeni a jelentkezést. Kérjük, próbálja újra, vagy írjon nekünk a kapcsolat oldalon.'); }
 });
 })();
 </script>
@@ -1064,23 +1217,83 @@ $('regForm').addEventListener('submit',async function(e){
       <p>Országos szakorvos- és klinikakereső: telefonszám, cím, rendelési idő és vélemények egy helyen.</p>
     </div>
     <div class="fcol"><h4>Pácienseknek</h4><a href="/#kereso">Orvoskereső</a><a href="/#szakteruletek">Szakterületek</a><a href="/klinikak">Klinikák</a><a href="/#tudastar">Tudástár</a><a href="/#gyik">GYIK</a></div>
-    <div class="fcol"><h4>Orvosoknak</h4><a href="/register.html">Partnerprogram</a><a href="/register.html#csomagok">Csomagok és árak</a><a href="/login.html">Bejelentkezés</a></div>
-    <div class="fcol"><h4>Jogi</h4><a href="/adatvedelem.html">Adatvédelem</a><a href="/aszf.html">ÁSZF</a><a href="/impresszum.html">Impresszum</a><a href="/kapcsolat.html">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
+    <div class="fcol"><h4>Orvosoknak</h4><a href="/register">Partnerprogram</a><a href="/register#csomagok">Csomagok és árak</a><a href="/login">Bejelentkezés</a></div>
+    <div class="fcol"><h4>Jogi</h4><a href="/adatvedelem">Adatvédelem</a><a href="/aszf">ÁSZF</a><a href="/impresszum">Impresszum</a><a href="/kapcsolat">Kapcsolat</a><a href="#" onclick="if(window.szkCookieSettings){szkCookieSettings()}return false;">Süti beállítások</a></div>
     <style>#skfoot .wrap{max-width:1120px!important;margin:0 auto!important;box-sizing:border-box}#skfoot .fspecs{grid-column:1/-1;padding-top:18px;border-top:1px solid var(--line)}#skfoot .fspecs h4{margin:0 0 10px}#skfoot .fspecs .fsl{display:flex;flex-wrap:wrap;gap:6px 18px}#skfoot .fspecs .fsl a{white-space:nowrap}</style>
 <div class="fspecs"><h4>Népszerű szakterületek</h4><div class="fsl"><a href="/szakorvos/nogyogyasz">Nőgyógyász</a><a href="/szakorvos/borgyogyasz">Bőrgyógyász</a><a href="/szakorvos/kardiologus">Kardiológus</a><a href="/szakorvos/urologus">Urológus</a><a href="/szakorvos/fogorvos">Fogorvos</a><a href="/szakorvos/szemeszet-szakorvos">Szemész</a><a href="/szakorvos/ortoped-traumatologus">Ortopéd-traumatológus</a><a href="/szakorvos/reumatologus">Reumatológus</a><a href="/szakorvos/gasztroenterologus">Gasztroenterológus</a><a href="/szakorvos/ful-orr-gege-szakorvos">Fül-orr-gégész</a><a href="/szakorvos/neurologus">Neurológus</a><a href="/szakorvos/pszichiatrus">Pszichiáter</a><a href="/szakorvos"><b>Összes szakterület →</b></a></div></div>
     <div class="bottom"><span>© 2026 szakorvos.hu</span><span>A tünetellenőrző nem helyettesíti az orvosi vizsgálatot. Sürgős esetben hívja a 112-t.</span></div>
   </div>
 </footer>
-<script>
+<script id="szk-nav">
+/* szakorvos.hu – fő navigáció v2 (2026.10) */
 (function(){
-  var nav=document.getElementById('sknav'); if(!nav) return;
-  function up(){ nav.classList.toggle('scrolled',window.scrollY>8); } up(); window.addEventListener('scroll',up,{passive:true});
-  var burger=document.getElementById('burger'), mob=document.getElementById('mobnav');
-  if(burger&&mob){ burger.addEventListener('click',function(){ var on=burger.getAttribute('aria-expanded')!=='true'; burger.setAttribute('aria-expanded',on?'true':'false'); mob.classList.toggle('on',on); });
-    [].forEach.call(mob.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ burger.setAttribute('aria-expanded','false'); mob.classList.remove('on'); }); }); }
+'use strict';
+var nav=document.getElementById('sknav'); if(!nav||nav.__nv) return; nav.__nv=1;
+var items=[].slice.call(nav.querySelectorAll('.nv-it')), burger=nav.querySelector('.nv-burger'), drawer=document.getElementById('nv-drawer');
+var fine=window.matchMedia&&matchMedia('(hover:hover) and (pointer:fine)').matches, tClose=null;
+
+/* görgetés-árnyék */
+function sc(){ nav.classList.toggle('scrolled',window.scrollY>8); } sc(); window.addEventListener('scroll',sc,{passive:true});
+
+/* asztali lenyíló menük */
+function setOpen(it,on){ it.classList.toggle('open',on); var b=it.querySelector('.nv-top'); if(b) b.setAttribute('aria-expanded',on?'true':'false'); }
+function closeAll(ex){ items.forEach(function(it){ if(it!==ex) setOpen(it,false); }); }
+items.forEach(function(it){
+  var b=it.querySelector('.nv-top');
+  b.addEventListener('click',function(e){ e.stopPropagation(); var on=!it.classList.contains('open')||(Date.now()-(it._ho||0)<600); closeAll(it); setOpen(it,on); if(on&&e.detail===0){ var f=it.querySelector('.nv-pan a'); if(f) f.focus(); } });
+  if(fine){
+    it.addEventListener('mouseenter',function(){ clearTimeout(tClose); if(!it.classList.contains('open')) it._ho=Date.now(); closeAll(it); setOpen(it,true); });
+    it.addEventListener('mouseleave',function(){ clearTimeout(tClose); tClose=setTimeout(function(){ setOpen(it,false); },180); });
+  }
+  it.addEventListener('keydown',function(e){
+    var links=[].slice.call(it.querySelectorAll('.nv-pan a')), i=links.indexOf(document.activeElement);
+    if(e.key==='Escape'){ setOpen(it,false); b.focus(); }
+    else if(e.key==='ArrowDown'){ e.preventDefault(); if(!it.classList.contains('open')){ closeAll(it); setOpen(it,true); } (links[i+1]||links[0]).focus(); }
+    else if(e.key==='ArrowUp'&&i>=0){ e.preventDefault(); (links[i-1]||links[links.length-1]).focus(); }
+  });
+  it.addEventListener('focusout',function(e){ if(!it.contains(e.relatedTarget)) setOpen(it,false); });
+  [].forEach.call(it.querySelectorAll('.nv-pan a'),function(a){ a.addEventListener('click',function(){ setOpen(it,false); }); });
+});
+document.addEventListener('click',function(e){ if(!nav.contains(e.target)) closeAll(); });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeAll(); if(drawer&&!drawer.hidden){ setDrawer(false); burger.focus(); } } });
+
+/* mobil fiók */
+function setDrawer(on){
+  if(!drawer) return;
+  if(on) closeAll();
+  nav.style.setProperty('--nv-h',Math.round(nav.getBoundingClientRect().bottom)+'px');
+  drawer.hidden=!on; burger.setAttribute('aria-expanded',on?'true':'false'); burger.setAttribute('aria-label',on?'Menü bezárása':'Menü megnyitása');
+  document.documentElement.classList.toggle('nv-lock',on);
+  nav.classList.toggle('dr-open',on);
+}
+if(burger&&drawer){
+  burger.addEventListener('click',function(){ setDrawer(drawer.hidden); });
+  drawer.addEventListener('click',function(e){ if(e.target===drawer) setDrawer(false); });
+  [].forEach.call(drawer.querySelectorAll('a'),function(a){ a.addEventListener('click',function(){ setDrawer(false); }); });
+  [].forEach.call(drawer.querySelectorAll('.nv-acc-h'),function(h){ h.addEventListener('click',function(){ var acc=h.parentNode, on=!acc.classList.contains('open'); acc.classList.toggle('open',on); h.setAttribute('aria-expanded',on?'true':'false'); }); });
+  window.addEventListener('resize',function(){ if(!drawer.hidden&&window.innerWidth>1023) setDrawer(false); });
+}
+
+/* aktuális oldal jelölése */
+var p=location.pathname.replace(/\.html$/,'').replace(/\/+$/,'')||'/', sec=null;
+if(/^\/(talalatok|szakorvos|orvos)(\/|$)/.test(p)||/^\/[a-z-]+\/dr-/.test(p)) sec='orvos';
+else if(/^\/(klinikak|klinika)(\/|$)/.test(p)) sec='rendelo';
+else if(/^\/vizsgalat/.test(p)) sec='vizsg';
+else if(/^\/tudastar/.test(p)) sec='tudas';
+else if(/^\/(register|demo-orvos|demo-klinika|login|kapcsolat|admin-orvos|admin-klinika)$/.test(p)) sec='partner';
+if(sec){ [].forEach.call(nav.querySelectorAll('[data-sec="'+sec+'"]'),function(x){ x.classList.add('cur'); if(x.classList.contains('nv-acc')){ x.classList.add('open'); var h=x.querySelector('.nv-acc-h'); if(h) h.setAttribute('aria-expanded','true'); } }); }
+var here=location.pathname+location.search;
+[].forEach.call(nav.querySelectorAll('.nv-pan a,.nv-acc-b a'),function(a){ var u=a.getAttribute('href')||''; if(u.indexOf('#')<0&&(u===here||u.replace(/\.html$/,'')===p)) a.setAttribute('aria-current','page'); });
+
+/* „Rendelők a térképen”: a főoldalon modál (index kezeli), a klinikalistán a térkép megnyitása */
+function openMapHere(){ var t=document.getElementById('mtog'); if(t&&t.offsetParent){ t.click(); return true; } var m=document.getElementById('mapCol')||document.getElementById('gmap'); if(m){ m.scrollIntoView({behavior:'smooth',block:'start'}); return true; } return false; }
+if(location.hash==='#terkep'&&/^\/klinikak/.test(p)) setTimeout(openMapHere,600);
+[].forEach.call(nav.querySelectorAll('a[href="/klinikak#terkep"]'),function(a){ a.addEventListener('click',function(e){ if(/^\/klinikak/.test(p)&&openMapHere()) e.preventDefault(); }); });
 })();
+
 </script>
-<script src="/js/cookie-consent.js?v=20261003" defer></script>
+
+<script src="/js/cookie-consent.js?v=20261003b" defer></script>
 <script id="skt">
 /* szakorvos.hu – látogatottságmérés (saját, sütimentes; munkamenet-azonosító csak a böngészőlap élettartamára) */
 (function(){
